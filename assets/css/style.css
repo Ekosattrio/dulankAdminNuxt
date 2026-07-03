@@ -39874,6 +39874,21 @@ table .edit-delete-action a {
   border-radius: var(--kc-radius-sm);
 }
 
+table tbody td.action-table-data a[data-bs-target="#add-address"] {
+  width: auto;
+  min-width: 90px;
+  height: 32px;
+  padding: 0 12px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+table tbody td.action-table-data a[data-bs-target="#add-address"] i {
+  margin-right: 4px;
+}
+
 table tbody td.action-table-data a svg,
 table .edit-delete-action a svg,
 .table-top-head li a svg {
