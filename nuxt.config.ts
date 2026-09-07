@@ -6,6 +6,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt'
   ],
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false
+    }
+  ],
   app: {
     head: {
       title: 'Kacetak System',

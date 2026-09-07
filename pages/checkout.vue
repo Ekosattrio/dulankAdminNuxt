@@ -208,3 +208,4 @@ function formatNumber(val: number) {
   return val.toLocaleString('id-ID')
 }
 </script>
+

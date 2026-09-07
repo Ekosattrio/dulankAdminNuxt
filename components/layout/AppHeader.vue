@@ -1,37 +1,40 @@
 <script setup lang="ts">
-import { useThemeStore } from '~/stores/theme'
+import { useThemeStore } from "~/stores/theme";
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
 
-const themeStore = useThemeStore()
-const isSearchOpen = ref(false)
-const isStoreDropdownOpen = ref(false)
-const isFlagDropdownOpen = ref(false)
-const isNotificationsOpen = ref(false)
-const isUserMenuOpen = ref(false)
-const isFullscreen = ref(false)
+const themeStore = useThemeStore();
+const isSearchOpen = ref(false);
+const isStoreDropdownOpen = ref(false);
+const isFlagDropdownOpen = ref(false);
+const isNotificationsOpen = ref(false);
+const isUserMenuOpen = ref(false);
+const isFullscreen = ref(false);
 
 const toggleFullscreen = () => {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(() => {})
-    isFullscreen.value = true
+    document.documentElement.requestFullscreen().catch(() => {});
+    isFullscreen.value = true;
   } else {
     if (document.exitFullscreen) {
-      document.exitFullscreen()
-      isFullscreen.value = false
+      document.exitFullscreen();
+      isFullscreen.value = false;
     }
   }
-}
+};
 
 const closeAllDropdowns = () => {
-  isSearchOpen.value = false
-  isStoreDropdownOpen.value = false
-  isFlagDropdownOpen.value = false
-  isNotificationsOpen.value = false
-  isUserMenuOpen.value = false
-}
+  isSearchOpen.value = false;
+  isStoreDropdownOpen.value = false;
+  isFlagDropdownOpen.value = false;
+  isNotificationsOpen.value = false;
+  isUserMenuOpen.value = false;
+};
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 transition-colors dark:border-gray-800 dark:bg-gray-900">
+  <header
+    class="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 transition-colors dark:border-gray-800 dark:bg-gray-900"
+  >
     <!-- Left Section: Logo & Toggle Button -->
     <div class="flex items-center space-x-3">
       <NuxtLink to="/" class="flex items-center gap-2">
@@ -41,22 +44,36 @@ const closeAllDropdowns = () => {
 
       <!-- Sidebar Desktop Toggle -->
       <button
+        id="toggle_btn"
         type="button"
-        class="hidden h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:flex dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-        title="Toggle Sidebar"
+        class="hidden h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#FE9F43] lg:flex dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-[#FE9F43]"
+        :title="themeStore.isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'"
         @click="themeStore.toggleSidebar"
       >
-        <FeatherIcon :name="themeStore.isSidebarCollapsed ? 'chevrons-right' : 'chevrons-left'" size="18" />
+        <!-- chevrons-right when collapsed, chevrons-left when expanded -->
+        <svg v-if="themeStore.isSidebarCollapsed" class="h-5 w-5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
+          <polyline points="13 17 18 12 13 7" />
+          <polyline points="6 17 11 12 6 7" />
+        </svg>
+        <svg v-else class="h-5 w-5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
+          <polyline points="11 17 6 12 11 7" />
+          <polyline points="18 17 13 12 18 7" />
+        </svg>
       </button>
 
       <!-- Mobile Hamburger Button -->
       <button
+        id="mobile_btn"
         type="button"
-        class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+        class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#FE9F43] lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
         title="Open Mobile Menu"
         @click="themeStore.toggleMobileSidebar"
       >
-        <FeatherIcon name="menu" size="20" />
+        <svg class="h-5 w-5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
       </button>
     </div>
 
@@ -86,9 +103,21 @@ const closeAllDropdowns = () => {
           </button>
         </div>
         <div class="mt-2 flex flex-wrap gap-1.5">
-          <NuxtLink to="/product-list" class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300">Products</NuxtLink>
-          <NuxtLink to="/sales" class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300">Sales</NuxtLink>
-          <NuxtLink to="/job-order" class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300">Job Orders</NuxtLink>
+          <NuxtLink
+            to="/product-list"
+            class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300"
+            >Products</NuxtLink
+          >
+          <NuxtLink
+            to="/sales"
+            class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300"
+            >Sales</NuxtLink
+          >
+          <NuxtLink
+            to="/job-order"
+            class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-primary-100 hover:text-primary dark:bg-gray-700 dark:text-gray-300"
+            >Job Orders</NuxtLink
+          >
         </div>
       </div>
     </div>
@@ -110,9 +139,21 @@ const closeAllDropdowns = () => {
           v-if="isStoreDropdownOpen"
           class="absolute end-0 mt-1.5 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         >
-          <a href="javascript:void(0)" class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Grocery Alpha</a>
-          <a href="javascript:void(0)" class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Grocery Apex</a>
-          <a href="javascript:void(0)" class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Grocery Bevy</a>
+          <a
+            href="javascript:void(0)"
+            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+            >Grocery Alpha</a
+          >
+          <a
+            href="javascript:void(0)"
+            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+            >Grocery Apex</a
+          >
+          <a
+            href="javascript:void(0)"
+            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+            >Grocery Bevy</a
+          >
         </div>
       </div>
 
@@ -207,16 +248,25 @@ const closeAllDropdowns = () => {
           v-if="isUserMenuOpen"
           class="absolute end-0 mt-1.5 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         >
-          <NuxtLink to="/profile" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
+          <NuxtLink
+            to="/profile"
+            class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
             <FeatherIcon name="user" size="14" />
             <span>My Profile</span>
           </NuxtLink>
-          <NuxtLink to="/company-setting" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
+          <NuxtLink
+            to="/company-setting"
+            class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
             <FeatherIcon name="settings" size="14" />
             <span>Settings</span>
           </NuxtLink>
           <hr class="my-1 border-gray-100 dark:border-gray-700" />
-          <NuxtLink to="/signin" class="flex items-center gap-2 px-4 py-2 text-xs text-danger hover:bg-danger-50 dark:hover:bg-gray-700">
+          <NuxtLink
+            to="/signin"
+            class="flex items-center gap-2 px-4 py-2 text-xs text-danger hover:bg-danger-50 dark:hover:bg-gray-700"
+          >
             <FeatherIcon name="log-out" size="14" />
             <span>Logout</span>
           </NuxtLink>
@@ -225,4 +275,3 @@ const closeAllDropdowns = () => {
     </div>
   </header>
 </template>
-

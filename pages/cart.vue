@@ -289,3 +289,4 @@ function deleteCartItem(id: number) {
   }
 }
 </script>
+

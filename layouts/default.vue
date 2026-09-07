@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useThemeStore } from '~/stores/theme'
-import AppHeader from '~/components/layout/AppHeader.vue'
-import AppSidebar from '~/components/layout/AppSidebar.vue'
+import { useThemeStore } from "~/stores/theme";
+import AppHeader from "~/components/layout/AppHeader.vue";
+import AppSidebar from "~/components/layout/AppSidebar.vue";
 
-const themeStore = useThemeStore()
+const themeStore = useThemeStore();
 
 onMounted(() => {
-  themeStore.initTheme()
-})
+  themeStore.initTheme();
+});
 </script>
 
 <template>
@@ -23,7 +23,7 @@ onMounted(() => {
       <main
         :class="[
           'flex-1 transition-all duration-300 min-w-0 p-4 sm:p-6 lg:p-8',
-          themeStore.isSidebarCollapsed ? 'lg:ms-20' : 'lg:ms-64'
+          themeStore.isSidebarCollapsed ? 'lg:ms-20' : 'lg:ms-[260px]',
         ]"
       >
         <slot />
@@ -31,4 +31,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
