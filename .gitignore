@@ -1,0 +1,29 @@
+# Nuxt & Build Output
+.output
+.output/**
+.nuxt
+.nuxt/**
+dist
+dist/**
+
+# Dependencies
+node_modules
+node_modules/**
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs & Runtime
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & OS Cache
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

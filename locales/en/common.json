@@ -1,0 +1,46 @@
+{
+  "system": {
+    "name": "Kacetak System",
+    "description": "POS & Printing Management System"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "print": "Print",
+    "download": "Download",
+    "search": "Search",
+    "reset": "Reset",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "sales": "Sales",
+    "invoice": "Invoice",
+    "deliveryNote": "Delivery Note",
+    "quotation": "Quotation",
+    "requestQuotation": "Request For Quotation",
+    "pos": "POS",
+    "payments": "Payments",
+    "workflow": "Workflow",
+    "orders": "Orders",
+    "jobOrders": "Job Orders",
+    "paperShop": "Paper Shop",
+    "inventory": "Inventory",
+    "purchases": "Purchases",
+    "promo": "Promo",
+    "finance": "Finance & Account",
+    "peoples": "Peoples",
+    "hrm": "HRM",
+    "reports": "Reports",
+    "userManagement": "User Management",
+    "settings": "Setting",
+    "logout": "Logout"
+  }
+}
+
