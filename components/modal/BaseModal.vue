@@ -1,36 +1,44 @@
 <script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
+
 const props = withDefaults(
   defineProps<{
-    modelValue: boolean
-    title?: string
-    maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+    modelValue: boolean;
+    title?: string;
+    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
   }>(),
   {
-    title: '',
-    maxWidth: 'lg'
-  }
-)
+    title: "",
+    maxWidth: "lg",
+  },
+);
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-  (e: 'close'): void
-}>()
+  (e: "update:modelValue", value: boolean): void;
+  (e: "close"): void;
+}>();
 
 const close = () => {
-  emit('update:modelValue', false)
-  emit('close')
-}
+  emit("update:modelValue", false);
+  emit("close");
+};
 
 const maxWidthClass = computed(() => {
   switch (props.maxWidth) {
-    case 'sm': return 'max-w-sm'
-    case 'md': return 'max-w-md'
-    case 'lg': return 'max-w-lg'
-    case 'xl': return 'max-w-xl'
-    case '2xl': return 'max-w-2xl'
-    default: return 'max-w-lg'
+    case "sm":
+      return "max-w-sm";
+    case "md":
+      return "max-w-md";
+    case "lg":
+      return "max-w-lg";
+    case "xl":
+      return "max-w-xl";
+    case "2xl":
+      return "max-w-2xl";
+    default:
+      return "max-w-lg";
   }
-})
+});
 </script>
 
 <template>
@@ -43,11 +51,14 @@ const maxWidthClass = computed(() => {
       <div
         :class="[
           'relative w-full rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transform transition-all',
-          maxWidthClass
+          maxWidthClass,
         ]"
       >
         <!-- Modal Header -->
-        <div v-if="title || $slots.header" class="flex items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+        <div
+          v-if="title || $slots.header"
+          class="flex items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800"
+        >
           <slot name="header">
             <h5 class="text-base font-bold text-gray-900 dark:text-white">{{ title }}</h5>
           </slot>
@@ -66,11 +77,13 @@ const maxWidthClass = computed(() => {
         </div>
 
         <!-- Modal Footer -->
-        <div v-if="$slots.footer" class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50/50 px-6 py-3 rounded-b-xl dark:border-gray-800 dark:bg-gray-800/40">
+        <div
+          v-if="$slots.footer"
+          class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50/50 px-6 py-3 rounded-b-xl dark:border-gray-800 dark:bg-gray-800/40"
+        >
           <slot name="footer" :close="close" />
         </div>
       </div>
     </div>
   </Teleport>
 </template>
-

@@ -1,220 +1,813 @@
+<script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
+import BaseModal from "~/components/modal/BaseModal.vue";
+import ConfirmModal from "~/components/modal/ConfirmModal.vue";
+
+definePageMeta({
+  layout: "default",
+});
+
+useHead({
+  title: "Kalkulator Dashboard - Kacetak System",
+});
+
+// --- State: Controls & Actions ---
+const isHeaderCollapsed = ref(false);
+const isRefreshing = ref(false);
+const toastMessage = ref<string | null>(null);
+const showFilterPanel = ref(false);
+const searchQuery = ref("");
+const selectedCategory = ref("All");
+const selectedStatus = ref("All");
+
+// Filter panel models
+const filterProduct = ref("");
+const filterCategory = ref("");
+const filterSubCategory = ref("");
+const filterBrand = ref("");
+const filterPrice = ref("");
+
+function showToast(msg: string) {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    if (toastMessage.value === msg) {
+      toastMessage.value = null;
+    }
+  }, 3000);
+}
+
+function refreshAllData() {
+  isRefreshing.value = true;
+  setTimeout(() => {
+    isRefreshing.value = false;
+    searchQuery.value = "";
+    selectedCategory.value = "All";
+    selectedStatus.value = "All";
+    showToast("Calculator dashboard metrics refreshed.");
+  }, 500);
+}
+
+function exportPdf() {
+  showToast("Exporting calculator report to PDF...");
+}
+
+function printPage() {
+  window.print();
+}
+
+// --- Data Table: Users & Calculation Stats ---
+interface CalculatorItem {
+  id: number;
+  user: string;
+  calculate: number;
+  request: number;
+  usage: number; // percentage
+  status: "Active" | "Disabled";
+  role?: string;
+  lastActive?: string;
+}
+
+const tableData = ref<CalculatorItem[]>([
+  {
+    id: 1,
+    user: "Bambang Prakoso",
+    calculate: 1250,
+    request: 580,
+    usage: 85,
+    status: "Active",
+    role: "Lead Estimator",
+    lastActive: "10 Mins ago",
+  },
+  {
+    id: 2,
+    user: "Citra Dewi",
+    calculate: 800,
+    request: 120,
+    usage: 45,
+    status: "Active",
+    role: "Prepress Designer",
+    lastActive: "25 Mins ago",
+  },
+  {
+    id: 3,
+    user: "Dian Permata",
+    calculate: 3200,
+    request: 1500,
+    usage: 92,
+    status: "Active",
+    role: "Production Manager",
+    lastActive: "5 Mins ago",
+  },
+  {
+    id: 4,
+    user: "Fajar Hidayat",
+    calculate: 150,
+    request: 50,
+    usage: 20,
+    status: "Disabled",
+    role: "Intern Estimator",
+    lastActive: "3 Days ago",
+  },
+  {
+    id: 5,
+    user: "Gita Ramadhani",
+    calculate: 4500,
+    request: 2100,
+    usage: 95,
+    status: "Active",
+    role: "Senior Estimator",
+    lastActive: "Just now",
+  },
+  {
+    id: 6,
+    user: "Hadi Wijaya",
+    calculate: 980,
+    request: 310,
+    usage: 70,
+    status: "Active",
+    role: "Offset Specialist",
+    lastActive: "1 Hour ago",
+  },
+  {
+    id: 7,
+    user: "Indah Sari",
+    calculate: 2100,
+    request: 1020,
+    usage: 88,
+    status: "Active",
+    role: "Sales Executive",
+    lastActive: "15 Mins ago",
+  },
+  {
+    id: 8,
+    user: "Joko Susilo",
+    calculate: 50,
+    request: 10,
+    usage: 5,
+    status: "Disabled",
+    role: "Trial User",
+    lastActive: "1 Week ago",
+  },
+  {
+    id: 9,
+    user: "Kartika Chandra",
+    calculate: 1800,
+    request: 750,
+    usage: 80,
+    status: "Active",
+    role: "Costing Officer",
+    lastActive: "40 Mins ago",
+  },
+  {
+    id: 10,
+    user: "Lukman Hakim",
+    calculate: 280,
+    request: 150,
+    usage: 55,
+    status: "Active",
+    role: "Junior Estimator",
+    lastActive: "2 Hours ago",
+  },
+]);
+
+// Filtering
+const filteredList = computed(() => {
+  return tableData.value.filter((item) => {
+    const matchesSearch = item.user.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchesStatus = selectedStatus.value === "All" || item.status === selectedStatus.value;
+    return matchesSearch && matchesStatus;
+  });
+});
+
+// Pagination
+const currentPage = ref(1);
+const pageSize = ref(10);
+
+const paginatedList = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  return filteredList.value.slice(start, start + pageSize.value);
+});
+
+const totalPages = computed(() => Math.ceil(filteredList.value.length / pageSize.value) || 1);
+
+// --- Modals State ---
+// 1. View Modal
+const isViewModalOpen = ref(false);
+const viewingUser = ref<CalculatorItem | null>(null);
+
+function openViewModal(item: CalculatorItem) {
+  viewingUser.value = item;
+  isViewModalOpen.value = true;
+}
+
+// 2. Edit Modal
+const isEditModalOpen = ref(false);
+const editingUser = ref<CalculatorItem | null>(null);
+const editForm = ref({
+  user: "",
+  calculate: 0,
+  request: 0,
+  usage: 0,
+  status: "Active" as "Active" | "Disabled",
+});
+
+function openEditModal(item: CalculatorItem) {
+  editingUser.value = item;
+  editForm.value = {
+    user: item.user,
+    calculate: item.calculate,
+    request: item.request,
+    usage: item.usage,
+    status: item.status,
+  };
+  isEditModalOpen.value = true;
+}
+
+function saveEdit() {
+  if (!editingUser.value) return;
+  editingUser.value.user = editForm.value.user;
+  editingUser.value.calculate = Number(editForm.value.calculate);
+  editingUser.value.request = Number(editForm.value.request);
+  editingUser.value.usage = Number(editForm.value.usage);
+  editingUser.value.status = editForm.value.status;
+  isEditModalOpen.value = false;
+  showToast(`Updated user record for ${editForm.value.user}.`);
+}
+
+// 3. Delete Confirmation Modal
+const isDeleteModalOpen = ref(false);
+const deletingUser = ref<CalculatorItem | null>(null);
+
+function openDeleteModal(item: CalculatorItem) {
+  deletingUser.value = item;
+  isDeleteModalOpen.value = true;
+}
+
+function confirmDelete() {
+  if (!deletingUser.value) return;
+  tableData.value = tableData.value.filter((i) => i.id !== deletingUser.value!.id);
+  showToast(`Deleted record for ${deletingUser.value.user}.`);
+  isDeleteModalOpen.value = false;
+  deletingUser.value = null;
+}
+
+// --- Telemetry Chart Helper ---
+// 7-day sparkline coordinates matching chart.js data from HTML:
+// labels: ['Aug 26', 'Aug 27', 'Aug 28', 'Aug 29', 'Aug 30', 'Aug 31', 'Sep 1']
+// this week: [0, 100, 0, 0, 1000, 0, 0]
+// last week: [16, 16, 15, 15, 16, 16, 16]
+const days = ["Aug 26", "Aug 27", "Aug 28", "Aug 29", "Aug 30", "Aug 31", "Sep 1"];
+
+function getChartPath(points: number[], maxVal = 1000, height = 90, width = 340) {
+  const stepX = width / (points.length - 1);
+  return points
+    .map((val, i) => {
+      const x = i * stepX;
+      const y = height - (val / maxVal) * (height - 15) - 5;
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
+}
+
+const thisWeekPath = computed(() => getChartPath([0, 100, 0, 0, 1000, 0, 0]));
+const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
+</script>
+
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Kalkulator Dashboard</h4>
-            <h6>Manage and monitor printing cost calculations and API requests</h6>
-          </div>
+  <div class="page-wrapper min-h-screen pb-10">
+    <div class="content mx-auto max-w-[1600px] px-4 pt-4 sm:px-6">
+      <!-- Floating Toast Notification -->
+      <Transition
+        enter-active-class="transform ease-out duration-300 transition"
+        enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+        enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
+        leave-active-class="transition ease-in duration-100"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="toastMessage"
+          class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-[#092C4C] px-4 py-3 text-xs font-semibold text-white shadow-lg"
+        >
+          <FeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
+          <span>{{ toastMessage }}</span>
         </div>
-        <ul class="table-top-head">
+      </Transition>
+
+      <!-- Page Header -->
+      <div class="page-header mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="page-title">
+          <h4 class="text-xl font-bold text-gray-900 dark:text-white">Kalkulator Dashboard</h4>
+          <h6 v-show="!isHeaderCollapsed" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Manage kalkulator</h6>
+        </div>
+
+        <!-- Action Buttons (PDF, Print, Refresh, Collapse) -->
+        <ul class="table-top-head flex items-center gap-2">
           <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
+            <button
+              type="button"
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              title="Pdf"
+              @click="exportPdf"
+            >
+              <img src="/assets/img/icons/pdf.svg" alt="pdf" class="h-4 w-4" />
+            </button>
           </li>
           <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
+            <button
+              type="button"
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              title="Print"
+              @click="printPage"
+            >
+              <FeatherIcon name="printer" size="16" />
+            </button>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
+            <button
+              type="button"
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:bg-primary hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              title="Refresh"
+              @click="refreshAllData"
+            >
+              <FeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:bg-primary hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              title="Collapse"
+              @click="isHeaderCollapsed = !isHeaderCollapsed"
+            >
+              <FeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
+            </button>
           </li>
         </ul>
       </div>
 
-      <!-- Realtime Engine Telemetry Card -->
-      <div class="card bg-dark text-white mb-4 shadow-lg border-0">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="badge bg-secondary px-3 py-1">Realtime Calculation Engine</span>
-            <span class="text-success small d-flex align-items-center"><i class="ti ti-point-filled me-1"></i>System Operational</span>
-          </div>
-          <div class="row g-4 mb-2">
-            <div class="col-md-4 border-end border-secondary border-opacity-25">
-              <div class="fs-13 text-secondary text-uppercase fw-semibold mb-1">Active Users (Current)</div>
-              <div class="fs-1 fw-bold text-white mb-2">56</div>
-              <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%;"></div>
-              </div>
+      <!-- Dashboard Statistik Build (Dark Telemetry Card) -->
+      <div class="mb-5 rounded-xl border border-slate-700/60 bg-[#161D31] p-5 sm:p-6 text-white shadow-md">
+        <div class="mb-4">
+          <span class="inline-block rounded bg-[#334155] px-2.5 py-1 text-xs font-semibold text-slate-200">
+            Realtime Database
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <!-- Col 1: User (current) -->
+          <div class="flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-semibold text-slate-400">User (current)</div>
+              <div class="text-3xl font-bold text-white mb-2">56</div>
             </div>
-            <div class="col-md-4 border-end border-secondary border-opacity-25">
-              <div class="fs-13 text-secondary text-uppercase fw-semibold mb-1">Total API Requests (7d)</div>
-              <div class="fs-1 fw-bold text-white mb-1">7,920</div>
-              <div class="text-success small fw-semibold">+5,056.2% vs last week</div>
-            </div>
-            <div class="col-md-4">
-              <div class="fs-13 text-secondary text-uppercase fw-semibold mb-1">Total Sheet Calculates (7d)</div>
-              <div class="fs-1 fw-bold text-white mb-1">18,032</div>
-              <div class="text-success small fw-semibold">+2,056.2% calculations</div>
+            <!-- SVG Sparkline Chart -->
+            <div class="w-full pt-2">
+              <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
+                <!-- Last week dashed -->
+                <path :d="lastWeekPath" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4 4" />
+                <!-- This week solid -->
+                <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Peak Dot -->
+                <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
+              </svg>
             </div>
           </div>
-          <div class="d-flex justify-content-between mt-3 text-secondary small border-top border-secondary border-opacity-25 pt-2">
-            <span>Peak Hour: 13:00 - 16:00 WIB</span>
-            <span>Avg Computation Latency: 42ms</span>
+
+          <!-- Col 2: Total Request (7d total) -->
+          <div class="flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-semibold text-slate-400">Total Request (7d total)</div>
+              <div class="text-3xl font-bold text-white">7920 Requests</div>
+              <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">+5,056.2%</div>
+            </div>
+            <!-- SVG Sparkline Chart -->
+            <div class="w-full pt-2">
+              <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
+                <path :d="lastWeekPath" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4 4" />
+                <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
+              </svg>
+            </div>
           </div>
+
+          <!-- Col 3: Total Calculate (7d total) -->
+          <div class="flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-semibold text-slate-400">Total Calculate (7d total)</div>
+              <div class="text-3xl font-bold text-white">18032 Calculates</div>
+              <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">+2,056.2%</div>
+            </div>
+            <!-- SVG Sparkline Chart -->
+            <div class="w-full pt-2">
+              <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
+                <path :d="lastWeekPath" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4 4" />
+                <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend Footer -->
+        <div class="mt-4 flex items-center justify-between border-t border-slate-700/60 pt-3 text-xs text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-[#3B82F6]"></span>
+            This week
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="inline-block w-4 border-t border-dashed border-slate-400"></span>
+            Last week
+          </span>
         </div>
       </div>
 
-      <!-- Calculation History Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search user or operator..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All' }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Active'; statusDropdownOpen = false">Active</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Inactive'; statusDropdownOpen = false">Inactive</a></li>
-                </ul>
-              </div>
+      <!-- Data Table Card -->
+      <div class="table-list-card rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <!-- Table Top Controls -->
+        <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <!-- Search Input -->
+          <div class="search-set flex items-center gap-2">
+            <div class="relative w-full sm:w-64">
+              <input
+                v-model="searchQuery"
+                type="text"
+                class="w-full rounded-lg border border-gray-200 bg-white ps-9 pe-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                placeholder="Search..."
+              />
+              <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-400">
+                <FeatherIcon name="search" size="14" />
+              </span>
             </div>
           </div>
 
-          <div class="table-responsive product-list">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>User / Estimator</th>
-                  <th class="text-end">Calculate Count</th>
-                  <th class="text-end">API Requests</th>
-                  <th style="min-width: 140px;">Quota Usage</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="u in filteredUsers" :key="u.id">
-                  <td class="fw-semibold text-dark">{{ u.name }}</td>
-                  <td class="text-end fw-bold">{{ formatNumber(u.calculate) }}</td>
-                  <td class="text-end">{{ formatNumber(u.request) }}</td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="progress flex-grow-1" style="height: 6px;">
-                        <div
-                          class="progress-bar"
-                          :class="u.usage >= 80 ? 'bg-danger' : u.usage >= 50 ? 'bg-warning' : 'bg-success'"
-                          :style="{ width: `${u.usage}%` }"
-                        ></div>
-                      </div>
-                      <span class="fs-12 fw-semibold text-muted">{{ u.usage }}%</span>
+          <!-- Filters & Actions -->
+          <div class="flex items-center gap-2">
+            <!-- Category Filter Button/Dropdown -->
+            <div class="relative">
+              <button
+                type="button"
+                class="flex items-center gap-1.5 rounded-lg border border-primary bg-white px-3 py-2 text-xs font-semibold text-primary transition hover:bg-primary hover:text-white dark:bg-gray-800"
+                @click="showFilterPanel = !showFilterPanel"
+              >
+                <FeatherIcon name="filter" size="14" />
+                <span>Filter</span>
+              </button>
+            </div>
+
+            <!-- Status Dropdown -->
+            <select
+              v-model="selectedStatus"
+              class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="All">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Disabled">Disabled</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Inputs Collapsible Bar -->
+        <div
+          v-if="showFilterPanel"
+          class="mb-4 rounded-xl border border-gray-100 bg-gray-50/60 p-4 dark:border-gray-800 dark:bg-gray-800/40"
+        >
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
+            <div>
+              <label class="mb-1 block text-[11px] font-semibold text-gray-500">Choose Product</label>
+              <select
+                v-model="filterProduct"
+                class="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="">Choose Product</option>
+                <option value="Lenovo">Lenovo 3rd Generation</option>
+                <option value="Nike">Nike Jordan</option>
+              </select>
+            </div>
+            <div>
+              <label class="mb-1 block text-[11px] font-semibold text-gray-500">Choose Category</label>
+              <select
+                v-model="filterCategory"
+                class="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="">Choose Category</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Shoe">Shoe</option>
+              </select>
+            </div>
+            <div>
+              <label class="mb-1 block text-[11px] font-semibold text-gray-500">Sub Category</label>
+              <select
+                v-model="filterSubCategory"
+                class="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="">Choose Sub Category</option>
+                <option value="Computers">Computers</option>
+                <option value="Fruits">Fruits</option>
+              </select>
+            </div>
+            <div>
+              <label class="mb-1 block text-[11px] font-semibold text-gray-500">All Brand</label>
+              <select
+                v-model="filterBrand"
+                class="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="">All Brand</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="Nike">Nike</option>
+              </select>
+            </div>
+            <div>
+              <label class="mb-1 block text-[11px] font-semibold text-gray-500">Price</label>
+              <select
+                v-model="filterPrice"
+                class="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="">Price</option>
+                <option value="12500">$12,500.00</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button
+                type="button"
+                class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white transition hover:bg-primary-hover shadow-sm"
+                @click="showToast('Filters applied.')"
+              >
+                <FeatherIcon name="search" size="14" />
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="border-b border-gray-100 bg-gray-50/60 text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:border-gray-800 dark:bg-gray-800/40"
+              >
+                <th class="py-3.5 ps-4 pe-3 min-w-[180px]">User</th>
+                <th class="py-3.5 px-4 min-w-[120px]">Calculate</th>
+                <th class="py-3.5 px-4 min-w-[120px]">Request</th>
+                <th class="py-3.5 px-4 min-w-[140px]">Usage</th>
+                <th class="py-3.5 px-4 min-w-[100px]">Status</th>
+                <th class="py-3.5 pe-4 ps-3 text-end min-w-[110px]">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-xs dark:divide-gray-800/60">
+              <tr v-for="item in paginatedList" :key="item.id" class="transition hover:bg-gray-50/80 dark:hover:bg-gray-800/40">
+                <td class="py-3.5 ps-4 pe-3 font-semibold text-secondary dark:text-gray-100">
+                  {{ item.user }}
+                </td>
+                <td class="py-3.5 px-4 font-bold text-secondary dark:text-white">
+                  {{ item.calculate.toLocaleString() }}
+                </td>
+                <td class="py-3.5 px-4 text-gray-600 dark:text-gray-300 font-medium">
+                  {{ item.request.toLocaleString() }}
+                </td>
+                <td class="py-3.5 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="h-2 w-20 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
+                      <div
+                        class="h-full rounded-full transition-all"
+                        :class="[item.usage >= 80 ? 'bg-primary' : item.usage >= 50 ? 'bg-emerald-500' : 'bg-blue-500']"
+                        :style="{ width: `${item.usage}%` }"
+                      ></div>
                     </div>
-                  </td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="u.status === 'Active' ? 'badge-success' : 'badge-secondary'"
+                    <span class="font-bold text-secondary dark:text-gray-200">{{ item.usage }}%</span>
+                  </div>
+                </td>
+                <td class="py-3.5 px-4">
+                  <span
+                    v-if="item.status === 'Active'"
+                    class="inline-block rounded bg-primary px-2.5 py-0.5 text-[11px] font-semibold text-white"
+                  >
+                    Active
+                  </span>
+                  <span v-else class="inline-block rounded bg-[#EA5455] px-2.5 py-0.5 text-[11px] font-semibold text-white">
+                    Disabled
+                  </span>
+                </td>
+                <td class="py-3.5 pe-4 ps-3 text-end">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <!-- View Button -->
+                    <button
+                      type="button"
+                      class="flex h-7 w-7 items-center justify-center rounded border border-gray-200 bg-white text-gray-500 transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                      title="View Details"
+                      @click="openViewModal(item)"
                     >
-                      • {{ u.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="View Calculations"
-                        @click="viewDetails(u)"
-                      >
-                        <i class="ti ti-eye fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Reset Quota"
-                        @click="resetQuota(u.id)"
-                      >
-                        <i class="ti ti-rotate-clockwise fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredUsers.length === 0">
-                  <td colspan="6" class="text-center py-4 text-muted">
-                    No calculator user logs found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                      <FeatherIcon name="eye" size="14" />
+                    </button>
+                    <!-- Edit Button -->
+                    <button
+                      type="button"
+                      class="flex h-7 w-7 items-center justify-center rounded border border-gray-200 bg-white text-gray-500 transition hover:border-blue-500 hover:text-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                      title="Edit"
+                      @click="openEditModal(item)"
+                    >
+                      <FeatherIcon name="edit" size="14" />
+                    </button>
+                    <!-- Delete Button -->
+                    <button
+                      type="button"
+                      class="flex h-7 w-7 items-center justify-center rounded border border-gray-200 bg-white text-gray-500 transition hover:border-red-500 hover:text-red-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                      title="Delete"
+                      @click="openDeleteModal(item)"
+                    >
+                      <FeatherIcon name="trash-2" size="14" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="paginatedList.length === 0">
+                <td colspan="6" class="py-8 text-center text-xs text-gray-400">No calculator logs matching your search.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Pagination Footer -->
+        <div
+          class="mt-4 flex flex-col items-center justify-between gap-3 border-t border-gray-100 pt-4 sm:flex-row dark:border-gray-800"
+        >
+          <div class="text-xs text-gray-500 dark:text-gray-400">
+            Showing {{ filteredList.length === 0 ? 0 : (currentPage - 1) * pageSize + 1 }} to
+            {{ Math.min(currentPage * pageSize, filteredList.length) }} of {{ filteredList.length }} entries
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button
+              type="button"
+              :disabled="currentPage <= 1"
+              class="flex h-8 items-center justify-center rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-600 transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              @click="currentPage--"
+            >
+              Previous
+            </button>
+            <button
+              v-for="p in totalPages"
+              :key="p"
+              type="button"
+              :class="[
+                'flex h-8 w-8 items-center justify-center rounded-lg text-xs font-semibold transition',
+                currentPage === p
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300',
+              ]"
+              @click="currentPage = p"
+            >
+              {{ p }}
+            </button>
+            <button
+              type="button"
+              :disabled="currentPage >= totalPages"
+              class="flex h-8 items-center justify-center rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-600 transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              @click="currentPage++"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal: View Calculator Details -->
+    <BaseModal v-model="isViewModalOpen" title="User Calculation Metrics" max-width="md">
+      <div v-if="viewingUser" class="space-y-4 text-xs sm:text-sm">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
+          <div>
+            <h4 class="text-base font-bold text-secondary dark:text-white">{{ viewingUser.user }}</h4>
+            <span class="text-xs text-gray-400"
+              >{{ viewingUser.role || "Calculator Operator" }} • {{ viewingUser.lastActive }}</span
+            >
+          </div>
+          <span
+            :class="[
+              'inline-block px-2.5 py-0.5 rounded text-xs font-semibold',
+              viewingUser.status === 'Active'
+                ? 'bg-emerald-50 text-emerald-600 border border-emerald-500'
+                : 'bg-red-50 text-red-600 border border-red-500',
+            ]"
+          >
+            {{ viewingUser.status }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 py-2 text-center">
+          <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+            <span class="text-[11px] text-gray-400 block mb-1">Calculations</span>
+            <span class="text-base font-bold text-secondary dark:text-white">{{ viewingUser.calculate.toLocaleString() }}</span>
+          </div>
+          <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+            <span class="text-[11px] text-gray-400 block mb-1">API Requests</span>
+            <span class="text-base font-bold text-primary">{{ viewingUser.request.toLocaleString() }}</span>
+          </div>
+          <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+            <span class="text-[11px] text-gray-400 block mb-1">Quota Usage</span>
+            <span class="text-base font-bold text-secondary dark:text-white">{{ viewingUser.usage }}%</span>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-gray-100 bg-gray-50/50 p-3 dark:border-gray-800 dark:bg-gray-800/30">
+          <h6 class="text-xs font-bold text-secondary dark:text-gray-200 mb-1">Printing & Layout Estimations</h6>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            This operator computes sheet optimizations, finishing costs, and plano layouts in real time.
+          </p>
+        </div>
+      </div>
+      <template #footer>
+        <button
+          type="button"
+          class="rounded-lg bg-gray-100 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200"
+          @click="isViewModalOpen = false"
+        >
+          Close
+        </button>
+      </template>
+    </BaseModal>
+
+    <!-- Modal: Edit Calculator Record -->
+    <BaseModal v-model="isEditModalOpen" title="Edit Calculator Record" max-width="md">
+      <div v-if="editingUser" class="space-y-3.5 text-xs">
+        <div>
+          <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">User Name</label>
+          <input
+            v-model="editForm.user"
+            type="text"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:border-primary focus:outline-none"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">Calculate Count</label>
+            <input
+              v-model="editForm.calculate"
+              type="number"
+              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:border-primary focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">Request Count</label>
+            <input
+              v-model="editForm.request"
+              type="number"
+              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:border-primary focus:outline-none"
+            />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">Quota Usage (%)</label>
+            <input
+              v-model="editForm.usage"
+              type="number"
+              min="0"
+              max="100"
+              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:border-primary focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">Status</label>
+            <select
+              v-model="editForm.status"
+              class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:border-primary focus:outline-none"
+            >
+              <option value="Active">Active</option>
+              <option value="Disabled">Disabled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex items-center justify-end gap-2">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200"
+            @click="isEditModalOpen = false"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white hover:bg-primary-hover shadow-sm"
+            @click="saveEdit"
+          >
+            Save Changes
+          </button>
+        </div>
+      </template>
+    </BaseModal>
+
+    <!-- Modal: Delete Confirmation -->
+    <ConfirmModal
+      v-model="isDeleteModalOpen"
+      title="Delete Calculator Record"
+      :message="`Are you sure you want to delete the calculator metrics record for '${deletingUser?.user}'? This action cannot be undone.`"
+      confirm-text="Yes, Delete"
+      confirm-variant="danger"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface CalculatorUser {
-  id: number
-  name: string
-  calculate: number
-  request: number
-  usage: number
-  status: 'Active' | 'Inactive'
-}
-
-const users = ref<CalculatorUser[]>([
-  { id: 1, name: 'Bambang Prakoso (Estimator Lead)', calculate: 1250, request: 580, usage: 85, status: 'Active' },
-  { id: 2, name: 'Citra Dewi (Prepress)', calculate: 800, request: 120, usage: 45, status: 'Active' },
-  { id: 3, name: 'Dedi Kurnia (Sales Officer)', calculate: 640, request: 95, usage: 35, status: 'Active' },
-  { id: 4, name: 'Eka Saputra (Offset Operator)', calculate: 420, request: 60, usage: 22, status: 'Active' },
-  { id: 5, name: 'Fajar Nugraha (Branch Bandung)', calculate: 310, request: 45, usage: 18, status: 'Active' },
-  { id: 6, name: 'Gita Permata (Intern)', calculate: 50, request: 10, usage: 5, status: 'Inactive' }
-])
-
-const searchQuery = ref('')
-const filterStatus = ref('')
-const statusDropdownOpen = ref(false)
-
-const filteredUsers = computed(() => {
-  return users.value.filter(u => {
-    const matchStatus = !filterStatus.value || u.status === filterStatus.value
-    const matchSearch = !searchQuery.value || u.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    return matchStatus && matchSearch
-  })
-})
-
-function formatNumber(val: number) {
-  return val.toLocaleString('id-ID')
-}
-
-function viewDetails(u: CalculatorUser) {
-  alert(`User ${u.name} has performed ${u.calculate} plano and layout calculations with quota usage of ${u.usage}%.`)
-}
-
-function resetQuota(id: number) {
-  if (confirm('Reset calculation quota for this user?')) {
-    const u = users.value.find(item => item.id === id)
-    if (u) {
-      u.usage = 0
-    }
-  }
-}
-
-function exportPdf() {
-  alert('Exporting calculation metrics as PDF...')
-}
-
-function printTable() {
-  window.print()
-}
-
-function refresh() {
-  searchQuery.value = ''
-  filterStatus.value = ''
-}
-</script>
-
