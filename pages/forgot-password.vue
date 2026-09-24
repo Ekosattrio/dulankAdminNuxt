@@ -79,8 +79,11 @@ definePageMeta({
   layout: 'auth'
 })
 
-useHead({
-  title: 'Forgot Password - Kacetak System'
+useLegacyPage({
+  title: 'Forgot Password',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const email = ref('')

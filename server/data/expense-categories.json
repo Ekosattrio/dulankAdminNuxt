@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1",
+    "categoryName": "Biaya Gaji & Upah",
+    "description": "Gaji rutin karyawan, uang lembur, dan bonus kinerja.",
+    "date": "01/10/2025",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "categoryName": "Bahan Baku Utama",
+    "description": "Pembelian kertas plano, tinta cetak, lem, dan bahan finishing.",
+    "date": "02/10/2025",
+    "status": "Active"
+  },
+  {
+    "id": "3",
+    "categoryName": "Perawatan Mesin",
+    "description": "Servis berkala, penggantian sparepart mesin offset dan potong.",
+    "date": "03/10/2025",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "categoryName": "Biaya Listrik & Air",
+    "description": "Tagihan listrik PLN 3 phase pabrik dan air PDAM.",
+    "date": "04/10/2025",
+    "status": "Active"
+  },
+  {
+    "id": "5",
+    "categoryName": "Transportasi & Kurir",
+    "description": "Bensin kendaraan operasional dan ongkir ekspedisi kirim cetakan.",
+    "date": "05/10/2025",
+    "status": "Active"
+  },
+  {
+    "id": "6",
+    "categoryName": "Promosi & Marketing",
+    "description": "Biaya iklan sosial media, sampel cetak, dan katalog.",
+    "date": "06/10/2025",
+    "status": "Deactive"
+  }
+]
+

@@ -3,8 +3,11 @@ import FeatherIcon from "~/components/common/FeatherIcon.vue";
 import BaseModal from "~/components/modal/BaseModal.vue";
 import ConfirmModal from "~/components/modal/ConfirmModal.vue";
 
-useHead({
-  title: "Subscriptions - Kacetak System",
+useLegacyPage({
+  title: 'Subscriptions',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface SubscriptionItem {

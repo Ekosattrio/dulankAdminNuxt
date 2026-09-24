@@ -5,8 +5,11 @@ import type { ProductItem } from '~/components/forms/ProductLiveSearch.vue'
 const router = useRouter()
 const { formatRupiah } = useFormatters()
 
-useHead({
-  title: 'Add Quotation - Kacetak System'
+useLegacyPage({
+  title: 'Add Quotation',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface QuotationLineItem {

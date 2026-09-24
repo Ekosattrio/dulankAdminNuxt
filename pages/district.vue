@@ -173,8 +173,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'District List - Kacetak System'
+useLegacyPage({
+  title: 'District List',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const searchQuery = ref('')

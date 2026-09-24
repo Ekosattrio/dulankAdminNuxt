@@ -125,8 +125,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "Permissions - Kacetak System",
+useLegacyPage({
+  title: 'Permissions',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const searchQuery = ref("");

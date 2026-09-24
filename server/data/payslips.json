@@ -1,0 +1,73 @@
+[
+  {
+    "id": "1",
+    "slipNo": "PS000001",
+    "name": "Budi Setiadi",
+    "period": "02/02/26 - 07/02/26",
+    "salaryRate": 150000,
+    "dayWorked": 6,
+    "allowance": 500000,
+    "overtime": 150000,
+    "deduction": 0,
+    "total": 1550000,
+    "status": "Paid",
+    "paidDate": "09/02/2026"
+  },
+  {
+    "id": "2",
+    "slipNo": "PS000002",
+    "name": "Siti Nurhaliza",
+    "period": "02/02/26 - 07/02/26",
+    "salaryRate": 4200000,
+    "dayWorked": 6,
+    "allowance": 300000,
+    "overtime": 0,
+    "deduction": 0,
+    "total": 1350000,
+    "status": "Paid",
+    "paidDate": "09/02/2026"
+  },
+  {
+    "id": "3",
+    "slipNo": "PS000003",
+    "name": "Agus Rahardjo",
+    "period": "02/02/26 - 07/02/26",
+    "salaryRate": 4000000,
+    "dayWorked": 6,
+    "allowance": 400000,
+    "overtime": 75000,
+    "deduction": 50000,
+    "total": 1425000,
+    "status": "Paid",
+    "paidDate": "09/02/2026"
+  },
+  {
+    "id": "4",
+    "slipNo": "PS000004",
+    "name": "Rina Permata",
+    "period": "02/02/26 - 07/02/26",
+    "salaryRate": 3800000,
+    "dayWorked": 6,
+    "allowance": 250000,
+    "overtime": 0,
+    "deduction": 0,
+    "total": 1200000,
+    "status": "Unpaid",
+    "paidDate": "-"
+  },
+  {
+    "id": "5",
+    "slipNo": "PS000005",
+    "name": "Dedi Kurniawan",
+    "period": "02/02/26 - 07/02/26",
+    "salaryRate": 150000,
+    "dayWorked": 5,
+    "allowance": 350000,
+    "overtime": 100000,
+    "deduction": 0,
+    "total": 1200000,
+    "status": "Unpaid",
+    "paidDate": "-"
+  }
+]
+

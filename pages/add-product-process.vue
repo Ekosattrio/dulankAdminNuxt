@@ -158,8 +158,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "Product Process List - Kacetak System",
+useLegacyPage({
+  title: 'Product Process List',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface ProductProcess {

@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import type { Customer } from "~/components/forms/CustomerLiveSearch.vue";
+const { products: serverProducts } = useProducts();
+const { saveSale } = useSales();
 
 definePageMeta({
   layout: "pos",
 });
 
-useHead({
-  title: "POS - Kacetak System",
+useLegacyPage({
+  title: 'POS',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const { formatRupiah } = useFormatters();
@@ -323,7 +328,22 @@ const openPaymentModal = () => {
   paymentModalOpen.value = true;
 };
 
-const completePayment = () => {
+const completePayment = async () => {
+  try {
+    await saveSale({
+      customer: customer.value.name || 'Walk-in Customer',
+      subTotal: subtotal.value,
+      deliveryFee: shippingCost.value,
+      discount: discountAmount.value,
+      tax: taxAmount.value,
+      delivery: shippingCost.value > 0 ? 'Shipping' : 'Pick Up',
+      channel: 'POS',
+      status: 'Paid',
+      method: paymentMethod.value === 'cash' ? 'Cash' : paymentMethod.value === 'card' ? 'Debit Card' : 'Bank Transfer'
+    });
+  } catch (err) {
+    console.error('Failed to persist POS sale:', err);
+  }
   paymentModalOpen.value = false;
   receiptModalOpen.value = true;
 };
@@ -339,6 +359,31 @@ const resetAll = () => {
   taxRate.value = 0;
   receiptModalOpen.value = false;
 };
+
+watch(
+  serverProducts,
+  (prods) => {
+    if (prods && prods.length > 0) {
+      const mappedProds: POSProduct[] = prods.map((p) => ({
+        id: p.id,
+        code: p.code,
+        name: p.name,
+        category: p.category.toLowerCase().includes('cetak') ? 'cetak' : 'all',
+        price: p.price,
+        stock: 50,
+        image: '/assets/img/products/brosur.png',
+        specs: `${p.subCategory}, ${p.unit}`
+      }));
+      const existingIds = new Set(products.value.map((p) => p.code));
+      for (const mp of mappedProds) {
+        if (!existingIds.has(mp.code)) {
+          products.value.unshift(mp);
+        }
+      }
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

@@ -112,8 +112,11 @@ definePageMeta({
   layout: 'default'
 })
 
-useHead({
-  title: 'Job Progress List - Kacetak System'
+useLegacyPage({
+  title: 'Job Progress List',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface JobProgressItem {

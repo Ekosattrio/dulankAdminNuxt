@@ -136,8 +136,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "Printer Settings - Kacetak System",
+useLegacyPage({
+  title: 'Printer Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const searchQuery = ref("");

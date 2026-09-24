@@ -101,8 +101,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-useHead({
-  title: "SMS Gateways - Kacetak System",
+useLegacyPage({
+  title: 'SMS Gateways',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 type GatewayKey = "nexmo" | "twoFactor" | "twilio" | "zenziva";

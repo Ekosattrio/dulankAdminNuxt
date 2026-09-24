@@ -127,8 +127,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-useHead({
-  title: "Profile Settings - Kacetak System",
+useLegacyPage({
+  title: 'Profile Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const profilePhotoUrl = ref("");

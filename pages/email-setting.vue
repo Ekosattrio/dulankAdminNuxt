@@ -211,8 +211,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Email Settings - Kacetak System'
+useLegacyPage({
+  title: 'Email Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const showConfigModal = ref(false)

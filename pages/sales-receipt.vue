@@ -1,6 +1,9 @@
 <script setup lang="ts">
-useHead({
-  title: "Sales Receipt - Kacetak System",
+useLegacyPage({
+  title: 'Sales Receipt',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const printReceipt = () => {

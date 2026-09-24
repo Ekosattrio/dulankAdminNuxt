@@ -4,8 +4,11 @@ const router = useRouter();
 
 const flowNo = computed(() => (route.query.no as string) || "JAP-0001");
 
-useHead({
-  title: computed(() => `Edit Work Flow ${flowNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Edit Work Flow',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const selectedProduct = ref("Brosur A5");

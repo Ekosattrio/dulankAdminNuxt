@@ -4,8 +4,11 @@ const router = useRouter();
 
 const rfqNo = computed(() => (route.query.no as string) || "RFQ00001");
 
-useHead({
-  title: computed(() => `Edit RFQ ${rfqNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Edit Request Quotation',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface RFQLineItem {

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "date": "01/11/2025",
+    "no": "IN000001",
+    "name": "Budi Santoso",
+    "category": "Penjualan Jasa Cetak",
+    "notes": "Pembayaran lunas cetak brosur 1000 pcs.",
+    "amount": 1000000,
+    "paymentMethod": "Transfer Bank",
+    "bankAccount": "Mandiri 1320009982282"
+  },
+  {
+    "id": "2",
+    "date": "03/11/2025",
+    "no": "IN000002",
+    "name": "Siti Nurhaliza",
+    "category": "Biaya Pengiriman",
+    "notes": "Pemasukan biaya kirim pesanan urgent.",
+    "amount": 150000,
+    "paymentMethod": "Tunai / Cash",
+    "bankAccount": "-"
+  },
+  {
+    "id": "3",
+    "date": "05/11/2025",
+    "no": "IN000003",
+    "name": "Ahmad Wijaya",
+    "category": "Jasa Desain",
+    "notes": "Pembayaran desain kartu nama & logo.",
+    "amount": 350000,
+    "paymentMethod": "Transfer Bank",
+    "bankAccount": "BCA 8830129841"
+  },
+  {
+    "id": "4",
+    "date": "07/11/2025",
+    "no": "IN000004",
+    "name": "Rina Puspita",
+    "category": "Penjualan Limbah Kertas",
+    "notes": "Penjualan kertas scrap bulan Oktober.",
+    "amount": 600000,
+    "paymentMethod": "Tunai / Cash",
+    "bankAccount": "-"
+  },
+  {
+    "id": "5",
+    "date": "09/11/2025",
+    "no": "IN000005",
+    "name": "Hendra Kusuma",
+    "category": "Penjualan Jasa Cetak",
+    "notes": "Pelunasan cetak banner outdoor.",
+    "amount": 880000,
+    "paymentMethod": "Transfer Bank",
+    "bankAccount": "BCA 8830129841"
+  }
+]
+

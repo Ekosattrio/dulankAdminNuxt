@@ -145,8 +145,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-useHead({
-  title: 'Invoice Settings - Kacetak System'
+useLegacyPage({
+  title: 'Invoice Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const invoiceLogo = ref('/assets/img/logo-small.png')

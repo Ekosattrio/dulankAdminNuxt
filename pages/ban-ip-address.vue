@@ -164,8 +164,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Ban IP Address - Kacetak System'
+useLegacyPage({
+  title: 'Ban IP Address',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface BanIp {

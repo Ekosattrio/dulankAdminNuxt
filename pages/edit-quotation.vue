@@ -8,8 +8,11 @@ const { formatRupiah } = useFormatters();
 
 const quoteNo = computed(() => (route.query.no as string) || "QUO00001");
 
-useHead({
-  title: computed(() => `Edit Quotation ${quoteNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Edit Quotation',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface QuotationLineItem {

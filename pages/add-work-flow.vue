@@ -3,8 +3,11 @@ import type { ProductItem } from '~/components/forms/ProductLiveSearch.vue'
 
 const router = useRouter()
 
-useHead({
-  title: 'Add Work Flow - Kacetak System'
+useLegacyPage({
+  title: 'Add Work Flow',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const selectedProduct = ref('Brosur A5 Full Color')

@@ -191,8 +191,11 @@ definePageMeta({
   layout: 'default'
 })
 
-useHead({
-  title: 'Edit Job Order - Kacetak System'
+useLegacyPage({
+  title: 'Edit Job Order',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface WorkflowStep {

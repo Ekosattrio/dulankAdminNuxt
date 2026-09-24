@@ -238,8 +238,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "POS Orders - Kacetak System",
+useLegacyPage({
+  title: 'POS Orders',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface PosOrder {

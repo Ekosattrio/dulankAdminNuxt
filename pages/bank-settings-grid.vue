@@ -128,8 +128,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-useHead({
-  title: 'Bank Settings Grid - Kacetak System'
+useLegacyPage({
+  title: 'Bank Settings Grid',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const showModal = ref(false)

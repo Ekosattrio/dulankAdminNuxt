@@ -376,8 +376,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "Add Sales - Kacetak System",
+useLegacyPage({
+  title: 'Add Sales',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface Customer {

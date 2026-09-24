@@ -1,0 +1,63 @@
+[
+  {
+    "id": "1",
+    "noQuotation": "QUO00001",
+    "date": "01/11/2025",
+    "customer": "PT Semesta Digital",
+    "email": "info@semestadigi.co.id",
+    "status": "Send",
+    "dateStatus": "01/11/2025",
+    "total": 4250000,
+    "channel": "Online",
+    "dueDate": "01/12/2025"
+  },
+  {
+    "id": "2",
+    "noQuotation": "QUO00002",
+    "date": "02/11/2025",
+    "customer": "CV Mitra Sejati",
+    "email": "mitra.sjt@gmail.com",
+    "status": "Ordered",
+    "dateStatus": "05/11/2025",
+    "total": 7800000,
+    "channel": "Sales Staff",
+    "dueDate": "02/12/2025"
+  },
+  {
+    "id": "3",
+    "noQuotation": "QUO00003",
+    "date": "03/11/2025",
+    "customer": "Yayasan Cahaya Ilmu",
+    "email": "yysn.ilmu@org.id",
+    "status": "Send",
+    "dateStatus": "03/11/2025",
+    "total": 5120000,
+    "channel": "Online",
+    "dueDate": "03/12/2025"
+  },
+  {
+    "id": "4",
+    "noQuotation": "QUO00004",
+    "date": "04/11/2025",
+    "customer": "Koperasi Karyawan Makmur",
+    "email": "krm@karya.id",
+    "status": "Rejected",
+    "dateStatus": "12/11/2025",
+    "total": 3950000,
+    "channel": "Sales Staff",
+    "dueDate": "03/12/2025"
+  },
+  {
+    "id": "5",
+    "noQuotation": "QUO00005",
+    "date": "05/11/2025",
+    "customer": "PT Griya Agung",
+    "email": "marketing@griyaagung.com",
+    "status": "Ordered",
+    "dateStatus": "08/11/2025",
+    "total": 6100000,
+    "channel": "Online",
+    "dueDate": "05/12/2025"
+  }
+]
+

@@ -259,8 +259,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "Money Transfer - Kacetak System",
+useLegacyPage({
+  title: 'Money Transfer',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface TransferRecord {

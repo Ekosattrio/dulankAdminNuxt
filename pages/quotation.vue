@@ -1,288 +1,151 @@
 <script setup lang="ts">
-const { formatRupiah } = useFormatters();
+import type { Quotation, QuotationFormData } from '~/types/quotation'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-useHead({
-  title: "Quotation List - Kacetak System",
-});
+definePageMeta({
+  layout: 'default'
+})
 
-interface QuotationItem {
-  id: string;
-  noQuotation: string;
-  date: string;
-  customer: string;
-  email: string;
-  status: "Send" | "Complete" | "Pending" | "Ordered" | "Received";
-  dateStatus: string;
-  total: number;
-  channel: "Online" | "Offline";
-  dueDate: string;
+useLegacyPage({
+  title: 'Quotations - Penawaran Harga',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+
+const { quotations, pending, refresh, saveQuotation, deleteQuotation } = useQuotations()
+
+const searchQuery = ref('')
+const filterStatus = ref('')
+
+const isModalOpen = ref(false)
+const isEdit = ref(false)
+const editData = ref<Quotation | null>(null)
+const toastMessage = ref('')
+
+const showToast = (msg: string) => {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3000)
 }
 
-const quotations = ref<QuotationItem[]>([
-  {
-    id: "1",
-    noQuotation: "QUO00001",
-    date: "01/11/2025",
-    customer: "PT Semesta Digital",
-    email: "info@semestadigi.co.id",
-    status: "Send",
-    dateStatus: "01/11/2025",
-    total: 4250000,
-    channel: "Online",
-    dueDate: "01/12/2025",
-  },
-  {
-    id: "2",
-    noQuotation: "QUO00002",
-    date: "03/11/2025",
-    customer: "PT Makmur Abadi",
-    email: "makmurabadi@gmail.com",
-    status: "Complete",
-    dateStatus: "04/11/2025",
-    total: 1332000,
-    channel: "Offline",
-    dueDate: "15/11/2025",
-  },
-  {
-    id: "3",
-    noQuotation: "QUO00003",
-    date: "05/11/2025",
-    customer: "Toko Buku Cerdas",
-    email: "cerdasbuku@yahoo.com",
-    status: "Pending",
-    dateStatus: "05/11/2025",
-    total: 3552000,
-    channel: "Online",
-    dueDate: "20/11/2025",
-  },
-  {
-    id: "4",
-    noQuotation: "QUO00004",
-    date: "08/11/2025",
-    customer: "Bpk. Rahmat",
-    email: "rahmat.design@gmail.com",
-    status: "Ordered",
-    dateStatus: "09/11/2025",
-    total: 610500,
-    channel: "Offline",
-    dueDate: "18/11/2025",
-  },
-  {
-    id: "5",
-    noQuotation: "QUO00005",
-    date: "10/11/2025",
-    customer: "CV Jaya Sentosa",
-    email: "jayasentosa@corp.id",
-    status: "Received",
-    dateStatus: "11/11/2025",
-    total: 3241200,
-    channel: "Online",
-    dueDate: "25/11/2025",
-  },
-]);
+const filteredList = computed(() => {
+  return quotations.value.filter((q) => {
+    const matchesSearch =
+      !searchQuery.value ||
+      q.quotationNo?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      q.customer?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    const matchesStatus = !filterStatus.value || q.status === filterStatus.value
+    return matchesSearch && matchesStatus
+  })
+})
 
-const statusFilter = ref<string>("All");
+const handleAdd = () => {
+  isEdit.value = false
+  editData.value = null
+  isModalOpen.value = true
+}
 
-const filteredQuotations = computed(() => {
-  if (statusFilter.value === "All") return quotations.value;
-  return quotations.value.filter((q) => q.status === statusFilter.value);
-});
+const handleEdit = (q: Quotation) => {
+  isEdit.value = true
+  editData.value = q
+  isModalOpen.value = true
+}
 
-const columns = [
-  { key: "noQuotation", label: "No Quotation", sortable: true },
-  { key: "date", label: "Date", sortable: true },
-  { key: "customer", label: "Customer", sortable: true },
-  { key: "email", label: "Email" },
-  { key: "status", label: "Status", sortable: true, align: "center" as const },
-  { key: "dateStatus", label: "Date Status", sortable: true },
-  { key: "total", label: "Total (IDR)", sortable: true, align: "end" as const },
-  { key: "channel", label: "Quotation Channel", align: "center" as const },
-  { key: "dueDate", label: "Due Date", sortable: true },
-  { key: "actions", label: "Action", align: "center" as const },
-];
+const handleDelete = async (id: string) => {
+  if (confirm('Apakah Anda yakin ingin menghapus data penawaran harga ini?')) {
+    try {
+      await deleteQuotation(id)
+      showToast('Quotation deleted successfully')
+    } catch (err) {
+      console.error('Failed to delete quotation:', err)
+      alert('Failed to delete quotation')
+    }
+  }
+}
 
-const deleteModalOpen = ref(false);
-const selectedQuo = ref<QuotationItem | null>(null);
+const handleSubmit = async (formData: QuotationFormData) => {
+  try {
+    const res = await saveQuotation(formData)
+    showToast(res?.message || 'Quotation saved successfully')
+    isModalOpen.value = false
+  } catch (err) {
+    console.error('Failed to save quotation:', err)
+    alert('Failed to save quotation')
+  }
+}
 
-const confirmDelete = (item: QuotationItem) => {
-  selectedQuo.value = item;
-  deleteModalOpen.value = true;
-};
+const printTable = () => {
+  window.print()
+}
 
-const handleDelete = () => {
-  if (!selectedQuo.value) return;
-  quotations.value = quotations.value.filter((q) => q.id !== selectedQuo.value?.id);
-  deleteModalOpen.value = false;
-  selectedQuo.value = null;
-};
+const exportPdf = () => {
+  showToast('Exporting Quotations to PDF...')
+}
 </script>
 
 <template>
-  <div>
-    <!-- Page Header -->
-    <PageHeader title="Quotation List" subtitle="Manage Your Quotation">
-      <template #actions>
-        <div class="flex items-center gap-2">
-          <button
-            type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
-            title="PDF"
-          >
-            <img src="/assets/img/icons/pdf.svg" alt="PDF" class="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
-            title="Print"
-            @click="() => window.print()"
-          >
-            <FeatherIcon name="printer" size="16" />
-          </button>
-          <NuxtLink
-            to="/add-quotation"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-primary/90"
-          >
-            <FeatherIcon name="plus-circle" size="14" />
-            <span>Add New Quotation</span>
-          </NuxtLink>
-        </div>
-      </template>
-    </PageHeader>
-
-    <!-- Filter Bar -->
-    <div
-      class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
-    >
-      <div class="flex items-center gap-2">
-        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Filter Status:</label>
-        <select
-          v-model="statusFilter"
-          class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-        >
-          <option value="All">All Status</option>
-          <option value="Send">Send</option>
-          <option value="Complete">Complete</option>
-          <option value="Pending">Pending</option>
-          <option value="Ordered">Ordered</option>
-          <option value="Received">Received</option>
-        </select>
+  <div class="page-wrapper mt-3">
+    <div class="content container-fluid">
+      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
+        <FeatherIcon name="check-circle" size="18" />
+        <div>{{ toastMessage }}</div>
       </div>
+
+      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div class="page-title">
+          <h4 class="fw-bold mb-1">Quotations / Penawaran Harga</h4>
+          <h6 class="text-muted mb-0">Kelola draft dan surat estimasi harga penawaran ke pelanggan</h6>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
+            <li>
+              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
+                <FeatherIcon name="printer" size="16" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
+                <FeatherIcon name="rotate-cw" size="16" />
+              </button>
+            </li>
+          </ul>
+          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
+            <FeatherIcon name="plus-circle" size="18" />
+            <span>Create Quotation</span>
+          </button>
+        </div>
+      </div>
+
+      <div v-if="pending" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <PagesQuotationTable
+        v-else
+        :quotations="filteredList"
+        :search-query="searchQuery"
+        :filter-status="filterStatus"
+        @update:search-query="searchQuery = $event"
+        @update:filter-status="filterStatus = $event"
+        @add-quotation="handleAdd"
+        @edit-quotation="handleEdit"
+        @delete-quotation="handleDelete"
+        @export-pdf="exportPdf"
+        @print-table="printTable"
+        @refresh="refresh"
+      />
     </div>
 
-    <!-- Data Table -->
-    <DataTable
-      :columns="columns"
-      :items="filteredQuotations"
-      search-placeholder="Search quotation, customer, email..."
-      @print="() => window.print()"
-    >
-      <!-- No Quotation -->
-      <template #cell(noQuotation)="{ item }">
-        <NuxtLink :to="`/quotation-detail?no=${item.noQuotation}`" class="font-semibold text-primary hover:underline">
-          {{ item.noQuotation }}
-        </NuxtLink>
-      </template>
-
-      <!-- Customer -->
-      <template #cell(customer)="{ item }">
-        <span class="font-medium text-gray-900 dark:text-white">{{ item.customer }}</span>
-      </template>
-
-      <!-- Email -->
-      <template #cell(email)="{ item }">
-        <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.email }}</span>
-      </template>
-
-      <!-- Status -->
-      <template #cell(status)="{ item }">
-        <span
-          :class="[
-            'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-            item.status === 'Complete'
-              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-              : item.status === 'Send'
-                ? 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800'
-                : item.status === 'Ordered'
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800'
-                  : 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800',
-          ]"
-        >
-          {{ item.status }}
-        </span>
-      </template>
-
-      <!-- Total -->
-      <template #cell(total)="{ item }">
-        <span class="font-semibold text-gray-900 dark:text-white">{{ formatRupiah(item.total) }}</span>
-      </template>
-
-      <!-- Channel -->
-      <template #cell(channel)="{ item }">
-        <span class="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-          {{ item.channel }}
-        </span>
-      </template>
-
-      <!-- Actions -->
-      <template #cell(actions)="{ item }">
-        <div class="flex items-center justify-center gap-1.5">
-          <NuxtLink
-            :to="`/quotation-detail?no=${item.noQuotation}`"
-            class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400"
-            title="View Quotation"
-          >
-            <FeatherIcon name="eye" size="13" />
-          </NuxtLink>
-          <NuxtLink
-            :to="`/edit-quotation?no=${item.noQuotation}`"
-            class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-warning hover:text-warning dark:border-gray-700 dark:text-gray-400"
-            title="Edit Quotation"
-          >
-            <FeatherIcon name="edit" size="13" />
-          </NuxtLink>
-          <button
-            type="button"
-            class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-danger hover:text-danger dark:border-gray-700 dark:text-gray-400"
-            title="Delete"
-            @click="confirmDelete(item)"
-          >
-            <FeatherIcon name="trash-2" size="13" />
-          </button>
-        </div>
-      </template>
-    </DataTable>
-
-    <!-- Delete Confirmation Modal -->
-    <BaseModal v-model="deleteModalOpen" title="Delete Quotation" size="sm">
-      <div class="p-4 text-center">
-        <div
-          class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/50"
-        >
-          <FeatherIcon name="alert-triangle" size="24" />
-        </div>
-        <h5 class="text-base font-semibold text-gray-900 dark:text-white">Are you sure?</h5>
-        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          Do you really want to delete quotation
-          <span class="font-bold text-gray-800 dark:text-gray-200">{{ selectedQuo?.noQuotation }}</span
-          >?
-        </p>
-        <div class="mt-6 flex justify-center gap-3">
-          <button
-            type="button"
-            class="rounded-lg border border-gray-200 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-            @click="deleteModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="rounded-lg bg-danger px-4 py-2 text-xs font-medium text-white hover:bg-danger/90"
-            @click="handleDelete"
-          >
-            Yes, Delete It
-          </button>
-        </div>
-      </div>
-    </BaseModal>
+    <PagesQuotationModal
+      :is-open="isModalOpen"
+      :is-edit="isEdit"
+      :edit-data="editData"
+      @close="isModalOpen = false"
+      @submit="handleSubmit"
+    />
   </div>
 </template>

@@ -286,8 +286,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "System Settings - Kacetak System",
+useLegacyPage({
+  title: 'System Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 type IntegrationKey = "captcha" | "analytics" | "adsense" | "map";

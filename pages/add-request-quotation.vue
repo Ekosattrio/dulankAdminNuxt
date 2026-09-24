@@ -1,8 +1,11 @@
 <script setup lang="ts">
 const router = useRouter()
 
-useHead({
-  title: 'Add Request For Quotation (RFQ) - Kacetak System'
+useLegacyPage({
+  title: 'Add Request For Quotation (RFQ)',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface RFQLineItem {

@@ -100,8 +100,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Delete Account Request - Kacetak System'
+useLegacyPage({
+  title: 'Delete Account Request',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const searchQuery = ref('')

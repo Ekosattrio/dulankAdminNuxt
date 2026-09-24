@@ -6,8 +6,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "Sales Dashboard - Kacetak System",
+useLegacyPage({
+  title: 'Sales Dashboard',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 // --- State: Header & Date Range Picker ---

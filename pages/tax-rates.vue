@@ -194,8 +194,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "Tax Rates - Kacetak System",
+useLegacyPage({
+  title: 'Tax Rates',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface TaxRateItem {

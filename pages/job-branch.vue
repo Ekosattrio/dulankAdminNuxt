@@ -215,8 +215,11 @@ definePageMeta({
   layout: 'default'
 })
 
-useHead({
-  title: 'Job Branch - Kacetak System'
+useLegacyPage({
+  title: 'Job Branch',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface JobBranchItem {

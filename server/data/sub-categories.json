@@ -1,0 +1,73 @@
+[
+  {
+    "id": "1",
+    "name": "Print Outdoor",
+    "category": "Print Outdoor (Spanduk/Baliho)",
+    "categoryCode": "CAT-OD02",
+    "description": "Spanduk, banner, baliho outdoor",
+    "itemUsed": 12,
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "name": "Cetak A3+",
+    "category": "Digital Printing A3+",
+    "categoryCode": "CAT-DP05",
+    "description": "Print lembaran A3+ bahan art paper, linen, dll",
+    "itemUsed": 25,
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "3",
+    "name": "Brosur & Flyer",
+    "category": "Jasa Cetak Offset",
+    "categoryCode": "CAT-OF01",
+    "description": "Brosur lipat 2, lipat 3, flyer promo",
+    "itemUsed": 8,
+    "createdBy": "Budi",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "name": "Sticker & Label",
+    "category": "Cutting Sticker",
+    "categoryCode": "CAT-CS06",
+    "description": "Sticker vinyl, cromo, bontax, transparan",
+    "itemUsed": 18,
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "5",
+    "name": "Kalender",
+    "category": "Finishing (Laminating/Jilid)",
+    "categoryCode": "CAT-FN08",
+    "description": "Kalender dinding, kalender meja spiral",
+    "itemUsed": 6,
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "6",
+    "name": "Kaos & T-Shirt",
+    "category": "Sablon DTF (Digital Transfer Film)",
+    "categoryCode": "CAT-DT07",
+    "description": "Kaos sablon transfer film full color",
+    "itemUsed": 14,
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "7",
+    "name": "Mug & Tumbler",
+    "category": "Merchandise & Souvenir (UV Print)",
+    "categoryCode": "CAT-MC09",
+    "description": "Cetak UV di permukaan silinder dan datar",
+    "itemUsed": 9,
+    "createdBy": "Admin",
+    "status": "Active"
+  }
+]
+

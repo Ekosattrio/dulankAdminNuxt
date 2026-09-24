@@ -1,0 +1,75 @@
+[
+  {
+    "id": "1",
+    "name": "Jasa Cetak Offset",
+    "code": "CAT-OF01",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "name": "Print Outdoor (Spanduk/Baliho)",
+    "code": "CAT-OD02",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "3",
+    "name": "Print Indoor (Poster/X-Banner)",
+    "code": "CAT-ID03",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "name": "Sablon Manual (Kaos/Plastik)",
+    "code": "CAT-SM04",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "5",
+    "name": "Digital Printing A3+",
+    "code": "CAT-DP05",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "6",
+    "name": "Cutting Sticker",
+    "code": "CAT-CS06",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "7",
+    "name": "Sablon DTF (Digital Transfer Film)",
+    "code": "CAT-DT07",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Inactive"
+  },
+  {
+    "id": "8",
+    "name": "Finishing (Laminating/Jilid)",
+    "code": "CAT-FN08",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "9",
+    "name": "Merchandise & Souvenir (UV Print)",
+    "code": "CAT-MC09",
+    "createdDate": "02/03/2026",
+    "createdBy": "Admin",
+    "status": "Active"
+  }
+]
+

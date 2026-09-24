@@ -150,8 +150,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Input Tax - Kacetak System'
+useLegacyPage({
+  title: 'Input Tax',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface InputTaxItem {

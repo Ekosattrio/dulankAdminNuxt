@@ -1,8 +1,23 @@
 <script setup lang="ts">
 import { useProfitCalculation, type ProfitTier } from '~/composables/useProfitCalculation'
+import type {
+  ProductCustom,
+  SizePreset,
+  PaperTypePreset,
+  MachineTypePreset,
+  LaminatePreset,
+  FoldPreset,
+  PrintSidePreset,
+  ComponentPreset,
+  WorkflowStepPreset,
+  CalculationLogTransaction
+} from '~/types/cetak-full-color'
 
-useHead({
-  title: 'Cetak Full Color - Kacetak System'
+useLegacyPage({
+  title: 'Cetak Full Color',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const { formatRupiah } = useFormatters()
@@ -25,133 +40,61 @@ const tabs = [
   { id: 'log-transaction', label: 'Log Transaction', icon: 'clipboard' }
 ]
 
-// Tab 1: Product Custom Default Data
-interface ProductCustom {
-  id: string
-  name: string
-  defaultSize: string
-  paperTypes: string
-  machine: string
-  active: boolean
-  image: string
+const { config, pending, refresh, saveCetakFullColorConfig } = useCetakFullColor()
+
+const products = ref<ProductCustom[]>([])
+const sizes = ref<SizePreset[]>([])
+const papers = ref<PaperTypePreset[]>([])
+const machines = ref<MachineTypePreset[]>([])
+const laminates = ref<LaminatePreset[]>([])
+const folds = ref<FoldPreset[]>([])
+const printSides = ref<PrintSidePreset[]>([])
+const components = ref<ComponentPreset[]>([])
+const workflowSteps = ref<WorkflowStepPreset[]>([])
+const profitTiers = ref<ProfitTier[]>([...defaultProfitTiers.value])
+const logTransactions = ref<CalculationLogTransaction[]>([])
+
+watch(
+  config,
+  (cfg) => {
+    if (cfg) {
+      if (cfg.products?.length) products.value = cfg.products
+      if (cfg.sizes?.length) sizes.value = cfg.sizes
+      if (cfg.papers?.length) papers.value = cfg.papers
+      if (cfg.machines?.length) machines.value = cfg.machines
+      if (cfg.laminates?.length) laminates.value = cfg.laminates
+      if (cfg.folds?.length) folds.value = cfg.folds
+      if (cfg.printSides?.length) printSides.value = cfg.printSides
+      if (cfg.components?.length) components.value = cfg.components
+      if (cfg.workflowSteps?.length) workflowSteps.value = cfg.workflowSteps
+      if (cfg.profitTiers?.length) profitTiers.value = cfg.profitTiers
+      if (cfg.logTransactions?.length) logTransactions.value = cfg.logTransactions
+    }
+  },
+  { immediate: true }
+)
+
+const persistCurrentState = async () => {
+  try {
+    await saveCetakFullColorConfig({
+      products: products.value,
+      sizes: sizes.value,
+      papers: papers.value,
+      machines: machines.value,
+      laminates: laminates.value,
+      folds: folds.value,
+      printSides: printSides.value,
+      components: components.value,
+      workflowSteps: workflowSteps.value,
+      profitTiers: profitTiers.value,
+      logTransactions: logTransactions.value
+    })
+  } catch (err) {
+    console.error('Failed to save config:', err)
+  }
 }
 
-const products = ref<ProductCustom[]>([
-  {
-    id: '1',
-    name: 'Brosur',
-    defaultSize: 'A4 (297x210mm) (Default), A5 (210x149mm)',
-    paperTypes: 'Art Paper 150gr, Art Paper 120gr',
-    machine: 'SM 52 4 Warna',
-    active: true,
-    image: '/assets/img/products/brosur.png'
-  },
-  {
-    id: '2',
-    name: 'Kartu Nama',
-    defaultSize: '90x54mm (Default)',
-    paperTypes: 'Art Carton 260gr',
-    machine: 'Digital Press Fuji Xerox',
-    active: true,
-    image: '/assets/img/products/pos-product-01.png'
-  },
-  {
-    id: '3',
-    name: 'Flyer',
-    defaultSize: 'A5 (210x148mm) (Default), DL (210x99mm)',
-    paperTypes: 'Art Paper 120gr, HVS 80gr',
-    machine: 'SM 52 4 Warna',
-    active: true,
-    image: '/assets/img/products/pos-product-04.png'
-  },
-  {
-    id: '4',
-    name: 'Kalender Meja',
-    defaultSize: '210x150mm Horizontal',
-    paperTypes: 'Art Carton 230gr, Board No. 30',
-    machine: 'Komori Lithrone 4 Warna',
-    active: false,
-    image: '/assets/img/products/pos-product-10.png'
-  }
-])
-
-// Tab 2: Product Size
-const sizes = ref([
-  { id: '1', name: 'A4', widthMm: 210, heightMm: 297, isStandard: true },
-  { id: '2', name: 'A5', widthMm: 148, heightMm: 210, isStandard: true },
-  { id: '3', name: 'A3', widthMm: 297, heightMm: 420, isStandard: true },
-  { id: '4', name: 'A3+', widthMm: 320, heightMm: 480, isStandard: true },
-  { id: '5', name: 'F4 / Folio', widthMm: 215, heightMm: 330, isStandard: true },
-  { id: '6', name: 'Kartu Nama Standard', widthMm: 90, heightMm: 54, isStandard: true }
-])
-
-// Tab 3: Paper Type
-const papers = ref([
-  { id: '1', name: 'Art Paper 120gr', plano: '65 x 100 cm', pricePlano: 2200 },
-  { id: '2', name: 'Art Paper 150gr', plano: '65 x 100 cm', pricePlano: 2750 },
-  { id: '3', name: 'Art Carton 210gr', plano: '65 x 100 cm', pricePlano: 3400 },
-  { id: '4', name: 'Art Carton 260gr', plano: '65 x 100 cm', pricePlano: 4200 },
-  { id: '5', name: 'HVS 70gr', plano: '65 x 100 cm', pricePlano: 1600 },
-  { id: '6', name: 'HVS 80gr', plano: '65 x 100 cm', pricePlano: 1850 },
-  { id: '7', name: 'Matte Paper 150gr', plano: '65 x 100 cm', pricePlano: 2900 }
-])
-
-// Tab 4: Machine Type
-const machines = ref([
-  { id: '1', name: 'Heidelberg SM 52 (4 Warna)', maxArea: '360 x 520 mm', plateCost: 45000, runChargeMin: 150000 },
-  { id: '2', name: 'Komori Lithrone 26 (4 Warna)', maxArea: '480 x 650 mm', plateCost: 65000, runChargeMin: 250000 },
-  { id: '3', name: 'Oliver 58 (1 Warna)', maxArea: '440 x 570 mm', plateCost: 35000, runChargeMin: 75000 },
-  { id: '4', name: 'Konica Minolta C1085 (Digital)', maxArea: '320 x 480 mm', plateCost: 0, runChargeMin: 2500 }
-])
-
-// Tab 5: Laminate
-const laminates = ref([
-  { id: '1', name: 'Tanpa Laminasi', costPerSide: 0 },
-  { id: '2', name: 'Laminasi Doff Panas 1 Sisi', costPerSide: 450 },
-  { id: '3', name: 'Laminasi Glossy Panas 1 Sisi', costPerSide: 400 },
-  { id: '4', name: 'Laminasi Doff Panas 2 Sisi', costPerSide: 900 },
-  { id: '5', name: 'Laminasi Glossy Panas 2 Sisi', costPerSide: 800 },
-  { id: '6', name: 'Spot UV Custom', costPerSide: 1200 }
-])
-
-// Tab 6: Fold
-const folds = ref([
-  { id: '1', name: 'Tanpa Lipatan', costPer1000: 0 },
-  { id: '2', name: 'Lipat 2 (Half Fold)', costPer1000: 25000 },
-  { id: '3', name: 'Lipat 3 (Tri-Fold / Z-Fold)', costPer1000: 45000 },
-  { id: '4', name: 'Lipat 3 (Gate Fold)', costPer1000: 60000 }
-])
-
-// Tab 7: Print Side
-const printSides = ref([
-  { id: '1', name: '1 Sisi (4/0)', plateMultiplier: 1, runMultiplier: 1 },
-  { id: '2', name: '2 Sisi Bolak-Balik Sama (4/4 Work & Turn)', plateMultiplier: 1, runMultiplier: 2 },
-  { id: '3', name: '2 Sisi Bolak-Balik Beda (4/4 Sheetwise)', plateMultiplier: 2, runMultiplier: 2 }
-])
-
-// Tab 8: Components
-const components = ref([
-  { id: '1', name: 'Cover Depan & Belakang', type: 'Cover' },
-  { id: '2', name: 'Lembar Isi Buku / Brosur', type: 'Content' },
-  { id: '3', name: 'Finishing Jilid / Staples', type: 'Binding' },
-  { id: '4', name: 'Packaging Box & Shrink Wrap', type: 'Packing' }
-])
-
-// Tab 9: Work Flow
-const workflowSteps = ref([
-  { step: 1, name: 'Pre-Press / CTCP Plate Making', department: 'Pre-Press' },
-  { step: 2, name: 'Cutting Bahan Baku (Paper Sheeting)', department: 'Potong' },
-  { step: 3, name: 'Printing Offset (Cetak)', department: 'Produksi Cetak' },
-  { step: 4, name: 'Laminating Doff / Glossy', department: 'Finishing' },
-  { step: 5, name: 'Folding / Creasing (Lipat)', department: 'Finishing' },
-  { step: 6, name: 'Final Trimming (Potong Jadi)', department: 'Potong' },
-  { step: 7, name: 'Quality Control & Packaging', department: 'Packing' }
-])
-
-// Tab 10: Profit Setting
-const profitTiers = ref<ProfitTier[]>([...defaultProfitTiers.value])
-
-const addProfitRange = () => {
+const addProfitRange = async () => {
   const last = profitTiers.value[profitTiers.value.length - 1]
   const newMin = last ? last.maxQty + 1 : 1
   profitTiers.value.push({
@@ -161,18 +104,13 @@ const addProfitRange = () => {
     profitPosPercent: 20,
     profitWebstorePercent: 15
   })
+  await persistCurrentState()
 }
 
-const deleteProfitRange = (index: number) => {
+const deleteProfitRange = async (index: number) => {
   profitTiers.value.splice(index, 1)
+  await persistCurrentState()
 }
-
-// Tab 11: Log Transaction
-const logTransactions = ref([
-  { id: '1', date: '01/12/2025 14:22', customer: 'PT Makmur Abadi', product: 'Brosur A4 150gr', qty: 2500, totalCost: 850000, sellingPrice: 1332000, status: 'Quoted' },
-  { id: '2', date: '02/12/2025 10:05', customer: 'Toko Buku Cerdas', product: 'Flyer A5 120gr', qty: 5000, totalCost: 2250000, sellingPrice: 3552000, status: 'In Production' },
-  { id: '3', date: '03/12/2025 16:40', customer: 'Bpk. Rahmat', product: 'Kartu Nama 260gr', qty: 500, totalCost: 380000, sellingPrice: 610500, status: 'Completed' }
-])
 
 // Add Product Modal
 const addProductModal = ref(false)
@@ -181,7 +119,7 @@ const newProductSize = ref('A4')
 const newProductPaper = ref('Art Paper 150gr')
 const newProductMachine = ref('SM 52 4 Warna')
 
-const handleCreateProduct = () => {
+const handleCreateProduct = async () => {
   products.value.push({
     id: String(Date.now()),
     name: newProductName.value || 'Custom Product',
@@ -193,6 +131,7 @@ const handleCreateProduct = () => {
   })
   addProductModal.value = false
   newProductName.value = ''
+  await persistCurrentState()
 }
 </script>
 

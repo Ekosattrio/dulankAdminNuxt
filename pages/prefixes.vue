@@ -54,8 +54,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-useHead({
-  title: "Prefix Settings - Kacetak System",
+useLegacyPage({
+  title: 'Prefix Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const defaultPrefixes: Record<string, string> = {

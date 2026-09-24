@@ -235,8 +235,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Custom Fields - Kacetak System'
+useLegacyPage({
+  title: 'Custom Fields',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface CustomField {

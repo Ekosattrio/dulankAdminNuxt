@@ -191,8 +191,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Billing - Kacetak System'
+useLegacyPage({
+  title: 'Billing',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface BillingItem {

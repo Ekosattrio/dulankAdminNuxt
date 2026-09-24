@@ -323,8 +323,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "Sales Return List - Kacetak System",
+useLegacyPage({
+  title: 'Sales Return List',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 interface ReturnItem {

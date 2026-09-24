@@ -113,8 +113,11 @@ definePageMeta({
   layout: 'default'
 })
 
-useHead({
-  title: 'Flow Category - Kacetak System'
+useLegacyPage({
+  title: 'Flow Category',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface FlowCategory {

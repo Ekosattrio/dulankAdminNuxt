@@ -2,8 +2,11 @@
 const route = useRoute();
 const rfqNo = computed(() => (route.query.no as string) || "6100167851");
 
-useHead({
-  title: computed(() => `Detail RFQ #${rfqNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Request Quotation Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const rfqStatus = ref<"pending" | "ordered" | "unavailable">("pending");

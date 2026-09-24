@@ -213,8 +213,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-useHead({
-  title: 'Download Files - Kacetak System'
+useLegacyPage({
+  title: 'Download Files',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 interface FileItem {

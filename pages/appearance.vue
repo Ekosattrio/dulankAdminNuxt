@@ -138,8 +138,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-useHead({
-  title: "Appearance Settings - Kacetak System",
+useLegacyPage({
+  title: 'Appearance Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const selectedTheme = ref("Light");

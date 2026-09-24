@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "flowName": "Cetak SM52 (4 Warna)",
+    "priority": "urgent",
+    "product": "Brosur Full Color A5",
+    "title": "Brosur SMKN 1 Karawang - 5000 pcs",
+    "description": "Plat CTP sudah siap di rak 3. Gunakan Art Paper 150gr, tinta CMYK standar.",
+    "status": "On Process",
+    "assignedTo": "Operator Cetak",
+    "dueDate": "17/12/2025"
+  },
+  {
+    "id": "2",
+    "flowName": "Potong & Sisir",
+    "priority": "high",
+    "product": "Kalender Dinding 2026",
+    "title": "Potong Bahan Kalender Al-Azhar",
+    "description": "Potong plano ke ukuran 32 x 48 cm sebelum naik mesin Komori. Jaga kerapihan sisi kiri.",
+    "status": "Waiting",
+    "assignedTo": "Operator Potong",
+    "dueDate": "18/12/2025"
+  },
+  {
+    "id": "3",
+    "flowName": "Digital Print Xerox",
+    "priority": "normal",
+    "product": "Kartu Nama Exclusive",
+    "title": "Kartu Nama Direksi CV Jaya Sentosa",
+    "description": "Bahan Mohawk Superfine 298gr. Cetak 5 box bolak balik full color.",
+    "status": "Waiting",
+    "assignedTo": "Operator Digital",
+    "dueDate": "19/12/2025"
+  },
+  {
+    "id": "4",
+    "flowName": "Laminasi Doff & Hardcover",
+    "priority": "urgent",
+    "product": "Company Profile Hardcover",
+    "title": "Cover Profile PT Global Solusi",
+    "description": "Laminasi thermal doff velvet + spot UV di logo utama.",
+    "status": "On Process",
+    "assignedTo": "Operator Finishing",
+    "dueDate": "20/12/2025"
+  }
+]
+

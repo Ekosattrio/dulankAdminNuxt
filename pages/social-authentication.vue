@@ -256,8 +256,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-useHead({
-  title: "Social Authentication - Kacetak System",
+useLegacyPage({
+  title: 'Social Authentication',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 type ProviderKey = "facebook" | "twitter" | "google" | "linkedin";

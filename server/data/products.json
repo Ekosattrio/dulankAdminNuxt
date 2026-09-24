@@ -1,0 +1,123 @@
+[
+  {
+    "id": "1",
+    "code": "001001",
+    "name": "Flexy 280gr",
+    "category": "Print Outdoor (Spanduk/Baliho)",
+    "subCategory": "Print Outdoor",
+    "unit": "Meter",
+    "price": 15000,
+    "priceType": "Size Calculation",
+    "created": "Admin : 25/12/2024 13:15",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "code": "001002",
+    "name": "Kartu Nama Matte",
+    "category": "Digital Printing A3+",
+    "subCategory": "Cetak A3+",
+    "unit": "Box",
+    "price": 35000,
+    "priceType": "Single Price",
+    "created": "Budi : 26/12/2024 09:30",
+    "status": "Active"
+  },
+  {
+    "id": "3",
+    "code": "001003",
+    "name": "Spanduk Korea 440gr",
+    "category": "Print Outdoor (Spanduk/Baliho)",
+    "subCategory": "Print Outdoor",
+    "unit": "Meter",
+    "price": 30000,
+    "priceType": "Size Calculation",
+    "created": "Admin : 28/12/2024 11:00",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "code": "001004",
+    "name": "Brosur A4 Art Paper",
+    "category": "Jasa Cetak Offset",
+    "subCategory": "Brosur & Flyer",
+    "unit": "Rim",
+    "price": 250000,
+    "priceType": "Quantity Tier",
+    "created": "Budi : 29/12/2024 15:45",
+    "status": "Active"
+  },
+  {
+    "id": "5",
+    "code": "001005",
+    "name": "Sticker Vinyl Glossy",
+    "category": "Cutting Sticker",
+    "subCategory": "Sticker & Label",
+    "unit": "Meter",
+    "price": 25000,
+    "priceType": "Size Calculation",
+    "created": "Admin : 02/01/2025 10:20",
+    "status": "Active"
+  },
+  {
+    "id": "6",
+    "code": "001006",
+    "name": "Kalender Meja 2025",
+    "category": "Finishing (Laminating/Jilid)",
+    "subCategory": "Kalender",
+    "unit": "Piece",
+    "price": 45000,
+    "priceType": "Tier Price",
+    "created": "Admin : 05/01/2025 14:10",
+    "status": "Active"
+  },
+  {
+    "id": "7",
+    "code": "001007",
+    "name": "Mug Keramik Custom",
+    "category": "Merchandise & Souvenir (UV Print)",
+    "subCategory": "Mug & Tumbler",
+    "unit": "Piece",
+    "price": 20000,
+    "priceType": "Single Price",
+    "created": "Budi : 07/01/2025 16:00",
+    "status": "Active"
+  },
+  {
+    "id": "8",
+    "code": "001008",
+    "name": "Banner Roll Up 60x160",
+    "category": "Print Indoor (Poster/X-Banner)",
+    "subCategory": "Print Outdoor",
+    "unit": "Piece",
+    "price": 150000,
+    "priceType": "Single Price",
+    "created": "Admin : 10/01/2025 11:30",
+    "status": "Active"
+  },
+  {
+    "id": "9",
+    "code": "001009",
+    "name": "Nota 2 Ply NCR",
+    "category": "Jasa Cetak Offset",
+    "subCategory": "Brosur & Flyer",
+    "unit": "Buku",
+    "price": 12000,
+    "priceType": "Quantity Tier",
+    "created": "Admin : 12/01/2025 13:00",
+    "status": "Active"
+  },
+  {
+    "id": "10",
+    "code": "001010",
+    "name": "Kaos Sablon DTF Cotton 30s",
+    "category": "Sablon DTF (Digital Transfer Film)",
+    "subCategory": "Kaos & T-Shirt",
+    "unit": "Piece",
+    "price": 55000,
+    "priceType": "Single Price",
+    "created": "Budi : 15/01/2025 10:00",
+    "status": "Active"
+  }
+]
+
