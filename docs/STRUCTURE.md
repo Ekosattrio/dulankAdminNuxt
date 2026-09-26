@@ -1,0 +1,1211 @@
+# ARCHITECTURE & CODING PATTERNS: NUXT 4 + TAILWIND 4
+
+Dokumen ini adalah **cetak biru (blueprint) teknis resmi** arsitektur, pemisahan tanggung jawab (separation of concerns), dan konvensi pengkodean yang digunakan dalam repositori ini.
+
+Dokumen ini dirancang khusus agar dapat dipahami dan dijalankan secara presisi oleh AI maupun developer manusia saat membangun atau memperluas project baru agar konsisten 100% dengan pola project ini.
+
+> **Struktur aktif:** Proyek memakai **Nuxt 4 + Tailwind CSS 4** dengan frontend di `app/`, mengikuti struktur [branch Rama](https://github.com/noosabaktee/dulank-nuxt/tree/Rama). Dokumentasi berada di `docs/`, referensi HTML beserta asetnya di `legacy/static-source/`, dan backend tetap di `server/`. Semua file dipindahkan dengan mempertahankan isinya; pemetaan lokasi dan hash dicatat dalam `MIGRATION_MANIFEST.json`. Bagian 1 dan 16 menjelaskan struktur aktif, bagian 17 memuat inventaris halaman, sedangkan contoh pada bagian 2–15 menjelaskan pola pengembangan yang dapat diterapkan sesuai kebutuhan.
+
+---
+
+## 1. Ikhtisar & Struktur Direktori
+
+Proyek ini menggunakan **Nuxt 4** (`nuxt: ^4.5.2`) dengan **Tailwind CSS 4** (`tailwindcss: ^4.3.3` dan `@tailwindcss/vite: ^4.3.3`) dan runtime server berbasis **Nitro**, sesuai dependency utama [package.json repo acuan](https://github.com/noosabaktee/dulank-nuxt/blob/HEAD/package.json). Pemetaan direktori setelah penataan struktur dijelaskan pada bagian 16.1.
+
+### 1.1 Struktur Direktori Aktif
+
+Frontend mengikuti direktori standar Nuxt 4. Backend, aset publik, dan konfigurasi proyek tetap berada di root.
+
+```text
+├── app/
+│   ├── app.vue                    # Entry NuxtLayout dan NuxtPage
+│   ├── assets/css/main.css        # Tailwind 4 dan token tema admin
+│   ├── components/                # Seluruh komponen domain dan komponen bersama
+│   ├── composables/               # State, data fetching, dan helper frontend
+│   ├── layouts/                   # default, auth, pos, print
+│   ├── locales/                   # JSON terjemahan yang sudah ada
+│   ├── pages/                     # Seluruh 186 halaman Nuxt
+│   ├── plugins/                   # Plugin frontend
+│   └── stores/                    # Pinia stores
+├── docs/
+│   ├── STRUCTURE.md               # Panduan ini
+│   └── DOKUMENTASI_SKRIPSI_KACETAK.md
+├── legacy/static-source/
+│   ├── assets/                    # CSS, JS, gambar, font, plugin, dan JSON referensi
+│   ├── components/                # Partial HTML header, sidebar, dan backup
+│   ├── *.html                     # Seluruh 186 HTML referensi asli
+│   └── tailwind.config.ts         # Konfigurasi lama, dipertahankan sebagai arsip
+├── public/                        # Aset publik, URL browser tetap sama
+├── scripts/
+│   ├── validate-structure.mjs      # Validasi struktur dan inventaris migrasi
+│   └── scratch/                   # Script bantuan yang sebelumnya di scratch/
+├── server/
+│   ├── api/                       # Seluruh endpoint tetap dipertahankan
+│   ├── data/                      # Seluruh 32 JSON sumber tetap dipertahankan
+│   ├── types/                     # Kontrak tipe data domain
+│   └── utils/                     # Utility backend dan akses data
+├── data/                          # Lokasi data runtime lama, tetap dipertahankan
+├── MIGRATION_MANIFEST.json         # Pemetaan file sebelum/sesudah beserta hash
+├── README.md
+├── nuxt.config.ts
+├── package.json
+├── package-lock.json
+└── tsconfig.json
+```
+
+Nuxt memakai direktori sumber default `app/`; tidak ada lagi override `srcDir: '.'`. Folder `server/`, `public/`, dan `data/` tidak dipindahkan. Direktori `data/` adalah kompatibilitas penyimpanan runtime yang sudah digunakan `server/utils/data.ts`; penataan struktur tidak menimpa data runtime dengan JSON seed.
+
+---
+
+## 2. Layer `pages/` (`app/pages/`)
+
+Halaman (`app/pages/*.vue`) bertindak sebagai **Thin Composition Layer**. Halaman **BUKAN** tempat menaruh markup UI monolitik atau styling kompleks.
+
+### 2.1 Tanggung Jawab Halaman
+1. Mendaftarkan metadata halaman dan runtime script/style lewat `useLegacyPage()`.
+2. Mengambil data (data fetching) via **composable** (`useOrders()`, `useUserAddresses()`) atau `useFetch()`.
+3. Mengelola state reaktif lokal halaman (misalnya `searchQuery`, `activeTab`, `sortMode`, filter/computed).
+4. Menyusun (compose) komponen UI spesifik halaman dari `app/components/pages/<route>/` dan mengirim data ke komponen via **typed props**.
+5. Mendengarkan event dari komponen anak (misalnya `@created="refresh"`) untuk memicu pembaruan data.
+
+### 2.2 Pola Penamaan File & Folder
+- File route menggunakan nama **kebab-case** yang mencerminkan URL target:
+  - `app/pages/index.vue` → `/`
+  - `app/pages/orders.vue` → `/orders`
+  - `app/pages/kalkulator-percetakan.vue` → `/kalkulator-percetakan`
+  - `app/pages/support-ticket-detail.vue` → `/support-ticket-detail`
+- Setiap route memiliki container root dengan class `.dulank-page.dulank-page-<route-name>`:
+
+```vue
+<template>
+  <div class="dulank-page dulank-page-orders">
+    <main>
+      ...
+    </main>
+  </div>
+</template>
+```
+
+### 2.3 Pemanggilan Komponen dari Halaman
+Konfigurasi admin mempertahankan `components.pathPrefix: false`, sehingga nama auto-import mengikuti nama file komponen:
+- `app/components/address/AddressTable.vue` → `<AddressTable />`
+- `app/components/category/CategoryTable.vue` → `<CategoryTable />`
+- `app/components/common/PageHeader.vue` → `<PageHeader />`
+
+Gunakan import eksplisit jika nama komponen bertabrakan. Contoh blueprint dengan nama berawalan `Pages...` di bagian berikutnya perlu disesuaikan dengan nama komponen atau alias import yang benar-benar digunakan; pemindahan ke `app/` tidak mengubah nama komponen yang sudah dipakai halaman.
+
+### 2.4 Contoh Pola Komposisi Halaman (Referensi Blueprint)
+```vue
+<script setup lang="ts">
+// 1. Inisialisasi metadata dan asset halaman
+useLegacyPage({
+  title: "Addresses",
+  styles: ["/css/style.css", "/css/pages/address-inline.css"],
+  scripts: [
+    "/js/component.js",
+    "/js/profile.js",
+    "/js/address-input.js",
+    "/js/pages/address.js",
+  ],
+  sweetAlert: false,
+});
+
+// 2. Fetch data menggunakan composable
+const { addresses } = useUserAddresses();
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-address">
+    <main>
+      <div class="container my-5">
+        <div class="row">
+          <!-- Shared domain component -->
+          <div class="col-lg-3 mb-4"><ProfileSidebar /></div>
+
+          <div class="col-lg-9">
+            <!-- Named UI components dari app/components/pages/address/ -->
+            <PagesAddressNoAddressesState v-if="!addresses.length" />
+            <PagesAddressAddAddressModal />
+            <PagesAddressList
+              v-if="addresses.length"
+              :addresses="addresses"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</template>
+```
+
+---
+
+## 3. Layer `components/` (`app/components/`)
+
+Komponen dibagi ke dalam kategori yang jelas berdasarkan cakupan tanggung jawab (UI scope).
+
+### 3.1 Kategori Komponen
+1. **Route-Specific Components (`app/components/pages/<route>/`)**:
+   - Wajib ada 1 folder untuk setiap file yang ada di `app/pages/`.
+   - Menggunakan **nama file bahasa Inggris** yang menjelaskan fungsi UI spesifiknya:
+     - `OrdersHeader.vue`, `OrderStatusTabs.vue`, `OrderRows.vue`, `EmptyOrdersState.vue`.
+     - `AddressList.vue`, `AddAddressModal.vue`, `NoAddressesState.vue`.
+   - **DILARANG** menggunakan nama generik seperti `Content.vue`, `Page.vue`, atau `Body.vue`.
+2. **Shared Domain Components (`app/components/<domain>/`)**:
+   - Digunakan oleh lebih dari satu halaman dalam domain yang sama:
+     - `product/`: `ProductCard.vue`, `PriceTable.vue`, `SpecSelector.vue`, `DesignCard.vue`.
+     - `profile/`: `Sidebar.vue`, `Header.vue`.
+     - `support/`: `CreateTicketModal.vue`, `TicketConversation.vue`, `TicketRow.vue`.
+     - `cart/`: shared widget cart antar-halaman.
+3. **Global Layout Components (`app/components/layout/`)**:
+   - Komponen kerangka aplikasi: `AppHeader.vue`, `AppFooter.vue`, `MainNavbar.vue`, `CalculatorNavbar.vue`, `CalculatorHeader.vue`.
+4. **Common Primitive Components (`app/components/common/`)**:
+   - Komponen generik non-domain: `Breadcrumb.vue`, `EmptyState.vue`, `QuantityControl.vue`.
+
+### 3.2 Props & Emits Handling
+Komponen adalah presentational & kontraktual. Semua data masuk melalui `defineProps` berbasis TypeScript type, dan aksi dikirim ke atas lewat `defineEmits`.
+
+#### Contoh Komponen Tabel / List (`app/components/pages/address/AddressList.vue`):
+```vue
+<script setup lang="ts">
+import type { UserAddress } from "#server/types/user";
+
+// Typed props wajib menggunakan interface dari #server/types
+defineProps<{
+  addresses: UserAddress[];
+}>();
+</script>
+
+<template>
+  <div class="profile-content bg-white p-4 rounded-3 shadow-sm">
+    <h4 class="fw-bold mb-4">Addresses</h4>
+    <div class="address-list row">
+      <div v-for="address in addresses" :key="`${address.type}-${address.street}`" class="col-md-6 mb-4">
+        <div class="address-item pb-4">
+          <div class="fw-semibold small">{{ address.recipientName }}</div>
+          <div class="text-standard mb-2">{{ address.phone }}</div>
+          <div class="text-standard mb-3">
+            {{ address.name }},<br />{{ address.street }}<br />
+            {{ address.city }} - {{ address.district }}, {{ address.province }}, {{ address.country }} {{ address.postalCode }}
+          </div>
+          <span class="text-standard border border-2 p-1 my-text-primary">{{ address.type }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-dark my-bg-primary" data-bs-target="#addAddressModal" data-bs-toggle="modal" type="button">
+        Add a new address
+      </button>
+    </div>
+  </div>
+</template>
+```
+
+#### Contoh Form / Control dengan `v-model` (`app/components/pages/orders/OrdersHeader.vue`):
+```vue
+<script setup lang="ts">
+defineProps<{
+  search: string;
+  sort: "newest" | "oldest" | "highest";
+}>();
+
+defineEmits<{
+  "update:search": [value: string];
+  "update:sort": [value: "newest" | "oldest" | "highest"];
+}>();
+</script>
+
+<template>
+  <div class="d-flex justify-content-between">
+    <h5>Orders</h5>
+    <div class="d-flex">
+      <input
+        :value="search"
+        class="form-control"
+        placeholder="Search Job Title"
+        type="search"
+        @input="$emit('update:search', ($event.target as HTMLInputElement).value)"
+      />
+      <select
+        :value="sort"
+        class="form-select ms-2"
+        @change="$emit('update:sort', ($event.target as HTMLSelectElement).value as any)"
+      >
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="highest">Highest</option>
+      </select>
+    </div>
+  </div>
+</template>
+```
+
+### 3.3 Batasan Logic: Kapan di Komponen vs Composable?
+- **Logic di Komponen**:
+  - State interaksi UI internal (contoh: dropdown toggle, tabs aktif lokal, modal open/close).
+  - Formatting visual sederhana untuk display (contoh: `formatRupiah`, format tanggal lokal).
+  - Emisi aksi user (`submit`, `change`, `select`).
+- **Logic di Composable**:
+  - Pengambilan data asynchronous dari API (`useFetch`, `$fetch`).
+  - Business logic yang mempengaruhi lebih dari satu komponen (contoh: cart recalculation, authentication, address management).
+  - State global/shared yang perlu persist atau sinkron lintas navigasi route.
+
+---
+
+## 4. Layer `server/` (Backend Nitro)
+
+Direktori `server/` adalah backend mandiri yang dieksekusi di runtime server Nuxt (Nitro Engine).
+
+```text
+server/
+├── api/          # Nitro route handlers (file-based API endpoints)
+├── data/         # Flat-file database JSON persistence
+├── types/        # TypeScript interfaces untuk data & domain entities
+└── utils/        # Server-side helper utilities
+```
+
+### 4.1 Server Data Utility (`server/utils/data.ts`)
+Semua endpoint membaca dan menulis ke penyimpanan data menggunakan utility standar `server/utils/data.ts`:
+
+```ts
+import { readFileSync, writeFileSync } from "node:fs";
+import { join, resolve } from "node:path";
+
+const dataDir = resolve(process.cwd(), "server", "data");
+
+export function readJSON<T>(filename: string): T {
+  const raw = readFileSync(join(dataDir, filename), "utf-8");
+  return JSON.parse(raw) as T;
+}
+
+export function writeJSON<T>(filename: string, data: T): void {
+  writeFileSync(join(dataDir, filename), JSON.stringify(data, null, 2), "utf-8");
+}
+
+export function createResponse<T>(data: T, meta?: Record<string, unknown>) {
+  return { success: true, data, ...(meta ? { meta } : {}) };
+}
+```
+
+Setiap respon API dibungkus oleh `createResponse()` sehingga memiliki struktur seragam:
+```json
+{
+  "success": true,
+  "data": { ... }
+}
+```
+
+---
+
+## 5. Layer `api/` (`server/api/`)
+
+Endpoints dibuat menggunakan **File-Based Routing Nitro** di dalam `server/api/`. File ini secara otomatis diekspos di route `/api/*`.
+
+### 5.1 Konvensi Penamaan Method HTTP
+Nama file menyertakan HTTP verb sebelum ekstensi file:
+- `GET /api/orders` → `server/api/orders.get.ts`
+- `GET /api/orders/:id` → `server/api/orders/[id].get.ts`
+- `POST /api/cart` → `server/api/cart.post.ts`
+- `POST /api/cart/clear` → `server/api/cart.clear.post.ts`
+- `PUT /api/cart/:itemId` → `server/api/cart/[itemId].put.ts`
+- `DELETE /api/cart/:itemId` → `server/api/cart/[itemId].delete.ts`
+- `GET /api/catalog/:kind` → `server/api/catalog/[kind].get.ts`
+- `GET /api/users/:id/addresses` → `server/api/users/[id]/addresses.get.ts`
+
+### 5.2 Pola Implementasi Endpoint Server
+Menggunakan fungsi Nitro `defineEventHandler`, `getQuery`, `readBody`, `getRouterParam`, dan `createError`.
+
+#### Contoh Endpoint Query dengan Parameter (`server/api/orders.get.ts`):
+```ts
+import type { Order } from "#server/types/order";
+
+export default defineEventHandler((event) => {
+  const query = getQuery(event);
+  const userId = Number(query.userId) || 1;
+
+  const orders = readJSON<Order[]>("orders.json").filter(
+    (order) => order.userId === userId,
+  );
+
+  return createResponse(orders);
+});
+```
+
+#### Contoh Endpoint Mutasi POST dengan Validasi (`server/api/tickets.post.ts`):
+```ts
+import type { SupportTicket } from "#server/types/ticket";
+
+export default defineEventHandler(async (event) => {
+  const body = await readBody<{
+    userId?: number;
+    subject?: string;
+    message?: string;
+    priority?: string;
+    type?: string;
+  }>(event);
+
+  if (!body?.subject?.trim() || !body?.message?.trim()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Subject and message are required",
+    });
+  }
+
+  const tickets = readJSON<SupportTicket[]>("tickets.json");
+  const id = `TK-${String(tickets.length + 1).padStart(3, "0")}`;
+
+  const ticket: SupportTicket = {
+    id,
+    userId: body.userId || 1,
+    subject: body.subject.trim(),
+    type: body.type || "Info Inquiry",
+    message: body.message.trim(),
+    priority: body.priority || "medium",
+    status: "open",
+    date: new Date().toISOString().split("T")[0],
+    replies: [],
+  };
+
+  tickets.push(ticket);
+  writeJSON("tickets.json", tickets);
+
+  return createResponse(ticket);
+});
+```
+
+---
+
+## 6. Layer `types/` (`server/types/`)
+
+Project ini menetapkan direktori `server/types/` sebagai **Single Source of Truth** untuk seluruh tipe data domain.
+
+### 6.1 Konvensi Type
+1. **Lokasi File**: Dikelompokkan per domain entitas dalam nama file singular kebab-case:
+   - `server/types/user.ts`
+   - `server/types/order.ts`
+   - `server/types/ticket.ts`
+   - `server/types/cart.ts`
+   - `server/types/product.ts`
+   - `server/types/category.ts`
+   - `server/types/faq.ts`
+   - `server/types/quotation.ts`
+2. **Penamaan Interface**: Menggunakan **PascalCase** eksplisit:
+   - `User`, `UserAddress`
+   - `Order`, `OrderItem`, `ShippingAddress`
+   - `SupportTicket`, `TicketReply`
+3. **Import Alias**: Di-import di seluruh file aplikasi (`pages/`, `components/`, `composables/`, `server/api/`) menggunakan alias resmi:
+   ```ts
+   import type { UserAddress } from "#server/types/user";
+   import type { SupportTicket } from "#server/types/ticket";
+   ```
+4. **Respon API Generic Wrapper**:
+   Bila halaman atau composable membutuhkan type wrapper response:
+   ```ts
+   interface ApiResponse<T> {
+     success: boolean;
+     data: T;
+     meta?: Record<string, unknown>;
+   }
+   ```
+
+---
+
+## 7. Layer `composables/` (`app/composables/`)
+
+Composable membungkus logic asynchronous, data fetching, dan computed states agar dapat digunakan ulang di pages atau components.
+
+### 7.1 Pola Pembuatan Composable
+- Format file: `app/composables/use<FeatureName>.ts`.
+- Menggunakan `useFetch` dengan konfigurasi `key` unik untuk mendukung SSR hydration caching.
+- Menyediakan computed value agar komponen pemanggil menerima reactive ref yang bersih.
+
+#### Contoh Composable Domain (`app/composables/useUserAddresses.ts`):
+```ts
+import type { UserAddress } from "#server/types/user";
+
+interface AddressResponse {
+  success: boolean;
+  data: UserAddress[];
+}
+
+export function useUserAddresses(userId = 1) {
+  const { data, pending, error, refresh } = useFetch<AddressResponse>(
+    `/api/users/${userId}/addresses`,
+    {
+      key: `user-${userId}-addresses`,
+    },
+  );
+
+  const addresses = computed<UserAddress[]>(() => data.value?.data ?? []);
+
+  return { addresses, pending, error, refresh };
+}
+```
+
+#### Contoh Composable Generic Catalog (`app/composables/useCatalog.ts`):
+```ts
+export interface CatalogResponse<T> {
+  success: boolean;
+  data: T[];
+}
+
+export function useCatalog<T>(kind: string) {
+  const { data, pending, error } = useFetch<CatalogResponse<T>>(
+    `/api/catalog/${kind}`,
+    {
+      key: `catalog-${kind}`,
+    },
+  );
+  const items = computed<T[]>(() => data.value?.data ?? []);
+  return { items, pending, error };
+}
+```
+
+#### Special Composable: `useLegacyPage.ts`
+Digunakan di setiap halaman `app/pages/*.vue` untuk menyuntikkan judul `<title>`, link CSS eksternal/font, dan script warisan tanpa konflik global:
+```ts
+useLegacyPage({
+  title: "Page Title",
+  styles: ["/css/style.css", "/css/pages/page-inline.css"],
+  scripts: ["/js/component.js", "/js/pages/page.js"],
+  sweetAlert: false, // set true jika halaman butuh SweetAlert2
+});
+```
+
+---
+
+## 8. Layer `layouts/` (`app/layouts/`)
+
+Layout utama berada di `app/layouts/default.vue` dan dihubungkan secara global melalui `app/app.vue`:
+
+```vue
+<!-- app/app.vue -->
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+</template>
+```
+
+### 8.1 Mekanisme Dynamic Navigation di `default.vue`
+Layout membaca path aktif via `useRoute()` dan secara otomatis memilih varian navigasi:
+1. **`main`**: Menggunakan `<LayoutMainNavbar />` untuk halaman toko dan informasi publik (misal `/`, `/cart`, `/orders`, `/address`, `/categories`).
+2. **`calculator`**: Menggunakan `<LayoutCalculatorNavbar />` untuk alat kalkulator cetak dan inventori mesin (misal `/kalkulator-percetakan`, `/semua-kertas`, `/store`).
+3. **`page` (tanpa navbar global)**: Untuk halaman khusus seperti login, register, checkout, dan verify email yang telah memiliki header sendiri di dalam halamannya.
+4. **Footer Suppression**: Menyembunyikan `<LayoutAppFooter />` pada rute tertentu (seperti `/print-order`).
+
+```vue
+<!-- app/layouts/default.vue -->
+<script setup lang="ts">
+const route = useRoute();
+
+const mainNavbarRoutes = new Set(["/", "/orders", "/address", "/cart", "/categories", ...]);
+const calculatorNavbarRoutes = new Set(["/kalkulator-percetakan", "/semua-kertas", ...]);
+
+const normalizedPath = computed(
+  () => route.path.replace(/\.html$/, "").replace(/\/$/, "") || "/",
+);
+
+const navbarType = computed(() => {
+  if (calculatorNavbarRoutes.has(normalizedPath.value)) return "calculator";
+  if (mainNavbarRoutes.has(normalizedPath.value)) return "main";
+  return "page";
+});
+
+const showFooter = computed(() => normalizedPath.value !== "/print-order");
+</script>
+
+<template>
+  <div class="dulank-layout min-h-screen bg-white">
+    <header v-if="navbarType !== 'page'" class="dulank-global-header">
+      <LayoutCalculatorNavbar v-if="navbarType === 'calculator'" />
+      <LayoutMainNavbar v-else />
+    </header>
+    <div class="dulank-layout-content">
+      <slot />
+    </div>
+    <LayoutAppFooter v-if="showFooter" class="dulank-layout-footer" />
+  </div>
+</template>
+```
+
+---
+
+## 9. Layer `plugins/` (`app/plugins/`)
+
+Plugin diletakkan di `app/plugins/` dan otomatis di-load oleh Nuxt.
+
+### 9.1 Compatibility Shim: `legacy-ui.client.ts`
+Project ini sengaja **TIDAK MENGGUNAKAN LIBRARY BOOTSTRAP RESMI** (JS bundle bootstrap dilarang). Sebagai gantinya, file `app/plugins/legacy-ui.client.ts` mengeksekusi emulator Bootstrap zero-dependency:
+- Menyediakan class kompatibilitas minimal `Collapse`, `Modal`, `Tab`, `Toast`, `Carousel`, `Tooltip` pada objek `window.bootstrap`.
+- Memasang event listener global untuk data attributes: `data-bs-toggle`, `data-bs-dismiss`, `data-bs-slide`, `data-bs-target`.
+- Memungkinkan modal dan collapse tetap bekerja mulus tanpa menambahkan dependensi pihak ketiga.
+
+---
+
+## 10. Layer `utils/` (`app/utils/` & `server/utils/`)
+
+Pemisahan fungsi utility murni (pure stateless helpers):
+
+### 10.1 Client Utils (`app/utils/`)
+Berisi fungsi helper murni di browser/client yang **tidak membutuhkan Vue reactivity** (`ref`, `computed`) dan **tidak mengakses lifecycle**:
+- `app/utils/currency.ts`:
+  ```ts
+  export function formatRupiah(value: number): string {
+    return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  ```
+- Di-auto-import oleh Nuxt sehingga dapat langsung dipanggil di component dan page: `formatRupiah(total)`.
+
+### 10.2 Server Utils (`server/utils/`)
+Berisi helper backend yang hanya diakses di sisi server (Nitro):
+- `server/utils/data.ts`: Membaca & menulis file JSON (`readJSON`, `writeJSON`, `createResponse`).
+- Otomatis di-import ke seluruh file di `server/api/`.
+
+### 10.3 Perbedaan Utils vs Composables
+| Kriteria | `utils/` | `composables/` |
+|---|---|---|
+| **Sifat** | Stateless & Pure JavaScript | Stateful & Reaktif Vue |
+| **Reactivity API** | Tidak boleh ada `ref()`, `computed()` | Menggunakan `ref()`, `computed()` |
+| **Asynchronous API** | Tidak memanggil `useFetch()` | Memanggil `useFetch()` atau `$fetch()` |
+| **Contoh** | `formatRupiah(10000)`, formatting string | `useOrders()`, `useUserAddresses()` |
+
+---
+
+## 11. Arsitektur Alur Data (Data Flow Architecture)
+
+Alur komunikasi data diatur secara satu arah (unidirectional data flow) untuk pembacaan, dan event-driven untuk mutasi:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Pengguna
+    participant Page as app/pages/*.vue
+    participant Comp as app/components/pages/*
+    participant Composable as app/composables/use*.ts
+    participant Nitro as server/api/*
+    participant ServerUtil as server/utils/data.ts
+    participant DB as server/data/*.json
+
+    Note over Page, DB: Alur 1: Inisialisasi & Pembacaan Data (Read Flow)
+    User->>Page: Kunjungi Halaman (misal /orders)
+    Page->>Composable: Panggil useOrders(userId)
+    Composable->>Nitro: useFetch('/api/orders?userId=1')
+    Nitro->>ServerUtil: readJSON<Order[]>('orders.json')
+    ServerUtil->>DB: Baca data JSON
+    DB-->>ServerUtil: Raw Array
+    ServerUtil-->>Nitro: Parsed Object
+    Nitro-->>Composable: { success: true, data: Order[] }
+    Composable-->>Page: reactive orders ref
+    Page->>Comp: Pass data via props (:orders="filteredOrders")
+    Comp-->>User: Render tabel dan list data
+
+    Note over Page, DB: Alur 2: Mutasi Data (Write/Mutation Flow)
+    User->>Comp: Submit Form (misal Tambah Tiket)
+    Comp->>Nitro: $fetch('/api/tickets', { method: 'POST', body })
+    Nitro->>ServerUtil: writeJSON('tickets.json', updated)
+    ServerUtil->>DB: Tulis ke file JSON
+    Nitro-->>Comp: { success: true, data: newTicket }
+    Comp->>Page: $emit('created')
+    Page->>Composable: Panggil refresh()
+    Composable->>Nitro: Re-fetch updated data
+    Page->>Comp: Update UI reaktif
+```
+
+---
+
+## 12. Contoh Implementasi Lengkap (Real World Project Trace)
+
+Berikut adalah penelusuran hubungan antar file nyata pada fitur **Support Ticket**:
+
+### 1. Definisi Kontrak Data (`server/types/ticket.ts`)
+```ts
+export interface TicketReply {
+  from: string;
+  message: string;
+  date: string;
+}
+
+export interface SupportTicket {
+  id: string;
+  userId: number;
+  subject: string;
+  type?: string;
+  message: string;
+  priority: string;
+  status: string;
+  date: string;
+  replies: TicketReply[];
+}
+```
+
+### 2. Mock Database (`server/data/tickets.json`)
+```json
+[
+  {
+    "id": "TK-001",
+    "userId": 1,
+    "subject": "Hasil cetak luntur",
+    "type": "Complaint",
+    "message": "Mohon dicek kembali pesanan saya...",
+    "priority": "high",
+    "status": "open",
+    "date": "2026-09-20",
+    "replies": []
+  }
+]
+```
+
+### 3. Server Endpoints
+- **GET Handler (`server/api/tickets.get.ts`)**:
+  ```ts
+  import type { SupportTicket } from "#server/types/ticket";
+
+  export default defineEventHandler((event) => {
+    const query = getQuery(event);
+    const userId = Number(query.userId) || 1;
+    const tickets = readJSON<SupportTicket[]>("tickets.json");
+    return createResponse(tickets.filter((t) => t.userId === userId));
+  });
+  ```
+- **POST Handler (`server/api/tickets.post.ts`)**:
+  ```ts
+  import type { SupportTicket } from "#server/types/ticket";
+
+  export default defineEventHandler(async (event) => {
+    const body = await readBody<Partial<SupportTicket>>(event);
+    if (!body?.subject || !body?.message) {
+      throw createError({ statusCode: 400, statusMessage: "Required fields missing" });
+    }
+    const tickets = readJSON<SupportTicket[]>("tickets.json");
+    const newTicket: SupportTicket = {
+      id: `TK-${String(tickets.length + 1).padStart(3, "0")}`,
+      userId: body.userId || 1,
+      subject: body.subject,
+      message: body.message,
+      priority: body.priority || "medium",
+      status: "open",
+      date: new Date().toISOString().split("T")[0],
+      replies: [],
+    };
+    tickets.push(newTicket);
+    writeJSON("tickets.json", tickets);
+    return createResponse(newTicket);
+  });
+  ```
+
+### 4. Thin Page Layer (`app/pages/support-ticket.vue`)
+```vue
+<script setup lang="ts">
+import type { SupportTicket } from "#server/types/ticket";
+
+useLegacyPage({
+  title: "Support Ticket",
+  styles: ["/css/style.css", "/css/pages/support-ticket-inline.css"],
+  scripts: ["/js/component.js", "/js/profile.js"],
+  sweetAlert: false,
+});
+
+// Fetching data dengan useFetch
+const { data, refresh } = useFetch<{ success: boolean; data: SupportTicket[] }>(
+  "/api/tickets?userId=1",
+);
+const tickets = computed(() => data.value?.data ?? []);
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-support-ticket">
+    <main>
+      <div class="container my-5">
+        <div class="row">
+          <div class="col-lg-3 mb-4"><ProfileSidebar /></div>
+          <div class="col-lg-9">
+            <PagesSupportTicketList :tickets="tickets" />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Form: mendengarkan event emisi @created untuk refresh data -->
+    <PagesSupportTicketCreateTicketModal @created="refresh" />
+  </div>
+</template>
+```
+
+### 5. Komponen Presentational List (`app/components/pages/support-ticket/TicketList.vue`)
+```vue
+<script setup lang="ts">
+import type { SupportTicket } from "#server/types/ticket";
+
+defineProps<{
+  tickets: SupportTicket[];
+}>();
+</script>
+
+<template>
+  <div class="profile-content bg-white p-4 rounded-3 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold m-0">Support Tickets</h4>
+      <button class="btn my-btn-primary" data-bs-toggle="modal" data-bs-target="#addNewTicketModal">
+        Submit New Ticket
+      </button>
+    </div>
+    <div class="ticket-list">
+      <div v-for="ticket in tickets" :key="ticket.id" class="ticket-item p-3 border rounded mb-3">
+        <div class="d-flex justify-content-between">
+          <span class="badge bg-secondary">{{ ticket.id }}</span>
+          <span class="text-muted small">{{ ticket.date }}</span>
+        </div>
+        <h6 class="fw-bold mt-2">{{ ticket.subject }}</h6>
+        <p class="text-standard mb-0">{{ ticket.message }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+### 6. Komponen Mutasi Modal (`app/components/support/CreateTicketModal.vue`)
+```vue
+<script setup lang="ts">
+const emit = defineEmits<{ created: [] }>();
+
+const subject = ref("");
+const message = ref("");
+const submitting = ref(false);
+
+async function submit() {
+  submitting.value = true;
+  try {
+    await $fetch("/api/tickets", {
+      method: "POST",
+      body: { userId: 1, subject: subject.value, message: message.value },
+    });
+    subject.value = "";
+    message.value = "";
+    emit("created"); // Memicu refresh di parent page
+    const modal = document.getElementById("addNewTicketModal");
+    if (modal) (window as any).bootstrap?.Modal.getOrCreateInstance(modal).hide();
+  } finally {
+    submitting.value = false;
+  }
+}
+</script>
+```
+
+---
+
+## 13. Rules for AI
+
+Bagian ini adalah **instruksi imperatif yang WAJIB ditaati** oleh setiap model AI saat membuat atau memodifikasi kode dalam project:
+
+1. **Patuhi Pemisahan Direktori Nuxt 4**:
+   - Seluruh halaman, komponen, composable, layout, plugin, dan client util berada di dalam folder `app/`.
+   - Seluruh endpoint API, data mock, dan interface tipe data berada di dalam folder root `server/`.
+   - Jangan membuat folder acak di luar konvensi ini.
+2. **Halaman Harus Menjadi Thin Composition Layer**:
+   - Dilarang menaruh template HTML ratusan baris di dalam `app/pages/*.vue`.
+   - Pecah setiap section halaman menjadi komponen di `app/components/pages/<route>/`.
+   - Halaman hanya bertugas menghubungkan composable data dengan komponen UI.
+3. **Konvensi 1 Folder Komponen per Route**:
+   - Untuk route `app/pages/foo-bar.vue`, wajib membuat folder `app/components/pages/foo-bar/`.
+   - Komponen di dalam folder ini harus menggunakan bahasa Inggris deskriptif (misal: `HeroSection.vue`, `FilterBar.vue`, `DataTable.vue`).
+   - Dilarang menamakan file komponen dengan nama generik seperti `Content.vue`, `Body.vue`, atau `Page.vue`.
+4. **Sentralisasi Types di `#server/types`**:
+   - Jangan mendefinisikan interface data entitas berulang-ulang di file `.vue`.
+   - Buat interface di `server/types/<entity>.ts` dan import menggunakan `import type { ... } from "#server/types/<entity>"`.
+5. **Pola Data Fetching**:
+   - Gunakan `useFetch()` di dalam composable untuk pembacaan data awal (SSR friendly).
+   - Selalu berikan opsi `key` unik pada `useFetch()`.
+   - Gunakan `$fetch()` di dalam method/handler untuk mutasi (`POST`, `PUT`, `DELETE`).
+   - Jangan pernah melakukan import file sistem (`fs`, `path`) atau query database langsung di dalam komponen client.
+6. **Props & Emits Wajib Typed**:
+   - Gunakan sintaks TypeScript murni: `defineProps<{ item: Product }>()` dan `defineEmits<{ 'update:modelValue': [val: string] }>()`.
+7. **Perbedaan Utils vs Composables**:
+   - Jika suatu fungsi adalah helper murni matematika/formatting tanpa state reaktif, letakkan di `app/utils/` atau `server/utils/`.
+   - Jika membutuhkan lifecycle, `ref`, `computed`, atau `useFetch`, letakkan di `app/composables/`.
+8. **Jangan Tambahkan Dependensi Bootstrap**:
+   - Repositori ini bebas dependensi Bootstrap runtime.
+   - Styling diselesaikan via Tailwind CSS 4 dan file CSS kompatibilitas (`bootstrap-compat.css`).
+   - Interaksi modal/dropdown/tab diselesaikan via `legacy-ui.client.ts`.
+9. **Gunakan `<NuxtLink>`**:
+   - Dilarang keras menggunakan tag `<a href="page.html">`. Gunakan `<NuxtLink to="/page">` tanpa ekstensi `.html`.
+
+---
+
+## 14. Aturan Langkah Membuat Fitur Baru
+
+Jika diperintahkan: **"Buat fitur X"** (Contoh: "Buat fitur Voucher"), lakukan langkah-langkah berikut secara berurutan:
+
+```text
+Langkah 1: Tentukan Tipe Data Domain (server/types/)
+  └── Buat server/types/voucher.ts
+      └── Ekspor interface Voucher, VoucherRedemption, dll.
+
+Langkah 2: Siapkan Data Persistence (server/data/)
+  └── Buat server/data/vouchers.json
+      └── Isi array awal data seed.
+
+Langkah 3: Bangun Endpoint API Server (server/api/)
+  ├── Buat server/api/vouchers.get.ts (handler pembacaan daftar voucher)
+  └── Buat server/api/vouchers/redeem.post.ts (handler mutasi/klaim voucher)
+      └── Gunakan readJSON, writeJSON, dan createResponse dari server/utils/data.ts.
+
+Langkah 4: Buat Composable Reaktif (app/composables/)
+  └── Buat app/composables/useVouchers.ts
+      ├── Import type dari "#server/types/voucher"
+      └── Bungkus useFetch('/api/vouchers', { key: 'vouchers' }) dan ekspos ref/computed.
+
+Langkah 5: Siapkan Folder & Komponen UI (app/components/pages/voucher/)
+  ├── Buat folder app/components/pages/voucher/
+  ├── Buat app/components/pages/voucher/VoucherList.vue (menerima props vouchers: Voucher[])
+  ├── Buat app/components/pages/voucher/VoucherCard.vue (kartu item)
+  └── Buat app/components/pages/voucher/RedeemModal.vue (form modal + emisi aksi)
+
+Langkah 6: Bangun Halaman Route (app/pages/voucher.vue)
+  ├── Daftarkan useLegacyPage({ title: 'Voucher', styles: [...], scripts: [...] })
+  ├── Panggil composable useVouchers()
+  ├── Susun komponen: <PagesVoucherList :vouchers="vouchers" />
+  └── Sambungkan event emisi: <PagesVoucherRedeemModal @redeemed="refresh" />
+
+Langkah 7: Konfigurasi Layout (app/layouts/default.vue)
+  └── Jika rute membutuhkan navigasi tertentu (misal main navbar atau calculator navbar),
+      tambahkan '/voucher' ke dalam Set rute di app/layouts/default.vue.
+```
+
+---
+
+## 15. Anti-Patterns (Hal yang Dilarang)
+
+Berikut adalah daftar praktik buruk yang **dilarang keras** dalam arsitektur ini:
+
+| Anti-Pattern | Mengapa Dilarang? | Solusi Sesuai Standar |
+|---|---|---|
+| **Menaruh fetch langsung di banyak komponen kecil** | Menyebabkan data tidak sinkron, duplikasi request, dan sulit di-debug. | Ambil data di level `page` atau `composable`, lalu oper via `props`. |
+| **Membuat komponen bernama `Content.vue` atau `Page.vue`** | Melanggar validasi arsitektur project dan mengaburkan tanggung jawab UI. | Berikan nama spesifik bahasa Inggris: `OrderRows.vue`, `ProfileDetailsForm.vue`. |
+| **Menulis ulang interface di setiap file `.vue`** | Merusak konsistensi tipe dan menyulitkan refactoring skema data. | Sentralisasi semua tipe di `server/types/*.ts` dan import via `#server/types/...`. |
+| **Membuat folder baru di root tanpa alasan** | Merusak struktur standar Nuxt 4 (`app/` dan `server/`). | Ikuti folder yang sudah ada (`app/components`, `app/pages`, `server/api`, dll). |
+| **Menginstall paket Bootstrap JS/CSS** | Memperbesar bundle size dan merusak layer kompatibilitas internal. | Gunakan Tailwind CSS 4 dan shim `legacy-ui.client.ts`. |
+| **Memanggil file system (`fs`) di komponen `app/`** | Kode di `app/` berjalan di client browser dan akan memicu runtime error fatal. | Operasi sistem dan I/O data hanya boleh dilakukan di `server/` (Nitro). |
+| **Hardcode link statis `.html`** | Mematikan Single Page Application (SPA) routing Nuxt. | Gunakan `<NuxtLink to="/orders">` tanpa akhiran `.html`. |
+| **Menaruh business calculation besar di template** | Template sulit dibaca dan tidak dapat diuji secara terisolasi. | Buat `computed` property di script setup halaman atau composable. |
+
+---
+
+## 16. Ketentuan Pages Nuxt: Samakan Tampilan dengan HTML Referensi Menggunakan Tailwind
+
+### 16.1 Konfigurasi dan Struktur yang Aktif
+
+**Frontend berada di `app/`, mengikuti struktur branch Rama.** Semua halaman tetap mengikuti HTML dengan nama yang sama di `legacy/static-source/`. HTML tersebut sebelumnya berada di root proyek; pemindahan ini mempertahankan seluruh file aslinya.
+
+| Bagian | Lokasi / konfigurasi aktif |
+|---|---|
+| Nuxt dan Tailwind | Nuxt `^4.5.2`, Tailwind CSS dan plugin Vite `^4.3.3`. |
+| Vue, router, dan state | Vue `^3.5.40`, Vue Router `^5.2.0`, Pinia `^4.0.3`, modul Pinia Nuxt `^1.0.2`. |
+| Frontend | `app/app.vue`, `app/pages/`, `app/components/`, `app/composables/`, `app/layouts/`, `app/plugins/`, `app/stores/`, dan `app/locales/`. |
+| Styling | `app/assets/css/main.css`, termasuk token `@theme`, pemindaian `@source`, dan variant dark mode admin. |
+| Backend | `server/api/`, `server/data/`, `server/types/`, dan `server/utils/` tetap di root. |
+| Alias frontend | `~/` dan `@/` mengikuti direktori `app/` Nuxt 4. |
+| Alias server | `#server`, `~/server`, dan `@/server` mengarah ke root `server/` agar import backend yang sudah ada tetap bekerja. |
+| Alias type | `~/types` dan `@/types` tetap mengarah ke `server/types/`. |
+| Referensi statis | `legacy/static-source/*.html`, `legacy/static-source/assets/`, dan `legacy/static-source/components/`. |
+| Dokumentasi | `docs/`; petunjuk ringkas ada di `README.md`. |
+| Data runtime dan publik | `data/` dan `public/` dipertahankan pada lokasi semula. |
+| URL | Route Nuxt, alias `.html`, dan URL aset publik tetap sama. |
+
+#### 16.1.1 Aturan Pelestarian File
+
+1. Pindahkan file sesuai tanggung jawabnya tanpa mengganti isi halaman, JSON, API, type, atau utils dengan placeholder. Pemetaan dari path awal dicatat pada `MIGRATION_MANIFEST.json`.
+2. Pertahankan kode bisnis dan integrasi data. Penyesuaian struktur dilakukan melalui konfigurasi sumber Nuxt, alias import, dan path script/dokumentasi.
+3. Gunakan `app/assets/css/main.css` sebagai sumber token Tailwind 4. CSS utama disalin dari lokasi awal sebelum aset referensi diarsipkan; warna, font, dan dark mode admin tetap sama.
+4. Jangan menghapus, melakukan seed ulang, atau menimpa JSON yang sudah ada. `server/utils/data.ts` tetap membaca/menulis direktori `data/`; JSON `server/data/` juga tetap dipertahankan.
+5. Partial HTML dan seluruh aset sumber mengikuti HTML referensi ke `legacy/static-source/`. Referensi lama dapat disajikan dari direktori tersebut sebagai document root sehingga path aset relatif tetap sesuai.
+6. Jalankan `npm run validate:structure` untuk mengecek file dan pasangan halaman/HTML. Opsi `-- --check-hashes` membandingkan isi file dengan snapshot setelah penataan struktur; perbedaan setelah pengembangan berikutnya perlu ditinjau, bukan dikembalikan otomatis.
+7. Periksa build, route/API, dan interaksi browser setelah pemindahan. Uji GET tidak boleh mengubah JSON; kegagalan implementasi lama dicatat secara eksplisit.
+
+Nuxt 4 memakai `app/` secara default. Konfigurasi admin tetap mempertahankan metadata aplikasi, modul Pinia, alias type/server, dan kompatibilitas URL `.html`; jangan mengganti seluruh konfigurasi dengan contoh minimal.
+
+### 16.2 Pemetaan HTML ke Halaman Nuxt
+
+1. Pasangkan `legacy/static-source/<nama>.html` dengan `app/pages/<nama>.vue`. Contoh: `legacy/static-source/all-blog.html` menjadi acuan `app/pages/all-blog.vue` pada route `/all-blog`. Nuxt 4 membaca halaman dari direktori `app/pages/`.
+2. Nama “allblog” mengacu ke halaman yang sudah ada, yaitu `all-blog.vue`; jangan membuat duplikat `allblog.vue`.
+3. `legacy/static-source/index.html` berpasangan dengan `app/pages/index.vue` pada route `/`.
+4. Edit halaman yang sudah ada beserta komponen terkait. Jika nantinya ada HTML di `legacy/static-source/` baru tanpa pasangan Nuxt, tambahkan halaman sesuai nama dan pola yang sama.
+5. Gunakan `<NuxtLink>` dengan route Nuxt untuk navigasi internal. Alias URL `.html` yang sudah dikonfigurasi dalam `nuxt.config.ts` tetap menjadi kompatibilitas URL lama.
+6. Baca setiap HTML pasangannya sebelum mengubah halaman; jangan menggunakan satu template generik untuk seluruh halaman.
+
+### 16.3 Unsur Tampilan yang Wajib Sama
+
+Yang harus dicocokkan adalah hasil tampilan di browser, bukan sekadar kesamaan nama class atau judul halaman:
+
+- **Kerangka halaman:** header, sidebar, area konten, footer bila ada, lebar konten, serta posisi dan urutan setiap section. Gunakan layout bersama agar header/sidebar tidak muncul dua kali.
+- **Tipografi dan warna:** keluarga font, ukuran, ketebalan, tinggi baris, warna teks, background, border, dan warna status/tombol.
+- **Ukuran dan jarak:** margin, padding, gap, tinggi input/tombol, radius sudut, bayangan, ukuran gambar, dan proporsi kolom.
+- **Header dan toolbar:** judul, subjudul, ikon, tombol tambah, pencarian, filter, pengurutan, ekspor, cetak, refresh, dan collapse sesuai elemen yang tersedia pada HTML sumber.
+- **Konten utama:** jenis tampilan tabel atau kartu, urutan kolom, badge, checkbox, thumbnail, label, pagination, serta posisi tombol aksi.
+- **Form dan modal:** susunan field, label, input, pilihan, upload/preview gambar, toggle, ukuran dialog, backdrop, dan tombol footer mengikuti referensi.
+- **Responsivitas:** perilaku pada desktop, tablet, dan ponsel; jumlah kolom, pembungkusan toolbar, scroll tabel, dan lebar modal mengikuti HTML sumber.
+
+Gunakan teks dan aset referensi untuk perbandingan tampilan awal. Data aplikasi tetap berasal dari alur data yang sudah tersedia. Jangan mengganti isi dengan kartu, statistik, field, gambar, atau section tambahan yang tidak ada pada referensi hanya untuk mengisi halaman.
+
+### 16.4 Implementasi Styling dengan Tailwind
+
+1. Implementasikan layout, spacing, tipografi, warna, border, shadow, dan responsive state menggunakan utility Tailwind CSS 4. Gunakan token `@theme` di `app/assets/css/main.css`; `legacy/static-source/tailwind.config.ts` tetap disimpan sebagai referensi nilai sebelum upgrade.
+2. Jika ukuran atau warna referensi belum tersedia sebagai token, gunakan arbitrary value Tailwind atau tambahkan token bersama bila dipakai berulang. Cocokkan hasil render; ukuran dengan angka yang sama pada Bootstrap dan Tailwind belum tentu menghasilkan ukuran yang sama.
+3. Periksa breakpoint CSS referensi. Jangan menganggap `xxl` Bootstrap sama dengan `2xl` Tailwind. Contoh: grid `legacy/static-source/all-blog.html` memakai `col-md-6 col-xxl-4`; pertahankan dua kolom mulai breakpoint `md` sumber dan tiga kolom mulai breakpoint `xxl` sumber.
+4. Class Bootstrap pada contoh lama seperti `row`, `col-*`, `d-flex`, `btn`, `card`, dan `form-control` harus diterjemahkan ke styling Tailwind pada halaman yang dimigrasikan. Menyalin class tersebut saja belum memenuhi ketentuan.
+5. Jangan memuat Bootstrap CSS/JS, jQuery, atau seluruh stylesheet legacy ke halaman Nuxt sebagai jalan pintas untuk menyamakan tampilan. HTML dan CSS lama dipakai untuk membaca referensi visual.
+6. Bila CSS khusus masih diperlukan, batasi pada komponen terkait; gunakan CSS scoped atau fasilitas Tailwind 4 seperlunya. Hindari override global yang mengubah halaman lain.
+7. Pertahankan pemisahan halaman, komponen, composable, dan tipe data. Gunakan kembali komponen domain yang sudah ada dan sesuaikan styling-nya; halaman tetap bertugas menyusun UI dan menghubungkan data.
+8. Modal, dropdown, tab, filter, sort, dan aksi lain dikendalikan melalui state serta event Vue. Pertahankan integrasi data dan perilaku yang sudah berjalan saat mengganti styling.
+9. Gunakan metadata Nuxt dan komponen layout yang tersedia. Jangan memasukkan satu dokumen HTML lengkap, iframe HTML lama, atau markup statis melalui `v-html` sebagai pengganti implementasi halaman.
+
+### 16.5 Acuan Khusus Halaman Blog dan Address
+
+Path di tabel ini merupakan lokasi aktif setelah penataan struktur Nuxt 4.
+
+| Halaman Nuxt | Acuan HTML di `legacy/static-source/` | Bagian yang wajib dicocokkan |
+|---|---|---|
+| `app/pages/all-blog.vue` | `legacy/static-source/all-blog.html` | Header “Blogs” / “Manage your blogs”, toolbar dan tombol Add Blog, pencarian, filter status, sort, grid kartu dengan gambar/badge/tanggal/penulis/judul/aksi, pagination, serta modal Add Blog dan Edit Blog. |
+| `app/pages/blog-category.vue` | `legacy/static-source/blog-category.html` | Header Blog Categories, toolbar/filter, tabel kategori dengan checkbox, tanggal, status, aksi, serta modal tambah/edit kategori. |
+| `app/pages/blog-tag.vue` | `legacy/static-source/blog-tag.html` | Header Blog Tags, toolbar/filter, tabel tag dengan checkbox, tanggal, status, aksi, dan form/modal yang tersedia pada HTML sumber. |
+| `app/pages/blog-comment.vue` | `legacy/static-source/blog-comment.html` | Header Blog Comments, toolbar, tabel komentar dengan tanggal, ratings, blog, penulis, dan aksi sesuai sumber. |
+| `app/pages/address.vue` | `legacy/static-source/address.html` | Header Address List, statistik, tab customer/supplier, pencarian/filter, tabel alamat, tombol aksi, serta modal yang tersedia pada HTML sumber. |
+
+Pola pencocokan yang sama berlaku untuk seluruh halaman di bagian 17, bukan hanya kelompok blog dan address.
+
+### 16.6 Urutan Pengerjaan dan Kriteria Selesai
+
+1. Buka HTML referensi beserta CSS/aset yang memengaruhi tampilannya; catat section, ukuran, breakpoint, serta kondisi interaksi yang perlu dicocokkan.
+2. Periksa halaman Nuxt, layout, komponen, dan composable yang sudah ada. Tentukan bagian yang perlu disesuaikan tanpa menggandakan kerangka aplikasi.
+3. Terapkan styling Tailwind pada komponen terkait, susun halaman, lalu hubungkan kembali data dan event Vue.
+4. Bandingkan HTML dan Nuxt pada ukuran viewport dan data tampilan yang sama. Periksa desktop, tablet, dan ponsel, termasuk modal terbuka, dropdown, tab aktif, serta tabel yang panjang bila tersedia.
+5. Verifikasi navigasi internal dan interaksi yang relevan; pastikan tidak ada aset hilang, error console, atau error hidrasi akibat perubahan.
+6. Jalankan build proyek untuk perubahan kode. Catat halaman yang sudah diverifikasi dan perbedaan yang masih tersisa; jangan menyatakan tampilan sudah sama hanya karena route berhasil dibuka.
+
+**Selesai berarti tampilan mengikuti HTML di `legacy/static-source/`, styling menggunakan Tailwind, dan fungsi halaman tetap berjalan.** Keberadaan file Vue pada inventaris berikut hanya menunjukkan pasangan file, bukan bukti halaman sudah selesai dimigrasikan atau diverifikasi secara visual.
+
+---
+
+## 17. Inventaris Lengkap Pages Nuxt dan HTML Referensi
+
+Terdapat **186 halaman Nuxt** di `app/pages/`, seluruhnya mempunyai pasangan HTML asli di `legacy/static-source/`. Nama route dan isi file dipertahankan selama penataan direktori.
+
+| Halaman Nuxt | HTML referensi | Route Nuxt |
+|---|---|---|
+| `app/pages/account-statement.vue` | `legacy/static-source/account-statement.html` | `/account-statement` |
+| `app/pages/add-employee.vue` | `legacy/static-source/add-employee.html` | `/add-employee` |
+| `app/pages/add-payroll.vue` | `legacy/static-source/add-payroll.html` | `/add-payroll` |
+| `app/pages/add-product-process.vue` | `legacy/static-source/add-product-process.html` | `/add-product-process` |
+| `app/pages/add-purchase.vue` | `legacy/static-source/add-purchase.html` | `/add-purchase` |
+| `app/pages/add-quotation.vue` | `legacy/static-source/add-quotation.html` | `/add-quotation` |
+| `app/pages/add-request-quotation.vue` | `legacy/static-source/add-request-quotation.html` | `/add-request-quotation` |
+| `app/pages/add-sales.vue` | `legacy/static-source/add-sales.html` | `/add-sales` |
+| `app/pages/add-work-flow.vue` | `legacy/static-source/add-work-flow.html` | `/add-work-flow` |
+| `app/pages/address.vue` | `legacy/static-source/address.html` | `/address` |
+| `app/pages/all-blog.vue` | `legacy/static-source/all-blog.html` | `/all-blog` |
+| `app/pages/analytics-dashboard.vue` | `legacy/static-source/analytics-dashboard.html` | `/analytics-dashboard` |
+| `app/pages/annual-reports.vue` | `legacy/static-source/annual-reports.html` | `/annual-reports` |
+| `app/pages/appearance.vue` | `legacy/static-source/appearance.html` | `/appearance` |
+| `app/pages/balance-account.vue` | `legacy/static-source/balance-account.html` | `/balance-account` |
+| `app/pages/balance-sheet.vue` | `legacy/static-source/balance-sheet.html` | `/balance-sheet` |
+| `app/pages/ban-ip-address.vue` | `legacy/static-source/ban-ip-address.html` | `/ban-ip-address` |
+| `app/pages/bank-account.vue` | `legacy/static-source/bank-account.html` | `/bank-account` |
+| `app/pages/bank-settings-grid.vue` | `legacy/static-source/bank-settings-grid.html` | `/bank-settings-grid` |
+| `app/pages/bank-settings-list.vue` | `legacy/static-source/bank-settings-list.html` | `/bank-settings-list` |
+| `app/pages/banner.vue` | `legacy/static-source/banner.html` | `/banner` |
+| `app/pages/best-seller.vue` | `legacy/static-source/best-seller.html` | `/best-seller` |
+| `app/pages/billing.vue` | `legacy/static-source/billing.html` | `/billing` |
+| `app/pages/blank.vue` | `legacy/static-source/blank.html` | `/blank` |
+| `app/pages/blog-category.vue` | `legacy/static-source/blog-category.html` | `/blog-category` |
+| `app/pages/blog-comment.vue` | `legacy/static-source/blog-comment.html` | `/blog-comment` |
+| `app/pages/blog-tag.vue` | `legacy/static-source/blog-tag.html` | `/blog-tag` |
+| `app/pages/calender.vue` | `legacy/static-source/calender.html` | `/calender` |
+| `app/pages/cart.vue` | `legacy/static-source/cart.html` | `/cart` |
+| `app/pages/cash-advance.vue` | `legacy/static-source/cash-advance.html` | `/cash-advance` |
+| `app/pages/cash-flow.vue` | `legacy/static-source/cash-flow.html` | `/cash-flow` |
+| `app/pages/category.vue` | `legacy/static-source/category.html` | `/category` |
+| `app/pages/cetak-full-color.vue` | `legacy/static-source/cetak-full-color.html` | `/cetak-full-color` |
+| `app/pages/cetak-full-colorbekup.vue` | `legacy/static-source/cetak-full-colorbekup.html` | `/cetak-full-colorbekup` |
+| `app/pages/checkout.vue` | `legacy/static-source/checkout.html` | `/checkout` |
+| `app/pages/company-setting.vue` | `legacy/static-source/company-setting.html` | `/company-setting` |
+| `app/pages/contact-form.vue` | `legacy/static-source/contact-form.html` | `/contact-form` |
+| `app/pages/coupon.vue` | `legacy/static-source/coupon.html` | `/coupon` |
+| `app/pages/create-product.vue` | `legacy/static-source/create-product.html` | `/create-product` |
+| `app/pages/currency-settings.vue` | `legacy/static-source/currency-settings.html` | `/currency-settings` |
+| `app/pages/custom-field.vue` | `legacy/static-source/custom-field.html` | `/custom-field` |
+| `app/pages/customer-due-report.vue` | `legacy/static-source/customer-due-report.html` | `/customer-due-report` |
+| `app/pages/customer-report.vue` | `legacy/static-source/customer-report.html` | `/customer-report` |
+| `app/pages/customer-type.vue` | `legacy/static-source/customer-type.html` | `/customer-type` |
+| `app/pages/customers.vue` | `legacy/static-source/customers.html` | `/customers` |
+| `app/pages/delete-account.vue` | `legacy/static-source/delete-account.html` | `/delete-account` |
+| `app/pages/delivery-note-detail.vue` | `legacy/static-source/delivery-note-detail.html` | `/delivery-note-detail` |
+| `app/pages/delivery-note.vue` | `legacy/static-source/delivery-note.html` | `/delivery-note` |
+| `app/pages/department.vue` | `legacy/static-source/department.html` | `/department` |
+| `app/pages/designation.vue` | `legacy/static-source/designation.html` | `/designation` |
+| `app/pages/discount-plan.vue` | `legacy/static-source/discount-plan.html` | `/discount-plan` |
+| `app/pages/discount.vue` | `legacy/static-source/discount.html` | `/discount` |
+| `app/pages/district.vue` | `legacy/static-source/district.html` | `/district` |
+| `app/pages/download-files.vue` | `legacy/static-source/download-files.html` | `/download-files` |
+| `app/pages/edit-employee.vue` | `legacy/static-source/edit-employee.html` | `/edit-employee` |
+| `app/pages/edit-job-order.vue` | `legacy/static-source/edit-job-order.html` | `/edit-job-order` |
+| `app/pages/edit-payroll.vue` | `legacy/static-source/edit-payroll.html` | `/edit-payroll` |
+| `app/pages/edit-quotation.vue` | `legacy/static-source/edit-quotation.html` | `/edit-quotation` |
+| `app/pages/edit-request-quotation.vue` | `legacy/static-source/edit-request-quotation.html` | `/edit-request-quotation` |
+| `app/pages/edit-work-flow.vue` | `legacy/static-source/edit-work-flow.html` | `/edit-work-flow` |
+| `app/pages/email-setting.vue` | `legacy/static-source/email-setting.html` | `/email-setting` |
+| `app/pages/employee-salary.vue` | `legacy/static-source/employee-salary.html` | `/employee-salary` |
+| `app/pages/employees.vue` | `legacy/static-source/employees.html` | `/employees` |
+| `app/pages/expense-category.vue` | `legacy/static-source/expense-category.html` | `/expense-category` |
+| `app/pages/expense-report.vue` | `legacy/static-source/expense-report.html` | `/expense-report` |
+| `app/pages/expenses.vue` | `legacy/static-source/expenses.html` | `/expenses` |
+| `app/pages/faq.vue` | `legacy/static-source/faq.html` | `/faq` |
+| `app/pages/flow-category.vue` | `legacy/static-source/flow-category.html` | `/flow-category` |
+| `app/pages/flow-name.vue` | `legacy/static-source/flow-name.html` | `/flow-name` |
+| `app/pages/flow-template.vue` | `legacy/static-source/flow-template.html` | `/flow-template` |
+| `app/pages/footer.vue` | `legacy/static-source/footer.html` | `/footer` |
+| `app/pages/forgot-password.vue` | `legacy/static-source/forgot-password.html` | `/forgot-password` |
+| `app/pages/gdpr-settings.vue` | `legacy/static-source/gdpr-settings.html` | `/gdpr-settings` |
+| `app/pages/harga-jasa-lainya.vue` | `legacy/static-source/harga-jasa-lainya.html` | `/harga-jasa-lainya` |
+| `app/pages/incentive.vue` | `legacy/static-source/incentive.html` | `/incentive` |
+| `app/pages/income-category.vue` | `legacy/static-source/income-category.html` | `/income-category` |
+| `app/pages/income-report.vue` | `legacy/static-source/income-report.html` | `/income-report` |
+| `app/pages/income.vue` | `legacy/static-source/income.html` | `/income` |
+| `app/pages/index.vue` | `legacy/static-source/index.html` | `/` |
+| `app/pages/input-tax.vue` | `legacy/static-source/input-tax.html` | `/input-tax` |
+| `app/pages/invoice-details.vue` | `legacy/static-source/invoice-details.html` | `/invoice-details` |
+| `app/pages/invoice-report.vue` | `legacy/static-source/invoice-report.html` | `/invoice-report` |
+| `app/pages/invoice-setting.vue` | `legacy/static-source/invoice-setting.html` | `/invoice-setting` |
+| `app/pages/invoice.vue` | `legacy/static-source/invoice.html` | `/invoice` |
+| `app/pages/job-branch.vue` | `legacy/static-source/job-branch.html` | `/job-branch` |
+| `app/pages/job-list.vue` | `legacy/static-source/job-list.html` | `/job-list` |
+| `app/pages/job-order-detail.vue` | `legacy/static-source/job-order-detail.html` | `/job-order-detail` |
+| `app/pages/job-order.vue` | `legacy/static-source/job-order.html` | `/job-order` |
+| `app/pages/job-progress.vue` | `legacy/static-source/job-progress.html` | `/job-progress` |
+| `app/pages/kalkulator-dashboard.vue` | `legacy/static-source/kalkulator-dashboard.html` | `/kalkulator-dashboard` |
+| `app/pages/kertas-group-self.vue` | `legacy/static-source/kertas-group-self.html` | `/kertas-group-self` |
+| `app/pages/kertas-group.vue` | `legacy/static-source/kertas-group.html` | `/kertas-group` |
+| `app/pages/kertas-harga-self.vue` | `legacy/static-source/kertas-harga-self.html` | `/kertas-harga-self` |
+| `app/pages/kertas-harga.vue` | `legacy/static-source/kertas-harga.html` | `/kertas-harga` |
+| `app/pages/kertas-jenis-self.vue` | `legacy/static-source/kertas-jenis-self.html` | `/kertas-jenis-self` |
+| `app/pages/kertas-jenis.vue` | `legacy/static-source/kertas-jenis.html` | `/kertas-jenis` |
+| `app/pages/kertas-ukuran-self.vue` | `legacy/static-source/kertas-ukuran-self.html` | `/kertas-ukuran-self` |
+| `app/pages/kertas-ukuran.vue` | `legacy/static-source/kertas-ukuran.html` | `/kertas-ukuran` |
+| `app/pages/komponen-fiks.vue` | `legacy/static-source/komponen-fiks.html` | `/komponen-fiks` |
+| `app/pages/komponen-minimum.vue` | `legacy/static-source/komponen-minimum.html` | `/komponen-minimum` |
+| `app/pages/language.vue` | `legacy/static-source/language.html` | `/language` |
+| `app/pages/localization.vue` | `legacy/static-source/localization.html` | `/localization` |
+| `app/pages/mesin-cetak-self.vue` | `legacy/static-source/mesin-cetak-self.html` | `/mesin-cetak-self` |
+| `app/pages/mesin-cetak.vue` | `legacy/static-source/mesin-cetak.html` | `/mesin-cetak` |
+| `app/pages/mesin-laminasi-self.vue` | `legacy/static-source/mesin-laminasi-self.html` | `/mesin-laminasi-self` |
+| `app/pages/mesin-laminasi.vue` | `legacy/static-source/mesin-laminasi.html` | `/mesin-laminasi` |
+| `app/pages/mesin-poli-self.vue` | `legacy/static-source/mesin-poli-self.html` | `/mesin-poli-self` |
+| `app/pages/mesin-poli.vue` | `legacy/static-source/mesin-poli.html` | `/mesin-poli` |
+| `app/pages/mesin-pond-self.vue` | `legacy/static-source/mesin-pond-self.html` | `/mesin-pond-self` |
+| `app/pages/mesin-pond.vue` | `legacy/static-source/mesin-pond.html` | `/mesin-pond` |
+| `app/pages/money-transfer.vue` | `legacy/static-source/money-transfer.html` | `/money-transfer` |
+| `app/pages/my-incentive.vue` | `legacy/static-source/my-incentive.html` | `/my-incentive` |
+| `app/pages/my-job.vue` | `legacy/static-source/my-job.html` | `/my-job` |
+| `app/pages/online-orders.vue` | `legacy/static-source/online-orders.html` | `/online-orders` |
+| `app/pages/orders.vue` | `legacy/static-source/orders.html` | `/orders` |
+| `app/pages/otp.vue` | `legacy/static-source/otp.html` | `/otp` |
+| `app/pages/our-client.vue` | `legacy/static-source/our-client.html` | `/our-client` |
+| `app/pages/output-tax.vue` | `legacy/static-source/output-tax.html` | `/output-tax` |
+| `app/pages/payment-gateway.vue` | `legacy/static-source/payment-gateway.html` | `/payment-gateway` |
+| `app/pages/payment-inflow.vue` | `legacy/static-source/payment-inflow.html` | `/payment-inflow` |
+| `app/pages/payment-outflow.vue` | `legacy/static-source/payment-outflow.html` | `/payment-outflow` |
+| `app/pages/payments.vue` | `legacy/static-source/payments.html` | `/payments` |
+| `app/pages/payslip-detail.vue` | `legacy/static-source/payslip-detail.html` | `/payslip-detail` |
+| `app/pages/payslip.vue` | `legacy/static-source/payslip.html` | `/payslip` |
+| `app/pages/permissions.vue` | `legacy/static-source/permissions.html` | `/permissions` |
+| `app/pages/pos-order.vue` | `legacy/static-source/pos-order.html` | `/pos-order` |
+| `app/pages/pos-settings.vue` | `legacy/static-source/pos-settings.html` | `/pos-settings` |
+| `app/pages/pos.vue` | `legacy/static-source/pos.html` | `/pos` |
+| `app/pages/preference.vue` | `legacy/static-source/preference.html` | `/preference` |
+| `app/pages/prefixes.vue` | `legacy/static-source/prefixes.html` | `/prefixes` |
+| `app/pages/printer-settings.vue` | `legacy/static-source/printer-settings.html` | `/printer-settings` |
+| `app/pages/product-details.vue` | `legacy/static-source/product-details.html` | `/product-details` |
+| `app/pages/product-list.vue` | `legacy/static-source/product-list.html` | `/product-list` |
+| `app/pages/product-report.vue` | `legacy/static-source/product-report.html` | `/product-report` |
+| `app/pages/profile.vue` | `legacy/static-source/profile.html` | `/profile` |
+| `app/pages/profit-and-loss.vue` | `legacy/static-source/profit-and-loss.html` | `/profit-and-loss` |
+| `app/pages/province.vue` | `legacy/static-source/province.html` | `/province` |
+| `app/pages/purchase-category.vue` | `legacy/static-source/purchase-category.html` | `/purchase-category` |
+| `app/pages/purchase-item.vue` | `legacy/static-source/purchase-item.html` | `/purchase-item` |
+| `app/pages/purchase-order-detail.vue` | `legacy/static-source/purchase-order-detail.html` | `/purchase-order-detail` |
+| `app/pages/purchase-order.vue` | `legacy/static-source/purchase-order.html` | `/purchase-order` |
+| `app/pages/purchase-report.vue` | `legacy/static-source/purchase-report.html` | `/purchase-report` |
+| `app/pages/purchase-return-detail.vue` | `legacy/static-source/purchase-return-detail.html` | `/purchase-return-detail` |
+| `app/pages/purchase-return.vue` | `legacy/static-source/purchase-return.html` | `/purchase-return` |
+| `app/pages/purchase.vue` | `legacy/static-source/purchase.html` | `/purchase` |
+| `app/pages/quotation-detail.vue` | `legacy/static-source/quotation-detail.html` | `/quotation-detail` |
+| `app/pages/quotation.vue` | `legacy/static-source/quotation.html` | `/quotation` |
+| `app/pages/regency.vue` | `legacy/static-source/regency.html` | `/regency` |
+| `app/pages/request-quotation-detail.vue` | `legacy/static-source/request-quotation-detail.html` | `/request-quotation-detail` |
+| `app/pages/request-quotation.vue` | `legacy/static-source/request-quotation.html` | `/request-quotation` |
+| `app/pages/reviews.vue` | `legacy/static-source/reviews.html` | `/reviews` |
+| `app/pages/role-permissions.vue` | `legacy/static-source/role-permissions.html` | `/role-permissions` |
+| `app/pages/role.vue` | `legacy/static-source/role.html` | `/role` |
+| `app/pages/sales-dashboard.vue` | `legacy/static-source/sales-dashboard.html` | `/sales-dashboard` |
+| `app/pages/sales-note.vue` | `legacy/static-source/sales-note.html` | `/sales-note` |
+| `app/pages/sales-receipt.vue` | `legacy/static-source/sales-receipt.html` | `/sales-receipt` |
+| `app/pages/sales-report.vue` | `legacy/static-source/sales-report.html` | `/sales-report` |
+| `app/pages/sales-return.vue` | `legacy/static-source/sales-return.html` | `/sales-return` |
+| `app/pages/sales.vue` | `legacy/static-source/sales.html` | `/sales` |
+| `app/pages/security-settings.vue` | `legacy/static-source/security-settings.html` | `/security-settings` |
+| `app/pages/semua-percetakan.vue` | `legacy/static-source/semua-percetakan.html` | `/semua-percetakan` |
+| `app/pages/semua-toko-kertas.vue` | `legacy/static-source/semua-toko-kertas.html` | `/semua-toko-kertas` |
+| `app/pages/signin.vue` | `legacy/static-source/signin.html` | `/signin` |
+| `app/pages/sms-gateway.vue` | `legacy/static-source/sms-gateway.html` | `/sms-gateway` |
+| `app/pages/social-authentication.vue` | `legacy/static-source/social-authentication.html` | `/social-authentication` |
+| `app/pages/storage-settings.vue` | `legacy/static-source/storage-settings.html` | `/storage-settings` |
+| `app/pages/store-list.vue` | `legacy/static-source/store-list.html` | `/store-list` |
+| `app/pages/sub-category.vue` | `legacy/static-source/sub-category.html` | `/sub-category` |
+| `app/pages/subscriptions.vue` | `legacy/static-source/subscriptions.html` | `/subscriptions` |
+| `app/pages/supplier-due-report.vue` | `legacy/static-source/supplier-due-report.html` | `/supplier-due-report` |
+| `app/pages/supplier-report.vue` | `legacy/static-source/supplier-report.html` | `/supplier-report` |
+| `app/pages/supplier.vue` | `legacy/static-source/supplier.html` | `/supplier` |
+| `app/pages/support-ticket-detail.vue` | `legacy/static-source/support-ticket-detail.html` | `/support-ticket-detail` |
+| `app/pages/support-ticket.vue` | `legacy/static-source/support-ticket.html` | `/support-ticket` |
+| `app/pages/system-setting.vue` | `legacy/static-source/system-setting.html` | `/system-setting` |
+| `app/pages/tax-rates.vue` | `legacy/static-source/tax-rates.html` | `/tax-rates` |
+| `app/pages/tax-report.vue` | `legacy/static-source/tax-report.html` | `/tax-report` |
+| `app/pages/ticket-detail.vue` | `legacy/static-source/ticket-detail.html` | `/ticket-detail` |
+| `app/pages/ticket-list.vue` | `legacy/static-source/ticket-list.html` | `/ticket-list` |
+| `app/pages/unit.vue` | `legacy/static-source/unit.html` | `/unit` |
+| `app/pages/user-admin.vue` | `legacy/static-source/user-admin.html` | `/user-admin` |
+| `app/pages/user.vue` | `legacy/static-source/user.html` | `/user` |
+| `app/pages/variant.vue` | `legacy/static-source/variant.html` | `/variant` |
+| `app/pages/voucher.vue` | `legacy/static-source/voucher.html` | `/voucher` |
+| `app/pages/wishlist.vue` | `legacy/static-source/wishlist.html` | `/wishlist` |
+| `app/pages/work-flow.vue` | `legacy/static-source/work-flow.html` | `/work-flow` |
+
+---
+
+## 18. Riwayat Upgrade Framework Sebelum Penataan Folder
+
+Tahap upgrade framework sebelum pemindahan ke `app/`, pada 26 September 2026, memasang Nuxt **4.5.2**, Tailwind CSS / plugin Vite **4.3.3**, Pinia **4.0.3**, dan modul Pinia Nuxt **1.0.2**. Versi terpasang lengkap tersimpan pada `package-lock.json`.
+
+- Pada tahap upgrade versi, frontend masih di root dengan `srcDir: '.'`. Tahap penataan folder selanjutnya memindahkannya ke `app/` sesuai bagian 1 dan 16, dengan isi seluruh halaman tetap dipertahankan.
+- Perbandingan terhadap **3.265 file awal yang tercatat Git** tidak menemukan file aplikasi yang hilang. Seluruh kode `server/api/`, **32 JSON di `server/data/`**, JSON aset, dan `server/utils/` tetap sama isinya. Direktori `data/` tetap dipertahankan; sebelum upgrade direktori ini memang belum berisi file.
+- Empat komponen address, type address, dan composable `useLegacyPage` yang sebelumnya kosong dilengkapi agar halaman dapat dikompilasi dan metadata halaman bekerja. Type address mengikuti field API/JSON yang sudah ada. Data JSON tidak diinisialisasi ulang.
+- `npm run build` berhasil. Uji HTTP memeriksa 186 halaman, dua alias `.html`, dan 32 endpoint GET: **219 dari 220 request sukses**.
+- Endpoint `/api/blogs` masih menghasilkan HTTP 500 karena `server/api/blogs/index.get.ts` memang kosong sejak sebelum upgrade. File tersebut, endpoint blog lainnya yang masih kosong, serta JSON blog tetap dipertahankan; keberadaan route tidak berarti implementasi API blog sudah selesai.
+- Pemeriksaan browser lulus untuk hidrasi dashboard, token warna Tailwind, toggle sidebar Pinia, tab alamat, pembukaan modal alamat, pencarian blog, dan menu mobile pada viewport 390px, tanpa exception browser yang tidak tertangani. Pemeriksaan ini tidak melakukan mutasi data melalui API.
+- Header timing diagnostik Nitro dinonaktifkan agar metadata timing tidak menumpuk dan melampaui batas header setelah banyak request.
+
+Validasi ini memeriksa upgrade framework dan pelestarian file. Pencocokan visual seluruh halaman terhadap HTML di `legacy/static-source/` tetap mengikuti pekerjaan dan kriteria pada bagian 16; belum dinyatakan selesai untuk seluruh 186 halaman.
+
+---
+
+## 19. Hasil Penataan Struktur Sesuai Branch Rama
+
+Frontend dipindahkan ke `app/`, dokumentasi ke `docs/`, dan HTML/aset referensi ke `legacy/static-source/`. Backend tetap di `server/`, aset publik tetap di `public/`, dan lokasi data runtime tetap di `data/`.
+
+- Inventaris sebelum pemindahan mencatat **3.266 file**, termasuk dokumen struktur. **2.226 file berpindah lokasi**; seluruh file awal ditemukan pada lokasi tujuannya tanpa kehilangan isi aplikasi atau data.
+- Isi **186 halaman**, **94 file API**, seluruh **32 JSON server**, types, utils, komponen, composable, store, locale, dan aset tetap sama berdasarkan SHA-256. Perubahan isi hanya diperlukan pada konfigurasi Nuxt, script package, path parser sidebar, dan dokumen struktur.
+- **186 HTML asli** dan **3 partial HTML** diarsipkan beserta asetnya. CSS utama aplikasi disalin ke `app/assets/css/main.css`; salinan sumbernya tetap ada di arsip legacy.
+- `MIGRATION_MANIFEST.json` merekam path dan hash sebelum/sesudah. `npm run validate:structure -- --check-hashes` memeriksa keberadaan seluruh file beserta isi snapshot-nya.
+- `npm run build` berhasil setelah pemindahan. Seluruh 186 route, dua alias `.html`, dan 31 API GET merespons sukses. Satu API GET blog tetap HTTP 500 karena implementasinya memang kosong sebelum pemindahan.
+- Pemeriksaan browser untuk dashboard, sidebar Pinia, tab/modal alamat, pencarian blog, dan menu mobile lulus tanpa exception yang tidak tertangani.
+
+File yang dibuka di editor sekarang adalah `app/pages/address.vue` dan `docs/STRUCTURE.md`. Status Git dapat menampilkan penghapusan path lama serta penambahan path baru sebelum file distage; inventaris dan hash menunjukkan file tersebut dipindahkan, bukan dibuang.

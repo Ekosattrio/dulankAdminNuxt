@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="description" content="POS - Bootstrap Admin Template">
+	<meta name="keywords"
+		content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
+	<meta name="author" content="Dreamguys - Bootstrap Admin Template">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Kacetak System</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/kacetak.jpeg" />
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+	<!-- Datetimepicker CSS -->
+	<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+	<!-- animation CSS -->
+	<link rel="stylesheet" href="assets/css/animate.css">
+
+	<!-- Select2 CSS -->
+	<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+
+	<!-- Summernote CSS -->
+	<link rel="stylesheet" href="assets/plugins/summernote/summernote-bs4.min.css">
+
+	<!-- Datatable CSS -->
+	<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+
+	<!-- Feathericon CSS -->
+	<link rel="stylesheet" href="assets/css/feather.css" />
+
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="assets/css/style.css">
+	<style>
+		@page {
+			size: A4;
+			margin: 0.3in !important;
+
+			@bottom-right {
+				content: counter(page) "/" counter(pages);
+				margin-bottom: 15px;
+			}
+		}
+
+
+		@media print {
+			body {
+				visibility: hidden;
+			}
+
+			html,
+			body {
+				font-size: 12px !important;
+				/* ubah angka ini bila ingin lebih kecil/lebih besar */
+				line-height: 1.2 !important;
+			}
+
+			/* fallback spesifik untuk elemen penting */
+			h1 {
+				font-size: 1.25rem !important;
+			}
+
+			h2 {
+				font-size: 1.1rem !important;
+			}
+
+			h3,
+			h4,
+			h5,
+			h6 {
+				font-size: 1rem !important;
+			}
+
+			.text-standard,
+			.order-table,
+			.table,
+			.order-section-title,
+			.page-title,
+			p,
+			span,
+			label {
+				font-size: 0.85rem !important;
+				/* skala turun lagi untuk konten */
+			}
+
+			#section-to-print {
+				width: 100vw;
+				visibility: visible;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			.modal-xl {
+				position: absolute;
+				top: 0;
+				width: 100vw !important;
+				align-items: self-start;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			.table-top-head {
+				display: none !important;
+			}
+
+			.dataTables_paginate,
+			.dataTables_length,
+			.dataTables_info {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div id="global-loader">
+		<div class="loader"> </div>
+	</div>
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
+
+		<!-- header -->
+		<div id="header-placeholder"></div>
+		<!-- sidebar -->
+		<div id="sidebar-placeholder"></div>
+
+		<div class="page-wrapper mt-3">
+			<!-- Main content tulis disini -->
+			<div class="content">
+				<div class="page-header transfer">
+					<div class="add-item d-flex">
+						<div class="page-title">
+							<h4>Purchase List</h4>
+							<h6>Manage your purchases</h6>
+						</div>
+					</div>
+					<ul class="table-top-head">
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img
+									src="assets/img/icons/pdf.svg" alt="img"></a>
+						</li>
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+									src="assets/img/icons/printer.svg" alt="img"></a>
+						</li>
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i
+									data-feather="chevron-up" class="feather-chevron-up"></i></a>
+						</li>
+					</ul>
+					<div class="d-flex purchase-pg-btn">
+						<div class="page-btn">
+							<a href="add-purchase.html" class="btn btn-added"><i data-feather="plus-circle"
+									class="me-2"></i>Add New
+								Purchase</a>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- /product list -->
+				<div class="card table-list-card">
+					<div class="card-body">
+						<!-- Filter -->
+						<div class="table-top d-flex align-items-center justify-content-between">
+							<!-- Search Input -->
+							<div class="search-set d-block d-md-flex">
+								<div class="search-input">
+									<a href="" class="btn btn-searchset"><i data-feather="search"
+											class="feather-search"></i></a>
+								</div>
+								<!-- Date Range -->
+								<div class="my-2">
+									<div class="pemilihrentang-container ">
+										<input type="text" id="pemilihrentang-input"
+											class="pemilihrentang-input form-control" readonly placeholder="Date"
+											style="height: fit-content !important;width: 100% !important;">
+										<div id="pemilihrentang-panel" class="pemilihrentang-panel">
+											<div class="pemilihrentang-isi">
+												<div class="opsi-cepat">
+													<div data-range="kemarin">Kemarin</div>
+													<div data-range="7hari">7 Hari Terakhir</div>
+													<div data-range="bulanIni">Bulan Ini</div>
+													<div data-range="bulanLalu">Bulan Lalu</div>
+													<div data-range="tahunLalu">Tahun Lalu</div>
+													<div data-range="kustom">Rentang Kustom</div>
+												</div>
+												<div class="kalender" id="kalender-view" style="display:none;">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="filters d-flex justify-content-end">
+								<div class="dropdown w-100 me-2">
+									<button class="btn btn-outline-primary dropdown-toggle" type="button"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										Status
+									</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Complete</a></li>
+										<li><a class="dropdown-item" href="#">Pending</a></li>
+										<li><a class="dropdown-item" href="#">Ordered</a></li>
+										<li><a class="dropdown-item" href="#">Received</a></li>
+									</ul>
+								</div>
+								<div class="dropdown w-100 me-2">
+									<button class="btn btn-outline-primary dropdown-toggle" type="button"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										Payment Status
+									</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Paid</a></li>
+										<li><a class="dropdown-item" href="#">Unpaid</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /Filter -->
+						<div class="table-responsive">
+							<table class="table  datanew">
+								<thead>
+									<tr>
+										<th class="no-sort"></th>
+										<th>No Purchase</th>
+										<th>Date</th>
+										<th>Created</th>
+										<th>Supplier</th>
+										<th>Product</th>
+										<th>Status</th>
+										<th>Amount (IDR)</th>
+										<th>Paid (IDR)</th>
+										<th>Due (IDR)</th>
+										<th>Status</th>
+										<th>Notes</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000001</td>
+										<td>01/10/2025</td>
+										<td>Sales Staff</td>
+										<td>PT Kertas Jaya</td>
+										<td>Kertas Art Paper 150gr, Tinta Offset Merah</td>
+										<td>Ordered</td>
+										<td>1500000</td>
+										<td>750000</td>
+										<td>750000</td>
+										<td>Partial</td>
+										<td>Pembelian rutin bulanan</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000002</td>
+										<td>03/10/2025</td>
+										<td>Sales Staff</td>
+										<td>CV Kimia Prima</td>
+										<td>Plastisol T-shirt Putih, Emulsion</td>
+										<td>Recieved</td>
+										<td>2800000</td>
+										<td>2800000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000003</td>
+										<td>05/10/2025</td>
+										<td>Sales Staff</td>
+										<td>Global Inkindo</td>
+										<td>Tinta UV LED, Cleaner Roll</td>
+										<td>Pending</td>
+										<td>850000</td>
+										<td>0</td>
+										<td>850000</td>
+										<td>Unpaid</td>
+										<td>Menunggu konfirmasi stok</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000004</td>
+										<td>07/10/2025</td>
+										<td>Sales Staff</td>
+										<td>UD Sukses Makmur</td>
+										<td>NCR TP, NCR BM, Lem Fox 5kg</td>
+										<td>Recieved</td>
+										<td>3100000</td>
+										<td>3100000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000005</td>
+										<td>09/10/2025</td>
+										<td>Sales Staff</td>
+										<td>Indo Material</td>
+										<td>Flexi Korea 440gr, MMT Frontlit</td>
+										<td>Cancel</td>
+										<td>1950000</td>
+										<td>0</td>
+										<td>1950000</td>
+										<td>Unpaid</td>
+										<td>Pembelian dialihkan ke supplier lain</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000006</td>
+										<td>12/10/2025</td>
+										<td>Sales Staff</td>
+										<td>PT Kertas Jaya</td>
+										<td>Kertas HVS 70gr, NCR BM</td>
+										<td>Ordered</td>
+										<td>500000</td>
+										<td>500000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000007</td>
+										<td>15/10/2025</td>
+										<td>Sales Staff</td>
+										<td>CV Kimia Prima</td>
+										<td>Screen Sablon T120</td>
+										<td>Recieved</td>
+										<td>1250000</td>
+										<td>1250000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000008</td>
+										<td>18/10/2025</td>
+										<td>Sales Staff</td>
+										<td>Global Inkindo</td>
+										<td>Tinta Solvent, Vinyl Doff</td>
+										<td>Ordered</td>
+										<td>3300000</td>
+										<td>1000000</td>
+										<td>2300000</td>
+										<td>Partial</td>
+										<td>Pembayaran termin 1</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000009</td>
+										<td>21/10/2025</td>
+										<td>Sales Staff</td>
+										<td>UD Sukses Makmur</td>
+										<td>NCR BM, Kertas Samson 80gr, Lakban</td>
+										<td>Pending</td>
+										<td>2150000</td>
+										<td>1500000</td>
+										<td>650000</td>
+										<td>Pending</td>
+										<td>Menunggu tagihan final</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000010</td>
+										<td>24/10/2025</td>
+										<td>Admin</td>
+										<td>Indo Material</td>
+										<td>Bahan Akrilik 3mm</td>
+										<td>Recieved</td>
+										<td>980000</td>
+										<td>980000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>Kebutuhan cetak ID Card</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000011</td>
+										<td>28/10/2025</td>
+										<td>Sales Staff</td>
+										<td>PT Kertas Jaya</td>
+										<td>Kertas Buffalo, Kertas Concorde</td>
+										<td>Ordered</td>
+										<td>1750000</td>
+										<td>0</td>
+										<td>1750000</td>
+										<td>Unpaid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000012</td>
+										<td>01/11/2025</td>
+										<td>Sales Staff</td>
+										<td>CV Kimia Prima</td>
+										<td>Coating Sablon, Minyak Terpentin</td>
+										<td>Recieved</td>
+										<td>650000</td>
+										<td>650000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000013</td>
+										<td>04/11/2025</td>
+										<td>Sales Staff</td>
+										<td>Global Inkindo</td>
+										<td>Tinta Eco-Solvent Cyan</td>
+										<td>Cancel</td>
+										<td>1100000</td>
+										<td>0</td>
+										<td>1100000</td>
+										<td>Unpaid</td>
+										<td>Produk tidak tersedia</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000014</td>
+										<td>07/11/2025</td>
+										<td>Sales Staff</td>
+										<td>UD Sukses Makmur</td>
+										<td>Lem Kayu, Lakban Bening</td>
+										<td>Ordered</td>
+										<td>2900000</td>
+										<td>1400000</td>
+										<td>1500000</td>
+										<td>Partial</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000015</td>
+										<td>10/11/2025</td>
+										<td>Sales Staff</td>
+										<td>Indo Material</td>
+										<td>Kain Kanvas Roll, Paperbag Craft</td>
+										<td>Recieved</td>
+										<td>780000</td>
+										<td>780000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+												<li>
+													<button data-bs-toggle="modal" data-bs-target="#showpayment"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="download" class="me-2" width="14"
+															height="14"></i>
+														Show Payment
+													</button>
+												</li>
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000016</td>
+										<td>13/11/2025</td>
+										<td>Sales Staff</td>
+										<td>PT Kertas Jaya</td>
+										<td>Kertas Ivory 230gr</td>
+										<td>Pending</td>
+										<td>2600000</td>
+										<td>0</td>
+										<td>2600000</td>
+										<td>Unpaid</td>
+										<td>Menunggu harga diskon</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000017</td>
+										<td>16/11/2025</td>
+										<td>Sales Staff</td>
+										<td>CV Kimia Prima</td>
+										<td>Plastisol T-shirt Hitam, Screen Sablon T90</td>
+										<td>Recieved</td>
+										<td>3500000</td>
+										<td>3500000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000018</td>
+										<td>19/11/2025</td>
+										<td>Admin</td>
+										<td>Global Inkindo</td>
+										<td>Tinta Pigment, Kertas Foto Glossy</td>
+										<td>Ordered</td>
+										<td>1450000</td>
+										<td>500000</td>
+										<td>950000</td>
+										<td>Partial</td>
+										<td>Pesanan Mendesak</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000019</td>
+										<td>22/11/2025</td>
+										<td>Sales Staff</td>
+										<td>UD Sukses Makmur</td>
+										<td>Kawat Jilid Spiral, Mika Bening</td>
+										<td>Pending</td>
+										<td>550000</td>
+										<td>0</td>
+										<td>550000</td>
+										<td>Unpaid</td>
+										<td>-</td>
+
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="btn btn-light btn-sm p-1"
+												data-bs-toggle="dropdown">
+												<i data-feather="more-vertical" width="14" height="14"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right shadow-sm p-1">
+												<li>
+													<button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#lihat-purchase">
+														<i data-feather="eye" class="me-2" width="14" height="14"></i>
+														Purchase Detail
+													</button>
+												</li>
+												<li><button class="dropdown-item d-flex align-items-center small py-1"
+														type="button" data-bs-toggle="modal"
+														data-bs-target="#edit-purchase"><i data-feather="edit"
+															class="me-2" width="14" height="14"></i>Edit</button>
+												</li>
+												<li><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger  btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i> Delete
+													</button>
+												</li>
+
+
+												<li>
+													<a href="purchase-order.html"
+														class="dropdown-item d-flex align-items-center small py-1">
+														<i data-feather="plus-circle" class="me-2" width="14"
+															height="14"></i>
+														Create Purchase Order
+													</a>
+												</li>
+
+											</ul>
+										</td>
+										<td>PR-2512000020</td>
+										<td>25/11/2025</td>
+										<td>Sales Staff</td>
+										<td>Indo Material</td>
+										<td>Magnet Sheet, PVC Card Blank</td>
+										<td>Recieved</td>
+										<td>2350000</td>
+										<td>2350000</td>
+										<td>0</td>
+										<td>Paid</td>
+										<td>-</td>
+
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="1"></td>
+										<td class="text-start fw-bold">Total</td>
+										<td colspan="5"></td>
+										<td id="amount-total" class="fw-bold sum-target" data-col-index="7">0</td>
+										<td id="paid-total" class="fw-bold sum-target" data-col-index="8">0</td>
+										<td id="due-total" class="fw-bold sum-target" data-col-index="9">0</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<!-- /product list -->
+			</div>
+		</div>
+
+	</div>
+	<!-- /Main Wrapper -->
+	<!-- modals -->
+	<!-- view purchase -->
+	<!-- lihat purchase modal -->
+	<div class="modal fade" id="lihat-purchase">
+		<div class="modal-dialog sales-details-modal modal-lg">
+			<div class="modal-content" style="border-radius: 10px; overflow: hidden; position: relative;">
+				<div class="page-wrapper details-blk">
+					<div class="content p-4" id="section-to-print">
+
+						<!-- Header -->
+						<div class="modal-header d-flex justify-content-between align-items-start border-0 pb-0">
+							<div class="page-title">
+								<h4>Purchase</h4>
+							</div>
+
+
+							<!-- Tombol close di kanan -->
+							<button type="button" class="btn-close ms-3 mt-1" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<ul class="table-top-head d-flex gap-3 mt-2 me-5 mb-0 justify-content-end pe-4">
+							<!-- edit ke modal -->
+							<li><a href="#" data-bs-toggle="modal" data-bs-target="#edit-purchase" title="Edit"
+									id="linkToEdit"><i data-feather="edit" class="action-edit sales-action"></i></a>
+							</li>
+							<li><a href="#" title="PDF"><img src="assets/img/icons/pdf.svg" alt="pdf"></a></li>
+
+							</li>
+							<li><a data-bs-toggle="tooltip" id="download-pdf" title="Print"><i data-feather="printer"
+										class="feather-rotate-ccw"></i></a></li>
+						</ul>
+						<!-- Body -->
+						<div class="mt-4 mb-3 px-3">
+							<div class="invoice-box" style="font-size:14px; line-height:22px; color:#555;">
+
+								<!-- Top Info -->
+								<div class="row mb-4 d-flex justify-content-between">
+									<div class="col-8">
+										<h6 class="fw-bold mb-1">Supplier :</h6>
+										<p class="mb-0">PT Cipta Kreasi<br>
+											ciptakreasi@gmail.com<br>
+											62819 0685 5554<br>
+											Cyber 2 Tower, Lantai 29, Jalan HR Rasuna Said,<br>
+											X5 No. 13, Jakarta Selatan, 12950
+										</p>
+									</div>
+									<div class="col-4">
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start fw-bold">Purchase Info</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start small">No. Purchase</div>
+											<div class="col-4 small">: 2505000018</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start small">Date</div>
+											<div class="col-4 small">: 25/12/2025</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start small">Created</div>
+											<div class="col-4 small">: Sales Staff</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start small">Payment Status</div>
+											<div class="col-4 small">: Paid</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Order Summary -->
+								<h6 class="fw-bold mb-2">Order Summary</h6>
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th style="width:40%;">Product Name</th>
+												<th>Qty</th>
+												<th>Unit</th>
+												<th>Price (IDR)</th>
+												<th>Amount (IDR)</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<strong>Tinta Neotex 1Kg Cyan</strong>
+												</td>
+												<td>2</td>
+												<td>Ream</td>
+												<td>450.000</td>
+												<td>900.000</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<!-- Notes & Summary -->
+								<div class="row mt-4">
+									<div class="col-md-6">
+										<p><strong>Notes :</strong></p>
+										<p>Pembelian Rutin Bulanan</p>
+									</div>
+									<div class="col-md-6">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td>Sub Total</td>
+													<td class="text-end">900.000</td>
+												</tr>
+												<tr>
+													<td>Tax (Ppn 11%)</td>
+													<td class="text-end">125.000</td>
+												</tr>
+												<tr class="table-active fw-bold">
+													<td>Total (IDR)</td>
+													<td class="text-end">1.150.000</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+						<div class="modal-footer modal-action-footer justify-content-end">
+			  <button type="button" class="btn btn-dark modal-action-cancel" data-bs-dismiss="modal">Cancel</button>
+			  <button type="submit" class="btn btn-warning modal-action-submit">Submit</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!-- lihat purchase modal -->
+	<!-- view purchase -->
+	<!-- Add Purchase -->
+	<div class="modal fade" id="add-units">
+		<div class="modal-dialog purchase modal-dialog-centered stock-adjust-modal">
+			<div class="modal-content">
+				<div class="page-wrapper-new p-0">
+					<div class="content">
+						<div class="modal-header border-0 custom-modal-header">
+							<div class="page-title">
+								<h4>Add Purchase</h4>
+							</div>
+							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body custom-modal-body">
+							<form action="purchase-list.html">
+								<div class="row">
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks add-product">
+											<label>Supplier Name</label>
+											<div class="search-container">
+												<input type="text" class="form-control customer-input"
+													placeholder="Search Supplier">
+												<div class="search-results"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Purchase Date</label>
+
+											<div class="input-groupicon calender-input">
+												<i data-feather="calendar" class="info-img"></i>
+												<input type="text" class="datetimepicker" placeholder="Choose">
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Product Name</label>
+											<input type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<div class="input-blocks align-items-center">
+												<label class="form-label">Reference No</label>
+												<input type="text" class="form-control">
+												<span class="btn btn-primaryadd">
+													Generate
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Amount</label>
+											<input type="text" class="form-control number-separator" inputmode="numeric"
+												pattern="[0-9]*">
+											<input type="hidden" class="result-input" id="amount">
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Paid</label>
+											<input type="text" class="form-control number-separator" inputmode="numeric"
+												pattern="[0-9]*">
+											<input type="hidden" class="result-input" id="paid">
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Due</label>
+											<input type="text" class="form-control number-separator" inputmode="numeric"
+												pattern="[0-9]*">
+											<input type="hidden" class="result-input" id="due">
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-12">
+										<div class="input-blocks">
+											<label>Status</label>
+											<select class="select">
+												<option>Choose</option>
+												<option>Paid</option>
+												<option>Unpaid</option>
+												<option>Canceled</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12">
+									<div class="input-blocks summer-description-box">
+										<label>Notes</label>
+										<div id="summernote"></div>
+									</div>
+								</div>
+
+								<div class="col-lg-12">
+																		<div class="modal-footer modal-action-footer justify-content-end">
+									  <button type="button" class="btn btn-dark modal-action-cancel" data-bs-dismiss="modal">Cancel</button>
+									  <button type="submit" class="btn btn-warning modal-action-submit">Submit</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Add Purchase -->
+
+	<!-- Edit Purchase -->
+	<div class="modal fade" id="edit-purchase">
+		<div class="modal-dialog sales-details-modal modal-lg">
+			<div class="modal-content" style="border-radius: 10px; overflow: hidden; position: relative;">
+				<div class="page-wrapper details-blk">
+					<div class="content p-4">
+
+						<!-- Header -->
+						<div class="modal-header d-flex justify-content-between align-items-start border-0 pb-0">
+							<div class="flex-grow-1">
+								<h4>Edit purchase</h4>
+							</div>
+
+							<!-- Tombol close di kanan -->
+							<button type="button" class="btn-close ms-3 mt-1" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+
+						<!-- Body -->
+						<div class="mt-4 mb-3 px-3">
+							<div class="invoice-box" style="font-size:14px; line-height:22px; color:#555;">
+
+								<!-- Top Info -->
+								<div class="row mb-4 d-flex justify-content-between">
+									<div class="col-md-6">
+										<h6 class="fw-bold mb-1">Customer :</h6>
+										<p class="mb-0">PT Cipta Kreasi<br>
+											ciptakreasi@gmail.com<br>
+											62819 0685 5554<br>
+											Cyber 2 Tower, Lantai 29, Jalan HR Rasuna Said,<br>
+											X5 No. 13, Jakarta Selatan, 12950
+										</p>
+									</div>
+									<div class="col-md-6">
+										<div class="row my-1">
+											<div class="offset-4 col-4 text-start fw-bold">Purchase Info</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-3 text-start small">No. Purchase</div>
+											<div class="col-5 small"><input type="text" class="form-control small"
+													value="2505000018"></div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-3 text-start small">Date</div>
+											<div class="col-5 small"><input type="date" class="form-control small">
+											</div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-3 text-start small">Created</div>
+											<div class="col-5 small"><input type="text" class="form-control small"
+													value="Sales Staff"></div>
+										</div>
+										<div class="row my-1">
+											<div class="offset-4 col-3 text-start small">Payment Status</div>
+											<div class="col-5 small">
+												<select class="form-select form-select-sm select">
+													<option selected>Paid</option>
+													<option>Refunded</option>
+													<option>Pending</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Order Summary -->
+								<h6 class="fw-bold mb-2">Order Summary</h6>
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th style="width:40%;">Product Name</th>
+												<th>Qty</th>
+												<th>Unit</th>
+												<th>Price (IDR)</th>
+												<th>Amount (IDR)</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<strong>Brosur PPDB SMAN 1 Bandung</strong><br>
+													<small><em>Brosur Full Color A4 (210x297 Millimeter), Art paper
+															150gr,<br>
+															Tanpa Laminasi, Tanpa Lipatan</em></small>
+												</td>
+												<td>
+													<div class="product-quantity" style="width: 100% !important;">
+														<span class="quantity-btn">+<i data-feather="plus-circle"
+																class="plus-circle"></i></span>
+														<input type="text" class="quntity-input" value="2">
+														<span class="quantity-btn"><i data-feather="minus-circle"
+																class="feather-search"></i></span>
+													</div>
+												</td>
+												<td>Ream</td>
+												<td>450.000</td>
+												<td>900.000</td>
+												<td><button
+														class="dropdown-item d-flex align-items-center small py-1 text-danger btn-delete-sale"
+														type="button">
+														<i data-feather="trash-2" class="me-2" width="14"
+															height="14"></i>
+													</button></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<!-- Notes & Summary -->
+								<div class="row mt-4">
+									<div class="col-md-6">
+										<p><strong>Notes :</strong></p>
+										<p>Pembelian Rutin Bulanan</p>
+									</div>
+									<div class="col-md-6">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td>Sub Total</td>
+													<td class="text-end">900.000</td>
+												</tr>
+												<tr>
+													<td>Voucher (DULANK12)</td>
+													<td class="text-end">0</td>
+												</tr>
+												<tr>
+													<td>Shipping Costs</td>
+													<td class="text-end">125.000</td>
+												</tr>
+												<tr>
+													<td>Sub Total Before Tax</td>
+													<td class="text-end">1.025.000</td>
+												</tr>
+												<tr>
+													<td>Tax (Ppn 11%)</td>
+													<td class="text-end">125.000</td>
+												</tr>
+												<tr class="table-active fw-bold">
+													<td>Grand Total (IDR)</td>
+													<td class="text-end">1.150.000</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+																<div class="modal-footer modal-action-footer justify-content-end">
+								  <button type="button" class="btn btn-dark modal-action-cancel add-cancel" data-bs-dismiss="modal">Cancel</button>
+								  <button type="submit" class="btn btn-warning modal-action-submit add-sale">Submit</button>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!-- /Edit Purchase -->
+
+	<!-- Import Purchase -->
+	<div class="modal fade" id="view-notes">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="page-wrapper-new p-0">
+					<div class="content">
+						<div class="modal-header border-0 custom-modal-header">
+							<div class="page-title">
+								<h4>Import Purchase</h4>
+							</div>
+							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body custom-modal-body">
+							<form action="purchase-list.html">
+								<div class="row">
+									<div class="col-lg-6 col-sm-6 col-12">
+										<div class="input-blocks">
+											<label>Supplier Name</label>
+											<div class="row">
+												<div class="col-lg-10 col-sm-10 col-10">
+													<select class="select">
+														<option>Choose</option>
+														<option>Apex Computers</option>
+														<option>Apex Computers</option>
+													</select>
+												</div>
+												<div class="col-lg-2 col-sm-2 col-2 ps-0">
+													<div class="add-icon tab">
+														<a href="javascript:void(0);"><i data-feather="plus-circle"
+																class="feather-plus-circles"></i></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-sm-6 col-12">
+										<div class="input-blocks">
+											<label>Purchase Status </label>
+											<select class="select">
+												<option>Choose</option>
+												<option>Paid</option>
+												<option>Unpaid</option>
+												<option>Canceled</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-12 col-sm-6 col-12">
+										<div class="row">
+											<div>
+												<!-- <div class="input-blocks download">
+													<a class="btn btn-submit">Download Sample File</a>
+												</div> -->
+											</div>
+										</div>
+
+
+									</div>
+									<div class="col-lg-12">
+										<div class="input-blocks image-upload-down">
+											<label> Upload CSV File</label>
+											<div class="image-upload download">
+												<input type="file">
+												<div class="image-uploads">
+													<img src="assets/img/download-img.png" alt="img">
+													<h4>Drag and drop a <span>file to upload</span></h4>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-sm-6 col-12">
+										<div class="input-blocks">
+											<label>Paid</label>
+											<input type="text" value="0">
+										</div>
+									</div>
+									<div class="col-lg-4 col-sm-6 col-12">
+										<div class="input-blocks">
+											<label>Due</label>
+											<input type="text" value="0">
+										</div>
+									</div>
+									<div class="col-lg-4 col-sm-6 col-12">
+										<div class="input-blocks">
+											<label>Shipping</label>
+											<input type="text" value="0">
+										</div>
+									</div>
+								</div>
+
+								<div class="modal-footer modal-action-footer justify-content-end">
+																														  <button type="button" class="btn btn-dark modal-action-cancel" data-bs-dismiss="modal">Cancel</button>
+																														  <button type="submit" class="btn btn-warning modal-action-submit">Submit</button>
+																														</div>
+
+								<div class="input-blocks summer-description-box transfer">
+									<label>Description</label>
+									<div id="summernote3">
+									</div>
+									<p>Maximum 60 Characters</p>
+								</div>
+																<div class="modal-footer modal-action-footer justify-content-end">
+								  <button type="button" class="btn btn-dark modal-action-cancel" data-bs-dismiss="modal">Cancel</button>
+								  <button type="submit" class="btn btn-warning modal-action-submit">Submit</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Import Purchase -->
+
+	<!-- show payment Modal -->
+
+	<!-- show payment Modal -->
+
+	<!-- Payment Out Modal -->
+
+	<!--Payment Out Modal -->
+	<!-- /modals -->
+
+	<!-- jQuery -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+	<!-- Feather Icon JS -->
+	<script src="assets/js/feather.min.js"></script>
+
+	<script src="assets/js/ui-foundation.js"></script>
+	<!-- Slimscroll JS -->
+	<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+	<!-- Datatable JS -->
+	<script src="assets/js/jquery.dataTables.min.js"></script>
+	<script src="assets/js/dataTables.bootstrap5.min.js"></script>
+
+	<!-- Bootstrap Core JS -->
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Datetimepicker JS -->
+	<script src="assets/js/moment.min.js"></script>
+	<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- Summernote JS -->
+	<script src="assets/plugins/summernote/summernote-bs4.min.js"></script>
+
+	<!-- Select2 JS -->
+	<script src="assets/plugins/select2/js/select2.min.js"></script>
+
+	<!-- Sweetalert 2 -->
+	<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+	<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+
+	<!-- Separator -->
+	<script src="assets/js/easy-number-separator.js"></script>
+
+	<!-- Live Search -->
+	<script src="assets/js/liveSearch.js"></script>
+
+	<!-- Custom JS -->
+	<script src="assets/js/theme-script.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script>
+		document.getElementById('download-pdf').addEventListener('click', function (e) {
+			e.preventDefault();
+
+			window.print()
+		});
+	</script>
+
+
+
+</body>
+
+</html>

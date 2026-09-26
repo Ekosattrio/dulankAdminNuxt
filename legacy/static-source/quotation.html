@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="description" content="POS - Bootstrap Admin Template">
+	<meta name="keywords"
+		content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
+	<meta name="author" content="Dreamguys - Bootstrap Admin Template">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Kacetak System</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/kacetak.jpeg" />
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+	<!-- animation CSS -->
+	<link rel="stylesheet" href="assets/css/animate.css">
+
+	<!-- Select2 CSS -->
+	<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+
+	<!-- Datatable CSS -->
+	<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+
+	<!-- Datetimepicker CSS -->
+	<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+	<!-- Summernote CSS -->
+	<link rel="stylesheet" href="assets/plugins/summernote/summernote-bs4.min.css">
+
+	<!-- Feathericon CSS -->
+	<link rel="stylesheet" href="assets/css/feather.css" />
+
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="assets/css/style.css">
+
+
+</head>
+
+<body>
+	<div id="global-loader">
+		<div class="loader"> </div>
+	</div>
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
+
+		<!-- header -->
+		<div id="header-placeholder"></div>
+		<!-- sidebar -->
+		<div id="sidebar-placeholder"></div>
+
+		<div class="page-wrapper mt-3">
+			<!-- Main content tulis disini -->
+			<div class="content">
+				<div class="page-header">
+					<div class="add-item d-flex">
+						<div class="page-title">
+							<h4>Quotation List</h4>
+							<h6>Manage Your Quotation</h6>
+						</div>
+					</div>
+					<ul class="table-top-head">
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img
+									src="assets/img/icons/pdf.svg" alt="img"></a>
+						</li>
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Print"><i data-feather="printer"
+									class="feather-rotate-ccw"></i></a>
+						</li>
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh"><i
+									data-feather="rotate-ccw" class="feather-rotate-ccw"></i></a>
+						</li>
+						<li>
+							<a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i
+									data-feather="chevron-up" class="feather-chevron-up"></i></a>
+						</li>
+					</ul>
+					<div class="page-btn">
+						<a href="add-quotation.html" class="btn btn-added"><i data-feather="plus-circle"
+								class="me-2"></i>Add New Quotation</a>
+					</div>
+				</div>
+
+
+				<!-- /product list -->
+				<div class="card table-list-card">
+					<div class="card-body">
+						<!-- Filter -->
+						<div class="table-top d-flex align-items-center justify-content-between">
+							<!-- Search Input -->
+							<div class="search-set d-block d-md-flex">
+								<div class="search-input">
+									<a href="" class="btn btn-searchset"><i data-feather="search"
+											class="feather-search"></i></a>
+								</div>
+								<!-- Date Range -->
+								<div class="my-2">
+									<div class="pemilihrentang-container ">
+										<input type="text" id="pemilihrentang-input"
+											class="pemilihrentang-input form-control" readonly placeholder="Date"
+											style="height: fit-content !important;width: 100% !important;">
+										<div id="pemilihrentang-panel" class="pemilihrentang-panel">
+											<div class="pemilihrentang-isi">
+												<div class="opsi-cepat">
+													<div data-range="kemarin">Kemarin</div>
+													<div data-range="7hari">7 Hari Terakhir</div>
+													<div data-range="bulanIni">Bulan Ini</div>
+													<div data-range="bulanLalu">Bulan Lalu</div>
+													<div data-range="tahunLalu">Tahun Lalu</div>
+													<div data-range="kustom">Rentang Kustom</div>
+												</div>
+												<div class="kalender" id="kalender-view" style="display:none;">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="filters d-flex justify-content-end">
+								<div class="dropdown w-100 me-2">
+									<button class="btn btn-outline-primary dropdown-toggle" type="button"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										Status
+									</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Complete</a></li>
+										<li><a class="dropdown-item" href="#">Pending</a></li>
+										<li><a class="dropdown-item" href="#">Ordered</a></li>
+										<li><a class="dropdown-item" href="#">Received</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /Filter -->
+						<div class="table-responsive">
+							<table class="table  datanew">
+								<thead>
+									<tr>
+										<th>No Quotation</th>
+										<th>Date</th>
+										<th>Customer</th>
+										<th>Email</th>
+										<th>Status</th>
+										<th>Date Status</th>
+										<th>Total (IDR)</th>
+										<th>Quotation Channel</th>
+										<th>Due Date</th>
+										<th class="no-sort">Action</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr>
+										<td>QUO00001</td>
+										<td>01/11/2025</td>
+										<td>PT Semesta Digital</td>
+										<td>info@semestadigi.co.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>01/11/2025</td>
+										<td>4.250.000</td>
+										<td>Online</td>
+										<td>01/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00002</td>
+										<td>02/11/2025</td>
+										<td>CV Mitra Sejati</td>
+										<td>mitra.sjt@gmail.com</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>05/11/2025</td>
+										<td>7.800.000</td>
+										<td>Sales Staff</td>
+										<td>02/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00003</td>
+										<td>03/11/2025</td>
+										<td>Yayasan Cahaya Ilmu</td>
+										<td>yysn.ilmu@org.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>03/11/2025</td>
+										<td>5.120.000</td>
+										<td>Online</td>
+										<td>03/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00004</td>
+										<td>04/11/2025</td>
+										<td>Koperasi Karyawan Makmur</td>
+										<td>krm@karya.id</td>
+										<td><span class="badge bg-soft-danger">Rejected</span></td>
+										<td>12/11/2025</td>
+										<td>3.950.000</td>
+										<td>Sales Staff</td>
+										<td>03/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00005</td>
+										<td>05/11/2025</td>
+										<td>PT Griya Agung</td>
+										<td>marketing@griyaagung.com</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>06/11/2025</td>
+										<td>8.550.000</td>
+										<td>Online</td>
+										<td>06/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00006</td>
+										<td>06/11/2025</td>
+										<td>Toko Roti Manis</td>
+										<td>rotimanis.order@biz.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>06/11/2025</td>
+										<td>6.200.000</td>
+										<td>Online</td>
+										<td>06/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00007</td>
+										<td>07/11/2025</td>
+										<td>CV Teknik Abadi</td>
+										<td>teknikabadi@email.com</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>07/11/2025</td>
+										<td>3.750.000</td>
+										<td>Sales Staff</td>
+										<td>07/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00008</td>
+										<td>08/11/2025</td>
+										<td>BPR Lestari</td>
+										<td>bpr.lestari@finance.co.id</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>09/11/2025</td>
+										<td>5.900.000</td>
+										<td>Sales Staff</td>
+										<td>08/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00009</td>
+										<td>09/11/2025</td>
+										<td>PT Energi Hijau</td>
+										<td>sales@enerjihijau.com</td>
+										<td><span class="badge bg-soft-danger">Rejected</span></td>
+										<td>12/11/2025</td>
+										<td>8.100.000</td>
+										<td>Online</td>
+										<td>09/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00010</td>
+										<td>10/11/2025</td>
+										<td>Sekolah Dasar Negeri 01</td>
+										<td>sdn01.am@edu.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>11/11/2025</td>
+										<td>4.880.000</td>
+										<td>Sales Staff</td>
+										<td>10/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00011</td>
+										<td>11/11/2025</td>
+										<td>PT Media Kreasi</td>
+										<td>order@mediakreasi.com</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>11/11/2025</td>
+										<td>6.950.000</td>
+										<td>Online</td>
+										<td>11/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00012</td>
+										<td>12/11/2025</td>
+										<td>Klinik Bersama Sehat</td>
+										<td>kliniksb@medica.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>11/12/2025</td>
+										<td>5.500.000</td>
+										<td>Sales Staff</td>
+										<td>12/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00013</td>
+										<td>13/11/2025</td>
+										<td>CV Solusi Digital</td>
+										<td>solusi.digi@outlook.com</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>13/11/2025</td>
+										<td>4.100.000</td>
+										<td>Online</td>
+										<td>13/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00014</td>
+										<td>14/11/2025</td>
+										<td>PT Pangan Makmur</td>
+										<td>pangan.mm@agro.com</td>
+										<td><span class="badge bg-soft-danger">Rejected</span></td>
+										<td>14/11/2025</td>
+										<td>7.350.000</td>
+										<td>Online</td>
+										<td>14/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00015</td>
+										<td>15/11/2025</td>
+										<td>Bank Sentral</td>
+										<td>humas@banksentral.co.id</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>15/11/2025</td>
+										<td>8.800.000</td>
+										<td>Online</td>
+										<td>15/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00016</td>
+										<td>16/11/2025</td>
+										<td>Yayasan Pendidikan</td>
+										<td>yp.pendidikan@org.id</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>18/11/2025</td>
+										<td>3.650.000</td>
+										<td>Sales Staff</td>
+										<td>16/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00017</td>
+										<td>17/11/2025</td>
+										<td>PT Logistik Cepat</td>
+										<td>logist.cepat@corp.com</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>17/11/2025</td>
+										<td>5.400.000</td>
+										<td>Online</td>
+										<td>17/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00018</td>
+										<td>18/11/2025</td>
+										<td>CV Alam Segar</td>
+										<td>alamsegar@yahoo.com</td>
+										<td><span class="badge bg-soft-danger">Rejected</span></td>
+										<td>18/11/2025</td>
+										<td>6.750.000</td>
+										<td>Online</td>
+										<td>18/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00019</td>
+										<td>19/11/2025</td>
+										<td>PT Konstruksi Baja</td>
+										<td>konstruksibaja@id.net</td>
+										<td><span class="badge bg-soft-success">Ordered</span></td>
+										<td>19/11/2025</td>
+										<td>7.990.000</td>
+										<td>Online</td>
+										<td>19/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td>QUO00020</td>
+										<td>20/11/2025</td>
+										<td>Toko Material Bangunan</td>
+										<td>order@materialbgn.com</td>
+										<td><span class="badge bg-soft-warning">Send</span></td>
+										<td>20/11/2025</td>
+										<td>4.550.000</td>
+										<td>Sales Staff</td>
+										<td>20/12/2025</td>
+										<td class="action-table-data">
+											<div class="edit-delete-action data-row">
+												<a class="me-2 p-2" href="quotation-detail.html"><i
+														data-feather="eye"></i></a>
+												<a class="me-2 p-2" href="edit-quotation.html"><i
+														data-feather="edit"></i></a>
+												<a class="me-2 p-2 confirm-text" href="#"><i
+														data-feather="trash-2"></i></a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+
+								<tfoot>
+									<tr>
+										<td class="text-start fw-bold">Total</td>
+										<!-- gunakan class sum-target dan data-col-index agar reusable -->
+										<td colspan="5"></td>
+										<td id="amount-total" class="fw-bold sum-target" data-col-index="6">0</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /product list -->
+			</div>
+		</div>
+
+	</div>
+	<!-- /Main Wrapper -->
+	<!-- modals -->
+
+
+
+
+	<!-- /modals -->
+	<!-- jQuery -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+	<!-- Feather Icon JS -->
+	<script src="assets/js/feather.min.js"></script>
+
+	<script src="assets/js/ui-foundation.js"></script>
+	<!-- Slimscroll JS -->
+	<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+	<!-- Datatable JS -->
+	<script src="assets/js/jquery.dataTables.min.js"></script>
+	<script src="assets/js/dataTables.bootstrap5.min.js"></script>
+
+	<!-- Datetimepicker JS -->
+	<script src="assets/js/moment.min.js"></script>
+	<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- Bootstrap Core JS -->
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Summernote JS -->
+	<script src="assets/plugins/summernote/summernote-bs4.min.js"></script>
+
+	<!-- Select2 JS -->
+	<script src="assets/plugins/select2/js/select2.min.js"></script>
+
+	<!-- Sweetalert 2 -->
+	<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+	<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+
+	<!-- Separator -->
+	<script src="assets/js/easy-number-separator.js"></script>
+
+	<!-- Live Search -->
+	<script src="assets/js/liveSearch.js"></script>
+
+	<!-- Custom JS -->
+	<script src="assets/js/theme-script.js"></script>
+	<script src="assets/js/script.js"></script>
+
+
+</body>
+
+</html>
