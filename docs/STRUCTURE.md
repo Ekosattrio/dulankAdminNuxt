@@ -1,5 +1,7 @@
 # ARCHITECTURE & CODING PATTERNS: NUXT 4 + TAILWIND 4
 
+> **Panduan kerja AI:** Baca [AGENTS.md](../AGENTS.md) sebelum mengubah menu. Panduan tersebut menetapkan pola revisi SALES pada bagian 20.4 sebagai acuan, termasuk struktur komponen, standar tabel, kecocokan HTML dan flow, serta perlindungan file dan data.
+
 Dokumen ini adalah **cetak biru (blueprint) teknis resmi** arsitektur, pemisahan tanggung jawab (separation of concerns), dan konvensi pengkodean yang digunakan dalam repositori ini.
 
 Dokumen ini dirancang khusus agar dapat dipahami dan dijalankan secara presisi oleh AI maupun developer manusia saat membangun atau memperluas project baru agar konsisten 100% dengan pola project ini.
@@ -921,6 +923,7 @@ Berikut adalah daftar praktik buruk yang **dilarang keras** dalam arsitektur ini
 5. Partial HTML dan seluruh aset sumber mengikuti HTML referensi ke `legacy/static-source/`. Referensi lama dapat disajikan dari direktori tersebut sebagai document root sehingga path aset relatif tetap sesuai.
 6. Jalankan `npm run validate:structure` untuk mengecek file dan pasangan halaman/HTML. Opsi `-- --check-hashes` membandingkan isi file dengan snapshot setelah penataan struktur; perbedaan setelah pengembangan berikutnya perlu ditinjau, bukan dikembalikan otomatis.
 7. Periksa build, route/API, dan interaksi browser setelah pemindahan. Uji GET tidak boleh mengubah JSON; kegagalan implementasi lama dicatat secara eksplisit.
+8. **Jangan hapus HTML asli, CSS, JavaScript, partial, gambar, atau JSON referensi di `legacy/static-source/`.** Semuanya tetap menjadi acuan layout, style, dan alur interaksi, termasuk setelah halaman Vue dipisahkan menjadi komponen. Penataan kode tidak boleh menghilangkan tombol, form, navigasi, ataupun data yang sudah berjalan.
 
 Nuxt 4 memakai `app/` secara default. Konfigurasi admin tetap mempertahankan metadata aplikasi, modul Pinia, alias type/server, dan kompatibilitas URL `.html`; jangan mengganti seluruh konfigurasi dengan contoh minimal.
 
@@ -1209,3 +1212,76 @@ Frontend dipindahkan ke `app/`, dokumentasi ke `docs/`, dan HTML/aset referensi 
 - Pemeriksaan browser untuk dashboard, sidebar Pinia, tab/modal alamat, pencarian blog, dan menu mobile lulus tanpa exception yang tidak tertangani.
 
 File yang dibuka di editor sekarang adalah `app/pages/address.vue` dan `docs/STRUCTURE.md`. Status Git dapat menampilkan penghapusan path lama serta penambahan path baru sebelum file distage; inventaris dan hash menunjukkan file tersebut dipindahkan, bukan dibuang.
+
+---
+
+## 20. Implementasi Bertahap: Grup Menu SALES
+
+Tahap ini mencakup tujuh route utama: `/sales`, `/invoice`, `/delivery-note`, `/sales-return`, `/quotation`, `/request-quotation`, dan `/pos`. Halaman sekarang menyusun komponen dan menghubungkan state/composable; markup tabel, editor, dan dialog berada di komponen terpisah. Form tambah/edit RFQ juga dihubungkan ke API daftar yang sama agar alur dari menu RFQ benar-benar menyimpan perubahan.
+
+| Route | Komponen utama di `app/components/pages/` | Composable |
+|---|---|---|
+| `/sales` | `sales/SalesRecordsTable.vue`, `sales/SalesEditor.vue` | `useSalesPage()` → `useSales()` |
+| `/invoice` | `invoice/InvoiceRecordsTable.vue`, `invoice/InvoiceEditor.vue` | `useInvoicePage()` → `useInvoices()` |
+| `/delivery-note` | `delivery-note/DeliveryNoteRecordsTable.vue`, `delivery-note/DeliveryNoteEditor.vue` | `useDeliveryNotePage()` → `useDeliveryNotes()` |
+| `/sales-return` | `sales-return/SalesReturnRecordsTable.vue`, `SalesReturnEditor.vue`, `SalesReturnDetails.vue`, `SalesReturnPayment.vue` | `useSalesReturns()` |
+| `/quotation` | `quotation/QuotationRecordsTable.vue`, `quotation/QuotationEditor.vue` | `useQuotationPage()` → `useQuotations()` |
+| `/request-quotation` | `request-quotation/RequestQuotationRecordsTable.vue` | `useRequestQuotations()` |
+| `/pos` | `pos/PosNavigation.vue`, `PosProductCatalog.vue`, `PosOrderSummary.vue`, `PosOrderAdjustments.vue`, `PosHeldOrders.vue`, `PosPaymentCheckout.vue`, `PosReceiptPreview.vue`, `PosCustomerPicker.vue`, `PosCartItemEditor.vue`, `PosRecentTransactions.vue` | `usePos()` |
+
+### 20.1 Aturan Komposisi
+
+- Root halaman memakai `dulank-page dulank-page-<route>`. Layout admin tetap menyediakan header/sidebar; POS memakai layout `pos`.
+- `useLegacyPage({ title, sweetAlert: false })` mendaftarkan metadata. Implementasi admin saat ini tidak menyuntikkan CSS/JavaScript legacy; Tailwind dan event Vue menangani UI. `styles`/`scripts` pada contoh blueprint bukan kewajiban memuat Bootstrap.
+- Komponen route di-import eksplisit bila memakai alias `Pages...`. Jangan mengandalkan awalan folder otomatis karena konfigurasi `pathPrefix: false` masih aktif.
+- Type entitas tetap di `server/types/`, di-import melalui `#server/types/...`. Form dan tabel memakai props/emits TypeScript; `defineModel` dipakai untuk nilai form yang memang dua arah.
+- `app/components/sales/` menyediakan header, feedback, dialog, dan konfirmasi hapus bersama. Nama komponen domain lama tetap tersedia sebagai adapter menuju komponen route, sehingga pemanggil lama tetap kompatibel.
+- `useSalesListActions()` menangani status editor, proses simpan/hapus, dan pesan kegagalan. Fungsi cetak di `app/utils/salesDocuments.ts` mencetak data pilihan melalui dialog browser, termasuk pilihan Save as PDF.
+
+### 20.2 Penyimpanan dan Pelestarian Data
+
+- File HTML/aset referensi dan seluruh JSON yang sudah ada tetap dipertahankan. Data contoh yang sebelumnya tertanam di halaman RFQ, Sales Return, dan katalog POS dipindahkan ke **file JSON baru**: `request-quotations.json`, `sales-returns.json`, dan `pos-products.json` di `server/data/`.
+- Khusus endpoint grup ini, `readSalesData()` membaca direktori data runtime yang sama dengan util lama. JSON sumber dipakai sebagai nilai awal hanya jika file runtime belum tersedia. Array kosong tetap dihormati, dan JSON runtime yang rusak menghasilkan error agar tidak tertimpa data awal saat menyimpan. GET tidak membuat atau menimpa file data.
+- Mutasi tetap disimpan ke `data/` melalui `writeJSON()`. `server/utils/data.ts` tidak diubah, dan tidak ada seed ulang terhadap data pengguna.
+- Sales Return memiliki API daftar, simpan, hapus, dan pencatatan refund. Refund harus sesuai total dan tidak dapat dicatat dua kali. Pencatatan ini menyimpan status pembayaran; tidak mengirim uang melalui layanan pembayaran eksternal.
+- RFQ memiliki API daftar, simpan, dan hapus. Duplikasi membuat identitas baru; form tambah/edit menyimpan metadata beserta baris barang.
+- POS menyimpan item, spesifikasi, dan judul pekerjaan bersama transaksi penjualan. Dialog struk muncul setelah API berhasil; kegagalan mempertahankan keranjang. Pesanan hold mempertahankan customer dan biaya di penyimpanan browser agar dapat dilanjutkan setelah reload. Pilihan customer berlaku pada pesanan; pengelolaan master customer tetap melalui `/customers`.
+
+### 20.3 Validasi
+
+```bash
+npm run build
+npm run test:sales
+npm run validate:structure
+```
+
+`test:sales` menjalankan hasil build Nitro dengan working directory sementara sehingga create/update/delete/refund tidak menyentuh `data/` proyek. Pengujian meliputi sumber data awal, mutasi empat domain lama, ID yang tidak ditemukan, item POS, duplikasi/dokumen RFQ, validasi refund, dan tujuh route beserta alias `.html`.
+
+Hasil pemeriksaan tahap ini:
+
+- Build, sepuluh pemeriksaan integrasi API, dan validasi keberadaan struktur lulus. Sebanyak 1.948 file arsip legacy dan JSON lama yang diperiksa tetap sama hash-nya; tidak ada file terlacak yang dihapus.
+- Uji browser lulus untuk CRUD Sales, editor Invoice/Delivery Note/Quotation, detail/refund Sales Return, duplikasi/tambah/edit RFQ setelah reload, serta POS. Uji POS mencakup hold setelah reload, penolakan uang tunai kurang, kegagalan API yang mempertahankan checkout, dan penyimpanan item setelah pembayaran berhasil.
+- Ketujuh halaman diperiksa pada viewport 390px tanpa overflow horizontal halaman; tabel lebar memiliki area scroll sendiri. Tidak ditemukan exception browser selama pengujian.
+- Pengecekan TypeScript seluruh proyek masih melaporkan 196 error di luar file yang diubah pada tahap ini. Build yang berhasil tidak berarti typecheck seluruh modul sudah bersih.
+
+`MIGRATION_MANIFEST.json` tetap menjadi snapshot penataan folder sebelumnya. Hash source yang sengaja diedit pada tahap Sales akan berbeda; jangan memperbarui seluruh hash atau mengembalikan perubahan fitur hanya untuk membuat snapshot lama cocok. Periksa bahwa semua file tetap ada dan arsip legacy serta JSON lama tetap utuh.
+
+Halaman detail/cetak/tambah lain di luar tahap ini masih menggunakan implementasi masing-masing. Pencocokan visual dan kelengkapan seluruh flow dari semua HTML belum dinyatakan selesai untuk seluruh aplikasi.
+
+### 20.4 Revisi Enam Halaman SALES terhadap HTML Referensi
+
+Revisi ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan Request For Quotation. POS ditunda sesuai arahan pengguna. Referensi dibandingkan dengan HTML yang disimpan di `legacy/static-source/` dan halaman `https://dulank-admin.netlify.app/`.
+
+- Keenam daftar menggunakan `SalesDataTable`, `SalesActionButton`, dan `SalesStatusBadge`. Ukuran font tabel mengikuti `text-xs` dari tabel Sales Return; warna teks, ukuran ikon Feather, pencarian, sorting, pagination, dan area scroll konsisten. Label serta urutan kolom mengikuti masing-masing HTML, termasuk **Sales Channel** dan **Quotation Channel**.
+- Sales memiliki More pada kolom pertama, sebelum No Sales. Aksinya mencakup Sale Detail, Edit Sale, Show Payments, Sales Receipt, Sales Note, Create Invoice, Create Delivery Note, dan Delete Sale. Tombol Delete Sales History dan Cancel Transaction History membuka tabel riwayat dengan filter tanggal. Penghapusan melalui API juga mencatat riwayat.
+- Add/Edit Sales memakai customer, pengiriman/pickup, PO, baris produk, voucher, biaya kirim, pajak, dan notes. Rincian tersebut disimpan bersama transaksi. Voucher diperiksa berdasarkan kode, periode aktif, dan batas pemakaian; tidak menampilkan keberhasilan palsu untuk kode yang tidak valid.
+- Daftar Invoice mengikuti referensi dengan aksi lihat/hapus, tanpa tombol Edit atau Create Invoice pada header. Pembuatan invoice tetap tersedia dari menu More Sales dengan customer dan nilai transaksi terisi.
+- Add/Edit Delivery Note memakai susunan dokumen: perusahaan, customer/Ship To, DN No, Dn Date, PO, Shipping BY, Reference, tabel barang/packing/berat, serta Receive By, Security / Check, Driver, dan Issued By. Editor mengisi data record yang dipilih dan menyimpan seluruh rinciannya.
+- Modal Sales Return memakai pilihan customer dan No Sales, tabel Qty/Qty Return/Unit/Price/Amount/Description, Notes, dan Grand Total. Pemilihan penjualan mengisi item jika rinciannya tersedia; data lama yang belum menyimpan item tetap dapat dilengkapi. Detail dan Payment-OUT menampilkan data refund beserta rekening/referensi yang tersimpan.
+- Add/Edit Quotation kembali berupa halaman dokumen terpisah, dengan metadata, customer, pengiriman, produk/MOQ/order, Term & Condition, biaya, pajak, dan tanda tangan. API menyimpan dokumen dan menghitung total dari item; data lama tanpa rincian tidak diisi dengan produk contoh yang tidak diketahui.
+- Form RFQ mencakup metadata, tabel barang, Due Date, Payment Term, Quotation requested to, dan penandatangan. Duplicate Request for Quotation membuka modal **To:** sebelum menyimpan salinan dengan penerima dan nomor baru. Dokumen sumber tidak berubah.
+- Sales Note dan Sales Receipt yang dibuka dari More menampilkan transaksi yang dipilih melalui parameter `id`. Rincian yang belum ada pada data lama tidak diganti dengan transaksi contoh.
+
+Tambahan JSON sumber `sales-history.json` dan `sales-vouchers.json` menyalin data contoh yang memang sudah ada di HTML/halaman voucher. Seluruh JSON sumber lama, data runtime pengguna, dan HTML/aset referensi tetap dipertahankan. Pengujian mutasi menggunakan direktori sementara.
+
+Validasi revisi: build, 13 pemeriksaan integrasi API, validasi struktur, dan uji browser lulus. Uji browser mencocokkan seluruh nama/urutan kolom serta computed font/warna keenam tabel, alur More dan history, add/edit dokumen, refund transfer, duplikasi RFQ ke penerima lain, serta pergantian alamat Shipping/Pickup. Keenam daftar dan modal Sales/Delivery Note/Sales Return diperiksa pada lebar 390px tanpa overflow halaman/modal. Tidak ada exception browser. Hash 1.953 file yang dilindungi tetap sama dan tidak ada file terlacak yang dihapus. Typecheck seluruh proyek masih memiliki 196 error di luar file yang diubah; file revisi tidak menghasilkan error TypeScript.

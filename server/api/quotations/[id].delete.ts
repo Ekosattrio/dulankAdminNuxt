@@ -6,17 +6,17 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Quotation ID is required'
+      statusMessage: 'Quotation ID is required',
     })
   }
 
-  const allQuotations = await readJSON<Quotation[]>('quotations.json', [])
-  const newQuotations = allQuotations.filter(q => q.id !== id && q.noQuotation !== id)
+  const allQuotations = await readSalesData<Quotation>('quotations.json')
+  const newQuotations = allQuotations.filter((q) => q.id !== id && q.noQuotation !== id)
 
   if (allQuotations.length === newQuotations.length) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Quotation not found'
+      statusMessage: 'Quotation not found',
     })
   }
 
@@ -24,4 +24,3 @@ export default defineEventHandler(async (event) => {
 
   return createResponse({ id }, 'Quotation deleted successfully')
 })
-

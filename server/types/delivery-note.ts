@@ -19,6 +19,10 @@ export interface DeliveryNote {
   shippingBy: string
   reference: string
   items: DNItemRow[]
+  receiveBy?: string
+  security?: string
+  driver?: string
+  issuedBy?: string
 }
 
 export interface DeliveryNoteFilterParams {
@@ -37,5 +41,9 @@ export interface DeliveryNoteFormData {
   shippingBy: string
   reference: string
   items?: DNItemRow[]
+  date?: string
+  receiveBy?: string
+  security?: string
+  driver?: string
+  issuedBy?: string
 }
-

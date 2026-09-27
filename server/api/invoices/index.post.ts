@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import type { Invoice, InvoiceFormData } from '~/types/invoice'
 
 export default defineEventHandler(async (event) => {
@@ -6,11 +7,11 @@ export default defineEventHandler(async (event) => {
   if (!body || !body.customer) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Customer name is required'
+      statusMessage: 'Customer name is required',
     })
   }
 
-  const allInvoices = await readJSON<Invoice[]>('invoices.json', [])
+  const allInvoices = readSalesData<Invoice>('invoices.json')
 
   const amount = Number(body.amount) || 0
   const paid = Number(body.paid) || 0
@@ -25,24 +26,28 @@ export default defineEventHandler(async (event) => {
 
   if (body.id) {
     // Update
-    const idx = allInvoices.findIndex(i => i.id === body.id)
+    const idx = allInvoices.findIndex((i) => i.id === body.id)
     if (idx !== -1) {
+      const previous = allInvoices[idx]!
       allInvoices[idx] = {
-        ...allInvoices[idx],
+        ...previous,
         customer: body.customer,
-        dueDate: body.dueDate || allInvoices[idx].dueDate,
+        dueDate: body.dueDate || previous.dueDate,
         amount,
         paid,
         amountDue,
-        status: (body.status as any) || status
+        status: (body.status as any) || status,
       }
       await writeJSON('invoices.json', allInvoices)
       return createResponse(allInvoices[idx], 'Invoice updated successfully')
     }
+    throw createError({ statusCode: 404, statusMessage: 'Record not found' })
   }
 
   // Create
-  const nextNum = String(allInvoices.length + 1).padStart(5, '0')
+  const nextNum = String(
+    Math.max(0, ...allInvoices.map((item) => Number(item.invoiceNo.replace(/\D/g, '')) || 0)) + 1,
+  ).padStart(5, '0')
   const invoiceNo = body.invoiceNo || `INV${nextNum}`
   const now = new Date()
   const due = new Date()
@@ -50,14 +55,14 @@ export default defineEventHandler(async (event) => {
   const dueStr = `${String(due.getDate()).padStart(2, '0')}/${String(due.getMonth() + 1).padStart(2, '0')}/${due.getFullYear()}`
 
   const newInvoice: Invoice = {
-    id: String(Date.now()),
+    id: randomUUID(),
     invoiceNo,
     customer: body.customer,
     dueDate: body.dueDate || dueStr,
     amount,
     paid,
     amountDue,
-    status: (body.status as any) || status
+    status: (body.status as any) || status,
   }
 
   allInvoices.unshift(newInvoice)
@@ -65,4 +70,3 @@ export default defineEventHandler(async (event) => {
 
   return createResponse(newInvoice, 'Invoice created successfully')
 })
-

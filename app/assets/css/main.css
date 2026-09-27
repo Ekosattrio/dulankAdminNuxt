@@ -8,6 +8,7 @@
 @source "../../plugins";
 @source "../../composables";
 @source "../../stores";
+@source "../../utils";
 
 @custom-variant dark (&:where(.dark, .dark *, [data-layout-mode="dark_mode"], [data-layout-mode="dark_mode"] *));
 

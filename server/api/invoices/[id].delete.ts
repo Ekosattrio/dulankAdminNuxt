@@ -6,17 +6,17 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invoice ID is required'
+      statusMessage: 'Invoice ID is required',
     })
   }
 
-  const allInvoices = await readJSON<Invoice[]>('invoices.json', [])
-  const newInvoices = allInvoices.filter(i => i.id !== id && i.invoiceNo !== id)
+  const allInvoices = await readSalesData<Invoice>('invoices.json')
+  const newInvoices = allInvoices.filter((i) => i.id !== id && i.invoiceNo !== id)
 
   if (allInvoices.length === newInvoices.length) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Invoice not found'
+      statusMessage: 'Invoice not found',
     })
   }
 
@@ -24,4 +24,3 @@ export default defineEventHandler(async (event) => {
 
   return createResponse({ id }, 'Invoice deleted successfully')
 })
-

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ID000001",
+    "customerId": "ID000001",
+    "name": "Eko Satrio",
+    "email": "eko_satrio@example.com",
+    "type": "General",
+    "balance": 0,
+    "phone": "+628973873452",
+    "channel": "Website",
+    "dateJoin": "27/09/2026, 09:45",
+    "lastSeen": "Just now",
+    "status": "Active"
+  }
+]

@@ -1,3 +1,29 @@
+import type { SalesContact, SalesShipping } from './sales-document'
+export interface QuotationLineItem {
+  productName: string
+  description: string
+  moq: number
+  unitPrice: number
+  order: number
+  unit: string
+  amount: number
+}
+export interface QuotationDocument {
+  contact: SalesContact
+  shipping: SalesShipping
+  date: string
+  currency: string
+  top: string
+  att: string
+  items: QuotationLineItem[]
+  terms: string[]
+  shippingCost: number
+  taxRate: number
+  pricesIncludeTax: boolean
+  signature: string
+  position?: string
+  legacyTotal?: number
+}
 export interface Quotation {
   id: string
   noQuotation: string
@@ -9,6 +35,7 @@ export interface Quotation {
   total: number
   channel: 'Online' | 'Sales Staff' | 'Offline'
   dueDate: string
+  document?: QuotationDocument
 }
 
 export interface QuotationFilterParams {
@@ -25,5 +52,5 @@ export interface QuotationFormData {
   total: number
   channel: 'Online' | 'Sales Staff' | 'Offline'
   dueDate: string
+  document?: QuotationDocument
 }
-

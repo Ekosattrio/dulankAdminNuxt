@@ -2,6 +2,8 @@
 
 Admin menggunakan Nuxt 4 dan Tailwind CSS 4. Struktur frontend mengikuti direktori `app/`, dengan backend tetap di `server/`.
 
+Untuk pengembangan bersama AI, baca [AGENTS.md](AGENTS.md): pola halaman dan komponen, pencocokan HTML, standar UI, perlindungan data, serta validasi mengikuti revisi SALES yang sudah disetujui.
+
 ```text
 app/                   Frontend: pages, components, layouts, composables, stores, locales
 docs/                  Panduan struktur dan dokumentasi proyek

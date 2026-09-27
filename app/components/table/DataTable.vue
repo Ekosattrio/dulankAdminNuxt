@@ -16,8 +16,8 @@ const props = withDefaults(
   {
     searchable: true,
     searchPlaceholder: 'Search...',
-    defaultPageSize: 10
-  }
+    defaultPageSize: 10,
+  },
 )
 
 const emit = defineEmits<{
@@ -47,8 +47,8 @@ const filteredItems = computed(() => {
 
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.toLowerCase()
-    result = result.filter(item => {
-      return Object.values(item).some(val => {
+    result = result.filter((item) => {
+      return Object.values(item).some((val) => {
         if (val === null || val === undefined) return false
         return String(val).toLowerCase().includes(q)
       })
@@ -90,12 +90,27 @@ const endIndex = computed(() => {
 watch(searchQuery, () => {
   currentPage.value = 1
 })
+
+watch(pageSize, () => {
+  currentPage.value = 1
+})
+watch(
+  () => props.items,
+  () => {
+    currentPage.value = 1
+  },
+)
+watch(totalPages, (value) => {
+  currentPage.value = Math.min(currentPage.value, value)
+})
 </script>
 
 <template>
   <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
     <!-- Table Controls Bar -->
-    <div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100 dark:border-gray-800">
+    <div
+      class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100 dark:border-gray-800"
+    >
       <!-- Search Input -->
       <div v-if="searchable" class="relative max-w-xs flex-1">
         <input
@@ -136,7 +151,9 @@ watch(searchQuery, () => {
     <!-- Table Body -->
     <div class="overflow-x-auto">
       <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
-        <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400">
+        <thead
+          class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+        >
           <tr>
             <th
               v-for="col in columns"
@@ -145,7 +162,7 @@ watch(searchQuery, () => {
                 'px-4 py-3 whitespace-nowrap select-none',
                 col.sortable ? 'cursor-pointer hover:text-gray-800 dark:hover:text-white' : '',
                 col.align === 'center' ? 'text-center' : col.align === 'end' ? 'text-end' : 'text-start',
-                col.class || ''
+                col.class || '',
               ]"
               @click="handleSort(col.key, col.sortable)"
             >
@@ -165,9 +182,7 @@ watch(searchQuery, () => {
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
           <tr v-if="paginatedItems.length === 0">
-            <td :colspan="columns.length" class="p-8 text-center text-gray-400">
-              No matching records found
-            </td>
+            <td :colspan="columns.length" class="p-8 text-center text-gray-400">No matching records found</td>
           </tr>
           <tr
             v-for="(item, idx) in paginatedItems"
@@ -180,7 +195,7 @@ watch(searchQuery, () => {
               :class="[
                 'px-4 py-3 whitespace-nowrap',
                 col.align === 'center' ? 'text-center' : col.align === 'end' ? 'text-end' : 'text-start',
-                col.class || ''
+                col.class || '',
               ]"
             >
               <slot :name="`cell(${col.key})`" :item="item" :index="(currentPage - 1) * pageSize + idx">
@@ -189,14 +204,19 @@ watch(searchQuery, () => {
             </td>
           </tr>
         </tbody>
-        <tfoot v-if="$slots.footer" class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+        <tfoot
+          v-if="$slots.footer"
+          class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white"
+        >
           <slot name="footer" :items="filteredItems" :paginated="paginatedItems" />
         </tfoot>
       </table>
     </div>
 
     <!-- Pagination Controls -->
-    <div class="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between border-t border-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+    <div
+      class="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between border-t border-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400"
+    >
       <div>
         Showing <span class="font-semibold text-gray-800 dark:text-white">{{ startIndex }}</span> to
         <span class="font-semibold text-gray-800 dark:text-white">{{ endIndex }}</span> of

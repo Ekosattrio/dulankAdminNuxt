@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "validate:structure": "node scripts/validate-structure.mjs"
+    "validate:structure": "node scripts/validate-structure.mjs",
+    "test:sales": "node scripts/test-sales-api.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

@@ -1,3 +1,10 @@
+import type { CartItem } from './pos'
+import type { SalesDocument, SalesPayment } from './sales-document'
+
+export interface SaleLineItem extends CartItem {
+  unit?: string
+}
+
 export interface Sale {
   id: string
   saleNo: string
@@ -12,6 +19,10 @@ export interface Sale {
   channel: 'POS' | 'Website'
   status: 'Paid' | 'Unpaid' | 'Partial'
   method: 'Cash' | 'Bank Transfer' | 'Debit Card'
+  transactionCode?: string
+  items?: SaleLineItem[]
+  document?: SalesDocument
+  payments?: SalesPayment[]
 }
 
 export interface SaleFilterParams {
@@ -32,5 +43,6 @@ export interface SaleFormData {
   channel?: 'POS' | 'Website'
   status?: 'Paid' | 'Unpaid' | 'Partial'
   method?: 'Cash' | 'Bank Transfer' | 'Debit Card'
+  items?: SaleLineItem[]
+  document?: SalesDocument
 }
-

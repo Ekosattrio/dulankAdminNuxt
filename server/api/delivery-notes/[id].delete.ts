@@ -6,17 +6,17 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Delivery Note ID is required'
+      statusMessage: 'Delivery Note ID is required',
     })
   }
 
-  const allNotes = await readJSON<DeliveryNote[]>('delivery-notes.json', [])
-  const newNotes = allNotes.filter(n => n.id !== id && n.dnNo !== id)
+  const allNotes = await readSalesData<DeliveryNote>('delivery-notes.json')
+  const newNotes = allNotes.filter((n) => n.id !== id && n.dnNo !== id)
 
   if (allNotes.length === newNotes.length) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Delivery note not found'
+      statusMessage: 'Delivery note not found',
     })
   }
 
@@ -24,4 +24,3 @@ export default defineEventHandler(async (event) => {
 
   return createResponse({ id }, 'Delivery note deleted successfully')
 })
-
