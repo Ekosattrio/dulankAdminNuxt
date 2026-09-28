@@ -1,14 +1,13 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
-const dataDir = resolve(process.cwd(), 'data')
-
-if (!existsSync(dataDir)) {
-  mkdirSync(dataDir, { recursive: true })
-}
+const runtimeDataDir = resolve(process.cwd(), 'data')
+const sourceDataDir = resolve(process.cwd(), 'server', 'data')
 
 export function readJSON<T>(filename: string, defaultValue?: T): T {
-  const filePath = join(dataDir, filename)
+  const runtimeFilePath = join(runtimeDataDir, filename)
+  const sourceFilePath = join(sourceDataDir, filename)
+  const filePath = existsSync(runtimeFilePath) ? runtimeFilePath : sourceFilePath
   if (!existsSync(filePath)) {
     if (defaultValue !== undefined) return defaultValue
     return [] as unknown as T
@@ -24,8 +23,9 @@ export function readJSON<T>(filename: string, defaultValue?: T): T {
 }
 
 export function writeJSON<T>(filename: string, data: T): void {
-  const filePath = join(dataDir, filename)
+  const filePath = join(runtimeDataDir, filename)
   try {
+    mkdirSync(runtimeDataDir, { recursive: true })
     writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
   } catch (err) {
     console.error(`Error writing JSON ${filename}:`, err)
