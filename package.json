@@ -24,5 +24,11 @@
     "@types/node": "^22.20.4",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.11"
+  },
+  "overrides": {
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/node": "4.3.3",
+    "@tailwindcss/vite": "4.3.3",
+    "@tailwindcss/postcss": "4.3.3"
   }
 }

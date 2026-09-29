@@ -58,3 +58,4 @@ Icons: use `<CommonFeatherIcon name="..." />`; legacy `data-feather` attributes 
 
 - The `pages:extend` `.html` aliases and the `-self`/`-bekup` pages are deliberate; verify against the sidebar before deleting routes.
 - Dev server note: `.nuxt` may be rebuilt from `node_modules/.cache/nuxt`; run `nuxi prepare` after structural changes (see Commands).
+- **Tailwind family is pinned via `overrides` to 4.3.3** (`tailwindcss`, `@tailwindcss/node`, `@tailwindcss/vite`, `@tailwindcss/postcss`). `@nuxtjs/tailwindcss@7.0.0-beta.1` declares `^4.1.12` and newer 4.x releases changed the package layout (`dist/` vs `lib/`), causing `Cannot find package 'tailwindcss/lib/index.js'` on some installs. Do not bump one of these packages alone; bump all four together (or upgrade `@nuxtjs/tailwindcss` when a stable v7 exists).
