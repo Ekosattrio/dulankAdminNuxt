@@ -173,8 +173,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "User Admin - Kacetak System",
@@ -187,15 +186,6 @@ const showModal = ref(false);
 const isEditing = ref(false);
 
 const availableStores = ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 2", "Toko Cabang 3"];
-
-interface AdminItem {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  stores: string[];
-  status: string;
-}
 
 const admins = ref<AdminItem[]>([
   {
@@ -325,5 +315,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

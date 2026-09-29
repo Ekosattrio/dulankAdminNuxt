@@ -108,23 +108,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Flow Category - Kacetak System'
 })
-
-interface FlowCategory {
-  id: number
-  code: string
-  name: string
-  usedCount: number
-  createdBy: string
-  createdDate: string
-}
 
 const categories = ref<FlowCategory[]>([
   { id: 1, code: 'PCC-001', name: 'Design', usedCount: 10, createdBy: 'Admin', createdDate: '2025-10-13 10:35:00' },
@@ -200,6 +190,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}
-</script>
+}</script>
 

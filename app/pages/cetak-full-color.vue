@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { useProfitCalculation, type ProfitTier } from '~/composables/useProfitCalculation'
+<script setup lang="ts">import { useProfitCalculation, type ProfitTier } from '~/composables/useProfitCalculation'
 
 useHead({
   title: 'Cetak Full Color - Kacetak System'
@@ -26,15 +25,6 @@ const tabs = [
 ]
 
 // Tab 1: Product Custom Default Data
-interface ProductCustom {
-  id: string
-  name: string
-  defaultSize: string
-  paperTypes: string
-  machine: string
-  active: boolean
-  image: string
-}
 
 const products = ref<ProductCustom[]>([
   {
@@ -193,8 +183,7 @@ const handleCreateProduct = () => {
   })
   addProductModal.value = false
   newProductName.value = ''
-}
-</script>
+}</script>
 
 <template>
   <div>

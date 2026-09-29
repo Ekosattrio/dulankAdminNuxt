@@ -200,22 +200,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface SelfPaperType {
-  id: number
-  name: string
-  merk: string
-  price: number
-  priceType: string
-  unitPrice: string
-  gsm: number
-  size: string
-  stock: number
-  unitStock: string
-  status: 'Active' | 'Inactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const items = ref<SelfPaperType[]>([
   { id: 1, name: 'Art Paper', merk: 'Pindo Deli', price: 52000, priceType: 'Group', unitPrice: 'Kg', gsm: 150, size: '65x100', stock: 1250, unitStock: 'Plano', status: 'Active' },
@@ -328,6 +313,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

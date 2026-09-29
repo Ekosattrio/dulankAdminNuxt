@@ -1,17 +1,6 @@
-<script setup lang="ts">
-useHead({
+<script setup lang="ts">useHead({
   title: "Request Quotation List - Kacetak System",
 });
-
-interface RFQItem {
-  id: string;
-  noRequest: string;
-  customer: string;
-  email: string;
-  telp: string;
-  date: string;
-  status: "Ordered" | "Complete" | "Pending" | "Received";
-}
 
 const rfqs = ref<RFQItem[]>([
   {
@@ -95,8 +84,7 @@ const duplicateRFQ = (item: RFQItem) => {
     date: new Date().toISOString().substring(0, 10),
     status: "Pending",
   });
-};
-</script>
+};</script>
 
 <template>
   <div>

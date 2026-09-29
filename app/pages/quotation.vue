@@ -1,22 +1,8 @@
-<script setup lang="ts">
-const { formatRupiah } = useFormatters();
+<script setup lang="ts">const { formatRupiah } = useFormatters();
 
 useHead({
   title: "Quotation List - Kacetak System",
 });
-
-interface QuotationItem {
-  id: string;
-  noQuotation: string;
-  date: string;
-  customer: string;
-  email: string;
-  status: "Send" | "Complete" | "Pending" | "Ordered" | "Received";
-  dateStatus: string;
-  total: number;
-  channel: "Online" | "Offline";
-  dueDate: string;
-}
 
 const quotations = ref<QuotationItem[]>([
   {
@@ -114,8 +100,7 @@ const handleDelete = () => {
   quotations.value = quotations.value.filter((q) => q.id !== selectedQuo.value?.id);
   deleteModalOpen.value = false;
   selectedQuo.value = null;
-};
-</script>
+};</script>
 
 <template>
   <div>

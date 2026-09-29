@@ -1,30 +1,4 @@
-<script setup lang="ts">
-import { formatRupiah } from '~/composables/useFormatters'
-
-interface CashAdvanceItem {
-  id: string
-  employee: string
-  date: string
-  tenorTotal: number
-  tenorRemain: number
-  totalCash: number
-  period: 'Daily' | 'Weekly' | 'Monthly'
-  note?: string
-  status: 'On' | 'Close'
-  history: Array<{
-    date: string
-    amount: number
-    installment: number
-    period: string
-    tenor: string
-    note: string
-    status: 'On' | 'Close'
-  }>
-  payments: Array<{
-    date: string
-    payment: number
-  }>
-}
+<script setup lang="ts">import { formatRupiah } from '~/composables/useFormatters'
 
 const cashAdvances = ref<CashAdvanceItem[]>([
   {
@@ -190,8 +164,7 @@ const deleteItem = (id: string) => {
   if (confirm('Are you sure you want to delete this cash advance?')) {
     cashAdvances.value = cashAdvances.value.filter((ca) => ca.id !== id)
   }
-}
-</script>
+}</script>
 
 <template>
   <div class="space-y-6">

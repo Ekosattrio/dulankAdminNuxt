@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
@@ -53,16 +51,6 @@ function printPage() {
 }
 
 // --- Data Table: Users & Calculation Stats ---
-interface CalculatorItem {
-  id: number;
-  user: string;
-  calculate: number;
-  request: number;
-  usage: number; // percentage
-  status: "Active" | "Disabled";
-  role?: string;
-  lastActive?: string;
-}
 
 const tableData = ref<CalculatorItem[]>([
   {
@@ -267,8 +255,7 @@ function getChartPath(points: number[], maxVal = 1000, height = 90, width = 340)
 }
 
 const thisWeekPath = computed(() => getChartPath([0, 100, 0, 0, 1000, 0, 0]));
-const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
-</script>
+const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));</script>
 
 <template>
   <div class="page-wrapper min-h-screen pb-10">

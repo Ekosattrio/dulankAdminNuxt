@@ -192,13 +192,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-
-interface FooterLink {
-  text: string
-  href: string
-}
+<script setup lang="ts">import { ref } from 'vue'
 
 const footerState = ref({
   judul: 'Dulank Percetakan & Packaging',
@@ -274,6 +268,5 @@ function resetDefaults() {
   if (confirm('Reset footer settings to initial configuration?')) {
     footerState.value.judul = 'Dulank Percetakan & Packaging'
   }
-}
-</script>
+}</script>
 

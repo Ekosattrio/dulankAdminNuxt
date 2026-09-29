@@ -251,21 +251,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface WishlistItem {
-  id: number;
-  product: string;
-  image: string;
-  user: string;
-  category: string;
-  price: number;
-  qty: number;
-  totalPrice: number;
-  date: string;
-  status: "Active" | "Checkout" | "Delete";
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const wishlist = ref<WishlistItem[]>([
   {
@@ -349,5 +335,4 @@ function deleteItem(id: number) {
   if (confirm("Delete this item from wishlist?")) {
     wishlist.value = wishlist.value.filter((w) => w.id !== id);
   }
-}
-</script>
+}</script>

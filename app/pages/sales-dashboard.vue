@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
@@ -54,17 +52,8 @@ function refreshCard(type: string) {
 }
 
 // --- Best Seller Products ---
-interface BestSellerItem {
-  id: number;
-  name: string;
-  price: number;
-  sales: number;
-  image: string;
-  category: string;
-  stock: number;
-}
 
-const bestSellers = ref<BestSellerItem[]>([
+const bestSellers = ref<SalesBestSellerItem[]>([
   {
     id: 1,
     name: "Lenovo 3rd Generation",
@@ -113,17 +102,6 @@ const bestSellers = ref<BestSellerItem[]>([
 ]);
 
 // --- Recent Transactions ---
-interface TransactionItem {
-  id: number;
-  name: string;
-  time: string;
-  paymentMethod: string;
-  reference: string;
-  status: "Success" | "Canceled" | "Pending";
-  amount: number;
-  image: string;
-  date: string;
-}
 
 const recentTransactions = ref<TransactionItem[]>([
   {
@@ -193,9 +171,9 @@ function viewTransaction(tx: TransactionItem) {
 }
 
 const isProductModalOpen = ref(false);
-const activeProduct = ref<BestSellerItem | null>(null);
+const activeProduct = ref<SalesBestSellerItem | null>(null);
 
-function viewProduct(p: BestSellerItem) {
+function viewProduct(p: SalesBestSellerItem) {
   activeProduct.value = p;
   isProductModalOpen.value = true;
 }
@@ -248,15 +226,6 @@ const currentChartPoints = computed(() => {
 const selectedCountryPeriod = ref("This Week");
 const showCountryDropdown = ref(false);
 
-interface CountryData {
-  id: string;
-  name: string;
-  sales: string;
-  percentage: number;
-  x: number; // SVG coordinates percent
-  y: number;
-}
-
 const countryMarkers = ref<CountryData[]>([
   { id: "US", name: "United States", sales: "1,000,000 Sales", percentage: 55, x: 25, y: 38 },
   { id: "UK", name: "United Kingdom", sales: "5,467 Sales", percentage: 8, x: 47, y: 28 },
@@ -268,8 +237,7 @@ const countryMarkers = ref<CountryData[]>([
   { id: "AFR", name: "Africa", sales: "3,455 Sales", percentage: 5, x: 51, y: 62 },
 ]);
 
-const hoveredCountry = ref<CountryData | null>(null);
-</script>
+const hoveredCountry = ref<CountryData | null>(null);</script>
 
 <template>
   <div class="page-wrapper min-h-screen pb-10">

@@ -216,18 +216,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-
-interface BannerItem {
-  id: string
-  src: string
-  title: string
-  desc: string
-  start: string
-  end: string
-  created: string
-}
+<script setup lang="ts">import { ref } from 'vue'
 
 const mainBanners = ref<BannerItem[]>([
   {
@@ -371,6 +360,5 @@ function deleteBanner(id: string, type: 'main' | 'product') {
       productBanners.value = productBanners.value.filter(b => b.id !== id)
     }
   }
-}
-</script>
+}</script>
 

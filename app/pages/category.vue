@@ -1,13 +1,4 @@
-<script setup lang="ts">
-interface CategoryItem {
-  id: string
-  name: string
-  code: string
-  createdDate: string
-  status: 'Active' | 'Deactive'
-}
-
-const categories = ref<CategoryItem[]>([
+<script setup lang="ts">const categories = ref<CategoryItem[]>([
   { id: '1', name: 'Large Format', code: 'CAT-LF', createdDate: '25/12/2024', status: 'Active' },
   { id: '2', name: 'Digital Print', code: 'CAT-DP', createdDate: '26/12/2024', status: 'Active' },
   { id: '3', name: 'Offset Print', code: 'CAT-OP', createdDate: '27/12/2024', status: 'Active' },
@@ -82,8 +73,7 @@ const deleteCategory = (id: string) => {
   if (confirm('Are you sure you want to delete this category?')) {
     categories.value = categories.value.filter((c) => c.id !== id)
   }
-}
-</script>
+}</script>
 
 <template>
   <div class="space-y-6">

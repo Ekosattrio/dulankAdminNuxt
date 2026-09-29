@@ -1,24 +1,4 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
-
-interface AllowanceItem {
-  id: string;
-  name: string;
-  amount: number;
-  isEditing?: boolean;
-}
-
-interface SalaryRecord {
-  id: string;
-  employeeId: string;
-  name: string;
-  salary: number;
-  system: "Monthly" | "Daily" | "Weekly";
-  allowanceTotal: number;
-  overtimeRate: number;
-  status: "Active" | "Disabled";
-  allowances: AllowanceItem[];
-}
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const records = ref<SalaryRecord[]>([
   {
@@ -205,8 +185,7 @@ const deleteRecord = (id: string) => {
   if (confirm("Are you sure you want to delete this salary setting?")) {
     records.value = records.value.filter((r) => r.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

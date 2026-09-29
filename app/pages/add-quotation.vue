@@ -1,21 +1,9 @@
-<script setup lang="ts">
-
-const router = useRouter()
+<script setup lang="ts">const router = useRouter()
 const { formatRupiah } = useFormatters()
 
 useHead({
   title: 'Add Quotation - Kacetak System'
 })
-
-interface QuotationLineItem {
-  productName: string
-  description?: string
-  moq: number
-  unitPrice: number
-  order: number
-  unit: string
-  amount: number
-}
 
 // Meta Fields
 const quotationNo = ref('QUO' + String(Date.now()).slice(-5))
@@ -144,8 +132,7 @@ const handleSubmit = () => {
     isSubmitting.value = false
     router.push('/quotation')
   }, 600)
-}
-</script>
+}</script>
 
 <template>
   <div>

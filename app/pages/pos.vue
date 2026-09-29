@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "pos",
 });
 
@@ -9,29 +7,6 @@ useHead({
 });
 
 const { formatRupiah } = useFormatters();
-
-interface POSProduct {
-  id: string;
-  code: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  image: string;
-  specs?: string;
-}
-
-interface CartItem {
-  id: string;
-  productId: string;
-  code: string;
-  name: string;
-  category: string;
-  price: number;
-  qty: number;
-  specs: string;
-  jobTitle: string;
-}
 
 const categories = [
   { id: "all", name: "All Categories", count: 80, icon: "/assets/img/categories/category-01.png" },
@@ -197,7 +172,7 @@ const filteredProducts = computed(() => {
 });
 
 // Cart State
-const cart = ref<CartItem[]>([
+const cart = ref<POSCartItem[]>([
   {
     id: "c1",
     productId: "p1",
@@ -246,7 +221,7 @@ const addToCart = (p: POSProduct) => {
   }
 };
 
-const updateQty = (item: CartItem, delta: number) => {
+const updateQty = (item: POSCartItem, delta: number) => {
   item.qty += delta;
   if (item.qty <= 0) {
     cart.value = cart.value.filter((i) => i.id !== item.id);
@@ -273,8 +248,8 @@ const transactionsModalOpen = ref(false);
 const addCustomerModalOpen = ref(false);
 const editItemModalOpen = ref(false);
 
-const editingItem = ref<CartItem | null>(null);
-const openEditItem = (item: CartItem) => {
+const editingItem = ref<POSCartItem | null>(null);
+const openEditItem = (item: POSCartItem) => {
   editingItem.value = JSON.parse(JSON.stringify(item));
   editItemModalOpen.value = true;
 };
@@ -288,7 +263,7 @@ const saveEditingItem = () => {
 };
 
 // Hold orders
-const holdOrders = ref<Array<{ id: string; ref: string; total: number; time: string; items: CartItem[] }>>([]);
+const holdOrders = ref<Array<{ id: string; ref: string; total: number; time: string; items: POSCartItem[] }>>([]);
 const holdReference = ref("");
 
 const confirmHold = () => {
@@ -337,8 +312,7 @@ const resetAll = () => {
   shippingCost.value = 0;
   taxRate.value = 0;
   receiptModalOpen.value = false;
-};
-</script>
+};</script>
 
 <template>
   <div class="flex h-screen flex-col overflow-hidden bg-gray-100 dark:bg-gray-950">

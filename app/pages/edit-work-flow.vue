@@ -1,5 +1,4 @@
-<script setup lang="ts">
-const route = useRoute();
+<script setup lang="ts">const route = useRoute();
 const router = useRouter();
 
 const flowNo = computed(() => (route.query.no as string) || "JAP-0001");
@@ -11,15 +10,7 @@ useHead({
 const selectedProduct = ref("Brosur A5");
 const selectedCategory = ref("Offset");
 
-interface FlowStepOption {
-  id: string;
-  name: string;
-  category: "Design" | "Pracetak" | "Cetak" | "Finishing";
-  selected: boolean;
-  template: string;
-}
-
-const flowSteps = ref<FlowStepOption[]>([
+const flowSteps = ref<EditFlowStepOption[]>([
   { id: "1", name: "Artwork Checking", category: "Design", selected: true, template: "Standard Ready Print" },
   { id: "2", name: "Layout & Imposition", category: "Design", selected: true, template: "Preps 8 Imposition" },
   { id: "3", name: "Plate CTP (Thermal)", category: "Pracetak", selected: true, template: "SM52 4 Warna (4 Plat)" },
@@ -41,11 +32,11 @@ const activeSequence = computed(() => {
   return flowSteps.value.filter((s) => s.selected);
 });
 
-const toggleStep = (step: FlowStepOption) => {
+const toggleStep = (step: EditFlowStepOption) => {
   step.selected = !step.selected;
 };
 
-const removeSequenceItem = (step: FlowStepOption) => {
+const removeSequenceItem = (step: EditFlowStepOption) => {
   step.selected = false;
 };
 
@@ -56,8 +47,7 @@ const handleSave = () => {
     isSaving.value = false;
     router.push("/work-flow");
   }, 500);
-};
-</script>
+};</script>
 
 <template>
   <div>

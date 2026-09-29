@@ -1,25 +1,7 @@
-<script setup lang="ts">
-import { useThemeStore } from "~/stores/theme";
+<script setup lang="ts">import { useThemeStore } from "~/stores/theme";
 
 const route = useRoute();
 const themeStore = useThemeStore();
-
-interface SubmenuItem {
-  title: string;
-  to: string;
-}
-
-interface MenuItem {
-  title: string;
-  icon?: string;
-  to?: string;
-  submenus?: SubmenuItem[];
-}
-
-interface MenuGroup {
-  header: string;
-  items: MenuItem[];
-}
 
 const openMenus = ref<Record<string, boolean>>({});
 
@@ -418,8 +400,7 @@ watch(
   () => {
     syncActiveSubmenus();
   },
-);
-</script>
+);</script>
 
 <template>
   <aside

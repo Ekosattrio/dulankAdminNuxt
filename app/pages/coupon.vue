@@ -168,26 +168,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Coupons - Kacetak System'
 })
-
-interface CouponItem {
-  id: number
-  name: string
-  code: string
-  type: 'Fixed' | 'Percentage'
-  discount: number
-  limit: number
-  used: number
-  valid: string
-  status: 'Active' | 'Inactive'
-}
 
 const coupons = ref<CouponItem[]>([
   { id: 1, name: 'Coupons 21', code: 'Christmas', type: 'Fixed', discount: 20000, limit: 40, used: 12, valid: '04 Jan 2026', status: 'Active' },
@@ -303,6 +290,5 @@ function refresh() {
   searchQuery.value = ''
   filterType.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

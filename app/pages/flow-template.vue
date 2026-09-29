@@ -117,21 +117,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Flow Template - Kacetak System'
 })
-
-interface FlowTemplateItem {
-  id: number
-  code: string
-  name: string
-  information: string
-}
 
 const templates = ref<FlowTemplateItem[]>([
   {
@@ -236,6 +228,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}
-</script>
+}</script>
 

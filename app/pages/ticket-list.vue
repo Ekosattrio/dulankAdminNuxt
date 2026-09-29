@@ -313,28 +313,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Support Ticket List - Kacetak System",
 });
 
-interface TicketItem {
-  id: number;
-  ticketId: string;
-  requestedBy: string;
-  avatar: string;
-  subject: string;
-  assignee: string;
-  assigneeAvatar: string;
-  priority: "High" | "Medium" | "Low";
-  status: "Open" | "Closed";
-  createdDate: string;
-  dueDate: string;
-}
-
-const tickets = ref<TicketItem[]>([
+const tickets = ref<TicketListItem[]>([
   {
     id: 1,
     ticketId: "#1020",
@@ -428,7 +413,7 @@ const openAddModal = () => {
   showAddModal.value = true;
 };
 
-const openEditModal = (item: TicketItem) => {
+const openEditModal = (item: TicketListItem) => {
   editingId.value = item.id;
   formData.value = {
     requestedBy: item.requestedBy,
@@ -505,5 +490,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

@@ -210,20 +210,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Download Files - Kacetak System'
 })
-
-interface FileItem {
-  id: number
-  name: string
-  type: 'pdf' | 'excel' | 'image' | 'file'
-  size: string
-  date: string
-}
 
 const filterOwner = ref('all')
 const selectedType = ref('')
@@ -285,6 +276,5 @@ const createFolder = () => {
     newFolderName.value = ''
     showCreateFolderModal.value = false
   }
-}
-</script>
+}</script>
 

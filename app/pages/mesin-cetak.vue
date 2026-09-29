@@ -104,20 +104,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface VendorPress {
-  id: number;
-  sumber: string;
-  lokasi: string;
-  avatar: string;
-  name: string;
-  colors: number;
-  minim: number;
-  druck: number;
-  update: string;
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const machines = ref<VendorPress[]>([
   {
@@ -196,5 +183,4 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = "";
-}
-</script>
+}</script>

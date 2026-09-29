@@ -1,20 +1,8 @@
-<script setup lang="ts">
-const { formatRupiah } = useFormatters();
+<script setup lang="ts">const { formatRupiah } = useFormatters();
 
 useHead({
   title: "Invoice - Kacetak System",
 });
-
-interface InvoiceItem {
-  id: string;
-  invoiceNo: string;
-  customer: string;
-  dueDate: string;
-  amount: number;
-  paid: number;
-  amountDue: number;
-  status: "Paid" | "Partial" | "Unpaid";
-}
 
 const invoices = ref<InvoiceItem[]>([
   {
@@ -259,8 +247,7 @@ const handleDelete = () => {
 
 const printTable = () => {
   window.print();
-};
-</script>
+};</script>
 
 <template>
   <div>

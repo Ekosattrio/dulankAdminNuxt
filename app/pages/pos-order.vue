@@ -233,28 +233,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "POS Orders - Kacetak System",
 });
-
-interface PosOrder {
-  id: number;
-  customer: string;
-  avatar: string;
-  reference: string;
-  date: string;
-  status: "Complete" | "Pending";
-  grandTotal: number;
-  paid: number;
-  due: number;
-  paymentStatus: "Paid" | "Unpaid";
-  biller: string;
-}
 
 const orders = ref<PosOrder[]>([
   {
@@ -370,5 +355,4 @@ function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
   filterPayment.value = "";
-}
-</script>
+}</script>

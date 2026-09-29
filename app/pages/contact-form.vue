@@ -207,18 +207,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface ContactMessage {
-  id: number
-  name: string
-  email: string
-  phone: string
-  message: string
-  date: string
-  status: 'Pending' | 'Answered'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const messages = ref<ContactMessage[]>([
   { id: 1, name: 'John Doe', email: 'john.doe@email.com', phone: '+62 812 3456 7890', message: 'Hello, I want to know more about your hardbox packaging and minimum order quantity.', date: '20/01/2024', status: 'Pending' },
@@ -288,6 +277,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

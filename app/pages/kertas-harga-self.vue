@@ -210,23 +210,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface SelfPaperPrice {
-  id: number
-  nama: string
-  group: string
-  merk: string
-  ukuran: string
-  satuan: string
-  gramatur: number
-  minOrder: string
-  kelipatan: string
-  harga: number
-  update: string
-  status: 'Active' | 'Inactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const prices = ref<SelfPaperPrice[]>([
   { id: 1, nama: 'A4', group: 'HVS Putih', merk: 'Paperone', ukuran: '21x29.7 cm', satuan: 'rim', gramatur: 80, minOrder: '1 rim', kelipatan: '1 rim', harga: 50000, update: '09/10/2025 10:00', status: 'Active' },
@@ -340,6 +324,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

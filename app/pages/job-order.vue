@@ -1,25 +1,6 @@
-<script setup lang="ts">
-useHead({
+<script setup lang="ts">useHead({
   title: "Job Order List - Kacetak System",
 });
-
-interface JobOrder {
-  id: string;
-  no: string;
-  dueDate: string;
-  customer: string;
-  product: string;
-  jobTitle: string;
-  priority: "High" | "Medium" | "Low";
-  status: "Waiting" | "On Process" | "Completed";
-  workflowType: string;
-  workflowCategory: "Design" | "Pracetak" | "Cetak" | "Finishing";
-  salesNo: string;
-  salesDate: string;
-  shipping: string;
-  orderSummary: string;
-  steps: Array<{ name: string; status: "done" | "active" | "pending" }>;
-}
 
 const jobOrders = ref<JobOrder[]>([
   {
@@ -156,8 +137,7 @@ const saveJob = () => {
     jobOrders.value[idx] = editingJob.value;
   }
   editModal.value = false;
-};
-</script>
+};</script>
 
 <template>
   <div>

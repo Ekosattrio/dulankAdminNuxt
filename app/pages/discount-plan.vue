@@ -237,19 +237,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Discount Plan - Kacetak System'
 })
-
-interface DiscountPlan {
-  id: number
-  name: string
-  customers: string
-  status: 'Active' | 'Inactive'
-}
 
 const customerOptions = ref([
   'All Customers',
@@ -375,6 +367,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}
-</script>
+}</script>
 

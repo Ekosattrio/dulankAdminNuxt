@@ -186,32 +186,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Edit Job Order - Kacetak System'
 })
-
-interface WorkflowStep {
-  id: number
-  flowName: string
-  branch: string
-  assignee: string
-  incentive: number
-}
-
-interface OrderProduct {
-  id: number
-  name: string
-  jobTitle: string
-  description: string
-  qty: string
-  priority: 'Urgent' | 'High' | 'Normal' | 'Low'
-  workflow: WorkflowStep[]
-}
 
 const orderProducts = ref<OrderProduct[]>([
   {
@@ -279,6 +260,5 @@ function addWorkflowStep() {
 
 function saveJobOrder() {
   alert('Job Order workflow updated successfully!')
-}
-</script>
+}</script>
 

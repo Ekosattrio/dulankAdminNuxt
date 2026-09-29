@@ -118,20 +118,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Customer Type - Kacetak System'
 })
-
-interface CustomerTypeItem {
-  id: number
-  name: string
-  status: 'Active' | 'Inactive'
-}
 
 const customerTypes = ref<CustomerTypeItem[]>([
   { id: 1, name: 'Standard', status: 'Active' },
@@ -212,6 +205,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

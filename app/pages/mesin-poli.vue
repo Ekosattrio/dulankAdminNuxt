@@ -91,20 +91,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface VendorPoli {
-  id: number;
-  sumber: string;
-  lokasi: string;
-  avatar: string;
-  name: string;
-  maxSize: string;
-  rateCm: number;
-  minim: number;
-  update: string;
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const polis = ref<VendorPoli[]>([
   {
@@ -168,5 +155,4 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = "";
-}
-</script>
+}</script>

@@ -107,26 +107,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Job Progress List - Kacetak System'
 })
-
-interface JobProgressItem {
-  id: number
-  progressCode: string
-  product: string
-  description: string
-  process: string
-  completedBy: string
-  time: string
-  note: string
-  isCompleted: boolean
-}
 
 const progressList = ref<JobProgressItem[]>([
   {
@@ -222,6 +209,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterProcess.value = ''
-}
-</script>
+}</script>
 

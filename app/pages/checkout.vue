@@ -153,20 +153,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface CheckoutItem {
-  id: number
-  user: string
-  date: string
-  amount: number
-  method: string
-  status: 'Berhasil' | 'Gagal'
-  voucher: string
-  deliveryFee: number
-  details: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const checkouts = ref<CheckoutItem[]>([
   { id: 1, user: 'john.doe@email.com', date: '2025-09-29', amount: 550000, method: 'Kartu Kredit', status: 'Berhasil', voucher: 'DISKON10', deliveryFee: 20000, details: 'Cetak Brosur A4 (500), Kartu Nama (2 box)' },
@@ -206,6 +193,5 @@ const filteredCheckouts = computed(() => {
 
 function formatNumber(val: number) {
   return val.toLocaleString('id-ID')
-}
-</script>
+}</script>
 

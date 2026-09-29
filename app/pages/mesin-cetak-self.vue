@@ -216,21 +216,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface SelfPress {
-  id: number
-  type: 'Offset' | 'Digital Printing'
-  name: string
-  colors: number
-  maxArea: string
-  plateCost: number
-  minim: number
-  druck: number
-  update: string
-  status: 'Active' | 'Inactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const machines = ref<SelfPress[]>([
   { id: 1, type: 'Offset', name: 'Heidelberg SM52', colors: 4, maxArea: '36 x 52 cm', plateCost: 65000, minim: 240000, druck: 85, update: '25/12/2025 Admin', status: 'Active' },
@@ -343,6 +329,5 @@ function refresh() {
   searchQuery.value = ''
   filterType.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

@@ -177,25 +177,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Output Tax - Kacetak System",
 });
-
-interface OutputTaxItem {
-  id: number;
-  salesNo: string;
-  etaxDate: string;
-  etaxNumber: string;
-  customerName: string;
-  dpp: number;
-  vat: number;
-  txCode: string;
-  total: number;
-  status: "Issued" | "Draft" | "Cancelled";
-}
 
 const transactionCodeOptions = [
   "01 - To Other party VAT Collector",
@@ -343,5 +329,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

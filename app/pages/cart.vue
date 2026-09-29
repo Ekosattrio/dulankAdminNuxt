@@ -178,21 +178,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface CartItem {
-  id: number
-  product: string
-  image: string
-  user: string
-  category: string
-  price: number
-  qty: number
-  totalPrice: number
-  date: string
-  status: 'Active' | 'Checkout' | 'Delete'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const carts = ref<CartItem[]>([
   {
@@ -287,6 +273,5 @@ function deleteCartItem(id: number) {
   if (confirm('Delete this cart record?')) {
     carts.value = carts.value.filter(c => c.id !== id)
   }
-}
-</script>
+}</script>
 

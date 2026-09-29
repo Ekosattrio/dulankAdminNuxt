@@ -208,17 +208,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface SelfPaperGroup {
-  id: number
-  name: string
-  merk: string
-  priceType: 'Yes' | 'No'
-  update: string
-  status: 'Active' | 'Deactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const groups = ref<SelfPaperGroup[]>([
   { id: 1, name: 'HVS Putih', merk: 'Paperone', priceType: 'Yes', update: '10/01/2025 12:00', status: 'Active' },
@@ -335,6 +325,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

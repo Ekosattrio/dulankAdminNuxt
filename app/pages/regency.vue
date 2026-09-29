@@ -171,8 +171,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Regency List - Kacetak System",
@@ -183,15 +182,6 @@ const selectedProvince = ref("");
 const showModal = ref(false);
 const showImportModal = ref(false);
 const isEditing = ref(false);
-
-interface RegencyItem {
-  id?: number;
-  province: string;
-  name: string;
-  added: string;
-  createdBy: string;
-  avatar: string;
-}
 
 const regencies = ref<RegencyItem[]>([
   {
@@ -330,5 +320,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

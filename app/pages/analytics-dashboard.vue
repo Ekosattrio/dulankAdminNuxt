@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
@@ -139,12 +137,6 @@ const svgPerfMetrics = computed(() => {
 });
 
 // --- Session by Browser ---
-interface BrowserStat {
-  name: string;
-  percent: number;
-  count: string;
-  color: string;
-}
 
 const browserStats: BrowserStat[] = [
   { name: "Chrome", percent: 62.5, count: "5.06k", color: "bg-[#28C76F]" },
@@ -166,13 +158,6 @@ const sessionsByCountry = [
 ];
 
 // --- Top Pages Table ---
-interface TopPage {
-  path: string;
-  views: number;
-  avgTime: string;
-  exitRate: string;
-  badgeColor: string;
-}
 
 const topPages: TopPage[] = [
   { path: "rasket/dashboard.html", views: 4265, avgTime: "09m:45s", exitRate: "20.4%", badgeColor: "bg-[#EA5455]" },
@@ -196,8 +181,7 @@ function openModal(title: string, desc: string) {
   modalTitle.value = title;
   modalContent.value = desc;
   isDetailModalOpen.value = true;
-}
-</script>
+}</script>
 
 <template>
   <div class="page-wrapper min-h-screen pb-10">

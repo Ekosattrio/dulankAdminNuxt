@@ -151,8 +151,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Bank Settings List - Kacetak System'
@@ -161,16 +160,6 @@ useHead({
 const searchQuery = ref('')
 const showModal = ref(false)
 const isEditing = ref(false)
-
-interface BankAccount {
-  id?: number
-  bankName: string
-  accountNo: string
-  holderName: string
-  branch: string
-  isDefault: boolean
-  createdOn: string
-}
 
 const accounts = ref<BankAccount[]>([
   { id: 1, bankName: 'Bank BCA', accountNo: '**** **** 1982', holderName: 'PT Kacetak Digital', branch: 'Jakarta', isDefault: true, createdOn: '12 Jul 2023' },
@@ -243,6 +232,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

@@ -1,16 +1,6 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const router = useRouter();
-
-interface LineItem {
-  id: string;
-  label: string;
-  isEditing?: boolean;
-  qty: number;
-  rate: number;
-  amount: number;
-}
 
 const form = reactive({
   employeeId: "ST001",
@@ -39,7 +29,7 @@ const form = reactive({
       amount: 15000,
       isEditing: false,
     },
-  ] as LineItem[],
+  ] as EditPayrollLineItem[],
 
   // Deduction
   cashAdvance: 300000,
@@ -52,7 +42,7 @@ const form = reactive({
       amount: 0,
       isEditing: false,
     },
-  ] as LineItem[],
+  ] as EditPayrollLineItem[],
 });
 
 // Overtime calculations
@@ -120,8 +110,7 @@ const removeDeduction = (index: number) => {
 const savePayroll = () => {
   alert("Payroll updated successfully!");
   router.push("/payslip");
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

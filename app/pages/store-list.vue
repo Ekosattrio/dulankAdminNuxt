@@ -210,18 +210,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface StoreItem {
-  id: number;
-  storeName: string;
-  userName: string;
-  address: string;
-  phone: string;
-  email: string;
-  status: "Active" | "Inactive";
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const stores = ref<StoreItem[]>([
   {
@@ -376,5 +365,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
-}
-</script>
+}</script>

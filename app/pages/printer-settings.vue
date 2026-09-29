@@ -133,8 +133,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Printer Settings - Kacetak System",
@@ -143,14 +142,6 @@ useHead({
 const searchQuery = ref("");
 const showModal = ref(false);
 const isEditing = ref(false);
-
-interface PrinterItem {
-  id?: number;
-  name: string;
-  connectionType: string;
-  ipAddress: string;
-  port: string;
-}
 
 const printers = ref<PrinterItem[]>([
   { id: 1, name: "HP LaserJet Pro MFP", connectionType: "Network", ipAddress: "192.168.1.22", port: "9100" },
@@ -213,5 +204,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

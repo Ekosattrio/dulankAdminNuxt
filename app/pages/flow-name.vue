@@ -165,26 +165,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Flow Name List - Kacetak System'
 })
-
-interface FlowNameItem {
-  id: number
-  code: string
-  category: string
-  name: string
-  incentive: number
-  unit: string
-  assignees: string
-  flowType: 'Inhouse' | 'Outsource'
-  createdInfo: string
-}
 
 const flowNames = ref<FlowNameItem[]>([
   { id: 1, code: 'JBP-0001', category: 'Design', name: 'Design Layout', incentive: 5000, unit: 'Per Job', assignees: 'Adul, Nurdin', flowType: 'Inhouse', createdInfo: 'Admin, 2025-10-13' },
@@ -297,6 +284,5 @@ function refresh() {
   searchQuery.value = ''
   filterCategory.value = ''
   filterType.value = ''
-}
-</script>
+}</script>
 

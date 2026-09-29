@@ -313,29 +313,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Toko Kertas List - Kacetak System",
 });
-
-interface TokoKertas {
-  id: number;
-  name: string;
-  avatar: string;
-  address: string;
-  joinDate: string;
-  subscribed: boolean;
-  counts: {
-    kertas: number;
-    group: number;
-    ukuran: number;
-    jenis: number;
-  };
-}
 
 const shops = ref<TokoKertas[]>([
   {
@@ -430,5 +414,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterSubscription.value = "";
-}
-</script>
+}</script>

@@ -240,8 +240,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
@@ -249,21 +248,7 @@ useHead({
   title: 'Customer List - Kacetak System'
 })
 
-interface Customer {
-  id: number
-  customerId: string
-  name: string
-  email: string
-  type: string
-  balance: number
-  phone: string
-  channel: string
-  dateJoin: string
-  lastSeen: string
-  address: string
-}
-
-const customers = ref<Customer[]>([
+const customers = ref<CustomerRecord[]>([
   { id: 1, customerId: 'ID000001', name: 'Aditya Pratama', email: 'aditya.pratama@gmail.com', type: 'Corporate', balance: 15000000, phone: '+6281234567890', channel: 'Website', dateJoin: '01/12/2025 9:15', lastSeen: '01/12/2025 9:15', address: 'Jl. Riau No. 12, Bandung' },
   { id: 2, customerId: 'ID000002', name: 'Siti Aminah', email: 'siti.aminah@yahoo.co.id', type: 'General', balance: 750000, phone: '+6281398765432', channel: 'Offline', dateJoin: '03/12/2025 10:30', lastSeen: '03/12/2025 10:30', address: 'Jl. Surya Kencana No. 40, Bogor' },
   { id: 3, customerId: 'ID000003', name: 'Budi Santoso', email: 'budi.santoso@outlook.com', type: 'VIP', balance: 5400000, phone: '+625211223344', channel: 'Website', dateJoin: '05/12/2025 14:45', lastSeen: '05/12/2025 14:45', address: 'Jl. Gatot Subroto Kav. 51, Jakarta' },
@@ -314,7 +299,7 @@ function openAddModal() {
   customerModalVisible.value = true
 }
 
-function openEditModal(c: Customer) {
+function openEditModal(c: CustomerRecord) {
   isEditing.value = true
   formData.id = c.id
   formData.name = c.name
@@ -367,10 +352,10 @@ function deleteCustomer(id: number) {
 // Address & Detail Modals
 const addressModalVisible = ref(false)
 const detailModalVisible = ref(false)
-const selectedCustomer = ref<Customer | null>(null)
+const selectedCustomer = ref<CustomerRecord | null>(null)
 const newAddressInput = ref('')
 
-function openAddressModal(c: Customer) {
+function openAddressModal(c: CustomerRecord) {
   selectedCustomer.value = c
   newAddressInput.value = ''
   addressModalVisible.value = true
@@ -384,7 +369,7 @@ function addAddress() {
   }
 }
 
-function viewCustomer(c: Customer) {
+function viewCustomer(c: CustomerRecord) {
   selectedCustomer.value = c
   detailModalVisible.value = true
 }
@@ -400,6 +385,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterType.value = ''
-}
-</script>
+}</script>
 

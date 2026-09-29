@@ -229,28 +229,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Online Orders - Kacetak System",
 });
-
-interface OnlineOrder {
-  id: number;
-  customer: string;
-  avatar: string;
-  reference: string;
-  date: string;
-  status: "Complete" | "Pending";
-  grandTotal: number;
-  paid: number;
-  due: number;
-  paymentStatus: "Paid" | "Unpaid";
-  biller: string;
-}
 
 const orders = ref<OnlineOrder[]>([
   {
@@ -366,5 +351,4 @@ function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
   filterPayment.value = "";
-}
-</script>
+}</script>

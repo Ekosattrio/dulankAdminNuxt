@@ -196,25 +196,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Orders List - Kacetak System",
 });
-
-interface Order {
-  id: number;
-  orderNo: string;
-  customer: string;
-  date: string;
-  status: "Complete" | "Processing" | "Waiting" | "Cancel";
-  statusBy: string;
-  salesChannel: string;
-  shipping: string;
-}
 
 const orders = ref<Order[]>([
   {
@@ -313,5 +301,4 @@ function refresh() {
   searchQuery.value = "";
   filterShipping.value = "";
   filterStatus.value = "";
-}
-</script>
+}</script>

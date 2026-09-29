@@ -1,24 +1,4 @@
-<script setup lang="ts">
-interface EmployeeItem {
-  id: string;
-  name: string;
-  department: string;
-  address: string;
-  detailAddress?: string;
-  phone: string;
-  joinDate: string;
-  status: "Active" | "Resign" | "Inactive";
-  gender?: string;
-  dob?: string;
-  joinChannel?: string;
-  contact1Name?: string;
-  contact1Phone?: string;
-  contact2Name?: string;
-  contact2Phone?: string;
-  email?: string;
-}
-
-const employees = ref<EmployeeItem[]>([
+<script setup lang="ts">const employees = ref<EmployeeItem[]>([
   {
     id: "ST001",
     name: "Budi Setiadi",
@@ -213,8 +193,7 @@ const deleteEmployee = (id: string) => {
   if (confirm("Are you sure you want to delete this employee?")) {
     employees.value = employees.value.filter((e) => e.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

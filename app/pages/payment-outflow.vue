@@ -309,24 +309,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Payment Outflow - Kacetak System",
 });
-
-interface OutflowRecord {
-  id: number;
-  date: string;
-  refNo: string;
-  name: string;
-  source: string;
-  amount: number;
-  status: "Paid" | "Partial" | "Unpaid";
-  method: string;
-  note: string;
-}
 
 const showBalanceSummary = ref(true);
 
@@ -477,5 +464,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

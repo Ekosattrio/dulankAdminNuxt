@@ -161,20 +161,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Ban IP Address - Kacetak System'
 })
-
-interface BanIp {
-  id: number
-  ip: string
-  reason: string
-  date: string
-  status: boolean
-}
 
 const banList = ref<BanIp[]>([
   {
@@ -284,6 +275,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

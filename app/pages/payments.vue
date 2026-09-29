@@ -164,24 +164,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Payments - Kacetak System",
 });
-
-interface PaymentRecord {
-  id: number;
-  date: string;
-  refNo: string;
-  name: string;
-  type: "Payment-In" | "Payment-Out";
-  method: "Cash" | "Transfer";
-  amount: number;
-  status: string;
-  created: string;
-}
 
 const payments = ref<PaymentRecord[]>([
   {
@@ -360,5 +347,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

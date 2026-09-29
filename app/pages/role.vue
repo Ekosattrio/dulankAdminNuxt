@@ -98,20 +98,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Role Permissions - Kacetak System",
 });
 
 const roles = ["Owner", "Super Admin", "Admin", "Designer"];
-
-interface PermissionGroup {
-  id: string;
-  title: string;
-  children: string[];
-}
 
 const groups = ref<PermissionGroup[]>([
   {
@@ -322,8 +315,7 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>
 
 <style scoped>
 .permission-table .group-header {

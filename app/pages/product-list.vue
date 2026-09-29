@@ -1,19 +1,6 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
-interface ProductItem {
-  id: string;
-  code: string;
-  name: string;
-  category: string;
-  subCategory: string;
-  unit: string;
-  price: number;
-  priceType: string;
-  created: string;
-}
-
-const products = ref<ProductItem[]>([
+const products = ref<ProductListRecord[]>([
   {
     id: "1",
     code: "001001",
@@ -160,8 +147,7 @@ const deleteProduct = (id: string) => {
   if (confirm("Are you sure you want to delete this product?")) {
     products.value = products.value.filter((p) => p.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

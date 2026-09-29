@@ -122,8 +122,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Permissions - Kacetak System",
@@ -133,14 +132,6 @@ const searchQuery = ref("");
 const selectedRole = ref("Admin");
 const showFilter = ref(false);
 const filterDate = ref("");
-
-interface ModulePerm {
-  name: string;
-  create: boolean;
-  edit: boolean;
-  delete: boolean;
-  view: boolean;
-}
 
 const modules = ref<ModulePerm[]>([
   { name: "Inventory", create: true, edit: true, delete: false, view: true },
@@ -204,5 +195,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

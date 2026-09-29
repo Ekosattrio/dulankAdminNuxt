@@ -188,8 +188,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "User List - Kacetak System",
@@ -200,21 +199,6 @@ const selectedRole = ref("");
 const selectedStatus = ref("");
 const showModal = ref(false);
 const isEditing = ref(false);
-
-interface UserItem {
-  id: string;
-  email: string;
-  name: string;
-  verified: boolean;
-  subscription: boolean;
-  status: string;
-  role?: string;
-  phone?: string;
-  avatar?: string;
-  password?: string;
-  confirmPassword?: string;
-  descriptions?: string;
-}
 
 const users = ref<UserItem[]>([
   {
@@ -414,5 +398,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

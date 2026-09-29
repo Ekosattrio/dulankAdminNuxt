@@ -318,38 +318,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Sales Return List - Kacetak System",
 });
-
-interface ReturnItem {
-  name: string;
-  description: string;
-  qtyOrder: number;
-  qtyReturn: number;
-  unit: string;
-  price: number;
-  returnAmount: number;
-  reason: string;
-}
-
-interface SalesReturn {
-  id: number;
-  returnNo: string;
-  date: string;
-  salesNo: string;
-  customer: string;
-  paymentStatus: "Paid" | "Unpaid";
-  paymentDate: string;
-  paymentMethod: string;
-  total: number;
-  items: ReturnItem[];
-}
 
 const returns = ref<SalesReturn[]>([
   {
@@ -561,5 +536,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterPaymentStatus.value = "";
-}
-</script>
+}</script>

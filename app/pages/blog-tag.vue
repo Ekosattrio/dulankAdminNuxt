@@ -186,15 +186,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface BlogTag {
-  id: number
-  name: string
-  createdDate: string
-  status: 'Active' | 'Inactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const tags = ref<BlogTag[]>([
   { id: 1, name: 'PointOfSale', createdDate: '12 Sep 2024', status: 'Active' },
@@ -317,6 +309,5 @@ function refresh() {
   searchQuery.value = ''
   sortBy.value = 'recent'
   selectedIds.value = []
-}
-</script>
+}</script>
 

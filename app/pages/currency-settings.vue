@@ -131,8 +131,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Currency Settings - Kacetak System'
@@ -141,15 +140,6 @@ useHead({
 const searchQuery = ref('')
 const showModal = ref(false)
 const isEditing = ref(false)
-
-interface CurrencyItem {
-  id?: number
-  name: string
-  code: string
-  symbol: string
-  exchangeRate: string
-  createdOn: string
-}
 
 const currencies = ref<CurrencyItem[]>([
   { id: 1, name: 'Indonesian Rupiah', code: 'IDR', symbol: 'Rp', exchangeRate: 'Default', createdOn: '01 Jan 2023' },
@@ -218,6 +208,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

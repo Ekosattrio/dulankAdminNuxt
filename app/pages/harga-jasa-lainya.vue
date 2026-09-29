@@ -197,22 +197,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Komponen Cetak & Jasa Lainnya - Kacetak System'
 })
-
-interface JasaLain {
-  id: number
-  name: string
-  harga: number
-  minimHarga: number
-  satuan: string
-}
 
 const items = ref<JasaLain[]>([
   { id: 1, name: 'Potong', harga: 2000, minimHarga: 30000, satuan: 'Kg' },
@@ -317,6 +308,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterUnit.value = ''
-}
-</script>
+}</script>
 

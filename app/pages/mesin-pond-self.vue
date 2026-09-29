@@ -211,20 +211,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface SelfPond {
-  id: number;
-  name: string;
-  maxSize: string;
-  putusRate: number;
-  putusMinim: number;
-  kissRate: number;
-  kissMinim: number;
-  update: string;
-  status: "Active" | "Deactive";
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const ponds = ref<SelfPond[]>([
   {
@@ -360,5 +347,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
-}
-</script>
+}</script>

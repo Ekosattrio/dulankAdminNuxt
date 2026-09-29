@@ -1,30 +1,6 @@
-<script setup lang="ts">
-useHead({
+<script setup lang="ts">useHead({
   title: "Delivery Note - Kacetak System",
 });
-
-interface DNItemRow {
-  description: string;
-  qty: number;
-  unit: string;
-  packingQty: string;
-  weight: string;
-}
-
-interface DeliveryNoteItem {
-  id: string;
-  dnNo: string;
-  date: string;
-  customer: string;
-  noSales: string;
-  shippingAddress: string;
-  status: "Complete" | "Pending" | "Ordered" | "Received";
-  dateStatus: string;
-  po: string;
-  shippingBy: string;
-  reference: string;
-  items: DNItemRow[];
-}
 
 const deliveryNotes = ref<DeliveryNoteItem[]>([
   {
@@ -236,8 +212,7 @@ const handleDelete = () => {
   deliveryNotes.value = deliveryNotes.value.filter((n) => n.id !== noteToDelete.value?.id);
   deleteModalOpen.value = false;
   noteToDelete.value = null;
-};
-</script>
+};</script>
 
 <template>
   <div>

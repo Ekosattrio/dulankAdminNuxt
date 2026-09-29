@@ -1,14 +1,4 @@
-<script setup lang="ts">
-interface UnitItem {
-  id: string;
-  name: string;
-  shortName: string;
-  itemUsed: number;
-  createdOn: string;
-  status: "Active" | "Deactive";
-}
-
-const units = ref<UnitItem[]>([
+<script setup lang="ts">const units = ref<UnitItem[]>([
   { id: "1", name: "Meter", shortName: "m", itemUsed: 14, createdOn: "25 May 2023", status: "Active" },
   { id: "2", name: "Box", shortName: "bx", itemUsed: 8, createdOn: "24 May 2023", status: "Active" },
   { id: "3", name: "Rim", shortName: "rm", itemUsed: 12, createdOn: "23 May 2023", status: "Active" },
@@ -88,8 +78,7 @@ const deleteUnit = (id: string) => {
   if (confirm("Are you sure you want to delete this unit?")) {
     units.value = units.value.filter((u) => u.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

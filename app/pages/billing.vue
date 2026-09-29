@@ -188,27 +188,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Billing - Kacetak System'
 })
-
-interface BillingItem {
-  id: number
-  billingId: string
-  txId: string
-  userEmail: string
-  date: string
-  subtotal: number
-  discount: number
-  tax: number
-  shipping: number
-  total: number
-  status: 'Berhasil' | 'Gagal'
-  method: string
-}
 
 const billings = ref<BillingItem[]>([
   { id: 1, billingId: 'B-001', txId: 'T-101', userEmail: 'john.doe@email.com', date: '2025-08-28', subtotal: 530000, discount: 53000, tax: 20000, shipping: 20000, total: 517000, status: 'Berhasil', method: 'Kartu Kredit' },
@@ -270,6 +254,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}
-</script>
+}</script>
 

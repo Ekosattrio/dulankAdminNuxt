@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                      <button class="btn btn-sm btn-outline-primary" @click="openConfig(key as GatewayKey)">
+                      <button class="btn btn-sm btn-outline-primary" @click="openConfig(key as PaymentGatewayKey)">
                         <i class="ti ti-settings me-1"></i> {{ gw.enabled ? "View Integration" : "Connect Now" }}
                       </button>
                       <div class="form-check form-switch mb-0">
@@ -98,25 +98,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup lang="ts">import { ref } from "vue";
 
 useHead({
   title: "Payment Gateway - Kacetak System",
 });
 
-type GatewayKey = "midtrans" | "xendit" | "paypal" | "stripe" | "braintree" | "wise";
-
-interface PaymentGatewayItem {
-  name: string;
-  desc: string;
-  enabled: boolean;
-  clientKey: string;
-  secretKey: string;
-  mode: "sandbox" | "production";
-}
-
-const gateways = ref<Record<GatewayKey, PaymentGatewayItem>>({
+const gateways = ref<Record<PaymentGatewayKey, PaymentGatewayItem>>({
   midtrans: {
     name: "Midtrans (Snap & Core)",
     desc: "Indonesian all-in-one payment gateway for QRIS, VA Bank Transfer, GoPay, OVO, ShopeePay.",
@@ -168,10 +156,10 @@ const gateways = ref<Record<GatewayKey, PaymentGatewayItem>>({
 });
 
 const showModal = ref(false);
-const activeKey = ref<GatewayKey>("midtrans");
+const activeKey = ref<PaymentGatewayKey>("midtrans");
 const selectedGw = ref<PaymentGatewayItem | null>(null);
 
-const openConfig = (key: GatewayKey) => {
+const openConfig = (key: PaymentGatewayKey) => {
   activeKey.value = key;
   selectedGw.value = { ...gateways.value[key] };
   showModal.value = true;
@@ -192,5 +180,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

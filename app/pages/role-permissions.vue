@@ -108,8 +108,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Roles & Permission - Kacetak System",
@@ -119,12 +118,6 @@ const searchQuery = ref("");
 const sortOrder = ref("newest");
 const showModal = ref(false);
 const isEditing = ref(false);
-
-interface RoleItem {
-  id?: number;
-  name: string;
-  createdOn: string;
-}
 
 const roles = ref<RoleItem[]>([
   { id: 1, name: "Admin", createdOn: "25 May 2023" },
@@ -193,5 +186,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

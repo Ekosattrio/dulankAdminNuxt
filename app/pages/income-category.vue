@@ -175,21 +175,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Income Category - Kacetak System'
 })
-
-interface IncomeCategory {
-  id: number
-  no: string
-  name: string
-  description: string
-  status: 'Active' | 'Inactive'
-  created: string
-}
 
 const categories = ref<IncomeCategory[]>([
   { id: 1, no: 'INC001', name: 'Penjualan Jasa Cetak', description: 'Pemasukan dari layanan cetak utama (Offset, Digital, Large Format).', status: 'Active', created: '25/11/2025 15:45, Admin' },
@@ -298,6 +288,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}
-</script>
+}</script>
 

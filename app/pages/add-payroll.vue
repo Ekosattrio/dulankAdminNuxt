@@ -1,16 +1,6 @@
-<script setup lang="ts">
-import { formatRupiah } from '~/composables/useFormatters'
+<script setup lang="ts">import { formatRupiah } from '~/composables/useFormatters'
 
 const router = useRouter()
-
-interface LineItem {
-  id: string
-  label: string
-  isEditing?: boolean
-  qty: number
-  rate: number
-  amount: number
-}
 
 const form = reactive({
   employeeId: '',
@@ -39,7 +29,7 @@ const form = reactive({
       amount: 15000,
       isEditing: false
     }
-  ] as LineItem[],
+  ] as PayrollLineItem[],
 
   // Deduction
   cashAdvance: 300000,
@@ -52,7 +42,7 @@ const form = reactive({
       amount: 0,
       isEditing: false
     }
-  ] as LineItem[]
+  ] as PayrollLineItem[]
 })
 
 const onSelectEmployee = (emp: any) => {
@@ -141,8 +131,7 @@ const resetForm = () => {
   form.cashAdvance = 0
   form.allowanceItems = []
   form.deductionItems = []
-}
-</script>
+}</script>
 
 <template>
   <div class="space-y-6">

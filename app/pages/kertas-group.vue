@@ -185,20 +185,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface PaperGroupItem {
-  id: number
-  sumber: string
-  lokasi: string
-  avatar: string
-  name: string
-  merk: string
-  update: string
-  status: 'Active' | 'Inactive'
-  isPublic: boolean
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const groups = ref<PaperGroupItem[]>([
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', name: 'HVS Putih', merk: 'Sinar Dunia', update: '09/11/2025 09:00', status: 'Active', isPublic: true },
@@ -246,6 +233,5 @@ function refresh() {
   searchQuery.value = ''
   filterGroup.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

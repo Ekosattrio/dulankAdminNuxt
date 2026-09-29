@@ -96,20 +96,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface VendorLaminate {
-  id: number;
-  sumber: string;
-  lokasi: string;
-  avatar: string;
-  name: string;
-  maxSize: string;
-  rateCm: number;
-  minim: number;
-  update: string;
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const laminates = ref<VendorLaminate[]>([
   {
@@ -184,5 +171,4 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = "";
-}
-</script>
+}</script>

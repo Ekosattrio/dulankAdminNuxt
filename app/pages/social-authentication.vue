@@ -253,14 +253,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Social Authentication - Kacetak System",
 });
-
-type ProviderKey = "facebook" | "twitter" | "google" | "linkedin";
 
 const activeModal = ref<ProviderKey | null>(null);
 
@@ -334,5 +331,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

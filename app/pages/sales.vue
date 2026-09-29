@@ -1,23 +1,6 @@
-<script setup lang="ts">
-
-useHead({
+<script setup lang="ts">useHead({
   title: "Sales - Kacetak System",
 });
-
-interface SaleItem {
-  id: string;
-  customer: string;
-  date: string;
-  subTotal: string;
-  deliveryFee: string;
-  discount: string;
-  tax: string;
-  total: string;
-  delivery: "Pick Up" | "Shipping";
-  channel: "POS" | "Website";
-  status: "Paid" | "Unpaid" | "Partial";
-  method: "Cash" | "Bank Transfer" | "Debit Card";
-}
 
 const columns = [
   { key: "actions", label: "", sortable: false, class: "w-10" },
@@ -132,8 +115,7 @@ const openPayment = (item: SaleItem) => {
 
 const onPrint = () => {
   window.print();
-};
-</script>
+};</script>
 
 <template>
   <div>

@@ -101,19 +101,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface PaperSizeItem {
-  id: number
-  sumber: string
-  lokasi: string
-  avatar: string
-  name: string
-  dimension: string
-  unit: string
-  update: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const sizes = ref<PaperSizeItem[]>([
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', name: 'A4 Cut', dimension: '21 x 29.7', unit: 'cm', update: '09/16/2025 09:00' },
@@ -148,6 +136,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}
-</script>
+}</script>
 

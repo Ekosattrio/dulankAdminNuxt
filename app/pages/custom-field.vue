@@ -232,23 +232,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Custom Fields - Kacetak System'
 })
-
-interface CustomField {
-  id: number
-  module: string
-  label: string
-  type: string
-  defaultValue: string
-  required: boolean
-  disabled: boolean
-  status: 'Active' | 'Inactive'
-}
 
 const customFields = ref<CustomField[]>([
   {
@@ -388,6 +376,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

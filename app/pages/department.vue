@@ -1,14 +1,4 @@
-<script setup lang="ts">
-interface DepartmentItem {
-  id: string;
-  name: string;
-  members: string[];
-  totalMembers: number;
-  createdDate: string;
-  status: "Active" | "Disable";
-}
-
-const departments = ref<DepartmentItem[]>([
+<script setup lang="ts">const departments = ref<DepartmentItem[]>([
   {
     id: "D01",
     name: "Produksi",
@@ -133,8 +123,7 @@ const deleteDepartment = (id: string) => {
   if (confirm("Are you sure you want to delete this department?")) {
     departments.value = departments.value.filter((d) => d.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

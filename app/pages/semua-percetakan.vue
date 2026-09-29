@@ -341,32 +341,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Percetakan List - Kacetak System",
 });
-
-interface PercetakanVendor {
-  id: number;
-  name: string;
-  avatar: string;
-  address: string;
-  joinDate: string;
-  subscribed: boolean;
-  whatsapp: string;
-  counts: {
-    kertas: number;
-    cetak: number;
-    laminasi: number;
-    pond: number;
-    poli: number;
-  };
-  capabilities: string[];
-}
 
 const vendors = ref<PercetakanVendor[]>([
   {
@@ -479,5 +460,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterSubscription.value = "";
-}
-</script>
+}</script>

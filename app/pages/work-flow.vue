@@ -1,15 +1,6 @@
-<script setup lang="ts">
-useHead({
+<script setup lang="ts">useHead({
   title: "Work Flow List - Kacetak System",
 });
-
-interface WorkflowItem {
-  id: string;
-  no: string;
-  category: string;
-  product: string;
-  workflowSteps: string;
-}
 
 const workflows = ref<WorkflowItem[]>([
   {
@@ -84,8 +75,7 @@ const handleDelete = () => {
   workflows.value = workflows.value.filter((w) => w.id !== selectedWf.value?.id);
   deleteModalOpen.value = false;
   selectedWf.value = null;
-};
-</script>
+};</script>
 
 <template>
   <div>

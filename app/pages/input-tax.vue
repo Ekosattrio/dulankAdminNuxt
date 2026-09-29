@@ -147,23 +147,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Input Tax - Kacetak System'
 })
-
-interface InputTaxItem {
-  id: number
-  purchaseNo: string
-  invoiceDate: string
-  fakturNo: string
-  supplierName: string
-  dpp: number
-  vat: number
-  credited: 'Yes' | 'No'
-}
 
 const invoices = ref<InputTaxItem[]>([
   { id: 1, purchaseNo: 'PO-001', invoiceDate: '02-02-2026', fakturNo: 'INV-KN-2026-01', supplierName: 'PT. Kertas Nusantara', dpp: 35000000, vat: 3850000, credited: 'Yes' },
@@ -242,6 +230,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}
-</script>
+}</script>
 

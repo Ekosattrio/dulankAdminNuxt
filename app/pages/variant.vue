@@ -1,14 +1,4 @@
-<script setup lang="ts">
-interface VariantItem {
-  id: string;
-  name: string;
-  values: string[];
-  itemUsed: number;
-  createdOn: string;
-  status: "Active" | "Deactive";
-}
-
-const variants = ref<VariantItem[]>([
+<script setup lang="ts">const variants = ref<VariantItem[]>([
   {
     id: "1",
     name: "Size (T-shirts)",
@@ -140,8 +130,7 @@ const deleteItem = (id: string) => {
   if (confirm("Are you sure you want to delete this variant attribute?")) {
     variants.value = variants.value.filter((v) => v.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

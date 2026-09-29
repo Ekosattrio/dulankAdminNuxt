@@ -1,16 +1,4 @@
-<script setup lang="ts">
-interface SubCategoryItem {
-  id: string;
-  name: string;
-  category: string;
-  categoryCode: string;
-  description: string;
-  itemUsed: number;
-  createdBy: string;
-  status: "Active" | "Deactive";
-}
-
-const subCategories = ref<SubCategoryItem[]>([
+<script setup lang="ts">const subCategories = ref<SubCategoryItem[]>([
   {
     id: "1",
     name: "Print Outdoor",
@@ -141,8 +129,7 @@ const deleteItem = (id: string) => {
   if (confirm("Are you sure you want to delete this sub-category?")) {
     subCategories.value = subCategories.value.filter((s) => s.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

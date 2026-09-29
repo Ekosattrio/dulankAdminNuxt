@@ -364,31 +364,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Voucher - Kacetak System",
 });
 
-interface CouponItem {
-  id: number;
-  name: string;
-  code: string;
-  type: "Fixed" | "Percentage";
-  discount: number;
-  discountDisplay: string;
-  limit: number;
-  used: number;
-  validDate: string;
-  startDate: string;
-  endDate: string;
-  allProducts: boolean;
-  oncePerCustomer: boolean;
-  status: "Active" | "Inactive";
-}
-
-const coupons = ref<CouponItem[]>([
+const coupons = ref<VoucherItem[]>([
   {
     id: 1,
     name: "Coupons 21",
@@ -497,7 +479,7 @@ const openAddModal = () => {
   showAddModal.value = true;
 };
 
-const openEditModal = (item: CouponItem) => {
+const openEditModal = (item: VoucherItem) => {
   editingId.value = item.id;
   formData.value = {
     name: item.name,
@@ -596,5 +578,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

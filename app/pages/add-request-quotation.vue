@@ -1,16 +1,8 @@
-<script setup lang="ts">
-const router = useRouter()
+<script setup lang="ts">const router = useRouter()
 
 useHead({
   title: 'Add Request For Quotation (RFQ) - Kacetak System'
 })
-
-interface RFQLineItem {
-  description: string
-  quantity: number
-  unit: string
-  eta: string
-}
 
 const form = ref({
   to: 'DULANK SEMESTA CIDA, PT',
@@ -47,8 +39,7 @@ const handleSubmit = () => {
     isSubmitting.value = false
     router.push('/request-quotation')
   }, 600)
-}
-</script>
+}</script>
 
 <template>
   <div>

@@ -100,18 +100,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface BlogComment {
-  id: number
-  comment: string
-  createdDate: string
-  rating: number
-  blogTitle: string
-  author: string
-  status: 'Publish' | 'Unpublish'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const comments = ref<BlogComment[]>([
   {
@@ -189,6 +178,5 @@ function deleteComment(id: number) {
 function refresh() {
   searchQuery.value = ''
   sortBy.value = 'recent'
-}
-</script>
+}</script>
 

@@ -210,25 +210,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'Job Branch - Kacetak System'
 })
-
-interface JobBranchItem {
-  id: number
-  jobNo: string
-  branch: string
-  customer: string
-  product: string
-  flowName: string
-  priority: 'Urgent' | 'High' | 'Reguler'
-  status: 'Waiting' | 'On Process' | 'Complete'
-}
 
 const jobs = ref<JobBranchItem[]>([
   { id: 1, jobNo: 'JOB-2510000001', branch: 'Dulank Karawang', customer: 'PT Makmur Abadi', product: 'Brosur A5', flowName: 'Cetak Multilith', priority: 'High', status: 'Waiting' },
@@ -316,6 +304,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterBranch.value = ''
-}
-</script>
+}</script>
 

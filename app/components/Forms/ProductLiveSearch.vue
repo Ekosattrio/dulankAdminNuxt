@@ -1,11 +1,4 @@
-<script setup lang="ts">
-export interface ProductItem {
-  name: string
-  code: string
-  category: string
-}
-
-const props = withDefaults(
+<script setup lang="ts">const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
@@ -73,8 +66,7 @@ onMounted(() => {
       isOpen.value = false
     }
   })
-})
-</script>
+})</script>
 
 <template>
   <div ref="root" class="relative w-full">

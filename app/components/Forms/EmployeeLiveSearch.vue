@@ -1,18 +1,4 @@
-<script setup lang="ts">
-export interface Employee {
-  id: string
-  name: string
-  department: string
-  phone: string
-  email: string
-  address: string
-  salary: number
-  system: string
-  ovtRate: number
-  status: string
-}
-
-const props = withDefaults(
+<script setup lang="ts">const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
@@ -193,8 +179,7 @@ onMounted(() => {
       isOpen.value = false
     }
   })
-})
-</script>
+})</script>
 
 <template>
   <div ref="root" class="relative w-full">

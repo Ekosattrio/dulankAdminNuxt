@@ -153,25 +153,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Supplier List - Kacetak System",
 });
-
-interface SupplierItem {
-  id: number;
-  code: string;
-  name: string;
-  email: string;
-  contact: string;
-  picName: string;
-  status: "Active" | "Inactive";
-  date: string;
-}
 
 const suppliers = ref<SupplierItem[]>([
   {
@@ -312,5 +300,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
-}
-</script>
+}</script>

@@ -371,8 +371,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
@@ -380,15 +379,7 @@ useHead({
   title: "Add Sales - Kacetak System",
 });
 
-interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-const mockCustomers: Customer[] = [
+const mockCustomers: SalesCustomer[] = [
   {
     id: 1,
     name: "PT Makmur Abadi",
@@ -413,8 +404,8 @@ const mockCustomers: Customer[] = [
 ];
 
 const customerSearch = ref("");
-const selectedCustomer = ref<Customer | null>(mockCustomers[0]);
-const filteredCustomers = ref<Customer[]>([]);
+const selectedCustomer = ref<SalesCustomer | null>(mockCustomers[0]);
+const filteredCustomers = ref<SalesCustomer[]>([]);
 
 function searchCustomer() {
   const q = customerSearch.value.toLowerCase();
@@ -425,7 +416,7 @@ function searchCustomer() {
   filteredCustomers.value = mockCustomers.filter((c) => c.name.toLowerCase().includes(q) || c.phone.includes(q));
 }
 
-function selectCustomer(c: Customer) {
+function selectCustomer(c: SalesCustomer) {
   selectedCustomer.value = c;
   customerSearch.value = c.name;
   filteredCustomers.value = [];
@@ -444,14 +435,6 @@ function changePickupStore() {
 }
 
 // Items
-interface OrderItem {
-  id: number;
-  name: string;
-  description: string;
-  qty: number;
-  unit: string;
-  price: number;
-}
 
 const items = ref<OrderItem[]>([
   {
@@ -530,7 +513,7 @@ function saveSales() {
   navigateTo("/sales");
 }
 
-// Customer Modal
+// SalesCustomer Modal
 const customerModalVisible = ref(false);
 const newCustomer = reactive({
   name: "",
@@ -548,12 +531,11 @@ function openCustomerModal() {
 }
 
 function saveCustomer() {
-  const created: Customer = {
+  const created: SalesCustomer = {
     id: Date.now(),
     ...newCustomer,
   };
   selectedCustomer.value = created;
   customerSearch.value = created.name;
   customerModalVisible.value = false;
-}
-</script>
+}</script>

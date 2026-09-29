@@ -125,8 +125,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
+<script setup lang="ts">import { ref } from 'vue'
 
 useHead({
   title: 'Bank Settings Grid - Kacetak System'
@@ -135,22 +134,13 @@ useHead({
 const showModal = ref(false)
 const isEditing = ref(false)
 
-interface BankAccount {
-  id?: number
-  bankName: string
-  accountNo: string
-  holderName: string
-  branch?: string
-  isDefault: boolean
-}
-
-const accounts = ref<BankAccount[]>([
+const accounts = ref<BankAccountGrid[]>([
   { id: 1, bankName: 'Bank BCA', accountNo: '**** **** 1982', holderName: 'PT Kacetak Digital', branch: 'Jakarta', isDefault: true },
   { id: 2, bankName: 'Bank Mandiri', accountNo: '**** **** 1796', holderName: 'PT Kacetak Digital', branch: 'Bandung', isDefault: false },
   { id: 3, bankName: 'Bank BNI', accountNo: '**** **** 1832', holderName: 'PT Kacetak Digital', branch: 'Surabaya', isDefault: false }
 ])
 
-const currentAccount = ref<BankAccount>({
+const currentAccount = ref<BankAccountGrid>({
   bankName: '',
   accountNo: '',
   holderName: '',
@@ -170,7 +160,7 @@ const openAddModal = () => {
   showModal.value = true
 }
 
-const openEditModal = (b: BankAccount) => {
+const openEditModal = (b: BankAccountGrid) => {
   isEditing.value = true
   currentAccount.value = { ...b }
   showModal.value = true
@@ -206,6 +196,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

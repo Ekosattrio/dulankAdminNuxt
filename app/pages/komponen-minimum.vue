@@ -143,18 +143,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface MinimumComponent {
-  id: number
-  name: string
-  rate: number
-  minim: number
-  unit: string
-  used: number
-  update: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const components = ref<MinimumComponent[]>([
   { id: 1, name: 'Potong Kertas Plano', rate: 2000, minim: 30000, unit: 'Kg', used: 27, update: '15/12/2025' },
@@ -265,6 +254,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}
-</script>
+}</script>
 

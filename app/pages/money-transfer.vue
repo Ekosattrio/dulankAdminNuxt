@@ -256,23 +256,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Money Transfer - Kacetak System",
 });
-
-interface TransferRecord {
-  id: number;
-  date: string;
-  no: string;
-  fromAccount: string;
-  toAccount: string;
-  amount: number;
-  description: string;
-  createdBy: string;
-}
 
 const accountOptions = [
   "Cash Account Cash Account - 1001",
@@ -445,5 +433,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

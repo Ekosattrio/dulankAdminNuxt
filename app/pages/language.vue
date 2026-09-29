@@ -186,23 +186,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Language Settings - Kacetak System'
 })
-
-interface LanguageItem {
-  name: string
-  code: string
-  flag: string
-  rtl: boolean
-  total: number
-  done: number
-  progress: number
-  status: 'Active' | 'Inactive'
-}
 
 const languages = ref<LanguageItem[]>([
   {
@@ -312,6 +300,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

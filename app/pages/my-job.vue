@@ -141,24 +141,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "My Job - Kacetak System",
 });
-
-interface MyJobItem {
-  id: number;
-  flowName: string;
-  priority: "Urgent" | "High" | "Normal";
-  product: string;
-  title: string;
-  description: string;
-  status: "Waiting" | "On Process" | "Complete" | "Hold";
-}
 
 const jobs = ref<MyJobItem[]>([
   {
@@ -224,5 +213,4 @@ const selectedJob = ref<MyJobItem | null>(null);
 function viewJob(job: MyJobItem) {
   selectedJob.value = job;
   viewModalVisible.value = true;
-}
-</script>
+}</script>

@@ -2,32 +2,9 @@
  * Composable for Offset & Digital Printing calculation formulas and profit margin settings
  */
 
-export interface ProfitTier {
-  id: string
-  minQty: number
-  maxQty: number
-  profitPosPercent: number
-  profitWebstorePercent: number
-}
-
-export interface PaperSpec {
-  name: string
-  grammage: number
-  planoWidthMm: number
-  planoHeightMm: number
-  pricePerSheet: number
-}
-
-export interface MachineSpec {
-  name: string
-  minCutWidthMm: number
-  minCutHeightMm: number
-  maxCutWidthMm: number
-  maxCutHeightMm: number
-  plateCostPerColor: number
-  runChargePer1000: number
-  minRunCharge: number
-}
+// Tipe dipisah ke shared/types/printing.ts (auto-import di app & server).
+// Re-export untuk kompatibilitas dengan halaman yang mengimpor tipe dari composable ini.
+export type { ProfitTier, PaperSpec, MachineSpec } from '../../shared/types/printing'
 
 export const useProfitCalculation = () => {
   // Default tiered profit settings
@@ -124,4 +101,3 @@ export const useProfitCalculation = () => {
     calculateSellingPrice
   }
 }
-

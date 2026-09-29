@@ -258,20 +258,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface ReviewItem {
-  id: number;
-  user: string;
-  productCode: string;
-  product: string;
-  date: string;
-  rating: number;
-  title: string;
-  content: string;
-  status: "Publish" | "Archived";
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const reviews = ref<ReviewItem[]>([
   {
@@ -413,5 +400,4 @@ function refresh() {
   searchQuery.value = "";
   filterRating.value = null;
   filterStatus.value = "";
-}
-</script>
+}</script>

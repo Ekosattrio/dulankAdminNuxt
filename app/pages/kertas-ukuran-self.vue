@@ -172,19 +172,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface SelfPaperSize {
-  id: number
-  name: string
-  dimension: string
-  length: number
-  width: number
-  unit: string
-  update: string
-  status: 'Active' | 'Inactive'
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const sizes = ref<SelfPaperSize[]>([
   { id: 1, name: 'A4', dimension: '21 x 29.7', length: 21, width: 29.7, unit: 'cm', update: '10/01/2025 09:00', status: 'Active' },
@@ -310,6 +298,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}
-</script>
+}</script>
 

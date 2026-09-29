@@ -153,23 +153,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: "default",
 });
 
 useHead({
   title: "Product Process List - Kacetak System",
 });
-
-interface ProductProcess {
-  id: number;
-  code: string;
-  product: string;
-  image: string;
-  processName: string;
-  createDate: string;
-}
 
 const processes = ref<ProductProcess[]>([
   {
@@ -272,5 +262,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterProcess.value = "";
-}
-</script>
+}</script>

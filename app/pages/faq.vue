@@ -199,15 +199,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface FAQItem {
-  id: number
-  question: string
-  answer: string
-  category: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const faqs = ref<FAQItem[]>([
   {
@@ -361,6 +353,5 @@ function refresh() {
   filterCategory.value = ''
   sortBy.value = 'recent'
   selectedIds.value = []
-}
-</script>
+}</script>
 

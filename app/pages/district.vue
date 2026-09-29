@@ -170,8 +170,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'District List - Kacetak System'
@@ -182,16 +181,6 @@ const selectedProvince = ref('')
 const showModal = ref(false)
 const showImportModal = ref(false)
 const isEditing = ref(false)
-
-interface DistrictItem {
-  id?: number
-  province: string
-  regency: string
-  name: string
-  added: string
-  createdBy: string
-  avatar: string
-}
 
 const districts = ref<DistrictItem[]>([
   { id: 1, province: 'DKI Jakarta', regency: 'Jakarta Selatan', name: 'Kebayoran Baru', added: '2025-08-28', createdBy: 'Arroon', avatar: '/assets/img/users/user-30.jpg' },
@@ -282,6 +271,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}
-</script>
+}</script>
 

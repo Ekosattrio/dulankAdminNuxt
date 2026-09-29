@@ -182,19 +182,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
+<script setup lang="ts">definePageMeta({
   layout: 'default'
 })
 
 useHead({
   title: 'All Job List - Kacetak System'
 })
-
-interface FlowCategoryCount {
-  name: string
-  count: number
-}
 
 const flowCategories = ref<FlowCategoryCount[]>([
   { name: 'Design', count: 252 },
@@ -207,18 +201,6 @@ const flowCategories = ref<FlowCategoryCount[]>([
   { name: 'Sablon Kaos', count: 5 },
   { name: 'Laminating', count: 25 }
 ])
-
-interface JobItem {
-  id: number
-  jobOrderNo: string
-  salesDate: string
-  customer: string
-  product: string
-  flow: string
-  flowType: 'In-House' | 'Outsource'
-  assignee: string
-  dateComplete: string
-}
 
 const jobs = ref<JobItem[]>([
   { id: 1, jobOrderNo: 'JO-000000001', salesDate: '25/12/2025', customer: 'PT Makmur Abadi', product: 'Brosur A5', flow: 'Design', flowType: 'In-House', assignee: 'Bejo', dateComplete: '15/02/2026' },
@@ -262,6 +244,5 @@ function printTable() {
 function refresh() {
   selectedFlow.value = ''
   searchQuery.value = ''
-}
-</script>
+}</script>
 

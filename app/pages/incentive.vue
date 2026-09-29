@@ -1,15 +1,4 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
-
-interface IncentiveItem {
-  id: string;
-  code: string;
-  employee: string;
-  period: string;
-  qtyComplete: number;
-  totalAmount: number;
-  status: "Paid" | "Pending";
-}
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const incentives = ref<IncentiveItem[]>([
   { id: "1", code: "INC-01", employee: "Desman Dwi", period: "2025-08", qtyComplete: 10, totalAmount: 5000, status: "Paid" },
@@ -105,8 +94,7 @@ const deleteItem = (id: string) => {
   if (confirm("Are you sure you want to delete this incentive entry?")) {
     incentives.value = incentives.value.filter((i) => i.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                      <button class="btn btn-sm btn-outline-primary" @click="openConfigModal(key as GatewayKey)">
+                      <button class="btn btn-sm btn-outline-primary" @click="openConfigModal(key as SmsGatewayKey)">
                         <i class="ti ti-settings me-1"></i> Configure
                       </button>
                       <div class="form-check form-switch mb-0">
@@ -98,25 +98,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup lang="ts">import { ref } from "vue";
 
 useHead({
   title: "SMS Gateways - Kacetak System",
 });
 
-type GatewayKey = "nexmo" | "twoFactor" | "twilio" | "zenziva";
-
-interface GatewayConfig {
-  name: string;
-  desc: string;
-  enabled: boolean;
-  apiKey: string;
-  apiSecret: string;
-  senderId: string;
-}
-
-const gateways = ref<Record<GatewayKey, GatewayConfig>>({
+const gateways = ref<Record<SmsGatewayKey, GatewayConfig>>({
   nexmo: {
     name: "Nexmo (Vonage)",
     desc: "Global SMS & OTP API provider",
@@ -152,10 +140,10 @@ const gateways = ref<Record<GatewayKey, GatewayConfig>>({
 });
 
 const showModal = ref(false);
-const activeKey = ref<GatewayKey>("nexmo");
+const activeKey = ref<SmsGatewayKey>("nexmo");
 const selectedGw = ref<GatewayConfig | null>(null);
 
-const openConfigModal = (key: GatewayKey) => {
+const openConfigModal = (key: SmsGatewayKey) => {
   activeKey.value = key;
   selectedGw.value = { ...gateways.value[key] };
   showModal.value = true;
@@ -175,5 +163,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

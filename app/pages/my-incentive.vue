@@ -1,14 +1,4 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
-
-interface MyIncentiveItem {
-  code: string;
-  process: string;
-  date: string;
-  qty: number;
-  amount: number;
-  status: "Paid" | "Pending";
-}
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const items = ref<MyIncentiveItem[]>([
   { code: "INC-01", process: "Printing", date: "2025-08-10", qty: 10, amount: 50000, status: "Paid" },
@@ -36,8 +26,7 @@ const columns = [
   { key: "qty", label: "Qty" },
   { key: "amount", label: "Amount" },
   { key: "status", label: "Status" },
-];
-</script>
+];</script>
 
 <template>
   <div class="space-y-6">

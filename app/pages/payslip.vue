@@ -1,19 +1,4 @@
-<script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
-
-interface PayslipItem {
-  slipNo: string;
-  name: string;
-  period: string;
-  salaryRate: number;
-  dayWorked: number;
-  allowance: number;
-  overtime: number;
-  deduction: number;
-  total: number;
-  status: "Paid" | "Unpaid";
-  paidDate: string;
-}
+<script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const payslips = ref<PayslipItem[]>([
   {
@@ -103,8 +88,7 @@ const deletePayslip = (slipNo: string) => {
   if (confirm(`Are you sure you want to delete payslip ${slipNo}?`)) {
     payslips.value = payslips.value.filter((p) => p.slipNo !== slipNo);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

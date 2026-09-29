@@ -321,28 +321,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Discount - Kacetak System'
 })
-
-interface DiscountItem {
-  id: number
-  name: string
-  value: number
-  type: 'Percentage' | 'Flat'
-  valueText: string
-  plan: string
-  validity: string
-  validFrom: string
-  validTill: string
-  days: string[]
-  products: string
-  used: number
-  status: 'Active' | 'Inactive'
-}
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -546,6 +529,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header trigger
-}
-</script>
+}</script>
 

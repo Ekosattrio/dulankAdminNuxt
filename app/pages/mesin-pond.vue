@@ -102,22 +102,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface VendorPond {
-  id: number;
-  sumber: string;
-  lokasi: string;
-  avatar: string;
-  name: string;
-  maxSize: string;
-  putusRate: number;
-  putusMinim: number;
-  kissRate: number;
-  kissMinim: number;
-  update: string;
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const ponds = ref<VendorPond[]>([
   {
@@ -187,5 +172,4 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = "";
-}
-</script>
+}</script>

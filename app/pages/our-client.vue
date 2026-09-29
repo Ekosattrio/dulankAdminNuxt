@@ -134,14 +134,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
-
-interface ClientLogo {
-  id: number;
-  name: string;
-  logoUrl: string;
-}
+<script setup lang="ts">import { ref } from "vue";
 
 const defaultClients: ClientLogo[] = [
   { id: 1, name: "Google Partner", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -224,5 +217,4 @@ function saveClient() {
     logoUrl: form.value.logoUrl,
   });
   closeModal();
-}
-</script>
+}</script>

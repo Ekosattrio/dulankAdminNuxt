@@ -1,5 +1,4 @@
-<script setup lang="ts">
-const route = useRoute();
+<script setup lang="ts">const route = useRoute();
 const router = useRouter();
 
 const rfqNo = computed(() => (route.query.no as string) || "RFQ00001");
@@ -7,13 +6,6 @@ const rfqNo = computed(() => (route.query.no as string) || "RFQ00001");
 useHead({
   title: computed(() => `Edit RFQ ${rfqNo.value} - Kacetak System`),
 });
-
-interface RFQLineItem {
-  description: string;
-  quantity: number;
-  unit: string;
-  eta: string;
-}
 
 const form = ref({
   to: "DULANK SEMESTA CIDA, PT",
@@ -30,7 +22,7 @@ const form = ref({
     { description: "STIKER, @CARA MENGGUNAKAN APAR", quantity: 100, unit: "PC", eta: "2025-12-15" },
     { description: "SAFETY SIGN, STIKER, @WSPD PEGANG HANDRAIL", quantity: 50, unit: "PC", eta: "2025-12-15" },
     { description: "SAFETY SIGN, @AREA DILARANG MEROKOK", quantity: 20, unit: "PC", eta: "2025-12-15" },
-  ] as RFQLineItem[],
+  ] as EditRFQLineItem[],
 });
 
 const addItem = () => {
@@ -53,8 +45,7 @@ const handleSubmit = () => {
     isSubmitting.value = false;
     router.push("/request-quotation");
   }, 600);
-};
-</script>
+};</script>
 
 <template>
   <div>

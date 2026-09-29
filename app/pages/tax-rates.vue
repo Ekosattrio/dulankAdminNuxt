@@ -191,20 +191,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Tax Rates - Kacetak System",
 });
-
-interface TaxRateItem {
-  id: number;
-  name: string;
-  rate: number;
-  createdOn: string;
-  status: "Active" | "Inactive";
-}
 
 const taxRates = ref<TaxRateItem[]>([
   { id: 1, name: "VAT", rate: 16, createdOn: "12 Jul 2023", status: "Active" },
@@ -294,5 +285,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

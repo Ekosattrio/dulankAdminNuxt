@@ -137,17 +137,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface FixedComponent {
-  id: number
-  name: string
-  value: number
-  unit: string
-  used: number
-  update: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const components = ref<FixedComponent[]>([
   { id: 1, name: 'Jam Kerja Harian Operator', value: 12, unit: 'Jam', used: 23, update: '15/12/2025' },
@@ -252,6 +242,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}
-</script>
+}</script>
 

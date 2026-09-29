@@ -234,8 +234,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Address List - Kacetak System",
@@ -246,20 +245,6 @@ const searchQuery = ref("");
 const selectedStatus = ref("");
 const showModal = ref(false);
 const isViewing = ref(false);
-
-interface AddressItem {
-  id: string;
-  entityId: string;
-  name: string;
-  contact: string;
-  province: string;
-  city: string;
-  district: string;
-  detail: string;
-  otherDetail: string;
-  tag: string;
-  date: string;
-}
 
 const customerAddresses = ref<AddressItem[]>([
   {
@@ -389,5 +374,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

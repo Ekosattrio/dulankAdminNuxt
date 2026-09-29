@@ -123,21 +123,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface PaperTypeItem {
-  id: number
-  sumber: string
-  lokasi: string
-  avatar: string
-  group: string
-  merk: string
-  ukuran: string
-  satuan: string
-  gramatur: number
-  update: string
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const paperTypes = ref<PaperTypeItem[]>([
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', group: 'HVS Putih', merk: 'Sinar Dunia', ukuran: '21x29.7', satuan: 'cm', gramatur: 80, update: '09/01/2025 10:15' },
@@ -177,6 +163,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterGroup.value = ''
-}
-</script>
+}</script>
 

@@ -299,21 +299,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface Blog {
-  id: number;
-  title: string;
-  category: string;
-  status: "Active" | "Inactive";
-  date: string;
-  author: string;
-  image: string;
-  excerpt: string;
-  tags: string[];
-  content: string;
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const blogs = ref<Blog[]>([
   {
@@ -511,5 +497,4 @@ function refreshBlogs() {
   searchQuery.value = "";
   filterStatus.value = "";
   sortBy.value = "recent";
-}
-</script>
+}</script>

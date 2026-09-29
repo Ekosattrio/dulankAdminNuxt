@@ -1,14 +1,4 @@
-<script setup lang="ts">
-interface DesignationItem {
-  id: string;
-  name: string;
-  members: string[];
-  createdOn: string;
-  totalMembers: number;
-  status: "Active" | "Inactive";
-}
-
-const designations = ref<DesignationItem[]>([
+<script setup lang="ts">const designations = ref<DesignationItem[]>([
   {
     id: "DS01",
     name: "Designer",
@@ -115,8 +105,7 @@ const deleteItem = (id: string) => {
   if (confirm("Are you sure you want to delete this designation?")) {
     designations.value = designations.value.filter((d) => d.id !== id);
   }
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

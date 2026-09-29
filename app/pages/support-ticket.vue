@@ -179,24 +179,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Support Ticket List - Kacetak System",
 });
-
-interface TicketItem {
-  id: number;
-  ticketId: string;
-  requestedBy: string;
-  subject: string;
-  assignee: string;
-  priority: "High" | "Medium" | "Low";
-  status: "Open" | "Closed";
-  createdDate: string;
-  dueDate: string;
-}
 
 const tickets = ref<TicketItem[]>([
   {
@@ -285,5 +272,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};
-</script>
+};</script>

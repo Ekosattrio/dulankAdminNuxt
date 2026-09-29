@@ -283,14 +283,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "System Settings - Kacetak System",
 });
-
-type IntegrationKey = "captcha" | "analytics" | "adsense" | "map";
 
 const activeKey = ref<IntegrationKey | null>(null);
 
@@ -344,5 +341,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

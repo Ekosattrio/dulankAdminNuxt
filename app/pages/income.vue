@@ -256,25 +256,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 useHead({
   title: 'Income - Kacetak System'
 })
-
-interface IncomeRecord {
-  id: number
-  date: string
-  no: string
-  name: string
-  category: string
-  notes: string
-  amount: number
-  paymentMethod?: string
-  bankAccount?: string
-  isCancelled?: boolean
-}
 
 const categoryList = [
   'Penjualan Jasa Cetak',
@@ -433,6 +419,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}
-</script>
+}</script>
 

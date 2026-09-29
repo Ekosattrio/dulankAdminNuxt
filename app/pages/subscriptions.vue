@@ -1,20 +1,6 @@
-<script setup lang="ts">
-
-useHead({
+<script setup lang="ts">useHead({
   title: "Subscriptions - Kacetak System",
 });
-
-interface SubscriptionItem {
-  id: number;
-  subscriber: string;
-  plan: string;
-  billingCycle: string;
-  method: string;
-  amount: number;
-  createdDate: string;
-  expiringOn: string;
-  status: "Paid" | "Unpaid";
-}
 
 // Initial records matching legacy subscriptions.html
 const initialData: SubscriptionItem[] = [
@@ -130,7 +116,7 @@ const filterDateRange = ref("");
 const isHeaderCollapsed = ref(false);
 
 // Sorting
-type SortField = "subscriber" | "plan" | "billingCycle" | "method" | "amount" | "createdDate" | "expiringOn" | "status";
+
 const sortField = ref<SortField>("id" as any);
 const sortOrder = ref<"asc" | "desc">("asc");
 
@@ -267,8 +253,7 @@ const handleConfirmDelete = () => {
   if (!selectedItem.value) return;
   subscriptions.value = subscriptions.value.filter((s) => s.id !== selectedItem.value?.id);
   showDeleteModal.value = false;
-};
-</script>
+};</script>
 
 <template>
   <div class="space-y-6">

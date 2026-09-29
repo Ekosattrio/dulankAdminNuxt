@@ -198,18 +198,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface SelfPoli {
-  id: number;
-  name: string;
-  maxSize: string;
-  rateCm: number;
-  minim: number;
-  update: string;
-  status: "Active" | "Deactive";
-}
+<script setup lang="ts">import { ref, computed } from "vue";
 
 const polis = ref<SelfPoli[]>([
   {
@@ -344,5 +333,4 @@ function printTable() {
 function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
-}
-</script>
+}</script>

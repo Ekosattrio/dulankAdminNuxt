@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-const route = useRoute();
+<script setup lang="ts">const route = useRoute();
 const router = useRouter();
 const { formatRupiah } = useFormatters();
 
@@ -9,16 +7,6 @@ const quoteNo = computed(() => (route.query.no as string) || "QUO00001");
 useHead({
   title: computed(() => `Edit Quotation ${quoteNo.value} - Kacetak System`),
 });
-
-interface QuotationLineItem {
-  productName: string;
-  description?: string;
-  moq: number;
-  unitPrice: number;
-  order: number;
-  unit: string;
-  amount: number;
-}
 
 // Meta Fields
 const quotationNo = ref(quoteNo.value);
@@ -52,7 +40,7 @@ const pickupStore = ref({
 });
 
 // Line Items
-const items = ref<QuotationLineItem[]>([
+const items = ref<EditQuotationLineItem[]>([
   {
     productName: "Brosur PPDN SMAN 1 Bandung",
     description: "Brosur Full Color A4 (210x297 Milimeter), Art paper 150gr, Tanpa Laminasi, Tanpa Lipatan",
@@ -99,7 +87,7 @@ const addNewItem = () => {
   });
 };
 
-const updateItemAmount = (item: QuotationLineItem) => {
+const updateItemAmount = (item: EditQuotationLineItem) => {
   item.amount = (item.order || 0) * (item.unitPrice || 0);
 };
 
@@ -121,8 +109,7 @@ const handleSubmit = () => {
     isSubmitting.value = false;
     router.push("/quotation");
   }, 600);
-};
-</script>
+};</script>
 
 <template>
   <div>

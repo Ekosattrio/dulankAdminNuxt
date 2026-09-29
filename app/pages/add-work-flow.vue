@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-const router = useRouter()
+<script setup lang="ts">const router = useRouter()
 
 useHead({
   title: 'Add Work Flow - Kacetak System'
@@ -8,14 +6,6 @@ useHead({
 
 const selectedProduct = ref('Brosur A5 Full Color')
 const selectedCategory = ref('Offset')
-
-interface FlowStepOption {
-  id: string
-  name: string
-  category: 'Design' | 'Pracetak' | 'Cetak' | 'Finishing'
-  selected: boolean
-  template: string
-}
 
 const flowSteps = ref<FlowStepOption[]>([
   { id: '1', name: 'Artwork Checking', category: 'Design', selected: true, template: 'Standard Ready Print' },
@@ -55,8 +45,7 @@ const handleSave = () => {
     isSaving.value = false
     router.push('/work-flow')
   }, 500)
-}
-</script>
+}</script>
 
 <template>
   <div>

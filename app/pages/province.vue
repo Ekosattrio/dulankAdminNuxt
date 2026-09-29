@@ -149,8 +149,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script setup lang="ts">import { ref, computed } from "vue";
 
 useHead({
   title: "Province List - Kacetak System",
@@ -161,14 +160,6 @@ const sortOrder = ref("newest");
 const showModal = ref(false);
 const showImportModal = ref(false);
 const isEditing = ref(false);
-
-interface ProvinceItem {
-  id?: number;
-  name: string;
-  added: string;
-  createdBy: string;
-  avatar: string;
-}
 
 const provinces = ref<ProvinceItem[]>([
   { id: 1, name: "DKI Jakarta", added: "2025-08-28", createdBy: "Arroon", avatar: "/assets/img/users/user-30.jpg" },
@@ -250,5 +241,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>

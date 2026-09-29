@@ -109,17 +109,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface BestsellerItem {
-  rank: number
-  category: string
-  product: string
-  sold: number
-  unit: string
-  total: number
-}
+<script setup lang="ts">import { ref, computed } from 'vue'
 
 const products = ref<BestsellerItem[]>([
   { rank: 1, category: 'Packaging', product: 'Sticker Label Kromo / Vinyl A3+', sold: 15000, unit: 'pcs', total: 750000000 },
@@ -166,6 +156,5 @@ function printReport() {
 function refresh() {
   searchQuery.value = ''
   filterCategory.value = ''
-}
-</script>
+}</script>
 

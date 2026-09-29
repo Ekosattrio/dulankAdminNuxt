@@ -58,19 +58,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup lang="ts">import { ref } from "vue";
 
 useHead({
   title: "Preferences - Kacetak System",
 });
-
-interface PreferenceItem {
-  key: string;
-  label: string;
-  icon: string;
-  enabled: boolean;
-}
 
 const preferences = ref<PreferenceItem[]>([
   { key: "maintenance", label: "Maintenance Mode", icon: "ti ti-alert-triangle", enabled: false },
@@ -96,5 +88,4 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};
-</script>
+};</script>
