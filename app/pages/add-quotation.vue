@@ -36,17 +36,8 @@ const pickupStore = ref({
 })
 
 // Line Items
-const items = ref<QuotationLineItem[]>([
-  {
-    productName: 'Brosur PPDN SMAN 1 Bandung',
-    description: 'Brosur Full Color A4 (210x297 Milimeter), Art paper 150gr, Tanpa Laminasi, Tanpa Lipatan\nArtwork: Ada file ready to print\nHasil Cetak: Warna Standard CMYK',
-    moq: 5,
-    unitPrice: 34000,
-    order: 10,
-    unit: 'pcs',
-    amount: 340000
-  }
-])
+const { data: addQuotationData } = await useFetch<QuotationLineItem[]>('/api/add-quotation')
+const items = ref<QuotationLineItem[]>(addQuotationData.value ?? [])
 
 const voucherDiscount = ref(0)
 const shippingCost = ref(89500)

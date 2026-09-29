@@ -238,28 +238,8 @@ useHead({
   title: 'Custom Fields - Kacetak System'
 })
 
-const customFields = ref<CustomField[]>([
-  {
-    id: 1,
-    module: 'Expense',
-    label: 'Name',
-    type: 'Text',
-    defaultValue: 'Name',
-    required: true,
-    disabled: false,
-    status: 'Active'
-  },
-  {
-    id: 2,
-    module: 'Transaction',
-    label: 'Comment',
-    type: 'Textarea',
-    defaultValue: 'Enter Comments',
-    required: true,
-    disabled: false,
-    status: 'Active'
-  }
-])
+const { data: customFieldData } = await useFetch<CustomField[]>('/api/custom-field')
+const customFields = ref<CustomField[]>(customFieldData.value ?? [])
 
 const searchQuery = ref('')
 const filterModule = ref('')

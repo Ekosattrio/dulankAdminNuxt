@@ -126,15 +126,8 @@ useHead({
   title: 'Customer Type - Kacetak System'
 })
 
-const customerTypes = ref<CustomerTypeItem[]>([
-  { id: 1, name: 'Standard', status: 'Active' },
-  { id: 2, name: 'Membership', status: 'Active' },
-  { id: 3, name: 'Premium', status: 'Active' },
-  { id: 4, name: 'Seasonal', status: 'Active' },
-  { id: 5, name: 'Student', status: 'Active' },
-  { id: 6, name: 'Free Shipping', status: 'Active' },
-  { id: 7, name: 'Celebration', status: 'Active' }
-])
+const { data: customerTypeData } = await useFetch<CustomerTypeItem[]>('/api/customer-type')
+const customerTypes = ref<CustomerTypeItem[]>(customerTypeData.value ?? [])
 
 const searchQuery = ref('')
 const filterStatus = ref('')

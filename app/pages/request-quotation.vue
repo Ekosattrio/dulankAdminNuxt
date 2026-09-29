@@ -2,44 +2,8 @@
   title: "Request Quotation List - Kacetak System",
 });
 
-const rfqs = ref<RFQItem[]>([
-  {
-    id: "1",
-    noRequest: "RFQ00001",
-    customer: "PT Semesta Digital",
-    email: "info@semestadigi.co.id",
-    telp: "081234567890",
-    date: "01/10/2025",
-    status: "Ordered",
-  },
-  {
-    id: "2",
-    noRequest: "RFQ00002",
-    customer: "PT Makmur Abadi",
-    email: "makmurabadi@gmail.com",
-    telp: "081398765432",
-    date: "03/10/2025",
-    status: "Complete",
-  },
-  {
-    id: "3",
-    noRequest: "RFQ00003",
-    customer: "Toko Buku Cerdas",
-    email: "cerdasbuku@yahoo.com",
-    telp: "081711223344",
-    date: "05/10/2025",
-    status: "Pending",
-  },
-  {
-    id: "4",
-    noRequest: "RFQ00004",
-    customer: "CV Jaya Sentosa",
-    email: "jayasentosa@corp.id",
-    telp: "085812345678",
-    date: "08/10/2025",
-    status: "Received",
-  },
-]);
+const { data: requestQuotationData } = await useFetch<RFQItem[]>('/api/request-quotation')
+const rfqs = ref<RFQItem[]>(requestQuotationData.value ?? []);
 
 const statusFilter = ref<string>("All");
 

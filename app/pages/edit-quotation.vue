@@ -40,17 +40,8 @@ const pickupStore = ref({
 });
 
 // Line Items
-const items = ref<EditQuotationLineItem[]>([
-  {
-    productName: "Brosur PPDN SMAN 1 Bandung",
-    description: "Brosur Full Color A4 (210x297 Milimeter), Art paper 150gr, Tanpa Laminasi, Tanpa Lipatan",
-    moq: 5,
-    unitPrice: 34000,
-    order: 10,
-    unit: "pcs",
-    amount: 340000,
-  },
-]);
+const { data: editQuotationData } = await useFetch<EditQuotationLineItem[]>('/api/edit-quotation')
+const items = ref<EditQuotationLineItem[]>(editQuotationData.value ?? []);
 
 const voucherDiscount = ref(0);
 const shippingCost = ref(89500);

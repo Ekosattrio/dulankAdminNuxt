@@ -436,16 +436,8 @@ function changePickupStore() {
 
 // Items
 
-const items = ref<OrderItem[]>([
-  {
-    id: 1,
-    name: "Brosur PPDB SMAN 1 Bandung",
-    description: "Brosur Full Color A4 (210x297 mm), Art paper 150gr, Tanpa Laminasi, 1 Lipatan",
-    qty: 2,
-    unit: "Ream",
-    price: 450000,
-  },
-]);
+const { data: addSalesData } = await useFetch<OrderItem[]>('/api/add-sales')
+const items = ref<OrderItem[]>(addSalesData.value ?? []);
 
 function updateQty(item: OrderItem, delta: number) {
   if (item.qty + delta >= 1) {

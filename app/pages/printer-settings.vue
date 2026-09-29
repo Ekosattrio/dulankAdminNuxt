@@ -143,11 +143,8 @@ const searchQuery = ref("");
 const showModal = ref(false);
 const isEditing = ref(false);
 
-const printers = ref<PrinterItem[]>([
-  { id: 1, name: "HP LaserJet Pro MFP", connectionType: "Network", ipAddress: "192.168.1.22", port: "9100" },
-  { id: 2, name: "Epson TM-T82 Thermal POS", connectionType: "Network", ipAddress: "192.168.1.25", port: "9100" },
-  { id: 3, name: "Canon imagePRESS C650", connectionType: "Network", ipAddress: "192.168.1.50", port: "9100" },
-]);
+const { data: printerSettingsData } = await useFetch<PrinterItem[]>('/api/printer-settings')
+const printers = ref<PrinterItem[]>(printerSettingsData.value ?? []);
 
 const currentPrinter = ref<PrinterItem>({
   name: "",

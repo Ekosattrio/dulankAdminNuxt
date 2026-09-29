@@ -2,80 +2,8 @@
   title: "Delivery Note - Kacetak System",
 });
 
-const deliveryNotes = ref<DeliveryNoteItem[]>([
-  {
-    id: "1",
-    dnNo: "DN0001",
-    date: "01/10/2025",
-    customer: "PT Makmur Abadi",
-    noSales: "2511000001",
-    shippingAddress: "Jl. Damai No. 4, Kec. Kramat Jati, Jakarta Timur, DKI Jakarta",
-    status: "Complete",
-    dateStatus: "02/10/2025",
-    po: "PO - 12120001",
-    shippingBy: "Car",
-    reference: "Mr. Aman",
-    items: [
-      { description: "Brosur Full Color\nBrosur PPDB SMAN 1 Bandung", qty: 2, unit: "Ream", packingQty: "2 Pax", weight: "6 Kg" },
-    ],
-  },
-  {
-    id: "2",
-    dnNo: "DN0002",
-    date: "03/10/2025",
-    customer: "Toko Buku Cerdas",
-    noSales: "2511000002",
-    shippingAddress: "Ruko Indah Blok A, Kec. Cinere, Kota Depok, Jawa Barat",
-    status: "Complete",
-    dateStatus: "04/10/2025",
-    po: "PO - 12120002",
-    shippingBy: "Motorcycle",
-    reference: "Ibu Cerdas",
-    items: [{ description: "Kalender Dinding 2026 Spiral", qty: 50, unit: "Pieces", packingQty: "1 Box", weight: "12 Kg" }],
-  },
-  {
-    id: "3",
-    dnNo: "DN0003",
-    date: "05/10/2025",
-    customer: "CV Jaya Sentosa",
-    noSales: "2511000003",
-    shippingAddress: "Kawasan Industri KIIC Lot C-4, Karawang Barat",
-    status: "Pending",
-    dateStatus: "05/10/2025",
-    po: "PO - 12120003",
-    shippingBy: "Truck",
-    reference: "Bpk. Jaya",
-    items: [{ description: "Kop Surat & Amplop Custom", qty: 5, unit: "Ream", packingQty: "5 Box", weight: "15 Kg" }],
-  },
-  {
-    id: "4",
-    dnNo: "DN0004",
-    date: "08/10/2025",
-    customer: "PT Global Solusi",
-    noSales: "2511000004",
-    shippingAddress: "Wisma Mulia Lt. 12, Gatot Subroto, Jakarta Selatan",
-    status: "Ordered",
-    dateStatus: "09/10/2025",
-    po: "PO - 12120004",
-    shippingBy: "Car",
-    reference: "Dani Alfa",
-    items: [{ description: "Company Profile Hardcover Excl.", qty: 100, unit: "Pieces", packingQty: "4 Box", weight: "28 Kg" }],
-  },
-  {
-    id: "5",
-    dnNo: "DN0005",
-    date: "12/10/2025",
-    customer: "Percetakan Berkah",
-    noSales: "2511000005",
-    shippingAddress: "Jl. Ahmad Yani No. 88, Bekasi Timur",
-    status: "Received",
-    dateStatus: "13/10/2025",
-    po: "PO - 12120005",
-    shippingBy: "Motorcycle",
-    reference: "Haji Berkah",
-    items: [{ description: "Paper Bag Custom Kraft 150gr", qty: 500, unit: "Pieces", packingQty: "2 Bale", weight: "20 Kg" }],
-  },
-]);
+const { data: deliveryNoteData } = await useFetch<DeliveryNoteItem[]>('/api/delivery-note')
+const deliveryNotes = ref<DeliveryNoteItem[]>(deliveryNoteData.value ?? []);
 
 const statusFilter = ref<string>("All");
 

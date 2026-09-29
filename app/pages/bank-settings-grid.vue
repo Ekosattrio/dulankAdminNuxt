@@ -134,11 +134,8 @@ useHead({
 const showModal = ref(false)
 const isEditing = ref(false)
 
-const accounts = ref<BankAccountGrid[]>([
-  { id: 1, bankName: 'Bank BCA', accountNo: '**** **** 1982', holderName: 'PT Kacetak Digital', branch: 'Jakarta', isDefault: true },
-  { id: 2, bankName: 'Bank Mandiri', accountNo: '**** **** 1796', holderName: 'PT Kacetak Digital', branch: 'Bandung', isDefault: false },
-  { id: 3, bankName: 'Bank BNI', accountNo: '**** **** 1832', holderName: 'PT Kacetak Digital', branch: 'Surabaya', isDefault: false }
-])
+const { data: bankSettingsGridData } = await useFetch<BankAccountGrid[]>('/api/bank-settings-grid')
+const accounts = ref<BankAccountGrid[]>(bankSettingsGridData.value ?? [])
 
 const currentAccount = ref<BankAccountGrid>({
   bankName: '',

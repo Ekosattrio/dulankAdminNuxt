@@ -187,40 +187,8 @@ const isEditing = ref(false);
 
 const availableStores = ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 2", "Toko Cabang 3"];
 
-const admins = ref<AdminItem[]>([
-  {
-    id: "U001",
-    name: "Budi Santoso",
-    email: "budi.santoso@email.com",
-    role: "Admin",
-    stores: ["Toko Pusat", "Toko Cabang 1"],
-    status: "Active",
-  },
-  {
-    id: "U002",
-    name: "Siti Aminah",
-    email: "siti.aminah@email.com",
-    role: "Manager",
-    stores: ["Toko Cabang 2"],
-    status: "Active",
-  },
-  {
-    id: "U003",
-    name: "Ahmad Fauzi",
-    email: "ahmad.fauzi@email.com",
-    role: "Supervisor",
-    stores: ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 3"],
-    status: "Active",
-  },
-  {
-    id: "U004",
-    name: "Diana Putri",
-    email: "diana.putri@email.com",
-    role: "Staff",
-    stores: ["Toko Cabang 2"],
-    status: "Inactive",
-  },
-]);
+const { data: userAdminData } = await useFetch<AdminItem[]>('/api/user-admin')
+const admins = ref<AdminItem[]>(userAdminData.value ?? []);
 
 const currentAdmin = ref<AdminItem>({
   id: "",

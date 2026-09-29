@@ -196,56 +196,8 @@ const transactionCodeOptions = [
   "10 - Other delivery of good/services",
 ];
 
-const invoices = ref<OutputTaxItem[]>([
-  {
-    id: 1,
-    salesNo: "SLS-001",
-    etaxDate: "01-02-2026",
-    etaxNumber: "001.26.0001",
-    customerName: "CV. Maju Jaya",
-    dpp: 12500000,
-    vat: 1375000,
-    txCode: "04 - Other Tax Base",
-    total: 13875000,
-    status: "Issued",
-  },
-  {
-    id: 2,
-    salesNo: "SLS-002",
-    etaxDate: "02-02-2026",
-    etaxNumber: "001.26.0002",
-    customerName: "PT. Sinar Abadi",
-    dpp: 45000000,
-    vat: 4950000,
-    txCode: "04 - Other Tax Base",
-    total: 49950000,
-    status: "Issued",
-  },
-  {
-    id: 3,
-    salesNo: "SLS-003",
-    etaxDate: "03-02-2026",
-    etaxNumber: "001.26.0003",
-    customerName: "Universitas Terbuka",
-    dpp: 18200000,
-    vat: 2002000,
-    txCode: "04 - Other Tax Base",
-    total: 20202000,
-    status: "Issued",
-  },
-  {
-    id: 4,
-    salesNo: "SLS-004",
-    etaxDate: "04-02-2026",
-    etaxNumber: "001.26.0004",
-    customerName: "Yayasan Pendidikan",
-    dpp: 7500000,
-    vat: 825000,
-    txCode: "04 - Other Tax Base",
-    total: 8325000,
-    status: "Issued",
-  },
-]);
+const { data: outputTaxData } = await useFetch<OutputTaxItem[]>('/api/output-tax')
+const invoices = ref<OutputTaxItem[]>(outputTaxData.value ?? []);
 
 const searchQuery = ref("");
 const filterTxCode = ref("");

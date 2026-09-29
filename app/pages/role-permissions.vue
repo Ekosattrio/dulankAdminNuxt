@@ -119,12 +119,8 @@ const sortOrder = ref("newest");
 const showModal = ref(false);
 const isEditing = ref(false);
 
-const roles = ref<RoleItem[]>([
-  { id: 1, name: "Admin", createdOn: "25 May 2023" },
-  { id: 2, name: "Customer", createdOn: "30 May 2023" },
-  { id: 3, name: "Shop Owner", createdOn: "20 Apr 2023" },
-  { id: 4, name: "Manager", createdOn: "12 Jan 2023" },
-]);
+const { data: rolePermissionsData } = await useFetch<RoleItem[]>('/api/role-permissions')
+const roles = ref<RoleItem[]>(rolePermissionsData.value ?? []);
 
 const currentRole = ref<RoleItem>({
   name: "",

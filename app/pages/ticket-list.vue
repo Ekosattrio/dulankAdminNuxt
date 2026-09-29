@@ -319,60 +319,8 @@ useHead({
   title: "Support Ticket List - Kacetak System",
 });
 
-const tickets = ref<TicketListItem[]>([
-  {
-    id: 1,
-    ticketId: "#1020",
-    requestedBy: "Lindsay Walton",
-    avatar: "/assets/img/users/user-23.jpg",
-    subject: "A new rating has been received",
-    assignee: "Desman Dwi",
-    assigneeAvatar: "/assets/img/users/user-23.jpg",
-    priority: "Medium",
-    status: "Closed",
-    createdDate: "13/08/2023",
-    dueDate: "30/08/2023",
-  },
-  {
-    id: 2,
-    ticketId: "#1254",
-    requestedBy: "Jhon Maryo",
-    avatar: "/assets/img/users/user-24.jpg",
-    subject: "Your application has been received!",
-    assignee: "Eko Satrio",
-    assigneeAvatar: "/assets/img/users/user-24.jpg",
-    priority: "High",
-    status: "Closed",
-    createdDate: "01/04/2024",
-    dueDate: "21/05/2024",
-  },
-  {
-    id: 3,
-    ticketId: "#1256",
-    requestedBy: "Jerry Geiger",
-    avatar: "/assets/img/users/user-25.jpg",
-    subject: "Support for theme",
-    assignee: "Desman Dwi",
-    assigneeAvatar: "/assets/img/users/user-25.jpg",
-    priority: "Low",
-    status: "Open",
-    createdDate: "28/07/2024",
-    dueDate: "28/07/2024",
-  },
-  {
-    id: 4,
-    ticketId: "#1352",
-    requestedBy: "Adam Thomas",
-    avatar: "/assets/img/users/user-26.jpg",
-    subject: "Question regarding your Tailwind Theme",
-    assignee: "Eko Satrio",
-    assigneeAvatar: "/assets/img/users/user-26.jpg",
-    priority: "Medium",
-    status: "Open",
-    createdDate: "10/08/2024",
-    dueDate: "15/08/2024",
-  },
-]);
+const { data: ticketListData } = await useFetch<TicketListItem[]>('/api/ticket-list')
+const tickets = ref<TicketListItem[]>(ticketListData.value ?? []);
 
 const searchQuery = ref("");
 const filterPriority = ref("");

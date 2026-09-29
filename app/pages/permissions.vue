@@ -133,20 +133,8 @@ const selectedRole = ref("Admin");
 const showFilter = ref(false);
 const filterDate = ref("");
 
-const modules = ref<ModulePerm[]>([
-  { name: "Inventory", create: true, edit: true, delete: false, view: true },
-  { name: "Expense", create: true, edit: true, delete: false, view: true },
-  { name: "Product", create: true, edit: true, delete: true, view: true },
-  { name: "Category", create: true, edit: true, delete: false, view: true },
-  { name: "Sub Category", create: true, edit: true, delete: false, view: true },
-  { name: "Unit", create: true, edit: true, delete: false, view: true },
-  { name: "Sales", create: true, edit: true, delete: false, view: true },
-  { name: "Purchases", create: true, edit: true, delete: false, view: true },
-  { name: "Payment", create: true, edit: true, delete: false, view: true },
-  { name: "Orders", create: true, edit: true, delete: false, view: true },
-  { name: "Reports", create: false, edit: false, delete: false, view: true },
-  { name: "User Management", create: true, edit: true, delete: true, view: true },
-]);
+const { data: permissionsData } = await useFetch<ModulePerm[]>('/api/permissions')
+const modules = ref<ModulePerm[]>(permissionsData.value ?? []);
 
 const filteredModules = computed(() => {
   return modules.value.filter((m) => m.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
