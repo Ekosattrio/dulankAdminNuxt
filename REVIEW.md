@@ -2,6 +2,26 @@
 
 **Branch:** `review` · **Tanggal:** 2026-09-29 · **Status:** analisis gap, belum ada perbaikan kode
 
+> ## UPDATE — Refactor Nuxt 4 (branch `refactor/nuxt4`, selesai 2026-09-29)
+>
+> Dokumen ini adalah analisis gap. Refactor ke Nuxt 4 sudah dieksekusi di branch `refactor/nuxt4` (7 commit step-by-step):
+>
+> | Step | Isi | Status |
+> |---|---|---|
+> | 1 | Upgrade Nuxt 4.5.2, vue 3.5.43, vue-router 5.3.1, pinia 4, tailwind module 7-beta | ✅ |
+> | 2 | Struktur `app/` (git mv, history aman), `server/` + `shared/`, alias `.html` tetap jalan | ✅ |
+> | 3 | Tailwind v4 CSS-first (`@theme` + `@custom-variant dark`), `tailwind.config.ts` dihapus | ✅ |
+> | 4 | Komponen auto-import ber-prefix path (`Common/Forms/Tables/Dashboard/App…`), plugin feather global dihapus | ✅ |
+> | 5 | 147 interface dipisah ke `shared/types/` (18 file per domain, auto-import, konflik nama di-rename) | ✅ |
+> | 6 | Composables `usePrint`/`useModal`, audit 100% `<script setup lang="ts">`, script `typecheck` | ✅ |
+> | 7 | Verifikasi: build, typecheck (0 unresolved name), dev server — `/`, `/sales.html`, `/api/health` 200 | ✅ |
+>
+> **Gap yang teratasi oleh refactor ini:** struktur direktori, auto-import komponen, pemisahan interface, Tailwind v4.
+> **Tetap backlog (dari dokumen ini):** date picker P0, rich-text editor P0, migrasi tabel inline → `<TablesDataTable/>` P1, unifikasi modal (`useModal`), live search & NumberInput perluasan, theme customizer UI.
+> **Utang baru tercatat:** ~103 error TS pra-eksisting (TS2322/TS2532); typecheck debt.
+>
+> ---
+
 Proyek ini adalah migrasi admin template statis (Bootstrap 5 + jQuery + DataTables) ke Nuxt 3 + Tailwind CSS. Dokumen ini membandingkan **186 file `*.html` legacy di root** dengan **186 file `pages/*.vue`**, memetakan fitur yang berhasil diport, yang hilang, dan yang berubah perilaku.
 
 ---
