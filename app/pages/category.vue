@@ -95,7 +95,7 @@ const deleteCategory = (id: string) => {
           class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
           @click="isAddModalOpen = true"
         >
-          <FeatherIcon name="plus-circle" size="18" />
+          <CommonFeatherIcon name="plus-circle" size="18" />
           <span>Add New Category</span>
         </button>
       </template>
@@ -112,7 +112,7 @@ const deleteCategory = (id: string) => {
             class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           />
           <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <FeatherIcon name="search" size="16" />
+            <CommonFeatherIcon name="search" size="16" />
           </span>
         </div>
 
@@ -160,7 +160,7 @@ const deleteCategory = (id: string) => {
               title="Edit"
               @click="openEditModal(row)"
             >
-              <FeatherIcon name="edit" size="16" />
+              <CommonFeatherIcon name="edit" size="16" />
             </button>
             <button
               type="button"
@@ -168,7 +168,7 @@ const deleteCategory = (id: string) => {
               title="Delete"
               @click="deleteCategory(row.id)"
             >
-              <FeatherIcon name="trash-2" size="16" />
+              <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>

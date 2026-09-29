@@ -90,7 +90,7 @@ const handleDelete = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Work Flow List" subtitle="Manage your production workflow templates">
+    <CommonPageHeader title="Work Flow List" subtitle="Manage your production workflow templates">
       <template #actions>
         <div class="flex items-center gap-2">
           <button
@@ -106,18 +106,18 @@ const handleDelete = () => {
             title="Print"
             @click="() => window.print()"
           >
-            <FeatherIcon name="printer" size="16" />
+            <CommonFeatherIcon name="printer" size="16" />
           </button>
           <NuxtLink
             to="/add-work-flow"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary/90"
           >
-            <FeatherIcon name="plus-circle" size="14" />
+            <CommonFeatherIcon name="plus-circle" size="14" />
             <span>Add New Work Flow</span>
           </NuxtLink>
         </div>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <!-- Filter Bar -->
     <div
@@ -139,7 +139,7 @@ const handleDelete = () => {
     </div>
 
     <!-- Data Table -->
-    <DataTable :columns="columns" :items="filteredWorkflows" search-placeholder="Search product, category, workflow steps...">
+    <TablesDataTable :columns="columns" :items="filteredWorkflows" search-placeholder="Search product, category, workflow steps...">
       <!-- No -->
       <template #cell(no)="{ item }">
         <span class="font-mono font-bold text-gray-900 dark:text-white">{{ item.no }}</span>
@@ -178,7 +178,7 @@ const handleDelete = () => {
             class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-warning hover:text-warning dark:border-gray-700"
             title="Edit Work Flow"
           >
-            <FeatherIcon name="edit" size="13" />
+            <CommonFeatherIcon name="edit" size="13" />
           </NuxtLink>
           <button
             type="button"
@@ -186,19 +186,19 @@ const handleDelete = () => {
             title="Delete"
             @click="confirmDelete(item)"
           >
-            <FeatherIcon name="trash-2" size="13" />
+            <CommonFeatherIcon name="trash-2" size="13" />
           </button>
         </div>
       </template>
-    </DataTable>
+    </TablesDataTable>
 
     <!-- Delete Confirmation Modal -->
-    <BaseModal v-model="deleteModalOpen" title="Delete Work Flow" size="sm">
+    <CommonBaseModal v-model="deleteModalOpen" title="Delete Work Flow" size="sm">
       <div class="p-4 text-center">
         <div
           class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/50"
         >
-          <FeatherIcon name="alert-triangle" size="24" />
+          <CommonFeatherIcon name="alert-triangle" size="24" />
         </div>
         <h5 class="text-base font-semibold text-gray-900 dark:text-white">Are you sure?</h5>
         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -223,6 +223,6 @@ const handleDelete = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

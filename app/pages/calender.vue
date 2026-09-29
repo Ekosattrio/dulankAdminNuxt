@@ -122,7 +122,7 @@ const calendarLogs = ref([
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Calendar Products & Calculator" subtitle="Configure desk and wall calendar parameters, binding, and pricing" />
+    <CommonPageHeader title="Calendar Products & Calculator" subtitle="Configure desk and wall calendar parameters, binding, and pricing" />
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
       <!-- Left Panel: Tabs -->
@@ -150,7 +150,7 @@ const calendarLogs = ref([
               ]"
               @click="activeTab = t.id"
             >
-              <FeatherIcon :name="t.icon" size="14" />
+              <CommonFeatherIcon :name="t.icon" size="14" />
               <span class="flex-1 truncate">{{ t.label }}</span>
             </button>
           </div>
@@ -285,7 +285,7 @@ const calendarLogs = ref([
                   <td class="p-2.5 text-end font-bold text-secondary">{{ tier.profitWebstorePercent }}%</td>
                   <td class="p-2.5 text-center">
                     <button type="button" class="text-gray-400 hover:text-danger" @click="deleteProfitRange(idx)">
-                      <FeatherIcon name="trash-2" size="14" />
+                      <CommonFeatherIcon name="trash-2" size="14" />
                     </button>
                   </td>
                 </tr>
@@ -320,7 +320,7 @@ const calendarLogs = ref([
 
           <!-- Fallback general specs -->
           <div v-else class="py-12 text-center text-xs text-gray-400">
-            <FeatherIcon name="settings" size="32" class="mx-auto mb-2 opacity-30" />
+            <CommonFeatherIcon name="settings" size="32" class="mx-auto mb-2 opacity-30" />
             <p>Parameters for this tab are inherited from global production specifications.</p>
           </div>
         </div>

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import PageHeader from "~/components/common/PageHeader.vue";
-import DataTable from "~/components/table/DataTable.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
 
 useHead({
   title: "Sales - Kacetak System",
@@ -141,17 +138,17 @@ const onPrint = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Sales" subtitle="Manage Yours sales">
+    <CommonPageHeader title="Sales" subtitle="Manage Yours sales">
       <template #actions>
         <NuxtLink
           to="/add-sales"
           class="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary-hover transition-colors"
         >
-          <FeatherIcon name="plus-circle" size="14" />
+          <CommonFeatherIcon name="plus-circle" size="14" />
           <span>Add Sales</span>
         </NuxtLink>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <!-- Top Action Links -->
     <div class="flex justify-end gap-2 mb-4">
@@ -159,20 +156,20 @@ const onPrint = () => {
         type="button"
         class="flex items-center gap-1 rounded border border-danger/40 px-2.5 py-1 text-xs text-danger hover:bg-danger-50 transition-colors"
       >
-        <FeatherIcon name="trash" size="12" />
+        <CommonFeatherIcon name="trash" size="12" />
         <span>Delete Sales History</span>
       </button>
       <button
         type="button"
         class="flex items-center gap-1 rounded border border-gray-300 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:text-gray-300"
       >
-        <FeatherIcon name="x-circle" size="12" />
+        <CommonFeatherIcon name="x-circle" size="12" />
         <span>Cancel Transaction History</span>
       </button>
     </div>
 
     <!-- Data Table -->
-    <DataTable :columns="columns" :items="salesList" search-placeholder="Search sales..." @print="onPrint">
+    <TablesDataTable :columns="columns" :items="salesList" search-placeholder="Search sales..." @print="onPrint">
       <!-- Action Menu Cell -->
       <template #cell(actions)="{ item }">
         <div class="relative">
@@ -181,7 +178,7 @@ const onPrint = () => {
             class="flex h-7 w-7 items-center justify-center rounded hover:bg-gray-100 text-gray-500 dark:hover:bg-gray-800"
             @click.stop="toggleDropdown(item.id)"
           >
-            <FeatherIcon name="more-vertical" size="14" />
+            <CommonFeatherIcon name="more-vertical" size="14" />
           </button>
 
           <!-- Dropdown Options -->
@@ -194,7 +191,7 @@ const onPrint = () => {
               class="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
               @click="openDetail(item)"
             >
-              <FeatherIcon name="eye" size="13" />
+              <CommonFeatherIcon name="eye" size="13" />
               <span>Sale Detail</span>
             </button>
             <button
@@ -202,21 +199,21 @@ const onPrint = () => {
               class="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
               @click="openPayment(item)"
             >
-              <FeatherIcon name="dollar-sign" size="13" />
+              <CommonFeatherIcon name="dollar-sign" size="13" />
               <span>Show Payments</span>
             </button>
             <NuxtLink
               :to="`/sales-receipt?id=${item.id}`"
               class="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
             >
-              <FeatherIcon name="printer" size="13" />
+              <CommonFeatherIcon name="printer" size="13" />
               <span>Print Receipt (80mm)</span>
             </NuxtLink>
             <NuxtLink
               :to="`/sales-note?id=${item.id}`"
               class="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
             >
-              <FeatherIcon name="file-text" size="13" />
+              <CommonFeatherIcon name="file-text" size="13" />
               <span>Print Note (A4)</span>
             </NuxtLink>
           </div>
@@ -269,10 +266,10 @@ const onPrint = () => {
       <template #cell(method)="{ item }">
         <span class="text-xs text-gray-600 dark:text-gray-300">{{ item.method }}</span>
       </template>
-    </DataTable>
+    </TablesDataTable>
 
     <!-- Sale Detail Modal -->
-    <BaseModal v-model="isDetailModalOpen" :title="`Sale Details - ${selectedSale?.id}`">
+    <CommonBaseModal v-model="isDetailModalOpen" :title="`Sale Details - ${selectedSale?.id}`">
       <div v-if="selectedSale" class="space-y-3 text-xs">
         <div class="grid grid-cols-2 gap-2 border-b pb-3">
           <div>
@@ -308,10 +305,10 @@ const onPrint = () => {
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Payment Detail Modal -->
-    <BaseModal v-model="isPaymentModalOpen" :title="`Payment Details - ${selectedSale?.id}`">
+    <CommonBaseModal v-model="isPaymentModalOpen" :title="`Payment Details - ${selectedSale?.id}`">
       <div v-if="selectedSale" class="space-y-2 text-xs">
         <div class="flex justify-between border-b pb-2">
           <span>Status:</span> <span class="font-bold text-success">{{ selectedSale.status }}</span>
@@ -328,6 +325,6 @@ const onPrint = () => {
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

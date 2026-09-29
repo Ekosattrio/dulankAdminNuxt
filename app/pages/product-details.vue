@@ -31,14 +31,14 @@ const product = reactive({
             to="/product-list"
             class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
           >
-            <FeatherIcon name="arrow-left" size="18" />
+            <CommonFeatherIcon name="arrow-left" size="18" />
             <span>Back to Product List</span>
           </NuxtLink>
           <NuxtLink
             to="/create-product"
             class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600"
           >
-            <FeatherIcon name="edit" size="18" />
+            <CommonFeatherIcon name="edit" size="18" />
             <span>Edit Product</span>
           </NuxtLink>
         </div>
@@ -60,7 +60,7 @@ const product = reactive({
               class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               onclick="window.print()"
             >
-              <FeatherIcon name="printer" size="14" />
+              <CommonFeatherIcon name="printer" size="14" />
               <span>Print Barcode</span>
             </button>
           </div>

@@ -265,7 +265,7 @@ const printTable = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Invoice" subtitle="Manage Your Invoice">
+    <CommonPageHeader title="Invoice" subtitle="Manage Your Invoice">
       <template #actions>
         <div class="flex items-center gap-2">
           <button
@@ -281,11 +281,11 @@ const printTable = () => {
             title="Print"
             @click="printTable"
           >
-            <FeatherIcon name="printer" size="16" />
+            <CommonFeatherIcon name="printer" size="16" />
           </button>
         </div>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <!-- Filter Bar -->
     <div
@@ -306,7 +306,7 @@ const printTable = () => {
     </div>
 
     <!-- Data Table -->
-    <DataTable
+    <TablesDataTable
       :columns="columns"
       :items="filteredInvoices"
       search-placeholder="Search invoice or customer..."
@@ -360,7 +360,7 @@ const printTable = () => {
             class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400"
             title="View Details"
           >
-            <FeatherIcon name="eye" size="13" />
+            <CommonFeatherIcon name="eye" size="13" />
           </NuxtLink>
           <button
             type="button"
@@ -368,7 +368,7 @@ const printTable = () => {
             title="Delete Invoice"
             @click="confirmDelete(item)"
           >
-            <FeatherIcon name="trash-2" size="13" />
+            <CommonFeatherIcon name="trash-2" size="13" />
           </button>
         </div>
       </template>
@@ -383,15 +383,15 @@ const printTable = () => {
           <td colspan="2"></td>
         </tr>
       </template>
-    </DataTable>
+    </TablesDataTable>
 
     <!-- Delete Confirm Modal -->
-    <BaseModal v-model="deleteModalOpen" title="Delete Invoice" size="sm">
+    <CommonBaseModal v-model="deleteModalOpen" title="Delete Invoice" size="sm">
       <div class="p-4 text-center">
         <div
           class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/50"
         >
-          <FeatherIcon name="alert-triangle" size="24" />
+          <CommonFeatherIcon name="alert-triangle" size="24" />
         </div>
         <h5 class="text-base font-semibold text-gray-900 dark:text-white">Are you sure?</h5>
         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -416,6 +416,6 @@ const printTable = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

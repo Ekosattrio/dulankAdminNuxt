@@ -242,7 +242,7 @@ const handleDelete = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Delivery Note" subtitle="Manage Your Delivery Note">
+    <CommonPageHeader title="Delivery Note" subtitle="Manage Your Delivery Note">
       <template #actions>
         <div class="flex items-center gap-2">
           <button
@@ -258,19 +258,19 @@ const handleDelete = () => {
             title="Print"
             @click="() => window.print()"
           >
-            <FeatherIcon name="printer" size="16" />
+            <CommonFeatherIcon name="printer" size="16" />
           </button>
           <button
             type="button"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-primary/90"
             @click="openAddModal"
           >
-            <FeatherIcon name="plus-circle" size="14" />
+            <CommonFeatherIcon name="plus-circle" size="14" />
             <span>Add New Delivery Note</span>
           </button>
         </div>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <!-- Filter Bar -->
     <div
@@ -292,7 +292,7 @@ const handleDelete = () => {
     </div>
 
     <!-- Data Table -->
-    <DataTable
+    <TablesDataTable
       :columns="columns"
       :items="filteredNotes"
       search-placeholder="Search delivery note, customer, sales no..."
@@ -343,7 +343,7 @@ const handleDelete = () => {
             class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400"
             title="View Details"
           >
-            <FeatherIcon name="eye" size="13" />
+            <CommonFeatherIcon name="eye" size="13" />
           </NuxtLink>
           <button
             type="button"
@@ -351,7 +351,7 @@ const handleDelete = () => {
             title="Edit Delivery Note"
             @click="openEditModal(item)"
           >
-            <FeatherIcon name="edit" size="13" />
+            <CommonFeatherIcon name="edit" size="13" />
           </button>
           <button
             type="button"
@@ -359,14 +359,14 @@ const handleDelete = () => {
             title="Delete"
             @click="confirmDelete(item)"
           >
-            <FeatherIcon name="trash-2" size="13" />
+            <CommonFeatherIcon name="trash-2" size="13" />
           </button>
         </div>
       </template>
-    </DataTable>
+    </TablesDataTable>
 
     <!-- Add / Edit Modal -->
-    <BaseModal v-model="isModalOpen" :title="modalMode === 'add' ? 'Add Delivery Note' : 'Edit Delivery Note'" size="xl">
+    <CommonBaseModal v-model="isModalOpen" :title="modalMode === 'add' ? 'Add Delivery Note' : 'Edit Delivery Note'" size="xl">
       <form @submit.prevent="saveDeliveryNote">
         <div class="p-6 space-y-6">
           <!-- Company & Header -->
@@ -513,7 +513,7 @@ const handleDelete = () => {
                   </td>
                   <td class="p-2 text-center">
                     <button type="button" class="text-gray-400 hover:text-danger" title="Delete Row" @click="removeRow(idx)">
-                      <FeatherIcon name="trash-2" size="14" />
+                      <CommonFeatherIcon name="trash-2" size="14" />
                     </button>
                   </td>
                 </tr>
@@ -525,7 +525,7 @@ const handleDelete = () => {
               class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
               @click="addRow"
             >
-              <FeatherIcon name="plus-circle" size="14" />
+              <CommonFeatherIcon name="plus-circle" size="14" />
               <span>Add New Item</span>
             </button>
           </div>
@@ -568,15 +568,15 @@ const handleDelete = () => {
           </button>
         </div>
       </form>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Delete Confirmation Modal -->
-    <BaseModal v-model="deleteModalOpen" title="Delete Delivery Note" size="sm">
+    <CommonBaseModal v-model="deleteModalOpen" title="Delete Delivery Note" size="sm">
       <div class="p-4 text-center">
         <div
           class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/50"
         >
-          <FeatherIcon name="alert-triangle" size="24" />
+          <CommonFeatherIcon name="alert-triangle" size="24" />
         </div>
         <h5 class="text-base font-semibold text-gray-900 dark:text-white">Are you sure?</h5>
         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -600,6 +600,6 @@ const handleDelete = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

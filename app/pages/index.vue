@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PageHeader from "~/components/common/PageHeader.vue";
 
 useHead({
   title: "Dashboard Admin - Kacetak System",
@@ -103,14 +102,14 @@ const recentTransactions = [
         class="flex items-center justify-between rounded-lg border border-warning/30 bg-warning-soft px-4 py-3 text-xs text-amber-900 dark:bg-amber-950/40 dark:text-amber-200"
       >
         <div class="flex items-center gap-2">
-          <FeatherIcon name="alert-triangle" size="16" class="text-warning flex-shrink-0" />
+          <CommonFeatherIcon name="alert-triangle" size="16" class="text-warning flex-shrink-0" />
           <span>Your Product <strong>Apple Iphone 15</strong> is running Low, already below 5 Pcs.</span>
           <NuxtLink to="/create-product" class="font-semibold underline ms-1 text-primary hover:text-primary-hover"
             >Add Stock</NuxtLink
           >
         </div>
         <button type="button" class="text-amber-700 hover:text-amber-900 dark:text-amber-300" @click="isAlertVisible = false">
-          <FeatherIcon name="x" size="14" />
+          <CommonFeatherIcon name="x" size="14" />
         </button>
       </div>
     </div>
@@ -124,7 +123,7 @@ const recentTransactions = [
       >
         <div class="flex items-center gap-3">
           <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
-            <FeatherIcon :name="metric.icon" size="22" class="text-white" />
+            <CommonFeatherIcon :name="metric.icon" size="22" class="text-white" />
           </div>
           <div class="min-w-0">
             <span class="block text-xs text-white/80 font-medium">{{ metric.title }}</span>
@@ -148,7 +147,7 @@ const recentTransactions = [
             <p class="text-xs text-gray-500 dark:text-gray-400">{{ card.title }}</p>
           </div>
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 text-primary dark:bg-primary/20">
-            <FeatherIcon :name="card.icon" size="18" />
+            <CommonFeatherIcon :name="card.icon" size="18" />
           </div>
         </div>
         <div class="mt-2.5 flex items-center justify-between text-xs">
@@ -230,7 +229,7 @@ const recentTransactions = [
             <div
               class="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-primary dark:bg-primary/20"
             >
-              <FeatherIcon name="users" size="14" />
+              <CommonFeatherIcon name="users" size="14" />
             </div>
             <span class="text-[11px] text-gray-400">Suppliers</span>
             <p class="text-sm font-bold text-gray-800 dark:text-white">6.987</p>
@@ -239,7 +238,7 @@ const recentTransactions = [
             <div
               class="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950"
             >
-              <FeatherIcon name="user" size="14" />
+              <CommonFeatherIcon name="user" size="14" />
             </div>
             <span class="text-[11px] text-gray-400">Customers</span>
             <p class="text-sm font-bold text-gray-800 dark:text-white">4.896</p>
@@ -248,7 +247,7 @@ const recentTransactions = [
             <div
               class="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-success-soft text-success dark:bg-emerald-950"
             >
-              <FeatherIcon name="shopping-cart" size="14" />
+              <CommonFeatherIcon name="shopping-cart" size="14" />
             </div>
             <span class="text-[11px] text-gray-400">Orders</span>
             <p class="text-sm font-bold text-gray-800 dark:text-white">487</p>
@@ -322,14 +321,14 @@ const recentTransactions = [
               <td class="px-4 py-3 text-end">
                 <div class="flex items-center justify-end gap-2">
                   <NuxtLink :to="`/sales-note?id=${t.id}`" class="rounded p-1 text-gray-400 hover:text-primary" title="View Note">
-                    <FeatherIcon name="eye" size="14" />
+                    <CommonFeatherIcon name="eye" size="14" />
                   </NuxtLink>
                   <NuxtLink
                     :to="`/sales-receipt?id=${t.id}`"
                     class="rounded p-1 text-gray-400 hover:text-primary"
                     title="Print Receipt"
                   >
-                    <FeatherIcon name="printer" size="14" />
+                    <CommonFeatherIcon name="printer" size="14" />
                   </NuxtLink>
                 </div>
               </td>

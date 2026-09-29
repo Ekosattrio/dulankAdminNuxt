@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
-import ConfirmModal from "~/components/modal/ConfirmModal.vue";
 
 useHead({
   title: "Subscriptions - Kacetak System",
@@ -304,7 +301,7 @@ const handleConfirmDelete = () => {
             title="Print"
             @click="printTable"
           >
-            <FeatherIcon name="printer" size="16" />
+            <CommonFeatherIcon name="printer" size="16" />
           </button>
         </li>
         <li>
@@ -314,7 +311,7 @@ const handleConfirmDelete = () => {
             title="Refresh"
             @click="refreshData"
           >
-            <FeatherIcon name="rotate-ccw" size="16" />
+            <CommonFeatherIcon name="rotate-ccw" size="16" />
           </button>
         </li>
         <li>
@@ -324,7 +321,7 @@ const handleConfirmDelete = () => {
             title="Collapse"
             @click="toggleHeaderCollapse"
           >
-            <FeatherIcon name="chevron-up" size="16" />
+            <CommonFeatherIcon name="chevron-up" size="16" />
           </button>
         </li>
       </ul>
@@ -409,7 +406,7 @@ const handleConfirmDelete = () => {
                 class="w-full rounded-lg border border-gray-200 bg-white py-2 ps-10 pe-4 text-xs sm:text-sm text-gray-800 transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
               />
               <span class="absolute inset-y-0 start-0 flex items-center ps-3 text-gray-400">
-                <FeatherIcon name="search" size="16" />
+                <CommonFeatherIcon name="search" size="16" />
               </span>
             </div>
 
@@ -468,7 +465,7 @@ const handleConfirmDelete = () => {
               class="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-100 dark:border-rose-800/40 dark:bg-rose-950/20 dark:text-rose-400"
               @click="refreshData"
             >
-              <FeatherIcon name="x" size="14" />
+              <CommonFeatherIcon name="x" size="14" />
               <span>Reset</span>
             </button>
           </div>
@@ -484,7 +481,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('subscriber')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Subscriber</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'subscriber'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -494,7 +491,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('plan')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Plan</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'plan'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -507,7 +504,7 @@ const handleConfirmDelete = () => {
                 >
                   <div class="inline-flex items-center gap-1.5">
                     <span>Billing Cycle</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'billingCycle'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -517,7 +514,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('method')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Payment Method</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'method'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -527,7 +524,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-end cursor-pointer select-none hover:text-primary" @click="handleSort('amount')">
                   <div class="inline-flex items-center justify-end gap-1.5 w-full">
                     <span>Amount</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'amount'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -537,7 +534,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('createdDate')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Created Date</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'createdDate'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -547,7 +544,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('expiringOn')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Expiring On</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'expiringOn'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -557,7 +554,7 @@ const handleConfirmDelete = () => {
                 <th class="py-3 px-4 text-start cursor-pointer select-none hover:text-primary" @click="handleSort('status')">
                   <div class="inline-flex items-center gap-1.5">
                     <span>Status</span>
-                    <FeatherIcon
+                    <CommonFeatherIcon
                       v-if="sortField === 'status'"
                       :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                       size="14"
@@ -637,7 +634,7 @@ const handleConfirmDelete = () => {
                       title="View Details"
                       @click="openViewModal(item)"
                     >
-                      <FeatherIcon name="eye" size="15" />
+                      <CommonFeatherIcon name="eye" size="15" />
                     </button>
                     <button
                       type="button"
@@ -645,7 +642,7 @@ const handleConfirmDelete = () => {
                       title="Edit Subscription"
                       @click="openEditModal(item)"
                     >
-                      <FeatherIcon name="edit" size="15" />
+                      <CommonFeatherIcon name="edit" size="15" />
                     </button>
                     <button
                       type="button"
@@ -653,7 +650,7 @@ const handleConfirmDelete = () => {
                       title="Delete"
                       @click="openDeleteModal(item)"
                     >
-                      <FeatherIcon name="trash-2" size="15" />
+                      <CommonFeatherIcon name="trash-2" size="15" />
                     </button>
                   </div>
                 </td>
@@ -663,7 +660,7 @@ const handleConfirmDelete = () => {
               <tr v-if="filteredSubs.length === 0">
                 <td colspan="9" class="py-8 text-center text-gray-400 dark:text-gray-500">
                   <div class="flex flex-col items-center justify-center gap-2">
-                    <FeatherIcon name="inbox" size="32" class="text-gray-300 dark:text-gray-600" />
+                    <CommonFeatherIcon name="inbox" size="32" class="text-gray-300 dark:text-gray-600" />
                     <p class="text-sm">No subscriptions found matching your filters.</p>
                   </div>
                 </td>
@@ -752,7 +749,7 @@ const handleConfirmDelete = () => {
     </div>
 
     <!-- 1. STANDARDIZED VIEW DETAILS MODAL -->
-    <BaseModal v-model="showViewModal" max-width="md" :title="selectedItem?.subscriber">
+    <CommonBaseModal v-model="showViewModal" max-width="md" :title="selectedItem?.subscriber">
       <div v-if="selectedItem" class="space-y-3 py-1">
         <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
           <span class="text-xs text-gray-500 dark:text-gray-400">Plan</span>
@@ -802,10 +799,10 @@ const handleConfirmDelete = () => {
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- 2. STANDARDIZED EDIT SUBSCRIPTION MODAL -->
-    <BaseModal v-model="showEditModal" max-width="lg" title="Edit Subscription">
+    <CommonBaseModal v-model="showEditModal" max-width="lg" title="Edit Subscription">
       <form class="space-y-4 py-2" @submit.prevent="handleSaveEdit">
         <div>
           <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1"> Subscriber Name </label>
@@ -910,10 +907,10 @@ const handleConfirmDelete = () => {
           Save Changes
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- 3. STANDARDIZED DELETE CONFIRMATION MODAL -->
-    <ConfirmModal
+    <CommonConfirmModal
       v-model="showDeleteModal"
       title="Delete Subscription?"
       :message="`Are you sure you want to delete the subscription for '${selectedItem?.subscriber}'? This action cannot be undone.`"

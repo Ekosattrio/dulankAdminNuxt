@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Customer } from '~/components/forms/CustomerLiveSearch.vue'
-import type { ProductItem } from '~/components/forms/ProductLiveSearch.vue'
 
 const router = useRouter()
 const { formatRupiah } = useFormatters()
@@ -152,17 +150,17 @@ const handleSubmit = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Add Quotation" subtitle="Create and submit new quotation">
+    <CommonPageHeader title="Add Quotation" subtitle="Create and submit new quotation">
       <template #actions>
         <NuxtLink
           to="/quotation"
           class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >
-          <FeatherIcon name="arrow-left" size="14" />
+          <CommonFeatherIcon name="arrow-left" size="14" />
           <span>Back to Quotation List</span>
         </NuxtLink>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <form @submit.prevent="handleSubmit">
       <div class="mx-auto max-w-5xl rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
@@ -241,11 +239,11 @@ const handleSubmit = () => {
                 class="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
                 @click="addCustomerModalOpen = true"
               >
-                <FeatherIcon name="plus-circle" size="13" />
+                <CommonFeatherIcon name="plus-circle" size="13" />
                 <span>Add New</span>
               </button>
             </div>
-            <CustomerLiveSearch @select="handleCustomerSelect" />
+            <FormsCustomerLiveSearch @select="handleCustomerSelect" />
 
             <div v-if="selectedCustomer" class="mt-3 rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800">
               <p class="font-bold text-gray-900 dark:text-white">{{ selectedCustomer.name }}</p>
@@ -325,12 +323,12 @@ const handleSubmit = () => {
               class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
               @click="addNewItem"
             >
-              <FeatherIcon name="plus-circle" size="13" />
+              <CommonFeatherIcon name="plus-circle" size="13" />
               <span>Add Custom Item</span>
             </button>
           </div>
           <div class="max-w-md">
-            <ProductLiveSearch @select="handleProductSelect" />
+            <FormsProductLiveSearch @select="handleProductSelect" />
           </div>
         </div>
 
@@ -406,7 +404,7 @@ const handleSubmit = () => {
                     title="Remove Item"
                     @click="removeItem(idx)"
                   >
-                    <FeatherIcon name="trash-2" size="14" />
+                    <CommonFeatherIcon name="trash-2" size="14" />
                   </button>
                 </td>
               </tr>
@@ -489,7 +487,7 @@ const handleSubmit = () => {
             :disabled="isSubmitting"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
           >
-            <FeatherIcon v-if="!isSubmitting" name="check" size="14" />
+            <CommonFeatherIcon v-if="!isSubmitting" name="check" size="14" />
             <span>{{ isSubmitting ? 'Saving...' : 'Save & Submit Quotation' }}</span>
           </button>
         </div>
@@ -497,7 +495,7 @@ const handleSubmit = () => {
     </form>
 
     <!-- Add Customer Modal with Address Cascader -->
-    <BaseModal
+    <CommonBaseModal
       v-model="addCustomerModalOpen"
       title="Add New Customer"
       size="md"
@@ -531,7 +529,7 @@ const handleSubmit = () => {
         </div>
         <div>
           <label class="font-semibold text-gray-700 dark:text-gray-300">Regional Address</label>
-          <AddressCascader class="mt-1" />
+          <FormsAddressCascader class="mt-1" />
         </div>
         <div>
           <label class="font-semibold text-gray-700 dark:text-gray-300">Street / Full Address</label>
@@ -557,10 +555,10 @@ const handleSubmit = () => {
           </button>
         </div>
       </form>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Change Address Modal -->
-    <BaseModal
+    <CommonBaseModal
       v-model="addressModalOpen"
       title="Select / Update Address"
       size="md"
@@ -584,7 +582,7 @@ const handleSubmit = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useThemeStore } from "~/stores/theme";
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
 
 const themeStore = useThemeStore();
 const isSearchOpen = ref(false);
@@ -87,7 +86,7 @@ const closeAllDropdowns = () => {
           @focus="isSearchOpen = true"
         />
         <span class="absolute inset-y-0 start-0 flex items-center ps-3 text-gray-400">
-          <FeatherIcon name="search" size="16" />
+          <CommonFeatherIcon name="search" size="16" />
         </span>
       </div>
 
@@ -99,7 +98,7 @@ const closeAllDropdowns = () => {
         <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-700">
           <span class="text-xs font-semibold uppercase text-gray-400">Recent Searches</span>
           <button type="button" class="text-xs text-gray-400 hover:text-gray-600" @click="isSearchOpen = false">
-            <FeatherIcon name="x" size="14" />
+            <CommonFeatherIcon name="x" size="14" />
           </button>
         </div>
         <div class="mt-2 flex flex-wrap gap-1.5">
@@ -133,7 +132,7 @@ const closeAllDropdowns = () => {
         >
           <img src="/assets/img/store/store-01.png" alt="Store" class="h-4 w-4 rounded-full" />
           <span>Select Store</span>
-          <FeatherIcon name="chevron-down" size="14" />
+          <CommonFeatherIcon name="chevron-down" size="14" />
         </button>
         <div
           v-if="isStoreDropdownOpen"
@@ -185,7 +184,7 @@ const closeAllDropdowns = () => {
         title="Toggle Fullscreen"
         @click="toggleFullscreen"
       >
-        <FeatherIcon :name="isFullscreen ? 'minimize' : 'maximize'" size="18" />
+        <CommonFeatherIcon :name="isFullscreen ? 'minimize' : 'maximize'" size="18" />
       </button>
 
       <!-- Notifications -->
@@ -196,7 +195,7 @@ const closeAllDropdowns = () => {
           title="Notifications"
           @click="isNotificationsOpen = !isNotificationsOpen"
         >
-          <FeatherIcon name="bell" size="18" />
+          <CommonFeatherIcon name="bell" size="18" />
           <span class="absolute right-1.5 top-1.5 flex h-2 w-2">
             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
@@ -212,14 +211,14 @@ const closeAllDropdowns = () => {
           </div>
           <div class="mt-2 space-y-2">
             <div class="flex gap-2.5 text-xs">
-              <div class="mt-0.5 text-primary"><FeatherIcon name="check-circle" size="14" /></div>
+              <div class="mt-0.5 text-primary"><CommonFeatherIcon name="check-circle" size="14" /></div>
               <div>
                 <p class="font-medium text-gray-800 dark:text-gray-200">Job Order #25250025452 approved</p>
                 <span class="text-[10px] text-gray-400">4 mins ago</span>
               </div>
             </div>
             <div class="flex gap-2.5 text-xs">
-              <div class="mt-0.5 text-primary"><FeatherIcon name="shopping-bag" size="14" /></div>
+              <div class="mt-0.5 text-primary"><CommonFeatherIcon name="shopping-bag" size="14" /></div>
               <div>
                 <p class="font-medium text-gray-800 dark:text-gray-200">New Sales Order PT002 received</p>
                 <span class="text-[10px] text-gray-400">12 mins ago</span>
@@ -241,7 +240,7 @@ const closeAllDropdowns = () => {
             <p class="text-xs font-bold leading-tight text-gray-800 dark:text-white">John Smilga</p>
             <span class="text-[11px] leading-tight text-gray-400">Super Admin</span>
           </div>
-          <FeatherIcon name="chevron-down" size="14" class="hidden text-gray-400 lg:block" />
+          <CommonFeatherIcon name="chevron-down" size="14" class="hidden text-gray-400 lg:block" />
         </button>
 
         <div
@@ -252,14 +251,14 @@ const closeAllDropdowns = () => {
             to="/profile"
             class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
           >
-            <FeatherIcon name="user" size="14" />
+            <CommonFeatherIcon name="user" size="14" />
             <span>My Profile</span>
           </NuxtLink>
           <NuxtLink
             to="/company-setting"
             class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
           >
-            <FeatherIcon name="settings" size="14" />
+            <CommonFeatherIcon name="settings" size="14" />
             <span>Settings</span>
           </NuxtLink>
           <hr class="my-1 border-gray-100 dark:border-gray-700" />
@@ -267,7 +266,7 @@ const closeAllDropdowns = () => {
             to="/signin"
             class="flex items-center gap-2 px-4 py-2 text-xs text-danger hover:bg-danger-50 dark:hover:bg-gray-700"
           >
-            <FeatherIcon name="log-out" size="14" />
+            <CommonFeatherIcon name="log-out" size="14" />
             <span>Logout</span>
           </NuxtLink>
         </div>

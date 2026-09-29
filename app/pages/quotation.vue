@@ -120,7 +120,7 @@ const handleDelete = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Quotation List" subtitle="Manage Your Quotation">
+    <CommonPageHeader title="Quotation List" subtitle="Manage Your Quotation">
       <template #actions>
         <div class="flex items-center gap-2">
           <button
@@ -136,18 +136,18 @@ const handleDelete = () => {
             title="Print"
             @click="() => window.print()"
           >
-            <FeatherIcon name="printer" size="16" />
+            <CommonFeatherIcon name="printer" size="16" />
           </button>
           <NuxtLink
             to="/add-quotation"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-primary/90"
           >
-            <FeatherIcon name="plus-circle" size="14" />
+            <CommonFeatherIcon name="plus-circle" size="14" />
             <span>Add New Quotation</span>
           </NuxtLink>
         </div>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <!-- Filter Bar -->
     <div
@@ -170,7 +170,7 @@ const handleDelete = () => {
     </div>
 
     <!-- Data Table -->
-    <DataTable
+    <TablesDataTable
       :columns="columns"
       :items="filteredQuotations"
       search-placeholder="Search quotation, customer, email..."
@@ -231,14 +231,14 @@ const handleDelete = () => {
             class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400"
             title="View Quotation"
           >
-            <FeatherIcon name="eye" size="13" />
+            <CommonFeatherIcon name="eye" size="13" />
           </NuxtLink>
           <NuxtLink
             :to="`/edit-quotation?no=${item.noQuotation}`"
             class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-warning hover:text-warning dark:border-gray-700 dark:text-gray-400"
             title="Edit Quotation"
           >
-            <FeatherIcon name="edit" size="13" />
+            <CommonFeatherIcon name="edit" size="13" />
           </NuxtLink>
           <button
             type="button"
@@ -246,19 +246,19 @@ const handleDelete = () => {
             title="Delete"
             @click="confirmDelete(item)"
           >
-            <FeatherIcon name="trash-2" size="13" />
+            <CommonFeatherIcon name="trash-2" size="13" />
           </button>
         </div>
       </template>
-    </DataTable>
+    </TablesDataTable>
 
     <!-- Delete Confirmation Modal -->
-    <BaseModal v-model="deleteModalOpen" title="Delete Quotation" size="sm">
+    <CommonBaseModal v-model="deleteModalOpen" title="Delete Quotation" size="sm">
       <div class="p-4 text-center">
         <div
           class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/50"
         >
-          <FeatherIcon name="alert-triangle" size="24" />
+          <CommonFeatherIcon name="alert-triangle" size="24" />
         </div>
         <h5 class="text-base font-semibold text-gray-900 dark:text-white">Are you sure?</h5>
         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -283,6 +283,6 @@ const handleDelete = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

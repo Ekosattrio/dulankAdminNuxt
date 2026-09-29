@@ -59,17 +59,17 @@ const handleSubmit = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader :title="`Edit Request For Quotation #${rfqNo}`" subtitle="Update RFQ details and supplier items">
+    <CommonPageHeader :title="`Edit Request For Quotation #${rfqNo}`" subtitle="Update RFQ details and supplier items">
       <template #actions>
         <NuxtLink
           to="/request-quotation"
           class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >
-          <FeatherIcon name="arrow-left" size="14" />
+          <CommonFeatherIcon name="arrow-left" size="14" />
           <span>Back to RFQ List</span>
         </NuxtLink>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <form @submit.prevent="handleSubmit">
       <div
@@ -206,7 +206,7 @@ const handleSubmit = () => {
                 </td>
                 <td class="p-2 text-center">
                   <button type="button" class="text-gray-400 hover:text-danger" title="Remove item" @click="removeItem(idx)">
-                    <FeatherIcon name="trash-2" size="14" />
+                    <CommonFeatherIcon name="trash-2" size="14" />
                   </button>
                 </td>
               </tr>
@@ -218,7 +218,7 @@ const handleSubmit = () => {
             class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
             @click="addItem"
           >
-            <FeatherIcon name="plus-circle" size="13" />
+            <CommonFeatherIcon name="plus-circle" size="13" />
             <span>Add Item Row</span>
           </button>
         </div>
@@ -256,7 +256,7 @@ const handleSubmit = () => {
             :disabled="isSubmitting"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
           >
-            <FeatherIcon v-if="!isSubmitting" name="check" size="14" />
+            <CommonFeatherIcon v-if="!isSubmitting" name="check" size="14" />
             <span>{{ isSubmitting ? "Updating..." : "Update RFQ" }}</span>
           </button>
         </div>

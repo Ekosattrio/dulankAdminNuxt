@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
-import ConfirmModal from "~/components/modal/ConfirmModal.vue";
 
 definePageMeta({
   layout: "default",
@@ -289,7 +286,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
           v-if="toastMessage"
           class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-[#092C4C] px-4 py-3 text-xs font-semibold text-white shadow-lg"
         >
-          <FeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
+          <CommonFeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
           <span>{{ toastMessage }}</span>
         </div>
       </Transition>
@@ -320,7 +317,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
               title="Print"
               @click="printPage"
             >
-              <FeatherIcon name="printer" size="16" />
+              <CommonFeatherIcon name="printer" size="16" />
             </button>
           </li>
           <li>
@@ -330,7 +327,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
               title="Refresh"
               @click="refreshAllData"
             >
-              <FeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
+              <CommonFeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
             </button>
           </li>
           <li>
@@ -340,7 +337,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
               title="Collapse"
               @click="isHeaderCollapsed = !isHeaderCollapsed"
             >
-              <FeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
+              <CommonFeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
             </button>
           </li>
         </ul>
@@ -436,7 +433,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                 placeholder="Search..."
               />
               <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-400">
-                <FeatherIcon name="search" size="14" />
+                <CommonFeatherIcon name="search" size="14" />
               </span>
             </div>
           </div>
@@ -450,7 +447,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                 class="flex items-center gap-1.5 rounded-lg border border-primary bg-white px-3 py-2 text-xs font-semibold text-primary transition hover:bg-primary hover:text-white dark:bg-gray-800"
                 @click="showFilterPanel = !showFilterPanel"
               >
-                <FeatherIcon name="filter" size="14" />
+                <CommonFeatherIcon name="filter" size="14" />
                 <span>Filter</span>
               </button>
             </div>
@@ -533,7 +530,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                 class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white transition hover:bg-primary-hover shadow-sm"
                 @click="showToast('Filters applied.')"
               >
-                <FeatherIcon name="search" size="14" />
+                <CommonFeatherIcon name="search" size="14" />
                 Search
               </button>
             </div>
@@ -598,7 +595,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                       title="View Details"
                       @click="openViewModal(item)"
                     >
-                      <FeatherIcon name="eye" size="14" />
+                      <CommonFeatherIcon name="eye" size="14" />
                     </button>
                     <!-- Edit Button -->
                     <button
@@ -607,7 +604,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                       title="Edit"
                       @click="openEditModal(item)"
                     >
-                      <FeatherIcon name="edit" size="14" />
+                      <CommonFeatherIcon name="edit" size="14" />
                     </button>
                     <!-- Delete Button -->
                     <button
@@ -616,7 +613,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
                       title="Delete"
                       @click="openDeleteModal(item)"
                     >
-                      <FeatherIcon name="trash-2" size="14" />
+                      <CommonFeatherIcon name="trash-2" size="14" />
                     </button>
                   </div>
                 </td>
@@ -674,7 +671,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
     </div>
 
     <!-- Modal: View Calculator Details -->
-    <BaseModal v-model="isViewModalOpen" title="User Calculation Metrics" max-width="md">
+    <CommonBaseModal v-model="isViewModalOpen" title="User Calculation Metrics" max-width="md">
       <div v-if="viewingUser" class="space-y-4 text-xs sm:text-sm">
         <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
           <div>
@@ -726,10 +723,10 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Modal: Edit Calculator Record -->
-    <BaseModal v-model="isEditModalOpen" title="Edit Calculator Record" max-width="md">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Calculator Record" max-width="md">
       <div v-if="editingUser" class="space-y-3.5 text-xs">
         <div>
           <label class="mb-1 block font-semibold text-gray-700 dark:text-gray-300">User Name</label>
@@ -798,10 +795,10 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
           </button>
         </div>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Modal: Delete Confirmation -->
-    <ConfirmModal
+    <CommonConfirmModal
       v-model="isDeleteModalOpen"
       title="Delete Calculator Record"
       :message="`Are you sure you want to delete the calculator metrics record for '${deletingUser?.user}'? This action cannot be undone.`"

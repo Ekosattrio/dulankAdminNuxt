@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -38,7 +36,7 @@ const handleConfirm = () => {
 </script>
 
 <template>
-  <BaseModal :model-value="modelValue" max-width="sm" @update:model-value="emit('update:modelValue', $event)">
+  <CommonBaseModal :model-value="modelValue" max-width="sm" @update:model-value="emit('update:modelValue', $event)">
     <div class="text-center py-2">
       <!-- Icon badge -->
       <div
@@ -49,7 +47,7 @@ const handleConfirm = () => {
             : 'bg-amber-100 text-amber-600 dark:bg-amber-900/30',
         ]"
       >
-        <FeatherIcon :name="variant === 'danger' ? 'trash-2' : 'alert-circle'" size="28" />
+        <CommonFeatherIcon :name="variant === 'danger' ? 'trash-2' : 'alert-circle'" size="28" />
       </div>
 
       <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">{{ title }}</h4>
@@ -75,5 +73,5 @@ const handleConfirm = () => {
         </button>
       </div>
     </div>
-  </BaseModal>
+  </CommonBaseModal>
 </template>

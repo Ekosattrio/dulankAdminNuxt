@@ -115,7 +115,7 @@ const deletePayslip = (slipNo: string) => {
           to="/add-payroll"
           class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
         >
-          <FeatherIcon name="plus-circle" size="18" />
+          <CommonFeatherIcon name="plus-circle" size="18" />
           <span>Add New Payroll</span>
         </NuxtLink>
       </template>
@@ -133,7 +133,7 @@ const deletePayslip = (slipNo: string) => {
             class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           />
           <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <FeatherIcon name="search" size="16" />
+            <CommonFeatherIcon name="search" size="16" />
           </span>
         </div>
 
@@ -213,14 +213,14 @@ const deletePayslip = (slipNo: string) => {
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
               title="View Payslip"
             >
-              <FeatherIcon name="eye" size="16" />
+              <CommonFeatherIcon name="eye" size="16" />
             </NuxtLink>
             <NuxtLink
               to="/edit-payroll"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
               title="Edit"
             >
-              <FeatherIcon name="edit" size="16" />
+              <CommonFeatherIcon name="edit" size="16" />
             </NuxtLink>
             <button
               type="button"
@@ -228,7 +228,7 @@ const deletePayslip = (slipNo: string) => {
               title="Delete"
               @click="deletePayslip(row.slipNo)"
             >
-              <FeatherIcon name="trash-2" size="16" />
+              <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Customer } from "~/components/forms/CustomerLiveSearch.vue";
 
 definePageMeta({
   layout: "pos",
@@ -352,7 +351,7 @@ const resetAll = () => {
           to="/"
           class="flex items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-secondary/90"
         >
-          <FeatherIcon name="home" size="14" />
+          <CommonFeatherIcon name="home" size="14" />
           <span>Dashboard Admin</span>
         </NuxtLink>
 
@@ -361,7 +360,7 @@ const resetAll = () => {
           class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
           @click="ordersModalOpen = true"
         >
-          <FeatherIcon name="shopping-cart" size="14" />
+          <CommonFeatherIcon name="shopping-cart" size="14" />
           <span>View Orders</span>
           <span v-if="holdOrders.length > 0" class="rounded-full bg-amber-500 px-1.5 py-0.2 text-[10px] text-white">
             {{ holdOrders.length }}
@@ -373,7 +372,7 @@ const resetAll = () => {
           class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
           @click="clearCart"
         >
-          <FeatherIcon name="rotate-cw" size="14" />
+          <CommonFeatherIcon name="rotate-cw" size="14" />
           <span>Reset</span>
         </button>
 
@@ -382,7 +381,7 @@ const resetAll = () => {
           class="flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
           @click="transactionsModalOpen = true"
         >
-          <FeatherIcon name="refresh-ccw" size="14" />
+          <CommonFeatherIcon name="refresh-ccw" size="14" />
           <span>Transaction</span>
         </button>
       </div>
@@ -409,7 +408,7 @@ const resetAll = () => {
                 class="w-full rounded-lg border border-gray-200 bg-white py-1.5 ps-8 pe-3 text-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
               />
               <span class="absolute inset-y-0 start-0 flex items-center ps-2.5 text-gray-400">
-                <FeatherIcon name="search" size="13" />
+                <CommonFeatherIcon name="search" size="13" />
               </span>
             </div>
           </div>
@@ -457,7 +456,7 @@ const resetAll = () => {
                 <span
                   class="absolute end-1.5 top-1.5 rounded-full bg-primary/10 p-1 text-primary opacity-0 transition group-hover:opacity-100"
                 >
-                  <FeatherIcon name="plus" size="12" />
+                  <CommonFeatherIcon name="plus" size="12" />
                 </span>
               </div>
 
@@ -506,7 +505,7 @@ const resetAll = () => {
         <!-- Scrollable Cart Items -->
         <div class="flex-1 overflow-y-auto p-3 space-y-2.5">
           <div v-if="cart.length === 0" class="flex h-48 flex-col items-center justify-center text-center text-gray-400">
-            <FeatherIcon name="shopping-cart" size="32" class="opacity-30" />
+            <CommonFeatherIcon name="shopping-cart" size="32" class="opacity-30" />
             <p class="mt-2 text-xs">Your cart is empty</p>
             <p class="text-[11px] text-gray-400">Select items from the catalog</p>
           </div>
@@ -538,7 +537,7 @@ const resetAll = () => {
                   class="flex h-6 w-6 items-center justify-center text-gray-500 hover:text-danger"
                   @click="updateQty(item, -1)"
                 >
-                  <FeatherIcon name="minus" size="11" />
+                  <CommonFeatherIcon name="minus" size="11" />
                 </button>
                 <input
                   v-model.number="item.qty"
@@ -550,16 +549,16 @@ const resetAll = () => {
                   class="flex h-6 w-6 items-center justify-center text-gray-500 hover:text-primary"
                   @click="updateQty(item, 1)"
                 >
-                  <FeatherIcon name="plus" size="11" />
+                  <CommonFeatherIcon name="plus" size="11" />
                 </button>
               </div>
 
               <!-- Item Actions -->
               <button type="button" class="text-gray-400 hover:text-primary" title="Edit item specs" @click="openEditItem(item)">
-                <FeatherIcon name="edit" size="13" />
+                <CommonFeatherIcon name="edit" size="13" />
               </button>
               <button type="button" class="text-gray-400 hover:text-danger" title="Delete item" @click="removeCartItem(item.id)">
-                <FeatherIcon name="trash-2" size="13" />
+                <CommonFeatherIcon name="trash-2" size="13" />
               </button>
             </div>
           </div>
@@ -573,7 +572,7 @@ const resetAll = () => {
               class="flex items-center justify-center gap-1 rounded-lg bg-blue-50 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-300"
               @click="holdModalOpen = true"
             >
-              <FeatherIcon name="pause" size="13" />
+              <CommonFeatherIcon name="pause" size="13" />
               <span>Hold Order</span>
             </button>
             <button
@@ -581,7 +580,7 @@ const resetAll = () => {
               class="flex items-center justify-center gap-1 rounded-lg bg-rose-50 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-300"
               @click="clearCart"
             >
-              <FeatherIcon name="trash-2" size="13" />
+              <CommonFeatherIcon name="trash-2" size="13" />
               <span>Void</span>
             </button>
           </div>
@@ -592,7 +591,7 @@ const resetAll = () => {
               class="flex items-center justify-center gap-1 rounded-lg border border-gray-200 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
               @click="taxModalOpen = true"
             >
-              <FeatherIcon name="percent" size="12" />
+              <CommonFeatherIcon name="percent" size="12" />
               <span>Tax ({{ taxRate }}%)</span>
             </button>
             <button
@@ -600,7 +599,7 @@ const resetAll = () => {
               class="flex items-center justify-center gap-1 rounded-lg border border-gray-200 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
               @click="shippingModalOpen = true"
             >
-              <FeatherIcon name="truck" size="12" />
+              <CommonFeatherIcon name="truck" size="12" />
               <span>Shipping</span>
             </button>
             <button
@@ -608,7 +607,7 @@ const resetAll = () => {
               class="flex items-center justify-center gap-1 rounded-lg border border-gray-200 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
               @click="discountModalOpen = true"
             >
-              <FeatherIcon name="tag" size="12" />
+              <CommonFeatherIcon name="tag" size="12" />
               <span>Discount</span>
             </button>
           </div>
@@ -645,7 +644,7 @@ const resetAll = () => {
             class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white shadow-md transition hover:bg-primary/90 disabled:opacity-50"
             @click="openPaymentModal"
           >
-            <FeatherIcon name="credit-card" size="16" />
+            <CommonFeatherIcon name="credit-card" size="16" />
             <span>Payment Total {{ formatRupiah(totalPayable) }}</span>
           </button>
         </div>
@@ -655,7 +654,7 @@ const resetAll = () => {
     <!-- Modals -->
 
     <!-- Tax Modal -->
-    <BaseModal v-model="taxModalOpen" title="Order Tax" size="sm">
+    <CommonBaseModal v-model="taxModalOpen" title="Order Tax" size="sm">
       <div class="p-5 text-xs space-y-3">
         <label class="font-semibold text-gray-700 dark:text-gray-300">Select Tax Rate</label>
         <select
@@ -673,10 +672,10 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Shipping Modal -->
-    <BaseModal v-model="shippingModalOpen" title="Shipping Cost" size="sm">
+    <CommonBaseModal v-model="shippingModalOpen" title="Shipping Cost" size="sm">
       <div class="p-5 text-xs space-y-3">
         <label class="font-semibold text-gray-700 dark:text-gray-300">Enter Shipping Fee</label>
         <input
@@ -695,10 +694,10 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Discount Modal -->
-    <BaseModal v-model="discountModalOpen" title="Order Discount" size="sm">
+    <CommonBaseModal v-model="discountModalOpen" title="Order Discount" size="sm">
       <div class="p-5 text-xs space-y-3">
         <label class="font-semibold text-gray-700 dark:text-gray-300">Discount Amount</label>
         <input
@@ -717,10 +716,10 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Hold Order Modal -->
-    <BaseModal v-model="holdModalOpen" title="Hold Order" size="sm">
+    <CommonBaseModal v-model="holdModalOpen" title="Hold Order" size="sm">
       <div class="p-5 text-xs space-y-3">
         <h3 class="text-center text-lg font-bold text-gray-900 dark:text-white">{{ formatRupiah(totalPayable) }}</h3>
         <label class="font-semibold text-gray-700 dark:text-gray-300">Order Reference / Note</label>
@@ -738,10 +737,10 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- View Orders (Held) Modal -->
-    <BaseModal v-model="ordersModalOpen" title="Held Orders" size="md">
+    <CommonBaseModal v-model="ordersModalOpen" title="Held Orders" size="md">
       <div class="p-5 text-xs space-y-3">
         <div v-if="holdOrders.length === 0" class="py-6 text-center text-gray-400">No held orders found</div>
         <div
@@ -759,10 +758,10 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Payment Modal -->
-    <BaseModal v-model="paymentModalOpen" title="Payment Checkout" size="md">
+    <CommonBaseModal v-model="paymentModalOpen" title="Payment Checkout" size="md">
       <div class="p-5 text-xs space-y-4">
         <!-- Method Selector -->
         <div class="grid grid-cols-4 gap-2">
@@ -830,15 +829,15 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Receipt Print Modal (80mm Thermal Receipt Preview) -->
-    <BaseModal v-model="receiptModalOpen" title="Order Completed" size="sm">
+    <CommonBaseModal v-model="receiptModalOpen" title="Order Completed" size="sm">
       <div class="p-5 text-center text-xs space-y-4">
         <div
           class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50"
         >
-          <FeatherIcon name="check" size="24" />
+          <CommonFeatherIcon name="check" size="24" />
         </div>
         <h4 class="text-base font-bold text-gray-900 dark:text-white">Transaction Successful!</h4>
 
@@ -889,6 +888,6 @@ const resetAll = () => {
           </button>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

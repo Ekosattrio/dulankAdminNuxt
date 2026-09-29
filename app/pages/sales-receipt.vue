@@ -16,7 +16,7 @@ const printReceipt = () => {
     >
       <div class="flex items-center gap-2">
         <NuxtLink to="/sales" class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white">
-          <FeatherIcon name="arrow-left" size="14" />
+          <CommonFeatherIcon name="arrow-left" size="14" />
           <span>Back to Sales</span>
         </NuxtLink>
         <span class="text-gray-300">/</span>
@@ -28,7 +28,7 @@ const printReceipt = () => {
         class="allow-print flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary-hover transition-colors"
         @click="printReceipt"
       >
-        <FeatherIcon name="printer" size="14" />
+        <CommonFeatherIcon name="printer" size="14" />
         <span>Print Struk</span>
       </button>
     </div>

@@ -208,7 +208,7 @@ onMounted(() => {
         @focus="isOpen = true"
       />
       <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-        <FeatherIcon name="search" size="16" />
+        <CommonFeatherIcon name="search" size="16" />
       </span>
     </div>
 

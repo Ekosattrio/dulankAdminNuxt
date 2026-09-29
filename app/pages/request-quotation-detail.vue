@@ -50,7 +50,7 @@ const handlePrint = () => {
             to="/request-quotation"
             class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
           >
-            <FeatherIcon name="arrow-left" size="14" />
+            <CommonFeatherIcon name="arrow-left" size="14" />
             <span>Back to RFQ List</span>
           </NuxtLink>
 
@@ -68,7 +68,7 @@ const handlePrint = () => {
             title="Print RFQ"
             @click="handlePrint"
           >
-            <FeatherIcon name="printer" size="14" />
+            <CommonFeatherIcon name="printer" size="14" />
             <span>Print</span>
           </button>
         </div>
@@ -217,7 +217,7 @@ const handlePrint = () => {
         class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700"
         @click="handleOrder"
       >
-        <FeatherIcon name="shopping-cart" size="14" />
+        <CommonFeatherIcon name="shopping-cart" size="14" />
         <span>Order (Add to purchase)</span>
       </button>
       <button
@@ -225,7 +225,7 @@ const handlePrint = () => {
         class="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700"
         @click="handleUnavailable"
       >
-        <FeatherIcon name="x-circle" size="14" />
+        <CommonFeatherIcon name="x-circle" size="14" />
         <span>Unavailable</span>
       </button>
     </div>

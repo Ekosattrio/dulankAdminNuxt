@@ -218,7 +218,7 @@ const deleteRecord = (id: string) => {
           class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
           @click="isAddModalOpen = true"
         >
-          <FeatherIcon name="plus-circle" size="18" />
+          <CommonFeatherIcon name="plus-circle" size="18" />
           <span>Add New Employee Salary</span>
         </button>
       </template>
@@ -236,7 +236,7 @@ const deleteRecord = (id: string) => {
             class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           />
           <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <FeatherIcon name="search" size="16" />
+            <CommonFeatherIcon name="search" size="16" />
           </span>
         </div>
 
@@ -307,7 +307,7 @@ const deleteRecord = (id: string) => {
               title="View"
               @click="openViewModal(row)"
             >
-              <FeatherIcon name="eye" size="16" />
+              <CommonFeatherIcon name="eye" size="16" />
             </button>
             <button
               type="button"
@@ -315,7 +315,7 @@ const deleteRecord = (id: string) => {
               title="Edit"
               @click="openEditModal(row)"
             >
-              <FeatherIcon name="edit" size="16" />
+              <CommonFeatherIcon name="edit" size="16" />
             </button>
             <button
               type="button"
@@ -323,7 +323,7 @@ const deleteRecord = (id: string) => {
               title="Delete"
               @click="deleteRecord(row.id)"
             >
-              <FeatherIcon name="trash-2" size="16" />
+              <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>
@@ -365,7 +365,7 @@ const deleteRecord = (id: string) => {
         <!-- Allowance section -->
         <div class="space-y-3 pt-2">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-2 dark:border-gray-800">
-            <FeatherIcon name="gift" size="16" class="text-primary" />
+            <CommonFeatherIcon name="gift" size="16" class="text-primary" />
             <h6 class="text-sm font-bold text-gray-900 dark:text-gray-100">Allowance</h6>
           </div>
 
@@ -471,7 +471,7 @@ const deleteRecord = (id: string) => {
         <!-- Allowance section -->
         <div class="space-y-3 pt-2">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-2 dark:border-gray-800">
-            <FeatherIcon name="gift" size="16" class="text-primary" />
+            <CommonFeatherIcon name="gift" size="16" class="text-primary" />
             <h6 class="text-sm font-bold text-gray-900 dark:text-gray-100">Allowance</h6>
           </div>
 

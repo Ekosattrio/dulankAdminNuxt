@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ProductItem } from '~/components/forms/ProductLiveSearch.vue'
 
 const router = useRouter()
 
@@ -62,17 +61,17 @@ const handleSave = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Add Work Flow" subtitle="Arrange and assign default workflow route to products">
+    <CommonPageHeader title="Add Work Flow" subtitle="Arrange and assign default workflow route to products">
       <template #actions>
         <NuxtLink
           to="/work-flow"
           class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >
-          <FeatherIcon name="arrow-left" size="14" />
+          <CommonFeatherIcon name="arrow-left" size="14" />
           <span>Back to Work Flow List</span>
         </NuxtLink>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <!-- Left 2 Cols: Step Selection -->
@@ -81,7 +80,7 @@ const handleSave = () => {
         <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 text-xs">
           <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-3">1. Select Target Product</h4>
           <div class="max-w-md">
-            <ProductLiveSearch @select="handleProductSelect" />
+            <FormsProductLiveSearch @select="handleProductSelect" />
           </div>
           <div class="mt-3 flex items-center gap-2 rounded-lg bg-gray-50 p-2.5 dark:bg-gray-800">
             <span class="font-semibold text-gray-700 dark:text-gray-300">Selected:</span>
@@ -158,7 +157,7 @@ const handleSave = () => {
                 title="Remove Step"
                 @click="removeSequenceItem(item)"
               >
-                <FeatherIcon name="x" size="13" />
+                <CommonFeatherIcon name="x" size="13" />
               </button>
             </div>
           </div>
@@ -170,7 +169,7 @@ const handleSave = () => {
               class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
               @click="handleSave"
             >
-              <FeatherIcon v-if="!isSaving" name="check" size="14" />
+              <CommonFeatherIcon v-if="!isSaving" name="check" size="14" />
               <span>{{ isSaving ? 'Saving Workflow...' : 'Save & Activate Work Flow' }}</span>
             </button>
           </div>

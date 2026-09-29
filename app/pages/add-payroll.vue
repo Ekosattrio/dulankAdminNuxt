@@ -153,7 +153,7 @@ const resetForm = () => {
           to="/payslip"
           class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
         >
-          <FeatherIcon name="arrow-left" size="18" />
+          <CommonFeatherIcon name="arrow-left" size="18" />
           <span>Back to Payslip List</span>
         </NuxtLink>
       </template>
@@ -164,7 +164,7 @@ const resetForm = () => {
         <!-- 1. Employee Information Section -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="user" size="18" class="text-primary" />
+            <CommonFeatherIcon name="user" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Employee Information</h6>
           </div>
 
@@ -221,7 +221,7 @@ const resetForm = () => {
         <!-- 2. Over Time Section -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="clock" size="18" class="text-primary" />
+            <CommonFeatherIcon name="clock" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Over Time</h6>
           </div>
 
@@ -273,7 +273,7 @@ const resetForm = () => {
         <!-- 3. Allowance Section -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="gift" size="18" class="text-primary" />
+            <CommonFeatherIcon name="gift" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Allowance</h6>
           </div>
 
@@ -334,7 +334,7 @@ const resetForm = () => {
         <!-- 4. Deduction Section -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="minus-circle" size="18" class="text-primary" />
+            <CommonFeatherIcon name="minus-circle" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Deduction</h6>
           </div>
 

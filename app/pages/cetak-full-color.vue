@@ -199,7 +199,7 @@ const handleCreateProduct = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Cetak Full Color" subtitle="Manage your printing workflow, pricing formulas, and product defaults" />
+    <CommonPageHeader title="Cetak Full Color" subtitle="Manage your printing workflow, pricing formulas, and product defaults" />
 
     <!-- 11-Tab Engine Shell -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
@@ -228,7 +228,7 @@ const handleCreateProduct = () => {
               ]"
               @click="activeTab = t.id"
             >
-              <FeatherIcon :name="t.icon" size="14" />
+              <CommonFeatherIcon :name="t.icon" size="14" />
               <span class="flex-1 truncate">{{ t.label }}</span>
             </button>
           </div>
@@ -250,7 +250,7 @@ const handleCreateProduct = () => {
                 class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-primary/90"
                 @click="addProductModal = true"
               >
-                <FeatherIcon name="plus" size="14" />
+                <CommonFeatherIcon name="plus" size="14" />
                 <span>Add Product</span>
               </button>
             </div>
@@ -463,7 +463,7 @@ const handleCreateProduct = () => {
                 class="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary/90"
                 @click="addProfitRange"
               >
-                <FeatherIcon name="plus" size="13" />
+                <CommonFeatherIcon name="plus" size="13" />
                 <span>Add Quantity Range</span>
               </button>
             </div>
@@ -524,7 +524,7 @@ const handleCreateProduct = () => {
                         title="Delete Range"
                         @click="deleteProfitRange(idx)"
                       >
-                        <FeatherIcon name="trash-2" size="14" />
+                        <CommonFeatherIcon name="trash-2" size="14" />
                       </button>
                     </td>
                   </tr>
@@ -570,7 +570,7 @@ const handleCreateProduct = () => {
     </div>
 
     <!-- Add Product Modal -->
-    <BaseModal v-model="addProductModal" title="Add Product Custom Default" size="md">
+    <CommonBaseModal v-model="addProductModal" title="Add Product Custom Default" size="md">
       <form class="p-5 text-xs space-y-4" @submit.prevent="handleCreateProduct">
         <div>
           <label class="font-semibold text-gray-700 dark:text-gray-300">Product Name</label>
@@ -593,7 +593,7 @@ const handleCreateProduct = () => {
           <button type="submit" class="rounded bg-primary px-4 py-1.5 font-semibold text-white">Save Product</button>
         </div>
       </form>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>
 

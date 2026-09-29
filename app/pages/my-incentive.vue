@@ -50,7 +50,7 @@ const columns = [
         class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
       >
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-primary dark:bg-orange-950/40">
-          <FeatherIcon name="award" size="24" />
+          <CommonFeatherIcon name="award" size="24" />
         </div>
         <div>
           <p class="text-xs font-medium text-gray-500">Total Count Incentive</p>
@@ -62,7 +62,7 @@ const columns = [
         class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
       >
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40">
-          <FeatherIcon name="dollar-sign" size="24" />
+          <CommonFeatherIcon name="dollar-sign" size="24" />
         </div>
         <div>
           <p class="text-xs font-medium text-gray-500">Amount Incentive</p>
@@ -82,7 +82,7 @@ const columns = [
             class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           />
           <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <FeatherIcon name="search" size="16" />
+            <CommonFeatherIcon name="search" size="16" />
           </span>
         </div>
 

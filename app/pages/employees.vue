@@ -225,7 +225,7 @@ const deleteEmployee = (id: string) => {
           to="/add-employee"
           class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-600 focus:outline-none"
         >
-          <FeatherIcon name="plus-circle" size="18" />
+          <CommonFeatherIcon name="plus-circle" size="18" />
           <span>Add New Employee</span>
         </NuxtLink>
       </template>
@@ -239,7 +239,7 @@ const deleteEmployee = (id: string) => {
           <h4 class="mt-1 text-2xl font-bold">1007</h4>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
-          <FeatherIcon name="users" size="24" />
+          <CommonFeatherIcon name="users" size="24" />
         </div>
       </div>
 
@@ -249,7 +249,7 @@ const deleteEmployee = (id: string) => {
           <h4 class="mt-1 text-2xl font-bold">1007</h4>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
-          <FeatherIcon name="user-check" size="24" />
+          <CommonFeatherIcon name="user-check" size="24" />
         </div>
       </div>
 
@@ -259,7 +259,7 @@ const deleteEmployee = (id: string) => {
           <h4 class="mt-1 text-2xl font-bold">1007</h4>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
-          <FeatherIcon name="user-x" size="24" />
+          <CommonFeatherIcon name="user-x" size="24" />
         </div>
       </div>
 
@@ -269,7 +269,7 @@ const deleteEmployee = (id: string) => {
           <h4 class="mt-1 text-2xl font-bold">67</h4>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
-          <FeatherIcon name="user-plus" size="24" />
+          <CommonFeatherIcon name="user-plus" size="24" />
         </div>
       </div>
     </div>
@@ -287,7 +287,7 @@ const deleteEmployee = (id: string) => {
               class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
             />
             <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-              <FeatherIcon name="search" size="16" />
+              <CommonFeatherIcon name="search" size="16" />
             </span>
           </div>
         </div>
@@ -372,14 +372,14 @@ const deleteEmployee = (id: string) => {
               title="View"
               @click="openViewModal(row)"
             >
-              <FeatherIcon name="eye" size="16" />
+              <CommonFeatherIcon name="eye" size="16" />
             </button>
             <NuxtLink
               :to="`/edit-employee?id=${row.id}`"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
               title="Edit"
             >
-              <FeatherIcon name="edit" size="16" />
+              <CommonFeatherIcon name="edit" size="16" />
             </NuxtLink>
             <button
               type="button"
@@ -387,7 +387,7 @@ const deleteEmployee = (id: string) => {
               title="Delete"
               @click="deleteEmployee(row.id)"
             >
-              <FeatherIcon name="trash-2" size="16" />
+              <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>
@@ -403,7 +403,7 @@ const deleteEmployee = (id: string) => {
             class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-4 text-center dark:border-gray-700"
           >
             <div class="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-primary">
-              <FeatherIcon name="user" size="24" />
+              <CommonFeatherIcon name="user" size="24" />
             </div>
             <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Profile Photo</span>
           </div>
@@ -411,7 +411,7 @@ const deleteEmployee = (id: string) => {
             class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-4 text-center dark:border-gray-700"
           >
             <div class="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-              <FeatherIcon name="credit-card" size="24" />
+              <CommonFeatherIcon name="credit-card" size="24" />
             </div>
             <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Photo ID</span>
           </div>
@@ -420,7 +420,7 @@ const deleteEmployee = (id: string) => {
         <!-- Emergency Information -->
         <div class="space-y-3">
           <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
-            <FeatherIcon name="info" size="16" class="text-primary" />
+            <CommonFeatherIcon name="info" size="16" class="text-primary" />
             <span>Emergency Information</span>
           </h6>
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -455,7 +455,7 @@ const deleteEmployee = (id: string) => {
         <!-- Designation -->
         <div class="space-y-3">
           <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
-            <FeatherIcon name="briefcase" size="16" class="text-primary" />
+            <CommonFeatherIcon name="briefcase" size="16" class="text-primary" />
             <span>Designation</span>
           </h6>
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -469,7 +469,7 @@ const deleteEmployee = (id: string) => {
         <!-- Personal Information -->
         <div class="space-y-3">
           <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
-            <FeatherIcon name="user" size="16" class="text-primary" />
+            <CommonFeatherIcon name="user" size="16" class="text-primary" />
             <span>Personal Information</span>
           </h6>
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -492,7 +492,7 @@ const deleteEmployee = (id: string) => {
         <!-- Account Information -->
         <div class="space-y-3">
           <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
-            <FeatherIcon name="lock" size="16" class="text-primary" />
+            <CommonFeatherIcon name="lock" size="16" class="text-primary" />
             <span>Account Information</span>
           </h6>
           <div class="grid grid-cols-2 gap-2 text-xs">

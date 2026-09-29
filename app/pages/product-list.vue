@@ -174,14 +174,14 @@ const deleteProduct = (id: string) => {
             class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
             @click="isImportModalOpen = true"
           >
-            <FeatherIcon name="download" size="18" />
+            <CommonFeatherIcon name="download" size="18" />
             <span>Import Product</span>
           </button>
           <NuxtLink
             to="/create-product"
             class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
           >
-            <FeatherIcon name="plus-circle" size="18" />
+            <CommonFeatherIcon name="plus-circle" size="18" />
             <span>Add New Product</span>
           </NuxtLink>
         </div>
@@ -199,7 +199,7 @@ const deleteProduct = (id: string) => {
             class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           />
           <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <FeatherIcon name="search" size="16" />
+            <CommonFeatherIcon name="search" size="16" />
           </span>
         </div>
 
@@ -266,14 +266,14 @@ const deleteProduct = (id: string) => {
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
               title="View"
             >
-              <FeatherIcon name="eye" size="16" />
+              <CommonFeatherIcon name="eye" size="16" />
             </NuxtLink>
             <NuxtLink
               :to="`/create-product?id=${row.id}`"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
               title="Edit"
             >
-              <FeatherIcon name="edit" size="16" />
+              <CommonFeatherIcon name="edit" size="16" />
             </NuxtLink>
             <button
               type="button"
@@ -281,7 +281,7 @@ const deleteProduct = (id: string) => {
               title="Delete"
               @click="deleteProduct(row.id)"
             >
-              <FeatherIcon name="trash-2" size="16" />
+              <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>
@@ -296,7 +296,7 @@ const deleteProduct = (id: string) => {
         <div
           class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-8 text-center hover:border-primary transition dark:border-gray-700"
         >
-          <FeatherIcon name="upload-cloud" size="32" class="text-gray-400 mb-2" />
+          <CommonFeatherIcon name="upload-cloud" size="32" class="text-gray-400 mb-2" />
           <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Drag & drop files or click to browse</p>
           <input type="file" accept=".xlsx,.csv" class="hidden" />
         </div>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Customer } from "~/components/forms/CustomerLiveSearch.vue";
-import type { ProductItem } from "~/components/forms/ProductLiveSearch.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -129,17 +127,17 @@ const handleSubmit = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader :title="`Edit Quotation #${quotationNo}`" subtitle="Update quotation details">
+    <CommonPageHeader :title="`Edit Quotation #${quotationNo}`" subtitle="Update quotation details">
       <template #actions>
         <NuxtLink
           to="/quotation"
           class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >
-          <FeatherIcon name="arrow-left" size="14" />
+          <CommonFeatherIcon name="arrow-left" size="14" />
           <span>Back to Quotation List</span>
         </NuxtLink>
       </template>
-    </PageHeader>
+    </CommonPageHeader>
 
     <form @submit.prevent="handleSubmit">
       <div
@@ -219,7 +217,7 @@ const handleSubmit = () => {
           <div>
             <span class="font-bold text-gray-900 dark:text-white">Customer</span>
             <div class="mt-2">
-              <CustomerLiveSearch @select="handleCustomerSelect" />
+              <FormsCustomerLiveSearch @select="handleCustomerSelect" />
             </div>
 
             <div
@@ -280,12 +278,12 @@ const handleSubmit = () => {
               class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
               @click="addNewItem"
             >
-              <FeatherIcon name="plus-circle" size="13" />
+              <CommonFeatherIcon name="plus-circle" size="13" />
               <span>Add Custom Item</span>
             </button>
           </div>
           <div class="max-w-md">
-            <ProductLiveSearch @select="handleProductSelect" />
+            <FormsProductLiveSearch @select="handleProductSelect" />
           </div>
         </div>
 
@@ -357,7 +355,7 @@ const handleSubmit = () => {
                 </td>
                 <td class="p-3 align-top text-center">
                   <button type="button" class="text-gray-400 hover:text-danger" title="Remove Item" @click="removeItem(idx)">
-                    <FeatherIcon name="trash-2" size="14" />
+                    <CommonFeatherIcon name="trash-2" size="14" />
                   </button>
                 </td>
               </tr>
@@ -430,7 +428,7 @@ const handleSubmit = () => {
             :disabled="isSubmitting"
             class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
           >
-            <FeatherIcon v-if="!isSubmitting" name="check" size="14" />
+            <CommonFeatherIcon v-if="!isSubmitting" name="check" size="14" />
             <span>{{ isSubmitting ? "Updating..." : "Update Quotation" }}</span>
           </button>
         </div>

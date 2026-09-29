@@ -162,14 +162,14 @@ const saveJob = () => {
 <template>
   <div>
     <!-- Page Header -->
-    <PageHeader title="Job Order List" subtitle="Manage production tickets and track department workflows" />
+    <CommonPageHeader title="Job Order List" subtitle="Manage production tickets and track department workflows" />
 
     <!-- 5 Summary Metric Cards -->
     <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <FeatherIcon name="clipboard" size="18" />
+            <CommonFeatherIcon name="clipboard" size="18" />
           </div>
           <div>
             <p class="text-[11px] font-semibold text-gray-500">Total Job Order</p>
@@ -181,7 +181,7 @@ const saveJob = () => {
       <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/40">
-            <FeatherIcon name="clock" size="18" />
+            <CommonFeatherIcon name="clock" size="18" />
           </div>
           <div>
             <p class="text-[11px] font-semibold text-gray-500">Total Waiting</p>
@@ -193,7 +193,7 @@ const saveJob = () => {
       <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40">
-            <FeatherIcon name="loader" size="18" />
+            <CommonFeatherIcon name="loader" size="18" />
           </div>
           <div>
             <p class="text-[11px] font-semibold text-gray-500">Total On Process</p>
@@ -207,7 +207,7 @@ const saveJob = () => {
           <div
             class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40"
           >
-            <FeatherIcon name="home" size="18" />
+            <CommonFeatherIcon name="home" size="18" />
           </div>
           <div>
             <p class="text-[11px] font-semibold text-gray-500">Total In-House</p>
@@ -219,7 +219,7 @@ const saveJob = () => {
       <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 dark:bg-rose-950/40">
-            <FeatherIcon name="truck" size="18" />
+            <CommonFeatherIcon name="truck" size="18" />
           </div>
           <div>
             <p class="text-[11px] font-semibold text-gray-500">Total Outsource</p>
@@ -363,7 +363,7 @@ const saveJob = () => {
           </div>
         </div>
 
-        <DataTable :columns="columns" :items="filteredJobs" search-placeholder="Search job title, product, customer...">
+        <TablesDataTable :columns="columns" :items="filteredJobs" search-placeholder="Search job title, product, customer...">
           <!-- No JO -->
           <template #cell(no)="{ item }">
             <NuxtLink :to="`/job-order-detail?no=${item.no}`" class="font-semibold text-primary hover:underline">
@@ -411,7 +411,7 @@ const saveJob = () => {
                 class="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-primary hover:text-primary dark:border-gray-700"
                 title="View SPK Sheet"
               >
-                <FeatherIcon name="eye" size="13" />
+                <CommonFeatherIcon name="eye" size="13" />
               </NuxtLink>
               <button
                 type="button"
@@ -419,7 +419,7 @@ const saveJob = () => {
                 title="View Flow Progress"
                 @click="openViewFlow(item)"
               >
-                <FeatherIcon name="git-branch" size="13" />
+                <CommonFeatherIcon name="git-branch" size="13" />
               </button>
               <button
                 type="button"
@@ -427,16 +427,16 @@ const saveJob = () => {
                 title="Edit Job"
                 @click="openEditModal(item)"
               >
-                <FeatherIcon name="edit" size="13" />
+                <CommonFeatherIcon name="edit" size="13" />
               </button>
             </div>
           </template>
-        </DataTable>
+        </TablesDataTable>
       </div>
     </div>
 
     <!-- Modal: View Flow Progress -->
-    <BaseModal v-model="viewFlowModal" title="View Work Flow" size="md">
+    <CommonBaseModal v-model="viewFlowModal" title="View Work Flow" size="md">
       <div v-if="activeFlowJob" class="p-5 text-xs space-y-4">
         <div>
           <h5 class="mb-2 font-bold text-gray-900 dark:text-white">Sales Information</h5>
@@ -484,10 +484,10 @@ const saveJob = () => {
           </div>
         </div>
       </div>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Modal: Edit Job Order -->
-    <BaseModal v-model="editModal" title="Edit Job Order" size="sm">
+    <CommonBaseModal v-model="editModal" title="Edit Job Order" size="sm">
       <form v-if="editingJob" class="p-5 text-xs space-y-3" @submit.prevent="saveJob">
         <div>
           <label class="font-semibold text-gray-700 dark:text-gray-300">Customer</label>
@@ -522,6 +522,6 @@ const saveJob = () => {
           <button type="submit" class="rounded bg-primary px-4 py-1.5 font-semibold text-white">Save Changes</button>
         </div>
       </form>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>

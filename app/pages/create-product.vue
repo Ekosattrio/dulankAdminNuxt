@@ -48,7 +48,7 @@ const units = ['Meter', 'Box', 'Rim', 'Pcs', 'Buku', 'Lembar', 'Kg']
           to="/product-list"
           class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
         >
-          <FeatherIcon name="arrow-left" size="18" />
+          <CommonFeatherIcon name="arrow-left" size="18" />
           <span>Back to Product</span>
         </NuxtLink>
       </template>
@@ -59,7 +59,7 @@ const units = ['Meter', 'Box', 'Rim', 'Pcs', 'Buku', 'Lembar', 'Kg']
         <!-- 1. Product Information -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="info" size="18" class="text-primary" />
+            <CommonFeatherIcon name="info" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Product Information</h6>
           </div>
 
@@ -163,7 +163,7 @@ const units = ['Meter', 'Box', 'Rim', 'Pcs', 'Buku', 'Lembar', 'Kg']
         <!-- 2. Pricing & Stocks -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="dollar-sign" size="18" class="text-primary" />
+            <CommonFeatherIcon name="dollar-sign" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Pricing & Stocks</h6>
           </div>
 
@@ -215,13 +215,13 @@ const units = ['Meter', 'Box', 'Rim', 'Pcs', 'Buku', 'Lembar', 'Kg']
         <!-- 3. Images -->
         <div class="space-y-4">
           <div class="flex items-center gap-2 border-b border-gray-200 pb-3 dark:border-gray-800">
-            <FeatherIcon name="image" size="18" class="text-primary" />
+            <CommonFeatherIcon name="image" size="18" class="text-primary" />
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Product Images</h6>
           </div>
 
           <div class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-8 text-center hover:border-primary transition dark:border-gray-700">
             <div class="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-primary dark:bg-orange-950/40">
-              <FeatherIcon name="upload-cloud" size="24" />
+              <CommonFeatherIcon name="upload-cloud" size="24" />
             </div>
             <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Drag and drop a file to upload or browse</p>
             <p class="mt-1 text-[11px] text-gray-400">Supports PNG, JPG, JPEG up to 5MB</p>

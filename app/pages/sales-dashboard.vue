@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
 
 definePageMeta({
   layout: "default",
@@ -289,7 +287,7 @@ const hoveredCountry = ref<CountryData | null>(null);
           v-if="toastMessage"
           class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-[#092C4C] px-4 py-3 text-xs font-semibold text-white shadow-lg"
         >
-          <FeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
+          <CommonFeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
           <span>{{ toastMessage }}</span>
         </div>
       </Transition>
@@ -323,10 +321,10 @@ const hoveredCountry = ref<CountryData | null>(null);
                 @click="showDatepicker = !showDatepicker"
               >
                 <div class="flex items-center gap-2">
-                  <FeatherIcon name="calendar" size="14" class="text-gray-400" />
+                  <CommonFeatherIcon name="calendar" size="14" class="text-gray-400" />
                   <span>{{ dateRangeLabel }}</span>
                 </div>
-                <FeatherIcon name="chevron-down" size="14" class="text-gray-400" />
+                <CommonFeatherIcon name="chevron-down" size="14" class="text-gray-400" />
               </button>
 
               <!-- Quick Range Preset Menu -->
@@ -348,7 +346,7 @@ const hoveredCountry = ref<CountryData | null>(null);
                   @click="selectDateRange(preset)"
                 >
                   <span>{{ preset.label }}</span>
-                  <FeatherIcon v-if="selectedDateRange === preset.id" name="check" size="12" />
+                  <CommonFeatherIcon v-if="selectedDateRange === preset.id" name="check" size="12" />
                 </button>
               </div>
             </div>
@@ -360,7 +358,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               title="Refresh"
               @click="refreshAllData"
             >
-              <FeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
+              <CommonFeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
             </button>
 
             <!-- Collapse Header Button -->
@@ -370,7 +368,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               title="Collapse"
               @click="isHeaderCollapsed = !isHeaderCollapsed"
             >
-              <FeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
+              <CommonFeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
             </button>
           </div>
         </div>
@@ -387,7 +385,7 @@ const hoveredCountry = ref<CountryData | null>(null);
             <h3 class="mb-2 text-2xl sm:text-3xl font-bold text-secondary dark:text-white">$95,000.45</h3>
             <p class="sales-range flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               <span class="inline-flex items-center font-semibold text-success">
-                <FeatherIcon name="chevron-up" size="16" class="me-0.5" />
+                <CommonFeatherIcon name="chevron-up" size="16" class="me-0.5" />
                 48%&nbsp;
               </span>
               increase compare to last week
@@ -412,7 +410,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               title="Refresh"
               @click="refreshCard('total sales')"
             >
-              <FeatherIcon name="rotate-ccw" size="16" />
+              <CommonFeatherIcon name="rotate-ccw" size="16" />
             </button>
           </div>
           <div>
@@ -433,7 +431,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               title="Refresh"
               @click="refreshCard('purchased earnings')"
             >
-              <FeatherIcon name="rotate-ccw" size="16" />
+              <CommonFeatherIcon name="rotate-ccw" size="16" />
             </button>
           </div>
           <div>
@@ -456,7 +454,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               class="view-all flex items-center text-xs font-semibold text-primary transition hover:text-primary-hover"
             >
               View All
-              <span class="ps-1.5 flex items-center"><FeatherIcon name="arrow-right" size="14" /></span>
+              <span class="ps-1.5 flex items-center"><CommonFeatherIcon name="arrow-right" size="14" /></span>
             </NuxtLink>
           </div>
           <div class="p-4 flex-1">
@@ -505,7 +503,7 @@ const hoveredCountry = ref<CountryData | null>(null);
               class="view-all flex items-center text-xs font-semibold text-primary transition hover:text-primary-hover"
             >
               View All
-              <span class="ps-1.5 flex items-center"><FeatherIcon name="arrow-right" size="14" /></span>
+              <span class="ps-1.5 flex items-center"><CommonFeatherIcon name="arrow-right" size="14" /></span>
             </NuxtLink>
           </div>
 
@@ -540,7 +538,7 @@ const hoveredCountry = ref<CountryData | null>(null);
                       <div class="min-w-0">
                         <p class="font-bold text-secondary dark:text-gray-100 truncate hover:text-primary">{{ tx.name }}</p>
                         <span class="flex items-center text-[11px] text-gray-400 gap-1 mt-0.5">
-                          <FeatherIcon name="clock" size="12" />
+                          <CommonFeatherIcon name="clock" size="12" />
                           {{ tx.time }}
                         </span>
                       </div>
@@ -595,9 +593,9 @@ const hoveredCountry = ref<CountryData | null>(null);
                 class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                 @click="showYearDropdown = !showYearDropdown"
               >
-                <FeatherIcon name="calendar" size="14" class="text-gray-400" />
+                <CommonFeatherIcon name="calendar" size="14" class="text-gray-400" />
                 <span>{{ selectedYear }}</span>
-                <FeatherIcon name="chevron-down" size="12" class="text-gray-400" />
+                <CommonFeatherIcon name="chevron-down" size="12" class="text-gray-400" />
               </button>
               <div
                 v-if="showYearDropdown"
@@ -759,7 +757,7 @@ const hoveredCountry = ref<CountryData | null>(null);
                 @click="showCountryDropdown = !showCountryDropdown"
               >
                 <span>{{ selectedCountryPeriod }}</span>
-                <FeatherIcon name="chevron-down" size="12" class="text-gray-400" />
+                <CommonFeatherIcon name="chevron-down" size="12" class="text-gray-400" />
               </button>
               <div
                 v-if="showCountryDropdown"
@@ -849,7 +847,7 @@ const hoveredCountry = ref<CountryData | null>(null);
           <!-- Bottom Increase Trend Text -->
           <p class="sales-range mt-4 flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             <span class="inline-flex items-center font-semibold text-success">
-              <FeatherIcon name="chevron-up" size="16" class="me-0.5" />
+              <CommonFeatherIcon name="chevron-up" size="16" class="me-0.5" />
               48%&nbsp;
             </span>
             increase compare to last week
@@ -859,7 +857,7 @@ const hoveredCountry = ref<CountryData | null>(null);
     </div>
 
     <!-- Modal: Transaction Details -->
-    <BaseModal v-model="isTxModalOpen" title="Transaction Details" max-width="md">
+    <CommonBaseModal v-model="isTxModalOpen" title="Transaction Details" max-width="md">
       <div v-if="activeTransaction" class="space-y-4 text-xs sm:text-sm">
         <div class="flex items-center gap-3 border-b border-gray-100 pb-3 dark:border-gray-800">
           <img
@@ -913,10 +911,10 @@ const hoveredCountry = ref<CountryData | null>(null);
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
 
     <!-- Modal: Product Details -->
-    <BaseModal v-model="isProductModalOpen" title="Product Details" max-width="md">
+    <CommonBaseModal v-model="isProductModalOpen" title="Product Details" max-width="md">
       <div v-if="activeProduct" class="space-y-4 text-xs sm:text-sm">
         <div class="flex items-center gap-4 border-b border-gray-100 pb-3 dark:border-gray-800">
           <img
@@ -955,6 +953,6 @@ const hoveredCountry = ref<CountryData | null>(null);
           Close
         </button>
       </template>
-    </BaseModal>
+    </CommonBaseModal>
   </div>
 </template>
