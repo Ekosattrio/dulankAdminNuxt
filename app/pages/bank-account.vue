@@ -227,9 +227,7 @@ const deleteAccount = (item: any) => {
   }
 }
 
-const printList = () => {
-  window.print()
-}
+const { printPage: printList } = usePrint()
 
 const refreshList = () => {
   searchQuery.value = ''
