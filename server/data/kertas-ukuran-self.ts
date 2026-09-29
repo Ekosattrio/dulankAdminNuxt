@@ -1,0 +1,12 @@
+// Mock data untuk halaman /kertas-ukuran-self (dipindah dari app/pages/kertas-ukuran-self.vue)
+// Dikonsumsi oleh server/api/kertas-ukuran-self.ts
+
+export const sizes = [
+  { id: 1, name: 'A4', dimension: '21 x 29.7', length: 21, width: 29.7, unit: 'cm', update: '10/01/2025 09:00', status: 'Active' },
+  { id: 2, name: 'F4 (Folio)', dimension: '21.5 x 33', length: 21.5, width: 33, unit: 'cm', update: '10/01/2025 09:15', status: 'Active' },
+  { id: 3, name: 'A3', dimension: '29.7 x 42', length: 29.7, width: 42, unit: 'cm', update: '10/01/2025 09:30', status: 'Active' },
+  { id: 4, name: 'A5', dimension: '14.8 x 21', length: 14.8, width: 21, unit: 'cm', update: '10/01/2025 09:45', status: 'Active' },
+  { id: 5, name: 'Plano 65 x 100', dimension: '65 x 100', length: 65, width: 100, unit: 'cm', update: '10/01/2025 10:00', status: 'Active' },
+  { id: 6, name: 'Plano 79 x 109', dimension: '79 x 109', length: 79, width: 109, unit: 'cm', update: '10/01/2025 10:15', status: 'Active' },
+  { id: 7, name: 'Plano 65 x 90', dimension: '65 x 90', length: 65, width: 90, unit: 'cm', update: '10/01/2025 10:30', status: 'Active' }
+]

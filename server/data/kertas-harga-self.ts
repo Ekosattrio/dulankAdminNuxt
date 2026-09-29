@@ -1,0 +1,10 @@
+// Mock data untuk halaman /kertas-harga-self (dipindah dari app/pages/kertas-harga-self.vue)
+// Dikonsumsi oleh server/api/kertas-harga-self.ts
+
+export const prices = [
+  { id: 1, nama: 'A4', group: 'HVS Putih', merk: 'Paperone', ukuran: '21x29.7 cm', satuan: 'rim', gramatur: 80, minOrder: '1 rim', kelipatan: '1 rim', harga: 50000, update: '09/10/2025 10:00', status: 'Active' },
+  { id: 2, nama: 'Plano', group: 'Art Paper', merk: 'Sinar Mas', ukuran: '65x90 cm', satuan: 'lembar', gramatur: 120, minOrder: '1 lembar', kelipatan: '10 lembar', harga: 2000, update: '09/10/2025 10:15', status: 'Active' },
+  { id: 3, nama: 'Plano', group: 'Art Carton', merk: 'Golden Coin', ukuran: '79x109 cm', satuan: 'lembar', gramatur: 260, minOrder: '1 lembar', kelipatan: '10 lembar', harga: 4500, update: '09/10/2025 10:30', status: 'Active' },
+  { id: 4, nama: 'Plano', group: 'Ivory', merk: 'Sinar Mas', ukuran: '65x100 cm', satuan: 'lembar', gramatur: 310, minOrder: '5 lembar', kelipatan: '5 lembar', harga: 5800, update: '09/10/2025 11:00', status: 'Active' },
+  { id: 5, nama: 'Plano', group: 'Duplex', merk: 'Cenming', ukuran: '79x109 cm', satuan: 'lembar', gramatur: 250, minOrder: '10 lembar', kelipatan: '10 lembar', harga: 3200, update: '09/10/2025 11:30', status: 'Inactive' }
+]

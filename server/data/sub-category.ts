@@ -1,0 +1,55 @@
+// Mock data untuk halaman /sub-category (dipindah dari app/pages/sub-category.vue)
+// Dikonsumsi oleh server/api/sub-category.ts
+
+export const subCategories = [
+  {
+    id: "1",
+    name: "Print Outdoor",
+    category: "Large Format",
+    categoryCode: "CAT-LF",
+    description: "Spanduk, banner, baliho outdoor",
+    itemUsed: 12,
+    createdBy: "Admin",
+    status: "Active",
+  },
+  {
+    id: "2",
+    name: "Cetak A3+",
+    category: "Digital Print",
+    categoryCode: "CAT-DP",
+    description: "Print lembaran A3+ bahan art paper, linen, dll",
+    itemUsed: 25,
+    createdBy: "Admin",
+    status: "Active",
+  },
+  {
+    id: "3",
+    name: "Brosur",
+    category: "Offset Print",
+    categoryCode: "CAT-OP",
+    description: "Brosur lipat 2, lipat 3, flyer promo",
+    itemUsed: 8,
+    createdBy: "Budi",
+    status: "Active",
+  },
+  {
+    id: "4",
+    name: "Sticker & Label",
+    category: "Digital Print",
+    categoryCode: "CAT-DP",
+    description: "Sticker vinyl, cromo, bontax, transparan",
+    itemUsed: 18,
+    createdBy: "Admin",
+    status: "Active",
+  },
+  {
+    id: "5",
+    name: "Kalender",
+    category: "Finishing & Merchandise",
+    categoryCode: "CAT-FM",
+    description: "Kalender dinding, kalender meja spiral",
+    itemUsed: 6,
+    createdBy: "Admin",
+    status: "Active",
+  },
+]
