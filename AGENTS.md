@@ -1,18 +1,30 @@
 # AGENTS.md
 
-Nuxt 4.5 + Tailwind CSS v4 admin UI ("Kacetak System", Indonesian POS & printing management). Migrated from a static HTML template; **all pages use hardcoded mock data in `<script setup lang="ts">` — no backend/API wiring yet** (only a demo `server/api/health.ts`). UI copy mixes English labels with Indonesian business fields.
+Nuxt 4.5 + Tailwind CSS v4 admin UI ("Kacetak System", Indonesian POS & printing management). Migrated from a static HTML template. **All data is mock data served by an in-repo Nitro mock server: literal arrays live in `server/data/*.ts` and are exposed via GET `server/api/<page>.ts` endpoints; pages fetch them with `useFetch`.** UI copy mixes English labels with Indonesian business fields.
 
 ## Commands
 
 - `npm run dev` / `npm run build` — primary checks. No lint/test configured.
-- `npm run typecheck` (`nuxt typecheck`) — known debt: ~100 pre-existing TS errors (mock literal vs interface optionality, TS2322/TS2532) unrelated to structure; don't try to fix them all in one pass.
+- `npm run typecheck` (`nuxt typecheck`) — known debt: ~103 pre-existing TS errors (mock literal vs interface optionality, TS2322/TS2532) unrelated to structure; don't try to fix them all in one pass.
 - `postinstall` runs `nuxt prepare`; root `tsconfig.json` extends generated `.nuxt/tsconfig.json` (project refs: app/server/shared). Re-run `nuxi prepare` after moving files so `.nuxt/imports.d.ts` & `components.d.ts` regenerate — **the build can silently reuse a stale components scan**, so prepare before trusting auto-imports.
+
+## Data & API layer (mock server)
+
+- **`server/data/<page>.ts`** — mock data, one file per page (`export const <arrayName> = [...]`). Literals are plain JSON-safe objects; **no type annotations, no imports** (typed at the page boundary). Do not put expressions/variables in them.
+- **`server/api/<page>.ts`** — one GET endpoint per page: returns the array directly, or `{ nameA, nameB }` for multi-array pages (address, banner, cetak-full-color, job-list, pos, role, sales-dashboard). `server/api/health.ts` is a demo.
+- **Page fetch pattern** (keeps all downstream mutations valid):
+  ```ts
+  const { data: pageData } = await useFetch<SomeItem[]>('/api/<page>')
+  const items = ref<SomeItem[]>(pageData.value ?? [])
+  ```
+- Exceptions: arrays derived from composables (`profitTiers` on calender/cetak-full-color spread `useProfitCalculation().defaultProfitTiers`) stay local. Empty `ref<T[]>([])` are UI state, not data — keep them in the page. UI mutations (add/edit/delete/push) currently mutate the client ref only; the mock server is GET-only (no POST/PUT/DELETE yet).
+- When adding a page or data: add the literal to `server/data`, create the endpoint, and use the fetch pattern above — don't hardcode arrays in pages.
 
 ## Nuxt 4 structure (app/ + server/ + shared/)
 
-- App code lives in `app/`: `app/pages`, `app/components`, `app/composables`, `app/layouts`, `app/plugins`, `app/stores` (Pinia, auto-discovered), `app/assets/css/main.css`, `app/app.vue`.
+- `app/` holds app code: `app/pages`, `app/components`, `app/composables`, `app/layouts`, `app/plugins`, `app/stores` (Pinia, auto-discovered), `app/assets/css/main.css`, `app/app.vue`.
 - `public/` stays at repo root and is served at `/assets/...` — runtime JSON fixtures (`/assets/json/provinsi.json`, `kota-kabupaten.json`, `kodepos.json`, `product.json`, `customer.json`) for the live-search/cascader components. Put new images/JSON there.
-- `server/` (one level above `app/`): Nitro routes, e.g. `server/api/health.ts`. On Nuxt 4.6+ prefer explicit `import { defineEventHandler } from 'nuxt/server'` (4.5.x auto-imports from h3).
+- `server/` (one level above `app/`): Nitro routes (`server/api/*`), mock data (`server/data/*` — see "Data & API layer"), and `server/api/health.ts`. On Nuxt 4.6+ prefer explicit `import { defineEventHandler } from 'nuxt/server'` (4.5.x auto-imports from h3).
 - `shared/types/` — **all interfaces/types live here, one file per domain** (customer, employee, payroll, product, printing, paper, machine, sales, finance, blog, workflow, settings, report, master, support, navigation, supplier). Auto-imported in both app & server; names must be globally unique. Don't define interfaces inline in pages.
 - `locales/`, `scratch/`, and root `*.html` files: legacy/reference material (see below).
 
