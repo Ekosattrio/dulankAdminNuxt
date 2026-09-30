@@ -1,212 +1,256 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Job Branch</h4>
-            <h6>Manage job distribution and branch operations</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-outline-secondary btn-sm" @click="historyModalVisible = true">
-            <i class="ti ti-history me-1"></i>History Job Branch
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Job Branch" subtitle="Manage job distribution and branch operations">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+            @click="historyModalVisible = true"
+          >
+            <CommonFeatherIcon name="clock" size="16" />
+            History Job Branch
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search job, branch, customer, flow..." />
+        <CommonFilterSelect
+          v-model="filterBranch"
+          allLabel="All Branches"
+          :options="[
+            { value: 'Dulank Karawang', label: 'Dulank Karawang' },
+            { value: 'Dulank Jakarta', label: 'Dulank Jakarta' },
+            { value: 'Dulank Cirebon', label: 'Dulank Cirebon' },
+          ]"
+        />
       </div>
 
-      <!-- Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search job, branch, customer, flow..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterBranch" class="form-select form-select-sm" style="width: auto;">
-                <option value="">All Branches</option>
-                <option value="Dulank Karawang">Dulank Karawang</option>
-                <option value="Dulank Jakarta">Dulank Jakarta</option>
-                <option value="Dulank Cirebon">Dulank Cirebon</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>No Job</th>
-                  <th>Branch</th>
-                  <th>Customer</th>
-                  <th>Product</th>
-                  <th>Flow Name</th>
-                  <th>Priority</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="job in filteredJobs" :key="job.id">
-                  <td class="fw-bold text-primary">{{ job.jobNo }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ job.branch }}</span>
-                  </td>
-                  <td class="fw-semibold text-dark">{{ job.customer }}</td>
-                  <td>{{ job.product }}</td>
-                  <td>{{ job.flowName }}</td>
-                  <td>
-                    <span :class="getPriorityBadge(job.priority)">{{ job.priority }}</span>
-                  </td>
-                  <td>
-                    <span :class="getStatusBadge(job.status)">{{ job.status }}</span>
-                  </td>
-                  <td class="text-center action-table-data">
-                    <button class="btn btn-sm btn-icon text-primary" title="Setting Detail Job" @click="openSettingModal(job)">
-                      <i class="ti ti-settings"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr v-if="filteredJobs.length === 0">
-                  <td colspan="8" class="text-center py-4 text-muted">
-                    No jobs found matching criteria.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Job</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Branch</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Priority</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="job in filteredJobs" :key="job.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ job.jobNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ job.branch }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ job.customer }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ job.product }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ job.flowName }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill
+                  :status="job.priority"
+                  :tone="job.priority === 'Urgent' ? 'rose' : job.priority === 'High' ? 'amber' : 'slate'"
+                />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="job.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <button
+                  type="button"
+                  class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
+                  title="Setting Detail Job"
+                  @click="openSettingModal(job)"
+                >
+                  <CommonFeatherIcon name="settings" size="16" />
+                </button>
+              </td>
+            </tr>
+            <tr v-if="filteredJobs.length === 0">
+              <td colspan="8" class="p-8 text-center text-gray-400">No jobs found matching criteria.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- History Job Branch Modal -->
-    <div v-if="historyModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">History Job Branch</h5>
-            <button type="button" class="btn-close" @click="historyModalVisible = false"></button>
-          </div>
-          <div class="modal-body pt-0">
-            <div class="table-responsive mb-3">
-              <table class="table table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th>Date</th>
-                    <th>Branch</th>
-                    <th>Customer</th>
-                    <th>Flow Name</th>
-                    <th>Date Finish</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="hist in historyData" :key="hist.id">
-                    <td>{{ hist.date }}</td>
-                    <td><span class="badge bg-light text-dark border">{{ hist.branch }}</span></td>
-                    <td>{{ hist.customer }}</td>
-                    <td>{{ hist.flowName }}</td>
-                    <td class="fw-semibold text-success">{{ hist.dateFinish }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="modal-footer border-0">
-            <button type="button" class="btn btn-secondary" @click="historyModalVisible = false">Close</button>
-          </div>
-        </div>
+    <CommonBaseModal v-model="historyModalVisible" title="History Job Branch" maxWidth="lg">
+      <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+            <tr>
+              <th class="px-3 py-2 text-start">Date</th>
+              <th class="px-3 py-2 text-start">Branch</th>
+              <th class="px-3 py-2 text-start">Customer</th>
+              <th class="px-3 py-2 text-start">Flow Name</th>
+              <th class="px-3 py-2 text-start">Date Finish</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="hist in historyData" :key="hist.id">
+              <td class="px-3 py-2">{{ hist.date }}</td>
+              <td class="px-3 py-2">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ hist.branch }}</span>
+              </td>
+              <td class="px-3 py-2">{{ hist.customer }}</td>
+              <td class="px-3 py-2">{{ hist.flowName }}</td>
+              <td class="px-3 py-2 font-semibold text-emerald-600 dark:text-emerald-400">{{ hist.dateFinish }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="historyModalVisible = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
 
     <!-- Setting Detail Job Branch Modal -->
-    <div v-if="settingModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Setting Detail Job Branch: {{ selectedJob?.jobNo }}</h5>
-            <button type="button" class="btn-close" @click="settingModalVisible = false"></button>
+    <CommonBaseModal v-model="settingModalVisible" :title="`Setting Detail Job Branch: ${selectedJob?.jobNo ?? ''}`" maxWidth="lg">
+      <div v-if="selectedJob" class="space-y-4">
+        <!-- Job Info -->
+        <div class="rounded-lg border border-gray-100 bg-gray-50/60 p-3 dark:border-gray-800 dark:bg-gray-800/30">
+          <div class="grid grid-cols-1 gap-1.5 text-sm sm:grid-cols-2">
+            <div class="flex"><span class="w-24 shrink-0 text-gray-400">Job Title:</span><span class="font-bold text-gray-800 dark:text-gray-200">{{ selectedJob.product }}</span></div>
+            <div class="flex"><span class="w-24 shrink-0 text-gray-400">Customer:</span><span class="text-gray-700 dark:text-gray-300">{{ selectedJob.customer }}</span></div>
+            <div class="flex"><span class="w-24 shrink-0 text-gray-400">Flow Process:</span><span class="font-bold text-primary">{{ selectedJob.flowName }}</span></div>
+            <div class="flex"><span class="w-24 shrink-0 text-gray-400">Branch:</span><span class="text-gray-700 dark:text-gray-300">{{ selectedJob.branch }}</span></div>
           </div>
-          <div class="modal-body pt-0" v-if="selectedJob">
-            <div class="p-3 bg-light rounded-3 mb-4">
-              <div class="row g-2 small">
-                <div class="col-sm-3 text-muted">Job Title:</div>
-                <div class="col-sm-9 fw-bold">{{ selectedJob.product }}</div>
-                <div class="col-sm-3 text-muted">Customer:</div>
-                <div class="col-sm-9">{{ selectedJob.customer }}</div>
-                <div class="col-sm-3 text-muted">Flow Process:</div>
-                <div class="col-sm-9 fw-bold text-primary">{{ selectedJob.flowName }}</div>
-                <div class="col-sm-3 text-muted">Branch:</div>
-                <div class="col-sm-9">{{ selectedJob.branch }}</div>
-              </div>
-            </div>
+        </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold">Priority</label>
-              <select v-model="selectedJob.priority" class="form-select form-select-sm">
-                <option value="Urgent">Urgent</option>
-                <option value="High">High</option>
-                <option value="Reguler">Reguler</option>
-              </select>
-            </div>
+        <CommonFormField label="Priority">
+          <select
+            v-model="selectedJob.priority"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Urgent">Urgent</option>
+            <option value="High">High</option>
+            <option value="Reguler">Reguler</option>
+          </select>
+        </CommonFormField>
 
-            <!-- Parameters Checklist -->
-            <h6 class="fw-bold mb-2">Process Information & Specifications</h6>
-            <div class="d-flex flex-column gap-2 mb-3">
-              <div v-for="(spec, idx) in jobSpecs" :key="idx" class="d-flex align-items-center gap-2">
-                <input v-model="spec.label" type="text" class="form-control form-control-sm" style="width: 180px;" placeholder="Label" />
-                <input v-model="spec.value" type="text" class="form-control form-control-sm flex-grow-1" placeholder="Value" />
-                <button type="button" class="btn btn-sm btn-icon text-danger" @click="removeSpec(idx)"><i class="ti ti-trash"></i></button>
-              </div>
-            </div>
-            <button type="button" class="btn btn-link text-primary p-0 small text-decoration-none mb-4" @click="addSpec">
-              <i class="ti ti-plus me-1"></i>Add Information Field
-            </button>
-
-            <!-- Assignee List -->
-            <h6 class="fw-bold mb-2">Assignee List</h6>
-            <div class="mb-4">
-              <input v-model="assigneesText" type="text" class="form-control form-control-sm" placeholder="e.g. Abdul, Nurdin, Arif (comma separated)" />
-            </div>
-
-            <!-- Incentive Settings -->
-            <h6 class="fw-bold mb-2">Incentive Setting</h6>
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-sm-4">
-                <label class="form-label small text-muted mb-0">Incentive Amount (Rp)</label>
-              </div>
-              <div class="col-sm-4">
-                <input v-model.number="incentiveAmount" type="number" class="form-control form-control-sm" />
-              </div>
-              <div class="col-sm-4">
-                <select v-model="incentiveUnit" class="form-select form-select-sm">
-                  <option value="Job">Per Job</option>
-                  <option value="Qty">Per Qty</option>
-                  <option value="Rim">Per Rim</option>
-                </select>
-              </div>
+        <!-- Parameters Checklist -->
+        <div>
+          <h6 class="mb-2 text-sm font-bold text-gray-800 dark:text-gray-200">Process Information & Specifications</h6>
+          <div class="space-y-2">
+            <div v-for="(spec, idx) in jobSpecs" :key="idx" class="flex items-center gap-2">
+              <input
+                v-model="spec.label"
+                type="text"
+                class="w-44 h-9 rounded-md border border-gray-200 bg-white px-2.5 text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                placeholder="Label"
+              />
+              <input
+                v-model="spec.value"
+                type="text"
+                class="h-9 flex-1 rounded-md border border-gray-200 bg-white px-2.5 text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                placeholder="Value"
+              />
+              <button type="button" class="rounded-lg p-1.5 text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-950" @click="removeSpec(idx)">
+                <CommonFeatherIcon name="trash-2" size="14" />
+              </button>
             </div>
           </div>
-          <div class="modal-footer border-0 justify-content-end gap-2">
-            <button type="button" class="btn btn-secondary" @click="settingModalVisible = false">Cancel</button>
-            <button type="button" class="btn btn-primary" @click="saveJobSetting">Save Changes</button>
+          <button type="button" class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline" @click="addSpec">
+            <CommonFeatherIcon name="plus" size="13" />
+            Add Information Field
+          </button>
+        </div>
+
+        <!-- Assignee List -->
+        <CommonFormField label="Assignee List">
+          <input
+            v-model="assigneesText"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Abdul, Nurdin, Arif (comma separated)"
+          />
+        </CommonFormField>
+
+        <!-- Incentive Settings -->
+        <div>
+          <h6 class="mb-2 text-sm font-bold text-gray-800 dark:text-gray-200">Incentive Setting</h6>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-xs text-gray-500 dark:text-gray-400">Incentive Amount (Rp)</span>
+            <input
+              v-model.number="incentiveAmount"
+              type="number"
+              class="w-36 h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+            <select
+              v-model="incentiveUnit"
+              class="w-32 h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Job">Per Job</option>
+              <option value="Qty">Per Qty</option>
+              <option value="Rim">Per Rim</option>
+            </select>
           </div>
         </div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="settingModalVisible = false"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-primary-600"
+            @click="saveJobSetting"
+          >
+            Save Changes
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -300,5 +344,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterBranch.value = ''
-}</script>
-
+}
+</script>
