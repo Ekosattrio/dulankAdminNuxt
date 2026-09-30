@@ -1,127 +1,129 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Settings</h4>
-            <h6>Manage your settings on portal</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Settings" subtitle="Manage your settings on portal">
+      <template #actions>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+          @click="openAddModal"
+        >
+          <CommonFeatherIcon name="plus" size="18" />
+          <span>Add New Account</span>
+        </button>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Toolbar -->
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <NuxtLink
+          to="/bank-settings-list"
+          title="List View"
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+        >
+          <CommonFeatherIcon name="list" size="18" />
+        </NuxtLink>
+        <NuxtLink
+          to="/bank-settings-grid"
+          title="Grid View"
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+        >
+          <CommonFeatherIcon name="grid" size="18" />
+        </NuxtLink>
       </div>
-
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="settings-wrapper d-flex">
-            <div class="settings-page-wrap w-100">
-              <div class="setting-title mb-3">
-                <h4 class="fs-18 fw-bold">Bank Account</h4>
-              </div>
-
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="d-flex align-items-center gap-2">
-                  <NuxtLink to="/bank-settings-list" class="btn btn-outline-secondary btn-sm p-2" title="List View">
-                    <i class="ti ti-list"></i>
-                  </NuxtLink>
-                  <NuxtLink to="/bank-settings-grid" class="btn btn-primary btn-sm p-2" title="Grid View">
-                    <i class="ti ti-grid-dots"></i>
-                  </NuxtLink>
-                </div>
-                <button class="btn btn-added" @click="openAddModal">
-                  <i class="ti ti-plus me-1"></i> Add New Account
-                </button>
-              </div>
-
-              <!-- Bank Account Cards Grid -->
-              <div class="row g-4">
-                <div v-for="(bank, idx) in accounts" :key="idx" class="col-xxl-4 col-xl-6 col-lg-6 col-md-6">
-                  <div
-                    class="card p-4 border shadow-sm h-100 position-relative"
-                    :class="{ 'border-primary': bank.isDefault }"
-                  >
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                      <div>
-                        <h5 class="fw-bold mb-1">{{ bank.bankName }}</h5>
-                        <p class="text-muted text-sm font-mono mb-0">{{ bank.accountNo }}</p>
-                      </div>
-                      <span v-if="bank.isDefault" class="badge bg-primary">Default</span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top">
-                      <div>
-                        <span class="text-muted text-xs d-block">Holder Name</span>
-                        <h6 class="fw-semibold mb-0">{{ bank.holderName }}</h6>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(bank)">
-                          <i class="ti ti-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteAccount(idx)">
-                          <i class="ti ti-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? 'Edit Bank Account' : 'Add Bank Account' }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveAccount">
-                <div class="mb-3">
-                  <label class="form-label">Bank Name</label>
-                  <input v-model="currentAccount.bankName" type="text" class="form-control" required placeholder="e.g. Bank Central Asia (BCA)" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Account Number</label>
-                  <input v-model="currentAccount.accountNo" type="text" class="form-control" required placeholder="e.g. 1234567890" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Account Holder Name</label>
-                  <input v-model="currentAccount.holderName" type="text" class="form-control" required placeholder="e.g. John Doe" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Branch</label>
-                  <input v-model="currentAccount.branch" type="text" class="form-control" placeholder="e.g. KCU Sudirman" />
-                </div>
-                <div class="mb-3">
-                  <div class="form-check form-switch">
-                    <input v-model="currentAccount.isDefault" class="form-check-input" type="checkbox" role="switch" id="makeDefault" />
-                    <label class="form-check-label" for="makeDefault">Make as default account</label>
-                  </div>
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Bank Account Cards Grid -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div
+        v-for="(bank, idx) in accounts"
+        :key="idx"
+        :class="[
+          'relative flex flex-col rounded-xl border bg-white p-5 shadow-sm dark:bg-gray-900',
+          bank.isDefault ? 'border-primary' : 'border-gray-200 dark:border-gray-800',
+        ]"
+      >
+        <div class="mb-3 flex items-start justify-between">
+          <div>
+            <h5 class="mb-1 font-bold text-gray-900 dark:text-gray-100">{{ bank.bankName }}</h5>
+            <p class="font-mono text-xs text-gray-500 dark:text-gray-400">{{ bank.accountNo }}</p>
+          </div>
+          <CommonStatusPill v-if="bank.isDefault" status="Default" tone="emerald" />
+        </div>
+
+        <div class="mt-auto flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
+          <div>
+            <span class="block text-xs text-gray-400">Holder Name</span>
+            <h6 class="mb-0 font-semibold text-gray-800 dark:text-gray-200">{{ bank.holderName }}</h6>
+          </div>
+          <CommonRowActions :item="bank" @edit="openEditModal(bank)" @delete="deleteAccount(idx)" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <CommonBaseModal v-model="showModal" :title="isEditing ? 'Edit Bank Account' : 'Add Bank Account'" maxWidth="md">
+      <form @submit.prevent="saveAccount" class="space-y-4">
+        <CommonFormField label="Bank Name" required>
+          <input
+            v-model="currentAccount.bankName"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. Bank Central Asia (BCA)"
+          />
+        </CommonFormField>
+        <CommonFormField label="Account Number" required>
+          <input
+            v-model="currentAccount.accountNo"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. 1234567890"
+          />
+        </CommonFormField>
+        <CommonFormField label="Account Holder Name" required>
+          <input
+            v-model="currentAccount.holderName"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. John Doe"
+          />
+        </CommonFormField>
+        <CommonFormField label="Branch">
+          <input
+            v-model="currentAccount.branch"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. KCU Sudirman"
+          />
+        </CommonFormField>
+
+        <!-- Default toggle -->
+        <div class="flex items-center justify-between rounded-lg border border-gray-100 p-3 dark:border-gray-800">
+          <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Make as default account</span>
+          <button
+            type="button"
+            :class="[
+              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none',
+              currentAccount.isDefault ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-gray-700',
+            ]"
+            @click="currentAccount.isDefault = !currentAccount.isDefault"
+          >
+            <span
+              :class="[
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                currentAccount.isDefault ? 'translate-x-5' : 'translate-x-0',
+              ]"
+            />
+          </button>
+        </div>
+
+        <CommonModalFooter submitLabel="Save Changes" @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -186,13 +188,4 @@ const deleteAccount = (idx: number) => {
   if (confirm('Are you sure you want to delete this bank account?')) {
     accounts.value.splice(idx, 1)
   }
-}
-
-const refresh = () => {
-  // refresh
-}
-
-const toggleCollapse = () => {
-  // collapse
 }</script>
-
