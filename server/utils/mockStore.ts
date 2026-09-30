@@ -39,6 +39,7 @@ import { items as editQuotationSeed } from '../data/edit-quotation'
 import { flowSteps as editWorkFlowSeed } from '../data/edit-work-flow'
 import { records as employeeSalarySeed } from '../data/employee-salary'
 import { employees as employeesSeed } from '../data/employees'
+import { expenses as expensesSeed } from '../data/expenses'
 import { faqs as faqSeed } from '../data/faq'
 import { categories as flowCategorySeed } from '../data/flow-category'
 import { flowNames as flowNameSeed } from '../data/flow-name'
@@ -151,6 +152,7 @@ const seeds: Record<string, unknown[]> = {
   'edit-work-flow': editWorkFlowSeed,
   'employee-salary': employeeSalarySeed,
   'employees': employeesSeed,
+  'expenses': expensesSeed,
   'faq': faqSeed,
   'flow-category': flowCategorySeed,
   'flow-name': flowNameSeed,
@@ -234,7 +236,7 @@ export function isMockResource(slug: string): boolean {
 }
 
 export function useMockCollection(slug: string): unknown[] {
-  if (!store.has(slug)) store.set(slug, structuredClone(seeds[slug]!))
+  if (!store.has(slug)) store.set(slug, structuredClone(seeds[slug]))
   return store.get(slug)!
 }
 

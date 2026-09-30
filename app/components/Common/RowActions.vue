@@ -23,6 +23,7 @@ const btn = "rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 dark:ho
 
 <template>
   <div class="flex items-center justify-end gap-2">
+    <slot name="extra" :item="props.item" />
     <button
       v-if="props.showView"
       type="button"

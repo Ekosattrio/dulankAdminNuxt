@@ -1,242 +1,267 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Customer List</h4>
-            <h6>Manage registered customers and address directories</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add New Customer
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Customer List" subtitle="Manage registered customers and address directories">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Customer</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search customer ID, name, email, or phone..." />
+        <CommonFilterSelect
+          v-model="filterType"
+          allLabel="All Customer Types"
+          :options="[
+            { value: 'Corporate', label: 'Corporate' },
+            { value: 'General', label: 'General' },
+            { value: 'VIP', label: 'VIP' },
+            { value: 'Reseller', label: 'Reseller' },
+          ]"
+        />
       </div>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search customer ID, name, email, or phone..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterType" class="form-select form-select-sm" style="width: auto;">
-                <option value="">All Customer Types</option>
-                <option value="Corporate">Corporate</option>
-                <option value="General">General</option>
-                <option value="VIP">VIP</option>
-                <option value="Reseller">Reseller</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Customer ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Customer Type</th>
-                  <th class="text-end">Balance</th>
-                  <th>Contact No</th>
-                  <th>Join Channel</th>
-                  <th>Date Join</th>
-                  <th>Last Seen</th>
-                  <th class="text-center" style="width: 140px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="cust in filteredCustomers" :key="cust.id">
-                  <td class="fw-bold text-primary">{{ cust.customerId }}</td>
-                  <td class="fw-bold text-dark">{{ cust.name }}</td>
-                  <td class="small text-muted">{{ cust.email }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ cust.type }}</span>
-                  </td>
-                  <td class="text-end fw-semibold">Rp {{ formatNumber(cust.balance) }}</td>
-                  <td>{{ cust.phone }}</td>
-                  <td>
-                    <span :class="cust.channel === 'Website' ? 'badge bg-info bg-opacity-10 text-info' : 'badge bg-secondary bg-opacity-10 text-secondary'">
-                      {{ cust.channel }}
-                    </span>
-                  </td>
-                  <td class="small">{{ cust.dateJoin }}</td>
-                  <td class="small text-muted">{{ cust.lastSeen }}</td>
-                  <td class="text-center action-table-data">
-                    <div class="edit-delete-action d-inline-flex gap-1">
-                      <button class="btn btn-sm btn-icon text-secondary" title="Manage Addresses" @click="openAddressModal(cust)">
-                        <i class="ti ti-map-pin"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-info" title="View Detail" @click="viewCustomer(cust)">
-                        <i class="ti ti-eye"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-primary" title="Edit" @click="openEditModal(cust)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-danger" title="Delete" @click="deleteCustomer(cust.id)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredCustomers.length === 0">
-                  <td colspan="10" class="text-center py-4 text-muted">
-                    No customers found matching the search.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer ID</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Email</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer Type</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Balance</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Contact No</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Join Channel</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date Join</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Last Seen</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="cust in filteredCustomers" :key="cust.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ cust.customerId }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ cust.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ cust.email }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="cust.type" tone="slate" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">Rp {{ formatNumber(cust.balance) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ cust.phone }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="cust.channel" :tone="cust.channel === 'Website' ? 'sky' : 'slate'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ cust.dateJoin }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ cust.lastSeen }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="cust" show-view @view="viewCustomer(cust)" @edit="openEditModal(cust)" @delete="deleteCustomer(cust.id)">
+                  <template #extra>
+                    <button
+                      type="button"
+                      class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-sky-500 dark:hover:bg-gray-800"
+                      title="Manage Addresses"
+                      @click="openAddressModal(cust)"
+                    >
+                      <CommonFeatherIcon name="map-pin" size="16" />
+                    </button>
+                  </template>
+                </CommonRowActions>
+              </td>
+            </tr>
+            <tr v-if="filteredCustomers.length === 0">
+              <td colspan="10" class="p-8 text-center text-gray-400">No customers found matching the search.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add / Edit Customer Modal -->
-    <div v-if="customerModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">{{ isEditing ? 'Edit Customer' : 'Add New Customer' }}</h5>
-            <button type="button" class="btn-close" @click="customerModalVisible = false"></button>
-          </div>
-          <form @submit.prevent="saveCustomer">
-            <div class="modal-body pt-0">
-              <div class="mb-3">
-                <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                <input v-model="formData.name" type="text" class="form-control" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Email <span class="text-danger">*</span></label>
-                  <input v-model="formData.email" type="email" class="form-control" required />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Contact No <span class="text-danger">*</span></label>
-                  <input v-model="formData.phone" type="text" class="form-control" required />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Customer Type</label>
-                  <select v-model="formData.type" class="form-select">
-                    <option value="General">General</option>
-                    <option value="Corporate">Corporate</option>
-                    <option value="VIP">VIP</option>
-                    <option value="Reseller">Reseller</option>
-                  </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Initial Balance (Rp)</label>
-                  <input v-model.number="formData.balance" type="number" class="form-control" min="0" />
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Primary Address</label>
-                <textarea v-model="formData.address" class="form-control" rows="2"></textarea>
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="customerModalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Customer' : 'Save Customer' }}</button>
-            </div>
-          </form>
+    <CommonBaseModal v-model="customerModalVisible" :title="isEditing ? 'Edit Customer' : 'Add New Customer'" maxWidth="lg">
+      <form @submit.prevent="saveCustomer" class="space-y-4">
+        <CommonFormField label="Full Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Email" required>
+            <input
+              v-model="formData.email"
+              type="email"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Contact No" required>
+            <input
+              v-model="formData.phone"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Customer Type">
+            <select
+              v-model="formData.type"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="General">General</option>
+              <option value="Corporate">Corporate</option>
+              <option value="VIP">VIP</option>
+              <option value="Reseller">Reseller</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Initial Balance (Rp)">
+            <input
+              v-model.number="formData.balance"
+              type="number"
+              min="0"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Primary Address">
+          <textarea
+            v-model="formData.address"
+            rows="2"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEditing ? 'Update Customer' : 'Save Customer'" @cancel="customerModalVisible = false" />
+      </form>
+    </CommonBaseModal>
 
     <!-- Manage Addresses Modal -->
-    <div v-if="addressModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Addresses: {{ selectedCustomer?.name }}</h5>
-            <button type="button" class="btn-close" @click="addressModalVisible = false"></button>
-          </div>
-          <div class="modal-body pt-0" v-if="selectedCustomer">
-            <div class="p-3 bg-light rounded-3 mb-3 border">
-              <span class="badge bg-primary mb-1">Primary Address</span>
-              <div class="text-dark">{{ selectedCustomer.address || 'No primary address recorded' }}</div>
-            </div>
-
-            <h6 class="fw-bold mb-2">Add New Shipping Address</h6>
-            <div class="mb-2">
-              <input v-model="newAddressInput" type="text" class="form-control form-control-sm" placeholder="Input complete destination address..." />
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-primary" @click="addAddress">
-              <i class="ti ti-plus me-1"></i>Add Address
-            </button>
-          </div>
-          <div class="modal-footer border-0">
-            <button type="button" class="btn btn-secondary" @click="addressModalVisible = false">Close</button>
+    <CommonBaseModal v-model="addressModalVisible" :title="`Addresses: ${selectedCustomer?.name ?? ''}`" maxWidth="md">
+      <div v-if="selectedCustomer" class="space-y-4">
+        <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/40">
+          <CommonStatusPill status="Primary Address" tone="emerald" class="mb-1" />
+          <div class="mt-1 text-sm text-gray-800 dark:text-gray-200">
+            {{ selectedCustomer.address || 'No primary address recorded' }}
           </div>
         </div>
+
+        <div>
+          <h6 class="mb-2 text-sm font-bold text-gray-800 dark:text-gray-200">Add New Shipping Address</h6>
+          <input
+            v-model="newAddressInput"
+            type="text"
+            placeholder="Input complete destination address..."
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          />
+        </div>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
+            @click="addAddress"
+          >
+            <CommonFeatherIcon name="plus" size="16" />
+            Add Address
+          </button>
+        </div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="addressModalVisible = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
 
     <!-- View Detail Modal -->
-    <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Customer Details: {{ selectedCustomer?.customerId }}</h5>
-            <button type="button" class="btn-close" @click="detailModalVisible = false"></button>
-          </div>
-          <div class="modal-body pt-0" v-if="selectedCustomer">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Name</span>
-                <span class="fw-bold">{{ selectedCustomer.name }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Email</span>
-                <span>{{ selectedCustomer.email }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Phone</span>
-                <span>{{ selectedCustomer.phone }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Customer Type</span>
-                <span class="badge bg-light text-dark border">{{ selectedCustomer.type }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Account Balance</span>
-                <span class="fw-bold text-success">Rp {{ formatNumber(selectedCustomer.balance) }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="text-muted">Join Date</span>
-                <span>{{ selectedCustomer.dateJoin }}</span>
-              </li>
-              <li class="list-group-item">
-                <div class="text-muted small mb-1">Shipping Address</div>
-                <div>{{ selectedCustomer.address || '-' }}</div>
-              </li>
-            </ul>
-          </div>
-          <div class="modal-footer border-0">
-            <button type="button" class="btn btn-secondary" @click="detailModalVisible = false">Close</button>
-          </div>
+    <CommonBaseModal v-model="detailModalVisible" :title="`Customer Details: ${selectedCustomer?.customerId ?? ''}`" maxWidth="md">
+      <div v-if="selectedCustomer" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Name</span>
+          <span class="font-semibold text-gray-800 dark:text-gray-200">{{ selectedCustomer.name }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Email</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ selectedCustomer.email }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Phone</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ selectedCustomer.phone }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Customer Type</span>
+          <CommonStatusPill :status="selectedCustomer.type" tone="slate" />
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Account Balance</span>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatNumber(selectedCustomer.balance) }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Join Date</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ selectedCustomer.dateJoin }}</span>
+        </div>
+        <div class="py-2.5">
+          <div class="mb-1 text-xs text-gray-400">Shipping Address</div>
+          <div class="text-sm text-gray-800 dark:text-gray-200">{{ selectedCustomer.address || '-' }}</div>
         </div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="detailModalVisible = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -383,4 +408,3 @@ function refresh() {
   searchQuery.value = ''
   filterType.value = ''
 }</script>
-

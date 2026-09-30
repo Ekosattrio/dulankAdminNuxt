@@ -26,7 +26,7 @@ const TONES: Record<Tone, string> = {
 
 const ACTIVE = ["active", "open", "paid", "approved", "completed", "success", "enabled", "available", "delivered", "confirmed", "read", "published"];
 const WARNING = ["pending", "progress", "processing", "draft", "waiting", "on-hold", "on hold", "partial", "scheduled", "queued", "unread"];
-const DANGER = ["inactive", "disable", "closed", "failed", "rejected", "resign", "cancelled", "canceled", "overdue", "expired", "blocked", "banned", "out of stock", "inactive", "returned", "deleted", "void", "refunded"];
+const DANGER = ["inactive", "disable", "closed", "failed", "rejected", "resign", "cancelled", "canceled", "overdue", "expired", "blocked", "banned", "out of stock", "inactive", "returned", "deleted", "void", "refunded", "unpaid"];
 
 const toneClass = computed<Tone>(() => {
   if (props.tone) return props.tone;
