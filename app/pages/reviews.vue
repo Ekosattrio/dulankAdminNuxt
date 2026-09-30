@@ -1,258 +1,111 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Product Reviews</h4>
-            <h6>Manage customer ratings, product feedback, and testimonial publication</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-      </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Product Reviews" subtitle="Manage customer ratings, product feedback, and testimonial publication">
+      <template #actions>
+        <button
+          type="button"
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+          title="Refresh"
+          @click="refresh"
+        >
+          <CommonFeatherIcon name="rotate-ccw" size="18" />
+        </button>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Dashboard Metric Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-messages fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Reviews</h6>
-              <h4 class="fw-bold mb-0">{{ reviews.length }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash1 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-warning bg-opacity-10 p-3 rounded">
-              <i class="ti ti-star fs-2 text-warning"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Average Rating</h6>
-              <h4 class="fw-bold mb-0">{{ avgRating }} / 5.0</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash2 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-circle-check fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Published Reviews</h6>
-              <h4 class="fw-bold mb-0">{{ publishedCount }}</h4>
-            </div>
-          </div>
+    <!-- Dashboard Metric Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <CommonStatCard label="Total Reviews" :value="String(reviews.length)" icon="message-square" tone="primary" />
+      <CommonStatCard label="Average Rating" :value="`${avgRating} / 5.0`" icon="star" tone="warning" />
+      <CommonStatCard label="Published Reviews" :value="String(publishedCount)" icon="check-circle" tone="success" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search product, user or review text..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <select
+            v-model="filterRating"
+            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option :value="null">Rating: All</option>
+            <option :value="5">5 Stars</option>
+            <option :value="4">4 Stars</option>
+            <option :value="3">3 Stars</option>
+            <option :value="2">2 Stars</option>
+            <option :value="1">1 Star</option>
+          </select>
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="Status: All"
+            :options="[
+              { value: 'Publish', label: 'Publish' },
+              { value: 'Archived', label: 'Archived' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control"
-                  placeholder="Search product, user or review text..."
-                />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="ratingDropdownOpen = !ratingDropdownOpen"
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">User</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product Code</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Rating</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Title</th>
+              <th class="min-w-[250px] px-4 py-3 text-start whitespace-nowrap">Review Content</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="r in filteredReviews" :key="r.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ r.user }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 font-mono text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ r.productCode }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ r.product }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ r.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex gap-0.5 text-amber-400">
+                  <CommonFeatherIcon
+                    v-for="star in 5"
+                    :key="star"
+                    name="star"
+                    size="14"
+                    :class="star > r.rating ? 'opacity-25 text-gray-300 dark:text-gray-600' : ''"
+                  />
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold">{{ r.title }}</td>
+              <td class="max-w-[250px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ r.content }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <select
+                  v-model="r.status"
+                  class="h-8 w-28 rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                 >
-                  Rating: {{ filterRating ? `${filterRating} Stars` : "All Ratings" }}
-                </button>
-                <ul v-if="ratingDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = null;
-                        ratingDropdownOpen = false;
-                      "
-                      >All Ratings</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = 5;
-                        ratingDropdownOpen = false;
-                      "
-                      >5 Stars</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = 4;
-                        ratingDropdownOpen = false;
-                      "
-                      >4 Stars</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = 3;
-                        ratingDropdownOpen = false;
-                      "
-                      >3 Stars</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = 2;
-                        ratingDropdownOpen = false;
-                      "
-                      >2 Stars</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterRating = 1;
-                        ratingDropdownOpen = false;
-                      "
-                      >1 Star</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || "All Status" }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = '';
-                        statusDropdownOpen = false;
-                      "
-                      >All Status</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = 'Publish';
-                        statusDropdownOpen = false;
-                      "
-                      >Publish</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = 'Archived';
-                        statusDropdownOpen = false;
-                      "
-                      >Archived</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive product-list">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>User</th>
-                  <th>Product Code</th>
-                  <th>Product</th>
-                  <th>Date</th>
-                  <th>Rating</th>
-                  <th>Title</th>
-                  <th style="min-width: 250px">Review Content</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 80px">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="r in filteredReviews" :key="r.id">
-                  <td class="fw-medium text-dark">{{ r.user }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark font-monospace">{{ r.productCode }}</span>
-                  </td>
-                  <td class="fw-semibold text-dark">{{ r.product }}</td>
-                  <td>{{ r.date }}</td>
-                  <td>
-                    <div class="d-flex text-warning gap-1">
-                      <i
-                        v-for="star in 5"
-                        :key="star"
-                        class="ti ti-star-filled"
-                        :class="{ 'text-muted opacity-25': star > r.rating }"
-                      ></i>
-                    </div>
-                  </td>
-                  <td class="fw-semibold">{{ r.title }}</td>
-                  <td class="small text-muted text-wrap">{{ r.content }}</td>
-                  <td>
-                    <select v-model="r.status" class="form-select form-select-sm" style="width: 110px">
-                      <option value="Publish">Publish</option>
-                      <option value="Archived">Archived</option>
-                    </select>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete review"
-                        @click="deleteReview(r.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredReviews.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">No reviews found matching filter criteria.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  <option value="Publish">Publish</option>
+                  <option value="Archived">Archived</option>
+                </select>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="r" @delete="deleteReview(r.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredReviews.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No reviews found matching filter criteria.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -302,4 +155,5 @@ function refresh() {
   searchQuery.value = "";
   filterRating.value = null;
   filterStatus.value = "";
-}</script>
+}
+</script>
