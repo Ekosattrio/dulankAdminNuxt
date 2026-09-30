@@ -176,6 +176,7 @@
 
 const { data: kertasUkuranSelfData } = await useFetch<SelfPaperSize[]>('/api/kertas-ukuran-self')
 const sizes = ref<SelfPaperSize[]>(kertasUkuranSelfData.value ?? [])
+useMockSync('kertas-ukuran-self', sizes)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

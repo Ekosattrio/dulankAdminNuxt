@@ -350,7 +350,8 @@ useHead({
 });
 
 const { data: semuaPercetakanData } = await useFetch<PercetakanVendor[]>('/api/semua-percetakan')
-const vendors = ref<PercetakanVendor[]>(semuaPercetakanData.value ?? []);
+const vendors = ref<PercetakanVendor[]>(semuaPercetakanData.value ?? [])
+useMockSync('semua-percetakan', vendors);
 
 const searchQuery = ref("");
 const filterSubscription = ref("");

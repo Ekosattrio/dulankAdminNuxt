@@ -371,7 +371,8 @@ useHead({
 });
 
 const { data: voucherData } = await useFetch<VoucherItem[]>('/api/voucher')
-const coupons = ref<VoucherItem[]>(voucherData.value ?? []);
+const coupons = ref<VoucherItem[]>(voucherData.value ?? [])
+useMockSync('voucher', coupons);
 
 const searchQuery = ref("");
 const showFilters = ref(false);

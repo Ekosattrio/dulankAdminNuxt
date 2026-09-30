@@ -162,7 +162,8 @@ const showImportModal = ref(false);
 const isEditing = ref(false);
 
 const { data: provinceData } = await useFetch<ProvinceItem[]>('/api/province')
-const provinces = ref<ProvinceItem[]>(provinceData.value ?? []);
+const provinces = ref<ProvinceItem[]>(provinceData.value ?? [])
+useMockSync('province', provinces);
 
 const currentProvince = ref<ProvinceItem>({
   name: "",

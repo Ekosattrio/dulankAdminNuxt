@@ -127,6 +127,7 @@
 
 const { data: kertasJenisData } = await useFetch<PaperTypeItem[]>('/api/kertas-jenis')
 const paperTypes = ref<PaperTypeItem[]>(kertasJenisData.value ?? [])
+useMockSync('kertas-jenis', paperTypes)
 
 const searchQuery = ref('')
 const filterGroup = ref('')

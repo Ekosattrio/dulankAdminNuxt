@@ -194,6 +194,7 @@ useHead({
 
 const { data: languageData } = await useFetch<LanguageItem[]>('/api/language')
 const languages = ref<LanguageItem[]>(languageData.value ?? [])
+useMockSync('language', languages)
 
 const searchQuery = ref('')
 const selectedLanguage = ref('')

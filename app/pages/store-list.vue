@@ -213,7 +213,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: storeListData } = await useFetch<StoreItem[]>('/api/store-list')
-const stores = ref<StoreItem[]>(storeListData.value ?? []);
+const stores = ref<StoreItem[]>(storeListData.value ?? [])
+useMockSync('store-list', stores);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

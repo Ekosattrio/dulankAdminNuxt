@@ -138,7 +138,8 @@
 
 
 const { data: ourClientData } = await useFetch<ClientLogo[]>('/api/our-client')
-const clients = ref<ClientLogo[]>(ourClientData.value ?? []);
+const clients = ref<ClientLogo[]>(ourClientData.value ?? [])
+useMockSync('our-client', clients);
 const draggedIndex = ref<number | null>(null);
 
 // Modal state

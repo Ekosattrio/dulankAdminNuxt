@@ -94,7 +94,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinPoliData } = await useFetch<VendorPoli[]>('/api/mesin-poli')
-const polis = ref<VendorPoli[]>(mesinPoliData.value ?? []);
+const polis = ref<VendorPoli[]>(mesinPoliData.value ?? [])
+useMockSync('mesin-poli', polis);
 
 const searchQuery = ref("");
 

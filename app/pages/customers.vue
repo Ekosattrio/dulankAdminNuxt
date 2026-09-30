@@ -250,6 +250,7 @@ useHead({
 
 const { data: customersData } = await useFetch<CustomerRecord[]>('/api/customers')
 const customers = ref<CustomerRecord[]>(customersData.value ?? [])
+useMockSync('customers', customers)
 
 const searchQuery = ref('')
 const filterType = ref('')

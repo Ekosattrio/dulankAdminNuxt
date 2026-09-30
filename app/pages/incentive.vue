@@ -1,7 +1,8 @@
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const { data: incentiveData } = await useFetch<IncentiveItem[]>('/api/incentive')
-const incentives = ref<IncentiveItem[]>(incentiveData.value ?? []);
+const incentives = ref<IncentiveItem[]>(incentiveData.value ?? [])
+useMockSync('incentive', incentives);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

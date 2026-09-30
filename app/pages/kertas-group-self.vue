@@ -212,6 +212,7 @@
 
 const { data: kertasGroupSelfData } = await useFetch<SelfPaperGroup[]>('/api/kertas-group-self')
 const groups = ref<SelfPaperGroup[]>(kertasGroupSelfData.value ?? [])
+useMockSync('kertas-group-self', groups)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

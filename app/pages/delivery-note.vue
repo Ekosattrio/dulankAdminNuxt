@@ -3,7 +3,8 @@
 });
 
 const { data: deliveryNoteData } = await useFetch<DeliveryNoteItem[]>('/api/delivery-note')
-const deliveryNotes = ref<DeliveryNoteItem[]>(deliveryNoteData.value ?? []);
+const deliveryNotes = ref<DeliveryNoteItem[]>(deliveryNoteData.value ?? [])
+useMockSync('delivery-note', deliveryNotes);
 
 const statusFilter = ref<string>("All");
 

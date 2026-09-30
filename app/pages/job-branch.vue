@@ -220,6 +220,7 @@ useHead({
 
 const { data: jobBranchData } = await useFetch<JobBranchItem[]>('/api/job-branch')
 const jobs = ref<JobBranchItem[]>(jobBranchData.value ?? [])
+useMockSync('job-branch', jobs)
 
 const searchQuery = ref('')
 const filterBranch = ref('')

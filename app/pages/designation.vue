@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: designationData } = await useFetch<DesignationItem[]>('/api/designation')
-const designations = ref<DesignationItem[]>(designationData.value ?? []);
+const designations = ref<DesignationItem[]>(designationData.value ?? [])
+useMockSync('designation', designations);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

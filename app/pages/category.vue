@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: categoryData } = await useFetch<CategoryItem[]>('/api/category')
 const categories = ref<CategoryItem[]>(categoryData.value ?? [])
+useMockSync('category', categories)
 
 const searchQuery = ref('')
 const selectedStatus = ref('')

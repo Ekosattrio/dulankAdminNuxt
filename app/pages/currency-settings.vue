@@ -143,6 +143,7 @@ const isEditing = ref(false)
 
 const { data: currencySettingsData } = await useFetch<CurrencyItem[]>('/api/currency-settings')
 const currencies = ref<CurrencyItem[]>(currencySettingsData.value ?? [])
+useMockSync('currency-settings', currencies)
 
 const currentCurrency = ref<CurrencyItem>({
   name: '',

@@ -238,7 +238,8 @@ useHead({
 });
 
 const { data: onlineOrdersData } = await useFetch<OnlineOrder[]>('/api/online-orders')
-const orders = ref<OnlineOrder[]>(onlineOrdersData.value ?? []);
+const orders = ref<OnlineOrder[]>(onlineOrdersData.value ?? [])
+useMockSync('online-orders', orders);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

@@ -107,7 +107,8 @@ useHead({
 const roles = ["Owner", "Super Admin", "Admin", "Designer"];
 
 const { data: roleData } = await useFetch<PermissionGroup[]>('/api/role')
-const groups = ref<PermissionGroup[]>(roleData.value ?? []);
+const groups = ref<PermissionGroup[]>(roleData.value ?? [])
+useMockSync('role', groups);
 
 const expandedGroups = ref<string[]>(["dashboard", "orders"]);
 

@@ -437,7 +437,8 @@ function changePickupStore() {
 // Items
 
 const { data: addSalesData } = await useFetch<OrderItem[]>('/api/add-sales')
-const items = ref<OrderItem[]>(addSalesData.value ?? []);
+const items = ref<OrderItem[]>(addSalesData.value ?? [])
+useMockSync('add-sales', items);
 
 function updateQty(item: OrderItem, delta: number) {
   if (item.qty + delta >= 1) {

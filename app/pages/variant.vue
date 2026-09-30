@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: variantData } = await useFetch<VariantItem[]>('/api/variant')
-const variants = ref<VariantItem[]>(variantData.value ?? []);
+const variants = ref<VariantItem[]>(variantData.value ?? [])
+useMockSync('variant', variants);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

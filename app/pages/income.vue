@@ -272,6 +272,7 @@ const categoryList = [
 
 const { data: incomeData } = await useFetch<IncomeRecord[]>('/api/income')
 const incomes = ref<IncomeRecord[]>(incomeData.value ?? [])
+useMockSync('income', incomes)
 
 const searchQuery = ref('')
 const filterCategory = ref('')

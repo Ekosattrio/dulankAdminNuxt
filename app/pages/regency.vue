@@ -184,7 +184,8 @@ const showImportModal = ref(false);
 const isEditing = ref(false);
 
 const { data: regencyData } = await useFetch<RegencyItem[]>('/api/regency')
-const regencies = ref<RegencyItem[]>(regencyData.value ?? []);
+const regencies = ref<RegencyItem[]>(regencyData.value ?? [])
+useMockSync('regency', regencies);
 
 const currentRegency = ref<RegencyItem>({
   province: "DKI Jakarta",

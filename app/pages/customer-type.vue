@@ -128,6 +128,7 @@ useHead({
 
 const { data: customerTypeData } = await useFetch<CustomerTypeItem[]>('/api/customer-type')
 const customerTypes = ref<CustomerTypeItem[]>(customerTypeData.value ?? [])
+useMockSync('customer-type', customerTypes)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

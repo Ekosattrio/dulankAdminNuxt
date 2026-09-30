@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: unitData } = await useFetch<UnitItem[]>('/api/unit')
-const units = ref<UnitItem[]>(unitData.value ?? []);
+const units = ref<UnitItem[]>(unitData.value ?? [])
+useMockSync('unit', units);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

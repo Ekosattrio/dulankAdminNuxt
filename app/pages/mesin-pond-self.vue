@@ -214,7 +214,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinPondSelfData } = await useFetch<SelfPond[]>('/api/mesin-pond-self')
-const ponds = ref<SelfPond[]>(mesinPondSelfData.value ?? []);
+const ponds = ref<SelfPond[]>(mesinPondSelfData.value ?? [])
+useMockSync('mesin-pond-self', ponds);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

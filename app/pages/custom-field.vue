@@ -240,6 +240,7 @@ useHead({
 
 const { data: customFieldData } = await useFetch<CustomField[]>('/api/custom-field')
 const customFields = ref<CustomField[]>(customFieldData.value ?? [])
+useMockSync('custom-field', customFields)
 
 const searchQuery = ref('')
 const filterModule = ref('')

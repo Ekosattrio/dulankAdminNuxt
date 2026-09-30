@@ -19,7 +19,8 @@ const columns = [
 ];
 
 const { data: salesData } = await useFetch<SaleItem[]>('/api/sales')
-const salesList = ref<SaleItem[]>(salesData.value ?? []);
+const salesList = ref<SaleItem[]>(salesData.value ?? [])
+useMockSync('sales', salesList);
 
 // Modal states
 const isDetailModalOpen = ref(false);

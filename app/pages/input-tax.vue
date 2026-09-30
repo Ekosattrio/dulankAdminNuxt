@@ -155,6 +155,7 @@ useHead({
 
 const { data: inputTaxData } = await useFetch<InputTaxItem[]>('/api/input-tax')
 const invoices = ref<InputTaxItem[]>(inputTaxData.value ?? [])
+useMockSync('input-tax', invoices)
 
 const searchQuery = ref('')
 const filterCredited = ref('')

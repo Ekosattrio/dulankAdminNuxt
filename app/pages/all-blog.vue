@@ -302,7 +302,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: allBlogData } = await useFetch<Blog[]>('/api/all-blog')
-const blogs = ref<Blog[]>(allBlogData.value ?? []);
+const blogs = ref<Blog[]>(allBlogData.value ?? [])
+useMockSync('all-blog', blogs);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

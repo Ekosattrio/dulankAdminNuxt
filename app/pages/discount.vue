@@ -331,6 +331,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 
 const { data: discountData } = await useFetch<DiscountItem[]>('/api/discount')
 const discounts = ref<DiscountItem[]>(discountData.value ?? [])
+useMockSync('discount', discounts)
 
 const searchQuery = ref('')
 const filterPlan = ref('')

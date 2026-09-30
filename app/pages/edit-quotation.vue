@@ -41,7 +41,8 @@ const pickupStore = ref({
 
 // Line Items
 const { data: editQuotationData } = await useFetch<EditQuotationLineItem[]>('/api/edit-quotation')
-const items = ref<EditQuotationLineItem[]>(editQuotationData.value ?? []);
+const items = ref<EditQuotationLineItem[]>(editQuotationData.value ?? [])
+useMockSync('edit-quotation', items);
 
 const voucherDiscount = ref(0);
 const shippingCost = ref(89500);

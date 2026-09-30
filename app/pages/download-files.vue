@@ -226,6 +226,7 @@ const newFolderName = ref('')
 
 const { data: downloadFilesData } = await useFetch<FileItem[]>('/api/download-files')
 const fileList = ref<FileItem[]>(downloadFilesData.value ?? [])
+useMockSync('download-files', fileList)
 
 const filteredFiles = computed(() => {
   return fileList.value.filter(file => {

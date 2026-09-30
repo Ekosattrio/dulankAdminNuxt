@@ -3,7 +3,8 @@
 });
 
 const { data: requestQuotationData } = await useFetch<RFQItem[]>('/api/request-quotation')
-const rfqs = ref<RFQItem[]>(requestQuotationData.value ?? []);
+const rfqs = ref<RFQItem[]>(requestQuotationData.value ?? [])
+useMockSync('request-quotation', rfqs);
 
 const statusFilter = ref<string>("All");
 

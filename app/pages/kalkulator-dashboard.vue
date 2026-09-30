@@ -53,7 +53,8 @@ function printPage() {
 // --- Data Table: Users & Calculation Stats ---
 
 const { data: kalkulatorDashboardData } = await useFetch<CalculatorItem[]>('/api/kalkulator-dashboard')
-const tableData = ref<CalculatorItem[]>(kalkulatorDashboardData.value ?? []);
+const tableData = ref<CalculatorItem[]>(kalkulatorDashboardData.value ?? [])
+useMockSync('kalkulator-dashboard', tableData);
 
 // Filtering
 const filteredList = computed(() => {

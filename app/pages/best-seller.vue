@@ -113,6 +113,7 @@
 
 const { data: bestSellerData } = await useFetch<BestsellerItem[]>('/api/best-seller')
 const products = ref<BestsellerItem[]>(bestSellerData.value ?? [])
+useMockSync('best-seller', products)
 
 const searchQuery = ref('')
 const filterCategory = ref('')

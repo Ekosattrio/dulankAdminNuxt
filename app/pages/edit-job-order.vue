@@ -196,6 +196,7 @@ useHead({
 
 const { data: editJobOrderData } = await useFetch<OrderProduct[]>('/api/edit-job-order')
 const orderProducts = ref<OrderProduct[]>(editJobOrderData.value ?? [])
+useMockSync('edit-job-order', orderProducts)
 
 const selectedProductIndex = ref(0)
 

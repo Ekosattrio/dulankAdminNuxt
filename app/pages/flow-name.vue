@@ -175,6 +175,7 @@ useHead({
 
 const { data: flowNameData } = await useFetch<FlowNameItem[]>('/api/flow-name')
 const flowNames = ref<FlowNameItem[]>(flowNameData.value ?? [])
+useMockSync('flow-name', flowNames)
 
 const searchQuery = ref('')
 const filterCategory = ref('')

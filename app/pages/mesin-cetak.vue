@@ -107,7 +107,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinCetakData } = await useFetch<VendorPress[]>('/api/mesin-cetak')
-const machines = ref<VendorPress[]>(mesinCetakData.value ?? []);
+const machines = ref<VendorPress[]>(mesinCetakData.value ?? [])
+useMockSync('mesin-cetak', machines);
 
 const searchQuery = ref("");
 

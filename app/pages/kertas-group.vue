@@ -189,6 +189,7 @@
 
 const { data: kertasGroupData } = await useFetch<PaperGroupItem[]>('/api/kertas-group')
 const groups = ref<PaperGroupItem[]>(kertasGroupData.value ?? [])
+useMockSync('kertas-group', groups)
 
 const searchQuery = ref('')
 const filterGroup = ref('')

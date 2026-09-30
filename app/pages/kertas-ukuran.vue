@@ -105,6 +105,7 @@
 
 const { data: kertasUkuranData } = await useFetch<PaperSizeItem[]>('/api/kertas-ukuran')
 const sizes = ref<PaperSizeItem[]>(kertasUkuranData.value ?? [])
+useMockSync('kertas-ukuran', sizes)
 
 const searchQuery = ref('')
 

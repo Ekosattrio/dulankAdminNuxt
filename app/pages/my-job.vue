@@ -150,7 +150,8 @@ useHead({
 });
 
 const { data: myJobData } = await useFetch<MyJobItem[]>('/api/my-job')
-const jobs = ref<MyJobItem[]>(myJobData.value ?? []);
+const jobs = ref<MyJobItem[]>(myJobData.value ?? [])
+useMockSync('my-job', jobs);
 
 const selectedPriority = ref<"all" | "urgent" | "high" | "normal">("all");
 

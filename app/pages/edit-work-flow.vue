@@ -11,7 +11,8 @@ const selectedProduct = ref("Brosur A5");
 const selectedCategory = ref("Offset");
 
 const { data: editWorkFlowData } = await useFetch<EditFlowStepOption[]>('/api/edit-work-flow')
-const flowSteps = ref<EditFlowStepOption[]>(editWorkFlowData.value ?? []);
+const flowSteps = ref<EditFlowStepOption[]>(editWorkFlowData.value ?? [])
+useMockSync('edit-work-flow', flowSteps);
 
 const activeSequence = computed(() => {
   return flowSteps.value.filter((s) => s.selected);

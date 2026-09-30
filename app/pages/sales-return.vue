@@ -327,7 +327,8 @@ useHead({
 });
 
 const { data: salesReturnData } = await useFetch<SalesReturn[]>('/api/sales-return')
-const returns = ref<SalesReturn[]>(salesReturnData.value ?? []);
+const returns = ref<SalesReturn[]>(salesReturnData.value ?? [])
+useMockSync('sales-return', returns);
 
 const searchQuery = ref("");
 const filterPaymentStatus = ref("");

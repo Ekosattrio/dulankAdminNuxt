@@ -203,6 +203,7 @@
 
 const { data: faqData } = await useFetch<FAQItem[]>('/api/faq')
 const faqs = ref<FAQItem[]>(faqData.value ?? [])
+useMockSync('faq', faqs)
 
 const searchQuery = ref('')
 const filterCategory = ref('')

@@ -211,6 +211,7 @@
 
 const { data: contactFormData } = await useFetch<ContactMessage[]>('/api/contact-form')
 const messages = ref<ContactMessage[]>(contactFormData.value ?? [])
+useMockSync('contact-form', messages)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

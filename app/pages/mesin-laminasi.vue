@@ -99,7 +99,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinLaminasiData } = await useFetch<VendorLaminate[]>('/api/mesin-laminasi')
-const laminates = ref<VendorLaminate[]>(mesinLaminasiData.value ?? []);
+const laminates = ref<VendorLaminate[]>(mesinLaminasiData.value ?? [])
+useMockSync('mesin-laminasi', laminates);
 
 const searchQuery = ref("");
 

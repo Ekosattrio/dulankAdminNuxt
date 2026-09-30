@@ -1,7 +1,8 @@
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const { data: productListData } = await useFetch<ProductListRecord[]>('/api/product-list')
-const products = ref<ProductListRecord[]>(productListData.value ?? []);
+const products = ref<ProductListRecord[]>(productListData.value ?? [])
+useMockSync('product-list', products);
 
 const searchQuery = ref("");
 const selectedCategory = ref("");

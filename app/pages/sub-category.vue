@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: subCategoryData } = await useFetch<SubCategoryItem[]>('/api/sub-category')
-const subCategories = ref<SubCategoryItem[]>(subCategoryData.value ?? []);
+const subCategories = ref<SubCategoryItem[]>(subCategoryData.value ?? [])
+useMockSync('sub-category', subCategories);
 
 const searchQuery = ref("");
 const selectedCategory = ref("");

@@ -105,7 +105,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinPondData } = await useFetch<VendorPond[]>('/api/mesin-pond')
-const ponds = ref<VendorPond[]>(mesinPondData.value ?? []);
+const ponds = ref<VendorPond[]>(mesinPondData.value ?? [])
+useMockSync('mesin-pond', ponds);
 
 const searchQuery = ref("");
 

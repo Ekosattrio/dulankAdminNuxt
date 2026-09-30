@@ -209,7 +209,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinLaminasiSelfData } = await useFetch<SelfLaminate[]>('/api/mesin-laminasi-self')
-const laminates = ref<SelfLaminate[]>(mesinLaminasiSelfData.value ?? []);
+const laminates = ref<SelfLaminate[]>(mesinLaminasiSelfData.value ?? [])
+useMockSync('mesin-laminasi-self', laminates);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

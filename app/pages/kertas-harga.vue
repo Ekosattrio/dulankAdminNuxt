@@ -120,6 +120,7 @@
 
 const { data: kertasHargaData } = await useFetch<VendorPaperPrice[]>('/api/kertas-harga')
 const prices = ref<VendorPaperPrice[]>(kertasHargaData.value ?? [])
+useMockSync('kertas-harga', prices)
 
 const searchQuery = ref('')
 const filterGroup = ref('')

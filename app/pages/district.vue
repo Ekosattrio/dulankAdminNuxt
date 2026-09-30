@@ -184,6 +184,7 @@ const isEditing = ref(false)
 
 const { data: districtData } = await useFetch<DistrictItem[]>('/api/district')
 const districts = ref<DistrictItem[]>(districtData.value ?? [])
+useMockSync('district', districts)
 
 const currentDistrict = ref<DistrictItem>({
   province: 'DKI Jakarta',

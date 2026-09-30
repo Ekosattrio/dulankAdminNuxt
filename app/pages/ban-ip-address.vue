@@ -169,6 +169,7 @@ useHead({
 
 const { data: banIpAddressData } = await useFetch<BanIp[]>('/api/ban-ip-address')
 const banList = ref<BanIp[]>(banIpAddressData.value ?? [])
+useMockSync('ban-ip-address', banList)
 
 const searchQuery = ref('')
 const filterIp = ref('')

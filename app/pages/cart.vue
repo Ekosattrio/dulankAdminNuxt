@@ -182,6 +182,7 @@
 
 const { data: cartData } = await useFetch<CartItem[]>('/api/cart')
 const carts = ref<CartItem[]>(cartData.value ?? [])
+useMockSync('cart', carts)
 
 const searchQuery = ref('')
 const filterCategory = ref('')

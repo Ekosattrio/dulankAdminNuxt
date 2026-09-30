@@ -188,7 +188,8 @@ const isEditing = ref(false);
 const availableStores = ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 2", "Toko Cabang 3"];
 
 const { data: userAdminData } = await useFetch<AdminItem[]>('/api/user-admin')
-const admins = ref<AdminItem[]>(userAdminData.value ?? []);
+const admins = ref<AdminItem[]>(userAdminData.value ?? [])
+useMockSync('user-admin', admins);
 
 const currentAdmin = ref<AdminItem>({
   id: "",

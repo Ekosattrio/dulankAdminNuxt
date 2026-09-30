@@ -201,7 +201,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: mesinPoliSelfData } = await useFetch<SelfPoli[]>('/api/mesin-poli-self')
-const polis = ref<SelfPoli[]>(mesinPoliSelfData.value ?? []);
+const polis = ref<SelfPoli[]>(mesinPoliSelfData.value ?? [])
+useMockSync('mesin-poli-self', polis);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

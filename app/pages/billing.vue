@@ -196,6 +196,7 @@ useHead({
 
 const { data: billingData } = await useFetch<BillingItem[]>('/api/billing')
 const billings = ref<BillingItem[]>(billingData.value ?? [])
+useMockSync('billing', billings)
 
 const searchQuery = ref('')
 const filterMethod = ref('')

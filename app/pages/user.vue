@@ -201,7 +201,8 @@ const showModal = ref(false);
 const isEditing = ref(false);
 
 const { data: userData } = await useFetch<UserItem[]>('/api/user')
-const users = ref<UserItem[]>(userData.value ?? []);
+const users = ref<UserItem[]>(userData.value ?? [])
+useMockSync('user', users);
 
 const currentUser = ref<UserItem>({
   id: "",

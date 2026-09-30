@@ -322,7 +322,8 @@ useHead({
 });
 
 const { data: semuaTokoKertasData } = await useFetch<TokoKertas[]>('/api/semua-toko-kertas')
-const shops = ref<TokoKertas[]>(semuaTokoKertasData.value ?? []);
+const shops = ref<TokoKertas[]>(semuaTokoKertasData.value ?? [])
+useMockSync('semua-toko-kertas', shops);
 
 const searchQuery = ref("");
 const filterSubscription = ref("");

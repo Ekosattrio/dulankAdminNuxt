@@ -3,7 +3,8 @@
 });
 
 const { data: workFlowData } = await useFetch<WorkflowItem[]>('/api/work-flow')
-const workflows = ref<WorkflowItem[]>(workFlowData.value ?? []);
+const workflows = ref<WorkflowItem[]>(workFlowData.value ?? [])
+useMockSync('work-flow', workflows);
 
 const categoryFilter = ref<string>("All");
 

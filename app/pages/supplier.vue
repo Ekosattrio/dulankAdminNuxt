@@ -162,7 +162,8 @@ useHead({
 });
 
 const { data: supplierData } = await useFetch<SupplierItem[]>('/api/supplier')
-const suppliers = ref<SupplierItem[]>(supplierData.value ?? []);
+const suppliers = ref<SupplierItem[]>(supplierData.value ?? [])
+useMockSync('supplier', suppliers);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

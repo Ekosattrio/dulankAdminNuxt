@@ -147,6 +147,7 @@
 
 const { data: komponenMinimumData } = await useFetch<MinimumComponent[]>('/api/komponen-minimum')
 const components = ref<MinimumComponent[]>(komponenMinimumData.value ?? [])
+useMockSync('komponen-minimum', components)
 
 const searchQuery = ref('')
 

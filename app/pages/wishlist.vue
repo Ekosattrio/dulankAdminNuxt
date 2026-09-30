@@ -254,7 +254,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: wishlistData } = await useFetch<WishlistItem[]>('/api/wishlist')
-const wishlist = ref<WishlistItem[]>(wishlistData.value ?? []);
+const wishlist = ref<WishlistItem[]>(wishlistData.value ?? [])
+useMockSync('wishlist', wishlist);
 
 const searchQuery = ref("");
 const filterCategory = ref("");

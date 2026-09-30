@@ -198,7 +198,8 @@ useHead({
 });
 
 const { data: taxRatesData } = await useFetch<TaxRateItem[]>('/api/tax-rates')
-const taxRates = ref<TaxRateItem[]>(taxRatesData.value ?? []);
+const taxRates = ref<TaxRateItem[]>(taxRatesData.value ?? [])
+useMockSync('tax-rates', taxRates);
 
 const searchQuery = ref("");
 

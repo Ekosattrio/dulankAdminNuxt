@@ -162,7 +162,8 @@ useHead({
 });
 
 const { data: addProductProcessData } = await useFetch<ProductProcess[]>('/api/add-product-process')
-const processes = ref<ProductProcess[]>(addProductProcessData.value ?? []);
+const processes = ref<ProductProcess[]>(addProductProcessData.value ?? [])
+useMockSync('add-product-process', processes);
 
 const searchQuery = ref("");
 const filterProcess = ref("");

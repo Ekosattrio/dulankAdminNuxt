@@ -190,6 +190,7 @@
 
 const { data: blogTagData } = await useFetch<BlogTag[]>('/api/blog-tag')
 const tags = ref<BlogTag[]>(blogTagData.value ?? [])
+useMockSync('blog-tag', tags)
 
 const searchQuery = ref('')
 const sortBy = ref<'recent' | 'asc' | 'desc'>('recent')

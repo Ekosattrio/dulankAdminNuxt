@@ -178,6 +178,7 @@ useHead({
 
 const { data: couponData } = await useFetch<CouponItem[]>('/api/coupon')
 const coupons = ref<CouponItem[]>(couponData.value ?? [])
+useMockSync('coupon', coupons)
 
 const searchQuery = ref('')
 const filterType = ref('')

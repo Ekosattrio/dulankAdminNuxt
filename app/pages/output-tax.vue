@@ -197,7 +197,8 @@ const transactionCodeOptions = [
 ];
 
 const { data: outputTaxData } = await useFetch<OutputTaxItem[]>('/api/output-tax')
-const invoices = ref<OutputTaxItem[]>(outputTaxData.value ?? []);
+const invoices = ref<OutputTaxItem[]>(outputTaxData.value ?? [])
+useMockSync('output-tax', invoices);
 
 const searchQuery = ref("");
 const filterTxCode = ref("");

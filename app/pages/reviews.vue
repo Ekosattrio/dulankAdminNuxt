@@ -261,7 +261,8 @@
 <script setup lang="ts">import { ref, computed } from "vue";
 
 const { data: reviewsData } = await useFetch<ReviewItem[]>('/api/reviews')
-const reviews = ref<ReviewItem[]>(reviewsData.value ?? []);
+const reviews = ref<ReviewItem[]>(reviewsData.value ?? [])
+useMockSync('reviews', reviews);
 
 const searchQuery = ref("");
 const filterRating = ref<number | null>(null);

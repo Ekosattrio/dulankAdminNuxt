@@ -65,7 +65,8 @@ useHead({
 });
 
 const { data: preferenceData } = await useFetch<PreferenceItem[]>('/api/preference')
-const preferences = ref<PreferenceItem[]>(preferenceData.value ?? []);
+const preferences = ref<PreferenceItem[]>(preferenceData.value ?? [])
+useMockSync('preference', preferences);
 
 const onToggle = (pref: PreferenceItem) => {
   // toggle notification

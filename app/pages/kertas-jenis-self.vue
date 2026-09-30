@@ -204,6 +204,7 @@
 
 const { data: kertasJenisSelfData } = await useFetch<SelfPaperType[]>('/api/kertas-jenis-self')
 const items = ref<SelfPaperType[]>(kertasJenisSelfData.value ?? [])
+useMockSync('kertas-jenis-self', items)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

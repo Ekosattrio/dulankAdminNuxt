@@ -5,7 +5,8 @@
 // Initial records matching legacy subscriptions.html
 
 const { data: subscriptionsData } = await useFetch<SubscriptionItem[]>('/api/subscriptions')
-const subscriptions = ref<SubscriptionItem[]>(subscriptionsData.value ?? []);
+const subscriptions = ref<SubscriptionItem[]>(subscriptionsData.value ?? [])
+useMockSync('subscriptions', subscriptions);
 
 // Filters & Search
 const searchQuery = ref("");

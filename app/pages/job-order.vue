@@ -3,7 +3,8 @@
 });
 
 const { data: jobOrderData } = await useFetch<JobOrder[]>('/api/job-order')
-const jobOrders = ref<JobOrder[]>(jobOrderData.value ?? []);
+const jobOrders = ref<JobOrder[]>(jobOrderData.value ?? [])
+useMockSync('job-order', jobOrders);
 
 const selectedFlowFilter = ref<string>("all");
 const categoryFilter = ref<string>("all");

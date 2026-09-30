@@ -171,7 +171,8 @@ useHead({
 });
 
 const { data: paymentsData } = await useFetch<PaymentRecord[]>('/api/payments')
-const payments = ref<PaymentRecord[]>(paymentsData.value ?? []);
+const payments = ref<PaymentRecord[]>(paymentsData.value ?? [])
+useMockSync('payments', payments);
 
 const searchQuery = ref("");
 const filterType = ref("");

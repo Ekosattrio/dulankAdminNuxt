@@ -127,6 +127,7 @@ useHead({
 
 const { data: flowTemplateData } = await useFetch<FlowTemplateItem[]>('/api/flow-template')
 const templates = ref<FlowTemplateItem[]>(flowTemplateData.value ?? [])
+useMockSync('flow-template', templates)
 
 const searchQuery = ref('')
 

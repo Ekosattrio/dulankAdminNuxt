@@ -207,6 +207,7 @@ useHead({
 
 const { data: hargaJasaLainyaData } = await useFetch<JasaLain[]>('/api/harga-jasa-lainya')
 const items = ref<JasaLain[]>(hargaJasaLainyaData.value ?? [])
+useMockSync('harga-jasa-lainya', items)
 
 const searchQuery = ref('')
 const filterUnit = ref('')

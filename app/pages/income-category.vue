@@ -183,6 +183,7 @@ useHead({
 
 const { data: incomeCategoryData } = await useFetch<IncomeCategory[]>('/api/income-category')
 const categories = ref<IncomeCategory[]>(incomeCategoryData.value ?? [])
+useMockSync('income-category', categories)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

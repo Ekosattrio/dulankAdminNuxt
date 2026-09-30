@@ -157,6 +157,7 @@
 
 const { data: checkoutData } = await useFetch<CheckoutItem[]>('/api/checkout')
 const checkouts = ref<CheckoutItem[]>(checkoutData.value ?? [])
+useMockSync('checkout', checkouts)
 
 const searchQuery = ref('')
 const filterMethod = ref('')

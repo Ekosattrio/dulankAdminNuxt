@@ -28,6 +28,7 @@ const tabs = [
 
 const { data: cetakFullColorData } = await useFetch<ProductCustom[]>('/api/cetak-full-color')
 const products = ref<ProductCustom[]>(cetakFullColorData.value ?? [])
+useMockSync('cetak-full-color', products)
 
 // Tab 2: Product Size
 const sizes = ref([

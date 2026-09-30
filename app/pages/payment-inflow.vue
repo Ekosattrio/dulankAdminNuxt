@@ -322,7 +322,8 @@ useHead({
 const showBalanceSummary = ref(true);
 
 const { data: paymentInflowData } = await useFetch<InflowRecord[]>('/api/payment-inflow')
-const inflows = ref<InflowRecord[]>(paymentInflowData.value ?? []);
+const inflows = ref<InflowRecord[]>(paymentInflowData.value ?? [])
+useMockSync('payment-inflow', inflows);
 
 const searchQuery = ref("");
 const filterSource = ref("");

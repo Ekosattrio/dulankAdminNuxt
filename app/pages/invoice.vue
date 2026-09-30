@@ -5,7 +5,8 @@ useHead({
 });
 
 const { data: invoiceData } = await useFetch<InvoiceItem[]>('/api/invoice')
-const invoices = ref<InvoiceItem[]>(invoiceData.value ?? []);
+const invoices = ref<InvoiceItem[]>(invoiceData.value ?? [])
+useMockSync('invoice', invoices);
 
 const statusFilter = ref<"All" | "Paid" | "Partial" | "Unpaid">("All");
 

@@ -2,6 +2,7 @@
 
 const { data: cashAdvanceData } = await useFetch<CashAdvanceItem[]>('/api/cash-advance')
 const cashAdvances = ref<CashAdvanceItem[]>(cashAdvanceData.value ?? [])
+useMockSync('cash-advance', cashAdvances)
 
 const searchQuery = ref('')
 const filteredCashAdvances = computed(() => {

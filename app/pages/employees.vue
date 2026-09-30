@@ -1,5 +1,6 @@
 <script setup lang="ts">const { data: employeesData } = await useFetch<EmployeeItem[]>('/api/employees')
-const employees = ref<EmployeeItem[]>(employeesData.value ?? []);
+const employees = ref<EmployeeItem[]>(employeesData.value ?? [])
+useMockSync('employees', employees);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

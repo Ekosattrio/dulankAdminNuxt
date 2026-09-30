@@ -1,7 +1,8 @@
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const { data: employeeSalaryData } = await useFetch<SalaryRecord[]>('/api/employee-salary')
-const records = ref<SalaryRecord[]>(employeeSalaryData.value ?? []);
+const records = ref<SalaryRecord[]>(employeeSalaryData.value ?? [])
+useMockSync('employee-salary', records);
 
 const searchQuery = ref("");
 const selectedStatus = ref("");

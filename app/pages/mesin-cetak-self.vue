@@ -220,6 +220,7 @@
 
 const { data: mesinCetakSelfData } = await useFetch<SelfPress[]>('/api/mesin-cetak-self')
 const machines = ref<SelfPress[]>(mesinCetakSelfData.value ?? [])
+useMockSync('mesin-cetak-self', machines)
 
 const searchQuery = ref('')
 const filterType = ref('')

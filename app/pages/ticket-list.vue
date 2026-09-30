@@ -320,7 +320,8 @@ useHead({
 });
 
 const { data: ticketListData } = await useFetch<TicketListItem[]>('/api/ticket-list')
-const tickets = ref<TicketListItem[]>(ticketListData.value ?? []);
+const tickets = ref<TicketListItem[]>(ticketListData.value ?? [])
+useMockSync('ticket-list', tickets);
 
 const searchQuery = ref("");
 const filterPriority = ref("");

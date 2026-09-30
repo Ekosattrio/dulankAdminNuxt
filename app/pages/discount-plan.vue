@@ -253,6 +253,7 @@ const customerOptions = ref([
 
 const { data: discountPlanData } = await useFetch<DiscountPlan[]>('/api/discount-plan')
 const plans = ref<DiscountPlan[]>(discountPlanData.value ?? [])
+useMockSync('discount-plan', plans)
 
 const searchQuery = ref('')
 const filterCustomer = ref('')

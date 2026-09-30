@@ -9,6 +9,7 @@ const selectedCategory = ref('Offset')
 
 const { data: addWorkFlowData } = await useFetch<FlowStepOption[]>('/api/add-work-flow')
 const flowSteps = ref<FlowStepOption[]>(addWorkFlowData.value ?? [])
+useMockSync('add-work-flow', flowSteps)
 
 const activeSequence = computed(() => {
   return flowSteps.value.filter(s => s.selected)

@@ -163,6 +163,7 @@ const isEditing = ref(false)
 
 const { data: bankSettingsListData } = await useFetch<BankAccount[]>('/api/bank-settings-list')
 const accounts = ref<BankAccount[]>(bankSettingsListData.value ?? [])
+useMockSync('bank-settings-list', accounts)
 
 const currentAccount = ref<BankAccount>({
   bankName: '',

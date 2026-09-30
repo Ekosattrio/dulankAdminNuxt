@@ -118,6 +118,7 @@ useHead({
 
 const { data: flowCategoryData } = await useFetch<FlowCategory[]>('/api/flow-category')
 const categories = ref<FlowCategory[]>(flowCategoryData.value ?? [])
+useMockSync('flow-category', categories)
 
 const searchQuery = ref('')
 

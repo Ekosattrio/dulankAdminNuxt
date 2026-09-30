@@ -134,7 +134,8 @@ const showFilter = ref(false);
 const filterDate = ref("");
 
 const { data: permissionsData } = await useFetch<ModulePerm[]>('/api/permissions')
-const modules = ref<ModulePerm[]>(permissionsData.value ?? []);
+const modules = ref<ModulePerm[]>(permissionsData.value ?? [])
+useMockSync('permissions', modules);
 
 const filteredModules = computed(() => {
   return modules.value.filter((m) => m.name.toLowerCase().includes(searchQuery.value.toLowerCase()));

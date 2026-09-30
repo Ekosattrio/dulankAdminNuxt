@@ -141,6 +141,7 @@
 
 const { data: komponenFiksData } = await useFetch<FixedComponent[]>('/api/komponen-fiks')
 const components = ref<FixedComponent[]>(komponenFiksData.value ?? [])
+useMockSync('komponen-fiks', components)
 
 const searchQuery = ref('')
 

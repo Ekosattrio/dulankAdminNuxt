@@ -104,6 +104,7 @@
 
 const { data: blogCommentData } = await useFetch<BlogComment[]>('/api/blog-comment')
 const comments = ref<BlogComment[]>(blogCommentData.value ?? [])
+useMockSync('blog-comment', comments)
 
 const searchQuery = ref('')
 const sortBy = ref<'recent' | 'asc' | 'desc'>('recent')

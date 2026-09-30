@@ -5,7 +5,8 @@ useHead({
 });
 
 const { data: quotationData } = await useFetch<QuotationItem[]>('/api/quotation')
-const quotations = ref<QuotationItem[]>(quotationData.value ?? []);
+const quotations = ref<QuotationItem[]>(quotationData.value ?? [])
+useMockSync('quotation', quotations);
 
 const statusFilter = ref<string>("All");
 

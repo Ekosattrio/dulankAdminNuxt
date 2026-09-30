@@ -144,7 +144,8 @@ const showModal = ref(false);
 const isEditing = ref(false);
 
 const { data: printerSettingsData } = await useFetch<PrinterItem[]>('/api/printer-settings')
-const printers = ref<PrinterItem[]>(printerSettingsData.value ?? []);
+const printers = ref<PrinterItem[]>(printerSettingsData.value ?? [])
+useMockSync('printer-settings', printers);
 
 const currentPrinter = ref<PrinterItem>({
   name: "",

@@ -242,7 +242,8 @@ useHead({
 });
 
 const { data: posOrderData } = await useFetch<PosOrder[]>('/api/pos-order')
-const orders = ref<PosOrder[]>(posOrderData.value ?? []);
+const orders = ref<PosOrder[]>(posOrderData.value ?? [])
+useMockSync('pos-order', orders);
 
 const searchQuery = ref("");
 const filterStatus = ref("");

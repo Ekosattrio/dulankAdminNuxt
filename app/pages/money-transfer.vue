@@ -271,7 +271,8 @@ const accountOptions = [
 ];
 
 const { data: moneyTransferData } = await useFetch<TransferRecord[]>('/api/money-transfer')
-const transfers = ref<TransferRecord[]>(moneyTransferData.value ?? []);
+const transfers = ref<TransferRecord[]>(moneyTransferData.value ?? [])
+useMockSync('money-transfer', transfers);
 
 const searchQuery = ref("");
 

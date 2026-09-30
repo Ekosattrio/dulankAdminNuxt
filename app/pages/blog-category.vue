@@ -188,6 +188,7 @@
 
 const { data: blogCategoryData } = await useFetch<BlogCategory[]>('/api/blog-category')
 const categories = ref<BlogCategory[]>(blogCategoryData.value ?? [])
+useMockSync('blog-category', categories)
 
 const searchQuery = ref('')
 const sortBy = ref<'recent' | 'asc' | 'desc'>('recent')

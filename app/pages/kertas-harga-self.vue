@@ -214,6 +214,7 @@
 
 const { data: kertasHargaSelfData } = await useFetch<SelfPaperPrice[]>('/api/kertas-harga-self')
 const prices = ref<SelfPaperPrice[]>(kertasHargaSelfData.value ?? [])
+useMockSync('kertas-harga-self', prices)
 
 const searchQuery = ref('')
 const filterStatus = ref('')

@@ -117,6 +117,7 @@ useHead({
 
 const { data: jobProgressData } = await useFetch<JobProgressItem[]>('/api/job-progress')
 const progressList = ref<JobProgressItem[]>(jobProgressData.value ?? [])
+useMockSync('job-progress', progressList)
 
 const searchQuery = ref('')
 const filterProcess = ref('')

@@ -120,7 +120,8 @@ const showModal = ref(false);
 const isEditing = ref(false);
 
 const { data: rolePermissionsData } = await useFetch<RoleItem[]>('/api/role-permissions')
-const roles = ref<RoleItem[]>(rolePermissionsData.value ?? []);
+const roles = ref<RoleItem[]>(rolePermissionsData.value ?? [])
+useMockSync('role-permissions', roles);
 
 const currentRole = ref<RoleItem>({
   name: "",
