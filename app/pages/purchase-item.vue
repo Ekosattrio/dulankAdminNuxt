@@ -1,189 +1,184 @@
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Purchase Item</h4>
-          <h6>Manage your purchase catalog items</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Purchase Item" subtitle="Manage your purchase catalog items">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printList"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refreshList"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Purchase Item</span>
+          </button>
         </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printList">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshList">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-      <div class="page-btn">
-        <a href="#" class="btn btn-added" @click.prevent="openAddModal">
-          <i class="feather-plus-circle me-2"></i>Add Purchase Item
-        </a>
-      </div>
-    </div>
+      </template>
+    </CommonPageHeader>
 
     <!-- Purchase Items Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <!-- Filter -->
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search purchase item..."
-                class="form-control form-control-sm"
-              />
-            </div>
-            <div class="category-filter">
-              <select class="form-select form-select-sm" v-model="categoryFilter">
-                <option value="">All Categories</option>
-                <option>Kertas & Bahan Baku Cetak</option>
-                <option>Tinta & Toner</option>
-                <option>Bahan Finishing & Jilid</option>
-                <option>Sparepart Mesin</option>
-              </select>
-            </div>
-          </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonSearchFilter v-model="searchQuery" placeholder="Search purchase item..." />
+          <CommonFilterSelect
+            v-model="categoryFilter"
+            allLabel="All Categories"
+            :options="[
+              { value: 'Kertas & Bahan Baku Cetak', label: 'Kertas & Bahan Baku Cetak' },
+              { value: 'Tinta & Toner', label: 'Tinta & Toner' },
+              { value: 'Bahan Finishing & Jilid', label: 'Bahan Finishing & Jilid' },
+              { value: 'Sparepart Mesin', label: 'Sparepart Mesin' },
+            ]"
+          />
         </div>
-        <!-- /Filter -->
+      </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Product</th>
-                <th>Description</th>
-                <th>Merk</th>
-                <th class="text-end">Price (IDR)</th>
-                <th>Unit</th>
-                <th>Created</th>
-                <th class="no-sort">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredItems" :key="item.id">
-                <td>{{ item.category }}</td>
-                <td class="fw-bold">{{ item.product }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.merk }}</td>
-                <td class="text-end fw-semibold">{{ formatNumber(item.price) }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ item.created }}</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action d-flex align-items-center gap-1">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewItem(item)" title="View">
-                      <i class="feather-eye"></i>
-                    </a>
-                    <a class="p-2 text-info cursor-pointer" @click.prevent="openEditModal(item)" title="Edit">
-                      <i class="feather-edit"></i>
-                    </a>
-                    <a class="p-2 text-danger cursor-pointer" @click.prevent="deleteItem(item)" title="Delete">
-                      <i class="feather-trash-2"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="filteredItems.length === 0">
-                <td colspan="8" class="text-center py-4 text-muted">No purchase items found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Category</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Description</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Merk</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Price (IDR)</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Unit</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredItems" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.category }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.product }}</td>
+              <td class="max-w-[200px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.description }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.merk }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.price) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.unit }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.created }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" show-view @view="viewItem(item)" @edit="openEditModal(item)" @delete="deleteItem(item)" />
+              </td>
+            </tr>
+            <tr v-if="filteredItems.length === 0">
+              <td colspan="8" class="p-8 text-center text-gray-400">No purchase items found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- View Item Modal -->
-    <div v-if="showViewModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Purchase Item Detail</h4>
-            <button type="button" class="btn-close" @click="showViewModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="selectedItem">
-            <div class="mb-2"><strong>Category:</strong> {{ selectedItem.category }}</div>
-            <div class="mb-2"><strong>Product Name:</strong> {{ selectedItem.product }}</div>
-            <div class="mb-2"><strong>Merk:</strong> {{ selectedItem.merk }}</div>
-            <div class="mb-2"><strong>Price:</strong> Rp {{ formatNumber(selectedItem.price) }} / {{ selectedItem.unit }}</div>
-            <div class="mb-2"><strong>Description:</strong> {{ selectedItem.description }}</div>
-            <div class="mb-2"><strong>Created:</strong> {{ selectedItem.created }}</div>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end mt-4">
-              <button type="button" class="btn btn-secondary" @click="showViewModal = false">Close</button>
-            </div>
-          </div>
-        </div>
+    <CommonBaseModal v-model="showViewModal" title="Purchase Item Detail" maxWidth="md">
+      <div v-if="selectedItem" class="space-y-2.5 text-sm">
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Category</span><span class="text-gray-800 dark:text-gray-200">{{ selectedItem.category }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Product Name</span><span class="text-gray-800 dark:text-gray-200">{{ selectedItem.product }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Merk</span><span class="text-gray-800 dark:text-gray-200">{{ selectedItem.merk }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Price</span><span class="text-gray-800 dark:text-gray-200">Rp {{ formatNumber(selectedItem.price) }} / {{ selectedItem.unit }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Description</span><span class="text-gray-800 dark:text-gray-200">{{ selectedItem.description }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Created</span><span class="text-gray-800 dark:text-gray-200">{{ selectedItem.created }}</span></div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="showViewModal = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
 
     <!-- Add/Edit Purchase Item Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">{{ isEdit ? "Edit Purchase Item" : "Add Purchase Item" }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4">
-            <form @submit.prevent="saveItem">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold">Category</label>
-                  <select class="form-select" v-model="formData.category" required>
-                    <option>Kertas & Bahan Baku Cetak</option>
-                    <option>Tinta & Toner</option>
-                    <option>Bahan Finishing & Jilid</option>
-                    <option>Sparepart Mesin</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold">Product Name</label>
-                  <input type="text" class="form-control" v-model="formData.product" required />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold">Merk</label>
-                  <input type="text" class="form-control" v-model="formData.merk" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label fw-semibold">Unit</label>
-                  <select class="form-select" v-model="formData.unit">
-                    <option>Lembar</option>
-                    <option>Botol</option>
-                    <option>Pcs</option>
-                    <option>Roll</option>
-                    <option>Ream</option>
-                    <option>Kg</option>
-                  </select>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label fw-semibold">Price (IDR)</label>
-                  <input type="number" class="form-control" v-model.number="formData.price" required />
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Description</label>
-                  <textarea class="form-control" rows="3" v-model="formData.description"></textarea>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end p-0 pt-3 border-top gap-2 mt-4">
-                <button type="button" class="btn btn-dark" @click="showModal = false">Cancel</button>
-                <button type="submit" class="btn btn-warning text-white fw-bold">Submit</button>
-              </div>
-            </form>
+    <CommonBaseModal v-model="showModal" :title="isEdit ? 'Edit Purchase Item' : 'Add Purchase Item'" maxWidth="lg">
+      <form @submit.prevent="saveItem" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Category" required>
+            <select
+              v-model="formData.category"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option>Kertas & Bahan Baku Cetak</option>
+              <option>Tinta & Toner</option>
+              <option>Bahan Finishing & Jilid</option>
+              <option>Sparepart Mesin</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Product Name" required>
+            <input
+              v-model="formData.product"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Merk">
+            <input
+              v-model="formData.merk"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+          <div class="grid grid-cols-2 gap-4">
+            <CommonFormField label="Unit">
+              <select
+                v-model="formData.unit"
+                class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option>Lembar</option>
+                <option>Botol</option>
+                <option>Pcs</option>
+                <option>Roll</option>
+                <option>Ream</option>
+                <option>Kg</option>
+              </select>
+            </CommonFormField>
+            <CommonFormField label="Price (IDR)" required>
+              <input
+                v-model.number="formData.price"
+                type="number"
+                class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                required
+              />
+            </CommonFormField>
           </div>
         </div>
-      </div>
-    </div>
+        <CommonFormField label="Description">
+          <textarea
+            v-model="formData.description"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -277,6 +272,5 @@ const refreshList = () => {
 const toggleHeader = () => {
   // toggle header
 };
-</script>
-
 useMockSync('purchase-item', items);
+</script>
