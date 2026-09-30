@@ -1,116 +1,106 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Paper Price Directory (Marketplace)</h4>
-            <h6>Realtime vendor paper prices per plano, per kg, and minimum order rules</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Paper Price (Vendor)" subtitle="Manage paper pricing from vendors">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <NuxtLink to="/kertas-harga-self" class="btn btn-outline-primary me-2">
-            <i class="ti ti-building-warehouse me-1"></i>Kelola Harga Kertas Sendiri
-          </NuxtLink>
-        </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search paper name, merk, or vendor..." />
+        <CommonFilterSelect
+          v-model="filterGroup"
+          allLabel="All Groups"
+          :options="[
+            { value: 'HVS Putih', label: 'HVS Putih' },
+            { value: 'Art Paper', label: 'Art Paper' },
+            { value: 'Art Carton', label: 'Art Carton' },
+            { value: 'Ivory', label: 'Ivory' },
+            { value: 'Duplex', label: 'Duplex' },
+          ]"
+        />
       </div>
 
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search paper, group, or vendor..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="groupDropdownOpen = !groupDropdownOpen"
-                >
-                  Group: {{ filterGroup || 'All Groups' }}
-                </button>
-                <ul v-if="groupDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = ''; groupDropdownOpen = false">All Groups</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'HVS Putih'; groupDropdownOpen = false">HVS Putih</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Art Paper'; groupDropdownOpen = false">Art Paper</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Art Carton'; groupDropdownOpen = false">Art Carton</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Sumber</th>
-                  <th>Nama Kertas</th>
-                  <th>Group</th>
-                  <th>Merk</th>
-                  <th>Ukuran</th>
-                  <th class="text-center">GSM</th>
-                  <th>Min Order</th>
-                  <th>Kelipatan</th>
-                  <th class="text-end">Harga Kertas</th>
-                  <th>Last Update</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="h in filteredPrices" :key="h.id">
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <img
-                        :src="h.avatar"
-                        :alt="h.sumber"
-                        class="rounded-circle me-2 border object-fit-cover"
-                        style="width: 34px; height: 34px;"
-                      />
-                      <div>
-                        <span class="fw-semibold text-dark d-block">{{ h.sumber }}</span>
-                        <span class="text-muted fs-11">{{ h.lokasi }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="fw-bold text-dark">{{ h.nama }}</td>
-                  <td>{{ h.group }}</td>
-                  <td>{{ h.merk }}</td>
-                  <td>{{ h.ukuran }}</td>
-                  <td class="text-center">{{ h.gramatur }}</td>
-                  <td>{{ h.minOrder }}</td>
-                  <td>{{ h.kelipatan }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(h.harga) }} / {{ h.satuan }}</td>
-                  <td>{{ h.update }}</td>
-                  <td>
-                    <span class="badge bg-success me-1">Publish</span>
-                    <span class="badge bg-info">Active</span>
-                  </td>
-                </tr>
-                <tr v-if="filteredPrices.length === 0">
-                  <td colspan="11" class="text-center py-4 text-muted">
-                    No vendor paper prices found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Sumber</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Nama Kertas</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Group</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Merk</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Ukuran</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">GSM</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Min Order</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Kelipatan</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Harga Kertas</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Last Update</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="h in filteredPrices" :key="h.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center">
+                  <img :src="h.avatar" :alt="h.sumber" class="me-2 h-9 w-9 rounded-full border border-gray-200 object-cover dark:border-gray-700" />
+                  <div>
+                    <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ h.sumber }}</span>
+                    <span class="block text-[11px] text-gray-400">{{ h.lokasi }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ h.nama }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ h.group }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ h.merk }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-mono">{{ h.ukuran }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ h.gramatur }} gsm</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ h.minOrder }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ h.kelipatan }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">Rp {{ formatNumber(h.harga) }} / {{ h.satuan }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ h.update }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex gap-1.5">
+                  <CommonStatusPill status="Publish" tone="emerald" />
+                  <CommonStatusPill status="Active" tone="sky" />
+                </div>
+              </td>
+            </tr>
+            <tr v-if="filteredPrices.length === 0">
+              <td colspan="11" class="p-8 text-center text-gray-400">No paper prices found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -153,5 +143,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterGroup.value = ''
-}</script>
-
+}
+</script>

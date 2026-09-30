@@ -1,185 +1,114 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Group Paper's List (Marketplace)</h4>
-            <h6>Directory of paper groups across partner printers and paper merchants</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Paper Group (Vendor)" subtitle="Manage paper groups from printing vendors">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <NuxtLink to="/kertas-group-self" class="btn btn-outline-primary me-2">
-            <i class="ti ti-building-warehouse me-1"></i>Kelola Kertas Sendiri
-          </NuxtLink>
+      </template>
+    </CommonPageHeader>
+
+    <!-- KPI Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Paper Groups" :value="String(groups.length)" icon="file-text" tone="primary" />
+      <CommonStatCard label="Total Percetakan" :value="String(vendorCount)" icon="printer" tone="success" />
+      <CommonStatCard label="Total Published" :value="String(publishedCount)" icon="share-2" tone="sky" />
+      <CommonStatCard label="Total Private" :value="String(privateCount)" icon="lock" tone="slate" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search paper group, merk, or vendor..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterGroup"
+            allLabel="All Groups"
+            :options="[
+              { value: 'HVS Putih', label: 'HVS Putih' },
+              { value: 'Art Paper', label: 'Art Paper' },
+              { value: 'Art Carton', label: 'Art Carton' },
+              { value: 'Ivory', label: 'Ivory' },
+              { value: 'Duplex', label: 'Duplex' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Status"
+            :options="[
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Dashboard Metric Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-files fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Paper Groups</h6>
-              <h4 class="fw-bold mb-0">{{ groups.length }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash1 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-printer fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Percetakan</h6>
-              <h4 class="fw-bold mb-0">{{ vendorCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash2 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-info bg-opacity-10 p-3 rounded">
-              <i class="ti ti-share fs-2 text-info"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Published</h6>
-              <h4 class="fw-bold mb-0">{{ publishedCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash3 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-secondary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-lock fs-2 text-secondary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Private</h6>
-              <h4 class="fw-bold mb-0">{{ privateCount }}</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search paper group, merk, or vendor..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="groupDropdownOpen = !groupDropdownOpen"
-                >
-                  Group: {{ filterGroup || 'All Groups' }}
-                </button>
-                <ul v-if="groupDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = ''; groupDropdownOpen = false">All Groups</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'HVS Putih'; groupDropdownOpen = false">HVS Putih</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Art Paper'; groupDropdownOpen = false">Art Paper</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Art Carton'; groupDropdownOpen = false">Art Carton</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Ivory'; groupDropdownOpen = false">Ivory</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterGroup = 'Duplex'; groupDropdownOpen = false">Duplex</a></li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All Status' }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Active'; statusDropdownOpen = false">Active</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Inactive'; statusDropdownOpen = false">Inactive</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Sumber / Vendor</th>
-                  <th>Paper's Group</th>
-                  <th>Merk</th>
-                  <th>Last Update</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 80px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="g in filteredGroups" :key="g.id">
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <img
-                        :src="g.avatar"
-                        :alt="g.sumber"
-                        class="rounded-circle me-2 border object-fit-cover"
-                        style="width: 36px; height: 36px;"
-                      />
-                      <div>
-                        <span class="fw-semibold text-dark d-block">{{ g.sumber }}</span>
-                        <span class="text-muted fs-11">{{ g.lokasi }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="fw-medium text-dark">{{ g.name }}</td>
-                  <td>{{ g.merk }}</td>
-                  <td>{{ g.update }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="g.status === 'Active' ? 'badge-success' : 'badge-secondary'"
-                    >
-                      • {{ g.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="View Group Details"
-                        @click="viewGroup(g)"
-                      >
-                        <i class="ti ti-eye fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredGroups.length === 0">
-                  <td colspan="6" class="text-center py-4 text-muted">
-                    No paper groups found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Sumber / Vendor</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Paper's Group</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Merk</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Last Update</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="g in filteredGroups" :key="g.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center">
+                  <img :src="g.avatar" :alt="g.sumber" class="me-2 h-9 w-9 rounded-full border border-gray-200 object-cover dark:border-gray-700" />
+                  <div>
+                    <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ g.sumber }}</span>
+                    <span class="block text-[11px] text-gray-400">{{ g.lokasi }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ g.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ g.merk }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ g.update }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="g.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="g" show-view @view="viewGroup(g)" />
+              </td>
+            </tr>
+            <tr v-if="filteredGroups.length === 0">
+              <td colspan="6" class="p-8 text-center text-gray-400">No paper groups found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -229,5 +158,5 @@ function refresh() {
   searchQuery.value = ''
   filterGroup.value = ''
   filterStatus.value = ''
-}</script>
-
+}
+</script>
