@@ -1,175 +1,188 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>User Admin</h4>
-            <h6>Kelola User & Role Toko</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="User Admin" subtitle="Kelola User & Role Toko">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New User</span>
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New User</button>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search User Admin..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="selectedRole"
+            allLabel="All Roles"
+            :options="[
+              { value: 'Admin', label: 'Admin' },
+              { value: 'Manager', label: 'Manager' },
+              { value: 'Supervisor', label: 'Supervisor' },
+              { value: 'Staff', label: 'Staff' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="selectedStatus"
+            allLabel="All Statuses"
+            :options="[
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+            ]"
+          />
         </div>
       </div>
 
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input position-relative">
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search User Admin..." />
-              </div>
-            </div>
-            <div class="filters d-flex justify-content-end gap-2">
-              <select v-model="selectedRole" class="form-select form-select-sm" style="min-width: 130px">
-                <option value="">All Roles</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Supervisor">Supervisor</option>
-                <option value="Staff">Staff</option>
-              </select>
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="min-width: 130px">
-                <option value="">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead>
-                <tr>
-                  <th>User ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Store</th>
-                  <th>Status</th>
-                  <th class="text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(u, idx) in filteredAdmins" :key="idx">
-                  <td class="fw-bold text-primary">{{ u.id }}</td>
-                  <td>{{ u.name }}</td>
-                  <td>{{ u.email }}</td>
-                  <td>
-                    <span :class="getRoleBadgeClass(u.role)">{{ u.role }}</span>
-                  </td>
-                  <td>
-                    <div class="d-flex flex-wrap gap-1">
-                      <span v-for="(store, sIdx) in u.stores" :key="sIdx" class="badge bg-primary text-xs">
-                        {{ store }}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <span :class="u.status === 'Active' ? 'badge bg-outline-success' : 'badge bg-outline-danger'">
-                      {{ u.status }}
-                    </span>
-                  </td>
-                  <td class="text-end">
-                    <div class="d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(u)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteAdmin(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredAdmins.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">No admin users found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? "Edit Admin User" : "Add Admin User" }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveAdmin">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Full Name</label>
-                    <input v-model="currentAdmin.name" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Email</label>
-                    <input v-model="currentAdmin.email" type="email" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Role</label>
-                    <select v-model="currentAdmin.role" class="form-select">
-                      <option value="Admin">Admin</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Supervisor">Supervisor</option>
-                      <option value="Staff">Staff</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Status</label>
-                    <select v-model="currentAdmin.status" class="form-select">
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-12">
-                    <label class="form-label d-block fw-semibold mb-2">Assigned Stores</label>
-                    <div class="row g-2">
-                      <div v-for="st in availableStores" :key="st" class="col-sm-6">
-                        <div class="form-check">
-                          <input
-                            :id="'store-' + st"
-                            type="checkbox"
-                            class="form-check-input"
-                            :value="st"
-                            :checked="currentAdmin.stores.includes(st)"
-                            @change="toggleStore(st)"
-                          />
-                          <label :for="'store-' + st" class="form-check-label">{{ st }}</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">User ID</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Email</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Role</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Store</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="(u, idx) in filteredAdmins" :key="idx" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ u.id }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ u.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ u.email }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill
+                  :status="u.role"
+                  :tone="u.role === 'Admin' ? 'indigo' : u.role === 'Manager' ? 'sky' : u.role === 'Supervisor' ? 'amber' : 'slate'"
+                />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex flex-wrap gap-1">
+                  <span
+                    v-for="(store, sIdx) in u.stores"
+                    :key="sIdx"
+                    class="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary dark:bg-primary/20"
+                  >
+                    {{ store }}
+                  </span>
                 </div>
-                <div class="modal-footer modal-action-footer justify-content-end mt-4 pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="u.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="u" @edit="openEditModal(u)" @delete="deleteAdmin(idx)" />
+              </td>
+            </tr>
+            <tr v-if="filteredAdmins.length === 0">
+              <td colspan="7" class="p-8 text-center text-gray-400">No admin users found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Add/Edit Modal -->
+    <CommonBaseModal v-model="showModal" :title="isEditing ? 'Edit Admin User' : 'Add Admin User'" maxWidth="lg">
+      <form @submit.prevent="saveAdmin" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Full Name" required>
+            <input
+              v-model="currentAdmin.name"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Email" required>
+            <input
+              v-model="currentAdmin.email"
+              type="email"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Role">
+            <select
+              v-model="currentAdmin.role"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Staff">Staff</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Status">
+            <select
+              v-model="currentAdmin.status"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Assigned Stores">
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <label
+              v-for="st in availableStores"
+              :key="st"
+              class="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-100 px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              <input
+                type="checkbox"
+                class="h-4 w-4 accent-primary"
+                :checked="currentAdmin.stores.includes(st)"
+                @change="toggleStore(st)"
+              />
+              {{ st }}
+            </label>
+          </div>
+        </CommonFormField>
+        <CommonModalFooter submitLabel="Save Changes" @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -199,7 +212,6 @@ const currentAdmin = ref<AdminItem>({
   stores: [],
   status: "Active",
 });
-
 const getRoleBadgeClass = (role: string) => {
   switch (role) {
     case "Admin":
