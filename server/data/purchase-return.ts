@@ -1,0 +1,43 @@
+// Mock data untuk halaman /purchase-return (dipindah dari app/pages/purchase-return.vue)
+// Dikonsumsi oleh server/api (catch-all) via mock store.
+export const returns = [
+  {
+    id: 1,
+    noPR: "PRT-0011",
+    date: "17/10/2025",
+    created: "Sales Staff",
+    noPurchase: "PUR000003",
+    supplier: "Global Inkindo",
+    amount: 850000,
+    paid: 0,
+    due: 850000,
+    status: "Pending",
+    statusBy: "Admin",
+  },
+  {
+    id: 2,
+    noPR: "PRT-0012",
+    date: "21/10/2025",
+    created: "Sales Staff",
+    noPurchase: "PUR000005",
+    supplier: "Indo Material",
+    amount: 1950000,
+    paid: 1950000,
+    due: 0,
+    status: "Refunded",
+    statusBy: "Admin",
+  },
+  {
+    id: 3,
+    noPR: "PRT-0013",
+    date: "25/10/2025",
+    created: "Sales Staff",
+    noPurchase: "PUR000008",
+    supplier: "PT Kertas Jaya",
+    amount: 600000,
+    paid: 600000,
+    due: 0,
+    status: "Refunded",
+    statusBy: "Admin",
+  },
+]

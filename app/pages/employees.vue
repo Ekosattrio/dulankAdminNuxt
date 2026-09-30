@@ -1,0 +1,321 @@
+<script setup lang="ts">const { data: employeesData } = await useFetch<EmployeeItem[]>('/api/employees')
+const employees = ref<EmployeeItem[]>(employeesData.value ?? [])
+useMockSync('employees', employees);
+
+const searchQuery = ref("");
+const selectedStatus = ref("");
+const selectedDepartment = ref("");
+
+const filteredEmployees = computed(() => {
+  return employees.value.filter((emp) => {
+    const matchSearch =
+      !searchQuery.value ||
+      emp.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      emp.id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      emp.phone.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchStatus = !selectedStatus.value || emp.status === selectedStatus.value;
+    const matchDept = !selectedDepartment.value || emp.department === selectedDepartment.value;
+    return matchSearch && matchStatus && matchDept;
+  });
+});
+
+const tableColumns = [
+  { key: "id", label: "Employee ID" },
+  { key: "name", label: "Name" },
+  { key: "department", label: "Department" },
+  { key: "address", label: "Alamat" },
+  { key: "phone", label: "Phone" },
+  { key: "joinDate", label: "Join" },
+  { key: "status", label: "Status" },
+  { key: "action", label: "Action", class: "text-end no-sort" },
+];
+
+// Modal View
+const isViewModalOpen = ref(false);
+const viewingEmployee = ref<EmployeeItem | null>(null);
+
+const openViewModal = (emp: EmployeeItem) => {
+  viewingEmployee.value = emp;
+  isViewModalOpen.value = true;
+};
+
+// Delete action
+const deleteEmployee = (id: string) => {
+  if (confirm("Are you sure you want to delete this employee?")) {
+    employees.value = employees.value.filter((e) => e.id !== id);
+  }
+};</script>
+
+<template>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Employees" subtitle="Manage your employees">
+      <template #actions>
+        <NuxtLink
+          to="/add-employee"
+          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-600 focus:outline-none"
+        >
+          <CommonFeatherIcon name="plus-circle" size="18" />
+          <span>Add New Employee</span>
+        </NuxtLink>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Metric Cards -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="flex items-center justify-between rounded-xl bg-purple-600 p-5 text-white shadow-sm">
+        <div>
+          <p class="text-sm font-medium text-purple-100">Total Employee</p>
+          <h4 class="mt-1 text-2xl font-bold">1007</h4>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+          <CommonFeatherIcon name="users" size="24" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between rounded-xl bg-teal-600 p-5 text-white shadow-sm">
+        <div>
+          <p class="text-sm font-medium text-teal-100">Active</p>
+          <h4 class="mt-1 text-2xl font-bold">1007</h4>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+          <CommonFeatherIcon name="user-check" size="24" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between rounded-xl bg-slate-600 p-5 text-white shadow-sm">
+        <div>
+          <p class="text-sm font-medium text-slate-100">Inactive</p>
+          <h4 class="mt-1 text-2xl font-bold">1007</h4>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+          <CommonFeatherIcon name="user-x" size="24" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between rounded-xl bg-sky-500 p-5 text-white shadow-sm">
+        <div>
+          <p class="text-sm font-medium text-sky-100">New Joiners</p>
+          <h4 class="mt-1 text-2xl font-bold">67</h4>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+          <CommonFeatherIcon name="user-plus" size="24" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Employee Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Filter Bar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative w-64">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search..."
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+            />
+            <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
+              <CommonFeatherIcon name="search" size="16" />
+            </span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <select
+            v-model="selectedStatus"
+            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Resign">Resign</option>
+          </select>
+
+          <select
+            v-model="selectedDepartment"
+            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="">All Department</option>
+            <option value="Produksi">Produksi</option>
+            <option value="Administrasi & Keuangan">Administrasi & Keuangan</option>
+            <option value="Desain Grafis">Desain Grafis</option>
+            <option value="Marketing">Marketing</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <TablesDataTable :columns="tableColumns" :items="filteredEmployees">
+        <template #cell(id)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.id }}</span>
+        </template>
+
+        <template #cell(name)="{ item }">
+          <div class="font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</div>
+          <div class="text-xs text-gray-500">{{ item.email }}</div>
+        </template>
+
+        <template #cell(department)="{ item }">
+          <span
+            class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+          >
+            {{ item.department }}
+          </span>
+        </template>
+
+        <template #cell(address)="{ item }">
+          <div
+            class="max-w-xs truncate text-xs text-gray-600 dark:text-gray-400"
+            :title="item.address + (item.detailAddress ? ', ' + item.detailAddress : '')"
+          >
+            {{ item.address }}
+          </div>
+        </template>
+
+        <template #cell(phone)="{ item }">
+          <span class="text-xs font-mono text-gray-700 dark:text-gray-300">{{ item.phone }}</span>
+        </template>
+
+        <template #cell(joinDate)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.joinDate }}</span>
+        </template>
+
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
+        </template>
+
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openViewModal(item)" @delete="deleteEmployee(item.id)" show-view @view="openViewModal(item)" />
+        </template>
+      </TablesDataTable>
+    </div>
+
+    <!-- Modal View Employee -->
+    <CommonBaseModal v-model="isViewModalOpen" title="View Employee" maxWidth="lg">
+      <div v-if="viewingEmployee" class="space-y-6 text-sm">
+        <!-- Photo Upload Placeholders -->
+        <div class="grid grid-cols-2 gap-4">
+          <div
+            class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-4 text-center dark:border-gray-700"
+          >
+            <div class="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-primary">
+              <CommonFeatherIcon name="user" size="24" />
+            </div>
+            <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Profile Photo</span>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 p-4 text-center dark:border-gray-700"
+          >
+            <div class="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+              <CommonFeatherIcon name="credit-card" size="24" />
+            </div>
+            <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Photo ID</span>
+          </div>
+        </div>
+
+        <!-- Emergency Information -->
+        <div class="space-y-3">
+          <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
+            <CommonFeatherIcon name="info" size="16" class="text-primary" />
+            <span>Emergency Information</span>
+          </h6>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="font-semibold text-gray-500">Employee Id</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.id }}</div>
+
+            <div class="font-semibold text-gray-500">Full Name</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.name }}</div>
+
+            <div class="font-semibold text-gray-500">Gender</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.gender || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Date of Birth</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.dob || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Join Channel</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.joinChannel || "Offline" }}</div>
+
+            <div class="font-semibold text-gray-500">Join Date</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.joinDate }}</div>
+
+            <div class="font-semibold text-gray-500">Address</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.address }}</div>
+
+            <div class="font-semibold text-gray-500">Detail Address</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.detailAddress || "-" }}</div>
+          </div>
+        </div>
+
+        <hr class="border-gray-200 dark:border-gray-800" />
+
+        <!-- Designation -->
+        <div class="space-y-3">
+          <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
+            <CommonFeatherIcon name="briefcase" size="16" class="text-primary" />
+            <span>Designation</span>
+          </h6>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="font-semibold text-gray-500">Department</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.department }}</div>
+          </div>
+        </div>
+
+        <hr class="border-gray-200 dark:border-gray-800" />
+
+        <!-- Personal Information -->
+        <div class="space-y-3">
+          <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
+            <CommonFeatherIcon name="user" size="16" class="text-primary" />
+            <span>Personal Information</span>
+          </h6>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="font-semibold text-gray-500">Contact Person 1</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.contact1Name || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Phone 1</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.contact1Phone || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Contact Person 2</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.contact2Name || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Phone 2</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.contact2Phone || "-" }}</div>
+          </div>
+        </div>
+
+        <hr class="border-gray-200 dark:border-gray-800" />
+
+        <!-- Account Information -->
+        <div class="space-y-3">
+          <h6 class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-200">
+            <CommonFeatherIcon name="lock" size="16" class="text-primary" />
+            <span>Account Information</span>
+          </h6>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="font-semibold text-gray-500">Email</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.email || "-" }}</div>
+
+            <div class="font-semibold text-gray-500">Phone</div>
+            <div class="text-gray-900 dark:text-gray-100">{{ viewingEmployee.phone }}</div>
+
+            <div class="font-semibold text-gray-500">Password</div>
+            <div class="text-gray-900 dark:text-gray-100">••••••••</div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="isViewModalOpen = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
+  </div>
+</template>

@@ -1,0 +1,53 @@
+// Mock data untuk halaman /wishlist (dipindah dari app/pages/wishlist.vue)
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
+
+export const wishlist = [
+  {
+    id: 1,
+    product: "Dus Kemasan Corrugated Custom Full Color",
+    image: "/assets/img/products/stock-img-01.png",
+    user: "ekosatrio@gmail.com",
+    category: "Packaging",
+    price: 12500,
+    qty: 1000,
+    totalPrice: 12500000,
+    date: "24/04/2025",
+    status: "Active",
+  },
+  {
+    id: 2,
+    product: "Buku Katalog Produk Kertas Art Paper 210g",
+    image: "/assets/img/products/stock-img-06.png",
+    user: "maria.designer@studio.com",
+    category: "Brochure",
+    price: 45000,
+    qty: 100,
+    totalPrice: 4500000,
+    date: "22/04/2025",
+    status: "Active",
+  },
+  {
+    id: 3,
+    product: "Paper Bag Kraft Sablon 1 Warna",
+    image: "/assets/img/products/stock-img-02.png",
+    user: "hendra.clothing@brand.co",
+    category: "Packaging",
+    price: 3500,
+    qty: 500,
+    totalPrice: 1750000,
+    date: "20/04/2025",
+    status: "Checkout",
+  },
+  {
+    id: 4,
+    product: "Kartu Nama Kertas Linen Emboss Logo",
+    image: "/assets/img/products/stock-img-03.png",
+    user: "lawfirm.partner@legal.id",
+    category: "Stationery",
+    price: 85000,
+    qty: 10,
+    totalPrice: 850000,
+    date: "18/04/2025",
+    status: "Delete",
+  },
+]

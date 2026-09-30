@@ -1,0 +1,55 @@
+// Mock data untuk halaman /mesin-laminasi-self (dipindah dari app/pages/mesin-laminasi-self.vue)
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
+
+export const laminates = [
+  {
+    id: 1,
+    name: "Laminasi Doff Thermal",
+    minSize: "25×15 cm",
+    maxSize: "65×100 cm",
+    rateCm: 20,
+    minim: 200000,
+    update: "20/12/24 23:12",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Laminasi Glossy Thermal",
+    minSize: "25×15 cm",
+    maxSize: "65×100 cm",
+    rateCm: 18,
+    minim: 180000,
+    update: "20/12/24 23:12",
+    status: "Deactive",
+  },
+  {
+    id: 3,
+    name: "UV Vernish Coating",
+    minSize: "25×15 cm",
+    maxSize: "72×102 cm",
+    rateCm: 10,
+    minim: 100000,
+    update: "20/12/24 23:12",
+    status: "Active",
+  },
+  {
+    id: 4,
+    name: "Spot UV Screen Doff Base",
+    minSize: "25×15 cm",
+    maxSize: "52×72 cm",
+    rateCm: 32,
+    minim: 280000,
+    update: "21/12/24 10:00",
+    status: "Active",
+  },
+  {
+    id: 5,
+    name: "Soft Touch Velvet Lamination",
+    minSize: "30×20 cm",
+    maxSize: "65×100 cm",
+    rateCm: 45,
+    minim: 450000,
+    update: "21/12/24 11:30",
+    status: "Active",
+  },
+]
