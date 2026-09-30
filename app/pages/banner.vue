@@ -1,218 +1,189 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content">
-      <div class="page-header mt-3">
-        <div class="page-title">
-          <h4>Banners Management</h4>
-          <h6>Manage store main hero sliders and product promo banners</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Banners Management" subtitle="Manage store main hero sliders and product promo banners" />
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <!-- Main Banner Section -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+          <h5 class="font-bold text-gray-900 dark:text-gray-100">Main Banner</h5>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-600"
+            @click="openAddModal('main')"
+          >
+            <CommonFeatherIcon name="plus" size="14" />
+            Add Main Banner
+          </button>
         </div>
-      </div>
-
-      <div class="row g-4 mb-4">
-        <!-- Main Banner Section -->
-        <div class="col-lg-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
-              <h5 class="card-title mb-0 fw-bold">Main Banner</h5>
-              <button type="button" class="btn btn-sm btn-primary" @click="openAddModal('main')">
-                <i class="ti ti-plus me-1"></i>Add Main Banner
-              </button>
+        <div class="space-y-4 p-4">
+          <div v-for="b in mainBanners" :key="b.id" class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+            <div class="relative">
+              <img :src="b.src" :alt="b.title" class="h-[180px] w-full object-cover" />
+              <span class="absolute left-2 top-2 rounded-md bg-black/75 px-2 py-0.5 text-[11px] text-white">{{ b.id }}</span>
+              <div class="absolute right-2 top-2 flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-md bg-white px-2 py-1 text-xs text-gray-700 shadow-sm transition hover:bg-gray-50"
+                  title="Edit"
+                  @click="openEditModal(b, 'main')"
+                >
+                  <CommonFeatherIcon name="edit" size="13" />
+                </button>
+                <button
+                  type="button"
+                  class="rounded-md bg-rose-600 px-2 py-1 text-xs text-white shadow-sm transition hover:bg-rose-700"
+                  title="Delete"
+                  @click="deleteBanner(b.id, 'main')"
+                >
+                  <CommonFeatherIcon name="trash-2" size="13" />
+                </button>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div v-for="b in mainBanners" :key="b.id" class="col-12">
-                  <div class="card border mb-0 overflow-hidden">
-                    <div class="position-relative">
-                      <img
-                        :src="b.src"
-                        :alt="b.title"
-                        class="w-100 object-fit-cover"
-                        style="height: 180px;"
-                      />
-                      <span class="position-absolute top-2 start-2 badge bg-dark bg-opacity-75 text-white fs-11">
-                        {{ b.id }}
-                      </span>
-                      <div class="position-absolute top-2 end-2 d-flex gap-2">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm shadow-sm py-1 px-2"
-                          title="Edit"
-                          @click="openEditModal(b, 'main')"
-                        >
-                          <i class="ti ti-edit fs-14"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm shadow-sm py-1 px-2"
-                          title="Delete"
-                          @click="deleteBanner(b.id, 'main')"
-                        >
-                          <i class="ti ti-trash fs-14"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="card-body p-3">
-                      <h6 class="fw-bold mb-1">{{ b.title || 'Untitled Banner' }}</h6>
-                      <p class="text-muted small mb-2">{{ b.desc || 'No description provided' }}</p>
-                      <div class="d-flex flex-wrap gap-2 text-muted fs-12 border-top pt-2">
-                        <span><i class="ti ti-calendar-event me-1"></i>Start: {{ formatDate(b.start) }}</span>
-                        <span><i class="ti ti-calendar-off me-1"></i>End: {{ formatDate(b.end) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="mainBanners.length === 0" class="col-12 text-center py-5 text-muted">
-                  <i class="ti ti-photo-off fs-1 text-muted"></i>
-                  <p class="mt-2">No main banners added yet.</p>
-                </div>
+            <div class="p-3">
+              <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-gray-100">{{ b.title || 'Untitled Banner' }}</h6>
+              <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">{{ b.desc || 'No description provided' }}</p>
+              <div class="flex flex-wrap gap-2 border-t border-gray-100 pt-2 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                <span class="inline-flex items-center gap-1">
+                  <CommonFeatherIcon name="calendar" size="12" />
+                  Start: {{ formatDate(b.start) }}
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <CommonFeatherIcon name="calendar-x" size="12" />
+                  End: {{ formatDate(b.end) }}
+                </span>
               </div>
             </div>
           </div>
+          <div v-if="mainBanners.length === 0" class="py-8 text-center text-gray-400">
+            <p>No main banners added yet.</p>
+          </div>
         </div>
+      </div>
 
-        <!-- Product Banner Section -->
-        <div class="col-lg-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
-              <h5 class="card-title mb-0 fw-bold">Product Banner</h5>
-              <button type="button" class="btn btn-sm btn-primary" @click="openAddModal('product')">
-                <i class="ti ti-plus me-1"></i>Add Product Banner
-              </button>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div v-for="b in productBanners" :key="b.id" class="col-12">
-                  <div class="card border mb-0 overflow-hidden">
-                    <div class="position-relative">
-                      <img
-                        :src="b.src"
-                        :alt="b.title"
-                        class="w-100 object-fit-cover"
-                        style="height: 180px;"
-                      />
-                      <span class="position-absolute top-2 start-2 badge bg-dark bg-opacity-75 text-white fs-11">
-                        {{ b.id }}
-                      </span>
-                      <div class="position-absolute top-2 end-2 d-flex gap-2">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm shadow-sm py-1 px-2"
-                          title="Edit"
-                          @click="openEditModal(b, 'product')"
-                        >
-                          <i class="ti ti-edit fs-14"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm shadow-sm py-1 px-2"
-                          title="Delete"
-                          @click="deleteBanner(b.id, 'product')"
-                        >
-                          <i class="ti ti-trash fs-14"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="card-body p-3">
-                      <h6 class="fw-bold mb-1">{{ b.title || 'Untitled Banner' }}</h6>
-                      <p class="text-muted small mb-2">{{ b.desc || 'No description provided' }}</p>
-                      <div class="d-flex flex-wrap gap-2 text-muted fs-12 border-top pt-2">
-                        <span><i class="ti ti-calendar-event me-1"></i>Start: {{ formatDate(b.start) }}</span>
-                        <span><i class="ti ti-calendar-off me-1"></i>End: {{ formatDate(b.end) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="productBanners.length === 0" class="col-12 text-center py-5 text-muted">
-                  <i class="ti ti-photo-off fs-1 text-muted"></i>
-                  <p class="mt-2">No product banners added yet.</p>
-                </div>
+      <!-- Product Banner Section -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+          <h5 class="font-bold text-gray-900 dark:text-gray-100">Product Banner</h5>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-600"
+            @click="openAddModal('product')"
+          >
+            <CommonFeatherIcon name="plus" size="14" />
+            Add Product Banner
+          </button>
+        </div>
+        <div class="space-y-4 p-4">
+          <div v-for="b in productBanners" :key="b.id" class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+            <div class="relative">
+              <img :src="b.src" :alt="b.title" class="h-[180px] w-full object-cover" />
+              <span class="absolute left-2 top-2 rounded-md bg-black/75 px-2 py-0.5 text-[11px] text-white">{{ b.id }}</span>
+              <div class="absolute right-2 top-2 flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-md bg-white px-2 py-1 text-xs text-gray-700 shadow-sm transition hover:bg-gray-50"
+                  title="Edit"
+                  @click="openEditModal(b, 'product')"
+                >
+                  <CommonFeatherIcon name="edit" size="13" />
+                </button>
+                <button
+                  type="button"
+                  class="rounded-md bg-rose-600 px-2 py-1 text-xs text-white shadow-sm transition hover:bg-rose-700"
+                  title="Delete"
+                  @click="deleteBanner(b.id, 'product')"
+                >
+                  <CommonFeatherIcon name="trash-2" size="13" />
+                </button>
               </div>
             </div>
+            <div class="p-3">
+              <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-gray-100">{{ b.title || 'Untitled Banner' }}</h6>
+              <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">{{ b.desc || 'No description provided' }}</p>
+              <div class="flex flex-wrap gap-2 border-t border-gray-100 pt-2 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                <span class="inline-flex items-center gap-1">
+                  <CommonFeatherIcon name="calendar" size="12" />
+                  Start: {{ formatDate(b.start) }}
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <CommonFeatherIcon name="calendar-x" size="12" />
+                  End: {{ formatDate(b.end) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div v-if="productBanners.length === 0" class="py-8 text-center text-gray-400">
+            <p>No product banners added yet.</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Add/Edit Banner Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
+    <CommonBaseModal
+      v-model="modalVisible"
+      :title="`${isEdit ? 'Edit Banner' : 'Add Banner'} (${targetType === 'main' ? 'Main' : 'Product'})`"
+      maxWidth="lg"
     >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ isEdit ? 'Edit Banner' : 'Add Banner' }} ({{ targetType === 'main' ? 'Main' : 'Product' }})</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveBanner">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-8">
-                  <label class="form-label">Image URL</label>
-                  <input
-                    v-model="form.src"
-                    class="form-control"
-                    placeholder="https://example.com/image.jpg"
-                    required
-                  />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Upload Preset</label>
-                  <select class="form-select" @change="applySampleImage($event)">
-                    <option value="">Select Sample...</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/brosur.jpg">Brosur Promo</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/yasin.jpg">Buku Yasin</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/kaos.jpg">Kaos Custom</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Title</label>
-                  <input v-model="form.title" class="form-control" placeholder="Optional promo title" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Description</label>
-                  <input v-model="form.desc" class="form-control" placeholder="Optional description / tagline" />
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Start Date & Time</label>
-                  <input v-model="form.start" type="datetime-local" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">End Date & Time</label>
-                  <input v-model="form.end" type="datetime-local" class="form-control" />
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label">Banner Preview</label>
-                  <div class="p-2 border rounded text-center bg-light">
-                    <img
-                      v-if="form.src"
-                      :src="form.src"
-                      alt="Banner Preview"
-                      class="img-fluid rounded"
-                      style="max-height: 200px; object-fit: contain;"
-                    />
-                    <span v-else class="text-muted small">No image URL specified</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update Banner' : 'Submit Banner' }}
-              </button>
-            </div>
-          </form>
+      <form @submit.prevent="saveBanner" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Image URL">
+            <input
+              v-model="form.src"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="https://example.com/image.jpg"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Upload Preset">
+            <select class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" @change="applySampleImage($event)">
+              <option value="">Select Sample...</option>
+              <option value="https://percetakan-dulank.netlify.app/images/brosur.jpg">Brosur Promo</option>
+              <option value="https://percetakan-dulank.netlify.app/images/yasin.jpg">Buku Yasin</option>
+              <option value="https://percetakan-dulank.netlify.app/images/kaos.jpg">Kaos Custom</option>
+            </select>
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Title">
+            <input
+              v-model="form.title"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="Optional promo title"
+            />
+          </CommonFormField>
+          <CommonFormField label="Description">
+            <input
+              v-model="form.desc"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="Optional description / tagline"
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Start Date & Time">
+            <input v-model="form.start" type="datetime-local" class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" />
+          </CommonFormField>
+          <CommonFormField label="End Date & Time">
+            <input v-model="form.end" type="datetime-local" class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Banner Preview">
+          <div class="rounded-lg border border-gray-200 bg-gray-50 p-2 text-center dark:border-gray-700 dark:bg-gray-800/40">
+            <img
+              v-if="form.src"
+              :src="form.src"
+              alt="Banner Preview"
+              class="mx-auto max-h-[200px] rounded object-contain"
+            />
+            <span v-else class="text-xs text-gray-400">No image URL specified</span>
+          </div>
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEdit ? 'Update Banner' : 'Submit Banner'" @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -323,5 +294,5 @@ function deleteBanner(id: string, type: 'main' | 'product') {
       productBanners.value = productBanners.value.filter(b => b.id !== id)
     }
   }
-}</script>
-
+}
+</script>
