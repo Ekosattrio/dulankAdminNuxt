@@ -155,110 +155,57 @@ const deleteRecord = (id: string) => {
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <!-- Filter Bar -->
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search employee..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search employee..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedStatus"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Status: All</option>
-            <option value="Active">Active</option>
-            <option value="Disabled">Disabled</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedStatus" :options="[{ value: 'Active', label: 'Active' }, { value: 'Disabled', label: 'Disabled' }]" />
       </div>
 
       <!-- Table -->
-      <TableDataTable :columns="columns" :rows="filteredRecords">
-        <template #cell(employeeId)="{ row }">
-          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ row.employeeId }}</span>
+      <TablesDataTable :columns="columns" :items="filteredRecords">
+        <template #cell(employeeId)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.employeeId }}</span>
         </template>
 
-        <template #cell(name)="{ row }">
-          <div class="font-medium text-gray-900 dark:text-gray-100">{{ row.name }}</div>
+        <template #cell(name)="{ item }">
+          <div class="font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</div>
         </template>
 
-        <template #cell(salary)="{ row }">
+        <template #cell(salary)="{ item }">
           <span class="font-mono font-medium text-gray-900 dark:text-gray-100">
-            {{ formatRupiah(row.salary) }}
+            {{ formatRupiah(item.salary) }}
           </span>
         </template>
 
-        <template #cell(system)="{ row }">
+        <template #cell(system)="{ item }">
           <span
             class="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300"
           >
-            {{ row.system }}
+            {{ item.system }}
           </span>
         </template>
 
-        <template #cell(allowanceTotal)="{ row }">
+        <template #cell(allowanceTotal)="{ item }">
           <span class="font-mono text-gray-700 dark:text-gray-300">
-            {{ formatRupiah(row.allowanceTotal) }}
+            {{ formatRupiah(item.allowanceTotal) }}
           </span>
         </template>
 
-        <template #cell(overtimeRate)="{ row }">
-          <span class="font-mono text-gray-700 dark:text-gray-300"> {{ formatRupiah(row.overtimeRate) }}/hr </span>
+        <template #cell(overtimeRate)="{ item }">
+          <span class="font-mono text-gray-700 dark:text-gray-300"> {{ formatRupiah(item.overtimeRate) }}/hr </span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Active'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
-              title="View"
-              @click="openViewModal(row)"
-            >
-              <CommonFeatherIcon name="eye" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-              @click="openEditModal(row)"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteRecord(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openViewModal(item)" @delete="deleteRecord(item.id)" show-view @view="openViewModal(item)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Add Salary -->
-    <ModalBaseModal v-model="isAddModalOpen" title="Add New Employee Salary" size="lg">
+    <CommonBaseModal v-model="isAddModalOpen" title="Add New Employee Salary" maxWidth="lg">
       <form @submit.prevent="submitAddSalary" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Select Employee *</label>
@@ -357,10 +304,10 @@ const deleteRecord = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal Edit Salary -->
-    <ModalBaseModal v-model="isEditModalOpen" title="Edit Employee Salary" size="lg">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Employee Salary" maxWidth="lg">
       <form @submit.prevent="submitEditSalary" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Employee</label>
@@ -473,10 +420,10 @@ const deleteRecord = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal View Salary -->
-    <ModalBaseModal v-model="isViewModalOpen" title="View Employee Salary" size="md">
+    <CommonBaseModal v-model="isViewModalOpen" title="View Employee Salary" maxWidth="md">
       <div v-if="viewingRecord" class="space-y-4 text-sm">
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div class="font-semibold text-gray-500">Employee</div>
@@ -524,6 +471,6 @@ const deleteRecord = (id: string) => {
           </button>
         </div>
       </template>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>

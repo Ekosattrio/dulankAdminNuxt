@@ -133,21 +133,8 @@ const duplicateRFQ = (item: RFQItem) => {
 
       <!-- Status -->
       <template #cell(status)="{ item }">
-        <span
-          :class="[
-            'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-            item.status === 'Complete'
-              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-              : item.status === 'Ordered'
-                ? 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800'
-                : item.status === 'Pending'
-                  ? 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800'
-                  : 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800',
-          ]"
-        >
-          {{ item.status }}
-        </span>
-      </template>
+          <CommonStatusPill :status="item.status" />
+        </template>
 
       <!-- Actions -->
       <template #cell(actions)="{ item }">

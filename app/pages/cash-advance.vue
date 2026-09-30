@@ -137,83 +137,41 @@ const deleteItem = (id: string) => {
     <!-- Table Card -->
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="mb-5 flex items-center justify-between">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search employee..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search employee..." />
       </div>
 
-      <TableDataTable :columns="columns" :rows="filteredCashAdvances">
-        <template #cell(employee)="{ row }">
-          <div class="font-medium text-gray-900 dark:text-gray-100">{{ row.employee }}</div>
-          <div class="text-xs text-gray-400">{{ row.note }}</div>
+      <TablesDataTable :columns="columns" :items="filteredCashAdvances">
+        <template #cell(employee)="{ item }">
+          <div class="font-medium text-gray-900 dark:text-gray-100">{{ item.employee }}</div>
+          <div class="text-xs text-gray-400">{{ item.note }}</div>
         </template>
 
-        <template #cell(date)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.date }}</span>
+        <template #cell(date)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.date }}</span>
         </template>
 
-        <template #cell(tenor)="{ row }">
+        <template #cell(tenor)="{ item }">
           <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            Tenor({{ row.tenorTotal }}) / remain({{ row.tenorRemain }})
+            Tenor({{ item.tenorTotal }}) / remain({{ item.tenorRemain }})
           </span>
         </template>
 
-        <template #cell(totalCash)="{ row }">
-          <span class="font-mono font-bold text-gray-900 dark:text-gray-100">{{ formatRupiah(row.totalCash) }}</span>
+        <template #cell(totalCash)="{ item }">
+          <span class="font-mono font-bold text-gray-900 dark:text-gray-100">{{ formatRupiah(item.totalCash) }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'On' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
-              title="View History"
-              @click="openViewModal(row)"
-            >
-              <CommonFeatherIcon name="eye" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-              @click="openEditModal(row)"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteItem(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openViewModal(item)" @delete="deleteItem(item.id)" show-view @view="openViewModal(item)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Add Cash Advance -->
-    <ModalBaseModal v-model="isAddModalOpen" title="Add New Cash Advance" size="md">
+    <CommonBaseModal v-model="isAddModalOpen" title="Add New Cash Advance" maxWidth="md">
       <form @submit.prevent="submitAdd" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Name</label>
@@ -276,10 +234,10 @@ const deleteItem = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal View Cash Advance (Debit & Credit Tabs) -->
-    <ModalBaseModal v-model="isViewModalOpen" title="Cash Advance Details" size="xl">
+    <CommonBaseModal v-model="isViewModalOpen" title="Cash Advance Details" maxWidth="xl">
       <div v-if="viewingItem" class="space-y-4">
         <!-- Header info -->
         <div class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
@@ -391,10 +349,10 @@ const deleteItem = (id: string) => {
           </button>
         </div>
       </template>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal Edit Cash Advance -->
-    <ModalBaseModal v-model="isEditModalOpen" title="Edit Cash Advance" size="md">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Cash Advance" maxWidth="md">
       <form @submit.prevent="submitEdit" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Employee</label>
@@ -447,7 +405,7 @@ const deleteItem = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>
 

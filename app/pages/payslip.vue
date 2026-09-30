@@ -58,88 +58,60 @@ const deletePayslip = (slipNo: string) => {
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <!-- Filter Bar -->
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search payslip..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search payslip..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedStatus"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Status: All</option>
-            <option value="Paid">Paid</option>
-            <option value="Unpaid">Unpaid</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedStatus" :options="[{ value: 'Paid', label: 'Paid' }, { value: 'Unpaid', label: 'Unpaid' }]" />
       </div>
 
       <!-- Table -->
-      <TableDataTable :columns="columns" :rows="filteredPayslips">
-        <template #cell(slipNo)="{ row }">
+      <TablesDataTable :columns="columns" :items="filteredPayslips">
+        <template #cell(slipNo)="{ item }">
           <NuxtLink to="/payslip-detail" class="font-semibold text-primary hover:underline">
-            {{ row.slipNo }}
+            {{ item.slipNo }}
           </NuxtLink>
         </template>
 
-        <template #cell(name)="{ row }">
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ row.name }}</span>
+        <template #cell(name)="{ item }">
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</span>
         </template>
 
-        <template #cell(period)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.period }}</span>
+        <template #cell(period)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.period }}</span>
         </template>
 
-        <template #cell(salaryRate)="{ row }">
-          <span class="font-mono text-gray-800 dark:text-gray-200">{{ formatRupiah(row.salaryRate) }}</span>
+        <template #cell(salaryRate)="{ item }">
+          <span class="font-mono text-gray-800 dark:text-gray-200">{{ formatRupiah(item.salaryRate) }}</span>
         </template>
 
-        <template #cell(dayWorked)="{ row }">
-          <span class="text-xs font-semibold">{{ row.dayWorked }} days</span>
+        <template #cell(dayWorked)="{ item }">
+          <span class="text-xs font-semibold">{{ item.dayWorked }} days</span>
         </template>
 
-        <template #cell(allowance)="{ row }">
-          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(row.allowance) }}</span>
+        <template #cell(allowance)="{ item }">
+          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(item.allowance) }}</span>
         </template>
 
-        <template #cell(overtime)="{ row }">
-          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(row.overtime) }}</span>
+        <template #cell(overtime)="{ item }">
+          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(item.overtime) }}</span>
         </template>
 
-        <template #cell(deduction)="{ row }">
-          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(row.deduction) }}</span>
+        <template #cell(deduction)="{ item }">
+          <span class="font-mono text-gray-600 dark:text-gray-400">{{ formatRupiah(item.deduction) }}</span>
         </template>
 
-        <template #cell(total)="{ row }">
-          <span class="font-mono font-bold text-gray-900 dark:text-gray-100">{{ formatRupiah(row.total) }}</span>
+        <template #cell(total)="{ item }">
+          <span class="font-mono font-bold text-gray-900 dark:text-gray-100">{{ formatRupiah(item.total) }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Paid'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(paidDate)="{ row }">
-          <span class="text-xs text-gray-500">{{ row.paidDate }}</span>
+        <template #cell(paidDate)="{ item }">
+          <span class="text-xs text-gray-500">{{ item.paidDate }}</span>
         </template>
 
-        <template #cell(action)="{ row }">
+        <template #cell(action)="{ item }">
           <div class="flex items-center justify-end gap-2">
             <NuxtLink
               to="/payslip-detail"
@@ -159,13 +131,13 @@ const deletePayslip = (slipNo: string) => {
               type="button"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
               title="Delete"
-              @click="deletePayslip(row.slipNo)"
+              @click="deletePayslip(item.slipNo)"
             >
               <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
   </div>
 </template>

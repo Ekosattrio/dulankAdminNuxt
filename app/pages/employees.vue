@@ -146,86 +146,53 @@ const deleteEmployee = (id: string) => {
       </div>
 
       <!-- Table -->
-      <TableDataTable :columns="tableColumns" :rows="filteredEmployees">
-        <template #cell(id)="{ row }">
-          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ row.id }}</span>
+      <TablesDataTable :columns="tableColumns" :items="filteredEmployees">
+        <template #cell(id)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.id }}</span>
         </template>
 
-        <template #cell(name)="{ row }">
-          <div class="font-medium text-gray-900 dark:text-gray-100">{{ row.name }}</div>
-          <div class="text-xs text-gray-500">{{ row.email }}</div>
+        <template #cell(name)="{ item }">
+          <div class="font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</div>
+          <div class="text-xs text-gray-500">{{ item.email }}</div>
         </template>
 
-        <template #cell(department)="{ row }">
+        <template #cell(department)="{ item }">
           <span
             class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300"
           >
-            {{ row.department }}
+            {{ item.department }}
           </span>
         </template>
 
-        <template #cell(address)="{ row }">
+        <template #cell(address)="{ item }">
           <div
             class="max-w-xs truncate text-xs text-gray-600 dark:text-gray-400"
-            :title="row.address + (row.detailAddress ? ', ' + row.detailAddress : '')"
+            :title="item.address + (item.detailAddress ? ', ' + item.detailAddress : '')"
           >
-            {{ row.address }}
+            {{ item.address }}
           </div>
         </template>
 
-        <template #cell(phone)="{ row }">
-          <span class="text-xs font-mono text-gray-700 dark:text-gray-300">{{ row.phone }}</span>
+        <template #cell(phone)="{ item }">
+          <span class="text-xs font-mono text-gray-700 dark:text-gray-300">{{ item.phone }}</span>
         </template>
 
-        <template #cell(joinDate)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.joinDate }}</span>
+        <template #cell(joinDate)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.joinDate }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Active'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
-              title="View"
-              @click="openViewModal(row)"
-            >
-              <CommonFeatherIcon name="eye" size="16" />
-            </button>
-            <NuxtLink
-              :to="`/edit-employee?id=${row.id}`"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </NuxtLink>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteEmployee(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openViewModal(item)" @delete="deleteEmployee(item.id)" show-view @view="openViewModal(item)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal View Employee -->
-    <ModalBaseModal v-model="isViewModalOpen" title="View Employee" size="lg">
+    <CommonBaseModal v-model="isViewModalOpen" title="View Employee" maxWidth="lg">
       <div v-if="viewingEmployee" class="space-y-6 text-sm">
         <!-- Photo Upload Placeholders -->
         <div class="grid grid-cols-2 gap-4">
@@ -349,6 +316,6 @@ const deleteEmployee = (id: string) => {
           </button>
         </div>
       </template>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>

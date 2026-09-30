@@ -162,19 +162,8 @@ const onPrint = () => {
       </template>
 
       <template #cell(status)="{ item }">
-        <span
-          :class="[
-            'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold',
-            item.status === 'Paid'
-              ? 'bg-emerald-100 text-emerald-800'
-              : item.status === 'Partial'
-                ? 'bg-amber-100 text-amber-800'
-                : 'bg-rose-100 text-rose-800',
-          ]"
-        >
-          {{ item.status }}
-        </span>
-      </template>
+          <CommonStatusPill :status="item.status" />
+        </template>
 
       <template #cell(method)="{ item }">
         <span class="text-xs text-gray-600 dark:text-gray-300">{{ item.method }}</span>

@@ -106,40 +106,21 @@ const deleteDepartment = (id: string) => {
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <!-- Filter Bar -->
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search department..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search department..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedStatus"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Status: All</option>
-            <option value="Active">Active</option>
-            <option value="Disable">Disable</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedStatus" :options="[{ value: 'Active', label: 'Active' }, { value: 'Disable', label: 'Disable' }]" />
       </div>
 
       <!-- Table -->
-      <TableDataTable :columns="columns" :rows="filteredDepartments">
-        <template #cell(name)="{ row }">
-          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ row.name }}</span>
+      <TablesDataTable :columns="columns" :items="filteredDepartments">
+        <template #cell(name)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</span>
         </template>
 
-        <template #cell(members)="{ row }">
-          <div v-if="row.members.length > 0" class="flex flex-wrap gap-1.5">
+        <template #cell(members)="{ item }">
+          <div v-if="item.members.length > 0" class="flex flex-wrap gap-1.5">
             <span
-              v-for="m in row.members"
+              v-for="m in item.members"
               :key="m"
               class="inline-flex rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300"
             >
@@ -149,52 +130,26 @@ const deleteDepartment = (id: string) => {
           <span v-else class="text-xs text-gray-400">-</span>
         </template>
 
-        <template #cell(totalMembers)="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-200">{{ row.totalMembers }}</span>
+        <template #cell(totalMembers)="{ item }">
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.totalMembers }}</span>
         </template>
 
-        <template #cell(createdDate)="{ row }">
-          <span class="text-xs text-gray-500 dark:text-gray-400">{{ row.createdDate }}</span>
+        <template #cell(createdDate)="{ item }">
+          <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.createdDate }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Active'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-              @click="openEditModal(row)"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteDepartment(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteDepartment(item.id)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Add Department -->
-    <ModalBaseModal v-model="isAddModalOpen" title="Add New Department" size="md">
+    <CommonBaseModal v-model="isAddModalOpen" title="Add New Department" maxWidth="md">
       <form @submit.prevent="addDepartment" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Department Name</label>
@@ -207,26 +162,12 @@ const deleteDepartment = (id: string) => {
           />
         </div>
 
-        <div class="flex justify-end gap-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isAddModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Submit
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Submit" @cancel="isAddModalOpen = false" />
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal Edit Department -->
-    <ModalBaseModal v-model="isEditModalOpen" title="Edit Department" size="md">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Department" maxWidth="md">
       <form @submit.prevent="saveEditDepartment" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Department Name</label>
@@ -283,22 +224,8 @@ const deleteDepartment = (id: string) => {
           </button>
         </div>
 
-        <div class="flex justify-end gap-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isEditModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Submit
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Submit" @cancel="isEditModalOpen = false" />
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>

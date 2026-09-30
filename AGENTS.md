@@ -61,8 +61,9 @@ Components are auto-imported with directory prefixes (no manual imports; don't a
 | Path (app/components/) | Name |
 |---|---|
 | `Common/FeatherIcon.vue`, `Common/PageHeader.vue`, `Common/BaseModal.vue`, `Common/ConfirmModal.vue` | `<CommonFeatherIcon/>`, `<CommonPageHeader/>`, … |
+| `Common/SearchFilter.vue`, `Common/FilterSelect.vue`, `Common/StatusPill.vue`, `Common/RowActions.vue`, `Common/FormField.vue`, `Common/ModalFooter.vue` | `<CommonSearchFilter/>` (v-model search), `<CommonFilterSelect/>` (`:options`), `<CommonStatusPill :status/>`, `<CommonRowActions @edit @delete @view/>`, `<CommonFormField/>`, `<CommonModalFooter @cancel/>` — pakai komponen ini untuk halaman/daftar baru, jangan menulis ulang bloknya |
 | `Forms/NumberInput.vue`, `Forms/AddressCascader.vue`, `Forms/CustomerLiveSearch.vue`, `Forms/EmployeeLiveSearch.vue`, `Forms/ProductLiveSearch.vue` | `<FormsNumberInput/>` … |
-| `Tables/DataTable.vue` | `<TablesDataTable/>` (generic; slots `cell(<key>)`, `footer`; emits `print`/`export-pdf`/`export-excel` — export events currently unhandled, buttons fall back to `window.print`) |
+| `Tables/DataTable.vue` | `<TablesDataTable/>` (generic; props `columns`/`items`; slots `cell(<key>)` dengan `{ item }`; emits `print`/`export-pdf`/`export-excel` — export events currently unhandled) |
 | `Dashboard/PrimaryCard.vue`, `Dashboard/RevenueCard.vue` | `<DashboardPrimaryCard/>`, `<DashboardRevenueCard/>` |
 | `App/Layout/Header.vue`, `App/Layout/Sidebar.vue` | `<AppLayoutHeader/>`, `<AppLayoutSidebar/>` |
 

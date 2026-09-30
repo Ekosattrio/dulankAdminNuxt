@@ -133,89 +133,44 @@ const deleteItem = (id: string) => {
     <!-- Table Card -->
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search employee / code..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search employee / code..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedStatus"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Status: All</option>
-            <option value="Paid">Paid</option>
-            <option value="Pending">Pending</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedStatus" :options="[{ value: 'Paid', label: 'Paid' }, { value: 'Pending', label: 'Pending' }]" />
       </div>
 
-      <TableDataTable :columns="columns" :rows="filteredIncentives">
-        <template #cell(code)="{ row }">
-          <span class="font-semibold text-primary">{{ row.code }}</span>
+      <TablesDataTable :columns="columns" :items="filteredIncentives">
+        <template #cell(code)="{ item }">
+          <span class="font-semibold text-primary">{{ item.code }}</span>
         </template>
 
-        <template #cell(employee)="{ row }">
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ row.employee }}</span>
+        <template #cell(employee)="{ item }">
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{ item.employee }}</span>
         </template>
 
-        <template #cell(period)="{ row }">
-          <span class="font-mono text-xs text-gray-600 dark:text-gray-400">{{ row.period }}</span>
+        <template #cell(period)="{ item }">
+          <span class="font-mono text-xs text-gray-600 dark:text-gray-400">{{ item.period }}</span>
         </template>
 
-        <template #cell(qtyComplete)="{ row }">
-          <span class="font-bold text-gray-900 dark:text-gray-100">{{ row.qtyComplete }}</span>
+        <template #cell(qtyComplete)="{ item }">
+          <span class="font-bold text-gray-900 dark:text-gray-100">{{ item.qtyComplete }}</span>
         </template>
 
-        <template #cell(totalAmount)="{ row }">
-          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(row.totalAmount) }}</span>
+        <template #cell(totalAmount)="{ item }">
+          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(item.totalAmount) }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Paid'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-              @click="openEditModal(row)"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteItem(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Add Incentive -->
-    <ModalBaseModal v-model="isAddModalOpen" title="Add New Incentive" size="md">
+    <CommonBaseModal v-model="isAddModalOpen" title="Add New Incentive" maxWidth="md">
       <form @submit.prevent="submitAdd" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Employee Name</label>
@@ -272,10 +227,10 @@ const deleteItem = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal Edit Incentive -->
-    <ModalBaseModal v-model="isEditModalOpen" title="Edit Incentive" size="md">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Incentive" maxWidth="md">
       <form @submit.prevent="submitEdit" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Employee</label>
@@ -323,6 +278,6 @@ const deleteItem = (id: string) => {
           </button>
         </div>
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>

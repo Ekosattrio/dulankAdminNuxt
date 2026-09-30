@@ -59,69 +59,40 @@ const columns = [
     <!-- Table Card -->
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search code..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search code..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedProcess"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Process: All</option>
-            <option value="Printing">Printing</option>
-            <option value="Cutting">Cutting</option>
-            <option value="Laminasi">Laminasi</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedProcess" :options="[{ value: 'Printing', label: 'Printing' }, { value: 'Cutting', label: 'Cutting' }, { value: 'Laminasi', label: 'Laminasi' }]" />
       </div>
 
-      <TableDataTable :columns="columns" :rows="filteredItems">
-        <template #cell(code)="{ row }">
-          <span class="font-semibold text-primary">{{ row.code }}</span>
+      <TablesDataTable :columns="columns" :items="filteredItems">
+        <template #cell(code)="{ item }">
+          <span class="font-semibold text-primary">{{ item.code }}</span>
         </template>
 
-        <template #cell(process)="{ row }">
+        <template #cell(process)="{ item }">
           <span
             class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300"
           >
-            {{ row.process }}
+            {{ item.process }}
           </span>
         </template>
 
-        <template #cell(date)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.date }}</span>
+        <template #cell(date)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.date }}</span>
         </template>
 
-        <template #cell(qty)="{ row }">
-          <span class="font-bold text-gray-900 dark:text-gray-100">{{ row.qty }}</span>
+        <template #cell(qty)="{ item }">
+          <span class="font-bold text-gray-900 dark:text-gray-100">{{ item.qty }}</span>
         </template>
 
-        <template #cell(amount)="{ row }">
-          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(row.amount) }}</span>
+        <template #cell(amount)="{ item }">
+          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(item.amount) }}</span>
         </template>
 
-        <template #cell(status)="{ row }">
-          <span
-            :class="[
-              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-              row.status === 'Paid'
-                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300',
-            ]"
-          >
-            {{ row.status }}
-          </span>
+        <template #cell(status)="{ item }">
+          <CommonStatusPill :status="item.status" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
   </div>
 </template>

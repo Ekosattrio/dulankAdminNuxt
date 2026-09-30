@@ -101,86 +101,48 @@ const deleteItem = (id: string) => {
     <!-- Table Card -->
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search sub category..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search sub category..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedCategory"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Category: All</option>
-            <option value="Large Format">Large Format</option>
-            <option value="Digital Print">Digital Print</option>
-            <option value="Offset Print">Offset Print</option>
-            <option value="Finishing & Merchandise">Finishing & Merchandise</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedCategory" :options="[{ value: 'Large Format', label: 'Large Format' }, { value: 'Digital Print', label: 'Digital Print' }, { value: 'Offset Print', label: 'Offset Print' }, { value: 'Finishing & Merchandise', label: 'Finishing & Merchandise' }]" />
       </div>
 
-      <TableDataTable :columns="columns" :rows="filteredList">
-        <template #cell(name)="{ row }">
-          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ row.name }}</span>
+      <TablesDataTable :columns="columns" :items="filteredList">
+        <template #cell(name)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</span>
         </template>
 
-        <template #cell(category)="{ row }">
+        <template #cell(category)="{ item }">
           <span
             class="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300"
           >
-            {{ row.category }}
+            {{ item.category }}
           </span>
         </template>
 
-        <template #cell(categoryCode)="{ row }">
-          <span class="font-mono text-xs text-gray-500">{{ row.categoryCode }}</span>
+        <template #cell(categoryCode)="{ item }">
+          <span class="font-mono text-xs text-gray-500">{{ item.categoryCode }}</span>
         </template>
 
-        <template #cell(description)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.description }}</span>
+        <template #cell(description)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.description }}</span>
         </template>
 
-        <template #cell(itemUsed)="{ row }">
-          <span class="font-medium text-gray-800 dark:text-gray-200">{{ row.itemUsed }}</span>
+        <template #cell(itemUsed)="{ item }">
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.itemUsed }}</span>
         </template>
 
-        <template #cell(createdBy)="{ row }">
-          <span class="text-xs text-gray-500">{{ row.createdBy }}</span>
+        <template #cell(createdBy)="{ item }">
+          <span class="text-xs text-gray-500">{{ item.createdBy }}</span>
         </template>
 
-        <template #cell(action)="{ row }">
-          <div class="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
-              title="Edit"
-              @click="openEditModal(row)"
-            >
-              <CommonFeatherIcon name="edit" size="16" />
-            </button>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
-              title="Delete"
-              @click="deleteItem(row.id)"
-            >
-              <CommonFeatherIcon name="trash-2" size="16" />
-            </button>
-          </div>
+        <template #cell(action)="{ item }">
+          <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Add Sub Category -->
-    <ModalBaseModal v-model="isAddModalOpen" title="Add Sub Category" size="md">
+    <CommonBaseModal v-model="isAddModalOpen" title="Add Sub Category" maxWidth="md">
       <form @submit.prevent="submitAdd" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category Name</label>
@@ -215,26 +177,12 @@ const deleteItem = (id: string) => {
           ></textarea>
         </div>
 
-        <div class="flex justify-end gap-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isAddModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Submit
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Submit" @cancel="isAddModalOpen = false" />
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
 
     <!-- Modal Edit Sub Category -->
-    <ModalBaseModal v-model="isEditModalOpen" title="Edit Sub Category" size="md">
+    <CommonBaseModal v-model="isEditModalOpen" title="Edit Sub Category" maxWidth="md">
       <form @submit.prevent="submitEdit" class="space-y-4">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category Name</label>
@@ -268,22 +216,8 @@ const deleteItem = (id: string) => {
           ></textarea>
         </div>
 
-        <div class="flex justify-end gap-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isEditModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Save Changes
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Save Changes" @cancel="isEditModalOpen = false" />
       </form>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>

@@ -68,85 +68,61 @@ const deleteProduct = (id: string) => {
     <!-- Table Card -->
     <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="relative w-64">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search product..."
-            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-8 text-sm text-gray-800 placeholder-gray-400 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-            <CommonFeatherIcon name="search" size="16" />
-          </span>
-        </div>
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search product..." />
 
-        <div class="flex items-center gap-3">
-          <select
-            v-model="selectedCategory"
-            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          >
-            <option value="">Category: All</option>
-            <option value="Large Format">Large Format</option>
-            <option value="Digital Print">Digital Print</option>
-            <option value="Offset Print">Offset Print</option>
-            <option value="Finishing & Merchandise">Finishing & Merchandise</option>
-            <option value="Merchandise">Merchandise</option>
-            <option value="Display Promo">Display Promo</option>
-            <option value="Sablon & Tekstil">Sablon & Tekstil</option>
-          </select>
-        </div>
+        <CommonFilterSelect v-model="selectedCategory" :options="[{ value: 'Large Format', label: 'Large Format' }, { value: 'Digital Print', label: 'Digital Print' }, { value: 'Offset Print', label: 'Offset Print' }, { value: 'Finishing & Merchandise', label: 'Finishing & Merchandise' }, { value: 'Merchandise', label: 'Merchandise' }, { value: 'Display Promo', label: 'Display Promo' }, { value: 'Sablon & Tekstil', label: 'Sablon & Tekstil' }]" />
       </div>
 
-      <TableDataTable :columns="columns" :rows="filteredProducts">
-        <template #cell(code)="{ row }">
-          <span class="font-mono font-semibold text-primary">{{ row.code }}</span>
+      <TablesDataTable :columns="columns" :items="filteredProducts">
+        <template #cell(code)="{ item }">
+          <span class="font-mono font-semibold text-primary">{{ item.code }}</span>
         </template>
 
-        <template #cell(name)="{ row }">
-          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ row.name }}</span>
+        <template #cell(name)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</span>
         </template>
 
-        <template #cell(category)="{ row }">
+        <template #cell(category)="{ item }">
           <span
             class="inline-flex rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-primary dark:bg-orange-950/40 dark:text-primary"
           >
-            {{ row.category }}
+            {{ item.category }}
           </span>
         </template>
 
-        <template #cell(subCategory)="{ row }">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{ row.subCategory }}</span>
+        <template #cell(subCategory)="{ item }">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.subCategory }}</span>
         </template>
 
-        <template #cell(unit)="{ row }">
+        <template #cell(unit)="{ item }">
           <span class="inline-flex rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-            {{ row.unit }}
+            {{ item.unit }}
           </span>
         </template>
 
-        <template #cell(price)="{ row }">
-          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(row.price) }}</span>
+        <template #cell(price)="{ item }">
+          <span class="font-mono font-medium text-gray-900 dark:text-gray-100">{{ formatRupiah(item.price) }}</span>
         </template>
 
-        <template #cell(priceType)="{ row }">
-          <span class="text-xs text-gray-500">{{ row.priceType }}</span>
+        <template #cell(priceType)="{ item }">
+          <span class="text-xs text-gray-500">{{ item.priceType }}</span>
         </template>
 
-        <template #cell(created)="{ row }">
-          <span class="text-[11px] text-gray-500">{{ row.created }}</span>
+        <template #cell(created)="{ item }">
+          <span class="text-[11px] text-gray-500">{{ item.created }}</span>
         </template>
 
-        <template #cell(action)="{ row }">
+        <template #cell(action)="{ item }">
           <div class="flex items-center justify-end gap-2">
             <NuxtLink
-              :to="`/product-details?id=${row.id}`"
+              :to="`/product-details?id=${item.id}`"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
               title="View"
             >
               <CommonFeatherIcon name="eye" size="16" />
             </NuxtLink>
             <NuxtLink
-              :to="`/create-product?id=${row.id}`"
+              :to="`/create-product?id=${item.id}`"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-amber-500 dark:hover:bg-gray-800"
               title="Edit"
             >
@@ -156,17 +132,17 @@ const deleteProduct = (id: string) => {
               type="button"
               class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800"
               title="Delete"
-              @click="deleteProduct(row.id)"
+              @click="deleteProduct(item.id)"
             >
               <CommonFeatherIcon name="trash-2" size="16" />
             </button>
           </div>
         </template>
-      </TableDataTable>
+      </TablesDataTable>
     </div>
 
     <!-- Modal Import Product -->
-    <ModalBaseModal v-model="isImportModalOpen" title="Import Product" size="md">
+    <CommonBaseModal v-model="isImportModalOpen" title="Import Product" maxWidth="md">
       <div class="space-y-4">
         <p class="text-xs text-gray-600 dark:text-gray-400">Upload an Excel (.xlsx) or CSV file containing product list.</p>
 
@@ -195,6 +171,6 @@ const deleteProduct = (id: string) => {
           </button>
         </div>
       </div>
-    </ModalBaseModal>
+    </CommonBaseModal>
   </div>
 </template>
