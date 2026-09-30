@@ -1,167 +1,180 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Flow Name List</h4>
-            <h6>Configure detailed work steps, standard incentives, and execution types</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add New Flow Name
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Flow Name" subtitle="Manage flow names and incentives">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
           </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Flow Name</span>
+          </button>
+        </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search flow name or assignee..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterCategory"
+            allLabel="All Categories"
+            :options="[
+              { value: 'Design', label: 'Design' },
+              { value: 'Pracetak', label: 'Pracetak' },
+              { value: 'Cetak', label: 'Cetak' },
+              { value: 'Finishing', label: 'Finishing' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterType"
+            allLabel="All Types"
+            :options="[
+              { value: 'Inhouse', label: 'Inhouse' },
+              { value: 'Outsource', label: 'Outsource' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search flow name or assignee..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterCategory" class="form-select form-select-sm" style="width: auto;">
-                <option value="">All Categories</option>
-                <option value="Design">Design</option>
-                <option value="Pracetak">Pracetak</option>
-                <option value="Cetak">Cetak</option>
-                <option value="Finishing">Finishing</option>
-              </select>
-              <select v-model="filterType" class="form-select form-select-sm" style="width: auto;">
-                <option value="">All Types</option>
-                <option value="Inhouse">Inhouse</option>
-                <option value="Outsource">Outsource</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>No</th>
-                  <th>Flow Category</th>
-                  <th>Flow Name</th>
-                  <th class="text-end">Incentive Amount</th>
-                  <th>Unit Incentive</th>
-                  <th>Flow Assignee</th>
-                  <th>Flow Type</th>
-                  <th>Created Info</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredList" :key="item.id">
-                  <td class="fw-bold text-primary">{{ item.code }}</td>
-                  <td><span class="badge bg-light text-dark border">{{ item.category }}</span></td>
-                  <td class="fw-bold text-dark">{{ item.name }}</td>
-                  <td class="text-end fw-semibold">Rp {{ formatNumber(item.incentive) }}</td>
-                  <td>{{ item.unit }}</td>
-                  <td class="small">{{ item.assignees }}</td>
-                  <td>
-                    <span :class="item.flowType === 'Inhouse' ? 'badge bg-success bg-opacity-10 text-success border border-success' : 'badge bg-warning bg-opacity-10 text-warning border border-warning'">
-                      {{ item.flowType }}
-                    </span>
-                  </td>
-                  <td class="small text-muted">{{ item.createdInfo }}</td>
-                  <td class="text-center action-table-data">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-icon text-primary" title="Edit" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-danger" title="Delete" @click="deleteItem(item.id)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredList.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">
-                    No flow names found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Category</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Name</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Incentive Amount</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Unit Incentive</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Assignee</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Type</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created Info</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredList" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ item.code }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ item.category }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.incentive) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.unit }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.assignees }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.flowType" :tone="item.flowType === 'Inhouse' ? 'emerald' : 'amber'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.createdInfo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredList.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No flow names found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add / Edit Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">{{ isEditing ? 'Edit Flow Name' : 'Add New Flow Name' }}</h5>
-            <button type="button" class="btn-close" @click="modalVisible = false"></button>
-          </div>
-          <form @submit.prevent="saveItem">
-            <div class="modal-body pt-0">
-              <div class="mb-3">
-                <label class="form-label">Flow Category <span class="text-danger">*</span></label>
-                <select v-model="formData.category" class="form-select" required>
-                  <option value="Design">Design</option>
-                  <option value="Pracetak">Pracetak</option>
-                  <option value="Cetak">Cetak</option>
-                  <option value="Finishing">Finishing</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Flow Name <span class="text-danger">*</span></label>
-                <input v-model="formData.name" type="text" class="form-control" placeholder="e.g. Cetak Multilith, Potong Sisir" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Incentive (Rp) <span class="text-danger">*</span></label>
-                  <input v-model.number="formData.incentive" type="number" min="0" class="form-control" required />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Unit Incentive <span class="text-danger">*</span></label>
-                  <select v-model="formData.unit" class="form-select" required>
-                    <option value="Per Job">Per Job</option>
-                    <option value="Per Meter">Per Meter</option>
-                    <option value="Per Rim">Per Rim</option>
-                    <option value="Per Pcs">Per Pcs</option>
-                  </select>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Flow Type</label>
-                <select v-model="formData.flowType" class="form-select">
-                  <option value="Inhouse">Inhouse</option>
-                  <option value="Outsource">Outsource</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Default Assignees</label>
-                <input v-model="formData.assignees" type="text" class="form-control" placeholder="e.g. Abdul, Nurdin" />
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="modalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Flow Name' : 'Save Flow Name' }}</button>
-            </div>
-          </form>
+    <CommonBaseModal v-model="modalVisible" :title="isEditing ? 'Edit Flow Name' : 'Add Flow Name'" maxWidth="md">
+      <form @submit.prevent="saveItem" class="space-y-4">
+        <CommonFormField label="Flow Category" required>
+          <select
+            v-model="formData.category"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          >
+            <option value="Design">Design</option>
+            <option value="Pracetak">Pracetak</option>
+            <option value="Cetak">Cetak</option>
+            <option value="Finishing">Finishing</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Flow Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Cetak Multilith, Potong Sisir"
+            required
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Incentive (Rp)" required>
+            <input
+              v-model.number="formData.incentive"
+              type="number"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Unit Incentive" required>
+            <select
+              v-model="formData.unit"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option value="Per Job">Per Job</option>
+              <option value="Per Meter">Per Meter</option>
+              <option value="Per Rim">Per Rim</option>
+              <option value="Per Pcs">Per Pcs</option>
+            </select>
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <CommonFormField label="Flow Type">
+          <select
+            v-model="formData.flowType"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Inhouse">Inhouse</option>
+            <option value="Outsource">Outsource</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Default Assignees">
+          <input
+            v-model="formData.assignees"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Abdul, Nurdin"
+          />
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEditing ? 'Update' : 'Submit'" @cancel="modalVisible = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -281,5 +294,5 @@ function refresh() {
   searchQuery.value = ''
   filterCategory.value = ''
   filterType.value = ''
-}</script>
-
+}
+</script>

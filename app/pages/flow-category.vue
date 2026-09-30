@@ -1,110 +1,101 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Flow Category</h4>
-            <h6>Manage master stages and manufacturing categories</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Flow Category
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Flow Category" subtitle="Manage master stages and manufacturing categories">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Flow Category</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-5">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search category..." />
       </div>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search category..." />
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>No</th>
-                  <th>Flow Process Category</th>
-                  <th class="text-center">Used Count</th>
-                  <th>Created By</th>
-                  <th>Created Date</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="cat in filteredList" :key="cat.id">
-                  <td class="fw-bold text-primary">{{ cat.code }}</td>
-                  <td class="fw-bold text-dark">{{ cat.name }}</td>
-                  <td class="text-center">
-                    <span class="badge bg-light text-dark border">{{ cat.usedCount }}</span>
-                  </td>
-                  <td>{{ cat.createdBy }}</td>
-                  <td class="small text-muted">{{ cat.createdDate }}</td>
-                  <td class="text-center action-table-data">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-icon text-primary" title="Edit" @click="openEditModal(cat)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-danger" title="Delete" @click="deleteCategory(cat.id)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredList.length === 0">
-                  <td colspan="6" class="text-center py-4 text-muted">
-                    No flow categories found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Flow Process Category</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Used Count</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created By</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created Date</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="cat in filteredList" :key="cat.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ cat.code }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ cat.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ cat.usedCount }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ cat.createdBy }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ cat.createdDate }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="cat" @edit="openEditModal(cat)" @delete="deleteCategory(cat.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredList.length === 0">
+              <td colspan="6" class="p-8 text-center text-gray-400">No flow categories found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add / Edit Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">{{ isEditing ? 'Edit Flow Category' : 'Add Flow Category' }}</h5>
-            <button type="button" class="btn-close" @click="modalVisible = false"></button>
-          </div>
-          <form @submit.prevent="saveCategory">
-            <div class="modal-body pt-0">
-              <div class="mb-3">
-                <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                <input v-model="formData.name" type="text" class="form-control" placeholder="e.g. Design, Pracetak, Cetak, Finishing" required />
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="modalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Category' : 'Save Category' }}</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <CommonBaseModal v-model="modalVisible" :title="isEditing ? 'Edit Flow Category' : 'Add Flow Category'" maxWidth="md">
+      <form @submit.prevent="saveCategory" class="space-y-4">
+        <CommonFormField label="Category Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Design, Pracetak, Cetak, Finishing"
+            required
+          />
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEditing ? 'Update Category' : 'Save Category'" @cancel="modalVisible = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -187,5 +178,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = ''
-}</script>
-
+}
+</script>
