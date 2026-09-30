@@ -1,320 +1,316 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Sales Return List</h4>
-            <h6>Manage return orders, credit notes, and customer refunds</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add New Sales Return
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Sales Return List" subtitle="Manage return orders, credit notes, and customer refunds">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Sales Return</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search return no, sales no, or customer..." />
+        <CommonFilterSelect
+          v-model="filterPaymentStatus"
+          allLabel="All Payment Status"
+          :options="[
+            { value: 'Paid', label: 'Paid' },
+            { value: 'Unpaid', label: 'Unpaid' },
+          ]"
+        />
       </div>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control"
-                  placeholder="Search return no, sales no, or customer..."
-                />
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Return</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Sales</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Payment Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Payment Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Payment Method</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Total</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="ret in filteredReturns" :key="ret.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ ret.returnNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ ret.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ ret.salesNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ ret.customer }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="ret.paymentStatus" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ ret.paymentDate || "-" }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ ret.paymentMethod || "-" }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold text-gray-900 dark:text-gray-100">Rp {{ formatNumber(ret.total) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="ret" show-view @view="viewReturn(ret)" @edit="openEditModal(ret)" @delete="deleteReturn(ret.id)">
+                  <template #extra>
+                    <button
+                      v-if="ret.paymentStatus === 'Unpaid'"
+                      type="button"
+                      class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-emerald-600 dark:hover:bg-gray-800"
+                      title="Payment-OUT"
+                      @click="openPaymentModal(ret)"
+                    >
+                      <CommonFeatherIcon name="credit-card" size="16" />
+                    </button>
+                  </template>
+                </CommonRowActions>
+              </td>
+            </tr>
+            <tr v-if="filteredReturns.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No sales returns found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- View Return Details Modal -->
+    <CommonBaseModal v-model="viewModalVisible" :title="`Return Invoice: ${selectedReturn?.returnNo ?? ''}`" maxWidth="xl">
+      <div v-if="selectedReturn" class="space-y-4">
+        <!-- Summary Card -->
+        <div class="rounded-lg border border-gray-100 bg-gray-50/60 p-4 dark:border-gray-800 dark:bg-gray-800/30">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <div class="text-xs text-gray-400">Customer</div>
+              <div class="font-bold text-gray-900 dark:text-gray-100">{{ selectedReturn.customer }}</div>
+              <div class="mt-0.5 text-xs text-gray-400">Sales Reference: {{ selectedReturn.salesNo }}</div>
+            </div>
+            <div class="sm:text-end">
+              <div class="text-xs text-gray-400">Return Date</div>
+              <div class="font-bold text-gray-900 dark:text-gray-100">{{ selectedReturn.date }}</div>
+              <div class="mt-0.5 text-xs text-gray-400">
+                Status: <CommonStatusPill :status="selectedReturn.paymentStatus" />
               </div>
             </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterPaymentStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Payment Status</option>
-                <option value="Paid">Paid</option>
-                <option value="Unpaid">Unpaid</option>
-              </select>
-            </div>
           </div>
+        </div>
 
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
+        <!-- Return Items Summary -->
+        <div>
+          <h6 class="mb-2 text-sm font-bold text-gray-800 dark:text-gray-200">Return Items Summary</h6>
+          <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+            <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+              <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
                 <tr>
-                  <th>No Return</th>
-                  <th>Date</th>
-                  <th>No Sales</th>
-                  <th>Customer</th>
-                  <th>Payment Status</th>
-                  <th>Payment Date</th>
-                  <th>Payment Method</th>
-                  <th class="text-end">Total</th>
-                  <th class="text-center" style="width: 130px">Action</th>
+                  <th class="px-3 py-2 text-start">Product Name</th>
+                  <th class="px-3 py-2 text-center">Qty Order</th>
+                  <th class="px-3 py-2 text-center">Qty Return</th>
+                  <th class="px-3 py-2 text-start">Unit</th>
+                  <th class="px-3 py-2 text-end">Unit Price</th>
+                  <th class="px-3 py-2 text-end">Return Amount</th>
+                  <th class="px-3 py-2 text-start">Reason</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="ret in filteredReturns" :key="ret.id">
-                  <td class="fw-bold text-primary">{{ ret.returnNo }}</td>
-                  <td>{{ ret.date }}</td>
-                  <td class="text-muted">{{ ret.salesNo }}</td>
-                  <td class="fw-semibold text-dark">{{ ret.customer }}</td>
-                  <td>
-                    <span
-                      :class="
-                        ret.paymentStatus === 'Paid'
-                          ? 'badge bg-success bg-opacity-10 text-success border border-success'
-                          : 'badge bg-danger bg-opacity-10 text-danger border border-danger'
-                      "
-                    >
-                      {{ ret.paymentStatus }}
-                    </span>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                <tr v-for="item in selectedReturn.items" :key="item.name">
+                  <td class="px-3 py-2">
+                    <div class="font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</div>
+                    <div class="text-[11px] text-gray-400">{{ item.description }}</div>
                   </td>
-                  <td>{{ ret.paymentDate || "-" }}</td>
-                  <td>{{ ret.paymentMethod || "-" }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(ret.total) }}</td>
-                  <td class="text-center action-table-data">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-icon text-info" title="View Details" @click="viewReturn(ret)">
-                        <i class="ti ti-eye"></i>
-                      </button>
-                      <button
-                        v-if="ret.paymentStatus === 'Unpaid'"
-                        class="btn btn-sm btn-icon text-success"
-                        title="Payment-OUT"
-                        @click="openPaymentModal(ret)"
-                      >
-                        <i class="ti ti-credit-card"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-primary" title="Edit" @click="openEditModal(ret)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-danger" title="Delete" @click="deleteReturn(ret.id)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredReturns.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">No sales returns found.</td>
+                  <td class="px-3 py-2 text-center">{{ item.qtyOrder }}</td>
+                  <td class="px-3 py-2 text-center font-bold text-rose-600 dark:text-rose-400">{{ item.qtyReturn }}</td>
+                  <td class="px-3 py-2">{{ item.unit }}</td>
+                  <td class="px-3 py-2 text-end">Rp {{ formatNumber(item.price) }}</td>
+                  <td class="px-3 py-2 text-end font-bold">Rp {{ formatNumber(item.returnAmount) }}</td>
+                  <td class="px-3 py-2 text-gray-500 dark:text-gray-400">{{ item.reason }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- View Return Details Modal (Printable) -->
-    <div v-if="viewModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Return Invoice: {{ selectedReturn?.returnNo }}</h5>
-            <button type="button" class="btn-close" @click="viewModalVisible = false"></button>
-          </div>
-          <div class="modal-body pt-0" v-if="selectedReturn">
-            <div class="row mb-4 p-3 bg-light rounded-3">
-              <div class="col-sm-6">
-                <div class="text-muted small">Customer</div>
-                <div class="fw-bold fs-6">{{ selectedReturn.customer }}</div>
-                <div class="text-muted small">Sales Reference: {{ selectedReturn.salesNo }}</div>
-              </div>
-              <div class="col-sm-6 text-sm-end">
-                <div class="text-muted small">Return Date</div>
-                <div class="fw-bold">{{ selectedReturn.date }}</div>
-                <div class="text-muted small">
-                  Status:
-                  <span :class="selectedReturn.paymentStatus === 'Paid' ? 'badge bg-success' : 'badge bg-danger'">{{
-                    selectedReturn.paymentStatus
-                  }}</span>
-                </div>
-              </div>
-            </div>
-
-            <h6 class="fw-bold mb-2">Return Items Summary</h6>
-            <div class="table-responsive mb-3">
-              <table class="table table-bordered">
-                <thead class="table-light">
-                  <tr>
-                    <th>Product Name</th>
-                    <th class="text-center">Qty Order</th>
-                    <th class="text-center">Qty Return</th>
-                    <th>Unit</th>
-                    <th class="text-end">Unit Price</th>
-                    <th class="text-end">Return Amount</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in selectedReturn.items" :key="item.name">
-                    <td>
-                      <div class="fw-bold">{{ item.name }}</div>
-                      <div class="small text-muted">{{ item.description }}</div>
-                    </td>
-                    <td class="text-center">{{ item.qtyOrder }}</td>
-                    <td class="text-center fw-bold text-danger">{{ item.qtyReturn }}</td>
-                    <td>{{ item.unit }}</td>
-                    <td class="text-end">Rp {{ formatNumber(item.price) }}</td>
-                    <td class="text-end fw-bold">Rp {{ formatNumber(item.returnAmount) }}</td>
-                    <td class="small">{{ item.reason }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-              <span class="fw-bold">Total Refund Due:</span>
-              <span class="fs-5 fw-bold text-primary">Rp {{ formatNumber(selectedReturn.total) }}</span>
-            </div>
-          </div>
-          <div class="modal-footer border-0 justify-content-between">
-            <button type="button" class="btn btn-outline-secondary" @click="printTable">
-              <i class="ti ti-printer me-1"></i>Print Invoice
-            </button>
-            <button type="button" class="btn btn-secondary" @click="viewModalVisible = false">Close</button>
-          </div>
+        <div class="flex items-center justify-between rounded-lg bg-gray-50/60 p-3.5 dark:bg-gray-800/30">
+          <span class="text-sm font-bold text-gray-800 dark:text-gray-200">Total Refund Due:</span>
+          <span class="text-lg font-bold text-primary">Rp {{ formatNumber(selectedReturn.total) }}</span>
         </div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex items-center justify-between">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="16" />
+            Print Invoice
+          </button>
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="viewModalVisible = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
 
     <!-- Payment-OUT Modal -->
-    <div v-if="paymentModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Payment-OUT Refund: {{ selectedReturn?.returnNo }}</h5>
-            <button type="button" class="btn-close" @click="paymentModalVisible = false"></button>
+    <CommonBaseModal v-model="paymentModalVisible" :title="`Payment-OUT Refund: ${selectedReturn?.returnNo ?? ''}`" maxWidth="md">
+      <form v-if="selectedReturn" @submit.prevent="processPaymentOut" class="space-y-4">
+        <CommonFormField label="Payment Method" required>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <input v-model="paymentForm.method" type="radio" value="Cash" class="h-4 w-4 accent-primary" />
+              Cash
+            </label>
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <input v-model="paymentForm.method" type="radio" value="Transfer" class="h-4 w-4 accent-primary" />
+              Bank Transfer
+            </label>
           </div>
-          <form @submit.prevent="processPaymentOut">
-            <div class="modal-body pt-0" v-if="selectedReturn">
-              <div class="mb-3">
-                <label class="form-label fw-bold">Payment Method</label>
-                <div class="d-flex gap-3">
-                  <div class="form-check">
-                    <input id="payCash" v-model="paymentForm.method" type="radio" value="Cash" class="form-check-input" />
-                    <label for="payCash" class="form-check-label">Cash</label>
-                  </div>
-                  <div class="form-check">
-                    <input id="payTransfer" v-model="paymentForm.method" type="radio" value="Transfer" class="form-check-input" />
-                    <label for="payTransfer" class="form-check-label">Bank Transfer</label>
-                  </div>
-                </div>
-              </div>
+        </CommonFormField>
 
-              <div v-if="paymentForm.method === 'Transfer'" class="p-3 bg-light rounded-3 border mb-3">
-                <div class="mb-2">
-                  <label class="form-label small mb-1">Customer Bank Name</label>
-                  <input
-                    v-model="paymentForm.bankName"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="BCA / Mandiri / BNI"
-                    required
-                  />
-                </div>
-                <div class="mb-2">
-                  <label class="form-label small mb-1">Account Number</label>
-                  <input
-                    v-model="paymentForm.accountNumber"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="e.g. 1234567890"
-                    required
-                  />
-                </div>
-                <div class="mb-2">
-                  <label class="form-label small mb-1">Account Holder</label>
-                  <input
-                    v-model="paymentForm.accountName"
-                    type="text"
-                    class="form-control form-control-sm"
-                    :placeholder="selectedReturn.customer"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Paying Refund Amount (Rp) <span class="text-danger">*</span></label>
-                <input v-model.number="paymentForm.amount" type="number" class="form-control" required />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Notes</label>
-                <textarea
-                  v-model="paymentForm.notes"
-                  class="form-control"
-                  rows="2"
-                  placeholder="Refund notes or reference..."
-                ></textarea>
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="paymentModalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-warning">Confirm Payment-OUT</button>
-            </div>
-          </form>
+        <div v-if="paymentForm.method === 'Transfer'" class="space-y-3 rounded-lg border border-gray-100 bg-gray-50/60 p-3.5 dark:border-gray-800 dark:bg-gray-800/30">
+          <CommonFormField label="Customer Bank Name">
+            <input
+              v-model="paymentForm.bankName"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="BCA / Mandiri / BNI"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Account Number">
+            <input
+              v-model="paymentForm.accountNumber"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="e.g. 1234567890"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Account Holder">
+            <input
+              v-model="paymentForm.accountName"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              :placeholder="selectedReturn.customer"
+              required
+            />
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+
+        <CommonFormField label="Paying Refund Amount (Rp)" required>
+          <input
+            v-model.number="paymentForm.amount"
+            type="number"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+
+        <CommonFormField label="Notes">
+          <textarea
+            v-model="paymentForm.notes"
+            rows="2"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Refund notes or reference..."
+          ></textarea>
+        </CommonFormField>
+
+        <CommonModalFooter submitLabel="Confirm Payment-OUT" @cancel="paymentModalVisible = false" />
+      </form>
+    </CommonBaseModal>
 
     <!-- Add / Edit Modal -->
-    <div v-if="crudModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">{{ isEditing ? "Edit Sales Return" : "Add New Sales Return" }}</h5>
-            <button type="button" class="btn-close" @click="crudModalVisible = false"></button>
-          </div>
-          <form @submit.prevent="saveCrudReturn">
-            <div class="modal-body pt-0">
-              <div class="mb-3">
-                <label class="form-label">Sales Invoice No <span class="text-danger">*</span></label>
-                <input v-model="crudForm.salesNo" type="text" class="form-control" placeholder="e.g. 2511000001" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Customer Name <span class="text-danger">*</span></label>
-                <input v-model="crudForm.customer" type="text" class="form-control" placeholder="Customer name" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Return Date <span class="text-danger">*</span></label>
-                  <input v-model="crudForm.date" type="text" class="form-control" placeholder="DD/MM/YYYY" required />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Total Refund (Rp) <span class="text-danger">*</span></label>
-                  <input v-model.number="crudForm.total" type="number" class="form-control" min="0" required />
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Payment Status</label>
-                <select v-model="crudForm.paymentStatus" class="form-select">
-                  <option value="Unpaid">Unpaid</option>
-                  <option value="Paid">Paid</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="crudModalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? "Update Return" : "Save Return" }}</button>
-            </div>
-          </form>
+    <CommonBaseModal v-model="crudModalVisible" :title="isEditing ? 'Edit Sales Return' : 'Add New Sales Return'" maxWidth="md">
+      <form @submit.prevent="saveCrudReturn" class="space-y-4">
+        <CommonFormField label="Sales Invoice No" required>
+          <input
+            v-model="crudForm.salesNo"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. 2511000001"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Customer Name" required>
+          <input
+            v-model="crudForm.customer"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Customer name"
+            required
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Return Date" required>
+            <input
+              v-model="crudForm.date"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="DD/MM/YYYY"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Total Refund (Rp)" required>
+            <input
+              v-model.number="crudForm.total"
+              type="number"
+              min="0"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <CommonFormField label="Payment Status">
+          <select
+            v-model="crudForm.paymentStatus"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Unpaid">Unpaid</option>
+            <option value="Paid">Paid</option>
+          </select>
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEditing ? 'Update Return' : 'Save Return'" @cancel="crudModalVisible = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -360,7 +356,7 @@ function viewReturn(ret: SalesReturn) {
 // Payment-OUT Modal
 const paymentModalVisible = ref(false);
 const paymentForm = reactive({
-  method: "Cash",
+  method: "Cash" as "Cash" | "Transfer",
   bankName: "BCA",
   accountNumber: "",
   accountName: "",
@@ -371,10 +367,10 @@ const paymentForm = reactive({
 function openPaymentModal(ret: SalesReturn) {
   selectedReturn.value = ret;
   paymentForm.method = "Cash";
-  paymentForm.amount = ret.total;
   paymentForm.bankName = "BCA";
   paymentForm.accountNumber = "";
   paymentForm.accountName = ret.customer;
+  paymentForm.amount = ret.total;
   paymentForm.notes = `Refund for ${ret.returnNo}`;
   paymentModalVisible.value = true;
 }
@@ -389,7 +385,7 @@ function processPaymentOut() {
   paymentModalVisible.value = false;
 }
 
-// CRUD Modal
+// Add / Edit CRUD Modal
 const crudModalVisible = ref(false);
 const isEditing = ref(false);
 const crudForm = reactive({
@@ -425,25 +421,29 @@ function openEditModal(ret: SalesReturn) {
 
 function saveCrudReturn() {
   if (isEditing.value) {
-    const idx = returns.value.findIndex((r) => r.id === crudForm.id);
+    const editId = crudForm.id;
+    const idx = returns.value.findIndex((r) => r.id === editId);
     if (idx !== -1) {
-      returns.value[idx].salesNo = crudForm.salesNo;
-      returns.value[idx].customer = crudForm.customer;
-      returns.value[idx].date = crudForm.date;
-      returns.value[idx].total = crudForm.total;
-      returns.value[idx].paymentStatus = crudForm.paymentStatus;
+      returns.value[idx] = {
+        ...returns.value[idx],
+        salesNo: crudForm.salesNo,
+        customer: crudForm.customer,
+        date: crudForm.date,
+        total: crudForm.total,
+        paymentStatus: crudForm.paymentStatus,
+      };
     }
   } else {
     returns.value.unshift({
       id: Date.now(),
-      returnNo: "RTN" + Math.floor(1000 + Math.random() * 9000),
+      returnNo: `SR${String(returns.value.length + 1).padStart(6, "0")}`,
       salesNo: crudForm.salesNo,
-      customer: crudForm.customer,
       date: crudForm.date,
-      paymentStatus: crudForm.paymentStatus,
-      paymentDate: crudForm.paymentStatus === "Paid" ? crudForm.date : "",
-      paymentMethod: crudForm.paymentStatus === "Paid" ? "Cash" : "",
+      customer: crudForm.customer,
       total: crudForm.total,
+      paymentStatus: crudForm.paymentStatus,
+      paymentDate: "",
+      paymentMethod: "",
       items: [],
     });
   }
@@ -451,20 +451,20 @@ function saveCrudReturn() {
 }
 
 function deleteReturn(id: number) {
-  if (confirm("Are you sure you want to delete this return record?")) {
+  if (confirm("Are you sure you want to delete this sales return?")) {
     returns.value = returns.value.filter((r) => r.id !== id);
   }
 }
 
-function exportPdf() {
-  alert("Exporting return orders as PDF...");
-}
-
-function printTable() {
+const exportPdf = () => {
   window.print();
-}
+};
 
-function refresh() {
+const printTable = () => {
+  window.print();
+};
+
+const refresh = () => {
   searchQuery.value = "";
   filterPaymentStatus.value = "";
-}</script>
+};</script>
