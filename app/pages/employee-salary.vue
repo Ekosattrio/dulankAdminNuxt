@@ -288,21 +288,7 @@ const deleteRecord = (id: string) => {
           </button>
         </div>
 
-        <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isAddModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Submit
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Submit" @cancel="isAddModalOpen = false" />
       </form>
     </CommonBaseModal>
 
@@ -404,21 +390,7 @@ const deleteRecord = (id: string) => {
           </select>
         </div>
 
-        <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-800">
-          <button
-            type="button"
-            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
-            @click="isEditModalOpen = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
-          >
-            Save Changes
-          </button>
-        </div>
+        <CommonModalFooter submitLabel="Save Changes" @cancel="isEditModalOpen = false" />
       </form>
     </CommonBaseModal>
 
