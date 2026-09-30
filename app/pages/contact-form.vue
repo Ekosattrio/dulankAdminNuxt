@@ -1,209 +1,146 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Contact Form Messages</h4>
-            <h6>Manage public inquiries, quotation requests, and feedback</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-      </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Contact Form" subtitle="Manage customer contact inquiries">
+      <template #actions>
+        <button
+          type="button"
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+          title="Refresh"
+          @click="refresh"
+        >
+          <CommonFeatherIcon name="rotate-ccw" size="18" />
+        </button>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Stats Widget -->
-      <div class="row mb-4">
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-mail-opened fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Inquiries</h6>
-              <h4 class="fw-bold mb-0">{{ messages.length }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-warning bg-opacity-10 p-3 rounded">
-              <i class="ti ti-clock fs-2 text-warning"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Pending Replies</h6>
-              <h4 class="fw-bold mb-0">{{ pendingCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-check fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Answered</h6>
-              <h4 class="fw-bold mb-0">{{ answeredCount }}</h4>
-            </div>
-          </div>
+    <!-- KPI Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <CommonStatCard label="Total Inquiries" :value="String(messages.length)" icon="mail" tone="primary" />
+      <CommonStatCard label="Pending Replies" :value="String(pendingCount)" icon="clock" tone="warning" />
+      <CommonStatCard label="Answered" :value="String(answeredCount)" icon="check" tone="success" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonSearchFilter v-model="searchQuery" placeholder="Search name, email, or message..." />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="Status: All"
+            :options="[
+              { value: 'Pending', label: 'Pending' },
+              { value: 'Answered', label: 'Answered' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search name, email, or message..." />
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All' }}
-                  <i class="ti ti-chevron-down ms-1"></i>
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu p-2 show" style="display: block; position: absolute;">
-                  <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = 'Pending'; statusDropdownOpen = false">Pending</a></li>
-                  <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = 'Answered'; statusDropdownOpen = false">Answered</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive product-list">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th style="min-width: 250px;">Message</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="m in filteredMessages" :key="m.id">
-                  <td class="fw-semibold text-dark">{{ m.name }}</td>
-                  <td>
-                    <a :href="`mailto:${m.email}`" class="text-primary">{{ m.email }}</a>
-                  </td>
-                  <td>
-                    <a :href="`https://wa.me/${m.phone.replace(/[^0-9]/g, '')}`" target="_blank" class="text-success text-decoration-none">
-                      <i class="ti ti-brand-whatsapp me-1"></i>{{ m.phone }}
-                    </a>
-                  </td>
-                  <td class="text-wrap small text-muted">{{ m.message }}</td>
-                  <td>{{ m.date }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="m.status === 'Answered' ? 'badge-success' : 'badge-warning'"
-                    >
-                      • {{ m.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="View / Reply"
-                        @click="openReplyModal(m)"
-                      >
-                        <i class="ti ti-eye fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete"
-                        @click="deleteMessage(m.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredMessages.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">
-                    No contact messages found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Email</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Phone</th>
+              <th class="min-w-[250px] px-4 py-3 text-start whitespace-nowrap">Message</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="m in filteredMessages" :key="m.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ m.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <a :href="`mailto:${m.email}`" class="text-primary hover:underline">{{ m.email }}</a>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <a :href="`https://wa.me/${m.phone.replace(/[^0-9]/g, '')}`" target="_blank" class="inline-flex items-center gap-1 text-emerald-600 hover:underline dark:text-emerald-400">
+                  <CommonFeatherIcon name="message-circle" size="13" />
+                  {{ m.phone }}
+                </a>
+              </td>
+              <td class="max-w-[250px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ m.message }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ m.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="m.status" :tone="m.status === 'Answered' ? 'emerald' : 'amber'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="m" show-view @view="openReplyModal(m)" @delete="deleteMessage(m.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredMessages.length === 0">
+              <td colspan="7" class="p-8 text-center text-gray-400">No contact messages found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Reply / Detail Modal -->
-    <div
-      v-if="modalVisible && activeMessage"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Inquiry Details — {{ activeMessage.name }}</h5>
-            <button type="button" class="btn-close" @click="modalVisible = false"></button>
+    <CommonBaseModal v-model="modalVisible" :title="`Inquiry Details — ${activeMessage?.name ?? ''}`" maxWidth="lg">
+      <div v-if="activeMessage" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-0 block text-xs text-gray-400">Sender Name</label>
+            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ activeMessage.name }}</p>
           </div>
-          <div class="modal-body pb-0">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label text-muted small mb-0">Sender Name</label>
-                <p class="fw-semibold text-dark">{{ activeMessage.name }}</p>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-muted small mb-0">Received Date</label>
-                <p class="fw-semibold text-dark">{{ activeMessage.date }}</p>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-muted small mb-0">Email</label>
-                <p><a :href="`mailto:${activeMessage.email}`" class="text-primary">{{ activeMessage.email }}</a></p>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-muted small mb-0">Phone</label>
-                <p class="fw-semibold">{{ activeMessage.phone }}</p>
-              </div>
-              <div class="col-12">
-                <label class="form-label text-muted small mb-0">Original Message</label>
-                <div class="p-3 bg-light rounded border text-dark">
-                  {{ activeMessage.message }}
-                </div>
-              </div>
-              <div class="col-12">
-                <label class="form-label fw-medium">Quick Reply via Email</label>
-                <textarea v-model="replyText" rows="3" class="form-control" placeholder="Write response to customer..."></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer modal-action-footer justify-content-end gap-2">
-            <button type="button" class="btn btn-dark modal-action-cancel" @click="modalVisible = false">Close</button>
-            <button type="button" class="btn btn-primary modal-action-submit" @click="sendReply">
-              <i class="ti ti-send me-1"></i>Send Response
-            </button>
+          <div>
+            <label class="mb-0 block text-xs text-gray-400">Received Date</label>
+            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ activeMessage.date }}</p>
           </div>
         </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-0 block text-xs text-gray-400">Email</label>
+            <p><a :href="`mailto:${activeMessage.email}`" class="text-primary hover:underline">{{ activeMessage.email }}</a></p>
+          </div>
+          <div>
+            <label class="mb-0 block text-xs text-gray-400">Phone</label>
+            <p class="font-semibold text-gray-800 dark:text-gray-200">{{ activeMessage.phone }}</p>
+          </div>
+        </div>
+        <div>
+          <label class="mb-0 block text-xs text-gray-400">Original Message</label>
+          <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm text-gray-800 dark:border-gray-800 dark:bg-gray-800/40 dark:text-gray-200">
+            {{ activeMessage.message }}
+          </div>
+        </div>
+        <CommonFormField label="Quick Reply via Email">
+          <textarea
+            v-model="replyText"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Write response to customer..."
+          ></textarea>
+        </CommonFormField>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="modalVisible = false"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-primary-600"
+            @click="sendReply"
+          >
+            <CommonFeatherIcon name="send" size="14" />
+            Send Response
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -271,5 +208,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}</script>
-
+}
+</script>
