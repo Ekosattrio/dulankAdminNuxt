@@ -1,258 +1,249 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header transfer">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Money Transfer</h4>
-            <h6>Manage Money Transfer List</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Money Transfer" subtitle="Manage Money Transfer List">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Transfer</span>
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="d-flex purchase-pg-btn">
-          <div class="page-btn">
-            <button type="button" class="btn btn-added btn-primary" @click="openAddModal">
-              <i class="ti ti-circle-plus me-2"></i>Add New Transfer
-            </button>
-          </div>
-        </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Transfer List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search transfer no, account, note..." />
       </div>
 
-      <!-- Transfer List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control"
-                  placeholder="Search transfer no, account, note..."
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>No Transfer</th>
-                  <th>From Account</th>
-                  <th>To Account</th>
-                  <th class="text-end">Amount (IDR)</th>
-                  <th>Description</th>
-                  <th>Created By</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredTransfers" :key="item.id">
-                  <td>{{ item.date }}</td>
-                  <td class="fw-semibold text-primary">{{ item.no }}</td>
-                  <td class="small fw-medium">{{ item.fromAccount }}</td>
-                  <td class="small fw-medium">{{ item.toAccount }}</td>
-                  <td class="text-end fw-semibold">{{ formatNumber(item.amount) }}</td>
-                  <td class="text-muted">{{ item.description }}</td>
-                  <td>{{ item.createdBy }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <a class="me-2 p-2 text-info" href="javascript:void(0);" title="View" @click="openViewModal(item)">
-                        <i class="ti ti-eye"></i>
-                      </a>
-                      <a class="me-2 p-2" href="javascript:void(0);" title="Edit" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </a>
-                      <a
-                        class="confirm-text p-2 align-center text-danger"
-                        href="javascript:void(0);"
-                        title="Delete"
-                        @click="deleteItem(item.id)"
-                      >
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredTransfers.length === 0">
-                  <td colspan="8" class="text-center py-4 text-muted">No money transfers found.</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="fw-bold bg-light">
-                  <td colspan="4" class="text-start">Total Transferred Amount</td>
-                  <td class="text-end text-primary fs-15">{{ formatNumber(totalAmount) }}</td>
-                  <td colspan="3"></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Transfer Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Add New Transfer</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="saveTransfer">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input v-model="formData.date" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Amount (IDR) <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.amount" type="number" class="form-control" required min="1" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">From Account <span class="text-danger">*</span></label>
-                    <select v-model="formData.fromAccount" class="form-select" required>
-                      <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">To Account <span class="text-danger">*</span></label>
-                    <select v-model="formData.toAccount" class="form-select" required>
-                      <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Description / Note</label>
-                    <textarea
-                      v-model="formData.description"
-                      class="form-control"
-                      rows="3"
-                      placeholder="Transfer purpose..."
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Edit Transfer Modal -->
-      <div v-if="showEditModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Edit Money Transfer</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="updateTransfer">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input v-model="formData.date" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Amount (IDR) <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.amount" type="number" class="form-control" required min="1" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">From Account <span class="text-danger">*</span></label>
-                    <select v-model="formData.fromAccount" class="form-select" required>
-                      <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">To Account <span class="text-danger">*</span></label>
-                    <select v-model="formData.toAccount" class="form-select" required>
-                      <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Description / Note</label>
-                    <textarea v-model="formData.description" class="form-control" rows="3"></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- View Modal -->
-      <div
-        v-if="showViewModal && activeItem"
-        class="modal fade show d-block"
-        tabindex="-1"
-        style="background-color: rgba(0, 0, 0, 0.5)"
-      >
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Transfer Details - {{ activeItem.no }}</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <div class="row g-2">
-                <div class="col-4 text-muted">No Transfer</div>
-                <div class="col-8 fw-bold text-primary">{{ activeItem.no }}</div>
-                <div class="col-4 text-muted">Date</div>
-                <div class="col-8">{{ activeItem.date }}</div>
-                <div class="col-4 text-muted">From Account</div>
-                <div class="col-8 small">{{ activeItem.fromAccount }}</div>
-                <div class="col-4 text-muted">To Account</div>
-                <div class="col-8 small">{{ activeItem.toAccount }}</div>
-                <div class="col-4 text-muted">Amount</div>
-                <div class="col-8 fw-bold fs-16 text-success">Rp {{ formatNumber(activeItem.amount) }}</div>
-                <div class="col-4 text-muted">Description</div>
-                <div class="col-8">{{ activeItem.description }}</div>
-                <div class="col-4 text-muted">Created By</div>
-                <div class="col-8">{{ activeItem.createdBy }}</div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Close</button>
-            </div>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Transfer</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">From Account</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">To Account</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount (IDR)</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Description</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created By</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredTransfers" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-primary">{{ item.no }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">{{ item.fromAccount }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">{{ item.toAccount }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.amount) }}</td>
+              <td class="max-w-[240px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.description }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.createdBy }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" show-view @view="openViewModal(item)" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredTransfers.length === 0">
+              <td colspan="8" class="p-8 text-center text-gray-400">No money transfers found.</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 text-start" colspan="4">Total Transferred Amount</td>
+              <td class="px-4 py-3 text-end font-bold text-primary">{{ formatNumber(totalAmount) }}</td>
+              <td class="px-4 py-3" colspan="3"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
+
+    <!-- Add Transfer Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add New Transfer" maxWidth="lg">
+      <form @submit.prevent="saveTransfer" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Date" required>
+            <input
+              v-model="formData.date"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Amount (IDR)" required>
+            <input
+              v-model.number="formData.amount"
+              type="number"
+              min="1"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="From Account" required>
+            <select
+              v-model="formData.fromAccount"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="To Account" required>
+            <select
+              v-model="formData.toAccount"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Description / Note">
+          <textarea
+            v-model="formData.description"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Transfer purpose..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Edit Transfer Modal -->
+    <CommonBaseModal v-model="showEditModal" title="Edit Money Transfer" maxWidth="lg">
+      <form @submit.prevent="updateTransfer" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Date" required>
+            <input
+              v-model="formData.date"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Amount (IDR)" required>
+            <input
+              v-model.number="formData.amount"
+              type="number"
+              min="1"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="From Account" required>
+            <select
+              v-model="formData.fromAccount"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="To Account" required>
+            <select
+              v-model="formData.toAccount"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option v-for="acc in accountOptions" :key="acc" :value="acc">{{ acc }}</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Description / Note">
+          <textarea
+            v-model="formData.description"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Transfer purpose..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- View Transfer Modal -->
+    <CommonBaseModal v-model="showViewModal" :title="`View Transfer - ${activeItem?.no ?? ''}`" maxWidth="md">
+      <div v-if="activeItem" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Date</span>
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{ activeItem.date }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">No Transfer</span>
+          <span class="font-semibold text-primary">{{ activeItem.no }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">From Account</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.fromAccount }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">To Account</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.toAccount }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Amount</span>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatNumber(activeItem.amount) }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Created By</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.createdBy }}</span>
+        </div>
+        <div class="py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Description</span>
+          <div class="mt-1 rounded-lg bg-gray-50 p-2 text-sm text-gray-500 dark:bg-gray-800/40 dark:text-gray-400">{{ activeItem.description || '-' }}</div>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="closeModal"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 

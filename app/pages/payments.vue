@@ -1,166 +1,191 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="page-title">
-          <h4>Payments</h4>
-          <h6>Manage payment in and payment out</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Payments" subtitle="Manage payment in and payment out">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-      </div>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Payment List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search ref no, name..." />
-              </div>
-            </div>
-
-            <div class="filters d-flex flex-wrap justify-content-end gap-2">
-              <select v-model="filterType" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Types</option>
-                <option value="Payment-In">Payment-In</option>
-                <option value="Payment-Out">Payment-Out</option>
-              </select>
-
-              <select v-model="filterMethod" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Methods</option>
-                <option value="Cash">Cash</option>
-                <option value="Transfer">Transfer</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date Payment</th>
-                  <th>Ref No</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Payment Method</th>
-                  <th class="text-end">Amount (IDR)</th>
-                  <th>Status</th>
-                  <th>Created By</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredPayments" :key="item.id">
-                  <td>{{ item.date }}</td>
-                  <td class="fw-semibold text-primary">{{ item.refNo }}</td>
-                  <td class="fw-medium text-dark">{{ item.name }}</td>
-                  <td>
-                    <span class="badge" :class="item.type === 'Payment-In' ? 'bg-success' : 'bg-danger'">
-                      {{ item.type }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ item.method }}</span>
-                  </td>
-                  <td class="text-end fw-semibold">{{ formatNumber(item.amount) }}</td>
-                  <td>
-                    <span class="badge bg-success">{{ item.status }}</span>
-                  </td>
-                  <td class="text-muted fs-12">{{ item.created }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <a class="me-2 p-2 text-info" href="javascript:void(0);" title="View Details" @click="openViewModal(item)">
-                        <i class="ti ti-eye"></i>
-                      </a>
-                      <a class="p-2 text-secondary" href="javascript:void(0);" title="Print Receipt" @click="printReceipt(item)">
-                        <i class="ti ti-printer"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredPayments.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">No payment records found.</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="fw-bold bg-light">
-                  <td colspan="5" class="text-start">Total Visible Payments</td>
-                  <td class="text-end text-primary fs-15">{{ formatNumber(totalAmount) }}</td>
-                  <td colspan="3"></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+    <!-- Payment List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search ref no, name..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterType"
+            allLabel="All Types"
+            :options="[
+              { value: 'Payment-In', label: 'Payment-In' },
+              { value: 'Payment-Out', label: 'Payment-Out' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterMethod"
+            allLabel="All Methods"
+            :options="[
+              { value: 'Cash', label: 'Cash' },
+              { value: 'Transfer', label: 'Transfer' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- View Payment Modal -->
-      <div
-        v-if="showViewModal && viewingItem"
-        class="modal fade show d-block"
-        tabindex="-1"
-        style="background-color: rgba(0, 0, 0, 0.5)"
-      >
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Payment Details - {{ viewingItem.refNo }}</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <div class="row g-2">
-                <div class="col-6 text-muted">Date</div>
-                <div class="col-6 text-end fw-medium">{{ viewingItem.date }}</div>
-                <div class="col-6 text-muted">Ref No</div>
-                <div class="col-6 text-end fw-bold text-primary">{{ viewingItem.refNo }}</div>
-                <div class="col-6 text-muted">Name / Entity</div>
-                <div class="col-6 text-end fw-medium">{{ viewingItem.name }}</div>
-                <div class="col-6 text-muted">Type</div>
-                <div class="col-6 text-end">
-                  <span class="badge" :class="viewingItem.type === 'Payment-In' ? 'bg-success' : 'bg-danger'">
-                    {{ viewingItem.type }}
-                  </span>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date Payment</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Ref No</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Type</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Payment Method</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount (IDR)</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created By</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredPayments" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-primary">{{ item.refNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.type" :tone="item.type === 'Payment-In' ? 'emerald' : 'rose'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  {{ item.method }}
+                </span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">{{ item.created }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <div class="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-sky-500 dark:hover:bg-gray-800"
+                    title="View Details"
+                    @click="openViewModal(item)"
+                  >
+                    <CommonFeatherIcon name="eye" size="16" />
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800"
+                    title="Print Receipt"
+                    @click="printReceipt(item)"
+                  >
+                    <CommonFeatherIcon name="printer" size="16" />
+                  </button>
                 </div>
-                <div class="col-6 text-muted">Method</div>
-                <div class="col-6 text-end">{{ viewingItem.method }}</div>
-                <div class="col-6 text-muted">Amount</div>
-                <div class="col-6 text-end fw-bold fs-16 text-success">Rp {{ formatNumber(viewingItem.amount) }}</div>
-                <div class="col-6 text-muted">Status</div>
-                <div class="col-6 text-end">
-                  <span class="badge bg-success">{{ viewingItem.status }}</span>
-                </div>
-                <div class="col-6 text-muted">Created By</div>
-                <div class="col-6 text-end">{{ viewingItem.created }}</div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Close</button>
-              <button type="button" class="btn btn-primary" @click="printReceipt(viewingItem)">
-                <i class="ti ti-printer me-1"></i>Print Receipt
-              </button>
-            </div>
-          </div>
-        </div>
+              </td>
+            </tr>
+            <tr v-if="filteredPayments.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No payment records found.</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 text-start" colspan="5">Total Visible Payments</td>
+              <td class="px-4 py-3 text-end font-bold text-primary">{{ formatNumber(totalAmount) }}</td>
+              <td class="px-4 py-3" colspan="3"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
+
+    <!-- View Payment Modal -->
+    <CommonBaseModal v-model="showViewModal" :title="`Payment Details - ${viewingItem?.refNo ?? ''}`" maxWidth="md">
+      <div v-if="viewingItem" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Date</span>
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{ viewingItem.date }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Ref No</span>
+          <span class="font-bold text-primary">{{ viewingItem.refNo }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Name / Entity</span>
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{ viewingItem.name }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Type</span>
+          <CommonStatusPill :status="viewingItem.type" :tone="viewingItem.type === 'Payment-In' ? 'emerald' : 'rose'" />
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Method</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ viewingItem.method }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Amount</span>
+          <span class="text-lg font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatNumber(viewingItem.amount) }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Status</span>
+          <CommonStatusPill :status="viewingItem.status" />
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Created By</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ viewingItem.created }}</span>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="closeModal"
+          >
+            Close
+          </button>
+          <button
+            v-if="viewingItem"
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-primary-600"
+            @click="printReceipt(viewingItem)"
+          >
+            <CommonFeatherIcon name="printer" size="15" />
+            Print Receipt
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
