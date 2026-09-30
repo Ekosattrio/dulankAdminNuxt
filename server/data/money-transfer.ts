@@ -1,5 +1,5 @@
 // Mock data untuk halaman /money-transfer (dipindah dari app/pages/money-transfer.vue)
-// Dikonsumsi oleh server/api/money-transfer.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const transfers = [
   {

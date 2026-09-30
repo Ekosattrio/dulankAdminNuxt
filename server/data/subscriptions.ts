@@ -1,5 +1,5 @@
 // Mock data untuk halaman /subscriptions (dipindah dari app/pages/subscriptions.vue)
-// Dikonsumsi oleh server/api/subscriptions.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const subscriptions = [
   {

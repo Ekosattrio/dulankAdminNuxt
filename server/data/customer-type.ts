@@ -1,5 +1,5 @@
 // Mock data untuk halaman /customer-type (dipindah dari app/pages/customer-type.vue)
-// Dikonsumsi oleh server/api/customer-type.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const customerTypes = [
   { id: 1, name: 'Standard', status: 'Active' },

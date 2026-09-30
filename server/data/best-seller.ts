@@ -1,5 +1,5 @@
 // Mock data untuk halaman /best-seller (dipindah dari app/pages/best-seller.vue)
-// Dikonsumsi oleh server/api/best-seller.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const products = [
   { rank: 1, category: 'Packaging', product: 'Sticker Label Kromo / Vinyl A3+', sold: 15000, unit: 'pcs', total: 750000000 },

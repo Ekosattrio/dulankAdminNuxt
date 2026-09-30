@@ -1,5 +1,5 @@
 // Mock data untuk halaman /job-branch (dipindah dari app/pages/job-branch.vue)
-// Dikonsumsi oleh server/api/job-branch.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const jobs = [
   { id: 1, jobNo: 'JOB-2510000001', branch: 'Dulank Karawang', customer: 'PT Makmur Abadi', product: 'Brosur A5', flowName: 'Cetak Multilith', priority: 'High', status: 'Waiting' },

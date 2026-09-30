@@ -1,5 +1,5 @@
 // Mock data untuk halaman /edit-work-flow (dipindah dari app/pages/edit-work-flow.vue)
-// Dikonsumsi oleh server/api/edit-work-flow.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const flowSteps = [
   { id: "1", name: "Artwork Checking", category: "Design", selected: true, template: "Standard Ready Print" },

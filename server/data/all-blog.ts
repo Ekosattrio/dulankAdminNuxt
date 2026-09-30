@@ -1,5 +1,5 @@
 // Mock data untuk halaman /all-blog (dipindah dari app/pages/all-blog.vue)
-// Dikonsumsi oleh server/api/all-blog.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const blogs = [
   {

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /orders (dipindah dari app/pages/orders.vue)
-// Dikonsumsi oleh server/api/orders.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const orders = [
   {

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /coupon (dipindah dari app/pages/coupon.vue)
-// Dikonsumsi oleh server/api/coupon.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const coupons = [
   { id: 1, name: 'Coupons 21', code: 'Christmas', type: 'Fixed', discount: 20000, limit: 40, used: 12, valid: '04 Jan 2026', status: 'Active' },

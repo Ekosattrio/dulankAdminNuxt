@@ -1,5 +1,5 @@
 // Mock data untuk halaman /payment-outflow (dipindah dari app/pages/payment-outflow.vue)
-// Dikonsumsi oleh server/api/payment-outflow.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const outflows = [
   {

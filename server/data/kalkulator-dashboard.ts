@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kalkulator-dashboard (dipindah dari app/pages/kalkulator-dashboard.vue)
-// Dikonsumsi oleh server/api/kalkulator-dashboard.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const tableData = [
   {

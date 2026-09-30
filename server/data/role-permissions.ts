@@ -1,5 +1,5 @@
 // Mock data untuk halaman /role-permissions (dipindah dari app/pages/role-permissions.vue)
-// Dikonsumsi oleh server/api/role-permissions.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const roles = [
   { id: 1, name: "Admin", createdOn: "25 May 2023" },

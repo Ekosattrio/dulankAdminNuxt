@@ -1,5 +1,5 @@
 // Mock data untuk halaman /billing (dipindah dari app/pages/billing.vue)
-// Dikonsumsi oleh server/api/billing.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const billings = [
   { id: 1, billingId: 'B-001', txId: 'T-101', userEmail: 'john.doe@email.com', date: '2025-08-28', subtotal: 530000, discount: 53000, tax: 20000, shipping: 20000, total: 517000, status: 'Berhasil', method: 'Kartu Kredit' },

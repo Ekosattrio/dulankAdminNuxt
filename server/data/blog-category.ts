@@ -1,5 +1,5 @@
 // Mock data untuk halaman /blog-category (dipindah dari app/pages/blog-category.vue)
-// Dikonsumsi oleh server/api/blog-category.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const categories = [
   { id: 1, name: 'PointOfSale', createdDate: '12 Sep 2024', status: 'Active' },

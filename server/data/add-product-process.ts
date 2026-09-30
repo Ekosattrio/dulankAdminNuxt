@@ -1,5 +1,5 @@
 // Mock data untuk halaman /add-product-process (dipindah dari app/pages/add-product-process.vue)
-// Dikonsumsi oleh server/api/add-product-process.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const processes = [
   {

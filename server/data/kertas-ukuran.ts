@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-ukuran (dipindah dari app/pages/kertas-ukuran.vue)
-// Dikonsumsi oleh server/api/kertas-ukuran.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const sizes = [
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', name: 'A4 Cut', dimension: '21 x 29.7', unit: 'cm', update: '09/16/2025 09:00' },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-harga (dipindah dari app/pages/kertas-harga.vue)
-// Dikonsumsi oleh server/api/kertas-harga.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const prices = [
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', nama: 'A4', group: 'HVS Putih', merk: 'Sinar Dunia', ukuran: '21x29.7 cm', satuan: 'rim', gramatur: 80, minOrder: '1 rim', kelipatan: '1 rim', harga: 52000, update: '09/01/2025 10:15' },

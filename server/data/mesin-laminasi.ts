@@ -1,5 +1,5 @@
 // Mock data untuk halaman /mesin-laminasi (dipindah dari app/pages/mesin-laminasi.vue)
-// Dikonsumsi oleh server/api/mesin-laminasi.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const laminates = [
   {

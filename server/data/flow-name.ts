@@ -1,5 +1,5 @@
 // Mock data untuk halaman /flow-name (dipindah dari app/pages/flow-name.vue)
-// Dikonsumsi oleh server/api/flow-name.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const flowNames = [
   { id: 1, code: 'JBP-0001', category: 'Design', name: 'Design Layout', incentive: 5000, unit: 'Per Job', assignees: 'Adul, Nurdin', flowType: 'Inhouse', createdInfo: 'Admin, 2025-10-13' },

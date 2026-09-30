@@ -1,5 +1,5 @@
 // Mock data untuk halaman /my-incentive (dipindah dari app/pages/my-incentive.vue)
-// Dikonsumsi oleh server/api/my-incentive.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const items = [
   { code: "INC-01", process: "Printing", date: "2025-08-10", qty: 10, amount: 50000, status: "Paid" },

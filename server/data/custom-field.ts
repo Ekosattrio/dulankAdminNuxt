@@ -1,5 +1,5 @@
 // Mock data untuk halaman /custom-field (dipindah dari app/pages/custom-field.vue)
-// Dikonsumsi oleh server/api/custom-field.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const customFields = [
   {

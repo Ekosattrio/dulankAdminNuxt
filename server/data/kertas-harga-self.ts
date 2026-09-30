@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-harga-self (dipindah dari app/pages/kertas-harga-self.vue)
-// Dikonsumsi oleh server/api/kertas-harga-self.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const prices = [
   { id: 1, nama: 'A4', group: 'HVS Putih', merk: 'Paperone', ukuran: '21x29.7 cm', satuan: 'rim', gramatur: 80, minOrder: '1 rim', kelipatan: '1 rim', harga: 50000, update: '09/10/2025 10:00', status: 'Active' },

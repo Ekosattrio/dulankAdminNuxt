@@ -1,5 +1,5 @@
 // Mock data untuk halaman /quotation (dipindah dari app/pages/quotation.vue)
-// Dikonsumsi oleh server/api/quotation.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const quotations = [
   {

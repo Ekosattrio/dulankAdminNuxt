@@ -1,5 +1,5 @@
 // Mock data untuk halaman /designation (dipindah dari app/pages/designation.vue)
-// Dikonsumsi oleh server/api/designation.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const designations = [
   {

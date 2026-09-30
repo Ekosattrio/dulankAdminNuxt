@@ -1,5 +1,5 @@
 // Mock data untuk halaman /mesin-cetak (dipindah dari app/pages/mesin-cetak.vue)
-// Dikonsumsi oleh server/api/mesin-cetak.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const machines = [
   {

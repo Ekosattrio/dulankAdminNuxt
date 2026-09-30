@@ -1,5 +1,5 @@
 // Mock data untuk halaman /mesin-cetak-self (dipindah dari app/pages/mesin-cetak-self.vue)
-// Dikonsumsi oleh server/api/mesin-cetak-self.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const machines = [
   { id: 1, type: 'Offset', name: 'Heidelberg SM52', colors: 4, maxArea: '36 x 52 cm', plateCost: 65000, minim: 240000, druck: 85, update: '25/12/2025 Admin', status: 'Active' },

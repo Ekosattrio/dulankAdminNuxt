@@ -1,5 +1,5 @@
 // Mock data untuk halaman /category (dipindah dari app/pages/category.vue)
-// Dikonsumsi oleh server/api/category.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const categories = [
   { id: '1', name: 'Large Format', code: 'CAT-LF', createdDate: '25/12/2024', status: 'Active' },

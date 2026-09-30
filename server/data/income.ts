@@ -1,5 +1,5 @@
 // Mock data untuk halaman /income (dipindah dari app/pages/income.vue)
-// Dikonsumsi oleh server/api/income.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const incomes = [
   { id: 1, date: '01/11/2025', no: 'IN000001', name: 'Budi Santoso', category: 'Penjualan Jasa Cetak', notes: 'Pembayaran lunas cetak brosur 1000 pcs.', amount: 1000000, paymentMethod: 'Transfer Bank', bankAccount: 'Mandiri 1320009982282' },

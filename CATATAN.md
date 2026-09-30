@@ -90,7 +90,90 @@ Halaman berikut **masih memakai markup Bootstrap legacy** (`page-wrapper`, `ti t
 
 ---
 
-## 2. Halaman yang SUDAH Modern (jangan dikerjakan ulang)
+## 2. Lapisan Data Mock — server/data & server/api (cara pakai + contoh 1 halaman)
+
+Arsitektur mock: **semua data bertumpu di `server/data/`, disajikan via store in-memory (`server/utils/mockStore.ts`) dan route CRUD generik (`server/api/[...mock].ts`)**. Halaman TIDAK pernah menyimpan data sendiri — cukup `useFetch` + `useMockSync`.
+
+### 2a. `server/data/<slug>.ts` — sumber data (seed)
+
+Satu file per halaman, **literal array tanpa tipe/import/ekspresi** (tipe ditentukan di boundary halaman via `shared/types`):
+
+```ts
+// app/data ini mantan array dari app/pages/unit.vue
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
+export const units = [
+  { id: "1", name: "Meter", shortName: "m", itemUsed: 14, createdOn: "25 May 2023", status: "Active" },
+  // ...
+]
+```
+
+File ini adalah **seed awal** — store in-memory di-seed `structuredClone` dari sini saat pertama kali diakses; perubahan runtime (CRUD) hilang saat dev server restart, lalu kembali ke seed.
+
+### 2b. `server/utils/mockStore.ts` — jembatan data → API
+
+Setiap data file **didaftarkan di registry `seeds`** (import + entry `{ names, cols }`). Contoh entry:
+
+```ts
+const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }> = {
+  'unit': { names: ['units'], cols: { units: unitsSeed } },
+  // ...
+}
+export function isMockResource(slug: string) { /* cek registry */ }
+export function useMockCollection(slug: string) { /* ambil array pertama */ }
+export function useMockCollections(slug: string) { /* ambil semua kolom (multi) */ }
+```
+
+> **Menambah resource baru**: (1) buat `server/data/<slug>.ts` dengan named export, (2) tambah import + entry di `seeds`, (3) **selesai** — route catch-all langsung melayani tanpa file API baru.
+
+### 2c. `server/api/` — hanya 7 file, semua sisanya OTOMATIS
+
+```
+server/api/
+├── [...mock].ts          # GENERIC CRUD utk SEMUA resource single-array
+├── health.ts             # /api/health (statis)
+├── address.ts, banner.ts, job-list.ts, pos.ts, sales-dashboard.ts
+│                         # 5 resource MULTI-array — file statis read-only
+│                         # (GET saja; selain GET -> 405)
+```
+
+Route yang dilayani `[...mock].ts` (single-array):
+
+| Method & path | Fungsi | Dipakai oleh |
+|---|---|---|
+| `GET /api/<slug>` | list koleksi (dari store) | `useFetch` di halaman |
+| `POST /api/<slug>` | create item (id auto bila kosong) | form tambah |
+| `PUT /api/<slug>` | **batch** ganti seluruh koleksi | `useMockSync` (sync otomatis) |
+| `PUT /api/<slug>/<id>` | update satu item | edit |
+| `DELETE /api/<slug>/<id>` | hapus item | hapus |
+
+⚠️ **JANGAN PERNAH membuat `server/api/<slug>.ts` untuk resource single-array.** File statis menangkap SEMUA metode (bukan hanya GET) dan mematikan CRUD. Insiden nyata: 111 file statis tanpa guard sempat dibuat ulang saat migrasi gelombang 2 → POST/PUT/DELETE membalas `[]`/array — sudah dihapus & diverifikasi (commit `fix(mock-server)`).
+
+### 2d. Contoh pola di SATU halaman: `app/pages/unit.vue`
+
+```vue
+<script setup lang="ts">
+// 1) FETCH — GET /api/unit via catch-all (tipe dari shared/types)
+const { data: unitData } = await useFetch<UnitItem[]>('/api/unit')
+const units = ref<UnitItem[]>(unitData.value ?? [])
+
+// 2) SYNC — deep-watch ref; setiap mutasi di-debounce lalu PUT batch /api/unit
+//    WAJIB berada DI DALAM <script> (bukan di luar </script>)
+useMockSync('unit', units)
+
+// 3) MUTASI — cukup ubah ref-nya; useMockSync yang persist ke server:
+const submitAdd = () => {
+  units.value.push({ id: String(Date.now()), name: addName.value.trim(), /* ... */ })
+}
+const submitEdit = () => { editingUnit.value.name = editName.value.trim() /* mutasi in-place */ }
+const deleteUnit = (id: string) => {
+  units.value = units.value.filter((u) => u.id !== id)
+}
+</script>
+```
+
+Prinsip: **handler tidak pernah memanggil API sendiri** — push/splice/filter/edit-in-place pada ref otomatis di-sync. Ini berlaku untuk SEMUA halaman list; hanya resource multi-array read-only (address, banner, job-list, pos, sales-dashboard) yang TIDAK di-sync.
+
+## 3. Halaman yang SUDAH Modern (jangan dikerjakan ulang)
 
 ~125 halaman sudah memakai blueprint modern (`CommonPageHeader` + komponen `Common*`/`Forms*`/`Tables*`).
 
@@ -102,7 +185,7 @@ Terdapat beberapa halaman **ber-Tailwind tanpa `CommonPageHeader`** — ini **bu
 
 ---
 
-## 3. Blueprint Konversi (pola yang WAJIB diikuti)
+## 4. Blueprint Konversi (pola yang WAJIB diikuti)
 
 Setiap halaman legacy dikonversi ke struktur berikut:
 
@@ -150,7 +233,7 @@ Setiap halaman legacy dikonversi ke struktur berikut:
 
 ---
 
-## 4. Ritual Verifikasi (wajib setiap batch)
+## 5. Ritual Verifikasi (wajib setiap batch)
 
 ```bash
 npx nuxi prepare                  # regenerate auto-import/types (penting setelah pindah file)
@@ -167,7 +250,7 @@ curl -s localhost:3000/<page> | grep -c "<data-atau-text-penting>"   # pastikan 
 
 ---
 
-## 5. Status Keluarga (yang sudah tuntas)
+## 6. Status Keluarga (yang sudah tuntas)
 
 | Keluarga | Status |
 |---|---|
@@ -177,7 +260,7 @@ curl -s localhost:3000/<page> | grep -c "<data-atau-text-penting>"   # pastikan 
 
 ---
 
-## 6. Rujukan
+## 7. Rujukan
 
 - `AGENTS.md` — konvensi kode, struktur app/server/shared, komponen, mock server, Tailwind v4
 - `REVIEW.md` — analisis gap legacy→Nuxt awal & backlog (date picker P0, rich text P0, DataTable P1, modal unifikasi P1)

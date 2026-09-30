@@ -1,5 +1,5 @@
 // Mock data untuk halaman /permissions (dipindah dari app/pages/permissions.vue)
-// Dikonsumsi oleh server/api/permissions.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const modules = [
   { name: "Inventory", create: true, edit: true, delete: false, view: true },

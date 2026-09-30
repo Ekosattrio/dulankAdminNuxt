@@ -1,5 +1,5 @@
 // Mock data untuk halaman /language (dipindah dari app/pages/language.vue)
-// Dikonsumsi oleh server/api/language.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const languages = [
   {

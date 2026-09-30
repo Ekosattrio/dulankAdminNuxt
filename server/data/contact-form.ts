@@ -1,5 +1,5 @@
 // Mock data untuk halaman /contact-form (dipindah dari app/pages/contact-form.vue)
-// Dikonsumsi oleh server/api/contact-form.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const messages = [
   { id: 1, name: 'John Doe', email: 'john.doe@email.com', phone: '+62 812 3456 7890', message: 'Hello, I want to know more about your hardbox packaging and minimum order quantity.', date: '20/01/2024', status: 'Pending' },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-jenis-self (dipindah dari app/pages/kertas-jenis-self.vue)
-// Dikonsumsi oleh server/api/kertas-jenis-self.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const items = [
   { id: 1, name: 'Art Paper', merk: 'Pindo Deli', price: 52000, priceType: 'Group', unitPrice: 'Kg', gsm: 150, size: '65x100', stock: 1250, unitStock: 'Plano', status: 'Active' },

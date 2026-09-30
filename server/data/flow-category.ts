@@ -1,5 +1,5 @@
 // Mock data untuk halaman /flow-category (dipindah dari app/pages/flow-category.vue)
-// Dikonsumsi oleh server/api/flow-category.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const categories = [
   { id: 1, code: 'PCC-001', name: 'Design', usedCount: 10, createdBy: 'Admin', createdDate: '2025-10-13 10:35:00' },

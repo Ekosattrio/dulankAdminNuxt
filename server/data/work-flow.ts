@@ -1,5 +1,5 @@
 // Mock data untuk halaman /work-flow (dipindah dari app/pages/work-flow.vue)
-// Dikonsumsi oleh server/api/work-flow.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const workflows = [
   {

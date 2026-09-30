@@ -1,5 +1,5 @@
 // Mock data untuk halaman /voucher (dipindah dari app/pages/voucher.vue)
-// Dikonsumsi oleh server/api/voucher.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const coupons = [
   {

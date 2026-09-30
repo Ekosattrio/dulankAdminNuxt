@@ -1,5 +1,5 @@
 // Mock data untuk halaman /variant (dipindah dari app/pages/variant.vue)
-// Dikonsumsi oleh server/api/variant.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const variants = [
   {

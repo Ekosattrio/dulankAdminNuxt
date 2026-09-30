@@ -1,5 +1,5 @@
 // Mock data untuk halaman /sales (dipindah dari app/pages/sales.vue)
-// Dikonsumsi oleh server/api/sales.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const salesList = [
   {

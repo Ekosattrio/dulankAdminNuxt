@@ -1,5 +1,5 @@
 // Mock data untuk halaman /download-files (dipindah dari app/pages/download-files.vue)
-// Dikonsumsi oleh server/api/download-files.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const fileList = [
   { id: 1, name: 'Sportsmodel.pdf', type: 'pdf', size: '2.4 MB', date: '01 Feb 2026' },

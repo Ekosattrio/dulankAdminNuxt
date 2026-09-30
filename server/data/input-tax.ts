@@ -1,5 +1,5 @@
 // Mock data untuk halaman /input-tax (dipindah dari app/pages/input-tax.vue)
-// Dikonsumsi oleh server/api/input-tax.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const invoices = [
   { id: 1, purchaseNo: 'PO-001', invoiceDate: '02-02-2026', fakturNo: 'INV-KN-2026-01', supplierName: 'PT. Kertas Nusantara', dpp: 35000000, vat: 3850000, credited: 'Yes' },

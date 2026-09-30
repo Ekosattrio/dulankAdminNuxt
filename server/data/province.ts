@@ -1,5 +1,5 @@
 // Mock data untuk halaman /province (dipindah dari app/pages/province.vue)
-// Dikonsumsi oleh server/api/province.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const provinces = [
   { id: 1, name: "DKI Jakarta", added: "2025-08-28", createdBy: "Arroon", avatar: "/assets/img/users/user-30.jpg" },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /our-client (dipindah dari app/pages/our-client.vue)
-// Dikonsumsi oleh server/api/our-client.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const clients = [
   { id: 1, name: "Google Partner", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },

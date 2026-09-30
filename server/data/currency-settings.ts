@@ -1,5 +1,5 @@
 // Mock data untuk halaman /currency-settings (dipindah dari app/pages/currency-settings.vue)
-// Dikonsumsi oleh server/api/currency-settings.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const currencies = [
   { id: 1, name: 'Indonesian Rupiah', code: 'IDR', symbol: 'Rp', exchangeRate: 'Default', createdOn: '01 Jan 2023' },

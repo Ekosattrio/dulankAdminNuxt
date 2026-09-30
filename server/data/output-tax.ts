@@ -1,5 +1,5 @@
 // Mock data untuk halaman /output-tax (dipindah dari app/pages/output-tax.vue)
-// Dikonsumsi oleh server/api/output-tax.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const invoices = [
   {

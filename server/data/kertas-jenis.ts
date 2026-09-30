@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-jenis (dipindah dari app/pages/kertas-jenis.vue)
-// Dikonsumsi oleh server/api/kertas-jenis.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const paperTypes = [
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', group: 'HVS Putih', merk: 'Sinar Dunia', ukuran: '21x29.7', satuan: 'cm', gramatur: 80, update: '09/01/2025 10:15' },

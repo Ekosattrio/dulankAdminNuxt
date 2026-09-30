@@ -1,5 +1,5 @@
 // Mock data untuk halaman /payments (dipindah dari app/pages/payments.vue)
-// Dikonsumsi oleh server/api/payments.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const payments = [
   {

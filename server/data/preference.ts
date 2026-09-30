@@ -1,5 +1,5 @@
 // Mock data untuk halaman /preference (dipindah dari app/pages/preference.vue)
-// Dikonsumsi oleh server/api/preference.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const preferences = [
   { key: "maintenance", label: "Maintenance Mode", icon: "ti ti-alert-triangle", enabled: false },

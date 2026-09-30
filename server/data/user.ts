@@ -1,5 +1,5 @@
 // Mock data untuk halaman /user (dipindah dari app/pages/user.vue)
-// Dikonsumsi oleh server/api/user.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const users = [
   {

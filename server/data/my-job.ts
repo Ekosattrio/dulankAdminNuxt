@@ -1,5 +1,5 @@
 // Mock data untuk halaman /my-job (dipindah dari app/pages/my-job.vue)
-// Dikonsumsi oleh server/api/my-job.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const jobs = [
   {

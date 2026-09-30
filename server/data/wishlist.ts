@@ -1,5 +1,5 @@
 // Mock data untuk halaman /wishlist (dipindah dari app/pages/wishlist.vue)
-// Dikonsumsi oleh server/api/wishlist.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const wishlist = [
   {

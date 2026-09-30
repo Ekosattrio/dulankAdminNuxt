@@ -1,5 +1,5 @@
 // Mock data untuk halaman /flow-template (dipindah dari app/pages/flow-template.vue)
-// Dikonsumsi oleh server/api/flow-template.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const templates = [
   {

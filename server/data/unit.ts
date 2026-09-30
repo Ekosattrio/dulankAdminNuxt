@@ -1,5 +1,5 @@
 // Mock data untuk halaman /unit (dipindah dari app/pages/unit.vue)
-// Dikonsumsi oleh server/api/unit.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const units = [
   { id: "1", name: "Meter", shortName: "m", itemUsed: 14, createdOn: "25 May 2023", status: "Active" },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /role (dipindah dari app/pages/role.vue)
-// Dikonsumsi oleh server/api/role.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const groups = [
   {

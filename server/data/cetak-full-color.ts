@@ -1,5 +1,5 @@
 // Mock data untuk halaman /cetak-full-color (dipindah dari app/pages/cetak-full-color.vue)
-// Dikonsumsi oleh server/api/cetak-full-color.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const products = [
   {

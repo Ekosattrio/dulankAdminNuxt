@@ -1,5 +1,5 @@
 // Mock data untuk halaman /semua-toko-kertas (dipindah dari app/pages/semua-toko-kertas.vue)
-// Dikonsumsi oleh server/api/semua-toko-kertas.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const shops = [
   {

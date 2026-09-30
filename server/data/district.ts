@@ -1,5 +1,5 @@
 // Mock data untuk halaman /district (dipindah dari app/pages/district.vue)
-// Dikonsumsi oleh server/api/district.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const districts = [
   { id: 1, province: 'DKI Jakarta', regency: 'Jakarta Selatan', name: 'Kebayoran Baru', added: '2025-08-28', createdBy: 'Arroon', avatar: '/assets/img/users/user-30.jpg' },

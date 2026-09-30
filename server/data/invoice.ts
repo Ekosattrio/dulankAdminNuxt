@@ -1,5 +1,5 @@
 // Mock data untuk halaman /invoice (dipindah dari app/pages/invoice.vue)
-// Dikonsumsi oleh server/api/invoice.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const invoices = [
   {

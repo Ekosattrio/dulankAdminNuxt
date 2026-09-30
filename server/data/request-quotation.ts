@@ -1,5 +1,5 @@
 // Mock data untuk halaman /request-quotation (dipindah dari app/pages/request-quotation.vue)
-// Dikonsumsi oleh server/api/request-quotation.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const rfqs = [
   {

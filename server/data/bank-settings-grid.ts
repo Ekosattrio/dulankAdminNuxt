@@ -1,5 +1,5 @@
 // Mock data untuk halaman /bank-settings-grid (dipindah dari app/pages/bank-settings-grid.vue)
-// Dikonsumsi oleh server/api/bank-settings-grid.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const accounts = [
   { id: 1, bankName: 'Bank BCA', accountNo: '**** **** 1982', holderName: 'PT Kacetak Digital', branch: 'Jakarta', isDefault: true },

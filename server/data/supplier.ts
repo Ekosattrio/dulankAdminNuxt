@@ -1,5 +1,5 @@
 // Mock data untuk halaman /supplier (dipindah dari app/pages/supplier.vue)
-// Dikonsumsi oleh server/api/supplier.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const suppliers = [
   {

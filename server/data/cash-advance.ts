@@ -1,5 +1,5 @@
 // Mock data untuk halaman /cash-advance (dipindah dari app/pages/cash-advance.vue)
-// Dikonsumsi oleh server/api/cash-advance.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const cashAdvances = [
   {

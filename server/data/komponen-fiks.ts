@@ -1,5 +1,5 @@
 // Mock data untuk halaman /komponen-fiks (dipindah dari app/pages/komponen-fiks.vue)
-// Dikonsumsi oleh server/api/komponen-fiks.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const components = [
   { id: 1, name: 'Jam Kerja Harian Operator', value: 12, unit: 'Jam', used: 23, update: '15/12/2025' },

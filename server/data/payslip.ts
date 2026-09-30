@@ -1,5 +1,5 @@
 // Mock data untuk halaman /payslip (dipindah dari app/pages/payslip.vue)
-// Dikonsumsi oleh server/api/payslip.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const payslips = [
   {

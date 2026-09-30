@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-group (dipindah dari app/pages/kertas-group.vue)
-// Dikonsumsi oleh server/api/kertas-group.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const groups = [
   { id: 1, sumber: 'Percetakan Cepat', lokasi: 'Surabaya, Jawa Timur', avatar: '/assets/img/users/user-23.jpg', name: 'HVS Putih', merk: 'Sinar Dunia', update: '09/11/2025 09:00', status: 'Active', isPublic: true },

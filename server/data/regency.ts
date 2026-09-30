@@ -1,5 +1,5 @@
 // Mock data untuk halaman /regency (dipindah dari app/pages/regency.vue)
-// Dikonsumsi oleh server/api/regency.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const regencies = [
   {

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /blog-tag (dipindah dari app/pages/blog-tag.vue)
-// Dikonsumsi oleh server/api/blog-tag.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const tags = [
   { id: 1, name: 'PointOfSale', createdDate: '12 Sep 2024', status: 'Active' },

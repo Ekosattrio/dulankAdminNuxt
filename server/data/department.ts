@@ -1,5 +1,5 @@
 // Mock data untuk halaman /department (dipindah dari app/pages/department.vue)
-// Dikonsumsi oleh server/api/department.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const departments = [
   {

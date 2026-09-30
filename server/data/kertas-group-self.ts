@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-group-self (dipindah dari app/pages/kertas-group-self.vue)
-// Dikonsumsi oleh server/api/kertas-group-self.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const groups = [
   { id: 1, name: 'HVS Putih', merk: 'Paperone', priceType: 'Yes', update: '10/01/2025 12:00', status: 'Active' },

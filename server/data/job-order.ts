@@ -1,5 +1,5 @@
 // Mock data untuk halaman /job-order (dipindah dari app/pages/job-order.vue)
-// Dikonsumsi oleh server/api/job-order.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const jobOrders = [
   {

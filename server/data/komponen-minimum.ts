@@ -1,5 +1,5 @@
 // Mock data untuk halaman /komponen-minimum (dipindah dari app/pages/komponen-minimum.vue)
-// Dikonsumsi oleh server/api/komponen-minimum.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const components = [
   { id: 1, name: 'Potong Kertas Plano', rate: 2000, minim: 30000, unit: 'Kg', used: 27, update: '15/12/2025' },

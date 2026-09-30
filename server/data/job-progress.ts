@@ -1,5 +1,5 @@
 // Mock data untuk halaman /job-progress (dipindah dari app/pages/job-progress.vue)
-// Dikonsumsi oleh server/api/job-progress.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const progressList = [
   {

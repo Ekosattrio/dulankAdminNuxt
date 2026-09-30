@@ -1,5 +1,5 @@
 // Mock data untuk halaman /cart (dipindah dari app/pages/cart.vue)
-// Dikonsumsi oleh server/api/cart.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const carts = [
   {

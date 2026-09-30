@@ -1,5 +1,5 @@
 // Mock data untuk halaman /support-ticket (dipindah dari app/pages/support-ticket.vue)
-// Dikonsumsi oleh server/api/support-ticket.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const tickets = [
   {

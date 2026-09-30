@@ -1,5 +1,5 @@
 // Mock data untuk halaman /ban-ip-address (dipindah dari app/pages/ban-ip-address.vue)
-// Dikonsumsi oleh server/api/ban-ip-address.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const banList = [
   {

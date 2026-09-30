@@ -1,5 +1,5 @@
 // Mock data untuk halaman /sub-category (dipindah dari app/pages/sub-category.vue)
-// Dikonsumsi oleh server/api/sub-category.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const subCategories = [
   {

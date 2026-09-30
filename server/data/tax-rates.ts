@@ -1,5 +1,5 @@
 // Mock data untuk halaman /tax-rates (dipindah dari app/pages/tax-rates.vue)
-// Dikonsumsi oleh server/api/tax-rates.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const taxRates = [
   { id: 1, name: "VAT", rate: 16, createdOn: "12 Jul 2023", status: "Active" },

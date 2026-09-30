@@ -1,5 +1,5 @@
 // Mock data untuk halaman /discount (dipindah dari app/pages/discount.vue)
-// Dikonsumsi oleh server/api/discount.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const discounts = [
   {

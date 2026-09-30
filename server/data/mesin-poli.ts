@@ -1,5 +1,5 @@
 // Mock data untuk halaman /mesin-poli (dipindah dari app/pages/mesin-poli.vue)
-// Dikonsumsi oleh server/api/mesin-poli.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const polis = [
   {

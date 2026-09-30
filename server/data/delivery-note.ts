@@ -1,5 +1,5 @@
 // Mock data untuk halaman /delivery-note (dipindah dari app/pages/delivery-note.vue)
-// Dikonsumsi oleh server/api/delivery-note.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const deliveryNotes = [
   {

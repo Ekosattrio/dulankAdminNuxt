@@ -1,5 +1,5 @@
 // Mock data untuk halaman /printer-settings (dipindah dari app/pages/printer-settings.vue)
-// Dikonsumsi oleh server/api/printer-settings.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const printers = [
   { id: 1, name: "HP LaserJet Pro MFP", connectionType: "Network", ipAddress: "192.168.1.22", port: "9100" },

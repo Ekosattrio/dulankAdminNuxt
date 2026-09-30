@@ -1,5 +1,5 @@
 // Mock data untuk halaman /kertas-ukuran-self (dipindah dari app/pages/kertas-ukuran-self.vue)
-// Dikonsumsi oleh server/api/kertas-ukuran-self.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const sizes = [
   { id: 1, name: 'A4', dimension: '21 x 29.7', length: 21, width: 29.7, unit: 'cm', update: '10/01/2025 09:00', status: 'Active' },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /reviews (dipindah dari app/pages/reviews.vue)
-// Dikonsumsi oleh server/api/reviews.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const reviews = [
   {

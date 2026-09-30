@@ -1,5 +1,5 @@
 // Mock data untuk halaman /blog-comment (dipindah dari app/pages/blog-comment.vue)
-// Dikonsumsi oleh server/api/blog-comment.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const comments = [
   {

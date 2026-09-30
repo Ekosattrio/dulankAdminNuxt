@@ -1,5 +1,5 @@
 // Mock data untuk halaman /user-admin (dipindah dari app/pages/user-admin.vue)
-// Dikonsumsi oleh server/api/user-admin.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const admins = [
   {

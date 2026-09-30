@@ -1,5 +1,5 @@
 // Mock data untuk halaman /customers (dipindah dari app/pages/customers.vue)
-// Dikonsumsi oleh server/api/customers.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const customers = [
   { id: 1, customerId: 'ID000001', name: 'Aditya Pratama', email: 'aditya.pratama@gmail.com', type: 'Corporate', balance: 15000000, phone: '+6281234567890', channel: 'Website', dateJoin: '01/12/2025 9:15', lastSeen: '01/12/2025 9:15', address: 'Jl. Riau No. 12, Bandung' },

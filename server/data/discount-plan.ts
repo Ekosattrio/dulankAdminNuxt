@@ -1,5 +1,5 @@
 // Mock data untuk halaman /discount-plan (dipindah dari app/pages/discount-plan.vue)
-// Dikonsumsi oleh server/api/discount-plan.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const plans = [
   { id: 1, name: 'Standard Plan', customers: 'All Customers', status: 'Active' },

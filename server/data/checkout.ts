@@ -1,5 +1,5 @@
 // Mock data untuk halaman /checkout (dipindah dari app/pages/checkout.vue)
-// Dikonsumsi oleh server/api/checkout.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const checkouts = [
   { id: 1, user: 'john.doe@email.com', date: '2025-09-29', amount: 550000, method: 'Kartu Kredit', status: 'Berhasil', voucher: 'DISKON10', deliveryFee: 20000, details: 'Cetak Brosur A4 (500), Kartu Nama (2 box)' },

@@ -1,5 +1,5 @@
 // Mock data untuk halaman /harga-jasa-lainya (dipindah dari app/pages/harga-jasa-lainya.vue)
-// Dikonsumsi oleh server/api/harga-jasa-lainya.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const items = [
   { id: 1, name: 'Potong', harga: 2000, minimHarga: 30000, satuan: 'Kg' },

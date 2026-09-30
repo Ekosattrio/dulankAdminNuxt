@@ -1,5 +1,5 @@
 // Mock data untuk halaman /mesin-pond (dipindah dari app/pages/mesin-pond.vue)
-// Dikonsumsi oleh server/api/mesin-pond.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const ponds = [
   {

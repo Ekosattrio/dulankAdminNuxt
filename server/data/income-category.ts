@@ -1,5 +1,5 @@
 // Mock data untuk halaman /income-category (dipindah dari app/pages/income-category.vue)
-// Dikonsumsi oleh server/api/income-category.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const categories = [
   { id: 1, no: 'INC001', name: 'Penjualan Jasa Cetak', description: 'Pemasukan dari layanan cetak utama (Offset, Digital, Large Format).', status: 'Active', created: '25/11/2025 15:45, Admin' },

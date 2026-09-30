@@ -1,5 +1,5 @@
 // Mock data untuk halaman /faq (dipindah dari app/pages/faq.vue)
-// Dikonsumsi oleh server/api/faq.ts
+// Dilayani generic CRUD: server/api/[...mock].ts (catch-all)
 
 export const faqs = [
   {
