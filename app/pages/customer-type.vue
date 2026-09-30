@@ -1,120 +1,114 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Customer Type</h4>
-            <h6>Manage customer classification tiers and membership levels</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Customer Type
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Customer Type" subtitle="Manage customer classification tiers and membership levels">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Customer Type</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search customer type..." />
+        <CommonFilterSelect
+          v-model="filterStatus"
+          allLabel="All Statuses"
+          :options="[
+            { value: 'Active', label: 'Active' },
+            { value: 'Inactive', label: 'Inactive' },
+          ]"
+        />
       </div>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search customer type..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterStatus" class="form-select form-select-sm" style="width: auto;">
-                <option value="">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Customer Type</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="t in filteredList" :key="t.id">
-                  <td class="fw-bold text-dark">{{ t.name }}</td>
-                  <td>
-                    <span :class="t.status === 'Active' ? 'badge bg-success bg-opacity-10 text-success border border-success' : 'badge bg-secondary bg-opacity-10 text-secondary border border-secondary'">
-                      {{ t.status }}
-                    </span>
-                  </td>
-                  <td class="text-center action-table-data">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-icon text-primary" title="Edit" @click="openEditModal(t)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon text-danger" title="Delete" @click="deleteType(t.id)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredList.length === 0">
-                  <td colspan="3" class="text-center py-4 text-muted">
-                    No customer types found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer Type</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="t in filteredList" :key="t.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ t.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="t.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="t" @edit="openEditModal(t)" @delete="deleteType(t.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredList.length === 0">
+              <td colspan="3" class="p-8 text-center text-gray-400">No customer types found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add / Edit Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">{{ isEditing ? 'Edit Customer Type' : 'Add Customer Type' }}</h5>
-            <button type="button" class="btn-close" @click="modalVisible = false"></button>
-          </div>
-          <form @submit.prevent="saveType">
-            <div class="modal-body pt-0">
-              <div class="mb-3">
-                <label class="form-label">Customer Type Name <span class="text-danger">*</span></label>
-                <input v-model="formData.name" type="text" class="form-control" placeholder="e.g. Standard, Corporate, Reseller" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Status</label>
-                <select v-model="formData.status" class="form-select">
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="modalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Type' : 'Save Type' }}</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <CommonBaseModal v-model="modalVisible" :title="isEditing ? 'Edit Customer Type' : 'Add Customer Type'" maxWidth="md">
+      <form @submit.prevent="saveType" class="space-y-4">
+        <CommonFormField label="Customer Type Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Standard, Corporate, Reseller"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Status">
+          <select
+            v-model="formData.status"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </CommonFormField>
+        <CommonModalFooter :submit-label="isEditing ? 'Update Type' : 'Save Type'" @cancel="modalVisible = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -199,5 +193,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}</script>
-
+}
+</script>

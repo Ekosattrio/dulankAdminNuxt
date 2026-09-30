@@ -1,193 +1,111 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Settings</h4>
-            <h6>Manage your settings on portal</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Settings" subtitle="Manage your settings on portal">
+      <template #actions>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+          @click="openAddModal"
+        >
+          <CommonFeatherIcon name="plus" size="18" />
+          <span>Add New Tax Rate</span>
+        </button>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:max-w-[900px]">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search tax rate..." />
       </div>
 
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="settings-wrapper d-flex">
-            <div class="settings-page-wrap w-100" style="max-width: 900px">
-              <div class="setting-title d-flex align-items-center justify-content-between mb-3">
-                <h4>Tax Rates</h4>
-                <button type="button" class="btn btn-primary btn-added" @click="openAddModal">
-                  <i class="ti ti-circle-plus me-2"></i>Add New Tax Rate
-                </button>
-              </div>
-
-              <div class="card table-list-card">
-                <div class="card-body">
-                  <div class="table-top mb-3">
-                    <div class="search-set">
-                      <div class="search-input">
-                        <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                        <input v-model="searchQuery" type="text" class="form-control" placeholder="Search tax rate..." />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="table-responsive">
-                    <table class="table datanew">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>Name</th>
-                          <th>Tax Rates %</th>
-                          <th>Created On</th>
-                          <th>Status</th>
-                          <th class="no-sort text-end">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="item in filteredTaxes" :key="item.id">
-                          <td class="fw-semibold text-dark">{{ item.name }}</td>
-                          <td>{{ item.rate }}%</td>
-                          <td>{{ item.createdOn }}</td>
-                          <td>
-                            <span class="badge" :class="item.status === 'Active' ? 'bg-success' : 'bg-danger'">
-                              {{ item.status }}
-                            </span>
-                          </td>
-                          <td class="action-table-data text-end">
-                            <div class="edit-delete-action justify-content-end">
-                              <a class="me-2 p-2" href="javascript:void(0);" @click="openEditModal(item)">
-                                <i class="ti ti-edit"></i>
-                              </a>
-                              <a
-                                class="confirm-text p-2 align-center text-danger"
-                                href="javascript:void(0);"
-                                @click="deleteItem(item.id)"
-                              >
-                                <i class="ti ti-trash"></i>
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr v-if="filteredTaxes.length === 0">
-                          <td colspan="5" class="text-center py-4 text-muted">No tax rates found.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Tax Rate Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Add Tax Rate</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="saveTax">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label">Name <span class="text-danger">*</span></label>
-                    <input v-model="formData.name" type="text" class="form-control" placeholder="e.g. PPN 11% / VAT" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Tax Rate % <span class="text-danger">*</span></label>
-                    <input
-                      v-model.number="formData.rate"
-                      type="number"
-                      step="0.1"
-                      class="form-control"
-                      placeholder="11"
-                      required
-                    />
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check form-switch d-flex align-items-center gap-2">
-                      <input
-                        id="addTaxStatus"
-                        v-model="formData.isActive"
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                      />
-                      <label class="form-check-label" for="addTaxStatus">Active</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Edit Tax Rate Modal -->
-      <div v-if="showEditModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Edit Tax Rate</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="updateTax">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label">Name <span class="text-danger">*</span></label>
-                    <input v-model="formData.name" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Tax Rate % <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.rate" type="number" step="0.1" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check form-switch d-flex align-items-center gap-2">
-                      <input
-                        id="editTaxStatus"
-                        v-model="formData.isActive"
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                      />
-                      <label class="form-check-label" for="editTaxStatus">Active</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Tax Rates %</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created On</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredTaxes" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.rate }}%</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.createdOn }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredTaxes.length === 0">
+              <td colspan="5" class="p-8 text-center text-gray-400">No tax rates found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Add Tax Rate Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add Tax Rate" maxWidth="md">
+      <form @submit.prevent="saveTax" class="space-y-4">
+        <CommonFormField label="Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. PPN 11% / VAT"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Tax Rate %" required>
+          <input
+            v-model.number="formData.rate"
+            type="number"
+            step="0.1"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="11"
+            required
+          />
+        </CommonFormField>
+        <CommonToggleSwitch v-model="formData.isActive" label="Active" />
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Edit Tax Rate Modal -->
+    <CommonBaseModal v-model="showEditModal" title="Edit Tax Rate" maxWidth="md">
+      <form @submit.prevent="updateTax" class="space-y-4">
+        <CommonFormField label="Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Tax Rate %" required>
+          <input
+            v-model.number="formData.rate"
+            type="number"
+            step="0.1"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonToggleSwitch v-model="formData.isActive" label="Active" />
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -281,4 +199,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};</script>
+};
+</script>

@@ -1,133 +1,103 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Settings</h4>
-            <h6>Manage your settings on portal</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Settings" subtitle="Manage your settings on portal">
+      <template #actions>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+          @click="openAddModal"
+        >
+          <CommonFeatherIcon name="plus" size="18" />
+          <span>Add New Currency</span>
+        </button>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search Currency..." />
       </div>
 
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="settings-wrapper d-flex">
-            <div class="settings-page-wrap w-100">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="setting-title mb-0">
-                  <h4 class="fs-18 fw-bold">Currency Settings</h4>
-                </div>
-                <button class="btn btn-added" @click="openAddModal">
-                  <i class="ti ti-plus me-1"></i> Add New Currency
-                </button>
-              </div>
-
-              <div class="card table-list-card border shadow-sm">
-                <div class="card-body">
-                  <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                    <div class="search-set d-block d-md-flex align-items-center gap-2">
-                      <div class="search-input position-relative">
-                        <input
-                          v-model="searchQuery"
-                          type="text"
-                          class="form-control"
-                          placeholder="Search Currency..."
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="table-responsive">
-                    <table class="table datanew">
-                      <thead>
-                        <tr>
-                          <th>Currency Name</th>
-                          <th>Code</th>
-                          <th>Symbol</th>
-                          <th>Exchange Rate</th>
-                          <th>Created On</th>
-                          <th class="text-end no-sort">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(c, idx) in filteredCurrencies" :key="idx">
-                          <td class="fw-semibold text-dark">{{ c.name }}</td>
-                          <td><span class="badge bg-light-primary text-primary">{{ c.code }}</span></td>
-                          <td class="fw-bold fs-16">{{ c.symbol }}</td>
-                          <td>{{ c.exchangeRate }}</td>
-                          <td>{{ c.createdOn }}</td>
-                          <td class="action-table-data text-end">
-                            <div class="edit-delete-action d-inline-flex gap-2">
-                              <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(c)">
-                                <i class="ti ti-edit"></i>
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteCurrency(idx)">
-                                <i class="ti ti-trash"></i>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr v-if="filteredCurrencies.length === 0">
-                          <td colspan="6" class="text-center py-4 text-muted">No currencies found.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Currency Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Code</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Symbol</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Exchange Rate</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created On</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="(c, idx) in filteredCurrencies" :key="idx" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ c.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary dark:bg-primary/20">{{ c.code }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-base font-bold">{{ c.symbol }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ c.exchangeRate }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ c.createdOn }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="c" @edit="openEditModal(c)" @delete="deleteCurrency(idx)" />
+              </td>
+            </tr>
+            <tr v-if="filteredCurrencies.length === 0">
+              <td colspan="6" class="p-8 text-center text-gray-400">No currencies found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? 'Edit Currency' : 'Add Currency' }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveCurrency">
-                <div class="mb-3">
-                  <label class="form-label">Currency Name</label>
-                  <input v-model="currentCurrency.name" type="text" class="form-control" required placeholder="e.g. Indonesian Rupiah" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Currency Code</label>
-                  <input v-model="currentCurrency.code" type="text" class="form-control" required placeholder="e.g. IDR" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Currency Symbol</label>
-                  <input v-model="currentCurrency.symbol" type="text" class="form-control" required placeholder="e.g. Rp" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Exchange Rate</label>
-                  <input v-model="currentCurrency.exchangeRate" type="text" class="form-control" placeholder="Default or 15,500" />
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Add/Edit Modal -->
+    <CommonBaseModal v-model="showModal" :title="isEditing ? 'Edit Currency' : 'Add Currency'" maxWidth="md">
+      <form @submit.prevent="saveCurrency" class="space-y-4">
+        <CommonFormField label="Currency Name" required>
+          <input
+            v-model="currentCurrency.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. Indonesian Rupiah"
+          />
+        </CommonFormField>
+        <CommonFormField label="Currency Code" required>
+          <input
+            v-model="currentCurrency.code"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. IDR"
+          />
+        </CommonFormField>
+        <CommonFormField label="Currency Symbol" required>
+          <input
+            v-model="currentCurrency.symbol"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. Rp"
+          />
+        </CommonFormField>
+        <CommonFormField label="Exchange Rate">
+          <input
+            v-model="currentCurrency.exchangeRate"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Default or 15,500"
+          />
+        </CommonFormField>
+        <CommonModalFooter submitLabel="Save Changes" @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -205,5 +175,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-}</script>
-
+}
+</script>
