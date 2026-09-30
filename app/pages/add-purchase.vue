@@ -300,22 +300,8 @@ const masterProducts = [
 ]
 
 // Line Items
-const items = ref([
-  {
-    name: 'Tinta Neotex 1Kg Cyan',
-    qty: 2,
-    unit: 'Kg',
-    price: 450000,
-    showDropdown: false
-  },
-  {
-    name: 'Kertas Art Paper 150gr',
-    qty: 1,
-    unit: 'Ream',
-    price: 600000,
-    showDropdown: false
-  }
-])
+const { data: addPurchaseData } = await useFetch<any[]>('/api/add-purchase')
+const items = ref(addPurchaseData.value ?? [])
 
 const addNewItem = () => {
   items.value.push({
@@ -359,3 +345,5 @@ const toggleHeader = () => {
 }
 </script>
 
+
+useMockSync('add-purchase', items);

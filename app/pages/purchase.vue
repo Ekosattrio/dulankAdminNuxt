@@ -539,92 +539,8 @@ import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
 // Sample Purchases Data
-const purchases = ref([
-  {
-    id: 1,
-    noPurchase: "PR-2512000001",
-    date: "01/10/2025",
-    created: "Sales Staff",
-    supplier: "PT Kertas Jaya",
-    product: "Kertas Art Paper 150gr, Tinta Offset Merah",
-    status: "Ordered",
-    amount: 1500000,
-    paid: 750000,
-    due: 750000,
-    paymentStatus: "Partial",
-    notes: "Pembelian rutin bulanan",
-  },
-  {
-    id: 2,
-    noPurchase: "PR-2512000002",
-    date: "03/10/2025",
-    created: "Sales Staff",
-    supplier: "CV Kimia Prima",
-    product: "Plastisol T-shirt Putih, Emulsion",
-    status: "Received",
-    amount: 2800000,
-    paid: 2800000,
-    due: 0,
-    paymentStatus: "Paid",
-    notes: "-",
-  },
-  {
-    id: 3,
-    noPurchase: "PR-2512000003",
-    date: "05/10/2025",
-    created: "Sales Staff",
-    supplier: "Global Inkindo",
-    product: "Tinta UV LED, Cleaner Roll",
-    status: "Pending",
-    amount: 850000,
-    paid: 0,
-    due: 850000,
-    paymentStatus: "Unpaid",
-    notes: "Menunggu konfirmasi stok",
-  },
-  {
-    id: 4,
-    noPurchase: "PR-2512000004",
-    date: "07/10/2025",
-    created: "Sales Staff",
-    supplier: "UD Sukses Makmur",
-    product: "NCR TP, NCR BM, Lem Fox 5kg",
-    status: "Received",
-    amount: 3100000,
-    paid: 3100000,
-    due: 0,
-    paymentStatus: "Paid",
-    notes: "Stok kantor Karawang",
-  },
-  {
-    id: 5,
-    noPurchase: "PR-2512000005",
-    date: "10/10/2025",
-    created: "Sales Staff",
-    supplier: "PT Duta Grafika",
-    product: "Plat CTP Thermal, Developer",
-    status: "Ordered",
-    amount: 4500000,
-    paid: 2000000,
-    due: 2500000,
-    paymentStatus: "Partial",
-    notes: "Pesanan plat cetak massal",
-  },
-  {
-    id: 6,
-    noPurchase: "PR-2512000006",
-    date: "14/10/2025",
-    created: "Sales Staff",
-    supplier: "CV Warna Warni",
-    product: "Tinta Offset Cyan, Magenta, Yellow",
-    status: "Received",
-    amount: 1900000,
-    paid: 1900000,
-    due: 0,
-    paymentStatus: "Paid",
-    notes: "-",
-  },
-]);
+const { data: purchaseData } = await useFetch<Record<string, any[]>>('/api/purchase')
+const purchases = ref(purchaseData.value?.purchases ?? []);
 
 // Filter & Search
 const searchQuery = ref("");
@@ -667,10 +583,7 @@ const totalDue = computed(() => filteredPurchases.value.reduce((acc, curr) => ac
 // View Modal
 const showViewModal = ref(false);
 const activePurchase = ref<any>(null);
-const viewOrderItems = ref([
-  { name: "Tinta Neotex 1Kg Cyan", qty: 2, unit: "Ream", price: 450000 },
-  { name: "Kertas Art Paper 150gr", qty: 1, unit: "Ream", price: 600000 },
-]);
+const viewOrderItems = ref(purchaseData.value?.viewOrderItems ?? []);
 const viewSubTotal = computed(() => viewOrderItems.value.reduce((acc, item) => acc + item.qty * item.price, 0));
 const viewTax = computed(() => Math.round(viewSubTotal.value * 0.11));
 
@@ -748,3 +661,7 @@ const toggleHeader = () => {
   // collapse header utility
 };
 </script>
+
+useMockSync('purchase', purchases);
+
+useMockSync('purchase', viewOrderItems);

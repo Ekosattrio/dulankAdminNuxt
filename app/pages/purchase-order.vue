@@ -294,60 +294,8 @@ import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
 // Sample Purchase Orders
-const orders = ref([
-  {
-    id: 1,
-    noPO: "PO-000001",
-    date: "05/10/2025",
-    created: "Sales Staff",
-    noPurchase: "PR-000001",
-    supplier: "PT Kertas Jaya",
-    amount: 1500000,
-    poStatus: "Sent",
-    goodsStatus: "Complete",
-    goodsDate: "05/10/2025",
-    goodsBy: "Admin",
-  },
-  {
-    id: 2,
-    noPO: "PO-000002",
-    date: "08/10/2025",
-    created: "Sales Staff",
-    noPurchase: "PR-000003",
-    supplier: "Global Inkindo",
-    amount: 850000,
-    poStatus: "Sent",
-    goodsStatus: "Scheduled",
-    goodsDate: "",
-    goodsBy: "",
-  },
-  {
-    id: 3,
-    noPO: "PO-000003",
-    date: "15/10/2025",
-    created: "Sales Staff",
-    noPurchase: "PR-000005",
-    supplier: "Indo Material",
-    amount: 1950000,
-    poStatus: "Cancel",
-    goodsStatus: "Cancel",
-    goodsDate: "15/10/2025",
-    goodsBy: "Admin",
-  },
-  {
-    id: 4,
-    noPO: "PO-000004",
-    date: "20/10/2025",
-    created: "Sales Staff",
-    noPurchase: "PR-000008",
-    supplier: "Global Inkindo",
-    amount: 3300000,
-    poStatus: "Sent",
-    goodsStatus: "Complete",
-    goodsDate: "21/10/2025",
-    goodsBy: "Admin",
-  },
-]);
+const { data: purchaseOrderData } = await useFetch<any[]>('/api/purchase-order')
+const orders = ref(purchaseOrderData.value ?? []);
 
 // Search & Filter
 const searchQuery = ref("");
@@ -459,3 +407,5 @@ const toggleHeader = () => {
   // header toggle
 };
 </script>
+
+useMockSync('purchase-order', orders);

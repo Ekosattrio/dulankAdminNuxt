@@ -138,15 +138,8 @@
 import { ref, computed } from 'vue'
 import { formatNumber } from '~/composables/useFormatters'
 
-const customers = ref([
-  { name: 'CV. Maju Jaya', totalOrder: 45, amount: 67500000, avgLeadTime: '3 Days' },
-  { name: 'Toko Berkah', totalOrder: 38, amount: 12400000, avgLeadTime: '2 Days' },
-  { name: 'Bpk. Heru', totalOrder: 12, amount: 4500000, avgLeadTime: '1 Days' },
-  { name: 'PT. Sinar Abadi', totalOrder: 30, amount: 85000000, avgLeadTime: '5 Days' },
-  { name: 'Universitas Terbuka', totalOrder: 15, amount: 42000000, avgLeadTime: '7 Days' },
-  { name: 'Yayasan Pendidikan Islam', totalOrder: 22, amount: 18750000, avgLeadTime: '4 Days' },
-  { name: 'Resto Sedap Malam', totalOrder: 55, amount: 9350000, avgLeadTime: '2 Days' }
-])
+const { data: customerReportData } = await useFetch<any[]>('/api/customer-report')
+const customers = ref(customerReportData.value ?? [])
 
 const searchQuery = ref('')
 const selectedDateRangeLabel = ref('')
@@ -189,3 +182,5 @@ const toggleHeader = () => {
 }
 </script>
 
+
+useMockSync('customer-report', customers);

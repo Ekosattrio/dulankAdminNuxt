@@ -115,12 +115,8 @@
 import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
-const dues = ref([
-  { name: "PT Kertas Jaya", purchasesDue: 2, amountDue: 7500000, daysDue: "14 Days" },
-  { name: "Global Inkindo", purchasesDue: 1, amountDue: 850000, daysDue: "4 Days" },
-  { name: "PT Duta Grafika", purchasesDue: 3, amountDue: 2500000, daysDue: "8 Days" },
-  { name: "Indo Material", purchasesDue: 1, amountDue: 1950000, daysDue: "1 Day" },
-]);
+const { data: supplierDueReportData } = await useFetch<any[]>('/api/supplier-due-report')
+const dues = ref(supplierDueReportData.value ?? []);
 
 const searchQuery = ref("");
 
@@ -151,3 +147,5 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+
+useMockSync('supplier-due-report', dues);

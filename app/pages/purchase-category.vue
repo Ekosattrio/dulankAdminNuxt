@@ -169,13 +169,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-const categories = ref([
-  { id: 1, name: "Kertas & Bahan Baku Cetak", created: "Admin, 02/01/2026, 08:00", status: "Active" },
-  { id: 2, name: "Tinta & Toner", created: "Admin, 02/01/2026, 08:15", status: "Active" },
-  { id: 3, name: "Bahan Finishing & Jilid", created: "Admin, 02/01/2026, 08:30", status: "Active" },
-  { id: 4, name: "Sparepart Mesin", created: "Admin, 02/01/2026, 08:45", status: "Active" },
-  { id: 5, name: "Packaging & Kemasan", created: "Admin, 02/01/2026, 09:00", status: "Deactive" },
-]);
+const { data: purchaseCategoryData } = await useFetch<any[]>('/api/purchase-category')
+const categories = ref(purchaseCategoryData.value ?? []);
 
 const searchQuery = ref("");
 const statusFilter = ref("");
@@ -252,3 +247,5 @@ const toggleHeader = () => {
   // header toggle
 };
 </script>
+
+useMockSync('purchase-category', categories);

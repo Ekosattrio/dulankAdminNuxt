@@ -157,63 +157,8 @@
 import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
-const rows = ref([
-  {
-    month: "January",
-    year: "2024",
-    totalInvoice: 101,
-    netSales: 94125132,
-    deliveryFee: 2564390,
-    tax: 10353764,
-    discount: 3697212,
-    grossRevenue: 103346074,
-    collectionRate: "95%",
-  },
-  {
-    month: "February",
-    year: "2024",
-    totalInvoice: 132,
-    netSales: 174428760,
-    deliveryFee: 3224232,
-    tax: 19187163,
-    discount: 4948536,
-    grossRevenue: 191891619,
-    collectionRate: "95%",
-  },
-  {
-    month: "March",
-    year: "2024",
-    totalInvoice: 149,
-    netSales: 147708915,
-    deliveryFee: 5367427,
-    tax: 16247980,
-    discount: 5322770,
-    grossRevenue: 164001552,
-    collectionRate: "95%",
-  },
-  {
-    month: "April",
-    year: "2024",
-    totalInvoice: 51,
-    netSales: 57215829,
-    deliveryFee: 2209983,
-    tax: 6293741,
-    discount: 573940,
-    grossRevenue: 65145613,
-    collectionRate: "95%",
-  },
-  {
-    month: "May",
-    year: "2024",
-    totalInvoice: 82,
-    netSales: 80751878,
-    deliveryFee: 3261058,
-    tax: 8882706,
-    discount: 2502521,
-    grossRevenue: 90393121,
-    collectionRate: "95%",
-  },
-]);
+const { data: invoiceReportData } = await useFetch<any[]>('/api/invoice-report')
+const rows = ref(invoiceReportData.value ?? []);
 
 const searchQuery = ref("");
 const monthFilter = ref("");
@@ -249,3 +194,5 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+
+useMockSync('invoice-report', rows);

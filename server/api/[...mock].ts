@@ -19,7 +19,9 @@ export default defineEventHandler(async (event) => {
   const id = segments[1]
 
   if (method === 'GET') {
-    return collection
+    const cols = useMockCollections(slug)
+    const keys = Object.keys(cols)
+    return keys.length === 1 ? cols[keys[0]!] : cols
   }
 
   if (method === 'POST' && !id) {

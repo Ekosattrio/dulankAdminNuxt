@@ -109,14 +109,8 @@
 import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
-const rows = ref([
-  { category: "Jasa Layout & Setting Buku", count: 15, amount: 7500000, percentage: "40.00" },
-  { category: "Penjualan Limbah Plat Alumunium", count: 4, amount: 4800000, percentage: "25.60" },
-  { category: "Jasa Desain Grafis & Logo", count: 25, amount: 3750000, percentage: "20.00" },
-  { category: "Penjualan Limbah Kertas (Kiloan)", count: 12, amount: 1500000, percentage: "8.00" },
-  { category: "Jasa Pengetikan & Scan Dokumen", count: 30, amount: 750000, percentage: "4.00" },
-  { category: "Penjualan Limbah Selongsong/Core", count: 8, amount: 450000, percentage: "2.40" },
-]);
+const { data: incomeReportData } = await useFetch<any[]>('/api/income-report')
+const rows = ref(incomeReportData.value ?? []);
 
 const searchQuery = ref("");
 const selectedDateRangeLabel = ref("");
@@ -152,3 +146,5 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+
+useMockSync('income-report', rows);

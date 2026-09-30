@@ -179,53 +179,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-const categories = ref([
-  {
-    id: 1,
-    code: "EXC001",
-    name: "Bahan Baku Utama",
-    description: "Pembelian kertas, tinta, dan bahan cetak lainnya.",
-    used: 25,
-    status: "Active",
-    created: "01/01/2026",
-  },
-  {
-    id: 2,
-    code: "EXC002",
-    name: "Biaya Gaji & Upah",
-    description: "Pengeluaran rutin untuk gaji karyawan dan upah lembur.",
-    used: 12,
-    status: "Active",
-    created: "03/01/2026",
-  },
-  {
-    id: 3,
-    code: "EXC003",
-    name: "Perawatan Mesin",
-    description: "Biaya service berkala dan perbaikan mendadak mesin cetak (Offset, Digital, Sablon).",
-    used: 5,
-    status: "Active",
-    created: "05/01/2026",
-  },
-  {
-    id: 4,
-    code: "EXC004",
-    name: "Biaya Listrik & Air",
-    description: "Tagihan utilitas operasional kantor dan workshop.",
-    used: 8,
-    status: "Active",
-    created: "07/01/2026",
-  },
-  {
-    id: 5,
-    code: "EXC005",
-    name: "Transportasi & Kurir",
-    description: "BBM kendaraan armada dan biaya jasa kurir ekspedisi.",
-    used: 19,
-    status: "Active",
-    created: "10/01/2026",
-  },
-]);
+const { data: expenseCategoryData } = await useFetch<any[]>('/api/expense-category')
+const categories = ref(expenseCategoryData.value ?? []);
 
 const searchQuery = ref("");
 const statusFilter = ref("");
@@ -309,3 +264,5 @@ const toggleHeader = () => {
   // toggle header
 };
 </script>
+
+useMockSync('expense-category', categories);

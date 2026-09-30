@@ -191,58 +191,8 @@
 import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
-const items = ref([
-  {
-    id: 1,
-    category: "Kertas & Bahan Baku Cetak",
-    product: "Art Paper 150gr",
-    description: "Kertas brosur glossy A3+",
-    merk: "Paperline",
-    price: 1250,
-    unit: "Lembar",
-    created: "Admin, 02/01/2026, 09:15",
-  },
-  {
-    id: 2,
-    category: "Tinta & Toner",
-    product: "Tinta Cyan Eco-Solvent",
-    description: "Tinta printer outdoor 1L",
-    merk: "Roland",
-    price: 450000,
-    unit: "Botol",
-    created: "Admin, 02/01/2026, 10:00",
-  },
-  {
-    id: 3,
-    category: "Tinta & Toner",
-    product: "Tinta Magenta Eco-Solvent",
-    description: "Tinta printer outdoor 1L",
-    merk: "Roland",
-    price: 450000,
-    unit: "Botol",
-    created: "Admin, 02/01/2026, 10:05",
-  },
-  {
-    id: 4,
-    category: "Tinta & Toner",
-    product: "Tinta Yellow Eco-Solvent",
-    description: "Tinta printer outdoor 1L",
-    merk: "Roland",
-    price: 450000,
-    unit: "Botol",
-    created: "Admin, 02/01/2026, 10:10",
-  },
-  {
-    id: 5,
-    category: "Bahan Finishing & Jilid",
-    product: "Plastik Laminasi Glossy",
-    description: "Ketebalan 32 micron roll 1000m",
-    merk: "D&K",
-    price: 380000,
-    unit: "Roll",
-    created: "Admin, 02/01/2026, 10:20",
-  },
-]);
+const { data: purchaseItemData } = await useFetch<any[]>('/api/purchase-item')
+const items = ref(purchaseItemData.value ?? []);
 
 const searchQuery = ref("");
 const categoryFilter = ref("");
@@ -328,3 +278,5 @@ const toggleHeader = () => {
   // toggle header
 };
 </script>
+
+useMockSync('purchase-item', items);

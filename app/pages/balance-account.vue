@@ -154,13 +154,8 @@
 import { ref, computed } from "vue";
 import { formatNumber } from "~/composables/useFormatters";
 
-const customers = ref([
-  { id: 1, code: "ID000001", name: "Aditya Pratama", type: "Corporate", balance: 1500000 },
-  { id: 2, code: "ID000006", name: "Fitri Handayani", type: "General", balance: 350000 },
-  { id: 3, code: "ID000007", name: "Guntur Saputra", type: "Reseller", balance: 257000 },
-  { id: 4, code: "ID000008", name: "Hana Pertiwi", type: "VIP", balance: 1200000 },
-  { id: 5, code: "ID000013", name: "Maya Indah", type: "General", balance: 580000 },
-]);
+const { data: balanceAccountData } = await useFetch<any[]>('/api/balance-account')
+const customers = ref(balanceAccountData.value ?? []);
 
 const searchQuery = ref("");
 const typeFilter = ref("");
@@ -197,3 +192,5 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+
+useMockSync('balance-account', customers);
