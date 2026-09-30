@@ -1,202 +1,177 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Internal Paper Stock & Specs</h4>
-            <h6>Manage internal paper gramatures, pricing models, stock levels, and sheets</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Paper Type
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Internal Paper Types" subtitle="Manage your workshop's own paper types, prices, and stock units">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Paper Type</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-5">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search paper name or merk..." />
       </div>
 
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search paper name, size or gsm..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All Status' }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Active'; statusDropdownOpen = false">Active</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Inactive'; statusDropdownOpen = false">Inactive</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Paper Name</th>
-                  <th>Merk</th>
-                  <th class="text-end">Price</th>
-                  <th>Price Type</th>
-                  <th>Unit</th>
-                  <th class="text-center">GSM</th>
-                  <th>Paper Size</th>
-                  <th class="text-end">Stock</th>
-                  <th>Unit Stock</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredItems" :key="item.id">
-                  <td class="fw-bold text-dark">{{ item.name }}</td>
-                  <td>{{ item.merk }}</td>
-                  <td class="text-end fw-semibold">Rp {{ formatNumber(item.price) }}</td>
-                  <td><span class="badge bg-light text-dark border">{{ item.priceType }}</span></td>
-                  <td>{{ item.unitPrice }}</td>
-                  <td class="text-center fw-bold">{{ item.gsm }}</td>
-                  <td><span class="badge bg-secondary bg-opacity-10 text-dark font-monospace">{{ item.size }}</span></td>
-                  <td class="text-end fw-bold" :class="item.stock < 100 ? 'text-danger' : 'text-dark'">
-                    {{ formatNumber(item.stock) }}
-                  </td>
-                  <td>{{ item.unitStock }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="item.status === 'Active' ? 'badge-success' : 'badge-secondary'"
-                    >
-                      • {{ item.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="Edit Paper Type"
-                        @click="openEditModal(item)"
-                      >
-                        <i class="ti ti-edit fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete Paper Type"
-                        @click="deleteItem(item.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredItems.length === 0">
-                  <td colspan="11" class="text-center py-4 text-muted">
-                    No paper types found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Nama Kertas</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Merk</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Harga (Rp)</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Price Model</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Unit Price</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">GSM</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Plano Size</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Stock</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Unit Stock</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredItems" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.merk }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">Rp {{ formatNumber(item.price) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ item.priceType }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.unitPrice }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center font-bold">{{ item.gsm }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 font-mono text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ item.size }}</span>
+              </td>
+              <td :class="item.stock < 100 ? 'px-4 py-3 whitespace-nowrap text-end font-bold text-rose-600 dark:text-rose-400' : 'px-4 py-3 whitespace-nowrap text-end font-bold text-gray-900 dark:text-gray-100'">
+                {{ formatNumber(item.stock) }}
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.unitStock }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredItems.length === 0">
+              <td colspan="11" class="p-8 text-center text-gray-400">No paper types found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add/Edit Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ isEdit ? 'Edit Paper Type' : 'Add Paper Type' }}</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveItem">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label">Paper Name <span class="text-danger">*</span></label>
-                  <input v-model="form.name" type="text" class="form-control" required placeholder="e.g. Art Paper" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Merk / Brand</label>
-                  <input v-model="form.merk" type="text" class="form-control" placeholder="e.g. Pindo Deli" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Price (Rp) <span class="text-danger">*</span></label>
-                  <input v-model.number="form.price" type="number" class="form-control" required placeholder="52000" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Price Model</label>
-                  <select v-model="form.priceType" class="form-select">
-                    <option value="Group">Group / Plano</option>
-                    <option value="Kg">Per Kg</option>
-                    <option value="Sheet">Per Sheet</option>
-                  </select>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Unit Price</label>
-                  <input v-model="form.unitPrice" type="text" class="form-control" placeholder="Kg, Lembar, Plano" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Gramatur (GSM) <span class="text-danger">*</span></label>
-                  <input v-model.number="form.gsm" type="number" class="form-control" required placeholder="150" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Plano Size (cm)</label>
-                  <input v-model="form.size" type="text" class="form-control" placeholder="65x100" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Stock Quantity</label>
-                  <input v-model.number="form.stock" type="number" class="form-control" placeholder="500" />
-                </div>
-                <div class="col-md-6">
-                  <div class="d-flex align-items-center my-3">
-                    <label class="form-label mb-0 me-3">Status Active</label>
-                    <div class="form-check form-switch">
-                      <input v-model="formActive" class="form-check-input" type="checkbox" role="switch" id="typeActiveSwitch" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update Type' : 'Save Type' }}
-              </button>
-            </div>
-          </form>
+    <CommonBaseModal v-model="modalVisible" :title="isEdit ? 'Edit Paper Type' : 'Add New Paper Type'" maxWidth="lg">
+      <form @submit.prevent="saveItem" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Paper Name" required>
+            <input
+              v-model="form.name"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+              placeholder="e.g. Art Paper"
+            />
+          </CommonFormField>
+          <CommonFormField label="Merk / Brand">
+            <input
+              v-model="form.merk"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="e.g. Pindo Deli"
+            />
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Price (Rp)" required>
+            <input
+              v-model.number="form.price"
+              type="number"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+              placeholder="52000"
+            />
+          </CommonFormField>
+          <CommonFormField label="Price Model">
+            <select
+              v-model="form.priceType"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Group">Group / Plano</option>
+              <option value="Kg">Per Kg</option>
+              <option value="Sheet">Per Sheet</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Unit Price">
+            <input
+              v-model="form.unitPrice"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="Kg, Lembar, Plano"
+            />
+          </CommonFormField>
+          <CommonFormField label="Gramatur (GSM)" required>
+            <input
+              v-model.number="form.gsm"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Plano Size (cm)">
+            <input
+              v-model="form.size"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="65x100"
+            />
+          </CommonFormField>
+          <CommonToggleSwitch v-model="formActive" label="Status Active" />
+        </div>
+        <CommonModalFooter :submit-label="isEdit ? 'Update' : 'Submit'" @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -309,5 +284,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}</script>
-
+}
+</script>

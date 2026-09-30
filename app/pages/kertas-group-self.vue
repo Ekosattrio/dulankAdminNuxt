@@ -1,210 +1,140 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Internal Paper Groups</h4>
-            <h6>Manage your workshop's own paper group classifications and price types</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add New Paper Group
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Internal Paper Groups" subtitle="Manage your workshop's own paper group classifications and price types">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Paper Group</span>
           </button>
         </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- KPI Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <CommonStatCard label="Paper Groups" :value="String(groups.length)" icon="file-text" tone="primary" />
+      <CommonStatCard label="Total Active" :value="String(activeCount)" icon="check-circle" tone="success" />
+      <CommonStatCard label="Total Inactive" :value="String(inactiveCount)" icon="x-circle" tone="slate" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search paper group or merk..." />
+        <CommonFilterSelect
+          v-model="filterStatus"
+          allLabel="All Status"
+          :options="[
+            { value: 'Active', label: 'Active' },
+            { value: 'Deactive', label: 'Deactive' },
+          ]"
+        />
       </div>
 
-      <!-- Dashboard Metric Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-files fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Paper Groups</h6>
-              <h4 class="fw-bold mb-0">{{ groups.length }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash2 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-circle-check fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Active</h6>
-              <h4 class="fw-bold mb-0">{{ activeCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash3 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-secondary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-circle-x fs-2 text-secondary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Inactive</h6>
-              <h4 class="fw-bold mb-0">{{ inactiveCount }}</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search paper group or merk..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All Status' }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Active'; statusDropdownOpen = false">Active</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Deactive'; statusDropdownOpen = false">Deactive</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Paper's Group</th>
-                  <th>Merk</th>
-                  <th>Price Type</th>
-                  <th>Last Update</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 120px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="g in filteredGroups" :key="g.id">
-                  <td class="fw-bold text-dark">{{ g.name }}</td>
-                  <td>{{ g.merk }}</td>
-                  <td>
-                    <span class="badge" :class="g.priceType === 'Yes' ? 'bg-info' : 'bg-light text-dark border'">
-                      {{ g.priceType }}
-                    </span>
-                  </td>
-                  <td>{{ g.update }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="g.status === 'Active' ? 'badge-success' : 'badge-secondary'"
-                    >
-                      • {{ g.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="Edit Paper Group"
-                        @click="openEditModal(g)"
-                      >
-                        <i class="ti ti-edit fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete Paper Group"
-                        @click="deleteGroup(g.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredGroups.length === 0">
-                  <td colspan="6" class="text-center py-4 text-muted">
-                    No paper groups found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Paper's Group</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Merk</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Price Type</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Last Update</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="g in filteredGroups" :key="g.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ g.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ g.merk }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="g.priceType" :tone="g.priceType === 'Yes' ? 'sky' : 'slate'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ g.update }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="g.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="g" @edit="openEditModal(g)" @delete="deleteGroup(g.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredGroups.length === 0">
+              <td colspan="6" class="p-8 text-center text-gray-400">No paper groups found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add/Edit Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ isEdit ? 'Edit Paper Group' : 'Add New Paper Group' }}</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveGroup">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-12">
-                  <label class="form-label">Paper Group Name <span class="text-danger">*</span></label>
-                  <input v-model="form.name" type="text" class="form-control" required placeholder="e.g. Art Paper, HVS Putih" />
-                </div>
-                <div class="col-12">
-                  <label class="form-label">Default Merk / Manufacturer</label>
-                  <input v-model="form.merk" type="text" class="form-control" placeholder="e.g. Paperone, Sinar Mas, Pindo Deli" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Price Type</label>
-                  <select v-model="form.priceType" class="form-select">
-                    <option value="Yes">Yes (By Weight/Kg)</option>
-                    <option value="No">No (By Sheet Plano)</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <div class="d-flex align-items-center my-3">
-                    <label class="form-label mb-0 me-3">Status Active</label>
-                    <div class="form-check form-switch">
-                      <input v-model="formActive" class="form-check-input" type="checkbox" role="switch" id="groupActiveSwitch" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update Group' : 'Save Group' }}
-              </button>
-            </div>
-          </form>
+    <CommonBaseModal v-model="modalVisible" :title="isEdit ? 'Edit Paper Group' : 'Add New Paper Group'" maxWidth="md">
+      <form @submit.prevent="saveGroup" class="space-y-4">
+        <CommonFormField label="Paper Group Name" required>
+          <input
+            v-model="form.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. Art Paper, HVS Putih"
+          />
+        </CommonFormField>
+        <CommonFormField label="Default Merk / Manufacturer">
+          <input
+            v-model="form.merk"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Paperone, Sinar Mas, Pindo Deli"
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Price Type">
+            <select
+              v-model="form.priceType"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Yes">Yes (By Weight/Kg)</option>
+              <option value="No">No (By Sheet Plano)</option>
+            </select>
+          </CommonFormField>
+          <CommonToggleSwitch v-model="formActive" label="Status Active" />
         </div>
-      </div>
-    </div>
+        <CommonModalFooter :submit-label="isEdit ? 'Update' : 'Submit'" @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -321,5 +251,5 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterStatus.value = ''
-}</script>
-
+}
+</script>
