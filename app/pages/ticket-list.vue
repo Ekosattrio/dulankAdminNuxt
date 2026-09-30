@@ -1,315 +1,259 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Support Ticket List</h4>
-            <h6>Manage your Support Ticket</h6>
-          </div>
-        </div>
-
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-added btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-2"></i>Add New Support Ticket
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Support Ticket List" subtitle="Manage your Support Ticket">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New Support Ticket</span>
           </button>
         </div>
-      </div>
+      </template>
+    </CommonPageHeader>
 
-      <!-- KPI Widgets -->
-      <div class="row mt-3 mb-4">
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 p-3 bg-white rounded border shadow-sm d-flex align-items-center justify-content-between">
-            <div>
-              <h6 class="text-muted mb-1">Total Tickets</h6>
-              <h4 class="mb-0 fw-bold">307,144.00</h4>
-            </div>
-            <div class="dash-widgetimg p-3 bg-light-primary rounded-circle">
-              <i class="ti ti-ticket fs-24 text-primary"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div
-            class="dash-widget dash1 w-100 p-3 bg-white rounded border shadow-sm d-flex align-items-center justify-content-between"
-          >
-            <div>
-              <h6 class="text-muted mb-1">Total Pending Tickets</h6>
-              <h4 class="mb-0 fw-bold text-warning">4,385.00</h4>
-            </div>
-            <div class="dash-widgetimg p-3 bg-light-warning rounded-circle">
-              <i class="ti ti-clock-pause fs-24 text-warning"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div
-            class="dash-widget dash2 w-100 p-3 bg-white rounded border shadow-sm d-flex align-items-center justify-content-between"
-          >
-            <div>
-              <h6 class="text-muted mb-1">Total Closed Tickets</h6>
-              <h4 class="mb-0 fw-bold text-success">385,656.50</h4>
-            </div>
-            <div class="dash-widgetimg p-3 bg-light-success rounded-circle">
-              <i class="ti ti-circle-check fs-24 text-success"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div
-            class="dash-widget dash3 w-100 p-3 bg-white rounded border shadow-sm d-flex align-items-center justify-content-between"
-          >
-            <div>
-              <h6 class="text-muted mb-1">Total Deleted Tickets</h6>
-              <h4 class="mb-0 fw-bold text-danger">400.00</h4>
-            </div>
-            <div class="dash-widgetimg p-3 bg-light-danger rounded-circle">
-              <i class="ti ti-trash fs-24 text-danger"></i>
-            </div>
-          </div>
+    <!-- KPI Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Tickets" value="307,144.00" icon="ticket" tone="primary" />
+      <CommonStatCard label="Total Pending Tickets" value="4,385.00" icon="clock" tone="warning" />
+      <CommonStatCard label="Total Closed Tickets" value="385,656.50" icon="check-circle" tone="success" />
+      <CommonStatCard label="Total Deleted Tickets" value="400.00" icon="trash-2" tone="danger" />
+    </div>
+
+    <!-- Ticket List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search ticket id, requester, subject..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterPriority"
+            allLabel="All Priorities"
+            :options="[
+              { value: 'High', label: 'High' },
+              { value: 'Medium', label: 'Medium' },
+              { value: 'Low', label: 'Low' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Statuses"
+            :options="[
+              { value: 'Open', label: 'Open' },
+              { value: 'Closed', label: 'Closed' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Ticket List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control"
-                  placeholder="Search ticket id, requester, subject..."
-                />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2">
-              <select v-model="filterPriority" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Priorities</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-              <select v-model="filterStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Statuses</option>
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Requested By</th>
-                  <th>Subject</th>
-                  <th>Assignee</th>
-                  <th>Priority</th>
-                  <th>Status</th>
-                  <th>Created Date</th>
-                  <th>Due Date</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredTickets" :key="item.id">
-                  <td class="fw-bold text-primary">{{ item.ticketId }}</td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <img :src="item.avatar" alt="user" class="rounded-circle" width="30" height="30" />
-                      <NuxtLink to="/ticket-detail" class="fw-medium text-dark">{{ item.requestedBy }}</NuxtLink>
-                    </div>
-                  </td>
-                  <td>{{ item.subject }}</td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <img :src="item.assigneeAvatar" alt="user" class="rounded-circle" width="30" height="30" />
-                      <span>{{ item.assignee }}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span
-                      class="badge"
-                      :class="{
-                        'bg-danger': item.priority === 'High',
-                        'bg-primary': item.priority === 'Medium',
-                        'bg-secondary': item.priority === 'Low',
-                      }"
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">ID</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Requested By</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Subject</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Assignee</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Priority</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Due Date</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredTickets" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ item.ticketId }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                  <img :src="item.avatar" alt="user" class="h-7 w-7 rounded-full object-cover" />
+                  <NuxtLink to="/ticket-detail" class="font-medium text-gray-900 hover:text-primary dark:text-gray-100">{{ item.requestedBy }}</NuxtLink>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.subject }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                  <img :src="item.assigneeAvatar" alt="user" class="h-7 w-7 rounded-full object-cover" />
+                  <span>{{ item.assignee }}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.priority" :tone="item.priority === 'High' ? 'rose' : item.priority === 'Medium' ? 'indigo' : 'slate'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" :tone="item.status === 'Open' ? 'emerald' : 'slate'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.createdDate }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.dueDate }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)">
+                  <template #extra>
+                    <NuxtLink
+                      to="/ticket-detail"
+                      title="View"
+                      class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-sky-500 dark:hover:bg-gray-800"
                     >
-                      {{ item.priority }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge" :class="item.status === 'Open' ? 'bg-success' : 'bg-dark'">
-                      {{ item.status }}
-                    </span>
-                  </td>
-                  <td>{{ item.createdDate }}</td>
-                  <td>{{ item.dueDate }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <NuxtLink to="/ticket-detail" class="me-2 p-2 text-info" title="View">
-                        <i class="ti ti-eye"></i>
-                      </NuxtLink>
-                      <a class="me-2 p-2" href="javascript:void(0);" title="Edit" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </a>
-                      <a
-                        class="confirm-text p-2 align-center text-danger"
-                        href="javascript:void(0);"
-                        title="Delete"
-                        @click="deleteItem(item.id)"
-                      >
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredTickets.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">No tickets found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Ticket Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Add New Support Ticket</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="saveTicket">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Requested By <span class="text-danger">*</span></label>
-                    <input v-model="formData.requestedBy" type="text" class="form-control" required placeholder="User name" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Assignee <span class="text-danger">*</span></label>
-                    <input v-model="formData.assignee" type="text" class="form-control" required placeholder="Staff assignee" />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Subject <span class="text-danger">*</span></label>
-                    <input
-                      v-model="formData.subject"
-                      type="text"
-                      class="form-control"
-                      required
-                      placeholder="Ticket topic / issue"
-                    />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Priority</label>
-                    <select v-model="formData.priority" class="form-select">
-                      <option value="High">High</option>
-                      <option value="Medium">Medium</option>
-                      <option value="Low">Low</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Due Date</label>
-                    <input v-model="formData.dueDate" type="date" class="form-control" />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Description</label>
-                    <textarea
-                      v-model="formData.description"
-                      class="form-control"
-                      rows="3"
-                      placeholder="Describe the issue..."
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Edit Ticket Modal -->
-      <div v-if="showEditModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Edit Support Ticket</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="updateTicket">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Requested By <span class="text-danger">*</span></label>
-                    <input v-model="formData.requestedBy" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Assignee <span class="text-danger">*</span></label>
-                    <input v-model="formData.assignee" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Subject <span class="text-danger">*</span></label>
-                    <input v-model="formData.subject" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Priority</label>
-                    <select v-model="formData.priority" class="form-select">
-                      <option value="High">High</option>
-                      <option value="Medium">Medium</option>
-                      <option value="Low">Low</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Status</label>
-                    <select v-model="formData.status" class="form-select">
-                      <option value="Open">Open</option>
-                      <option value="Closed">Closed</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
+                      <CommonFeatherIcon name="eye" size="16" />
+                    </NuxtLink>
+                  </template>
+                </CommonRowActions>
+              </td>
+            </tr>
+            <tr v-if="filteredTickets.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No tickets found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Add Ticket Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add New Support Ticket" maxWidth="lg">
+      <form @submit.prevent="saveTicket" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Requested By" required>
+            <input
+              v-model="formData.requestedBy"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+              placeholder="User name"
+            />
+          </CommonFormField>
+          <CommonFormField label="Assignee" required>
+            <input
+              v-model="formData.assignee"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+              placeholder="Staff assignee"
+            />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Subject" required>
+          <input
+            v-model="formData.subject"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="Ticket topic / issue"
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Priority">
+            <select
+              v-model="formData.priority"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Due Date">
+            <input
+              v-model="formData.dueDate"
+              type="date"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Description">
+          <textarea
+            v-model="formData.description"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Describe the issue..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Edit Ticket Modal -->
+    <CommonBaseModal v-model="showEditModal" title="Edit Support Ticket" maxWidth="lg">
+      <form @submit.prevent="updateTicket" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Requested By" required>
+            <input
+              v-model="formData.requestedBy"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Assignee" required>
+            <input
+              v-model="formData.assignee"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Subject" required>
+          <input
+            v-model="formData.subject"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Priority">
+            <select
+              v-model="formData.priority"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Status">
+            <select
+              v-model="formData.status"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Open">Open</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -435,8 +379,4 @@ const refresh = () => {
   searchQuery.value = "";
   filterPriority.value = "";
   filterStatus.value = "";
-};
-
-const toggleCollapse = () => {
-  // collapsible header
 };</script>
