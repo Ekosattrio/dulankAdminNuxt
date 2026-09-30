@@ -1,315 +1,316 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Payment Inflow</h4>
-            <h6>Manage your Payment Inflow report</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-added btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-2"></i>Add Payment Inflow
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Payment Inflow" subtitle="Manage your Payment Inflow report">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Payment Inflow</span>
           </button>
         </div>
-      </div>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Balance Summary Card -->
-      <div class="card balance-summary-card mb-4 border">
-        <div class="card-body">
-          <div
-            class="d-flex align-items-center justify-content-between cursor-pointer"
-            @click="showBalanceSummary = !showBalanceSummary"
-          >
-            <div class="d-flex align-items-center gap-2">
-              <i class="ti ti-wallet fs-20 text-primary"></i>
-              <h5 class="mb-0 fw-bold">Balance Summary (Kas & Rekening Bank)</h5>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-              <i class="ti" :class="showBalanceSummary ? 'ti-chevron-up' : 'ti-chevron-down'"></i>
-            </button>
+    <!-- Balance Summary Card -->
+    <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="p-5">
+        <div class="flex cursor-pointer items-center justify-between" @click="showBalanceSummary = !showBalanceSummary">
+          <div class="flex items-center gap-2">
+            <CommonFeatherIcon name="wallet" size="20" class="text-primary" />
+            <h5 class="font-bold text-gray-900 dark:text-gray-100">Balance Summary (Kas & Rekening Bank)</h5>
           </div>
-          <div v-if="showBalanceSummary" class="mt-3 pt-3 border-top">
-            <div class="table-responsive">
-              <table class="table table-sm balance-summary-table mb-0">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Bank Account</th>
-                    <th>Account Name</th>
-                    <th class="text-end">Amount Balance (IDR)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="fw-medium">Cash Box</td>
-                    <td>Kasir Dulank</td>
-                    <td class="text-end fw-semibold text-success">1.350.500</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">Bank Mandiri</td>
-                    <td>PT. Dulank Semesta Cida</td>
-                    <td class="text-end fw-semibold">0</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">Bank BCA</td>
-                    <td>PT. Dulank Semesta Cida</td>
-                    <td class="text-end fw-semibold text-danger">-750.000</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">QRIS Mandiri</td>
-                    <td>Percetakan Dulank</td>
-                    <td class="text-end fw-semibold text-success">250.000</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800">
+            <CommonFeatherIcon :name="showBalanceSummary ? 'chevron-up' : 'chevron-down'" size="16" />
+          </button>
         </div>
-      </div>
-
-      <!-- Inflow Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search ref no, customer name..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2">
-              <select v-model="filterSource" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Sources</option>
-                <option value="Sales">Sales</option>
-                <option value="Income">Income</option>
-                <option value="Purchase Return">Purchase Return</option>
-              </select>
-              <select v-model="filterStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Statuses</option>
-                <option value="Paid">Paid</option>
-                <option value="Partial">Partial</option>
-                <option value="Unpaid">Unpaid</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Ref No</th>
-                  <th>Name</th>
-                  <th>Source</th>
-                  <th class="text-end">Amount</th>
-                  <th>Due Date</th>
-                  <th>Status</th>
-                  <th>Payment Method</th>
-                  <th>Note</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredInflows" :key="item.id">
-                  <td>{{ item.date }}</td>
-                  <td class="fw-semibold text-primary">{{ item.refNo }}</td>
-                  <td class="fw-medium text-dark">{{ item.name }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ item.source }}</span>
-                  </td>
-                  <td class="text-end fw-semibold">{{ formatNumber(item.amount) }}</td>
-                  <td>{{ item.dueDate }}</td>
-                  <td>
-                    <span
-                      class="badge"
-                      :class="{
-                        'bg-success': item.status === 'Paid',
-                        'bg-warning': item.status === 'Partial',
-                        'bg-danger': item.status === 'Unpaid',
-                      }"
-                    >
-                      {{ item.status }}
-                    </span>
-                  </td>
-                  <td>{{ item.method || "-" }}</td>
-                  <td class="text-muted text-truncate" style="max-width: 200px">{{ item.note || "-" }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <a class="me-2 p-2 text-info" href="javascript:void(0);" title="View" @click="openViewModal(item)">
-                        <i class="ti ti-eye"></i>
-                      </a>
-                      <a
-                        class="me-2 p-2 text-success"
-                        href="javascript:void(0);"
-                        title="Make Payment"
-                        @click="openPayModal(item)"
-                      >
-                        <i class="ti ti-currency-dollar"></i>
-                      </a>
-                      <a class="me-2 p-2" href="javascript:void(0);" title="Edit" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </a>
-                      <a
-                        class="confirm-text p-2 align-center text-danger"
-                        href="javascript:void(0);"
-                        title="Delete"
-                        @click="deleteItem(item.id)"
-                      >
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredInflows.length === 0">
-                  <td colspan="10" class="text-center py-4 text-muted">No inflow records found.</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="fw-bold bg-light">
-                  <td colspan="4" class="text-start">Total Visible Inflows</td>
-                  <td class="text-end text-success fs-15">{{ formatNumber(totalAmount) }}</td>
-                  <td colspan="5"></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Payment Inflow Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Add Payment Inflow</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="saveInflow">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input v-model="formData.date" type="date" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Due Date</label>
-                    <input v-model="formData.dueDate" type="date" class="form-control" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Customer / Entity Name <span class="text-danger">*</span></label>
-                    <input v-model="formData.name" type="text" class="form-control" placeholder="Enter customer name" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Source <span class="text-danger">*</span></label>
-                    <select v-model="formData.source" class="form-select" required>
-                      <option value="Sales">Sales</option>
-                      <option value="Income">Income</option>
-                      <option value="Purchase Return">Purchase Return</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Amount (IDR) <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.amount" type="number" class="form-control" required min="1" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Payment Method</label>
-                    <select v-model="formData.method" class="form-select">
-                      <option value="Transfer">Transfer</option>
-                      <option value="Cash">Cash</option>
-                      <option value="Balanced">Balanced</option>
-                    </select>
-                  </div>
-                  <div v-if="formData.method === 'Transfer'" class="col-12">
-                    <label class="form-label">Destination Bank Account</label>
-                    <select v-model="formData.bankAccount" class="form-select">
-                      <option value="Dulank Semesta Cida PT / BCA / 1092993242">Dulank Semesta Cida PT / BCA / 1092993242</option>
-                      <option value="Dulank Semesta Cida PT / Mandiri / 1320009982282">
-                        Dulank Semesta Cida PT / Mandiri / 1320009982282
-                      </option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Note</label>
-                    <textarea v-model="formData.note" class="form-control" rows="3" placeholder="Notes..."></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- View Modal -->
-      <div
-        v-if="showViewModal && activeItem"
-        class="modal fade show d-block"
-        tabindex="-1"
-        style="background-color: rgba(0, 0, 0, 0.5)"
-      >
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Payment Inflow - {{ activeItem.refNo }}</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <div class="row g-2">
-                <div class="col-6 text-muted">Date</div>
-                <div class="col-6 text-end">{{ activeItem.date }}</div>
-                <div class="col-6 text-muted">Customer / Entity</div>
-                <div class="col-6 text-end fw-bold">{{ activeItem.name }}</div>
-                <div class="col-6 text-muted">Source</div>
-                <div class="col-6 text-end">{{ activeItem.source }}</div>
-                <div class="col-6 text-muted">Amount</div>
-                <div class="col-6 text-end fw-bold fs-16 text-success">Rp {{ formatNumber(activeItem.amount) }}</div>
-                <div class="col-6 text-muted">Due Date</div>
-                <div class="col-6 text-end">{{ activeItem.dueDate }}</div>
-                <div class="col-6 text-muted">Status</div>
-                <div class="col-6 text-end">
-                  <span class="badge bg-success">{{ activeItem.status }}</span>
-                </div>
-                <div class="col-6 text-muted">Payment Method</div>
-                <div class="col-6 text-end">{{ activeItem.method || "-" }}</div>
-                <div class="col-12 mt-2">
-                  <label class="text-muted small">Notes</label>
-                  <p class="p-2 bg-light rounded mb-0">{{ activeItem.note || "-" }}</p>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Close</button>
-            </div>
-          </div>
+        <div v-if="showBalanceSummary" class="mt-3 overflow-x-auto border-t border-gray-100 pt-3 dark:border-gray-800">
+          <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+            <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+              <tr>
+                <th class="px-3 py-2 text-start">Bank Account</th>
+                <th class="px-3 py-2 text-start">Account Name</th>
+                <th class="px-3 py-2 text-end">Amount Balance (IDR)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              <tr>
+                <td class="px-3 py-2 font-medium">Cash Box</td>
+                <td class="px-3 py-2">Kasir Dulank</td>
+                <td class="px-3 py-2 text-end font-semibold text-emerald-600 dark:text-emerald-400">1.350.500</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-medium">Bank Mandiri</td>
+                <td class="px-3 py-2">PT. Dulank Semesta Cida</td>
+                <td class="px-3 py-2 text-end font-semibold">0</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-medium">Bank BCA</td>
+                <td class="px-3 py-2">PT. Dulank Semesta Cida</td>
+                <td class="px-3 py-2 text-end font-semibold text-rose-600 dark:text-rose-400">-750.000</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-medium">QRIS Mandiri</td>
+                <td class="px-3 py-2">Percetakan Dulank</td>
+                <td class="px-3 py-2 text-end font-semibold text-emerald-600 dark:text-emerald-400">250.000</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+
+    <!-- Inflow Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search ref no, customer name..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterSource"
+            allLabel="All Sources"
+            :options="[
+              { value: 'Sales', label: 'Sales' },
+              { value: 'Income', label: 'Income' },
+              { value: 'Purchase Return', label: 'Purchase Return' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Statuses"
+            :options="[
+              { value: 'Paid', label: 'Paid' },
+              { value: 'Partial', label: 'Partial' },
+              { value: 'Unpaid', label: 'Unpaid' },
+            ]"
+          />
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Ref No</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Source</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Due Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Payment Method</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Note</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredInflows" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-primary">{{ item.refNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ item.source }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.dueDate }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.method || "-" }}</td>
+              <td class="max-w-[200px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.note || "-" }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" show-view @view="openViewModal(item)" @edit="openEditModal(item)" @delete="deleteItem(item.id)">
+                  <template #extra>
+                    <button
+                      type="button"
+                      class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-emerald-600 dark:hover:bg-gray-800"
+                      title="Make Payment"
+                      @click="openPayModal(item)"
+                    >
+                      <CommonFeatherIcon name="dollar-sign" size="16" />
+                    </button>
+                  </template>
+                </CommonRowActions>
+              </td>
+            </tr>
+            <tr v-if="filteredInflows.length === 0">
+              <td colspan="10" class="p-8 text-center text-gray-400">No inflow records found.</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 text-start" colspan="4">Total Visible Inflows</td>
+              <td class="px-4 py-3 text-end text-emerald-600 dark:text-emerald-400">{{ formatNumber(totalAmount) }}</td>
+              <td class="px-4 py-3" colspan="5"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add Payment Inflow Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add Payment Inflow" maxWidth="lg">
+      <form @submit.prevent="saveInflow" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Date" required>
+            <input
+              v-model="formData.date"
+              type="date"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Due Date">
+            <input
+              v-model="formData.dueDate"
+              type="date"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Customer / Entity Name" required>
+            <input
+              v-model="formData.name"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="Enter customer name"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Source" required>
+            <select
+              v-model="formData.source"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option value="Sales">Sales</option>
+              <option value="Income">Income</option>
+              <option value="Purchase Return">Purchase Return</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Amount (IDR)" required>
+            <input
+              v-model.number="formData.amount"
+              type="number"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+              min="1"
+            />
+          </CommonFormField>
+          <CommonFormField label="Payment Method">
+            <select
+              v-model="formData.method"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Transfer">Transfer</option>
+              <option value="Cash">Cash</option>
+              <option value="Balanced">Balanced</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <CommonFormField v-if="formData.method === 'Transfer'" label="Destination Bank Account">
+          <select
+            v-model="formData.bankAccount"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Dulank Semesta Cida PT / BCA / 1092993242">Dulank Semesta Cida PT / BCA / 1092993242</option>
+            <option value="Dulank Semesta Cida PT / Mandiri / 1320009982282">Dulank Semesta Cida PT / Mandiri / 1320009982282</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Note">
+          <textarea
+            v-model="formData.note"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Notes..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- View Modal -->
+    <CommonBaseModal v-model="showViewModal" :title="`Payment Inflow - ${activeItem?.refNo ?? ''}`" maxWidth="md">
+      <div v-if="activeItem" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Date</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.date }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Customer / Entity</span>
+          <span class="font-bold text-gray-900 dark:text-gray-100">{{ activeItem.name }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Source</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.source }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Amount</span>
+          <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatNumber(activeItem.amount) }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Due Date</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.dueDate }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Status</span>
+          <CommonStatusPill :status="activeItem.status" />
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="text-gray-500 dark:text-gray-400">Payment Method</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ activeItem.method || "-" }}</span>
+        </div>
+        <div class="py-2.5">
+          <span class="text-xs text-gray-400">Notes</span>
+          <p class="mb-0 mt-1 rounded-lg bg-gray-50 p-2 text-sm text-gray-500 dark:bg-gray-800/40 dark:text-gray-400">{{ activeItem.note || "-" }}</p>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="closeModal"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -433,4 +434,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-};</script>
+};
+</script>
