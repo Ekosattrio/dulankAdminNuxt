@@ -1,258 +1,268 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="page-title">
-          <h4>Income</h4>
-          <h6>Manage your income</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Income" subtitle="Manage your income">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Income</span>
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="d-flex flex-wrap gap-2">
-          <div class="page-btn flex-fill">
-            <button type="button" class="btn btn-added btn-primary w-100" @click="openAddModal">
-              <i class="ti ti-circle-plus me-2"></i> Add income
-            </button>
-          </div>
-        </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Income List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search by name, no income, notes..." />
+        <CommonFilterSelect
+          v-model="filterCategory"
+          allLabel="All Categories"
+          :options="categoryList.map((c) => ({ value: c, label: c }))"
+        />
       </div>
 
-      <!-- Income List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <!-- Filter -->
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search by name, no income, notes..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2">
-              <select v-model="filterCategory" class="form-select form-select-sm" style="min-width: 180px;">
-                <option value="">All Categories</option>
-                <option v-for="cat in categoryList" :key="cat" :value="cat">{{ cat }}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Date</th>
-                  <th>No Income</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Notes</th>
-                  <th class="text-end">Amount (IDR)</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredIncomes" :key="item.id">
-                  <td class="inc-date">{{ item.date }}</td>
-                  <td class="inc-no fw-semibold text-primary">{{ item.no }}</td>
-                  <td class="inc-name fw-medium">{{ item.name }}</td>
-                  <td class="inc-category">
-                    <span class="badge bg-light text-dark border">{{ item.category }}</span>
-                  </td>
-                  <td class="inc-notes text-muted text-truncate" style="max-width: 250px;">{{ item.notes }}</td>
-                  <td class="inc-amount text-end fw-semibold">{{ formatNumber(item.amount) }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <a class="me-2 p-2 text-info" href="javascript:void(0);" title="View" @click="openViewModal(item)">
-                        <i class="ti ti-eye"></i>
-                      </a>
-                      <a class="me-2 p-2" href="javascript:void(0);" title="Edit" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </a>
-                      <a class="confirm-text p-2 align-center text-danger" href="javascript:void(0);" title="Delete" @click="deleteItem(item.id)">
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredIncomes.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">No income records found.</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr class="fw-bold bg-light">
-                  <td class="text-start">Total</td>
-                  <td colspan="4"></td>
-                  <td class="text-end text-success fs-15">{{ formatNumber(totalAmount) }}</td>
-                  <td></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Income</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Category</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Notes</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount (IDR)</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredIncomes" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-primary">{{ item.no }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  {{ item.category }}
+                </span>
+              </td>
+              <td class="max-w-[250px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.notes }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" show-view @view="openViewModal(item)" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredIncomes.length === 0">
+              <td colspan="7" class="p-8 text-center text-gray-400">No income records found.</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 text-start">Total</td>
+              <td class="px-4 py-3" colspan="4"></td>
+              <td class="px-4 py-3 text-end font-bold text-emerald-600 dark:text-emerald-400">{{ formatNumber(totalAmount) }}</td>
+              <td class="px-4 py-3"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
-
-      <!-- Add Income Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Add New Income</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="saveIncome">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label">Income Category <span class="text-danger">*</span></label>
-                    <select v-model="formData.category" class="form-select" required>
-                      <option value="">Choose</option>
-                      <option v-for="cat in categoryList" :key="cat" :value="cat">{{ cat }}</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input v-model="formData.date" type="date" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Name / Payer <span class="text-danger">*</span></label>
-                    <input v-model="formData.name" type="text" class="form-control" placeholder="Enter name" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Amount (IDR) <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.amount" type="number" class="form-control" placeholder="Enter amount" min="0" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Payment Method</label>
-                    <select v-model="formData.paymentMethod" class="form-select">
-                      <option value="Transfer Bank">Transfer Bank</option>
-                      <option value="Tunai / Cash">Tunai / Cash</option>
-                      <option value="QRIS">QRIS</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Bank Account</label>
-                    <input v-model="formData.bankAccount" type="text" class="form-control" placeholder="e.g. Mandiri 1320009982282" />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Notes / Description</label>
-                    <textarea v-model="formData.notes" class="form-control" rows="3" placeholder="Enter note here..."></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Edit Income Modal -->
-      <div v-if="showEditModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Edit Income</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="updateIncome">
-              <div class="modal-body custom-modal-body">
-                <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label">Income Category <span class="text-danger">*</span></label>
-                    <select v-model="formData.category" class="form-select" required>
-                      <option v-for="cat in categoryList" :key="cat" :value="cat">{{ cat }}</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Date <span class="text-danger">*</span></label>
-                    <input v-model="formData.date" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Name <span class="text-danger">*</span></label>
-                    <input v-model="formData.name" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Amount (IDR) <span class="text-danger">*</span></label>
-                    <input v-model.number="formData.amount" type="number" class="form-control" min="0" required />
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label">Notes</label>
-                    <textarea v-model="formData.notes" class="form-control" rows="3"></textarea>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check">
-                      <input id="cancelTxCheck" v-model="formData.isCancelled" class="form-check-input" type="checkbox" />
-                      <label class="form-check-label" for="cancelTxCheck">Cancel Transaction</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- View Income Modal -->
-      <div v-if="showViewModal && viewingItem" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>View Income - {{ viewingItem.no }}</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <div class="row g-2">
-                <div class="col-6 fw-bold">Income Category</div>
-                <div class="col-6 text-end">{{ viewingItem.category }}</div>
-                <div class="col-6 fw-bold">Date</div>
-                <div class="col-6 text-end">{{ viewingItem.date }}</div>
-                <div class="col-6 fw-bold">Amount</div>
-                <div class="col-6 text-end fw-semibold text-success">Rp {{ formatNumber(viewingItem.amount) }}</div>
-                <div class="col-6 fw-bold">Payment Method</div>
-                <div class="col-6 text-end">{{ viewingItem.paymentMethod || 'Transfer Bank' }}</div>
-                <div class="col-6 fw-bold">Bank Account</div>
-                <div class="col-6 text-end">{{ viewingItem.bankAccount || 'BCA 8830129841' }}</div>
-                <div class="col-12 fw-bold mt-2">Notes</div>
-                <div class="col-12 p-2 bg-light rounded text-muted">{{ viewingItem.notes || '-' }}</div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Add Income Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add New Income" maxWidth="md">
+      <form @submit.prevent="saveIncome" class="space-y-4">
+        <CommonFormField label="Income Category" required>
+          <select v-model="formData.category" class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" required>
+            <option value="">Choose</option>
+            <option v-for="cat in categoryList" :key="cat" :value="cat">{{ cat }}</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Date" required>
+          <input
+            v-model="formData.date"
+            type="date"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Name / Payer" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Enter name"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Amount (IDR)" required>
+          <input
+            v-model.number="formData.amount"
+            type="number"
+            min="0"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Enter amount"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Payment Method">
+          <select
+            v-model="formData.paymentMethod"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="Tunai / Cash">Tunai / Cash</option>
+            <option value="QRIS">QRIS</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Bank Account">
+          <input
+            v-model="formData.bankAccount"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="e.g. Mandiri 1320009982282"
+          />
+        </CommonFormField>
+        <CommonFormField label="Notes / Description">
+          <textarea
+            v-model="formData.notes"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Enter note here..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Edit Income Modal -->
+    <CommonBaseModal v-model="showEditModal" title="Edit Income" maxWidth="md">
+      <form @submit.prevent="updateIncome" class="space-y-4">
+        <CommonFormField label="Income Category" required>
+          <select v-model="formData.category" class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" required>
+            <option v-for="cat in categoryList" :key="cat" :value="cat">{{ cat }}</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Date" required>
+          <input
+            v-model="formData.date"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Amount (IDR)" required>
+          <input
+            v-model.number="formData.amount"
+            type="number"
+            min="0"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Notes">
+          <textarea
+            v-model="formData.notes"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          ></textarea>
+        </CommonFormField>
+        <div class="flex items-center justify-between rounded-lg border border-gray-100 p-3 dark:border-gray-800">
+          <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Cancel Transaction</span>
+          <button
+            type="button"
+            :class="[
+              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none',
+              formData.isCancelled ? 'bg-rose-500' : 'bg-gray-300 dark:bg-gray-700',
+            ]"
+            @click="formData.isCancelled = !formData.isCancelled"
+          >
+            <span :class="['pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out', formData.isCancelled ? 'translate-x-5' : 'translate-x-0']" />
+          </button>
+        </div>
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- View Income Modal -->
+    <CommonBaseModal v-model="showViewModal" :title="`View Income - ${viewingItem?.no ?? ''}`" maxWidth="md">
+      <div v-if="viewingItem" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div class="flex items-center justify-between py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Income Category</span>
+          <span class="text-gray-700 dark:text-gray-300">{{ viewingItem.category }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Date</span>
+          <span class="text-gray-700 dark:text-gray-300">{{ viewingItem.date }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Amount</span>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatNumber(viewingItem.amount) }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Payment Method</span>
+          <span class="text-gray-700 dark:text-gray-300">{{ viewingItem.paymentMethod || 'Transfer Bank' }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Bank Account</span>
+          <span class="text-gray-700 dark:text-gray-300">{{ viewingItem.bankAccount || 'BCA 8830129841' }}</span>
+        </div>
+        <div class="py-2.5">
+          <span class="font-semibold text-gray-800 dark:text-gray-200">Notes</span>
+          <div class="mt-1 rounded-lg bg-gray-50 p-2 text-sm text-gray-500 dark:bg-gray-800/40 dark:text-gray-400">{{ viewingItem.notes || '-' }}</div>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="closeModal"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -407,4 +417,3 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapsible header
 }</script>
-
