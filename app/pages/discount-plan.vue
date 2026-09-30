@@ -1,239 +1,189 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Discount Plan</h4>
-            <h6>Manage your discount plans</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Discount Plan
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Discount Plan" subtitle="Manage your discount plans">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Discount Plan</span>
           </button>
         </div>
-      </div>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-          <div class="search-set">
-            <div class="search-input">
-              <span class="btn-searchset"><i class="ti ti-search fs-14"></i></span>
-              <input v-model="searchQuery" type="text" class="form-control" placeholder="Search plan name..." />
-            </div>
-          </div>
-          <div class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-            <div class="dropdown me-2">
-              <button
-                type="button"
-                class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
-                data-bs-toggle="dropdown"
-              >
-                {{ filterCustomer || 'Customer' }}
-                <i class="ti ti-chevron-down ms-1"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end p-2">
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCustomer = ''">All Customer</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCustomer = 'Members Only'">Members Only</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCustomer = 'High-Spending Customers'">High-Spending Customers</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCustomer = 'Online Customers'">Online Customers</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCustomer = 'Students'">Students</a></li>
-              </ul>
-            </div>
-            <div class="dropdown">
-              <button
-                type="button"
-                class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
-                data-bs-toggle="dropdown"
-              >
-                {{ filterStatus || 'Status' }}
-                <i class="ti ti-chevron-down ms-1"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end p-2">
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = ''">All Status</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = 'Active'">Active</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterStatus = 'Inactive'">Inactive</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Plan Name</th>
-                  <th>Customers</th>
-                  <th>Status</th>
-                  <th class="no-sort text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredPlans" :key="item.id">
-                  <td class="text-gray-9 fw-medium">{{ item.name }}</td>
-                  <td>{{ item.customers }}</td>
-                  <td>
-                    <span class="badge table-badge fw-medium fs-10" :class="item.status === 'Active' ? 'bg-success' : 'bg-danger'">
-                      {{ item.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action justify-content-end">
-                      <a class="me-2 p-2" href="javascript:void(0);" @click="openEditModal(item)">
-                        <i class="ti ti-edit"></i>
-                      </a>
-                      <a class="confirm-text p-2 align-center text-danger" href="javascript:void(0);" @click="deleteItem(item.id)">
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredPlans.length === 0">
-                  <td colspan="4" class="text-center py-4 text-muted">No discount plans found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <!-- Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search plan name..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterCustomer"
+            allLabel="All Customer"
+            :options="[
+              { value: 'Members Only', label: 'Members Only' },
+              { value: 'High-Spending Customers', label: 'High-Spending Customers' },
+              { value: 'Online Customers', label: 'Online Customers' },
+              { value: 'Students', label: 'Students' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Status"
+            :options="[
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Add Discount Plan Modal -->
-      <div v-if="showAddModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="page-title">
-                <h4>Add Discount Plan</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="savePlan">
-              <div class="modal-body">
-                <div class="mb-3">
-                  <label class="form-label">Plan Name <span class="text-danger ms-1">*</span></label>
-                  <input v-model="formData.name" type="text" class="form-control" required placeholder="e.g. Premium Plan" />
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label mb-0">Customer <span class="text-danger ms-1">*</span></label>
-                    <a href="javascript:void(0);" class="text-primary fs-12 fw-medium" @click="showAddCustomerModal = true">
-                      <i class="ti ti-circle-plus me-1"></i>Add New
-                    </a>
-                  </div>
-                  <select v-model="formData.customers" class="form-select" required>
-                    <option value="">Select</option>
-                    <option v-for="c in customerOptions" :key="c" :value="c">{{ c }}</option>
-                  </select>
-                </div>
-                <div class="mb-0">
-                  <div class="form-check form-switch d-flex align-items-center gap-2">
-                    <input id="addPlanStatus" v-model="formData.isActive" class="form-check-input" type="checkbox" role="switch" />
-                    <label class="form-check-label" for="addPlanStatus">Active Status</label>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Plan Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customers</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredPlans" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.customers }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteItem(item.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredPlans.length === 0">
+              <td colspan="4" class="p-8 text-center text-gray-400">No discount plans found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <!-- Edit Discount Plan Modal -->
-      <div v-if="showEditModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="page-title">
-                <h4>Edit Discount Plan</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="closeModal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="updatePlan">
-              <div class="modal-body">
-                <div class="mb-3">
-                  <label class="form-label">Plan Name <span class="text-danger ms-1">*</span></label>
-                  <input v-model="formData.name" type="text" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label mb-0">Customer <span class="text-danger ms-1">*</span></label>
-                    <a href="javascript:void(0);" class="text-primary fs-12 fw-medium" @click="showAddCustomerModal = true">
-                      <i class="ti ti-circle-plus me-1"></i>Add New
-                    </a>
-                  </div>
-                  <select v-model="formData.customers" class="form-select" required>
-                    <option v-for="c in customerOptions" :key="c" :value="c">{{ c }}</option>
-                  </select>
-                </div>
-                <div class="mb-0">
-                  <div class="form-check form-switch d-flex align-items-center gap-2">
-                    <input id="editPlanStatus" v-model="formData.isActive" class="form-check-input" type="checkbox" role="switch" />
-                    <label class="form-check-label" for="editPlanStatus">Active Status</label>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Customer Sub-Modal -->
-      <div v-if="showAddCustomerModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6); z-index: 1060;">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="page-title">
-                <h4>Add Customer</h4>
-              </div>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="showAddCustomerModal = false">
-                <span>&times;</span>
-              </button>
-            </div>
-            <form @submit.prevent="addNewCustomerOption">
-              <div class="modal-body">
-                <div>
-                  <label class="form-label">Customer Tier / Name <span class="text-danger">*</span></label>
-                  <input v-model="newCustomerName" type="text" class="form-control" required placeholder="e.g. VIP Gold Tier" />
-                </div>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end">
-                <button type="button" class="btn btn-dark modal-action-cancel" @click="showAddCustomerModal = false">Cancel</button>
-                <button type="submit" class="btn btn-warning modal-action-submit text-white">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Add Discount Plan Modal -->
+    <CommonBaseModal v-model="showAddModal" title="Add Discount Plan" maxWidth="md">
+      <form @submit.prevent="savePlan" class="space-y-4">
+        <CommonFormField label="Plan Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. Premium Plan"
+          />
+        </CommonFormField>
+        <CommonFormField label="Customer" required>
+          <div class="flex gap-2">
+            <select
+              v-model="formData.customers"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option value="">Select</option>
+              <option v-for="c in customerOptions" :key="c" :value="c">{{ c }}</option>
+            </select>
+            <button
+              type="button"
+              class="shrink-0 rounded-lg border border-primary px-3 text-xs font-semibold text-primary transition hover:bg-primary hover:text-white"
+              @click="showAddCustomerModal = true"
+            >
+              Create New
+            </button>
+          </div>
+        </CommonFormField>
+        <CommonToggleSwitch v-model="formData.isActive" label="Status Active" />
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Edit Discount Plan Modal -->
+    <CommonBaseModal v-model="showEditModal" title="Edit Discount Plan" maxWidth="md">
+      <form @submit.prevent="updatePlan" class="space-y-4">
+        <CommonFormField label="Plan Name" required>
+          <input
+            v-model="formData.name"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+          />
+        </CommonFormField>
+        <CommonFormField label="Customer" required>
+          <div class="flex gap-2">
+            <select
+              v-model="formData.customers"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option v-for="c in customerOptions" :key="c" :value="c">{{ c }}</option>
+            </select>
+            <button
+              type="button"
+              class="shrink-0 rounded-lg border border-primary px-3 text-xs font-semibold text-primary transition hover:bg-primary hover:text-white"
+              @click="showAddCustomerModal = true"
+            >
+              Create New
+            </button>
+          </div>
+        </CommonFormField>
+        <CommonToggleSwitch v-model="formData.isActive" label="Status Active" />
+        <CommonModalFooter @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
+
+    <!-- Add Customer Sub-Modal -->
+    <CommonBaseModal v-model="showAddCustomerModal" title="Add Customer" maxWidth="md">
+      <form @submit.prevent="addNewCustomerOption" class="space-y-4">
+        <CommonFormField label="Customer Tier / Name" required>
+          <input
+            v-model="newCustomerName"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="e.g. VIP Gold Tier"
+          />
+        </CommonFormField>
+        <CommonModalFooter @cancel="showAddCustomerModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -361,5 +311,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}</script>
-
+}
+</script>
