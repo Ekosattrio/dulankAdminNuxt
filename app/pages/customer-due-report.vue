@@ -1,121 +1,104 @@
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Customer Due Report</h4>
-          <h6>Manage customer outstanding payment and due aging</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Customer Due Report" subtitle="Manage customer outstanding payment and due aging">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refreshReport"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+      </template>
+    </CommonPageHeader>
 
     <!-- Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search customer..."
-                class="form-control form-control-sm"
-              />
-            </div>
-          </div>
-        </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-5">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search customer..." />
+      </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Customer Name</th>
-                <th class="text-center">Order Due</th>
-                <th class="text-end">Amount Due (IDR)</th>
-                <th class="text-center">Days Due</th>
-                <th class="no-sort text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredDues" :key="item.name">
-                <td class="fw-bold">{{ item.name }}</td>
-                <td class="text-center">{{ item.orderDue }}</td>
-                <td class="text-end fw-bold text-danger">{{ formatNumber(item.amountDue) }}</td>
-                <td class="text-center">
-                  <span
-                    class="badge"
-                    :class="parseInt(item.daysDue) > 10 ? 'bg-outline-danger' : 'bg-outline-warning'"
-                  >
-                    {{ item.daysDue }}
-                  </span>
-                </td>
-                <td class="action-table-data text-center">
-                  <div class="edit-delete-action justify-content-center">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewDetail(item)" title="View Details">
-                      <i class="feather-eye"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="filteredDues.length === 0">
-                <td colspan="5" class="text-center py-4 text-muted">No records found.</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr class="fw-bold table-light">
-                <td>Total</td>
-                <td class="text-center">{{ totalOrdersDue }}</td>
-                <td class="text-end text-danger">{{ formatNumber(totalAmountDue) }}</td>
-                <td colspan="2"></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer Name</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Order Due</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount Due (IDR)</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Days Due</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredDues" :key="item.name" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">{{ item.orderDue }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold text-rose-600 dark:text-rose-400">{{ formatNumber(item.amountDue) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonStatusPill :status="item.daysDue" :tone="parseInt(item.daysDue) > 10 ? 'rose' : 'amber'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="item" show-view @view="viewDetail(item)" />
+              </td>
+            </tr>
+            <tr v-if="filteredDues.length === 0">
+              <td colspan="5" class="p-8 text-center text-gray-400">No records found.</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3">Total</td>
+              <td class="px-4 py-3 text-center">{{ totalOrdersDue }}</td>
+              <td class="px-4 py-3 text-end text-rose-600 dark:text-rose-400">{{ formatNumber(totalAmountDue) }}</td>
+              <td class="px-4 py-3" colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
 
     <!-- View Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Outstanding Invoices - {{ activeItem?.name }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="activeItem">
-            <p><strong>Customer:</strong> {{ activeItem.name }}</p>
-            <p><strong>Total Pending Orders:</strong> {{ activeItem.orderDue }}</p>
-            <p><strong>Total Due Amount:</strong> Rp {{ formatNumber(activeItem.amountDue) }}</p>
-            <p><strong>Overdue Aging:</strong> {{ activeItem.daysDue }}</p>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end mt-4">
-              <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-            </div>
-          </div>
-        </div>
+    <CommonBaseModal v-model="showModal" :title="`Outstanding Invoices - ${activeItem?.name ?? ''}`" maxWidth="md">
+      <div v-if="activeItem" class="space-y-2 text-sm">
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Customer</span><span class="font-semibold text-gray-800 dark:text-gray-200">{{ activeItem.name }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Total Pending Orders</span><span class="text-gray-800 dark:text-gray-200">{{ activeItem.orderDue }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Total Due Amount</span><span class="font-bold text-rose-600 dark:text-rose-400">Rp {{ formatNumber(activeItem.amountDue) }}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Overdue Aging</span><span class="text-gray-800 dark:text-gray-200">{{ activeItem.daysDue }}</span></div>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="showModal = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -154,7 +137,5 @@ const refreshReport = () => {
 const toggleHeader = () => {
   // toggle
 }
-</script>
-
-
 useMockSync('customer-due-report', dues);
+</script>
