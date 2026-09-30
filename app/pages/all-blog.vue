@@ -1,301 +1,192 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Blogs</h4>
-            <h6>Manage your blogs</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printBlogs"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refreshBlogs"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Blog
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Blogs" subtitle="Manage your blogs">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printBlogs"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refreshBlogs"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Blog</span>
           </button>
         </div>
-      </div>
+      </template>
+    </CommonPageHeader>
 
-      <!-- Filter Controls -->
-      <div class="card mb-4">
-        <div class="card-body pb-3">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-            <div class="search-set mb-0">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search blog title or category..." />
-              </div>
+    <!-- Filter Controls -->
+    <div class="rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search blog title or category..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Status"
+            :options="[
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+            ]"
+          />
+          <select
+            v-model="sortBy"
+            class="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="recent">Sort By: Recently Added</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div v-for="blog in filteredBlogs" :key="blog.id" class="flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="relative mb-3 overflow-hidden rounded-t-xl">
+          <img :src="blog.image" :alt="blog.title" class="h-[220px] w-full rounded-t-xl object-cover" />
+          <div class="absolute left-2 top-2 flex gap-2">
+            <span class="rounded-md bg-sky-500 px-2 py-0.5 text-[11px] font-medium text-white">{{ blog.category }}</span>
+            <CommonStatusPill :status="blog.status" :tone="blog.status === 'Active' ? 'emerald' : 'slate'" />
+          </div>
+        </div>
+
+        <div class="flex flex-1 flex-col px-5 pb-5">
+          <!-- Author and Date -->
+          <div class="mb-2 flex items-center justify-between">
+            <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+              <span class="inline-flex items-center gap-1">
+                <CommonFeatherIcon name="calendar" size="13" />
+                {{ blog.date }}
+              </span>
+              <span class="inline-flex items-center gap-1 border-l border-gray-200 ps-2 dark:border-gray-700">
+                <CommonFeatherIcon name="user" size="13" />
+                {{ blog.author }}
+              </span>
             </div>
-            <div class="d-flex align-items-center gap-3 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || "All" }}
-                  <i class="ti ti-chevron-down ms-1"></i>
-                </button>
-                <ul
-                  v-if="statusDropdownOpen"
-                  class="dropdown-menu dropdown-menu-end p-2 show"
-                  style="display: block; position: absolute"
-                >
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = '';
-                        statusDropdownOpen = false;
-                      "
-                      >All Status</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = 'Active';
-                        statusDropdownOpen = false;
-                      "
-                      >Active</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = 'Inactive';
-                        statusDropdownOpen = false;
-                      "
-                      >Inactive</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                  type="button"
-                  @click="sortDropdownOpen = !sortDropdownOpen"
-                >
-                  Sort By: {{ sortByLabel }}
-                  <i class="ti ti-chevron-down ms-1"></i>
-                </button>
-                <ul
-                  v-if="sortDropdownOpen"
-                  class="dropdown-menu dropdown-menu-end p-2 show"
-                  style="display: block; position: absolute"
-                >
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'recent';
-                        sortDropdownOpen = false;
-                      "
-                      >Recently Added</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'asc';
-                        sortDropdownOpen = false;
-                      "
-                      >Ascending</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'desc';
-                        sortDropdownOpen = false;
-                      "
-                      >Descending</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <CommonRowActions :item="blog" @edit="openEditModal(blog)" @delete="deleteBlog(blog.id)" />
+          </div>
+
+          <!-- Title and Excerpt -->
+          <h5 class="mb-2 text-sm font-semibold text-gray-900 hover:text-primary dark:text-gray-100">
+            {{ blog.title }}
+          </h5>
+          <p class="line-clamp-2 flex-grow-1 text-xs text-gray-500 dark:text-gray-400">{{ blog.excerpt }}</p>
+
+          <!-- Tags -->
+          <div class="mt-2 flex flex-wrap gap-1 border-t border-gray-100 pt-2 dark:border-gray-800">
+            <span
+              v-for="tag in blog.tags"
+              :key="tag"
+              class="inline-flex rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px] text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+            >
+              #{{ tag }}
+            </span>
           </div>
         </div>
       </div>
 
-      <!-- Blog Grid -->
-      <div class="row g-4">
-        <div v-for="blog in filteredBlogs" :key="blog.id" class="col-xxl-4 col-md-6">
-          <div class="card h-100 shadow-sm border">
-            <div class="card-body d-flex flex-column">
-              <div class="w-100 position-relative mb-3 overflow-hidden rounded">
-                <img class="w-100 object-fit-cover rounded" style="height: 220px" :src="blog.image" :alt="blog.title" />
-                <div class="position-absolute top-2 start-2 d-flex gap-2">
-                  <span class="badge bg-info badge-custom fs-11 fw-medium px-2 py-1">{{ blog.category }}</span>
-                  <span
-                    class="badge badge-status fs-11 fw-medium px-2 py-1"
-                    :class="blog.status === 'Active' ? 'bg-success' : 'bg-secondary'"
-                  >
-                    • {{ blog.status }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Author and Date -->
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <div class="d-flex align-items-center text-muted small">
-                  <span class="me-3 d-flex align-items-center"> <i class="ti ti-calendar me-1"></i> {{ blog.date }} </span>
-                  <span class="border-start ps-2 d-flex align-items-center">
-                    <i class="ti ti-user me-1"></i> {{ blog.author }}
-                  </span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <button type="button" class="btn btn-sm btn-icon text-primary p-0" title="Edit" @click="openEditModal(blog)">
-                    <i class="ti ti-edit fs-16"></i>
-                  </button>
-                  <button type="button" class="btn btn-sm btn-icon text-danger p-0" title="Delete" @click="deleteBlog(blog.id)">
-                    <i class="ti ti-trash fs-16"></i>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Title and Excerpt -->
-              <h5 class="card-title mb-2">
-                <a href="javascript:void(0);" class="text-dark hover:text-primary text-decoration-none fw-semibold">
-                  {{ blog.title }}
-                </a>
-              </h5>
-              <p class="text-muted small flex-grow-1 line-clamp-2">{{ blog.excerpt }}</p>
-
-              <!-- Tags -->
-              <div class="d-flex flex-wrap gap-1 mt-2 pt-2 border-top">
-                <span v-for="tag in blog.tags" :key="tag" class="badge bg-light text-secondary border fs-11"> #{{ tag }} </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="filteredBlogs.length === 0" class="col-12 text-center py-5">
-          <i class="ti ti-article-off text-muted" style="font-size: 3rem"></i>
-          <p class="text-muted mt-2">No blogs found matching your criteria.</p>
-        </div>
+      <div v-if="filteredBlogs.length === 0" class="col-span-full py-10 text-center text-gray-400">
+        <p>No blogs found matching your criteria.</p>
       </div>
     </div>
 
     <!-- Add/Edit Blog Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5)" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ isEdit ? "Edit Blog" : "Add Blog" }}</h4>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+    <CommonBaseModal v-model="modalVisible" :title="isEdit ? 'Edit Blog' : 'Add Blog'" maxWidth="lg">
+      <form @submit.prevent="saveBlog" class="space-y-4">
+        <CommonFormField label="Image URL / Preview">
+          <div class="flex items-center gap-3">
+            <img
+              :src="form.image || 'https://assets.penguinrandomhouse.com/wp-content/uploads/2025/02/08160313/PRH_BooksBeforeYouDie-1200x628-1.jpg'"
+              alt="Preview"
+              class="h-[70px] w-[100px] rounded-md border border-gray-200 object-cover dark:border-gray-700"
+            />
+            <input
+              v-model="form.image"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="https://example.com/image.jpg"
+            />
           </div>
-          <form @submit.prevent="saveBlog">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-12">
-                  <label class="form-label">Image URL / Preview</label>
-                  <div class="d-flex gap-3 align-items-center mb-2">
-                    <img
-                      :src="
-                        form.image ||
-                        'https://assets.penguinrandomhouse.com/wp-content/uploads/2025/02/08160313/PRH_BooksBeforeYouDie-1200x628-1.jpg'
-                      "
-                      alt="Preview"
-                      class="rounded border object-fit-cover"
-                      style="width: 100px; height: 70px"
-                    />
-                    <div class="flex-grow-1">
-                      <input v-model="form.image" type="text" class="form-control" placeholder="https://example.com/image.jpg" />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">Blog Title <span class="text-danger">*</span></label>
-                  <input v-model="form.title" type="text" class="form-control" required placeholder="Enter blog title" />
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Category <span class="text-danger">*</span></label>
-                  <select v-model="form.category" class="form-select form-select-lg" required>
-                    <option value="Features">Features</option>
-                    <option value="Guide">Guide</option>
-                    <option value="Security">Security</option>
-                    <option value="Printing & Packaging">Printing & Packaging</option>
-                    <option value="Business Tips">Business Tips</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Tags (comma-separated)</label>
-                  <input v-model="tagsInput" type="text" class="form-control" placeholder="Retail, POS, Guide" />
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">Excerpt / Short Description</label>
-                  <textarea
-                    v-model="form.excerpt"
-                    rows="2"
-                    class="form-control"
-                    placeholder="Brief summary of article..."
-                  ></textarea>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">Content Description <span class="text-danger">*</span></label>
-                  <textarea
-                    v-model="form.content"
-                    rows="4"
-                    class="form-control"
-                    placeholder="Write blog content here..."
-                    required
-                  ></textarea>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="d-flex align-items-center mb-3">
-                    <label class="form-label mb-0 me-3">Status Active</label>
-                    <div class="form-check form-switch">
-                      <input
-                        v-model="formStatusBool"
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="blogStatusSwitch"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? "Update Blog" : "Submit Blog" }}
-              </button>
-            </div>
-          </form>
+        </CommonFormField>
+        <CommonFormField label="Blog Title" required>
+          <input
+            v-model="form.title"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            required
+            placeholder="Enter blog title"
+          />
+        </CommonFormField>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Category" required>
+            <select
+              v-model="form.category"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            >
+              <option value="Features">Features</option>
+              <option value="Guide">Guide</option>
+              <option value="Security">Security</option>
+              <option value="Printing & Packaging">Printing & Packaging</option>
+              <option value="Business Tips">Business Tips</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="Tags (comma-separated)">
+            <input
+              v-model="tagsInput"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              placeholder="Retail, POS, Guide"
+            />
+          </CommonFormField>
         </div>
-      </div>
-    </div>
+        <CommonFormField label="Excerpt / Short Description">
+          <textarea
+            v-model="form.excerpt"
+            rows="2"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Brief summary of article..."
+          ></textarea>
+        </CommonFormField>
+        <CommonFormField label="Content Description" required>
+          <textarea
+            v-model="form.content"
+            rows="4"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Write blog content here..."
+            required
+          ></textarea>
+        </CommonFormField>
+        <CommonToggleSwitch v-model="formStatusBool" label="Status Active" />
+        <CommonModalFooter :submit-label="isEdit ? 'Update Blog' : 'Submit Blog'" @cancel="closeModal" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
