@@ -1,251 +1,93 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Wishlist List</h4>
-            <h6>Manage customer wishlist items and product interests</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Wishlist List" subtitle="Manage customer wishlist items and product interests" />
+
+    <!-- Dashboard Metric Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Wishlist Value" :value="`Rp ${formatNumber(totalWishlistAmount)}`" icon="heart" tone="primary" />
+      <CommonStatCard label="Active Wishlists" :value="String(activeCount)" icon="check-circle" tone="success" />
+      <CommonStatCard label="Converted to Order" :value="String(checkoutCount)" icon="shopping-cart" tone="sky" />
+      <CommonStatCard label="Removed from Wishlist" :value="String(deleteCount)" icon="trash-2" tone="danger" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search product or user..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterCategory"
+            allLabel="All Categories"
+            :options="[
+              { value: 'Brochure', label: 'Brochure' },
+              { value: 'Flyer', label: 'Flyer' },
+              { value: 'Packaging', label: 'Packaging' },
+              { value: 'Stationery', label: 'Stationery' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Status"
+            :options="[
+              { value: 'Active', label: 'Active' },
+              { value: 'Checkout', label: 'Checkout' },
+              { value: 'Delete', label: 'Delete' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Dashboard Metric Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-heart fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Wishlist Value</h6>
-              <h4 class="fw-bold mb-0">Rp {{ formatNumber(totalWishlistAmount) }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash1 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-heart-check fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Active Wishlists</h6>
-              <h4 class="fw-bold mb-0">{{ activeCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash2 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-info bg-opacity-10 p-3 rounded">
-              <i class="ti ti-shopping-cart-check fs-2 text-info"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Converted to Order</h6>
-              <h4 class="fw-bold mb-0">{{ checkoutCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash3 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-danger bg-opacity-10 p-3 rounded">
-              <i class="ti ti-heart-broken fs-2 text-danger"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Removed from Wishlist</h6>
-              <h4 class="fw-bold mb-0">{{ deleteCount }}</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search product or user email..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" @click="catDropdownOpen = !catDropdownOpen">
-                  Category: {{ filterCategory || "All" }}
-                </button>
-                <ul v-if="catDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterCategory = '';
-                        catDropdownOpen = false;
-                      "
-                      >All Categories</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterCategory = 'Packaging';
-                        catDropdownOpen = false;
-                      "
-                      >Packaging</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterCategory = 'Brochure';
-                        catDropdownOpen = false;
-                      "
-                      >Brochure</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterCategory = 'Stationery';
-                        catDropdownOpen = false;
-                      "
-                      >Stationery</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || "All" }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = '';
-                        statusDropdownOpen = false;
-                      "
-                      >All Status</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = 'Active';
-                        statusDropdownOpen = false;
-                      "
-                      >Active</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = 'Checkout';
-                        statusDropdownOpen = false;
-                      "
-                      >Checkout</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="javascript:void(0);"
-                      @click="
-                        filterStatus = 'Delete';
-                        statusDropdownOpen = false;
-                      "
-                      >Delete</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive product-list">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Product</th>
-                  <th>User</th>
-                  <th>Category</th>
-                  <th class="text-end">Price</th>
-                  <th class="text-center">Qty</th>
-                  <th class="text-end">Total Price</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 80px">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="w in filteredWishlist" :key="w.id">
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <img
-                        :src="w.image"
-                        :alt="w.product"
-                        class="rounded me-2 border object-fit-cover"
-                        style="width: 44px; height: 44px"
-                      />
-                      <span class="fw-semibold text-dark">{{ w.product }}</span>
-                    </div>
-                  </td>
-                  <td>{{ w.user }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ w.category }}</span>
-                  </td>
-                  <td class="text-end">Rp {{ formatNumber(w.price) }}</td>
-                  <td class="text-center fw-bold">{{ w.qty }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(w.totalPrice) }}</td>
-                  <td>{{ w.date }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="{
-                        'badge-success': w.status === 'Active',
-                        'badge-info': w.status === 'Checkout',
-                        'badge-danger': w.status === 'Delete',
-                      }"
-                    >
-                      • {{ w.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete from wishlist"
-                        @click="deleteItem(w.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredWishlist.length === 0">
-                  <td colspan="9" class="text-center py-4 text-muted">No wishlist items found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">User</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Category</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Price</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Qty</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Total Price</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="w in filteredWishlist" :key="w.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center">
+                  <img :src="w.image" :alt="w.product" class="me-2 h-11 w-11 rounded border border-gray-200 object-cover dark:border-gray-700" />
+                  <span class="font-semibold text-gray-900 dark:text-gray-100">{{ w.product }}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ w.user }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ w.category }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">Rp {{ formatNumber(w.price) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center font-bold">{{ w.qty }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold text-gray-900 dark:text-gray-100">Rp {{ formatNumber(w.totalPrice) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ w.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill
+                  :status="w.status"
+                  :tone="w.status === 'Active' ? 'emerald' : w.status === 'Checkout' ? 'sky' : 'rose'"
+                />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">
+                <CommonRowActions :item="w" @delete="deleteItem(w.id)" />
+              </td>
+            </tr>
+            <tr v-if="filteredWishlist.length === 0">
+              <td colspan="9" class="p-8 text-center text-gray-400">No wishlist records found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -288,4 +130,5 @@ function deleteItem(id: number) {
   if (confirm("Delete this item from wishlist?")) {
     wishlist.value = wishlist.value.filter((w) => w.id !== id);
   }
-}</script>
+}
+</script>

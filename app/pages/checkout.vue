@@ -1,153 +1,83 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Checkout List</h4>
-            <h6>Manage completed and pending customer checkouts</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Checkout List" subtitle="Manage completed and pending customer checkouts" />
+
+    <!-- Dashboard Metric Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Checkout" :value="String(checkouts.length)" icon="shopping-cart" tone="primary" />
+      <CommonStatCard label="Total Revenue" :value="`Rp ${formatNumber(totalRevenue)}`" icon="dollar-sign" tone="success" />
+      <CommonStatCard label="Total Success" :value="String(successCount)" icon="check-circle" tone="sky" />
+      <CommonStatCard label="Total Failed" :value="String(failedCount)" icon="alert-triangle" tone="danger" />
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search customer or product details..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterMethod"
+            allLabel="Metode: All"
+            :options="[
+              { value: 'Kartu Kredit', label: 'Kartu Kredit' },
+              { value: 'Transfer Bank', label: 'Transfer Bank' },
+              { value: 'E-Wallet', label: 'E-Wallet' },
+              { value: 'Virtual Account', label: 'Virtual Account' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="Status: All"
+            :options="[
+              { value: 'Berhasil', label: 'Berhasil' },
+              { value: 'Gagal', label: 'Gagal' },
+            ]"
+          />
         </div>
       </div>
 
-      <!-- Dashboard Metric Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-primary bg-opacity-10 p-3 rounded">
-              <i class="ti ti-shopping-cart-check fs-2 text-primary"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Checkout</h6>
-              <h4 class="fw-bold mb-0">{{ checkouts.length }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash1 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-success bg-opacity-10 p-3 rounded">
-              <i class="ti ti-cash fs-2 text-success"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Revenue</h6>
-              <h4 class="fw-bold mb-0">Rp {{ formatNumber(totalRevenue) }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash2 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-info bg-opacity-10 p-3 rounded">
-              <i class="ti ti-circle-check fs-2 text-info"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Success</h6>
-              <h4 class="fw-bold mb-0">{{ successCount }}</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12 d-flex">
-          <div class="dash-widget dash3 w-100 shadow-sm border p-3 rounded bg-white d-flex align-items-center">
-            <div class="dash-widgetimg me-3 bg-danger bg-opacity-10 p-3 rounded">
-              <i class="ti ti-alert-triangle fs-2 text-danger"></i>
-            </div>
-            <div class="dash-widgetcontent">
-              <h6 class="text-muted small mb-1">Total Failed</h6>
-              <h4 class="fw-bold mb-0">{{ failedCount }}</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search customer or product details..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="methodDropdownOpen = !methodDropdownOpen"
-                >
-                  Metode: {{ filterMethod || 'All' }}
-                </button>
-                <ul v-if="methodDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterMethod = ''; methodDropdownOpen = false">All Methods</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterMethod = 'Kartu Kredit'; methodDropdownOpen = false">Kartu Kredit</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterMethod = 'Transfer Bank'; methodDropdownOpen = false">Transfer Bank</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterMethod = 'E-Wallet'; methodDropdownOpen = false">E-Wallet</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterMethod = 'Virtual Account'; methodDropdownOpen = false">Virtual Account</a></li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || 'All' }}
-                </button>
-                <ul v-if="statusDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = ''; statusDropdownOpen = false">All Status</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Berhasil'; statusDropdownOpen = false">Berhasil</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterStatus = 'Gagal'; statusDropdownOpen = false">Gagal</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive product-list">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>User</th>
-                  <th>Date Checkout</th>
-                  <th class="text-end">Payment Amount</th>
-                  <th>Metode</th>
-                  <th>Status</th>
-                  <th>Voucher</th>
-                  <th class="text-end">Delivery Fee</th>
-                  <th>Detail Product</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredCheckouts" :key="item.id">
-                  <td class="fw-semibold text-dark">{{ item.user }}</td>
-                  <td>{{ item.date }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(item.amount) }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ item.method }}</span>
-                  </td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="item.status === 'Berhasil' ? 'badge-success' : 'badge-danger'"
-                    >
-                      • {{ item.status }}
-                    </span>
-                  </td>
-                  <td>
-                    <span v-if="item.voucher !== '-'" class="badge bg-warning text-dark font-monospace">{{ item.voucher }}</span>
-                    <span v-else class="text-muted">-</span>
-                  </td>
-                  <td class="text-end">{{ item.deliveryFee > 0 ? `Rp ${formatNumber(item.deliveryFee)}` : '-' }}</td>
-                  <td class="small text-muted text-wrap" style="max-width: 250px;">{{ item.details }}</td>
-                </tr>
-                <tr v-if="filteredCheckouts.length === 0">
-                  <td colspan="8" class="text-center py-4 text-muted">
-                    No checkout records found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">User</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date Checkout</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Payment Amount</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Metode</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Voucher</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Delivery Fee</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Detail Product</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredCheckouts" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ item.user }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold text-gray-900 dark:text-gray-100">Rp {{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ item.method }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="item.status" :tone="item.status === 'Berhasil' ? 'emerald' : 'rose'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span v-if="item.voucher !== '-'" class="inline-flex rounded-md bg-amber-100 px-2 py-0.5 font-mono text-[11px] text-amber-800 dark:bg-amber-950 dark:text-amber-300">{{ item.voucher }}</span>
+                <span v-else class="text-gray-400">-</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">{{ item.deliveryFee > 0 ? `Rp ${formatNumber(item.deliveryFee)}` : '-' }}</td>
+              <td class="max-w-[250px] truncate px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.details }}</td>
+            </tr>
+            <tr v-if="filteredCheckouts.length === 0">
+              <td colspan="8" class="p-8 text-center text-gray-400">No checkout records found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -187,5 +117,5 @@ const filteredCheckouts = computed(() => {
 
 function formatNumber(val: number) {
   return val.toLocaleString('id-ID')
-}</script>
-
+}
+</script>
