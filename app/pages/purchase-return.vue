@@ -1,287 +1,279 @@
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Purchase Return List</h4>
-          <h6>Manage your Returns</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Purchase Return List" subtitle="Manage your Returns">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="printList"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printList"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add Purchase Return</span>
+          </button>
         </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printList">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printList">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-      <div class="page-btn">
-        <a href="#" class="btn btn-added" @click.prevent="openAddModal">
-          <i class="feather-plus-circle me-2"></i>Add Purchase Return
-        </a>
-      </div>
-    </div>
+      </template>
+    </CommonPageHeader>
 
     <!-- Purchase Return Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <!-- Filter -->
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <!-- Search Input -->
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input v-model="searchQuery" type="text" placeholder="Search..." class="form-control form-control-sm" />
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonSearchFilter v-model="searchQuery" placeholder="Search..." />
+
+          <!-- Date Range Picker (custom) -->
+          <div class="relative">
+            <input
+              type="text"
+              readonly
+              placeholder="Date"
+              :value="selectedDateRangeLabel"
+              class="w-full h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-3 pe-4 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              @click="showDateDropdown = !showDateDropdown"
+            />
+            <div
+              v-if="showDateDropdown"
+              class="absolute z-20 mt-1 w-48 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            >
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('kemarin')">Kemarin</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('7hari')">7 Hari Terakhir</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanIni')">Bulan Ini</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" @click="setDateRange('semua')">Semua</div>
             </div>
-            <!-- Date Range -->
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
+          </div>
+        </div>
+
+        <CommonFilterSelect
+          v-model="statusFilter"
+          allLabel="Status: All"
+          :options="[
+            { value: 'Refunded', label: 'Refunded' },
+            { value: 'Pending', label: 'Pending' },
+            { value: 'Cancel', label: 'Cancel' },
+          ]"
+        />
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No PR</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Created</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Purchase</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Supplier</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount (IDR)</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Paid (IDR)</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Due (IDR)</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status By</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredReturns" :key="item.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.noPR }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.created }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ item.noPurchase }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.supplier }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end text-emerald-600 dark:text-emerald-400">{{ formatNumber(item.paid) }}</td>
+              <td :class="item.due > 0 ? 'px-4 py-3 whitespace-nowrap text-end text-rose-600 dark:text-rose-400' : 'px-4 py-3 whitespace-nowrap text-end text-gray-400'">
+                {{ formatNumber(item.due) }}
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill
+                  :status="item.status || '-'"
+                  :tone="item.status === 'Refunded' ? 'emerald' : item.status === 'Pending' ? 'amber' : item.status === 'Cancel' ? 'rose' : 'slate'"
                 />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('tahunLalu')">Tahun Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="filters d-flex justify-content-end gap-2">
-            <div class="dropdown">
-              <button
-                class="btn btn-outline-primary dropdown-toggle btn-sm"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {{ statusFilter || "Status" }}
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = ''">All Status</a></li>
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = 'Refunded'">Refunded</a></li>
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = 'Pending'">Pending</a></li>
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = 'Cancel'">Cancel</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- /Filter -->
-
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>No PR</th>
-                <th>Date</th>
-                <th>Created</th>
-                <th>No Purchase</th>
-                <th>Supplier</th>
-                <th>Amount (IDR)</th>
-                <th>Paid (IDR)</th>
-                <th>Due (IDR)</th>
-                <th>Status</th>
-                <th>Status By</th>
-                <th class="no-sort">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredReturns" :key="item.id">
-                <td class="fw-bold">{{ item.noPR }}</td>
-                <td>{{ item.date }}</td>
-                <td>{{ item.created }}</td>
-                <td>{{ item.noPurchase }}</td>
-                <td>{{ item.supplier }}</td>
-                <td class="fw-semibold">{{ formatNumber(item.amount) }}</td>
-                <td class="text-success">{{ formatNumber(item.paid) }}</td>
-                <td :class="item.due > 0 ? 'text-danger' : 'text-muted'">{{ formatNumber(item.due) }}</td>
-                <td>
-                  <span
-                    class="badge"
-                    :class="{
-                      'bg-outline-success': item.status === 'Refunded',
-                      'bg-outline-warning': item.status === 'Pending',
-                      'bg-outline-danger': item.status === 'Cancel',
-                    }"
-                  >
-                    {{ item.status || "-" }}
-                  </span>
-                </td>
-                <td>{{ item.statusBy || "-" }}</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action d-flex align-items-center gap-1">
-                    <NuxtLink class="p-2 text-primary" to="/purchase-return-detail" title="View Detail">
-                      <i class="feather-eye"></i>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.statusBy || "-" }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" @edit="openEditModal(item)" @delete="deleteReturn(item)">
+                  <template #extra>
+                    <NuxtLink
+                      to="/purchase-return-detail"
+                      title="View Detail"
+                      class="rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-sky-500 dark:hover:bg-gray-800"
+                    >
+                      <CommonFeatherIcon name="eye" size="16" />
                     </NuxtLink>
-                    <a class="p-2 text-info cursor-pointer" @click.prevent="openEditModal(item)" title="Edit">
-                      <i class="feather-edit"></i>
-                    </a>
-                    <a class="p-2 text-danger cursor-pointer" @click.prevent="deleteReturn(item)" title="Delete">
-                      <i class="feather-trash-2"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="filteredReturns.length === 0">
-                <td colspan="11" class="text-center py-4 text-muted">No purchase returns found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  </template>
+                </CommonRowActions>
+              </td>
+            </tr>
+            <tr v-if="filteredReturns.length === 0">
+              <td colspan="11" class="p-8 text-center text-gray-400">No purchase returns found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Add/Edit Purchase Return Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">{{ isEdit ? "Edit Purchase Return" : "Add Purchase Return" }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
+    <CommonBaseModal v-model="showModal" :title="isEdit ? 'Edit Purchase Return' : 'Add Purchase Return'" maxWidth="xl">
+      <form @submit.prevent="saveReturn" class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <CommonFormField label="Supplier">
+            <select
+              v-model="formData.supplier"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option>PT Kertas Jaya</option>
+              <option>PT Cipta Kreasi</option>
+              <option>Global Inkindo</option>
+              <option>Indo Material</option>
+            </select>
+          </CommonFormField>
+          <CommonFormField label="No Purchase Return">
+            <input
+              v-model="formData.noPR"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+          <CommonFormField label="No Purchase Order / Ref">
+            <input
+              v-model="formData.noPurchase"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+          <CommonFormField label="Date">
+            <input
+              type="date"
+              v-model="formData.date"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+        </div>
+
+        <!-- Return Items -->
+        <div>
+          <h5 class="mb-3 text-sm font-bold text-gray-800 dark:text-gray-200">Return Items</h5>
+          <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+            <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+              <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+                <tr>
+                  <th class="px-3 py-2 text-start">Product Name</th>
+                  <th class="w-16 px-3 py-2 text-center">Qty</th>
+                  <th class="w-24 px-3 py-2 text-center">Qty Return</th>
+                  <th class="w-16 px-3 py-2 text-center">Unit</th>
+                  <th class="w-32 px-3 py-2 text-end">Price</th>
+                  <th class="w-32 px-3 py-2 text-end">Amount</th>
+                  <th class="w-52 px-3 py-2">Description of return</th>
+                  <th class="w-10 px-3 py-2"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                <tr v-for="(item, idx) in returnItems" :key="idx">
+                  <td class="px-3 py-1.5">
+                    <input
+                      v-model="item.name"
+                      type="text"
+                      class="w-full h-8 rounded-md border border-gray-200 bg-white px-2.5 text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    />
+                  </td>
+                  <td class="px-3 py-1.5 text-center">{{ item.qty }}</td>
+                  <td class="px-3 py-1.5">
+                    <input
+                      v-model.number="item.qtyReturn"
+                      type="number"
+                      min="1"
+                      class="w-full h-8 rounded-md border border-gray-200 bg-white px-2 text-center text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    />
+                  </td>
+                  <td class="px-3 py-1.5 text-center">{{ item.unit }}</td>
+                  <td class="px-3 py-1.5">
+                    <input
+                      v-model.number="item.price"
+                      type="number"
+                      class="w-full h-8 rounded-md border border-gray-200 bg-white px-2 text-end text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    />
+                  </td>
+                  <td class="px-3 py-1.5 text-end font-bold">{{ formatNumber(item.qtyReturn * item.price) }}</td>
+                  <td class="px-3 py-1.5">
+                    <input
+                      v-model="item.reason"
+                      type="text"
+                      class="w-full h-8 rounded-md border border-gray-200 bg-white px-2.5 text-xs text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                      placeholder="Reason..."
+                    />
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <button type="button" class="rounded p-1 text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-950" @click="removeItem(idx)">
+                      <CommonFeatherIcon name="trash-2" size="14" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="modal-body p-4">
-            <form @submit.prevent="saveReturn">
-              <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                  <label class="form-label small fw-bold">Supplier</label>
-                  <select class="form-select form-select-sm" v-model="formData.supplier">
-                    <option>PT Kertas Jaya</option>
-                    <option>PT Cipta Kreasi</option>
-                    <option>Global Inkindo</option>
-                    <option>Indo Material</option>
-                  </select>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label small fw-bold">No Purchase Return</label>
-                  <input type="text" class="form-control form-control-sm" v-model="formData.noPR" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label small fw-bold">No Purchase Order / Ref</label>
-                  <input type="text" class="form-control form-control-sm" v-model="formData.noPurchase" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label small fw-bold">Date</label>
-                  <input type="date" class="form-control form-control-sm" v-model="formData.date" />
-                </div>
-              </div>
+          <button
+            type="button"
+            class="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary hover:text-white"
+            @click="addItem"
+          >
+            <CommonFeatherIcon name="plus" size="14" />
+            Add Return Item
+          </button>
+        </div>
 
-              <!-- Return Items Table -->
-              <h5 class="fw-bold mb-3">Return Items</h5>
-              <div class="table-responsive mb-3">
-                <table class="table table-bordered align-middle">
-                  <thead>
-                    <tr>
-                      <th>Product Name</th>
-                      <th style="width: 80px" class="text-center">Qty</th>
-                      <th style="width: 120px" class="text-center">Qty Return</th>
-                      <th style="width: 80px" class="text-center">Unit</th>
-                      <th style="width: 140px" class="text-end">Price</th>
-                      <th style="width: 140px" class="text-end">Amount</th>
-                      <th style="width: 220px">Description of return</th>
-                      <th style="width: 40px"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, idx) in returnItems" :key="idx">
-                      <td>
-                        <input type="text" class="form-control form-control-sm" v-model="item.name" />
-                      </td>
-                      <td class="text-center">{{ item.qty }}</td>
-                      <td>
-                        <input
-                          type="number"
-                          class="form-control form-control-sm text-center"
-                          v-model.number="item.qtyReturn"
-                          min="1"
-                        />
-                      </td>
-                      <td class="text-center">{{ item.unit }}</td>
-                      <td>
-                        <input type="number" class="form-control form-control-sm text-end" v-model.number="item.price" />
-                      </td>
-                      <td class="text-end fw-bold">
-                        {{ formatNumber(item.qtyReturn * item.price) }}
-                      </td>
-                      <td>
-                        <input type="text" class="form-control form-control-sm" v-model="item.reason" placeholder="Reason..." />
-                      </td>
-                      <td class="text-center">
-                        <a href="javascript:void(0);" class="text-danger" @click="removeItem(idx)">
-                          <i class="feather-trash-2"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <button type="button" class="btn btn-outline-primary btn-sm mb-4" @click="addItem">
-                <i class="feather-plus-circle me-1"></i> Add Return Item
-              </button>
-
-              <!-- Bank & Totals -->
-              <div class="row mt-3">
-                <div class="col-sm-7">
-                  <p class="small mb-1"><strong>Refund To Bank</strong> : Bank BCA PT Dulank Semesta Cida - 1091956271</p>
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label small fw-bold">Payment Return Status</label>
-                    <select class="form-select form-select-sm" v-model="formData.status">
-                      <option>Refunded</option>
-                      <option>Pending</option>
-                      <option>Cancel</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-sm-5">
-                  <div class="float-end" style="min-width: 240px">
-                    <div class="d-flex justify-content-between fw-bold">
-                      <div>Sub Total</div>
-                      <div>Rp. {{ formatNumber(subTotal) }}</div>
-                    </div>
-                    <div class="d-flex justify-content-between fw-bold mt-2">
-                      <div>Tax (PPN 11%)</div>
-                      <div>0</div>
-                    </div>
-                    <div class="d-flex justify-content-between fw-bold mt-2 pt-2 border-top text-primary fs-5">
-                      <div>Total</div>
-                      <div>Rp. {{ formatNumber(subTotal) }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Footer -->
-              <div class="modal-footer modal-action-footer justify-content-end p-0 pt-3 border-top gap-2 mt-4">
-                <button type="button" class="btn btn-dark" @click="showModal = false">Cancel</button>
-                <button type="submit" class="btn btn-warning text-white fw-bold">Submit</button>
-              </div>
-            </form>
+        <!-- Bank & Totals -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <p class="mb-1 text-xs font-bold text-gray-700 dark:text-gray-300">Refund To Bank : Bank BCA PT Dulank Semesta Cida - 1091956271</p>
+            <CommonFormField label="Payment Return Status">
+              <select
+                v-model="formData.status"
+                class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option>Refunded</option>
+                <option>Pending</option>
+                <option>Cancel</option>
+              </select>
+            </CommonFormField>
+          </div>
+          <div class="space-y-2 rounded-lg border border-gray-100 p-3 dark:border-gray-800 sm:max-w-[260px] sm:ms-auto">
+            <div class="flex justify-between text-sm font-bold text-gray-800 dark:text-gray-200">
+              <span>Sub Total</span><span>Rp. {{ formatNumber(subTotal) }}</span>
+            </div>
+            <div class="flex justify-between text-sm font-bold text-gray-800 dark:text-gray-200">
+              <span>Tax (PPN 11%)</span><span>0</span>
+            </div>
+            <div class="flex justify-between border-t border-gray-100 pt-2 text-base font-bold text-primary dark:border-gray-800">
+              <span>Total</span><span>Rp. {{ formatNumber(subTotal) }}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+
+        <CommonModalFooter @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -404,6 +396,5 @@ const printList = () => {
 const toggleHeader = () => {
   // header toggle
 };
-</script>
-
 useMockSync('purchase-return', returns);
+</script>
