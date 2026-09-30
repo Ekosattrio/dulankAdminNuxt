@@ -1,190 +1,206 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>User List</h4>
-            <h6>Manage Your Users</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="User List" subtitle="Manage Your Users">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none"
+            @click="openAddModal"
+          >
+            <CommonFeatherIcon name="plus" size="18" />
+            <span>Add New User</span>
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New User</button>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search Customer or Email..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="selectedRole"
+            allLabel="All Roles"
+            :options="[
+              { value: 'Admin', label: 'Admin' },
+              { value: 'Manager', label: 'Manager' },
+              { value: 'Sales', label: 'Sales' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="selectedStatus"
+            allLabel="All Statuses"
+            :options="[
+              { value: 'Active Member', label: 'Active Member' },
+              { value: 'Suspended', label: 'Suspended' },
+            ]"
+          />
         </div>
       </div>
 
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input position-relative">
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search Customer or Email..." />
-              </div>
-            </div>
-            <div class="filters d-flex justify-content-end gap-2">
-              <select v-model="selectedRole" class="form-select form-select-sm" style="min-width: 120px">
-                <option value="">All Roles</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Sales">Sales</option>
-              </select>
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="min-width: 140px">
-                <option value="">All Statuses</option>
-                <option value="Active Member">Active Member</option>
-                <option value="Suspended">Suspended</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead>
-                <tr>
-                  <th>Customer Id</th>
-                  <th>Email</th>
-                  <th>Customer Name</th>
-                  <th>Verified Email</th>
-                  <th>Subscription</th>
-                  <th>Status</th>
-                  <th class="text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(user, idx) in filteredUsers" :key="idx">
-                  <td class="fw-semibold text-primary">{{ user.id }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.name }}</td>
-                  <td>
-                    <span :class="user.verified ? 'badge bg-outline-success' : 'badge bg-outline-danger'">
-                      {{ user.verified ? "Active" : "No" }}
-                    </span>
-                  </td>
-                  <td>
-                    <span :class="user.subscription ? 'badge bg-outline-success' : 'badge bg-outline-danger'">
-                      {{ user.subscription ? "Yes" : "No" }}
-                    </span>
-                  </td>
-                  <td>
-                    <select v-model="user.status" class="form-select form-select-sm" style="width: 140px">
-                      <option value="Active Member">Active Member</option>
-                      <option value="Suspended">Suspended</option>
-                    </select>
-                  </td>
-                  <td class="text-end">
-                    <div class="d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(user)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteUser(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredUsers.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">No users found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit User Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? "Edit User" : "Add User" }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveUser">
-                <div class="row g-3">
-                  <div class="col-lg-12">
-                    <div class="new-employee-field">
-                      <span class="fw-semibold d-block mb-1">Avatar</span>
-                      <div class="profile-pic-upload mb-2 d-flex align-items-center gap-3">
-                        <div class="profile-pic border rounded-circle overflow-hidden" style="width: 60px; height: 60px">
-                          <img
-                            :src="currentUser.avatar || '/assets/img/users/user-01.jpg'"
-                            alt="User"
-                            style="width: 100%; height: 100%; object-fit: cover"
-                          />
-                        </div>
-                        <div>
-                          <label class="btn btn-sm btn-outline-secondary mb-0">
-                            Change Image
-                            <input type="file" class="d-none" accept="image/*" @change="onAvatarChange" />
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">User Name</label>
-                    <input v-model="currentUser.name" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Phone</label>
-                    <input v-model="currentUser.phone" type="text" class="form-control" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Email</label>
-                    <input v-model="currentUser.email" type="email" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Role</label>
-                    <select v-model="currentUser.role" class="form-select">
-                      <option value="Admin">Admin</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Sales">Sales</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Password</label>
-                    <input v-model="currentUser.password" type="password" class="form-control" :required="!isEditing" />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Confirm Password</label>
-                    <input v-model="currentUser.confirmPassword" type="password" class="form-control" :required="!isEditing" />
-                  </div>
-                  <div class="col-lg-12">
-                    <label class="form-label">Descriptions</label>
-                    <textarea
-                      v-model="currentUser.descriptions"
-                      class="form-control"
-                      rows="3"
-                      placeholder="Type message..."
-                    ></textarea>
-                  </div>
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end mt-4 pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer Id</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Email</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer Name</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Verified Email</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Subscription</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="(user, idx) in filteredUsers" :key="idx" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-primary">{{ user.id }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ user.email }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">{{ user.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="user.verified ? 'Active' : 'No'" :tone="user.verified ? 'emerald' : 'rose'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="user.subscription ? 'Yes' : 'No'" :tone="user.subscription ? 'emerald' : 'rose'" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <select
+                  v-model="user.status"
+                  class="h-8 rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                >
+                  <option value="Active Member">Active Member</option>
+                  <option value="Suspended">Suspended</option>
+                </select>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="user" @edit="openEditModal(user)" @delete="deleteUser(idx)" />
+              </td>
+            </tr>
+            <tr v-if="filteredUsers.length === 0">
+              <td colspan="7" class="p-8 text-center text-gray-400">No users found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Add/Edit User Modal -->
+    <CommonBaseModal v-model="showModal" :title="isEditing ? 'Edit User' : 'Add User'" maxWidth="lg">
+      <form @submit.prevent="saveUser" class="space-y-4">
+        <!-- Avatar -->
+        <div>
+          <span class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Avatar</span>
+          <div class="mb-2 flex items-center gap-3">
+            <div class="h-[60px] w-[60px] overflow-hidden rounded-full border border-gray-200 dark:border-gray-700">
+              <img
+                :src="currentUser.avatar || '/assets/img/users/user-01.jpg'"
+                alt="User"
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <label class="cursor-pointer rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+              Change Image
+              <input type="file" class="hidden" accept="image/*" @change="onAvatarChange" />
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="User Name" required>
+            <input
+              v-model="currentUser.name"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Phone">
+            <input
+              v-model="currentUser.phone"
+              type="text"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            />
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Email" required>
+            <input
+              v-model="currentUser.email"
+              type="email"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              required
+            />
+          </CommonFormField>
+          <CommonFormField label="Role">
+            <select
+              v-model="currentUser.role"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Sales">Sales</option>
+            </select>
+          </CommonFormField>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <CommonFormField label="Password">
+            <input
+              v-model="currentUser.password"
+              type="password"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              :required="!isEditing"
+            />
+          </CommonFormField>
+          <CommonFormField label="Confirm Password">
+            <input
+              v-model="currentUser.confirmPassword"
+              type="password"
+              class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              :required="!isEditing"
+            />
+          </CommonFormField>
+        </div>
+        <CommonFormField label="Descriptions">
+          <textarea
+            v-model="currentUser.descriptions"
+            rows="3"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            placeholder="Type message..."
+          ></textarea>
+        </CommonFormField>
+        <CommonModalFooter submitLabel="Submit" @cancel="showModal = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -291,4 +307,5 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapse
-};</script>
+};
+</script>

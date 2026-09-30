@@ -1,198 +1,152 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Orders List</h4>
-            <h6>Manage sales orders, execution workflows, and fulfillment tracking</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Orders List" subtitle="Manage sales orders, execution workflows, and fulfillment tracking">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
+      </template>
+    </CommonPageHeader>
+
+    <!-- KPI Widgets -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Orders" value="307,144" icon="shopping-cart" tone="primary" />
+      <CommonStatCard label="Total Customers" value="4,385" icon="users" tone="sky" />
+      <CommonStatCard label="Total Complete" value="3,000" icon="check-circle" tone="success" />
+      <CommonStatCard label="Total Cancel" value="1,385" icon="x-circle" tone="danger" />
+    </div>
+
+    <!-- Table List Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search order number or customer..." />
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonFilterSelect
+            v-model="filterShipping"
+            allLabel="All Shipping"
+            :options="[
+              { value: 'Pickup', label: 'Pickup' },
+              { value: 'Courier', label: 'Courier' },
+              { value: 'Express', label: 'Express' },
+            ]"
+          />
+          <CommonFilterSelect
+            v-model="filterStatus"
+            allLabel="All Statuses"
+            :options="[
+              { value: 'Complete', label: 'Complete' },
+              { value: 'Processing', label: 'Processing' },
+              { value: 'Waiting', label: 'Waiting' },
+              { value: 'Cancel', label: 'Cancel' },
+            ]"
+          />
+        </div>
       </div>
 
-      <!-- KPI Widgets -->
-      <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-sm-6">
-          <div class="card p-3 border-0 shadow-sm d-flex flex-row align-items-center gap-3">
-            <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3">
-              <i class="ti ti-shopping-cart fs-3"></i>
-            </div>
-            <div>
-              <div class="text-muted small">Total Orders</div>
-              <h4 class="mb-0 fw-bold">307,144</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-          <div class="card p-3 border-0 shadow-sm d-flex flex-row align-items-center gap-3">
-            <div class="p-3 bg-info bg-opacity-10 text-info rounded-3">
-              <i class="ti ti-users fs-3"></i>
-            </div>
-            <div>
-              <div class="text-muted small">Total Customers</div>
-              <h4 class="mb-0 fw-bold">4,385</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-          <div class="card p-3 border-0 shadow-sm d-flex flex-row align-items-center gap-3">
-            <div class="p-3 bg-success bg-opacity-10 text-success rounded-3">
-              <i class="ti ti-circle-check fs-3"></i>
-            </div>
-            <div>
-              <div class="text-muted small">Total Complete</div>
-              <h4 class="mb-0 fw-bold">3,000</h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-          <div class="card p-3 border-0 shadow-sm d-flex flex-row align-items-center gap-3">
-            <div class="p-3 bg-danger bg-opacity-10 text-danger rounded-3">
-              <i class="ti ti-circle-x fs-3"></i>
-            </div>
-            <div>
-              <div class="text-muted small">Total Cancel</div>
-              <h4 class="mb-0 fw-bold">1,385</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table List Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search order number or customer..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="filterShipping" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Shipping</option>
-                <option value="Pickup">Pickup</option>
-                <option value="Courier">Courier</option>
-                <option value="Express">Express</option>
-              </select>
-              <select v-model="filterStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">All Statuses</option>
-                <option value="Complete">Complete</option>
-                <option value="Processing">Processing</option>
-                <option value="Waiting">Waiting</option>
-                <option value="Cancel">Cancel</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive mb-4">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>No Order</th>
-                  <th>Customer</th>
-                  <th>Order Date</th>
-                  <th>Order Status</th>
-                  <th>Status By</th>
-                  <th>Sales Channel</th>
-                  <th>Shipping</th>
-                  <th class="text-center" style="width: 250px">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="order in filteredOrders" :key="order.id">
-                  <td class="fw-bold text-primary">{{ order.orderNo }}</td>
-                  <td class="fw-semibold text-dark">{{ order.customer }}</td>
-                  <td>{{ order.date }}</td>
-                  <td>
-                    <span :class="getStatusClass(order.status)">{{ order.status }}</span>
-                  </td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ order.statusBy }}</span>
-                  </td>
-                  <td>{{ order.salesChannel }}</td>
-                  <td>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary border">{{ order.shipping }}</span>
-                  </td>
-                  <td class="text-center action-table-data">
-                    <div class="d-inline-flex gap-1 flex-wrap justify-content-center">
-                      <NuxtLink to="/job-order-detail" class="btn btn-sm btn-info text-white py-0 px-2" style="font-size: 11px">
-                        Detail
-                      </NuxtLink>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-success text-white py-0 px-2"
-                        style="font-size: 11px"
-                        @click="openStatusModal(order)"
-                      >
-                        Status
-                      </button>
-                      <NuxtLink
-                        to="/edit-job-order"
-                        class="btn btn-sm btn-secondary text-white py-0 px-2"
-                        style="font-size: 11px"
-                      >
-                        Add Job Order
-                      </NuxtLink>
-                      <NuxtLink to="/edit-job-order" class="btn btn-sm btn-warning text-white py-0 px-2" style="font-size: 11px">
-                        Edit Job Order
-                      </NuxtLink>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredOrders.length === 0">
-                  <td colspan="8" class="text-center py-4 text-muted">No orders match the selected filters.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">No Order</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Customer</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Order Date</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Order Status</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status By</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Sales Channel</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Shipping</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="order in filteredOrders" :key="order.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-primary">{{ order.orderNo }}</td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ order.customer }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ order.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <CommonStatusPill :status="order.status" />
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ order.statusBy }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ order.salesChannel }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ order.shipping }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex flex-wrap items-center justify-center gap-1.5">
+                  <NuxtLink to="/job-order-detail" class="rounded-md bg-sky-500 px-2 py-1 text-[11px] font-medium text-white transition hover:bg-sky-600">Detail</NuxtLink>
+                  <button
+                    type="button"
+                    class="rounded-md bg-emerald-500 px-2 py-1 text-[11px] font-medium text-white transition hover:bg-emerald-600"
+                    @click="openStatusModal(order)"
+                  >
+                    Status
+                  </button>
+                  <NuxtLink to="/edit-job-order" class="rounded-md bg-gray-500 px-2 py-1 text-[11px] font-medium text-white transition hover:bg-gray-600">Add Job Order</NuxtLink>
+                  <NuxtLink to="/edit-job-order" class="rounded-md bg-amber-500 px-2 py-1 text-[11px] font-medium text-white transition hover:bg-amber-600">Edit Job Order</NuxtLink>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="filteredOrders.length === 0">
+              <td colspan="8" class="p-8 text-center text-gray-400">No orders match the selected filters.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Update Status Modal -->
-    <div v-if="statusModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="modal-title font-bold">Update Order Status: {{ selectedOrder?.orderNo }}</h5>
-            <button type="button" class="btn-close" @click="statusModalVisible = false"></button>
-          </div>
-          <form @submit.prevent="updateStatus">
-            <div class="modal-body pt-0" v-if="selectedOrder">
-              <div class="mb-3">
-                <label class="form-label">Order Status</label>
-                <select v-model="newStatus" class="form-select">
-                  <option value="Waiting">Waiting</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Complete">Complete</option>
-                  <option value="Cancel">Cancel</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Status Updated By</label>
-                <input v-model="statusBy" type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" @click="statusModalVisible = false">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Status</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <CommonBaseModal v-model="statusModalVisible" :title="`Update Order Status: ${selectedOrder?.orderNo ?? ''}`" maxWidth="md">
+      <form v-if="selectedOrder" @submit.prevent="updateStatus" class="space-y-4">
+        <CommonFormField label="Order Status">
+          <select
+            v-model="newStatus"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="Waiting">Waiting</option>
+            <option value="Processing">Processing</option>
+            <option value="Complete">Complete</option>
+            <option value="Cancel">Cancel</option>
+          </select>
+        </CommonFormField>
+        <CommonFormField label="Status Updated By">
+          <input
+            v-model="statusBy"
+            type="text"
+            class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          />
+        </CommonFormField>
+        <CommonModalFooter submitLabel="Save Status" @cancel="statusModalVisible = false" />
+      </form>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -262,4 +216,5 @@ function refresh() {
   searchQuery.value = "";
   filterShipping.value = "";
   filterStatus.value = "";
-}</script>
+}
+</script>
