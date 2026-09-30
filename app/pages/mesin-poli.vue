@@ -1,91 +1,88 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Hot Stamping / Poly Machines (Marketplace)</h4>
-            <h6>Network directory of foil stamping and deboss capabilities</h6>
-          </div>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Mesin Poli / Foil (Vendor)" subtitle="Manage hot print & foil machine rates from partners">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="exportPdf"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printTable"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refresh"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <NuxtLink to="/mesin-poli-self" class="btn btn-outline-primary me-2">
-            <i class="ti ti-building-warehouse me-1"></i>Kelola Mesin Poli Sendiri
-          </NuxtLink>
-        </div>
+      </template>
+    </CommonPageHeader>
+
+    <!-- Data Table Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-5">
+        <CommonSearchFilter v-model="searchQuery" placeholder="Search poly/foil type or partner..." />
       </div>
 
-      <!-- Data Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search foil type or partner..." />
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive mb-4">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th>Sumber Percetakan</th>
-                  <th>Nama Poly / Foil</th>
-                  <th>Ukuran Max</th>
-                  <th class="text-end">Tarif per cm²</th>
-                  <th class="text-end">Ongkos Minim</th>
-                  <th>Last Update</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="p in filteredPolis" :key="p.id">
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <img
-                        :src="p.avatar"
-                        :alt="p.sumber"
-                        class="rounded-circle me-2 border object-fit-cover"
-                        style="width: 34px; height: 34px"
-                      />
-                      <div>
-                        <span class="fw-semibold text-dark d-block">{{ p.sumber }}</span>
-                        <span class="text-muted fs-11">{{ p.lokasi }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="fw-bold text-dark">{{ p.name }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border font-monospace">{{ p.maxSize }}</span>
-                  </td>
-                  <td class="text-end fw-semibold">Rp {{ formatNumber(p.rateCm) }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(p.minim) }}</td>
-                  <td>{{ p.update }}</td>
-                  <td>
-                    <span class="badge bg-success me-1">Publish</span>
-                    <span class="badge bg-info">Active</span>
-                  </td>
-                </tr>
-                <tr v-if="filteredPolis.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">No hot stamping services found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Sumber Percetakan</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Nama Poly / Foil</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Ukuran Max</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Tarif per cm²</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Ongkos Minim</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Last Update</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="p in filteredPolis" :key="p.id" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex items-center">
+                  <img :src="p.avatar" :alt="p.sumber" class="me-2 h-9 w-9 rounded-full border border-gray-200 object-cover dark:border-gray-700" />
+                  <div>
+                    <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ p.sumber }}</span>
+                    <span class="block text-[11px] text-gray-400">{{ p.lokasi }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ p.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-flex rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 font-mono text-[11px] text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{{ p.maxSize }}</span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-semibold">Rp {{ formatNumber(p.rateCm) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold text-gray-900 dark:text-gray-100">Rp {{ formatNumber(p.minim) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ p.update }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <div class="flex gap-1.5">
+                  <CommonStatusPill status="Publish" tone="emerald" />
+                  <CommonStatusPill status="Active" tone="sky" />
+                </div>
+              </td>
+            </tr>
+            <tr v-if="filteredPolis.length === 0">
+              <td colspan="7" class="p-8 text-center text-gray-400">No poly/foil machines found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -123,4 +120,5 @@ function printTable() {
 
 function refresh() {
   searchQuery.value = "";
-}</script>
+}
+</script>
