@@ -1,100 +1,98 @@
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Expense Report</h4>
-          <h6>Manage your Expense Report</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Expense Report" subtitle="Manage your Expense Report">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refreshReport"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+      </template>
+    </CommonPageHeader>
 
     <!-- Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input v-model="searchQuery" type="text" placeholder="Search category..." class="form-control form-control-sm" />
-            </div>
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date Range"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonSearchFilter v-model="searchQuery" placeholder="Search category..." />
+
+          <!-- Date Range Picker (custom) -->
+          <div class="relative">
+            <input
+              type="text"
+              readonly
+              placeholder="Date Range"
+              :value="selectedDateRangeLabel"
+              class="w-full h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-3 pe-4 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              @click="showDateDropdown = !showDateDropdown"
+            />
+            <div
+              v-if="showDateDropdown"
+              class="absolute z-20 mt-1 w-48 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            >
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('kemarin')">Kemarin</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('7hari')">7 Hari Terakhir</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanIni')">Bulan Ini</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" @click="setDateRange('semua')">Semua</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th class="text-center">Total Expense (Trx)</th>
-                <th class="text-end">Amount (IDR)</th>
-                <th class="text-end">Percentage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredRows" :key="item.category">
-                <td class="fw-semibold">{{ item.category }}</td>
-                <td class="text-center">{{ item.count }}</td>
-                <td class="text-end fw-bold">{{ formatNumber(item.amount) }}</td>
-                <td class="text-end">{{ item.percentage }}%</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td class="fw-bold">Total</td>
-                <td class="fw-bold text-center">{{ totalCount }}</td>
-                <td class="fw-bold text-end text-primary">{{ formatNumber(totalAmount) }}</td>
-                <td class="fw-bold text-end">100%</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Category</th>
+              <th class="px-4 py-3 text-center whitespace-nowrap">Total Expense (Trx)</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Amount (IDR)</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Percentage</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredRows" :key="item.category" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">{{ item.category }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-center">{{ item.count }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">{{ item.percentage }}%</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 font-bold">Total</td>
+              <td class="px-4 py-3 text-center font-bold">{{ totalCount }}</td>
+              <td class="px-4 py-3 text-end font-bold text-primary">{{ formatNumber(totalAmount) }}</td>
+              <td class="px-4 py-3 text-end font-bold">100%</td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
   </div>
@@ -140,6 +138,5 @@ const refreshReport = () => {
 const toggleHeader = () => {
   // toggle
 };
-</script>
-
 useMockSync('expense-report', rows);
+</script>

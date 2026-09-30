@@ -1,249 +1,163 @@
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Sales Report</h4>
-          <h6>Manage Your Sales Report</h6>
+  <div class="space-y-6">
+    <!-- Page Header -->
+    <CommonPageHeader title="Sales Report" subtitle="Manage Your Sales Report">
+      <template #actions>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Export PDF"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="file-text" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Print"
+            @click="printReport"
+          >
+            <CommonFeatherIcon name="printer" size="18" />
+          </button>
+          <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-primary dark:border-gray-700 dark:hover:bg-gray-800"
+            title="Refresh"
+            @click="refreshReport"
+          >
+            <CommonFeatherIcon name="rotate-ccw" size="18" />
+          </button>
         </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+      </template>
+    </CommonPageHeader>
 
-    <!-- Metric Cards Row 1 -->
-    <div class="row mt-4">
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash1.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sold Unit</h6>
-            <h5><span>307.144</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash1 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash2.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales</h6>
-            <h5>Rp <span>481.002.000</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash2 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash3.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales Due</h6>
-            <h5>Rp <span>38.565.000</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash3 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash4.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales Amount</h6>
-            <h5>Rp <span>442.437.000</span></h5>
-          </div>
-        </div>
-      </div>
+    <!-- Metric Cards -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Total Sold Unit" value="307.144" icon="package" tone="primary" />
+      <CommonStatCard label="Total Sales" value="Rp 481.002.000" icon="shopping-cart" tone="sky" />
+      <CommonStatCard label="Total Sales Due" value="Rp 38.565.000" icon="credit-card" tone="warning" />
+      <CommonStatCard label="Total Sales Amount" value="Rp 442.437.000" icon="dollar-sign" tone="success" />
     </div>
-
-    <!-- Metric Cards Row 2 (Channel breakdown) -->
-    <div class="row">
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-shopping-bag"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Point of Sales</h6>
-            <h5>Rp <span>215.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash1 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-globe"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Website</h6>
-            <h5>Rp <span>52.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash2 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-file-text"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Quotation</h6>
-            <h5>Rp <span>75.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash3 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-users"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Sales Staff</h6>
-            <h5>Rp <span>138.250.500</span></h5>
-          </div>
-        </div>
-      </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <CommonStatCard label="Point of Sales" value="Rp 215.250.500" icon="shopping-bag" tone="primary" />
+      <CommonStatCard label="Website" value="Rp 52.250.500" icon="globe" tone="sky" />
+      <CommonStatCard label="Quotation" value="Rp 75.250.500" icon="file-text" tone="warning" />
+      <CommonStatCard label="Sales Staff" value="Rp 138.250.500" icon="users" tone="success" />
     </div>
 
     <!-- Report Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input v-model="searchQuery" type="text" placeholder="Search category..." class="form-control form-control-sm" />
-            </div>
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date Range"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Toolbar -->
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <CommonSearchFilter v-model="searchQuery" placeholder="Search category..." />
+
+          <!-- Date Range Picker (custom) -->
+          <div class="relative">
+            <input
+              type="text"
+              readonly
+              placeholder="Date Range"
+              :value="selectedDateRangeLabel"
+              class="w-full h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-3 pe-4 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              @click="showDateDropdown = !showDateDropdown"
+            />
+            <div
+              v-if="showDateDropdown"
+              class="absolute z-20 mt-1 w-48 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            >
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('kemarin')">Kemarin</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('7hari')">7 Hari Terakhir</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanIni')">Bulan Ini</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
+              <div class="cursor-pointer rounded px-2.5 py-1.5 text-xs text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" @click="setDateRange('semua')">Semua</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Product Category</th>
-                <th>Sold Qty</th>
-                <th>Unit</th>
-                <th>Total Sales</th>
-                <th>Total Sales Due</th>
-                <th>Total Sales Amount</th>
-                <th>Percentage</th>
-                <th class="no-sort">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredRows" :key="item.category">
-                <td class="fw-bold">{{ item.category }}</td>
-                <td>{{ item.soldQty }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ formatNumber(item.totalSales) }}</td>
-                <td :class="item.due > 0 ? 'text-danger' : 'text-muted'">{{ formatNumber(item.due) }}</td>
-                <td class="fw-semibold text-success">{{ formatNumber(item.amount) }}</td>
-                <td class="fw-bold">{{ item.percentage }}%</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewDetail(item)" title="View Detail">
-                      <i class="feather-eye"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td class="fw-bold">Total</td>
-                <td class="fw-bold">{{ totalQty }}</td>
-                <td></td>
-                <td class="fw-bold">{{ formatNumber(sumSales) }}</td>
-                <td class="fw-bold text-danger">{{ formatNumber(sumDue) }}</td>
-                <td class="fw-bold text-success">{{ formatNumber(sumAmount) }}</td>
-                <td class="fw-bold">100%</td>
-                <td></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead
+            class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Product Category</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Sold Qty</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Unit</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Total Sales</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Total Sales Due</th>
+              <th class="px-4 py-3 text-start whitespace-nowrap">Total Sales Amount</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Percentage</th>
+              <th class="px-4 py-3 text-end whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="item in filteredRows" :key="item.category" class="transition-colors hover:bg-gray-50/75 dark:hover:bg-gray-800/40">
+              <td class="px-4 py-3 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100">{{ item.category }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.soldQty }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ item.unit }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{ formatNumber(item.totalSales) }}</td>
+              <td :class="item.due > 0 ? 'px-4 py-3 whitespace-nowrap text-rose-600 dark:text-rose-400' : 'px-4 py-3 whitespace-nowrap text-gray-400'">
+                {{ formatNumber(item.due) }}
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-emerald-600 dark:text-emerald-400">{{ formatNumber(item.amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end font-bold">{{ item.percentage }}%</td>
+              <td class="px-4 py-3 whitespace-nowrap text-end">
+                <CommonRowActions :item="item" show-view @view="viewDetail(item)" />
+              </td>
+            </tr>
+          </tbody>
+          <tfoot class="border-t-2 border-gray-200 bg-gray-50/75 font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800/60 dark:text-white">
+            <tr>
+              <td class="px-4 py-3 font-bold">Total</td>
+              <td class="px-4 py-3 font-bold">{{ totalQty }}</td>
+              <td class="px-4 py-3"></td>
+              <td class="px-4 py-3 font-bold">{{ formatNumber(sumSales) }}</td>
+              <td class="px-4 py-3 font-bold text-rose-600 dark:text-rose-400">{{ formatNumber(sumDue) }}</td>
+              <td class="px-4 py-3 font-bold text-emerald-600 dark:text-emerald-400">{{ formatNumber(sumAmount) }}</td>
+              <td class="px-4 py-3 text-end font-bold">100%</td>
+              <td class="px-4 py-3"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
 
     <!-- View Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Sales Category Breakdown - {{ activeItem?.category }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="activeItem">
-            <table class="table table-bordered align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>Product</th>
-                  <th class="text-center">Sold Qty</th>
-                  <th class="text-end">Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(p, idx) in activeItem.products" :key="idx">
-                  <td class="fw-semibold">{{ p.name }}</td>
-                  <td class="text-center">{{ p.qty }} {{ activeItem.unit }}</td>
-                  <td class="text-end fw-bold">Rp {{ formatNumber(p.revenue) }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end">
-              <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-            </div>
-          </div>
-        </div>
+    <CommonBaseModal v-model="showModal" :title="`Sales Category Breakdown - ${activeItem?.category ?? ''}`" maxWidth="lg">
+      <div v-if="activeItem" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+        <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+          <thead class="bg-gray-50 text-[11px] font-semibold uppercase text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+            <tr>
+              <th class="px-3 py-2 text-start">Product</th>
+              <th class="px-3 py-2 text-center">Sold Qty</th>
+              <th class="px-3 py-2 text-end">Revenue</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr v-for="(p, idx) in activeItem.products" :key="idx">
+              <td class="px-3 py-2 font-semibold text-gray-900 dark:text-gray-100">{{ p.name }}</td>
+              <td class="px-3 py-2 text-center">{{ p.qty }} {{ activeItem.unit }}</td>
+              <td class="px-3 py-2 text-end font-bold">Rp {{ formatNumber(p.revenue) }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      <template #footer>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+            @click="showModal = false"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </CommonBaseModal>
   </div>
 </template>
 
@@ -297,6 +211,5 @@ const refreshReport = () => {
 const toggleHeader = () => {
   // toggle
 };
-</script>
-
 useMockSync('sales-report', rows);
+</script>
