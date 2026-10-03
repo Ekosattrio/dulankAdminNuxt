@@ -1,0 +1,79 @@
+[
+  {
+    "id": "1",
+    "no": "JBP-0001",
+    "category": "Design",
+    "name": "Design Layout",
+    "incentiveAmount": 5000,
+    "unitIncentive": "Per Job",
+    "flowAssignee": "Adul, Nurdin",
+    "flowType": "Inhouse",
+    "createDate": "Admin, 2025-10-13 10:35:00"
+  },
+  {
+    "id": "2",
+    "no": "JBP-0002",
+    "category": "Pracetak",
+    "name": "Pre-press Setting",
+    "incentiveAmount": 8500,
+    "unitIncentive": "Per Job",
+    "flowAssignee": "Adul, Nurdin, Admin",
+    "flowType": "Inhouse",
+    "createDate": "Admin, 2025-10-13 10:40:00"
+  },
+  {
+    "id": "3",
+    "no": "JBP-0003",
+    "category": "Cetak",
+    "name": "Digital Printing",
+    "incentiveAmount": 4000,
+    "unitIncentive": "Per Meter",
+    "flowAssignee": "Arif, Galih",
+    "flowType": "Outsource",
+    "createDate": "Admin, 2025-10-13 10:45:00"
+  },
+  {
+    "id": "4",
+    "no": "JBP-0004",
+    "category": "Finishing",
+    "name": "Paper Cutting",
+    "incentiveAmount": 1500,
+    "unitIncentive": "Per Ream",
+    "flowAssignee": "Rapli, Nurdin",
+    "flowType": "Inhouse",
+    "createDate": "Admin, 2025-10-13 10:50:00"
+  },
+  {
+    "id": "5",
+    "no": "JBP-0005",
+    "category": "Design",
+    "name": "Custom Design",
+    "incentiveAmount": 9000,
+    "unitIncentive": "Per Job",
+    "flowAssignee": "Adul, Admin, Arif",
+    "flowType": "Inhouse",
+    "createDate": "Adul, 2025-10-14 09:00:00"
+  },
+  {
+    "id": "6",
+    "no": "JBP-0006",
+    "category": "Pracetak",
+    "name": "Plate Making",
+    "incentiveAmount": 6000,
+    "unitIncentive": "Per Pieces",
+    "flowAssignee": "Nurdin, Galih",
+    "flowType": "Outsource",
+    "createDate": "Adul, 2025-10-14 09:05:00"
+  },
+  {
+    "id": "7",
+    "no": "JBP-0007",
+    "category": "Cetak",
+    "name": "Offset Printing",
+    "incentiveAmount": 5000,
+    "unitIncentive": "Per Ream",
+    "flowAssignee": "Admin, Rapli, Adul",
+    "flowType": "Inhouse",
+    "createDate": "Adul, 2025-10-14 09:10:00"
+  }
+]

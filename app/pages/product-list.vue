@@ -48,10 +48,10 @@ const filteredProducts = computed(() => {
   })
 })
 
+const router = useRouter()
+
 const handleAdd = () => {
-  isEdit.value = false
-  editData.value = null
-  isModalOpen.value = true
+  router.push('/create-product')
 }
 
 const handleEdit = (p: Product) => {
@@ -118,10 +118,10 @@ const exportPdf = () => {
               </button>
             </li>
           </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
+          <NuxtLink to="/create-product" class="btn btn-primary d-flex align-items-center gap-2">
             <FeatherIcon name="plus-circle" size="18" />
             <span>Add New Product</span>
-          </button>
+          </NuxtLink>
         </div>
       </div>
 

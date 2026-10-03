@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Sale } from '#server/types/sale'
+import { tableFilterControlClass } from '~/utils/salesUi'
 defineProps<{
   sales: Sale[]
   searchQuery: string
@@ -33,6 +34,7 @@ const transactionCodes = [
   '09 - Sale of unrekated to business asset',
   '10 - Other delivery of good/services',
 ]
+
 const { formatRupiah } = useFormatters()
 const columns = [
   { key: 'more', label: '' },
@@ -99,8 +101,8 @@ function select(key: string, sale: Sale) {
       <select
         :value="filterTransactionCode || ''"
         aria-label="Transaction Code"
-        :class="salesField"
-        class="!w-auto max-w-44"
+        :class="tableFilterControlClass"
+        class="w-44 max-w-full"
         @change="$emit('update:filterTransactionCode', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">Transaction Code</option>
@@ -109,8 +111,8 @@ function select(key: string, sale: Sale) {
       <select
         :value="filterStatus"
         aria-label="Payment Status"
-        :class="salesField"
-        class="!w-auto"
+        :class="tableFilterControlClass"
+        class="w-40 max-w-full"
         @change="$emit('update:filterStatus', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">Payment Status</option>
@@ -121,8 +123,8 @@ function select(key: string, sale: Sale) {
       <select
         :value="filterChannel"
         aria-label="Channel"
-        :class="salesField"
-        class="!w-auto"
+        :class="tableFilterControlClass"
+        class="w-36 max-w-full"
         @change="$emit('update:filterChannel', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">Channel</option>

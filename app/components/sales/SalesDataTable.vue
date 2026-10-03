@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
+import { tableFilterControlClass } from '~/utils/salesUi'
 const props = withDefaults(
   defineProps<{
     columns: Array<{
@@ -8,13 +9,14 @@ const props = withDefaults(
       class?: string
       align?: 'start' | 'center' | 'end'
     }>
-    items: T[]
+    items?: T[]
     searchable?: boolean
     searchPlaceholder?: string
     defaultPageSize?: number
     search?: string
   }>(),
   {
+    items: () => [],
     searchable: true,
     searchPlaceholder: 'Search...',
     defaultPageSize: 10,
@@ -36,10 +38,12 @@ const searchQuery = computed({
     emit('update:search', value)
   },
 })
+
 const currentPage = ref(1)
 const pageSize = ref(props.defaultPageSize)
 const sortKey = ref<string>('')
 const sortOrder = ref<'asc' | 'desc'>('asc')
+const tableControlClass = tableFilterControlClass
 
 const handleSort = (key: string, sortable?: boolean) => {
   if (!sortable) return
@@ -53,7 +57,7 @@ const handleSort = (key: string, sortable?: boolean) => {
 }
 
 const filteredItems = computed(() => {
-  let result = [...props.items]
+  let result = Array.isArray(props.items) ? [...props.items] : []
 
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.toLowerCase()
@@ -128,15 +132,16 @@ watch(totalPages, (value) => {
       class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100 dark:border-gray-800"
     >
       <!-- Search Input -->
-      <div v-if="searchable" class="relative max-w-xs flex-1">
+      <div v-if="searchable" class="relative w-full max-w-xs flex-1">
         <input
           aria-label="Search records"
           v-model="searchQuery"
           type="text"
           :placeholder="searchPlaceholder"
-          class="w-full rounded-lg border border-gray-200 bg-gray-50 py-1.5 ps-9 pe-3 text-xs transition-colors focus:border-primary focus:bg-white focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          :class="tableControlClass"
+          class="w-full ps-9"
         />
-        <span class="absolute inset-y-0 start-0 flex items-center ps-2.5 text-gray-400">
+        <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-2.5 text-gray-400">
           <FeatherIcon name="search" size="14" />
         </span>
       </div>
@@ -149,7 +154,8 @@ watch(totalPages, (value) => {
         <select
           v-model="pageSize"
           aria-label="Rows per page"
-          class="rounded-lg border border-gray-200 bg-gray-50 px-2 py-1 text-xs text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+          :class="tableControlClass"
+          class="w-auto pe-8"
         >
           <option :value="10">10 / page</option>
           <option :value="25">25 / page</option>
@@ -189,17 +195,19 @@ watch(totalPages, (value) => {
               @keydown.enter="handleSort(col.key, col.sortable)"
               @keydown.space.prevent="handleSort(col.key, col.sortable)"
             >
-              <div class="inline-flex items-center gap-1.5">
-                <span>{{ col.label }}</span>
-                <span v-if="col.sortable" class="text-gray-400">
-                  <FeatherIcon
-                    v-if="sortKey === col.key"
-                    :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
-                    size="12"
-                  />
-                  <FeatherIcon v-else name="chevrons-up" size="12" class="opacity-40" />
-                </span>
-              </div>
+              <slot :name="`header(${col.key})`" :column="col">
+                <div class="inline-flex items-center gap-1.5">
+                  <span>{{ col.label }}</span>
+                  <span v-if="col.sortable" class="text-gray-400">
+                    <FeatherIcon
+                      v-if="sortKey === col.key"
+                      :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
+                      size="12"
+                    />
+                    <FeatherIcon v-else name="chevrons-up" size="12" class="opacity-40" />
+                  </span>
+                </div>
+              </slot>
             </th>
           </tr>
         </thead>

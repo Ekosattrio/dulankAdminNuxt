@@ -1,182 +1,68 @@
 <script setup lang="ts">
+import type { WorkFlow, WorkFlowFormData } from "#server/types/work-flow";
+import WorkFlowDocumentForm from "~/components/pages/work-flow/WorkFlowDocumentForm.vue";
+import SalesFeedback from "~/components/sales/SalesFeedback.vue";
+import SalesListHeader from "~/components/sales/SalesListHeader.vue";
+
+useLegacyPage({ title: "Edit Work Flow", sweetAlert: false });
+
 const route = useRoute();
 const router = useRouter();
+const { getWorkFlow, saveWorkFlow } = useWorkFlows();
 
-const flowNo = computed(() => (route.query.no as string) || "JAP-0001");
+const targetId = computed(() => (route.query.id as string) || (route.query.no as string) || "1");
+const record = ref<WorkFlow | null>(null);
+const loading = ref(true);
+const loadError = ref("");
+const busy = ref(false);
+const saveError = ref("");
 
-useLegacyPage({
-  title: 'Edit Work Flow',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-});
-
-const selectedProduct = ref("Brosur A5");
-const selectedCategory = ref("Offset");
-
-interface FlowStepOption {
-  id: string;
-  name: string;
-  category: "Design" | "Pracetak" | "Cetak" | "Finishing";
-  selected: boolean;
-  template: string;
+async function fetchWorkflow() {
+  loading.value = true;
+  loadError.value = "";
+  try {
+    record.value = await getWorkFlow(targetId.value);
+  } catch (err) {
+    loadError.value = "Failed to load workflow data. Please try again.";
+  } finally {
+    loading.value = false;
+  }
 }
 
-const flowSteps = ref<FlowStepOption[]>([
-  { id: "1", name: "Artwork Checking", category: "Design", selected: true, template: "Standard Ready Print" },
-  { id: "2", name: "Layout & Imposition", category: "Design", selected: true, template: "Preps 8 Imposition" },
-  { id: "3", name: "Plate CTP (Thermal)", category: "Pracetak", selected: true, template: "SM52 4 Warna (4 Plat)" },
-  {
-    id: "4",
-    name: "Potong Kertas Plano (Sheeting)",
-    category: "Pracetak",
-    selected: true,
-    template: "Potong Ukuran Mesin 37x52",
-  },
-  { id: "5", name: "Cetak Mesin SM 52", category: "Cetak", selected: true, template: "SM52 4/0 Full Color" },
-  { id: "6", name: "Potong Jadi (Final Trimming)", category: "Finishing", selected: true, template: "Potong Siku Presisi" },
-  { id: "7", name: "Lipatan Brosur (Folding)", category: "Finishing", selected: true, template: "Lipat 2 (Half Fold)" },
-  { id: "8", name: "Sortir & Quality Check", category: "Finishing", selected: true, template: "Inspeksi Standar" },
-  { id: "9", name: "Packing & Shrink Wrap", category: "Finishing", selected: true, template: "Kardus Dulank" },
-]);
-
-const activeSequence = computed(() => {
-  return flowSteps.value.filter((s) => s.selected);
+onMounted(() => {
+  fetchWorkflow();
 });
 
-const toggleStep = (step: FlowStepOption) => {
-  step.selected = !step.selected;
-};
-
-const removeSequenceItem = (step: FlowStepOption) => {
-  step.selected = false;
-};
-
-const isSaving = ref(false);
-const handleSave = () => {
-  isSaving.value = true;
-  setTimeout(() => {
-    isSaving.value = false;
+async function handleSubmit(formData: WorkFlowFormData) {
+  busy.value = true;
+  saveError.value = "";
+  try {
+    await saveWorkFlow({
+      ...formData,
+      id: record.value?.id || targetId.value,
+    });
     router.push("/work-flow");
-  }, 500);
-};
+  } catch (err) {
+    saveError.value = salesErrorMessage(err);
+  } finally {
+    busy.value = false;
+  }
+}
 </script>
 
 <template>
-  <div>
-    <!-- Page Header -->
-    <PageHeader :title="`Edit Work Flow #${flowNo}`" subtitle="Update production workflow steps and templates">
-      <template #actions>
-        <NuxtLink
-          to="/work-flow"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-        >
-          <FeatherIcon name="arrow-left" size="14" />
-          <span>Back to Work Flow List</span>
-        </NuxtLink>
-      </template>
-    </PageHeader>
+  <div class="dulank-page dulank-page-edit-work-flow">
+    <SalesListHeader title="Edit Work Flow" subtitle="Manage your product with default Work Flow" />
 
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Left 2 Cols -->
-      <div class="lg:col-span-2 space-y-4">
-        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 text-xs">
-          <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Target Product</h4>
-          <div class="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
-            <span class="font-semibold text-gray-700 dark:text-gray-300">Product:</span>
-            <span class="font-bold text-primary">{{ selectedProduct }}</span>
-            <span class="rounded bg-primary/10 px-2 py-0.5 text-[10px] text-primary">{{ selectedCategory }}</span>
-            <span class="font-mono text-gray-400 ms-auto">ID: {{ flowNo }}</span>
-          </div>
-        </div>
+    <SalesFeedback :pending="loading" :error="loadError || saveError" @retry="fetchWorkflow()" />
 
-        <div
-          class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 text-xs space-y-4"
-        >
-          <h4 class="text-sm font-bold text-gray-900 dark:text-white">Configure Department Steps</h4>
-
-          <div
-            v-for="cat in ['Design', 'Pracetak', 'Cetak', 'Finishing'] as const"
-            :key="cat"
-            class="border-t border-gray-100 pt-3 dark:border-gray-800"
-          >
-            <h5 class="mb-2 font-bold uppercase text-[11px] text-gray-500">{{ cat }} Department</h5>
-            <div class="space-y-2">
-              <div
-                v-for="step in flowSteps.filter((s) => s.category === cat)"
-                :key="step.id"
-                class="flex items-center justify-between rounded-lg border border-gray-200 p-2.5 dark:border-gray-700"
-              >
-                <label class="flex cursor-pointer items-center gap-2.5 font-medium text-gray-800 dark:text-gray-200">
-                  <input
-                    type="checkbox"
-                    :checked="step.selected"
-                    class="h-4 w-4 rounded text-primary focus:ring-primary"
-                    @change="toggleStep(step)"
-                  />
-                  <span>{{ step.name }}</span>
-                </label>
-
-                <div v-if="step.selected" class="flex items-center gap-2">
-                  <span class="text-[11px] text-gray-400">Template:</span>
-                  <input
-                    v-model="step.template"
-                    type="text"
-                    class="rounded border border-gray-200 bg-gray-50 p-1 text-[11px] dark:border-gray-700 dark:bg-gray-800"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right 1 Col -->
-      <div class="lg:col-span-1">
-        <div
-          class="sticky top-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 text-xs space-y-4"
-        >
-          <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
-            <h4 class="text-sm font-bold text-gray-900 dark:text-white">Updated Workflow Route</h4>
-            <span class="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
-              {{ activeSequence.length }} Steps
-            </span>
-          </div>
-
-          <div class="space-y-2">
-            <div
-              v-for="(item, idx) in activeSequence"
-              :key="item.id"
-              class="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50/70 p-2.5 dark:border-gray-700 dark:bg-gray-800"
-            >
-              <div class="flex items-center gap-2">
-                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-                  {{ idx + 1 }}
-                </span>
-                <div>
-                  <p class="font-bold text-gray-900 dark:text-white">{{ item.name }}</p>
-                  <p class="text-[10px] text-gray-500">{{ item.template }}</p>
-                </div>
-              </div>
-              <button type="button" class="text-gray-400 hover:text-danger" title="Remove Step" @click="removeSequenceItem(item)">
-                <FeatherIcon name="x" size="13" />
-              </button>
-            </div>
-          </div>
-
-          <div class="border-t border-gray-100 pt-4 dark:border-gray-800">
-            <button
-              type="button"
-              :disabled="activeSequence.length === 0 || isSaving"
-              class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
-              @click="handleSave"
-            >
-              <FeatherIcon v-if="!isSaving" name="check" size="14" />
-              <span>{{ isSaving ? "Updating..." : "Update Work Flow" }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <WorkFlowDocumentForm
+      v-if="!loading && record"
+      :initial-data="record"
+      is-edit
+      :busy="busy"
+      @submit="handleSubmit"
+      @cancel="router.push('/work-flow')"
+    />
   </div>
 </template>

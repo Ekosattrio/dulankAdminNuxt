@@ -1,4 +1,4 @@
-import type { Product, ProductFormData } from '~/types/product'
+import type { Product, ProductFormData } from '#server/types/product'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<ProductFormData>(event)
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!body || !body.name || !body.category) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Product name and category are required'
+      statusMessage: 'Product name and category are required',
     })
   }
 
@@ -25,7 +25,22 @@ export default defineEventHandler(async (event) => {
         unit: body.unit || allProducts[idx].unit,
         price: Number(body.price) || 0,
         priceType: body.priceType || allProducts[idx].priceType,
-        status: body.status || 'Active'
+        status: body.status || allProducts[idx].status || 'Active',
+        store: body.store ?? allProducts[idx].store,
+        sellingType: body.sellingType ?? allProducts[idx].sellingType,
+        description: body.description ?? allProducts[idx].description,
+        quantity: body.quantity !== undefined ? Number(body.quantity) : allProducts[idx].quantity,
+        minOrderQty: body.minOrderQty !== undefined ? Number(body.minOrderQty) : allProducts[idx].minOrderQty,
+        discountType: body.discountType ?? allProducts[idx].discountType,
+        discountValue: body.discountValue !== undefined ? Number(body.discountValue) : allProducts[idx].discountValue,
+        taxType: body.taxType ?? allProducts[idx].taxType,
+        quantityAlert: body.quantityAlert !== undefined ? Number(body.quantityAlert) : allProducts[idx].quantityAlert,
+        minPrice: body.minPrice !== undefined ? Number(body.minPrice) : allProducts[idx].minPrice,
+        druckPrice: body.druckPrice !== undefined ? Number(body.druckPrice) : allProducts[idx].druckPrice,
+        minLength: body.minLength !== undefined ? Number(body.minLength) : allProducts[idx].minLength,
+        minWidth: body.minWidth !== undefined ? Number(body.minWidth) : allProducts[idx].minWidth,
+        images: body.images ?? allProducts[idx].images,
+        variants: body.variants ?? allProducts[idx].variants,
       }
       await writeJSON('products.json', allProducts)
       return createResponse(allProducts[idx], 'Product updated successfully')
@@ -46,9 +61,24 @@ export default defineEventHandler(async (event) => {
     subCategory: body.subCategory || 'General',
     unit: body.unit || 'Piece',
     price: Number(body.price) || 0,
-    priceType: body.priceType || 'Single Price',
+    priceType: body.priceType || 'Single Product',
     created: dateStr,
-    status: body.status || 'Active'
+    status: body.status || 'Active',
+    store: body.store || 'Main Store',
+    sellingType: body.sellingType || 'Single Price',
+    description: body.description || '',
+    quantity: Number(body.quantity) || 0,
+    minOrderQty: Number(body.minOrderQty) || 1,
+    discountType: body.discountType || 'Percentage',
+    discountValue: Number(body.discountValue) || 0,
+    taxType: body.taxType || 'Exclusive',
+    quantityAlert: Number(body.quantityAlert) || 10,
+    minPrice: Number(body.minPrice) || 0,
+    druckPrice: Number(body.druckPrice) || 0,
+    minLength: Number(body.minLength) || 0,
+    minWidth: Number(body.minWidth) || 0,
+    images: body.images || [],
+    variants: body.variants || [],
   }
 
   allProducts.unshift(newProduct)
@@ -56,4 +86,3 @@ export default defineEventHandler(async (event) => {
 
   return createResponse(newProduct, 'Product created successfully')
 })
-

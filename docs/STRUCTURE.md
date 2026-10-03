@@ -297,6 +297,23 @@ Setiap respon API dibungkus oleh `createResponse()` sehingga memiliki struktur s
 }
 ```
 
+### 4.2 Target Backend-Ready untuk Setiap Menu
+
+Revisi menu tidak boleh berhenti pada pemindahan markup. Setiap menu yang dinyatakan selesai harus siap dipindahkan ke backend/database nyata tanpa bongkar besar:
+
+- **Kontrak data jelas:** semua field yang muncul di HTML, modal, detail, cetak, dan flow simpan harus dipetakan ke tipe domain di `server/types/`. Jangan menyimpan hanya field yang terlihat di tabel bila modal/detail membutuhkan data lain.
+- **API menjadi sumber kebenaran:** page dan komponen tidak boleh memakai array transaksi hardcoded untuk flow aktif. Data dibaca lewat composable (`useFetch`/`$fetch`) ke `server/api/`; feedback sukses hanya mengikuti response API.
+- **Utility server memegang persistensi dan validasi:** route handler tipis, sedangkan normalisasi, penomoran, kalkulasi total, filter tanggal, validasi pembayaran/refund, dan baca/tulis data berada di `server/utils/` atau helper domain yang bisa diganti adapter database.
+- **Response stabil:** gunakan bentuk `success`, `data`, `message`, dan `meta` bila perlu. Perubahan backend berikutnya tidak boleh memaksa komponen UI membaca bentuk response baru per halaman.
+- **Data runtime aman:** `data/` adalah penyimpanan runtime pengguna, `server/data/` adalah sumber JSON awal. GET tidak membuat/mengubah data, array kosong tetap valid, JSON rusak harus error jelas, dan seed ulang tidak boleh menimpa data pengguna.
+- **Frontend tipis:** `app/pages/<route>.vue` hanya menyusun state koordinasi dan komponen. Form/tabel/detail berada di `app/components/pages/<menu>/`, alur fetch/simpan di `app/composables/`, dan helper UI bersama di `app/components/common/` atau `app/utils/`.
+- **Reusable untuk fungsi dan style berulang:** bila filter, search, date range, status, action button, modal, print, formatter, atau control toolbar dipakai lebih dari satu menu, buat standar bersama. Jangan membiarkan setiap menu punya tinggi field, radius, warna, focus state, atau helper parsing yang berbeda untuk fungsi yang sama.
+- **Siap DB:** ketika JSON nanti diganti database, idealnya perubahan berada pada `server/utils/`/repository dan bukan pada page/component. Karena itu ID, relasi record, detail item, payment history, source transaction, status, dan nomor dokumen harus disimpan eksplisit.
+
+Menu **Sales** dan **Payment** adalah acuan paling aman saat ini untuk pola backend-ready. Gunakan keduanya sebagai contoh saat mengerjakan menu berikutnya, tanpa mengklaim seluruh halaman lain sudah memiliki kualitas backend yang sama.
+
+Standar visual terbaru untuk control kecil di toolbar tabel mengikuti revisi Sales: gaya light modern, tinggi `h-9`, background putih, border abu halus, radius sedang, shadow kecil, teks `text-xs`, focus ring primary, dan spacing rapat. Standar ini berlaku untuk search, filter select, date range picker trigger, dan page-size selector. Jika dipakai lintas menu, pindahkan ke helper/shared class agar tidak muncul variasi baru.
+
 ---
 
 ## 5. Layer `api/` (`server/api/`)
@@ -831,6 +848,9 @@ Bagian ini adalah **instruksi imperatif yang WAJIB ditaati** oleh setiap model A
    - Interaksi modal/dropdown/tab diselesaikan via `legacy-ui.client.ts`.
 9. **Gunakan `<NuxtLink>`**:
    - Dilarang keras menggunakan tag `<a href="page.html">`. Gunakan `<NuxtLink to="/page">` tanpa ekstensi `.html`.
+10. **Jangan Jalankan Git yang Mengubah Repo Tanpa Instruksi**:
+   - Jangan menjalankan `git add`, `git commit`, `git push`, `git pull`, `git merge`, `git rebase`, `git checkout`, `git switch`, `git reset`, `git restore`, `git clean`, perubahan remote, atau operasi Git lain yang mengubah state repositori kecuali pengguna meminta secara eksplisit.
+   - Perintah Git read-only seperti `git status`, `git diff`, `git log`, dan `git show` boleh dipakai untuk membaca kondisi repo tanpa mengubah file, branch, remote, index, atau history.
 
 ---
 
@@ -1285,3 +1305,164 @@ Revisi ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan 
 Tambahan JSON sumber `sales-history.json` dan `sales-vouchers.json` menyalin data contoh yang memang sudah ada di HTML/halaman voucher. Seluruh JSON sumber lama, data runtime pengguna, dan HTML/aset referensi tetap dipertahankan. Pengujian mutasi menggunakan direktori sementara.
 
 Validasi revisi: build, 13 pemeriksaan integrasi API, validasi struktur, dan uji browser lulus. Uji browser mencocokkan seluruh nama/urutan kolom serta computed font/warna keenam tabel, alur More dan history, add/edit dokumen, refund transfer, duplikasi RFQ ke penerima lain, serta pergantian alamat Shipping/Pickup. Keenam daftar dan modal Sales/Delivery Note/Sales Return diperiksa pada lebar 390px tanpa overflow halaman/modal. Tidak ada exception browser. Hash 1.953 file yang dilindungi tetap sama dan tidak ada file terlacak yang dihapus. Typecheck seluruh proyek masih memiliki 196 error di luar file yang diubah; file revisi tidak menghasilkan error TypeScript.
+
+---
+
+## 21. Implementasi Bertahap: Grup Menu PAYMENT
+
+Tahap Payment mencakup `/payments`, `/payment-inflow`, dan `/payment-outflow`. Ketiga route ini memakai pola backend-ready yang menjadi acuan setelah Sales: page tipis, tabel/editor/detail dipisah ke komponen, data berasal dari API Nitro, kontrak data berada di `server/types/`, dan helper persistensi/validasi berada di `server/utils/`.
+
+| Route | Komponen utama di `app/components/pages/` | Composable | API |
+|---|---|---|---|
+| `/payments` | `payments/PaymentRecordsTable.vue` | `usePayments()` | `/api/payments` |
+| `/payment-inflow` | `payment-flow/PaymentBalanceSummary.vue`, `PaymentFlowRecordsTable.vue`, `PaymentFlowEditor.vue`, `PaymentFlowDetails.vue` | `usePaymentFlow('inflow')` | `/api/payment-inflow` |
+| `/payment-outflow` | `payment-flow/PaymentBalanceSummary.vue`, `PaymentFlowRecordsTable.vue`, `PaymentFlowEditor.vue`, `PaymentFlowDetails.vue` | `usePaymentFlow('outflow')` | `/api/payment-outflow` |
+
+### 21.1 Kontrak Data dan Backend
+
+- `server/types/payment.ts` mendefinisikan daftar gabungan Payments: Date Payment, Ref No, Name, Type, Payment Method, Amount (IDR), Status, dan Create.
+- `server/types/payment-flow.ts` mendefinisikan Inflow/Outflow, termasuk balance summary, transfer bank, transaction detail, dan payment history.
+- `server/data/payments.json`, `payment-inflows.json`, `payment-outflows.json`, dan `payment-balances.json` menjadi JSON sumber awal. Runtime data tetap tidak boleh ditimpa otomatis.
+- `server/utils/paymentData.ts`, `paymentFlowData.ts`, dan `paymentFlow.ts` menjadi adapter data/validasi domain. Jika nanti masuk database, ubah lapisan ini lebih dulu, bukan page/component.
+- Endpoint GET mendukung pencarian, filter source/type/method/status, serta `startDate` dan `endDate` untuk rentang waktu. Endpoint mutasi Payment Flow menyimpan Add/Edit/Payment/Delete melalui API, bukan state lokal sementara.
+
+### 21.2 Standar Rentang Waktu
+
+Fitur pemilih rentang waktu sudah distandarkan agar dapat dipakai ulang di menu lain:
+
+- Frontend memakai `app/components/common/DateRangePicker.vue`.
+- State dan helper tanggal memakai `app/composables/useDateRange.ts`.
+- Filtering server memakai `server/utils/dateRange.ts`.
+- Preset mengikuti HTML legacy: Kemarin, 7 Hari Terakhir, Bulan Ini, Bulan Lalu, Tahun Lalu, dan Rentang Kustom.
+- Query API memakai `startDate` dan `endDate`. Server harus bisa membaca tanggal legacy `DD/MM/YYYY` dan input ISO `YYYY-MM-DD`.
+
+Jika halaman lain memiliki input `pemilihrentang`/Date Range dari HTML legacy, gunakan standar ini. Jangan membuat filter tanggal teks baru atau logika parsing tanggal berbeda per halaman.
+
+### 21.3 Batas Regresi Payment
+
+- `/payments` tidak boleh kembali ke data hardcoded di page. Tabel tetap memakai `PaymentRecordsTable.vue` dan `usePayments()`.
+- `/payment-inflow` dan `/payment-outflow` harus mempertahankan balance summary, filter tanggal, filter source/status, detail record, editor add/edit/payment, payment history, dan delete confirmation.
+- Tombol View, Payment, Edit, Delete harus selalu memakai record yang dipilih. Detail/cetak tidak boleh memakai contoh statis.
+- Data lama yang belum memiliki rincian tertentu harus ditampilkan sebagai kosong/known value, bukan diisi transaksi, rekening, customer, atau pembayaran buatan.
+- Label, urutan kolom, opsi source/status/method, dan flow modal tetap mengikuti `legacy/static-source/payment-inflow.html`, `payment-outflow.html`, `payments.html`, serta referensi Netlify yang diberikan pengguna.
+
+### 21.4 Status Validasi dan Penyesuaian Modal Netlify
+
+- Modal Payment pada `/payment-inflow` dan `/payment-outflow` disesuaikan dengan referensi Netlify (`custom-modal-two` style):
+  - Lebar modal disesuaikan ke ukuran medium (`max-w-2xl` / ~672px).
+  - Background header modal menggunakan `#fafbfe` dengan title `#092c4c`.
+  - Tata letak form menggunakan susunan baris horizontal (label di kolom kiri `sm:w-1/3`, control input di kolom kanan `sm:w-2/3`).
+  - Tombol aksi dialog mengikuti skema Netlify: Cancel berwarna gelap (`#212b36`) dan Submit berwarna aksen oranye/emas (`#ff9f43`).
+- Sanity check rentang data dan pembacaan JSON Payment terverifikasi.
+- Build aplikasi `npm run build` berhasil 100% tanpa error.
+
+---
+
+## 22. Implementasi Bertahap: Grup Menu WORKFLOW
+
+Grup menu WORKFLOW mencakup empat menu operasional:
+1. `/flow-category` (Kategori Alur Produksi)
+2. `/flow-name` (Daftar Nama Alur & Insentif Kerja)
+3. `/flow-template` (Template Parameter SPK)
+4. `/work-flow`, `/add-work-flow`, dan `/edit-work-flow` (Konfigurasi Alur Kerja per Produk)
+
+Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis, komponen domain terpisah, dan susunan visual sesuai file referensi `legacy/static-source/flow-category.html`, `flow-name.html`, `flow-template.html`, `work-flow.html`, `add-work-flow.html`, dan `edit-work-flow.html`.
+
+| Route | Komponen utama di `app/components/pages/` | Composable | API |
+|---|---|---|---|
+| `/flow-category` | `flow-category/FlowCategoryRecordsTable.vue`, `flow-category/FlowCategoryModal.vue` | `useFlowCategories()` | `/api/flow-categories` |
+| `/flow-name` | `flow-name/FlowNameRecordsTable.vue`, `flow-name/FlowNameModal.vue` | `useFlowNames()` | `/api/flow-names` |
+| `/flow-template` | `flow-template/FlowTemplateRecordsTable.vue`, `flow-template/FlowTemplateModal.vue` | `useFlowTemplates()` | `/api/flow-templates` |
+| `/work-flow` | `work-flow/WorkFlowRecordsTable.vue`, `work-flow/WorkFlowProcessModal.vue` | `useWorkFlows()` | `/api/work-flows` |
+| `/add-work-flow` | `work-flow/WorkFlowDocumentForm.vue` | `useWorkFlows()` | `/api/work-flows` (POST) |
+| `/edit-work-flow` | `work-flow/WorkFlowDocumentForm.vue` | `useWorkFlows()` | `/api/work-flows/[id]` (GET, PUT) |
+
+### 22.1 Kontrak Data dan Backend
+
+- `server/types/flow-category.ts`: `id`, `no` (`PCC-xxx`), `name`, `used`, `createdBy`, `createdDate`.
+- `server/types/flow-name.ts`: `id`, `no` (`JBP-xxxx`), `category`, `name`, `incentiveAmount`, `unitIncentive`, `flowAssignee`, `flowType`, `createDate`.
+- `server/types/flow-template.ts`: `id`, `no` (`FT-xxxx`), `name`, `information`.
+- `server/types/work-flow.ts`: `id`, `no` (`JAP-xxxx`), `date`, `category`, `product`, `workflowSteps`, `steps: WorkFlowStepItem[]`.
+- Seluruh JSON sumber awal tersimpan di `server/data/flow-categories.json`, `flow-names.json`, `flow-templates.json`, dan `work-flows.json`. Penyimpanan runtime disimpan terisolasi di `data/*.json` dan tidak ditimpa oleh seed.
+- Validasi, penomoran otomatis prefix domain, dan filter tanggal ditangani di `server/utils/`.
+
+### 22.2 Arsitektur UI & Komponen
+
+- Tabel pada keempat menu menggunakan standar bersama `SalesDataTable.vue` (`text-xs`), kontrol toolbar light modern `h-9`, `DateRangePicker.vue`, dan `SalesActionButton.vue`.
+- Modal Add/Edit (`FlowCategoryModal`, `FlowNameModal`, `FlowTemplateModal`, `WorkFlowProcessModal`) menggunakan standar modal Netlify: lebar medium, header `#fafbfe`, judul `#092c4c`, tombol Cancel `#212b36`, dan Submit `#ff9f43`.
+- Halaman konfigurasi dokumen `add-work-flow` dan `edit-work-flow` menggunakan form 2-kolom:
+  - Kolom kiri: Live search produk, checklist stasiun kerja (Design, Cetak, PraCetak, Finishing), serta toggle template alur.
+  - Kolom kanan: `Work Flow Arrange` sticky card dengan urutan stasiun produksi `No. 1`, `No. 2`, dsb. serta sepasang tombol reorder Up/Down (`arrow-up` & `arrow-down`) ukuran 34x34px.
+
+### 22.3 Batas Regresi Workflow Group
+
+- Tidak boleh ada halaman yang kembali menggunakan array mock lokal atau data statis di dalam file page.
+- Seluruh mutasi (Add, Edit, Delete) harus tersimpan persisten ke API backend Nitro.
+- Label kolom dan data pada tabel harus konsisten dengan file HTML legacy masing-masing.
+- Seluruh tombol edit pada tabel harus membuka modal atau halaman edit dengan data record terpilih.
+
+### 22.4 Status Validasi
+
+- Sesuai arahan tegas pengguna, **`npm run dev` dan `npm run build` TIDAK dijalankan**.
+- Validasi dilakukan secara statis:
+  - Pemeriksaan integritas ukuran file seluruh modul di grup workflow (tidak ada file 0-byte atau placeholder).
+  - Validitas syntax seluruh JSON data awal (`flow-categories.json`, `flow-names.json`, `flow-templates.json`, `work-flows.json`) terverifikasi.
+  - Pemeriksaan statis kontrak tipe, API endpoints Nitro, utility server, dan composables untuk keempat submenu terhubung utuh tanpa broken paths.
+  - Pemeriksaan kecocokan struktur tabel, toolbar, filter tanggal, modal, dan form dokumen dengan HTML legacy.
+
+### 22.5 Standarisasi Dimensi & Komponen Reusable
+
+- **Tinggi Kontrol Toolbar & Form:** Seluruh kontrol input, select filter toolbar tabel, search bar, dan input form modal harus menggunakan tinggi standar `h-9` (36px). Untuk kontrol tag / multi-select (seperti `AssigneeSelect.vue`), gunakan tinggi dasar `min-h-9` (36px) agar sejajar dengan kontrol lainnya.
+- **Standar Filter Toolbar (`TableFilterSelect.vue`):** Dropdown filter standar toolbar tabel (`h-9`, `text-xs`, border abu halus, background putih, shadow-sm, focus ring primary) menggantikan tag `<select>` manual lokal.
+- **Standar Assignee Picker (`AssigneeSelect.vue`):** Pemilih penugasan standar modal (`min-h-9`, opsi radio Employees / Department, chips badge `#ff9f43`, search, dan floating dropdown selection).
+- **Standar Grid 12 Kolom Modal:** Pada form modal, susun baris dengan CSS Grid 12 kolom murni:
+  - Baris: `grid grid-cols-12 items-center gap-3 sm:gap-4` (`items-start` untuk field multiline/tags) atau helper `modalFormRowClass`.
+  - Label: `col-span-5 text-xs font-semibold text-gray-700 dark:text-gray-300` atau helper `modalFormLabelClass`.
+  - Input: `col-span-7` atau helper `modalFormInputColClass`.
+  Pola ini menjamin posisi ujung kiri dan kanan seluruh input dalam modal 100% sejajar, presisi, dan tidak terdistorsi oleh kalkulasi flexbox.
+
+---
+
+## 23. Create Product & Standarisasi Komponen Reusable Baru
+
+Bagian ini mendokumentasikan implementasi backend-ready halaman `/create-product` (`create-product.html` / `https://dulank-admin.netlify.app/create-product.html`) serta komponen reusable baru yang distandarisasi untuk digunakan di seluruh proyek (Sales, Product, POS).
+
+### 23.1 Struktur Komponen & Pemisahan Tanggung Jawab
+
+| File | Tanggung Jawab |
+|---|---|
+| `app/pages/create-product.vue` | Halaman form utama dengan 3 accordion card (Product Information, Pricing Type, Images), reactive state, integrasi API, feedback error, dan navigasi. |
+| `app/components/pages/create-product/ProductInfoSection.vue` | Form informasi dasar produk: Store, Item Code (dengan tombol `Generate Code`), Product Name, Category (+ Add New modal trigger), Sub Category (+ Add New), Unit (+ Add New), Selling Type, Description. |
+| `app/components/pages/create-product/ProductPricingSection.vue` | Tab navigasi 5 jenis harga (Single Product, Variable Product, Size Calculation, Large Format, Offset Service Price), form input spesifik per tipe, chip tag varian dinamis, serta tabel varian dengan QuantityStepper. |
+| `app/components/pages/create-product/ProductCategoryModal.vue` | Modal dialog tambah kategori baru cepat menggunakan `SalesDialog` dan pola Grid 12 kolom. |
+| `app/components/pages/create-product/ProductAttributeModal.vue` | Modal dialog tambah atribut varian baru (misal: Size, Color) beserta input tags nilainya. |
+| `app/components/pages/create-product/ProductVariationModal.vue` | Modal dialog konfigurasi detail varian terpilih (Quantity, Price, Quantity Alert, Tax, Discount). |
+| `app/components/common/QuantityStepper.vue` | **Reusable Component**: Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
+| `app/components/common/ImageUploadGrid.vue` | **Reusable Component**: Pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
+
+### 23.2 Kontrak Data & Backend Persistence
+
+- `server/types/product.ts`:
+  - `ProductPricingType`: `'Single Product' | 'Variable Product' | 'Size Calculation' | 'Large Format' | 'Offset Service Price'`.
+  - `ProductVariant`: `{ id, variation, value, quantity, price, checked }`.
+  - `ProductFormData`: Mendukung seluruh parameter harga (quantity, price, minOrderQty, discountType, discountValue, taxType, quantityAlert, minPrice, druckPrice, minLength, minWidth, images, variants).
+- `server/api/products/index.post.ts`: Menerima form submission, memvalidasi kelengkapan data (nama produk, kategori), membangkitkan ID produk jika baru (`PRD-xxx`), dan menyimpan secara persisten ke `server/data/products.json`.
+- Integrasi composable: `useProducts()`, `useCategories()`, dan `useUnits()`.
+
+### 23.3 Standarisasi Komponen Reusable Baru
+
+1. **`QuantityStepper.vue` (`app/components/common/QuantityStepper.vue`):**
+   - Props: `modelValue: number`, `min?: number` (default 0), `max?: number`, `step?: number` (default 1), `size?: 'sm' | 'md'` (default 'sm'), `disabled?: boolean`.
+   - Menggunakan tombol minus (`minus`) dan plus (`plus`) Feather icon 12px/14px.
+   - Input numerik diapit di tengah dengan alignment text-center, focus ring primary, dan proteksi batasan `min`/`max`.
+   - Standar tinggi: `h-7` untuk compact table row, `h-9` untuk form reguler.
+
+2. **`ImageUploadGrid.vue` (`app/components/common/ImageUploadGrid.vue`):**
+   - Props: `modelValue: string[]` (array gambar URL/base64), `maxImages?: number` (default 10), `disabled?: boolean`.
+   - Area drag-and-drop / file selector dengan tombol Browse Files standar Netlify.
+   - Grid thumbnail responsif (kolom dinamis 2 hingga 6 kolom), preview gambar terpotong rapi dengan aspect ratio persegi, serta tombol hapus (`x` icon) overlay merah saat di-hover.
+
+
+
+
+

@@ -5,6 +5,7 @@ Panduan ini berlaku untuk seluruh repositori. Pola revisi menu SALES yang sudah 
 ## 1. Baca acuan sebelum mengubah halaman
 
 - Baca [docs/STRUCTURE.md](docs/STRUCTURE.md), terutama bagian 20.4 untuk hasil revisi SALES yang disetujui. Bagian sebelumnya juga memuat riwayat implementasi; jangan mengembalikan perilaku lama yang sudah direvisi.
+- Untuk perintah seperti "kerjakan menu <nama-menu>" atau "lanjut ke menu <nama-menu>", baca juga [docs/MENU_IMPLEMENTATION_COMMAND.md](docs/MENU_IMPLEMENTATION_COMMAND.md). Dokumen itu menjelaskan workflow backend-ready, reusable-first, dan kriteria selesai per menu.
 - Kerjakan **per menu sesuai permintaan pengguna**. Acuan saat ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan Request For Quotation. **POS ditunda** sampai diminta lagi.
 - Baca HTML halaman yang bersesuaian di [legacy/static-source/](legacy/static-source/), termasuk script, partial, dan aset yang mengatur interaksinya. Bila pengguna memberi URL referensi, bandingkan juga referensi tersebut. Situs acuannya adalah `https://dulank-admin.netlify.app/<nama-halaman>.html`.
 - Sebelum implementasi, petakan kolom tabel, tombol, dropdown, filter, modal, halaman tambah/edit/detail, cetak, dan alur penyimpanan. Jangan menyimpulkan isi form hanya dari nama menu.
@@ -19,6 +20,7 @@ Panduan ini berlaku untuk seluruh repositori. Pola revisi menu SALES yang sudah 
 - Array runtime kosong adalah data valid. JSON rusak harus menghasilkan error yang jelas, bukan diam-diam diganti seed. Request GET tidak boleh membuat atau mengubah data.
 - Jangan mengisi rincian transaksi lama yang tidak tersedia dengan produk, pembayaran, atau identitas contoh buatan. Pertahankan nilai yang diketahui dan tangani rincian kosong secara eksplisit.
 - Jangan mengedit `.nuxt/`, `.output/`, atau `node_modules/` sebagai solusi perubahan source. Jangan membatalkan perubahan pengguna yang sudah ada di working tree.
+- Jangan menjalankan proses Git yang mengubah state repositori kecuali pengguna meminta secara eksplisit. Perintah seperti `git add`, `git commit`, `git push`, `git pull`, `git merge`, `git rebase`, `git checkout`, `git switch`, `git reset`, `git restore`, `git clean`, perubahan remote, dan operasi sejenis hanya boleh dilakukan setelah ada instruksi langsung dari pengguna. Pemeriksaan read-only seperti `git status`, `git diff`, `git log`, atau `git show` boleh dipakai untuk memahami kondisi repo.
 
 ## 3. Struktur kode: halaman tipis, komponen terpisah
 
@@ -33,6 +35,10 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 | `app/utils/` | Helper UI dan fungsi frontend yang dapat digunakan kembali. |
 | `server/api/`, `server/types/`, `server/utils/` | Endpoint, kontrak data, validasi backend, dan persistensi. |
 
+- Target revisi setiap menu adalah **backend-ready**, bukan sekadar tampilan mirip HTML. Struktur data harus benar untuk kebutuhan sistem nyata: field domain lengkap, relasi/transaksi jelas, tipe di `server/types/`, endpoint di `server/api/`, akses data/validasi di `server/utils/`, dan frontend hanya berkomunikasi lewat composable/API.
+- Hindari desain yang memaksa bongkar besar saat pindah dari JSON ke database. API route harus tipis, logika baca/tulis dan validasi berada di utility/domain helper, dan bentuk response stabil (`success`, `data`, `message`, `meta` bila perlu).
+- Menu **Sales** dan **Payment** adalah acuan implementasi yang paling aman saat ini untuk pola backend-ready. Jangan menurunkan pola ini menjadi data lokal page, prompt/timeout palsu, atau field contoh yang tidak bersumber dari legacy/API.
+- Jika suatu menu membutuhkan fitur umum seperti filter rentang waktu, pencarian, status, payment/refund, atau dokumen cetak, gunakan komponen/composable/utility bersama yang sudah ada atau buat standar reusable baru. Jangan membuat versi khusus per halaman jika fitur itu jelas dipakai banyak menu.
 - Gunakan `<script setup lang="ts">`, props/emits bertipe, dan composable domain. Hindari menumpuk tabel, semua modal, dan logika bisnis dalam satu file page.
 - Tetap gunakan `useLegacyPage({ title: 'Nama Halaman', sweetAlert: false })` sesuai pola proyek. Saat ini helper tersebut mengatur judul; opsi `styles`/`scripts` lama hanya diterima untuk kompatibilitas, bukan memuat aset legacy.
 - Template page memakai pembungkus `dulank-page dulank-page-<nama-route>`. Header/sidebar umum tetap melalui layout; jangan diduplikasi di setiap halaman.
@@ -48,6 +54,8 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 - Gunakan Tailwind dan komponen Vue untuk UI aktif. Jangan mengaktifkan Bootstrap/jQuery atau script legacy untuk mengambil alih DOM yang dikelola Vue.
 - Gunakan [salesUi.ts](app/utils/salesUi.ts) untuk kelas field, label, tombol, dan tabel dokumen. Pastikan direktori sumber kelas Tailwind tercakup dalam `app/assets/css/main.css`.
 - Pertahankan font tema proyek. Ukuran teks tabel mengikuti tabel Sales Return yang disetujui, yaitu kelas `text-xs` pada komponen bersama. Jangan membuat ukuran atau warna teks berbeda per halaman.
+- Untuk filter, search, page-size, dropdown, dan control kecil di toolbar tabel, gunakan gaya light modern yang konsisten seperti revisi Sales: tinggi `h-9`, background putih, border abu halus, radius sedang, shadow kecil, teks `text-xs`, focus ring primary, dan spacing rapat. Jika style ini dipakai lebih dari satu tempat, pindahkan ke shared class/helper, bukan ditulis ulang berbeda per komponen.
+- Jika ada fungsi atau style yang sama berulang di beberapa menu, buat standar reusable di `app/components/common/`, `app/components/sales/`, `app/composables/`, `app/utils/`, atau `server/utils/` sesuai cakupannya. Jangan membiarkan variasi kecil tumbuh per halaman untuk fitur yang sama.
 - Tabel lebar harus bisa di-scroll di dalam wadahnya. Halaman dan modal tidak boleh melebar keluar viewport. Periksa desktop dan layar kecil, termasuk lebar 390px.
 
 Gunakan komponen bersama berikut sebelum membuat variasi baru:
@@ -62,6 +70,22 @@ Gunakan komponen bersama berikut sebelum membuat variasi baru:
 | [SalesDialog.vue](app/components/sales/SalesDialog.vue) | Modal, Escape, judul aksesibel, pengamanan saat busy, dan ukuran dokumen yang responsif. |
 | [SalesFeedback.vue](app/components/sales/SalesFeedback.vue) | Loading, error, feedback hasil, dan retry. |
 | [SalesConfirmDelete.vue](app/components/sales/SalesConfirmDelete.vue) | Konfirmasi sebelum penghapusan record. |
+| [DateRangePicker.vue](app/components/common/DateRangePicker.vue) | Pemilih rentang tanggal standar toolbar (`h-9`, preset tanggal, kustom tanggal). |
+| [TableFilterSelect.vue](app/components/common/TableFilterSelect.vue) | Dropdown filter standar toolbar tabel (`h-9`, `text-xs`, border abu halus, light modern). |
+| [AssigneeSelect.vue](app/components/common/AssigneeSelect.vue) | Pemilih assignee standar modal (`min-h-9`, radio Employees/Department, chips badge, floating dropdown). |
+| [QuantityStepper.vue](app/components/common/QuantityStepper.vue) | Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
+| [ImageUploadGrid.vue](app/components/common/ImageUploadGrid.vue) | Komponen pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
+| [salesUi.ts](app/utils/salesUi.ts) | Helper kelas UI bersama: `tableFilterControlClass`, `formControlClass`, `modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`. |
+
+### Standarisasi Dimensi (Height, Width, dan Grid Form)
+
+- **Tinggi Kontrol Toolbar & Form:** Seluruh kontrol input, select filter toolbar tabel, search bar, dan input form modal harus menggunakan tinggi standar `h-9` (36px). Untuk kontrol tag / multi-select (seperti `AssigneeSelect`), gunakan tinggi dasar `min-h-9` (36px) agar sejajar dengan kontrol lainnya.
+- **Standar Filter Toolbar:** Gunakan `TableFilterSelect.vue` atau kelas `tableFilterControlClass` untuk seluruh dropdown filter pada slot `#filters`. Gunakan `DateRangePicker.vue` untuk filter tanggal. Jangan membuat input teks lokal atau kelas `salesField` tanpa `h-9`.
+- **Standar Grid 12 Kolom Modal:** Pada form modal, susun baris dengan CSS Grid 12 kolom murni:
+  - Baris: `grid grid-cols-12 items-center gap-3 sm:gap-4` (`items-start` untuk field multiline/tags) atau helper `modalFormRowClass`.
+  - Label: `col-span-5 text-xs font-semibold text-gray-700 dark:text-gray-300` atau helper `modalFormLabelClass`.
+  - Input: `col-span-7` atau helper `modalFormInputColClass`.
+  Pola ini menjamin posisi ujung kiri dan kanan seluruh input dalam modal 100% sejajar, presisi, dan tidak terdistorsi oleh kalkulasi flexbox.
 
 Standarisasi berarti komponen dan gaya konsisten; **nama serta urutan kolom tetap mengikuti domain masing-masing**. Jangan mengganti `Sales Channel` atau `Quotation Channel` menjadi `Channel`. Jangan mencampur emoji, ikon dari library lain, dan Feather untuk fungsi setara.
 
@@ -78,6 +102,16 @@ Gunakan daftar ini sebagai batas regresi saat mengubah kode bersama:
 - **Sales Note/Receipt:** dokumen dan hasil cetak harus berasal dari transaksi yang dipilih melalui `id`, bukan data contoh tetap.
 
 Rincian kolom lengkap ada di komponen `*RecordsTable.vue` masing-masing menu dan HTML acuannya. Halaman lain yang belum direvisi tidak otomatis menjadi contoh yang benar hanya karena sudah ada di repo.
+
+## 5.1 Perilaku PAYMENT yang sudah disetujui
+
+Gunakan daftar ini sebagai batas regresi untuk Payment:
+
+- **Payments:** daftar memakai data server/API, tipe di `server/types/payment.ts`, composable `usePayments()`, dan komponen `PaymentRecordsTable.vue`. Kolom mengikuti HTML: Date Payment, Ref No, Name, Type, Payment Method, Amount (IDR), Status, dan Create. Filter tanggal memakai rentang waktu standar, bukan input teks lokal.
+- **Payment Inflow:** daftar memakai data server/API, tipe di `server/types/payment-flow.ts`, composable `usePaymentFlow('inflow')`, komponen flow Payment, dan data balance. Aksi View, Payment, Edit, dan Delete terhubung ke record yang dipilih.
+- **Payment Outflow:** struktur sama dengan Inflow, memakai `usePaymentFlow('outflow')`, data outflow, bank transfer, payment history, detail transaksi, dan validasi simpan/hapus di server.
+- **Rentang waktu Payment:** gunakan `DateRangePicker.vue`, `useDateRange.ts`, dan `server/utils/dateRange.ts`. Query API memakai `startDate` dan `endDate`; data legacy `DD/MM/YYYY` difilter di server. Komponen ini adalah standar reusable untuk halaman lain yang punya fitur pemilih rentang waktu.
+- Data Payment tidak boleh kembali menjadi array hardcoded di page. Jika detail lama tidak tersedia, tampilkan keadaan kosong/known value secara eksplisit; jangan mengarang transaksi, rekening, customer, atau pembayaran contoh.
 
 ## 6. Semua tombol harus menjalankan flow yang benar
 

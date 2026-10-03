@@ -3,6 +3,7 @@ const props = defineProps<{
   open: boolean
   title: string
   wide?: boolean
+  medium?: boolean
   document?: boolean
   busy?: boolean
 }>()
@@ -29,19 +30,19 @@ function cancel(event: Event) {
     :aria-labelledby="titleId"
     :class="[
       'fixed m-auto max-h-[90dvh] w-[calc(100%-2rem)] overflow-y-auto rounded-lg border border-gray-200 bg-white p-0 text-gray-900 shadow-xl backdrop:bg-black/50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100',
-      document ? 'max-w-6xl' : wide ? 'max-w-5xl' : 'max-w-xl',
+      document ? 'max-w-6xl' : wide ? 'max-w-5xl' : medium ? 'max-w-2xl' : 'max-w-xl',
     ]"
     @cancel="cancel"
   >
     <div
-      class="flex items-center justify-between gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-700"
+      class="flex items-center justify-between gap-4 border-b border-gray-200 bg-[#fafbfe] px-6 py-4 dark:border-gray-700 dark:bg-gray-800"
     >
-      <h2 :id="titleId" class="text-lg font-semibold">{{ title }}</h2>
+      <h2 :id="titleId" class="text-lg font-bold text-[#092c4c] dark:text-white">{{ title }}</h2>
       <button
         type="button"
         :disabled="busy"
         aria-label="Close dialog"
-        class="rounded p-1 hover:bg-gray-100 disabled:opacity-50 dark:hover:bg-gray-800"
+        class="rounded p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-600 disabled:opacity-50 dark:hover:bg-gray-700 dark:hover:text-gray-200"
         @click="$emit('close')"
       >
         <FeatherIcon name="x" :size="20" />
