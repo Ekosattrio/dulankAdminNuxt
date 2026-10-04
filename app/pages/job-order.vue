@@ -1,183 +1,179 @@
 <script setup lang="ts">
-import type { JobOrder, JobOrderFormData } from '~/types/job-order'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { JobOrder, JobOrderFormData } from '#server/types/job-order'
+import { useJobOrders } from '~/composables/useJobOrders'
+import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
+import JobOrderEditModal from '~/components/pages/job-order/JobOrderEditModal.vue'
+import JobOrderRecordsTable from '~/components/pages/job-order/JobOrderRecordsTable.vue'
+import JobOrderStatsWidgets from '~/components/pages/job-order/JobOrderStatsWidgets.vue'
+import JobOrderViewFlowModal from '~/components/pages/job-order/JobOrderViewFlowModal.vue'
+import JobOrderWorkflowSidebar from '~/components/pages/job-order/JobOrderWorkflowSidebar.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Job Orders - SPK Produksi',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { jobOrders, pending, refresh, saveJobOrder, deleteJobOrder } = useJobOrders()
+useLegacyPage({ title: 'Job Orders', sweetAlert: false })
 
 const searchQuery = ref('')
-const filterStatus = ref('')
+const filterCategory = ref('')
+const activeWorkflowType = ref('design')
+const activeWorkflowLabel = ref('Design')
 
-const isModalOpen = ref(false)
-const isEdit = ref(false)
-const editData = ref<JobOrder | null>(null)
+const activeOrderForEdit = ref<JobOrder | null>(null)
+const activeOrderForView = ref<JobOrder | null>(null)
+const deletingRecord = ref<JobOrder | null>(null)
+const isEditModalOpen = ref(false)
+const isViewModalOpen = ref(false)
+const busy = ref(false)
+const actionError = ref('')
 
-const isProgressOpen = ref(false)
-const progressData = ref<JobOrder | null>(null)
-const toastMessage = ref('')
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  workflowCategory: filterCategory.value,
+  workflowType: activeWorkflowType.value,
+}))
 
-const showToast = (msg: string) => {
-  toastMessage.value = msg
-  setTimeout(() => {
-    toastMessage.value = ''
-  }, 3000)
+const { jobOrders, pending, error, refresh, saveJobOrder, deleteJobOrder } = useJobOrders(filterParams)
+
+function handleSelectType(typeId: string, label: string) {
+  activeWorkflowType.value = typeId
+  activeWorkflowLabel.value = label
 }
 
-const filteredList = computed(() => {
-  return jobOrders.value.filter((j) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      j.jobOrderNo?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      j.jobName?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      j.customer?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !filterStatus.value || j.status === filterStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
-const handleAdd = () => {
-  isEdit.value = false
-  editData.value = null
-  isModalOpen.value = true
+function handleOpenEdit(order: JobOrder) {
+  activeOrderForEdit.value = order
+  isEditModalOpen.value = true
 }
 
-const handleEdit = (j: JobOrder) => {
-  isEdit.value = true
-  editData.value = j
-  isModalOpen.value = true
+function handleOpenView(order: JobOrder) {
+  activeOrderForView.value = order
+  isViewModalOpen.value = true
 }
 
-const handleProgress = (j: JobOrder) => {
-  progressData.value = j
-  isProgressOpen.value = true
-}
-
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus SPK Job Order ini?')) {
-    try {
-      await deleteJobOrder(id)
-      showToast('Job order deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete job order:', err)
-      alert('Failed to delete job order')
-    }
-  }
-}
-
-const handleSubmit = async (formData: JobOrderFormData) => {
+async function handleEditSubmit(formData: JobOrderFormData) {
+  busy.value = true
+  actionError.value = ''
   try {
-    const res = await saveJobOrder(formData)
-    showToast(res?.message || 'Job order saved successfully')
-    isModalOpen.value = false
+    await saveJobOrder(formData)
+    isEditModalOpen.value = false
+    activeOrderForEdit.value = null
   } catch (err) {
-    console.error('Failed to save job order:', err)
-    alert('Failed to save job order')
+    actionError.value = salesErrorMessage(err)
+  } finally {
+    busy.value = false
   }
 }
 
-const handleProgressUpdate = async (updatedSteps: any) => {
-  if (!progressData.value) return
+async function handleConfirmDelete() {
+  if (!deletingRecord.value) return
+  busy.value = true
+  actionError.value = ''
   try {
-    const payload: JobOrderFormData = {
-      ...progressData.value,
-      steps: updatedSteps
-    }
-    await saveJobOrder(payload)
-    showToast('Job progress updated successfully')
-    isProgressOpen.value = false
+    await deleteJobOrder(deletingRecord.value.id)
+    deletingRecord.value = null
   } catch (err) {
-    console.error('Failed to update progress:', err)
+    actionError.value = salesErrorMessage(err)
+  } finally {
+    busy.value = false
   }
 }
 
-const printTable = () => {
-  window.print()
-}
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-const exportPdf = () => {
-  showToast('Exporting Job Orders to PDF...')
-}
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const jobOrderPrintColumns = [
+  { key: 'no', label: 'No' },
+  { key: 'dueDate', label: 'Due Date' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'product', label: 'Product' },
+  { key: 'jobTitle', label: 'Job Title' },
+  { key: 'priority', label: 'Priority', align: 'center' as const },
+  { key: 'status', label: 'Status', align: 'center' as const }
+]
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
-
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Job Orders / SPK Produksi</h4>
-          <h6 class="text-muted mb-0">Kelola surat perintah kerja produksi dan alur divisi cetak</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Create Job Order</span>
-          </button>
-        </div>
-      </div>
-
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <PagesJobOrderTable
-        v-else
-        :job-orders="filteredList"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-job-order="handleAdd"
-        @edit-job-order="handleEdit"
-        @view-progress="handleProgress"
-        @delete-job-order="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
-
-    <PagesJobOrderModal
-      :is-open="isModalOpen"
-      :is-edit="isEdit"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @submit="handleSubmit"
+  <div class="dulank-page dulank-page-job-order space-y-6">
+    <SalesListHeader
+      title="Job Orders"
+      subtitle="Manage your Job Orders"
+      :refreshing="pending"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
 
-    <PagesJobOrderProgressModal
-      :is-open="isProgressOpen"
-      :job="progressData"
-      @close="isProgressOpen = false"
-      @update-steps="handleProgressUpdate"
+    <!-- KPI Widgets -->
+    <JobOrderStatsWidgets :orders="jobOrders" />
+
+    <SalesFeedback
+      :pending="pending"
+      :error="error ? 'Unable to load job orders. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- 2-Column Main Content -->
+    <div v-if="!pending && !error" class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+      <!-- Left: All Work Flow Panel -->
+      <div class="lg:col-span-4 xl:col-span-3">
+        <JobOrderWorkflowSidebar
+          :active-type="activeWorkflowType"
+          @select-type="handleSelectType"
+        />
+      </div>
+
+      <!-- Right: Job Order Table -->
+      <div class="lg:col-span-8 xl:col-span-9">
+        <JobOrderRecordsTable
+          :orders="jobOrders"
+          :search-query="searchQuery"
+          :filter-category="filterCategory"
+          :flow-title="activeWorkflowLabel"
+          @update:search-query="searchQuery = $event"
+          @update:filter-category="filterCategory = $event"
+          @view-flow="handleOpenView"
+          @edit="handleOpenEdit"
+          @delete="deletingRecord = $event"
+        />
+      </div>
+    </div>
+
+    <!-- Edit Job Order Modal -->
+    <JobOrderEditModal
+      :open="isEditModalOpen"
+      :order="activeOrderForEdit"
+      :busy="busy"
+      @close="isEditModalOpen = false; activeOrderForEdit = null"
+      @submit="handleEditSubmit"
+    />
+
+    <!-- View Flow Modal -->
+    <JobOrderViewFlowModal
+      :open="isViewModalOpen"
+      :order="activeOrderForView"
+      @close="isViewModalOpen = false; activeOrderForView = null"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!deletingRecord"
+      :busy="busy"
+      :error="actionError"
+      @close="deletingRecord = null"
+      @confirm="handleConfirmDelete"
+    />
+
+    <!-- Standardized Print & Export PDF Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Laporan Job Orders (Job Orders List)"
+      :columns="jobOrderPrintColumns"
+      :items="jobOrders"
+      date-field="dueDate"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

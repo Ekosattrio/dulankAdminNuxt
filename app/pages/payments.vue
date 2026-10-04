@@ -17,22 +17,21 @@ const paymentFilters = computed(() => ({
 }))
 const { payments, pending, error, refresh } = usePayments(paymentFilters)
 
-function printTable() {
-  printSalesRows(
-    'Payments',
-    ['Date Payment', 'Ref No', 'Name', 'Type', 'Payment Method', 'Amount (IDR)', 'Status', 'Create'],
-    payments.value.map((item) => [
-      item.date,
-      item.refNo,
-      item.name,
-      item.type,
-      item.method,
-      item.amount.toLocaleString('id-ID'),
-      item.status,
-      item.created,
-    ]),
-  )
-}
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
+
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const paymentPrintColumns = [
+  { key: 'date', label: 'Date Payment' },
+  { key: 'refNo', label: 'Ref No' },
+  { key: 'name', label: 'Name' },
+  { key: 'type', label: 'Type' },
+  { key: 'method', label: 'Payment Method' },
+  { key: 'amount', label: 'Amount (IDR)', align: 'right' as const },
+  { key: 'status', label: 'Status', align: 'center' as const },
+  { key: 'created', label: 'Create' }
+]
 </script>
 
 <template>
@@ -42,7 +41,8 @@ function printTable() {
       subtitle="Manage payment in and payment out"
       :refreshing="pending"
       @refresh="refresh()"
-      @print="printTable"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
     <SalesFeedback
       :pending="pending"
@@ -60,6 +60,19 @@ function printTable() {
       @update:filter-date-range="filterDateRange = $event"
       @update:filter-type="filterType = $event"
       @update:filter-method="filterMethod = $event"
+    />
+
+    <!-- Standardized Print & Export PDF Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Laporan Pembayaran (Payments List)"
+      :columns="paymentPrintColumns"
+      :items="payments"
+      date-field="date"
+      :initial-date-range="filterDateRange"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

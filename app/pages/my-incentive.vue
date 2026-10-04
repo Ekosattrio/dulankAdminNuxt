@@ -1,132 +1,90 @@
 <script setup lang="ts">
-import type { MyIncentive, MyIncentiveFormData } from '~/types/my-incentive'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { MyIncentiveFilterParams } from '#server/types/my-incentive'
+import { useMyIncentives } from '~/composables/useMyIncentives'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import MyIncentiveStatsWidgets from '~/components/pages/my-incentive/MyIncentiveStatsWidgets.vue'
+import MyIncentiveRecordsTable from '~/components/pages/my-incentive/MyIncentiveRecordsTable.vue'
+import type { DateRangeValue } from '~/composables/useDateRange'
+
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({
   layout: 'default'
 })
 
 useLegacyPage({
-  title: 'My Incentives - Insentif Saya',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  title: 'My Incentive List - Dulank Admin',
+  sweetAlert: false
 })
-
-const { myIncentives, pending, refresh, saveMyIncentive, deleteMyIncentive } = useMyIncentives()
 
 const searchQuery = ref('')
-const selectedStatus = ref('')
+const selectedProcess = ref('')
+const filterDateRange = ref<DateRangeValue | null>(null)
 
-const isModalOpen = ref(false)
-const editData = ref<MyIncentive | null>(null)
+const filterParams = computed<MyIncentiveFilterParams>(() => ({
+  search: searchQuery.value || undefined,
+  process: selectedProcess.value && selectedProcess.value !== 'All Process' ? selectedProcess.value : undefined,
+  startDate: filterDateRange.value?.start || undefined,
+  endDate: filterDateRange.value?.end || undefined
+}))
 
-const filteredList = computed(() => {
-  return myIncentives.value.filter((item) => {
-    const matchSearch =
-      !searchQuery.value ||
-      item.code?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      item.employee?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchStatus = !selectedStatus.value || item.status === selectedStatus.value
-    return matchSearch && matchStatus
-  })
-})
+const { myIncentives, stats, pending, error, refresh } = useMyIncentives(filterParams)
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const handleAdd = () => {
-  editData.value = null
-  isModalOpen.value = true
-}
-
-const handleEdit = (item: MyIncentive) => {
-  editData.value = item
-  isModalOpen.value = true
-}
-
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data insentif ini?')) {
-    try {
-      await deleteMyIncentive(id)
-    } catch (err) {
-      console.error('Failed to delete incentive:', err)
-    }
-  }
-}
-
-const handleSave = async (formData: MyIncentiveFormData) => {
-  try {
-    await saveMyIncentive(formData)
-    isModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save incentive:', err)
-  }
-}
+const incentivePrintColumns = [
+  { key: 'date', label: 'Date' },
+  { key: 'jobTitle', label: 'Job Title' },
+  { key: 'flowName', label: 'Flow Name' },
+  { key: 'incentive', label: 'Incentive', align: 'right' as const },
+  { key: 'unit', label: 'Unit', align: 'center' as const },
+  { key: 'qty', label: 'Qty', align: 'center' as const },
+  { key: 'amount', label: 'Amount', align: 'right' as const }
+]
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">My Incentives / Insentif Pribadi</h4>
-          <h6 class="text-muted mb-0">Rincian perolehan insentif penyelesaian order kerja karyawan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-            <FeatherIcon name="rotate-cw" size="16" />
-          </button>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Incentive Record</span>
-          </button>
-        </div>
-      </div>
+  <div class="dulank-page dulank-page-my-incentive max-w-7xl mx-auto px-4 py-6">
+    <!-- Header with literal titles from legacy HTML (Pdf, Print, Refresh icons, NO add button) -->
+    <SalesListHeader
+      title="My Incentive List"
+      subtitle="Manage My Incentive"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3 mb-4">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari kode insentif atau nama..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end">
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Paid">Paid</option>
-                <option value="Pending">Pending</option>
-              </select>
-            </div>
-          </div>
+    <!-- KPI Widgets matching exact legacy row & styling -->
+    <MyIncentiveStatsWidgets :stats="stats" />
 
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-
-          <PagesMyIncentiveTable
-            v-else
-            :items="filteredList"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
-      </div>
+    <!-- Error State -->
+    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
+      Gagal memuat daftar insentif: {{ error.message }}
+      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
     </div>
 
-    <PagesMyIncentiveModal
-      :is-open="isModalOpen"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @save="handleSave"
+    <!-- Incentive Records Table (7 columns, tfoot sum, NO Action column) -->
+    <MyIncentiveRecordsTable
+      :items="myIncentives"
+      :loading="pending"
+      v-model:search-query="searchQuery"
+      v-model:selected-process="selectedProcess"
+      v-model:date-range="filterDateRange"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+    />
+
+    <!-- Standardized Print & Export PDF Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Laporan Insentif Karyawan (My Incentive List)"
+      :columns="incentivePrintColumns"
+      :items="myIncentives"
+      date-field="date"
+      :initial-date-range="filterDateRange"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

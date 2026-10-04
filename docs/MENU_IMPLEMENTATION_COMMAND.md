@@ -228,6 +228,9 @@ Gunakan urutan ini saat mengeksekusi menu:
 12. **Validasi**
     Jalankan validasi sesuai arahan pengguna dan `AGENTS.md`. Jika pengguna melarang build/dev, jangan jalankan.
 
+13. **Catat progres**
+    Catat file yang berubah, flow yang selesai, reusable yang dibuat/dipakai, validasi yang dijalankan, dan sisa risiko. Jika menu menjadi selesai atau statusnya berubah, perbarui dokumen progres yang relevan.
+
 ---
 
 ## 8. Pola Jawaban Saat Selesai
@@ -241,6 +244,7 @@ Laporan akhir harus menyebut:
 - Validasi yang benar-benar dijalankan.
 - Validasi yang tidak dijalankan dan alasannya.
 - Kekurangan yang masih tersisa, jika ada.
+- Perubahan status/progres menu jika ada, serta dokumen progres yang ikut diperbarui.
 
 Jangan mengklaim seluruh aplikasi aman jika hanya satu menu yang diperiksa.
 

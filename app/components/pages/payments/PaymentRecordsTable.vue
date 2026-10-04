@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DateRangePicker from '~/components/common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import type { PaymentRecord } from '#server/types/payment'
 
@@ -90,7 +91,7 @@ const columns = [
       </span>
     </template>
     <template #cell(amount)="{ item }">
-      <span class="font-semibold">{{ formatNumber(item.amount) }}</span>
+      <CurrencyDisplay :value="item.amount" prefix="" align="right" class="w-full font-semibold" />
     </template>
     <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
     <template #cell(created)="{ item }">

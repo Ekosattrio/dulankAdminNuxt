@@ -5,6 +5,7 @@ import DateRangePicker from '~/components/common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
 import SalesActionButton from '~/components/sales/SalesActionButton.vue'
 import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
 
 const props = defineProps<{
   flowNames: FlowName[]
@@ -30,17 +31,13 @@ const columns = [
   { key: 'no', label: 'No', sortable: true },
   { key: 'category', label: 'Flow Category', sortable: true },
   { key: 'name', label: 'Flow Name', sortable: true },
-  { key: 'incentiveAmount', label: 'Incentive Amount (Rp)', sortable: true },
+  { key: 'incentiveAmount', label: 'Incentive Amount (Rp)', sortable: true, align: 'end' as const },
   { key: 'unitIncentive', label: 'Unit Incentive', sortable: true },
   { key: 'flowAssignee', label: 'Flow Assignee', sortable: true },
   { key: 'flowType', label: 'Flow Type', sortable: true },
   { key: 'createDate', label: 'Create Date', sortable: true },
   { key: 'actions', label: 'Action', sortable: false, align: 'center', class: 'w-28 text-center min-w-[100px] whitespace-nowrap' },
 ]
-
-function formatCurrency(val: number): string {
-  return new Intl.NumberFormat('id-ID').format(val || 0)
-}
 </script>
 
 <template>
@@ -94,7 +91,7 @@ function formatCurrency(val: number): string {
     </template>
 
     <template #cell(incentiveAmount)="{ item }">
-      <span class="text-gray-800 dark:text-gray-200">{{ formatCurrency(item.incentiveAmount) }}</span>
+      <CurrencyDisplay :value="item.incentiveAmount" prefix="" align="right" class="w-full text-gray-800 dark:text-gray-200" />
     </template>
 
     <template #cell(unitIncentive)="{ item }">

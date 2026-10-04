@@ -1,37 +1,51 @@
-import { readData, writeData } from '~/server/utils/data'
-import type { MyIncentive } from '~/types/my-incentive'
+import type { MyIncentive, MyIncentiveFormData } from '~/types/my-incentive'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<Partial<MyIncentive>>(event)
-  const items = readData<MyIncentive>('my-incentives.json')
+  const body = await readBody<MyIncentiveFormData>(event)
+  const items = await readJSON<MyIncentive[]>('my-incentives.json', [])
 
   if (body.id) {
     const index = items.findIndex((i) => String(i.id) === String(body.id))
     if (index !== -1) {
+      const incentiveRate = Number(body.incentive ?? items[index].incentive ?? 0)
+      const qty = Number(body.qty ?? items[index].qty ?? 1)
+      const amount = body.amount != null ? Number(body.amount) : (incentiveRate * qty)
+
       items[index] = {
         ...items[index],
         ...body,
-        qty: Number(body.qty ?? items[index].qty),
-        amount: Number(body.amount ?? items[index].amount)
+        incentive: incentiveRate,
+        qty,
+        amount,
+        status: body.status || items[index].status
       } as MyIncentive
-      writeData('my-incentives.json', items)
+      await writeJSON('my-incentives.json', items)
       return { success: true, data: items[index], message: 'Incentive updated successfully' }
     }
   }
 
   const nextCodeNum = items.length + 1
+  const incentiveRate = Number(body.incentive || 1000)
+  const qty = Number(body.qty || 1)
+  const amount = body.amount != null ? Number(body.amount) : (incentiveRate * qty)
+
   const newIncentive: MyIncentive = {
     id: Date.now().toString(),
     code: body.code || `INC-${String(nextCodeNum).padStart(2, '0')}`,
-    process: body.process || 'General',
-    date: body.date || new Date().toISOString().split('T')[0],
-    qty: Number(body.qty || 1),
-    amount: Number(body.amount || 0),
-    status: body.status || 'Pending'
+    date: body.date || new Date().toLocaleDateString('id-ID'),
+    jobTitle: body.jobTitle || 'Job Cetak',
+    flowName: body.flowName || 'Cetak Multilith',
+    process: body.process || 'Printing',
+    incentive: incentiveRate,
+    unit: body.unit || 'Ream',
+    qty,
+    amount,
+    status: body.status || 'Pending',
+    employee: body.employee || 'Ahmad'
   }
 
   items.unshift(newIncentive)
-  writeData('my-incentives.json', items)
+  await writeJSON('my-incentives.json', items)
 
   return {
     success: true,
@@ -39,4 +53,3 @@ export default defineEventHandler(async (event) => {
     message: 'Incentive created successfully'
   }
 })
-

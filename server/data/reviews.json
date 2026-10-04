@@ -1,0 +1,98 @@
+[
+  {
+    "id": "REV-4001",
+    "customerId": "CUST-001",
+    "productId": "P-101",
+    "productName": "Brosur Full Color A4",
+    "userEmail": "john.doe@email.com",
+    "date": "2025-09-30",
+    "rating": 5,
+    "title": "Suka banget!",
+    "review": "Kualitas cetaknya sangat memuaskan, warnanya cerah dan tajam, pengiriman juga kilat.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4002",
+    "customerId": "CUST-002",
+    "productId": "P-102",
+    "productName": "Label Tag Pakaian Custom",
+    "userEmail": "jane.smith@email.com",
+    "date": "2025-09-29",
+    "rating": 3,
+    "title": "Cukup OK",
+    "review": "Kualitas bahan lumayan bagus, namun ada sedikit pergeseran garis potong di beberapa tag.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4003",
+    "customerId": "CUST-003",
+    "productId": "P-103",
+    "productName": "Sticker Label Product Vinyl",
+    "userEmail": "david.williams@email.com",
+    "date": "2025-09-29",
+    "rating": 2,
+    "title": "Perlu Ditingkatkan",
+    "review": "Lem sticker agak kurang merekat di permukaan botol plastik basah, tolong tingkatkan lemnya.",
+    "status": "Unpublish"
+  },
+  {
+    "id": "REV-4004",
+    "customerId": "CUST-004",
+    "productId": "P-101",
+    "productName": "Brosur Full Color A4",
+    "userEmail": "sarah.jones@email.com",
+    "date": "2025-09-28",
+    "rating": 5,
+    "title": "Sangat Puas",
+    "review": "Hasil cetak brosur sangat profesional, packaging rapi kedap air dengan bubble wrap tebal.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4005",
+    "customerId": "CUST-005",
+    "productId": "P-104",
+    "productName": "Kartu Nama Matte Eksklusif",
+    "userEmail": "michael.brown@email.com",
+    "date": "2025-09-27",
+    "rating": 4,
+    "title": "Bagus dan Elegan",
+    "review": "Laminasi doff sangat halus, potongannya rapi, box kartu namanya kokoh.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4006",
+    "customerId": "CUST-006",
+    "productId": "P-105",
+    "productName": "Spanduk Flexy Korea 440gr",
+    "userEmail": "emily.davis@email.com",
+    "date": "2025-09-26",
+    "rating": 5,
+    "title": "Kokoh & Tebal",
+    "review": "Dipasang di outdoor kena hujan panas berminggu-minggu warna tetap awet dan tidak pudar.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4007",
+    "customerId": "CUST-007",
+    "productId": "P-102",
+    "productName": "Label Tag Pakaian Custom",
+    "userEmail": "chris.wilson@email.com",
+    "date": "2025-09-25",
+    "rating": 4,
+    "title": "Recommended",
+    "review": "Bahan kraft tebal sesuai pesanan, lubang hangtag presisi.",
+    "status": "Publish"
+  },
+  {
+    "id": "REV-4008",
+    "customerId": "CUST-008",
+    "productId": "P-106",
+    "productName": "Roll Up Banner 60x160cm",
+    "userEmail": "olivia.martin@email.com",
+    "date": "2025-09-24",
+    "rating": 1,
+    "title": "Tiang Penyangga Bengkok",
+    "review": "Tiang penyangga banner agak bengkok saat tiba dari kurir, mohon perkuat packing proteksinya.",
+    "status": "Unpublish"
+  }
+]

@@ -9,6 +9,7 @@ Panduan ini berlaku untuk seluruh repositori. Pola revisi menu SALES yang sudah 
 - Kerjakan **per menu sesuai permintaan pengguna**. Acuan saat ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan Request For Quotation. **POS ditunda** sampai diminta lagi.
 - Baca HTML halaman yang bersesuaian di [legacy/static-source/](legacy/static-source/), termasuk script, partial, dan aset yang mengatur interaksinya. Bila pengguna memberi URL referensi, bandingkan juga referensi tersebut. Situs acuannya adalah `https://dulank-admin.netlify.app/<nama-halaman>.html`.
 - Sebelum implementasi, petakan kolom tabel, tombol, dropdown, filter, modal, halaman tambah/edit/detail, cetak, dan alur penyimpanan. Jangan menyimpulkan isi form hanya dari nama menu.
+- **Kewajiban Modal & Interaksi Penuh:** Seluruh modal (termasuk modal Add/Edit dan sub-modal terkait) WAJIB mengimplementasikan seluruh interaksi, input, submodal, dan fungsinya persis seperti file HTML referensi/Netlify (misal: tabel informasi dinamis, penambahan baris inline, pergantian tipe input/select, submodal data select options). DILARANG menyederhanakan modal menjadi form generik atau satu kolom textarea saja.
 - Gunakan halaman SALES yang sudah direvisi sebagai contoh pola kode dan konsistensi UI. Isi, label, dan alur menu lain tetap mengikuti HTML menu tersebut.
 
 ## 2. Pertahankan file dan data yang sudah ada
@@ -75,7 +76,10 @@ Gunakan komponen bersama berikut sebelum membuat variasi baru:
 | [AssigneeSelect.vue](app/components/common/AssigneeSelect.vue) | Pemilih assignee standar modal (`min-h-9`, radio Employees/Department, chips badge, floating dropdown). |
 | [QuantityStepper.vue](app/components/common/QuantityStepper.vue) | Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
 | [ImageUploadGrid.vue](app/components/common/ImageUploadGrid.vue) | Komponen pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
-| [salesUi.ts](app/utils/salesUi.ts) | Helper kelas UI bersama: `tableFilterControlClass`, `formControlClass`, `modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`. |
+| [CurrencyInput.vue](app/components/common/CurrencyInput.vue) | Input mata uang / separator ribuan realtime (`h-9`), prefix 'Rp' opsional, justifikasi kanan (`align="right"`) atau kiri (`align="left"`), v-model angka murni. |
+| [CurrencyDisplay.vue](app/components/common/CurrencyDisplay.vue) | Display mata uang / separator ribuan standar (`Rp 10.000`), format monospaced tabular-nums, justifikasi kanan (`align="right"`) atau kiri (`align="left"`). |
+| [currency.ts](app/utils/currency.ts) | Utility pemformat & parser uang: `formatMoney()`, `formatIDR()`, `parseMoney()`, dan helper alignment `currencyAlignClass()`. |
+| [salesUi.ts](app/utils/salesUi.ts) | Helper kelas UI bersama: `tableFilterControlClass`, `formControlClass`, `modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`, re-export currency utils. |
 
 ### Standarisasi Dimensi (Height, Width, dan Grid Form)
 
@@ -85,7 +89,9 @@ Gunakan komponen bersama berikut sebelum membuat variasi baru:
   - Baris: `grid grid-cols-12 items-center gap-3 sm:gap-4` (`items-start` untuk field multiline/tags) atau helper `modalFormRowClass`.
   - Label: `col-span-5 text-xs font-semibold text-gray-700 dark:text-gray-300` atau helper `modalFormLabelClass`.
   - Input: `col-span-7` atau helper `modalFormInputColClass`.
-  Pola ini menjamin posisi ujung kiri dan kanan seluruh input dalam modal 100% sejajar, presisi, dan tidak terdistorsi oleh kalkulasi flexbox.
+- **Aturan Single Card Container (No Double Card Nesting):** `SalesDataTable.vue` sudah memiliki container card mandiri lengkap dengan border, rounded corner, dan background. DILARANG membungkus `SalesDataTable.vue` di dalam card pembungkus tambahan (`<div class="card">...</div>` atau sejenisnya) karena akan menyebabkan tampilan kartu bertumpuk/bersarang ganda yang merusak estetika dan konsistensi layout. Gunakan `SalesDataTable` langsung di tingkat container layout halaman.
+- **Kewajiban Relasional Dummy Data (Database Migration Ready):** Seluruh dataset dummy pada mock JSON server WAJIB memiliki struktur relasional yang komprehensif: Primary Key `id`, serta Foreign Keys penaut antar entitas (`orderId`, `jobOrderId`, `customerId`, `branchId`, `productId`, `employeeId`), rincian spesifikasi input/output teknis pengerjaan, kuantitas OK (`qtyOk`), kuantitas rusak (`qtyRusak`), dan timestamp. Hal ini mutlak diperlukan sebagai acuan skema perancangan database relasional (PostgreSQL/MySQL) di masa mendatang.
+- **Kewajiban Format Uang & Penyimpanan Numerik Murni:** Nilai uang (harga, diskon, insentif, biaya, total) di seluruh dataset JSON / database DILARANG ditulis/disimpan sebagai string berpemisah statis seperti `"2.000"` atau `"Rp 2.000"`. Seluruh nilai uang WAJIB disimpan sebagai **angka numerik murni** (`number`, cth: `2000`). Pemformatan separator ribuan bertitik (`1.000.000` / `Rp 1.000.000`) dan prefix WAJIB dijalankan secara dinamis melalui utility (`formatMoney`, `formatIDR`) atau komponen bersama (`<CurrencyDisplay>`, `<CurrencyInput>`) dengan opsi justifikasi kanan (`align="right"`) untuk kolom tabel & kalkulasi, maupun kiri (`align="left"`) jika diperlukan.
 
 Standarisasi berarti komponen dan gaya konsisten; **nama serta urutan kolom tetap mengikuti domain masing-masing**. Jangan mengganti `Sales Channel` atau `Quotation Channel` menjadi `Channel`. Jangan mencampur emoji, ikon dari library lain, dan Feather untuk fungsi setara.
 
@@ -113,7 +119,40 @@ Gunakan daftar ini sebagai batas regresi untuk Payment:
 - **Rentang waktu Payment:** gunakan `DateRangePicker.vue`, `useDateRange.ts`, dan `server/utils/dateRange.ts`. Query API memakai `startDate` dan `endDate`; data legacy `DD/MM/YYYY` difilter di server. Komponen ini adalah standar reusable untuk halaman lain yang punya fitur pemilih rentang waktu.
 - Data Payment tidak boleh kembali menjadi array hardcoded di page. Jika detail lama tidak tersedia, tampilkan keadaan kosong/known value secara eksplisit; jangan mengarang transaksi, rekening, customer, atau pembayaran contoh.
 
-## 6. Semua tombol harus menjalankan flow yang benar
+## 5.2 Perilaku ORDERS Group yang sudah disetujui
+
+Gunakan daftar ini sebagai batas regresi untuk grup menu Orders:
+
+- **Orders (`/orders`):** tabel daftar pesanan dilengkapi filter tanggal `DateRangePicker.vue`, status, dan shipping method. Modal status pesanan (`OrderStatusModal.vue`) menggunakan CSS Grid 12 kolom untuk update status.
+- **Job Orders (`/job-order`):** layout 2 kolom dengan sidebar kategori workflow (Design, Pracetak, Cetak, Finishing) dan counter badge job aktif. Modal View Flow menampilkan rincian pesanan dan timeline tahapan workflow. Modal Edit memuat data pengerjaan pesanan.
+- **Job List (`/job-list`):** layout 2 kolom dengan sidebar All Flow dan filter jenis pekerjaan. Modal View Detail memuat Order Information dan rincian spesifikasi teknis pengerjaan cetak/finishing serta kuantitas OK / Rusak.
+- **Job Branch (`/job-branch`):** modal Setting Job Branch (`JobBranchSettingModal.vue`) mencakup konfigurasi cabang, prioritas, status pengerjaan, editor dinamis spesifikasi sebelum cetak (`infoList`) dan sesudah cetak (`afterInfoList`), pemilih petugas penanggung jawab (`AssigneeSelect.vue`), serta besaran dan satuan insentif per job. Modal History (`JobBranchHistoryModal.vue`) menampilkan log riwayat cabang penyelesaian.
+- **My Incentive (`/my-incentive`):** tabel riwayat insentif karyawan dengan 7 kolom literal (Date, Job Title, Flow Name, Incentive, Unit, Qty, Amount), tanpa kolom Action atau tombol Add sesuai referensi Netlify, widget KPI proporsional (Total Count & Amount), filter tanggal DateRangePicker, filter Name Of Process (Printing, Cutting), dan footer akumulatif total Amount.
+
+## 5.3 Perilaku WEBSTORE yang sudah disetujui
+
+Gunakan daftar ini sebagai batas regresi untuk grup menu Webstore (`https://percetakan-dulank.netlify.app/`):
+
+- **Cart (`/cart`):** tabel daftar keranjang pelanggan dengan filter tanggal `DateRangePicker.vue`, filter Category dan Status (`TableFilterSelect.vue`). Format uang Price dan Total Price menggunakan `<CurrencyDisplay align="right">` dari angka murni. 4 widget KPI: Total Cart Amount, Total Cart Active, Total Cart Checkout, Total Cart Delete. Tanpa kolom Action.
+- **Checkout (`/checkout`):** tabel transaksi checkout dengan filter tanggal, Metode, dan Status. Kolom Payment dan Delivery fee berformat mata uang rata kanan numerik murni. 4 widget KPI: Total Checkout, Total Revenue, Total Success, Total Failed. Tanpa kolom Action.
+- **Wishlist (`/wishlist`):** tabel daftar wishlist dengan 4 widget KPI (Amount, Active, Checkout, Delete), filter Category dan Status, kolom Price dan Total Price berformat numerik murni rata kanan. Tanpa kolom Action.
+- **Reviews (`/reviews`):** tabel ulasan pelanggan dengan 3 widget KPI proporsional (Total Review, Total Product, Total Publish), filter tanggal dan Rating (1-5), kolom Rating berikon bintang emas, Title, Review, dan badge Status. Tanpa kolom Action.
+- **Contact Form (`/contact-form`):** tabel formulir kontak dengan widget Total Contact, filter tanggal, 5 kolom literal (Name, Email, Phone, Message, Date) tanpa kolom Action sesuai template referensi Netlify.
+
+## 5.4 Perilaku PRINT & PDF EXPORT yang sudah disetujui
+
+Gunakan standar ini untuk fitur cetak (Print) dan ekspor PDF di seluruh repositori:
+
+- **Isolasi Cetak Iframe (`app/utils/documentPrinter.ts`):** Cetak tabel/laporan dijalankan melalui iframe terisolasi (`printDocument()`) agar tidak bocor elemen UI Nuxt (sidebar, navbar, tombol, dark mode background).
+- **Kop Surat Resmi (Letterhead):** Laporan cetak menyertakan Kop Surat resmi PT. DULANK SEMESTA CIDA (Logo, Alamat Jl. Arif Rahman Hakim Karawang, Kontak, Email, dan garis ganda pembatas resmi kop).
+- **Kolom Tanda Tangan (TTD):** Menyertakan tanggal terformat ("Karawang, [Tanggal]") dan 2 kolom tanda tangan: "Dibuat Oleh" (Staff Administrasi) dan "Mengetahui" (Manager Operasional).
+- **Dialog Opsi Cetak (`DocumentPrintModal.vue`):** Tombol Print (printer) dan PDF (file-text) di toolbar header (`SalesListHeader.vue`) membuka modal dialog opsi cetak:
+  - **Cakupan Data:** Pilihan antara "Semua Data Terfilter", "Halaman Ini Saja (Current Page)", atau "Rentang Tanggal Khusus" (`DateRangePicker.vue`).
+  - **Opsi Dokumen:** Toggle sertakan Kop Surat, Kolom TTD, Waktu/Tanggal Cetak, serta orientasi kertas A4 (Landscape/Portrait).
+  - **Pengecualian Kolom:** Kolom 'actions' / 'action' otomatis diabaikan saat dicetak. Format mata uang diformat rata kanan dengan pemformat Rupiah `formatIDR()`.
+- **Pengecualian Dokumen Khusus (Template Khusus dari HTML Asli):**
+  - Halaman dokumen spesifik tetap mempertahankan template khususnya: **Sales Receipt** (`sales-receipt.vue` format thermal struk 80mm), **Sales Note** (`sales-note.vue` format nota penjualan), **SPK My Job / Job Order Ticket** (`printJobDetailTicket` format SPK produksi), **Invoice Details** (`invoice-details.html`), **Delivery Note Detail** (`delivery-note-detail.html`), **Quotation Detail** (`quotation-detail.html`), **Request Quotation Detail** (`request-quotation-detail.html`), dan **Payslip Detail** (`payslip-detail.html`).
+  - Layout default Nuxt (`app/layouts/default.vue`) dan `app/assets/css/main.css` telah diproteksi dengan `@media print` (`print:hidden`, `print:ms-0`, `print:p-0`, `print:w-full`) sehingga dokumen khusus yang dicetak via browser tidak mengalami pergeseran margin 260px atau bocornya header/sidebar.
 
 - Hubungkan aksi dengan record yang dipilih. Uji More, view, add, edit, delete, history, pembayaran, duplicate, dan print yang tersedia di menu tersebut.
 - Edit memuat seluruh field dan item tersimpan. Menyimpan lalu membuka ulang atau reload harus menampilkan perubahan yang sama.
@@ -140,3 +179,10 @@ npm run validate:structure
 - Untuk perubahan dokumentasi saja, cukup periksa isi, tautan lokal, dan diff; tidak perlu menjalankan build aplikasi.
 
 Laporan akhir harus menyebut perubahan yang selesai, pemeriksaan yang benar-benar dijalankan, serta kekurangan yang masih ada. Jangan menyatakan semua halaman atau semua flow sudah sesuai HTML jika yang diperiksa hanya sebagian.
+
+## 8. Catatan progres dan perubahan
+
+- Setiap AI yang mengubah kode atau dokumentasi wajib mencatat progres pekerjaannya dengan jelas di laporan akhir: file yang berubah, fitur/flow yang disentuh, reusable yang dibuat/dipakai, validasi yang dijalankan, validasi yang tidak dijalankan, dan sisa risiko.
+- Jika pekerjaan menyelesaikan atau mengubah status sebuah menu/modul, perbarui dokumen progres yang relevan (`AI_HANDOVER_GUIDE.md`, `docs/STRUCTURE.md`, `docs/MENU_IMPLEMENTATION_COMMAND.md`, atau bagian perilaku menu di `AGENTS.md`) agar AI berikutnya tidak mengulang audit dari nol.
+- Catatan progres harus jujur dan spesifik. Jangan menulis "semua sudah selesai" bila yang dicek hanya sebagian flow. Sebutkan route/menu dan tanggal kerja bila relevan.
+- Jangan memperbarui progress matrix hanya untuk mengklaim selesai; status "selesai" harus berdasarkan implementasi yang benar-benar ada, flow yang terhubung, dan validasi yang dilaporkan.

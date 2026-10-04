@@ -40,12 +40,13 @@ export function getFlowTemplateById(id: string): FlowTemplate | null {
 
 export function createFlowTemplate(payload: FlowTemplateFormData): FlowTemplate {
   const name = payload.name?.trim();
-  const information = payload.information?.trim();
+  const templateItems = payload.items || [];
+  const information = payload.information?.trim() || templateItems.map((item) => item.label?.trim()).filter(Boolean).join(", ");
 
   if (!name) {
     throw createError({ statusCode: 400, statusMessage: "Flow template name is required" });
   }
-  if (!information) {
+  if (!information && !templateItems.length) {
     throw createError({ statusCode: 400, statusMessage: "Information is required" });
   }
 
@@ -55,7 +56,8 @@ export function createFlowTemplate(payload: FlowTemplateFormData): FlowTemplate 
     id: nextFlowTemplateId(items),
     no: payload.no?.trim() || nextFlowTemplateNo(items),
     name,
-    information,
+    information: information || "Default",
+    items: templateItems,
   };
 
   items.unshift(newItem);
@@ -65,30 +67,33 @@ export function createFlowTemplate(payload: FlowTemplateFormData): FlowTemplate 
 
 export function updateFlowTemplate(id: string, payload: FlowTemplateFormData): FlowTemplate {
   const name = payload.name?.trim();
-  const information = payload.information?.trim();
-
-  if (!name) {
-    throw createError({ statusCode: 400, statusMessage: "Flow template name is required" });
-  }
-  if (!information) {
-    throw createError({ statusCode: 400, statusMessage: "Information is required" });
-  }
-
-  const items = readFlowTemplateData();
-  const index = items.findIndex((item) => String(item.id) === String(id) || item.no === id);
+  const templateItems = payload.items;
+  const currentItems = readFlowTemplateData();
+  const index = currentItems.findIndex((item) => String(item.id) === String(id) || item.no === id);
   if (index === -1) {
     throw createError({ statusCode: 404, statusMessage: "Flow template not found" });
   }
 
-  const current = items[index];
+  const current = currentItems[index];
+  const finalItems = templateItems || current.items || [];
+  const information = payload.information?.trim() || finalItems.map((item) => item.label?.trim()).filter(Boolean).join(", ");
+
+  if (!name) {
+    throw createError({ statusCode: 400, statusMessage: "Flow template name is required" });
+  }
+  if (!information && !finalItems.length) {
+    throw createError({ statusCode: 400, statusMessage: "Information is required" });
+  }
+
   const updated: FlowTemplate = {
     ...current,
     name,
-    information,
+    information: information || current.information,
+    items: finalItems,
   };
 
-  items[index] = updated;
-  writeFlowTemplateData(items);
+  currentItems[index] = updated;
+  writeFlowTemplateData(currentItems);
   return updated;
 }
 

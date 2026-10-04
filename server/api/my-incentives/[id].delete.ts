@@ -1,9 +1,8 @@
-import { readData, writeData } from '~/server/utils/data'
 import type { MyIncentive } from '~/types/my-incentive'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-  const items = readData<MyIncentive>('my-incentives.json')
+  const items = await readJSON<MyIncentive[]>('my-incentives.json', [])
 
   const updated = items.filter((item) => String(item.id) !== String(id))
 
@@ -14,11 +13,10 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  writeData('my-incentives.json', updated)
+  await writeJSON('my-incentives.json', updated)
 
   return {
     success: true,
     data: { id }
   }
 })
-

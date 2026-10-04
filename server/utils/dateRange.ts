@@ -45,3 +45,5 @@ export function isDateWithinRange(value: string, startDate?: string | null, endD
   if (endTime !== null && dateTime > endTime) return false
   return true
 }
+
+export const isDateInRange = isDateWithinRange

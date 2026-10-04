@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import { useAttrs } from 'vue'
+
 defineProps<{ title: string; subtitle: string; addLabel?: string; addTo?: string; refreshing?: boolean }>()
-defineEmits<{ add: []; refresh: []; print: [] }>()
+const emit = defineEmits<{ add: []; refresh: []; print: []; pdf: [] }>()
+const attrs = useAttrs()
+
+function onPdfClick() {
+  if (attrs.onPdf) {
+    emit('pdf')
+  } else {
+    emit('print')
+  }
+}
 </script>
 
 <template>
@@ -14,8 +25,8 @@ defineEmits<{ add: []; refresh: []; print: [] }>()
         type="button"
         title="Export PDF (Save as PDF)"
         aria-label="Export PDF"
-        class="flex size-9 items-center justify-center rounded border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
-        @click="$emit('print')"
+        class="flex size-9 items-center justify-center rounded border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 text-gray-600 dark:text-gray-300"
+        @click="onPdfClick"
       >
         <FeatherIcon name="file-text" :size="16" />
       </button>

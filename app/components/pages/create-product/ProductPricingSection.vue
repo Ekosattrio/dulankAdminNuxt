@@ -2,6 +2,7 @@
 import type { ProductVariant } from '#server/types/product'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import QuantityStepper from '~/components/common/QuantityStepper.vue'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import { formControlClass } from '~/utils/salesUi'
 
 export type PriceTypeTab =
@@ -168,13 +169,12 @@ function removeVariant(index: number) {
 
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Price (IDR)</label>
-          <input
-            :value="price"
-            type="number"
-            min="0"
+          <CurrencyInput
+            :model-value="price"
+            prefix="Rp"
+            align="right"
             :disabled="disabled"
-            :class="formControlClass"
-            @input="emit('update:price', Number(($event.target as HTMLInputElement).value))"
+            @update:model-value="emit('update:price', $event)"
           />
         </div>
 
@@ -347,12 +347,13 @@ function removeVariant(index: number) {
                 />
               </td>
               <td class="px-4 py-2">
-                <input
-                  :value="v.price"
-                  type="number"
-                  min="0"
-                  class="h-8 w-28 rounded-md border border-gray-200 bg-white px-2.5 text-xs text-gray-800 shadow-sm outline-none transition hover:border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
-                  @input="updateVariantPrice(idx, Number(($event.target as HTMLInputElement).value))"
+                <CurrencyInput
+                  :model-value="v.price"
+                  size="sm"
+                  prefix=""
+                  align="right"
+                  input-class="w-28"
+                  @update:model-value="updateVariantPrice(idx, $event)"
                 />
               </td>
               <td class="px-4 py-2">
@@ -460,13 +461,12 @@ function removeVariant(index: number) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Price (IDR)</label>
-          <input
-            :value="price"
-            type="number"
-            min="0"
+          <CurrencyInput
+            :model-value="price"
+            prefix="Rp"
+            align="right"
             :disabled="disabled"
-            :class="formControlClass"
-            @input="emit('update:price', Number(($event.target as HTMLInputElement).value))"
+            @update:model-value="emit('update:price', $event)"
           />
         </div>
 
@@ -484,13 +484,12 @@ function removeVariant(index: number) {
 
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Minimal Price</label>
-          <input
-            :value="minPrice"
-            type="number"
-            min="0"
+          <CurrencyInput
+            :model-value="minPrice"
+            prefix="Rp"
+            align="right"
             :disabled="disabled"
-            :class="formControlClass"
-            @input="emit('update:minPrice', Number(($event.target as HTMLInputElement).value))"
+            @update:model-value="emit('update:minPrice', $event)"
           />
         </div>
 
@@ -564,13 +563,12 @@ function removeVariant(index: number) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Druck Price</label>
-          <input
-            :value="druckPrice"
-            type="number"
-            min="0"
+          <CurrencyInput
+            :model-value="druckPrice"
+            prefix="Rp"
+            align="right"
             :disabled="disabled"
-            :class="formControlClass"
-            @input="emit('update:druckPrice', Number(($event.target as HTMLInputElement).value))"
+            @update:model-value="emit('update:druckPrice', $event)"
           />
         </div>
 

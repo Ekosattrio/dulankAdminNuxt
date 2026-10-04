@@ -1,8 +1,9 @@
-import type { MyIncentive, MyIncentiveFormData, MyIncentiveFilterParams } from '#server/types/my-incentive'
+import type { MyIncentive, MyIncentiveFormData, MyIncentiveFilterParams, MyIncentiveStats } from '#server/types/my-incentive'
 
 interface ResponseData {
   success: boolean
   data: MyIncentive[]
+  stats?: MyIncentiveStats
   message?: string
 }
 
@@ -15,6 +16,10 @@ export function useMyIncentives(filterParams?: Ref<MyIncentiveFilterParams> | My
   })
 
   const myIncentives = computed<MyIncentive[]>(() => data.value?.data ?? [])
+  const stats = computed<MyIncentiveStats>(() => data.value?.stats ?? {
+    totalCount: myIncentives.value.reduce((acc, curr) => acc + (Number(curr.qty) || 0), 0),
+    totalAmount: myIncentives.value.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
+  })
 
   const saveMyIncentive = async (payload: MyIncentiveFormData) => {
     const res = await $fetch<{ success: boolean; data: MyIncentive; message?: string }>('/api/my-incentives', {
@@ -35,6 +40,7 @@ export function useMyIncentives(filterParams?: Ref<MyIncentiveFilterParams> | My
 
   return {
     myIncentives,
+    stats,
     pending,
     error,
     refresh,

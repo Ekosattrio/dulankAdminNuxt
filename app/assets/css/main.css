@@ -96,16 +96,33 @@
 
 /* Print support */
 @media print {
-  body {
+  body, html {
     background: white !important;
+    color: black !important;
     padding: 0 !important;
+    margin: 0 !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
+  
   .no-print,
   nav,
   aside,
   header,
+  .app-header,
+  .app-sidebar,
   .page-header-actions,
   button:not(.allow-print) {
     display: none !important;
+    visibility: hidden !important;
+  }
+
+  main {
+    margin: 0 !important;
+    margin-inline-start: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }

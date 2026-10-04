@@ -49,5 +49,8 @@ function cancel(event: Event) {
       </button>
     </div>
     <div v-if="open" class="p-6"><slot /></div>
+    <div v-if="open && $slots.footer" class="border-t border-gray-100 bg-[#fafbfe] px-6 py-3 dark:border-gray-800 dark:bg-gray-800/80">
+      <slot name="footer" />
+    </div>
   </dialog>
 </template>

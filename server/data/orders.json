@@ -1,0 +1,222 @@
+[
+  {
+    "id": "1",
+    "no": "ORD-2510000001",
+    "customer": "PT Makmur Abadi",
+    "orderDate": "10/9/2025",
+    "status": "Complete",
+    "statusBy": "Admin",
+    "salesChannel": "Quotation",
+    "shipping": "Courier",
+    "customerId": "CUST-001",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-001",
+        "productName": "PT Makmur Abadi Print Item",
+        "qty": 1000,
+        "unitPrice": 500,
+        "total": 500000
+      }
+    ],
+    "totalAmount": 500000
+  },
+  {
+    "id": "2",
+    "no": "ORD-2510000002",
+    "customer": "Toko Digital Jaya",
+    "orderDate": "10/9/2025",
+    "status": "Processing",
+    "statusBy": "System",
+    "salesChannel": "Website",
+    "shipping": "Express",
+    "customerId": "CUST-002",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-002",
+        "productName": "Toko Digital Jaya Print Item",
+        "qty": 2000,
+        "unitPrice": 500,
+        "total": 1000000
+      }
+    ],
+    "totalAmount": 1000000
+  },
+  {
+    "id": "3",
+    "no": "ORD-2510000003",
+    "customer": "Bapak Heru Santoso",
+    "orderDate": "10/8/2025",
+    "status": "Cancel",
+    "statusBy": "Admin",
+    "salesChannel": "POS",
+    "shipping": "Pickup",
+    "customerId": "CUST-003",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-003",
+        "productName": "Bapak Heru Santoso Print Item",
+        "qty": 3000,
+        "unitPrice": 500,
+        "total": 1500000
+      }
+    ],
+    "totalAmount": 1500000
+  },
+  {
+    "id": "4",
+    "no": "ORD-2510000004",
+    "customer": "CV Cahaya Baru",
+    "orderDate": "10/8/2025",
+    "status": "Waiting",
+    "statusBy": "System",
+    "salesChannel": "Website",
+    "shipping": "Courier",
+    "customerId": "CUST-004",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-004",
+        "productName": "CV Cahaya Baru Print Item",
+        "qty": 4000,
+        "unitPrice": 500,
+        "total": 2000000
+      }
+    ],
+    "totalAmount": 2000000
+  },
+  {
+    "id": "5",
+    "no": "ORD-2510000005",
+    "customer": "PT Global Solusi",
+    "orderDate": "10/7/2025",
+    "status": "Complete",
+    "statusBy": "Admin",
+    "salesChannel": "Quotation",
+    "shipping": "Pickup",
+    "customerId": "CUST-005",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-005",
+        "productName": "PT Global Solusi Print Item",
+        "qty": 5000,
+        "unitPrice": 500,
+        "total": 2500000
+      }
+    ],
+    "totalAmount": 2500000
+  },
+  {
+    "id": "6",
+    "no": "ORD-2510000006",
+    "customer": "Ibu Rina Kusuma",
+    "orderDate": "10/7/2025",
+    "status": "Processing",
+    "statusBy": "System",
+    "salesChannel": "POS",
+    "shipping": "Express",
+    "customerId": "CUST-006",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-006",
+        "productName": "Ibu Rina Kusuma Print Item",
+        "qty": 6000,
+        "unitPrice": 500,
+        "total": 3000000
+      }
+    ],
+    "totalAmount": 3000000
+  },
+  {
+    "id": "7",
+    "no": "ORD-2510000007",
+    "customer": "UD Mandiri Cetak",
+    "orderDate": "10/6/2025",
+    "status": "Complete",
+    "statusBy": "System",
+    "salesChannel": "Website",
+    "shipping": "Courier",
+    "customerId": "CUST-007",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-007",
+        "productName": "UD Mandiri Cetak Print Item",
+        "qty": 7000,
+        "unitPrice": 500,
+        "total": 3500000
+      }
+    ],
+    "totalAmount": 3500000
+  },
+  {
+    "id": "8",
+    "no": "ORD-2510000008",
+    "customer": "PT Sinergi Karya",
+    "orderDate": "10/6/2025",
+    "status": "Cancel",
+    "statusBy": "Admin",
+    "salesChannel": "Quotation",
+    "shipping": "Express",
+    "customerId": "CUST-008",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-008",
+        "productName": "PT Sinergi Karya Print Item",
+        "qty": 8000,
+        "unitPrice": 500,
+        "total": 4000000
+      }
+    ],
+    "totalAmount": 4000000
+  },
+  {
+    "id": "9",
+    "no": "ORD-2510000009",
+    "customer": "Bapak Doni Wiguna",
+    "orderDate": "10/5/2025",
+    "status": "Waiting",
+    "statusBy": "System",
+    "salesChannel": "POS",
+    "shipping": "Pickup",
+    "customerId": "CUST-009",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-009",
+        "productName": "Bapak Doni Wiguna Print Item",
+        "qty": 9000,
+        "unitPrice": 500,
+        "total": 4500000
+      }
+    ],
+    "totalAmount": 4500000
+  },
+  {
+    "id": "10",
+    "no": "ORD-2510000010",
+    "customer": "Toko Buku Harapan",
+    "orderDate": "10/5/2025",
+    "status": "Processing",
+    "statusBy": "Admin",
+    "salesChannel": "Website",
+    "shipping": "Courier",
+    "customerId": "CUST-010",
+    "branchId": "BR-01",
+    "items": [
+      {
+        "productId": "PRD-010",
+        "productName": "Toko Buku Harapan Print Item",
+        "qty": 10000,
+        "unitPrice": 500,
+        "total": 5000000
+      }
+    ],
+    "totalAmount": 5000000
+  }
+]

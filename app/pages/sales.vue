@@ -33,6 +33,25 @@ const {
   confirmDelete,
   printTable,
 } = useSalesPage()
+
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
+
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const salesPrintColumns = [
+  { key: 'saleNo', label: 'No Sales' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'date', label: 'Date' },
+  { key: 'subTotal', label: 'Sub Total', align: 'right' as const },
+  { key: 'deliveryFee', label: 'Delivery Fee', align: 'right' as const },
+  { key: 'discount', label: 'Discount', align: 'right' as const },
+  { key: 'tax', label: 'Tax', align: 'right' as const },
+  { key: 'total', label: 'Total (IDR)', align: 'right' as const },
+  { key: 'delivery', label: 'Delivery' },
+  { key: 'channel', label: 'Channel' },
+  { key: 'status', label: 'Status', align: 'center' as const }
+]
 </script>
 
 <template>
@@ -44,7 +63,8 @@ const {
       :refreshing="pending"
       @add="handleAdd"
       @refresh="refresh()"
-      @print="printTable"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
     <SalesFeedback
       :pending="pending"
@@ -99,5 +119,17 @@ const {
     <SalesHistoryDialog :kind="historyKind" @close="historyKind = null" />
     <SalesDetailsDialog :record="selectedSale" @close="selectedSale = null" />
     <SalesPaymentsDialog :record="paymentSale" @close="paymentSale = null" @saved="refresh()" />
+
+    <!-- Standardized Print & Export PDF Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Laporan Data Penjualan (Sales List)"
+      :columns="salesPrintColumns"
+      :items="filteredList"
+      date-field="date"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
   </div>
 </template>

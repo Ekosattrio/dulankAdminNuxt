@@ -20,3 +20,7 @@ export const formControlClass =
 export const modalFormRowClass = "grid grid-cols-12 items-center gap-3 sm:gap-4";
 export const modalFormLabelClass = "col-span-5 text-xs font-semibold text-gray-700 dark:text-gray-300";
 export const modalFormInputColClass = "col-span-7";
+
+// Export standard currency & thousands separator utilities
+export * from "./currency";
+

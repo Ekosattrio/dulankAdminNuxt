@@ -1381,7 +1381,7 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 
 - `server/types/flow-category.ts`: `id`, `no` (`PCC-xxx`), `name`, `used`, `createdBy`, `createdDate`.
 - `server/types/flow-name.ts`: `id`, `no` (`JBP-xxxx`), `category`, `name`, `incentiveAmount`, `unitIncentive`, `flowAssignee`, `flowType`, `createDate`.
-- `server/types/flow-template.ts`: `id`, `no` (`FT-xxxx`), `name`, `information`.
+- `server/types/flow-template.ts`: `id`, `no` (`FT-xxxx`), `name`, `information`, `items?: FlowTemplateItem[]` di mana `FlowTemplateItem` terdiri dari `id`, `label`, `type` (`Input Type` | `Select Type`), dan `options?: string[]`.
 - `server/types/work-flow.ts`: `id`, `no` (`JAP-xxxx`), `date`, `category`, `product`, `workflowSteps`, `steps: WorkFlowStepItem[]`.
 - Seluruh JSON sumber awal tersimpan di `server/data/flow-categories.json`, `flow-names.json`, `flow-templates.json`, dan `work-flows.json`. Penyimpanan runtime disimpan terisolasi di `data/*.json` dan tidak ditimpa oleh seed.
 - Validasi, penomoran otomatis prefix domain, dan filter tanggal ditangani di `server/utils/`.
@@ -1390,6 +1390,13 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 
 - Tabel pada keempat menu menggunakan standar bersama `SalesDataTable.vue` (`text-xs`), kontrol toolbar light modern `h-9`, `DateRangePicker.vue`, dan `SalesActionButton.vue`.
 - Modal Add/Edit (`FlowCategoryModal`, `FlowNameModal`, `FlowTemplateModal`, `WorkFlowProcessModal`) menggunakan standar modal Netlify: lebar medium, header `#fafbfe`, judul `#092c4c`, tombol Cancel `#212b36`, dan Submit `#ff9f43`.
+- **Flow Template Add/Edit Modal (`FlowTemplateModal.vue`) & Sub-modal (`FlowTemplateDataSelectModal.vue`):**
+  - Mengimplementasikan alur lengkap HTML `flow-template.html`:
+    - Field input `Flow Templete Name`.
+    - Trigger `+ Add Information` yang membuka baris inline input (`Information` placeholder, tombol Cancel, dan tombol Save primary).
+    - Tabel dinamis seluruh item informasi: menampilkan label (dengan kemampuan inline edit), tombol Edit, tombol Delete, dropdown tipe (`Input Type` / `Select Type`), dan tautan aksi Data Select (`Add Data Select` / `Edit Data Select`).
+    - Sub-modal `Add Data Select` (`FlowTemplateDataSelectModal.vue`): menampilkan field `Information` (read-only), input penambahan opsi baru dengan tombol Add, dan kotak `Data Select Saved` yang memuat daftar pilihan tersimpan lengkap dengan tombol Hapus untuk masing-masing opsi, serta tombol Cancel dan Submit.
+    - Sinkronisasi otomatis ke string `information` (comma-separated) dan array domain `items` yang tersimpan persisten ke backend API.
 - Halaman konfigurasi dokumen `add-work-flow` dan `edit-work-flow` menggunakan form 2-kolom:
   - Kolom kiri: Live search produk, checklist stasiun kerja (Design, Cetak, PraCetak, Finishing), serta toggle template alur.
   - Kolom kanan: `Work Flow Arrange` sticky card dengan urutan stasiun produksi `No. 1`, `No. 2`, dsb. serta sepasang tombol reorder Up/Down (`arrow-up` & `arrow-down`) ukuran 34x34px.
@@ -1400,6 +1407,7 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 - Seluruh mutasi (Add, Edit, Delete) harus tersimpan persisten ke API backend Nitro.
 - Label kolom dan data pada tabel harus konsisten dengan file HTML legacy masing-masing.
 - Seluruh tombol edit pada tabel harus membuka modal atau halaman edit dengan data record terpilih.
+- Modal Add Flow Template dan Edit Flow Template WAJIB menyediakan seluruh fitur legacy secara presisi: tabel item informasi dinamis, penambahan baris inline, pergantian tipe input/select, dan sub-modal Add/Edit Data Select untuk konfigurasi opsi. DILARANG menurunkan form ini menjadi satu kolom textarea sederhana.
 
 ### 22.4 Status Validasi
 
@@ -1462,6 +1470,194 @@ Bagian ini mendokumentasikan implementasi backend-ready halaman `/create-product
    - Area drag-and-drop / file selector dengan tombol Browse Files standar Netlify.
    - Grid thumbnail responsif (kolom dinamis 2 hingga 6 kolom), preview gambar terpotong rapi dengan aspect ratio persegi, serta tombol hapus (`x` icon) overlay merah saat di-hover.
 
+---
+
+## 24. Implementasi Menu Orders Group (Orders, Job Orders, Job List, Job Branch, My Job, My Incentive)
+
+Bagian ini mendokumentasikan implementasi lengkap dan backend-ready untuk seluruh 6 submenu dalam grup **ORDERS** sesuai file HTML legacy di `legacy/static-source/` dan live Netlify `https://dulank-admin.netlify.app/`:
+1. **Orders:** `orders.html` / `/orders`
+2. **Job Orders:** `job-order.html` / `/job-order`
+3. **Job List:** `job-list.html` / `/job-list`
+4. **Job Branch:** `job-branch.html` / `/job-branch`
+5. **My Job:** `my-job.html` / `/my-job`
+6. **My Incentive:** `my-incentive.html` / `/my-incentive`
+
+### 24.1 Struktur Komponen & Pemisahan Tanggung Jawab
+
+| Menu | Page (`app/pages/`) | Komponen Domain (`app/components/pages/<menu>/`) | Composable & Endpoint |
+|---|---|---|---|
+| **Orders** | `orders.vue` | `OrderStatsWidgets.vue`<br>`OrdersRecordsTable.vue`<br>`OrderStatusModal.vue` | `useOrders.ts`<br>`/api/orders/` (GET, POST, PUT, DELETE, stats) |
+| **Job Orders** | `job-order.vue` | `JobOrderStatsWidgets.vue`<br>`JobOrderWorkflowSidebar.vue`<br>`JobOrderRecordsTable.vue`<br>`JobOrderEditModal.vue`<br>`JobOrderViewFlowModal.vue` | `useJobOrders.ts`<br>`/api/job-orders/` (GET, POST, DELETE) |
+| **Job List** | `job-list.vue` | `JobListFlowSidebar.vue`<br>`JobListRecordsTable.vue`<br>`JobListDetailModal.vue` | `useJobList.ts`<br>`/api/job-list/` (GET, flows.get) |
+| **Job Branch** | `job-branch.vue` | `JobBranchRecordsTable.vue`<br>`JobBranchSettingModal.vue` | `useJobBranches.ts`<br>`/api/job-branches/` (GET, PUT) |
+| **My Job** | `my-job.vue` | `MyJobCardGrid.vue`<br>`MyJobDetailModal.vue`<br>`MyJobStatusModal.vue` | `useMyJobs.ts`<br>`/api/my-jobs/` (GET, POST, PUT, DELETE) |
+| **My Incentive** | `my-incentive.vue` | `MyIncentiveStatsWidgets.vue`<br>`MyIncentiveRecordsTable.vue`<br>`MyIncentiveModal.vue` | `useMyIncentives.ts`<br>`/api/my-incentives/` (GET, POST, DELETE) |
+
+### 24.2 Rincian Fitur & Keselarasan dengan Legacy HTML
+
+1. **Orders (`/orders`):**
+   - KPI Widgets: Total Orders, Pending Orders, In Process, Completed Orders.
+   - Filter Toolbar: `DateRangePicker.vue` (kemarin, 7 hari, bulan ini, dsb), `TableFilterSelect.vue` untuk Shipping (All, Pickup, Courier, Delivery) dan Status (All, Pending, On Process, Completed, Cancelled).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Date, Order No, Customer, Shipping Type, Status, Sales Channel, Total (IDR), Action.
+   - Modal: `OrderStatusModal.vue` (Grid 12 kolom untuk memperbarui status pesanan).
+
+2. **Job Orders (`/job-order`):**
+   - KPI Widgets: Total Job Order (154), Waiting (120), On Process (12), In-House (132), Outsource (2).
+   - Layout 2 Kolom: Kolom kiri sidebar `JobOrderWorkflowSidebar.vue` (kategori workflow: Design, Pracetak, Cetak, Finishing dengan badge jumlah job), kolom kanan `JobOrderRecordsTable.vue`.
+   - Modals:
+     - `JobOrderEditModal.vue`: Modal edit Customer, Product, Job Title, Qty.
+     - `JobOrderViewFlowModal.vue`: Modal alur kerja interaktif (Sales Information + Work Flow step timeline).
+
+3. **Job List (`/job-list`):**
+   - Layout 2 Kolom: Kolom kiri `JobListFlowSidebar.vue` ("All Flow" dengan akumulasi kuantitas per stasiun kerja alur produksi), kolom kanan `JobListRecordsTable.vue`.
+   - Modals: `JobListDetailModal.vue` (`#view-units`) menampilkan Order Information lengkap (Sales Date, No Sales, Customer, Description) serta Job Completed Information (Kertas, Ukuran, Cetak, Mesin, Qty OK, Qty Rusak, Petugas Operator, Tanggal Selesai).
+
+4. **Job Branch (`/job-branch`):**
+   - Filter Toolbar: `DateRangePicker.vue`, `TableFilterSelect.vue` untuk Branch (All, Dulank Karawang, Dulank Jakarta, Dulank Cirebon) dan Priority (All, Urgent, High, Normal).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Order No, Date, Customer, Product, Job Title, Branch, Priority, Status, Action.
+   - Modals: `JobBranchSettingModal.vue` (`#setting-job-branch`) dengan Grid 12 kolom untuk mengatur cabang pelaksana, prioritas kerja, dan status pengerjaan cabang.
+
+5. **My Job (`/my-job`):**
+   - Header Filter Prioritas: Tombol pill All, Urgent (merah), High (info), Normal (abu).
+   - Card Grid Antrian: Responsive 4-kolom (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`), card dengan border dinamis sesuai prioritas, badge status, info spesifikasi produk, dropdown `Change Status` (`h-9`), serta tombol eye icon.
+   - Modals:
+     - `MyJobDetailModal.vue` (`#view-units`): Order Information dengan tombol PDF & Cetak, ringkasan produk, dan tabel rincian teknis lengkap (Kertas, Sisi Cetak, Ukuran, Model, Plat, Bahan, Insit, Contoh, dsb).
+     - `MyJobStatusModal.vue` (`#modalUbahStatus`): Konfirmasi perubahan status dengan input `Qty Lembar OK ?` dan `Lembar Rusak ?` menggunakan Grid 12 kolom presisi.
+
+6. **My Incentive (`/my-incentive`):**
+   - KPI Widgets: Tampilan proporsional 2 widget ringkas (`Total Count Incentive` dengan icon `dash1.svg` dan `Amount Incentive` dengan icon `dash2.svg` dan format `Rp`).
+   - Page Header: Title "My Incentive List", Subtitle "Manage My Incentive", action icons Pdf, Print, Refresh (tanpa tombol Add Incentive, sesuai HTML referensi Netlify).
+   - Filter Toolbar: Pencarian, `DateRangePicker.vue` ("Date"), dan dropdown filter `Name Of Process` (`TableFilterSelect.vue`: Printing, Cutting).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), tepat 7 kolom literal: Date, Job Title, Flow Name, Incentive, Unit, Qty, Amount (tanpa kolom Action karena menu ini merupakan portal log riwayat insentif karyawan).
+   - Footer Tabel: Baris total kalkulasi akumulatif persis seperti `<tfoot>` HTML legacy (`Total` pada kolom 1, `colspan="5"`, dan total Amount pada kolom 7).
+
+### 24.3 Standarisasi UI & Backend Persistence
+- **Tinggi Kontrol & Grid:** Seluruh input, select, tombol, dan kontrol filter menggunakan tinggi standar `h-9` (36px). Form modal disusun dengan Grid 12 kolom (`col-span-5` label, `col-span-7` input).
+- **Aturan Single Card Container (No Double Card Nesting):** `SalesDataTable.vue` sudah memiliki container card dengan styling background, border, dan shadow. Menempatkan `SalesDataTable` di dalam elemen wrapper card lain (`<div class="card p-4">...</div>`) menyebabkan card bersarang ganda yang tidak rapi. Gunakan `SalesDataTable` langsung di root page atau layout flex/grid tanpa pembungkus card tambahan.
+- **Warna Tombol Standar Netlify:** Tombol cancel `#212b36` (dark) dan tombol submit/action `#ff9f43` (orange warning).
+- **Backend Nitro & Data:** Data disimpan persisten pada `server/data/orders.json`, `job-orders.json`, `job-list.json`, `job-branches.json`, `my-jobs.json`, dan `my-incentives.json` dengan API RESTful lengkap (GET, POST, PUT, DELETE).
+- **Cetak Work Order Ticket (SPK):** `app/utils/salesDocuments.ts` mengimplementasikan `printJobDetailTicket(job)` untuk menghasilkan lembar Surat Perintah Kerja (SPK) siap cetak dan simpan PDF yang dipicu oleh tombol cetak dan PDF di modal My Job.
+
+### 24.4 Arsitektur Relasional Dummy Data (Migration Ready)
+Seluruh data dummy grup Orders dirancang dengan Foreign Key dan Primary Key relasional yang sinkron untuk memudahkan migrasi ke PostgreSQL/MySQL:
+- **Relasi Antar Entitas:**
+  - `orders` (`id`, `no`, `customerId`, `branchId`, `items`: `productId`, `unitPrice`, `qty`, `total`, `totalAmount`)
+  - `job-orders` (`id`, `no`, `orderId`, `customerId`, `branchId`, `productId`, `flowType`, `inputSpecs`, `outputSpecs`, `steps`)
+  - `job-branches` (`id`, `no`, `jobOrderId`, `orderNo`, `customerId`, `branchId`, `infoList`, `afterInfoList`, `assignees`, `incentiveAmount`, `incentiveUnit`)
+  - `job-list` (`id`, `no`, `jobOrderId`, `orderNo`, `customerId`, `branchId`, `productId`, `qtyOk`, `qtyRusak`, `assignee`, `dateComplete`)
+  - `my-jobs` (`id`, `jobOrderId`, `orderId`, `customerId`, `branchId`, `productId`, `employeeId`, `qtyOk`, `qtyRusak`, input teknis cetak)
+  - `my-incentives` (`id`, `code`, `jobOrderId`, `employeeId`, `branchId`, `process`, `incentive`, `unit`, `qty`, `amount`, `status`)
+- **Penyempurnaan Modal Job Branch (`JobBranchSettingModal.vue` & `JobBranchHistoryModal.vue`):**
+  - Editor dinamis spesifikasi sebelum cetak (`infoList`) dengan tombol `+ Add Information` dan hapus per baris.
+  - Editor dinamis spesifikasi sesudah cetak (`afterInfoList`) dengan tombol `+ Add Information After`.
+  - Integrasi pemilih operator penanggung jawab menggunakan `AssigneeSelect.vue`.
+  - Pengaturan besaran insentif per job (`incentiveAmount`) dan satuan pengerjaan (`incentiveUnit`: Job, Lembar, Rim, Meter, Pcs).
+  - Modal riwayat pengerjaan cabang (`JobBranchHistoryModal.vue`) terhubung ke endpoint `/api/job-branches/history`.
+
+### 24.5 Standarisasi Format Uang & Separator Ribuan (Currency System)
+Untuk mengatasi inkonsistensi formatting mata uang (Rupiah / IDR) di seluruh form dan tabel, telah disediakan utilitas dan komponen bersama:
+1. **Utility `currency.ts` (`app/utils/currency.ts` & re-export di `salesUi.ts`):**
+   - `formatMoney(value, options?)`: Memformat angka murni menjadi string berpemisah ribuan Indonesia (`.` titik) dengan opsi prefix (cth: `1000000` ➔ `1.000.000` atau `Rp 1.000.000`).
+   - `formatIDR(value, withSpace?, fallback?)`: Shortcut formatting Rupiah standar (cth: `formatIDR(25000)` ➔ `Rp 25.000`).
+   - `parseMoney(value)`: Mengubah string berpemisah ribuan kembali menjadi `number` murni (cth: `"Rp 1.500.000"` ➔ `1500000`).
+   - `currencyAlignClass(align)`: Mengembalikan kelas Tailwind untuk perataan teks (`text-right justify-end font-mono tabular-nums` atau `text-left justify-start font-mono tabular-nums`).
+2. **Komponen `CurrencyInput.vue` (`app/components/common/CurrencyInput.vue`):**
+   - Input uang real-time yang memformat pemisah ribuan secara otomatis saat pengguna mengetik dengan menjaga posisi kursor.
+   - Mendukung justifikasi kanan (`align="right"`) maupun kiri (`align="left"`).
+   - Memiliki prefix badge `"Rp"` yang rapi dan memancarkan nilai asli bertipe `number` ke `v-model` untuk kemudahan persistensi ke database.
+3. **Komponen `CurrencyDisplay.vue` (`app/components/common/CurrencyDisplay.vue`):**
+   - Komponen representasi nilai uang untuk cell tabel, kartu ringkasan, dan dokumen cetak.
+   - Mendukung prop `align="right"` (rata kanan) dan `align="left"` (rata kiri), font monospaced tabular nums, dan prefix custom.
+
+## 25. Standardisasi & Implementasi Modul WEBSTORE
+
+Grup modul **WEBSTORE** menghubungkan langsung sistem admin Dulank dengan storefront publik e-commerce percetakan (`https://percetakan-dulank.netlify.app/`). Seluruh halaman telah distandarisasi mengikuti template referensi Netlify (`https://dulank-admin.netlify.app/`), dengan arsitektur backend-ready, komponen terpisah, dan penyimpanan numerik murni.
+
+### 25.1 Pemetaan Halaman WEBSTORE
+1. **Cart (`/cart`):**
+   - KPI Widgets: `Total Cart Amount` (`dash1.svg`, format `CurrencyDisplay`), `Total Cart Active` (`dash2.svg`), `Total Cart Checkout` (`dash3.svg`), `Total Cart Delete` (`dash4.svg`).
+   - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Category: Brochure, Flyer, Banner, Stationery; Status: Active, Checkout, Delete).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Product (gambar thumbnail + nama produk), User (email), Category, Price (rata kanan), Qty, Total Price (rata kanan), Date, Status (badge).
+   - Tanpa kolom aksi sesuai referensi HTML Netlify.
+
+2. **Checkout (`/checkout`):**
+   - KPI Widgets: `Total Checkout` (`dash1.svg`), `Total Revenue` (`dash2.svg`, format `CurrencyDisplay`), `Total Success` (`dash3.svg`), `Total Failed` (`dash4.svg`).
+   - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Metode: Kartu Kredit, Transfer Bank, E-Wallet, Virtual Account; Status: Berhasil, Gagal).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: User, Date Checkout, Payment (rata kanan), Metode, Status, Voucher, Delivery fee (rata kanan), Detail Product.
+   - Tanpa kolom aksi sesuai referensi HTML Netlify.
+
+3. **Wishlist (`/wishlist`):**
+   - KPI Widgets: `Total Wishlist Amount` (`dash1.svg`, format `CurrencyDisplay`), `Total Wishlist Active` (`dash2.svg`), `Total Wishlist Checkout` (`dash3.svg`), `Total Wishlist Delete` (`dash4.svg`).
+   - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Category & Status).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Product, User, Category, Price, Qty, Total Price, Date, Status.
+
+4. **Reviews (`/reviews`):**
+   - KPI Widgets: Tepat 3 widget proporsional (`Total Review` `dash1.svg`, `Total Product` `dash2.svg`, `Total Publish` `dash3.svg`).
+   - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Rating 1-5).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: User, ID Produk, Product, Date, Rating (1-5) dengan ikon bintang, Title, Review, Status (Publish / Unpublish).
+
+5. **Support Ticket (`/support-ticket`):**
+   - KPI Widgets: `Total Tickets` (`dash1.svg`), `Total Pending Tickets` (`dash2.svg`), `Total Closed Tickets` (`dash3.svg`), `Total Delete Tickets` (`dash4.svg`).
+   - Page Header: Title "Support Ticket List", Subtitle "Manage your Support Ticket", tombol "Add Ticket", icon PDF, Print, Refresh.
+   - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Priority: Low, High, Medium; Status: Open, Closed, Pending).
+   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: ID, Requested By (avatar + nama), Subject, Assignee, Priority, Status, Created Date, Due Date, Action (View detail, Delete).
+   - Modals:
+     - `SupportTicketAddModal.vue`: Form pembuatan tiket bantuan (Avatar, Customer Name, Email, Phone, Address, City, Country, Descriptions).
+     - `SupportTicketDetailModal.vue`: Modal detail komprehensif dari `support-ticket-detail.html` (informasi tiket, requested by, assigned agent, deskripsi, tags, timeline activity, dan live interactive chat history).
+     - `SalesConfirmDelete.vue`: Dialog konfirmasi penghapusan tiket.
+
+6. **Contact Form (`/contact-form`):**
+   - KPI Widget: 1 widget ringkas `Total Contact` (`dash1.svg`).
+   - Toolbar: Search input, `DateRangePicker.vue`.
+   - Tabel: `SalesDataTable.vue` (`text-xs`), tepat 5 kolom literal sesuai referensi HTML Netlify: Name, Email, Phone, Message, Date (tanpa kolom Action).
+
+### 25.2 Arsitektur Data & Standar Mutlak
+- **Penyimpanan Numerik Murni:** Nilai `price`, `totalPrice`, `payment`, `deliveryFee` di seluruh mock data JSON disimpan sebagai `number` murni tanpa format string statis.
+- **Relasi Database Ready:** Entitas dilengkapi dengan Primary Key (`id`), serta Foreign Key relasional (`customerId`, `productId`, `orderId`).
+- **Single Card Container:** Seluruh tabel menggunakan `SalesDataTable.vue` langsung tanpa pembungkus card ganda.
+- **Kontrol Standar:** Tinggi input dan select `h-9` (36px), rentang tanggal menggunakan `DateRangePicker.vue`, dan filtering dropdown menggunakan `TableFilterSelect.vue`.
+
+---
+
+## 26. Standardisasi Fitur Cetak (Print & PDF Export) Seluruh Halaman
+
+### 26.1 Latar Belakang & Masalah Sebelumnya
+Sebelum standardisasi:
+1. Banyak halaman langsung memanggil `window.print()`, yang menyebabkan layout website (navbar header, sidebar menu `ms-[260px]`, background gelap dark mode, dan tombol-tombol aksi) ikut ter-capture dan merusak hasil cetak di kertas.
+2. Tidak adanya Kop Surat resmi perusahaan percetakan, nomor halaman, dan kolom tanda tangan (TTD) formal yang dibutuhkan untuk laporan bisnis.
+3. Tidak adanya dialog pemilihan cakupan data (seluruh data, halaman aktif, atau rentang waktu).
+
+### 26.2 Solusi Arsitektur Standar
+
+1. **Mesin Cetak Terisolasi Iframe (`app/utils/documentPrinter.ts`):**
+   - Menggunakan elemen `<iframe>` tersembunyi yang menerima dokumen HTML mandiri, sehingga 100% terisolasi dari DOM aplikasi Nuxt, komponen interaktif, dan CSS tema.
+   - **Kop Surat Resmi Dulank:** Menampilkan logo resmi, identitas "PT. DULANK SEMESTA CIDA", tagline layanan percetakan, alamat lengkap Karawang Barat, kontak telepon/WA, email, dan garis ganda pembatas resmi kop surat.
+   - **Tabel Data Rapi:** Header berlatar abu-abu halus, padding baris proporsional, border solid bersih, kolom numerik/uang otomatis rata kanan (`text-right font-mono`), kolom ID/status rata tengah, dan kolom 'action' / aksi otomatis diabaikan.
+   - **Bagian Tanda Tangan (TTD):** Tempat dan tanggal otomatis ("Karawang, [Tanggal]") dan 2 kolom tanda tangan: "Dibuat Oleh" (Staff Administrasi) dan "Mengetahui" (Manager Operasional).
+
+2. **Modal Dialog Interaktif Cetak (`app/components/common/DocumentPrintModal.vue`):**
+   - Terbuka otomatis saat tombol **Print** atau **PDF** pada toolbar header tabel (`SalesListHeader.vue`) ditekan.
+   - Pilihan Cakupan Data:
+     - **Semua Data Terfilter (`all`)**: mencetak seluruh baris data aktif.
+     - **Halaman Ini Saja (`current`)**: mencetak baris data di halaman pagination yang sedang dilihat.
+     - **Rentang Tanggal Khusus (`date-range`)**: menyaring tanggal secara dinamis menggunakan `DateRangePicker.vue`.
+   - Opsi Dokumen: Checkbox toggle Kop Surat Resmi, Kolom TTD, Waktu & Tanggal Cetak.
+   - Orientasi Kertas: Pilihan Landscape (mendatar) atau Portrait (tegak).
+   - Tombol Aksi: "Simpan sebagai PDF" dan "Cetak Dokumen".
+
+3. **Composable Bersama (`app/composables/useTablePrint.ts`):**
+   - Memudahkan integrasi fitur cetak ke halaman mana pun cukup dengan mengimpor composable dan menyematkan `<DocumentPrintModal>`.
+
+4. **Proteksi Layout Global (@media print):**
+   - Layout default (`app/layouts/default.vue`) dilengkapi atribut `print:hidden` pada `AppHeader` dan `AppSidebar`, serta `print:p-0 print:m-0 print:ms-0 print:w-full` pada container `<main>`.
+   - CSS global (`app/assets/css/main.css`) menetapkan background putih murni dan menyembunyikan elemen navigasi sehingga halaman dokumen khusus seperti **Sales Note** (`sales-note.vue`) dan **Sales Receipt** (`sales-receipt.vue`) tidak tergeser margin atau bocor elemen navbar.
+
+5. **Pengecualian Cetak Dokumen Khusus (Template Khusus dari HTML Asli):**
+   - Halaman dengan format dokumen fisik spesifik tetap menggunakan template aslinya:
+     - **Sales Receipt (`/sales-receipt`):** Struk kasir thermal 80mm format roll paper.
+     - **Sales Note (`/sales-note`):** Nota penjualan formal dengan rincian barang.
+     - **SPK My Job / Job Order (`printJobDetailTicket`):** Lembar Surat Perintah Kerja teknis pengerjaan cetak.
+     - **Invoice Details, Delivery Note Detail, Quotation Detail, Request Quotation Detail, Payslip Detail.**
 
 
 
