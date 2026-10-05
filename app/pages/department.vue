@@ -1,136 +1,243 @@
 <script setup lang="ts">
-import type { Department, DepartmentFormData } from '~/types/department'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { Department, DepartmentFormData } from '#server/types/department'
+import { useDepartments } from '~/composables/useDepartments'
+import { useEmployees } from '~/composables/useEmployees'
+import { useTablePrint } from '~/composables/useTablePrint'
+import DepartmentStatsWidgets from '~/components/pages/department/DepartmentStatsWidgets.vue'
+import DepartmentRecordsTable from '~/components/pages/department/DepartmentRecordsTable.vue'
+import DepartmentFormModal from '~/components/pages/department/DepartmentFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Departments - Departemen Karyawan', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Departments - Departemen Karyawan',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { departments, pending, refresh, saveDepartment, deleteDepartment } = useDepartments()
-
+// Filter states
 const searchQuery = ref('')
-const selectedStatus = ref('')
+const filterStatus = ref('')
 
-const isModalOpen = ref(false)
-const editData = ref<Department | null>(null)
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  status: filterStatus.value,
+}))
 
-const filteredDepartments = computed(() => {
-  return departments.value.filter((d) => {
-    const matchQuery =
-      !searchQuery.value ||
-      d.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      d.members?.some((m) => m.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    const matchStatus = !selectedStatus.value || d.status === selectedStatus.value
-    return matchQuery && matchStatus
-  })
+const { departments, pending, error, refresh, saveDepartment, deleteDepartment } = useDepartments(filterParams)
+const { employees } = useEmployees()
+
+// Available employee names for quick pick
+const availableMembers = computed(() => {
+  return employees.value.map(e => e.name)
 })
 
-const openAddModal = () => {
-  editData.value = null
-  isModalOpen.value = true
-}
+// KPI Stats calculation
+const stats = computed(() => {
+  const all = departments.value
+  const totalDepartments = all.length
+  const totalEmployees = all.reduce((sum, d) => sum + (d.totalMembers ?? (d.members?.length || 0)), 0)
+  const activeDepartments = all.filter(d => d.status === 'Active').length
+  const inactiveDepartments = all.filter(d => d.status === 'Disable').length
 
-const handleEdit = (d: Department) => {
-  editData.value = d
-  isModalOpen.value = true
-}
-
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus departemen ini?')) {
-    try {
-      await deleteDepartment(id)
-    } catch (error) {
-      console.error('Failed to delete department:', error)
-    }
+  return {
+    totalDepartments,
+    totalEmployees,
+    activeDepartments,
+    inactiveDepartments,
   }
+})
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeDepartmentForEdit = ref<Department | null>(null)
+const departmentToDelete = ref<Department | null>(null)
+const isBusy = ref(false)
+
+// Toast feedback
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const handleSave = async (payload: DepartmentFormData) => {
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activeDepartmentForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(dept: Department) {
+  isEditMode.value = true
+  activeDepartmentForEdit.value = dept
+  isFormModalOpen.value = true
+}
+
+function handleDeleteRequest(dept: Department) {
+  departmentToDelete.value = dept
+}
+
+async function confirmDelete() {
+  if (!departmentToDelete.value) return
+  isBusy.value = true
   try {
-    await saveDepartment(payload)
-    isModalOpen.value = false
-  } catch (error) {
-    console.error('Failed to save department:', error)
+    const res = await deleteDepartment(departmentToDelete.value.id)
+    showToast(res?.message || 'Department deleted successfully')
+    departmentToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete department')
+  } finally {
+    isBusy.value = false
   }
+}
+
+async function handleFormSubmit(formData: DepartmentFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveDepartment(formData)
+    showToast(res?.message || (isEditMode.value ? 'Department updated successfully' : 'Department created successfully'))
+    isFormModalOpen.value = false
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save department')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & PDF
+const {
+  isPrintModalOpen,
+  printTitle,
+  printColumns,
+  printRows,
+  openPrintModal,
+} = useTablePrint()
+
+function handlePrint() {
+  openPrintModal({
+    title: 'Department List Report - PT Dulank Semesta Cida',
+    columns: [
+      { key: 'id', label: 'ID' },
+      { key: 'name', label: 'Department Name' },
+      { key: 'members', label: 'Members' },
+      { key: 'totalMembers', label: 'Total Members' },
+      { key: 'createdDate', label: 'Created Date' },
+      { key: 'status', label: 'Status' },
+    ],
+    rows: departments.value.map(d => ({
+      id: d.id,
+      name: d.name,
+      members: d.members && d.members.length > 0 ? d.members.join(', ') : '-',
+      totalMembers: d.totalMembers ?? (d.members?.length || 0),
+      createdDate: d.createdDate || '-',
+      status: d.status,
+    })),
+  })
+}
+
+function handleExportPdf() {
+  handlePrint()
+}
+
+function handleExportExcel() {
+  const header = ['ID', 'Department Name', 'Members', 'Total Members', 'Created Date', 'Status']
+  const rows = departments.value.map(d => [
+    `"${d.id}"`,
+    `"${d.name}"`,
+    `"${(d.members || []).join('; ')}"`,
+    `"${d.totalMembers ?? (d.members?.length || 0)}"`,
+    `"${d.createdDate || ''}"`,
+    `"${d.status}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `departments_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Department list exported to CSV successfully')
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Departments</h4>
-          <h6 class="text-muted mb-0">Kelola divisi dan departemen kerja karyawan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Department</span>
-          </button>
-        </div>
-      </div>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="Department"
+      subtitle="Manage employee departments and teams"
+      add-label="Add Department"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="handlePrint"
+      @export-pdf="handleExportPdf"
+      @export-excel="handleExportExcel"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari departemen atau anggota..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end gap-2">
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Active">Active</option>
-                <option value="Disable">Disable</option>
-              </select>
-            </div>
-          </div>
+    <!-- KPI Stats Widgets -->
+    <DepartmentStatsWidgets :stats="stats" />
 
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+    <!-- Toast Notification -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @close="toastMessage = ''"
+    />
 
-          <PagesDepartmentTable
-            v-else
-            :departments="filteredDepartments"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
-      </div>
+    <!-- Error State -->
+    <div
+      v-if="error"
+      class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-400"
+    >
+      Failed to load departments: {{ error.message }}
     </div>
 
-    <PagesDepartmentModal
-      :is-open="isModalOpen"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @save="handleSave"
+    <!-- Department Records Table -->
+    <DepartmentRecordsTable
+      :departments="departments"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <DepartmentFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :department-data="activeDepartmentForEdit"
+      :available-members="availableMembers"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!departmentToDelete"
+      title="Delete Department"
+      :message="`Are you sure you want to delete department '${departmentToDelete?.name}'? Members assigned to this department will need reassignment.`"
+      :busy="isBusy"
+      @close="departmentToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <!-- Table Print / PDF Preview Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      :title="printTitle"
+      :columns="printColumns"
+      :rows="printRows"
+      @close="isPrintModalOpen = false"
     />
   </div>
 </template>

@@ -102,6 +102,7 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Supplier** | `/supplier` | Peoples: Pemasok bahan/kertas, 8 kolom literal, tombol baris "Address" modal & Edit/Delete, modal Add/Edit (Grid 12-kolom), TableSkeleton, Print Kop Surat resmi. |
 | **Branch Store** | `/store-list` | Peoples: Cabang gerai fisik & workshop cetak, 7 kolom literal, modal Add/Edit (Grid 12-kolom), filter status, TableSkeleton, Print Kop Surat resmi. |
 | **Employees** | `/employees` | HRM: 4 KPI Cards (Total, Active, Inactive, New Joiners), 8 kolom literal, filter DateRangePicker & Department & Status, Modal Add/Edit (Grid 12-kolom), Modal View profil lengkap, TableSkeleton, Print Kop Surat resmi. |
+| **Department** | `/department` | HRM: 4 KPI Cards (Total Departments, Total Members, Active, Disabled), 6 kolom literal, modal Add/Edit (Member chips & quick pick, status toggle), export CSV & Print Kop Surat resmi. |
 | **Print & PDF** | Seluruh modul di atas | Dialog `DocumentPrintModal`, Kop Surat PT. Dulank Semesta Cida, 2 kolom TTD resmi. |
 
 ### B. MODUL PENDING / BERIKUTNYA
