@@ -111,171 +111,166 @@ function handleSubmit() {
   <SalesDialog
     :open="open"
     :title="isEdit ? 'Edit Payslip' : 'Add New Payslip'"
-    wide
+    medium
     @close="emit('close')"
   >
-    <form class="space-y-4" @submit.prevent="handleSubmit">
+    <form class="space-y-4 p-5 sm:p-6" @submit.prevent="handleSubmit">
       <div v-if="errorMessage" class="rounded-lg bg-rose-50 p-3 text-xs text-rose-600 dark:bg-rose-950/50 dark:text-rose-400">
         {{ errorMessage }}
       </div>
 
-      <!-- No. Slip & Employee Name (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            No. Slip <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <input
-              v-model="form.slipNo"
-              type="text"
-              required
-              placeholder="PS000001"
-              :class="formControlClass"
-            >
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Employee Name <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <select
-              :value="form.name"
-              :class="formControlClass"
-              @change="onEmployeeChange"
-            >
-              <option value="" disabled>Choose Employee</option>
-              <option v-for="emp in employees" :key="emp.id" :value="emp.name">
-                {{ emp.id }} - {{ emp.name }} ({{ emp.department }})
-              </option>
-            </select>
-          </div>
+      <!-- No. Slip -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          No. Slip <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.slipNo"
+            type="text"
+            required
+            placeholder="PS000001"
+            :class="formControlClass"
+          >
         </div>
       </div>
 
-      <!-- Period & Paid Date (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Period (Periode) <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <input
-              v-model="form.period"
-              type="text"
-              placeholder="dd/mm/yy - dd/mm/yy"
-              :class="formControlClass"
-            >
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Paid Date
-          </label>
-          <div :class="modalFormInputColClass">
-            <input
-              v-model="form.paidDate"
-              type="text"
-              placeholder="dd/mm/yyyy or -"
-              :class="formControlClass"
-            >
-          </div>
+      <!-- Employee Name -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Employee Name <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <select
+            :value="form.name"
+            :class="formControlClass"
+            @change="onEmployeeChange"
+          >
+            <option value="" disabled>Choose Employee</option>
+            <option v-for="emp in employees" :key="emp.id" :value="emp.name">
+              {{ emp.id }} - {{ emp.name }} ({{ emp.department }})
+            </option>
+          </select>
         </div>
       </div>
 
-      <!-- Salary Rate & Days Worked (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Salary / Rate (IDR) <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.salaryRate"
-              align="right"
-              :class="formControlClass"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Days Worked (Hari) <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <input
-              v-model="form.dayWorked"
-              type="number"
-              min="0"
-              max="31"
-              :class="formControlClass"
-            >
-          </div>
+      <!-- Period -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Period (Periode) <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.period"
+            type="text"
+            placeholder="dd/mm/yy - dd/mm/yy"
+            :class="formControlClass"
+          >
         </div>
       </div>
 
-      <!-- Allowance & Overtime (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Allowance (Tunjangan)
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.allowance"
-              align="right"
-              :class="formControlClass"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Overtime (Lembur)
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.overtime"
-              align="right"
-              :class="formControlClass"
-              placeholder="0"
-            />
-          </div>
+      <!-- Salary Rate -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Salary / Rate (IDR) <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.salaryRate"
+            align="right"
+            :class="formControlClass"
+            placeholder="0"
+          />
         </div>
       </div>
 
-      <!-- Deduction & Status (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Deduction (Potongan)
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.deduction"
-              align="right"
-              :class="formControlClass"
-              placeholder="0"
-            />
-          </div>
+      <!-- Days Worked -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Days Worked (Hari) <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.dayWorked"
+            type="number"
+            min="0"
+            max="31"
+            :class="formControlClass"
+          >
         </div>
+      </div>
 
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Status
-          </label>
-          <div :class="modalFormInputColClass">
-            <select v-model="form.status" :class="formControlClass">
-              <option v-for="st in statusOptions" :key="st" :value="st">
-                {{ st }}
-              </option>
-            </select>
-          </div>
+      <!-- Allowance -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Allowance (Tunjangan)
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.allowance"
+            align="right"
+            :class="formControlClass"
+            placeholder="0"
+          />
+        </div>
+      </div>
+
+      <!-- Overtime -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Overtime (Lembur)
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.overtime"
+            align="right"
+            :class="formControlClass"
+            placeholder="0"
+          />
+        </div>
+      </div>
+
+      <!-- Deduction -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Deduction (Potongan)
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.deduction"
+            align="right"
+            :class="formControlClass"
+            placeholder="0"
+          />
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Status
+        </label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option v-for="st in statusOptions" :key="st" :value="st">
+              {{ st }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Paid Date -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Paid Date
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.paidDate"
+            type="text"
+            placeholder="dd/mm/yyyy or -"
+            :class="formControlClass"
+          >
         </div>
       </div>
 
@@ -283,8 +278,8 @@ function handleSubmit() {
       <div class="rounded-lg border border-primary/20 bg-primary/5 p-4 dark:border-primary/30 dark:bg-primary/10">
         <div class="flex items-center justify-between">
           <div>
-            <span class="text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
-              Total Net Salary (Gaji Bersih Diterima)
+            <span class="text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+              Total Net Salary (Gaji Bersih)
             </span>
             <p class="text-[11px] text-gray-500">
               (Rate × Hari Kerja) + Tunjangan + Lembur - Potongan

@@ -135,10 +135,10 @@ function handleSubmit() {
   <SalesDialog
     :open="open"
     :title="isEdit ? 'Edit Employee Salary' : 'Add New Employee Salary'"
-    wide
+    medium
     @close="emit('close')"
   >
-    <form class="space-y-4" @submit.prevent="handleSubmit">
+    <form class="space-y-4 p-5 sm:p-6" @submit.prevent="handleSubmit">
       <div v-if="errorMessage" class="rounded-lg bg-rose-50 p-3 text-xs text-rose-600 dark:bg-rose-950/50 dark:text-rose-400">
         {{ errorMessage }}
       </div>
@@ -160,86 +160,84 @@ function handleSubmit() {
               {{ emp.id }} - {{ emp.name }} ({{ emp.department }})
             </option>
           </select>
-          <div v-else class="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+          <div v-else class="flex h-9 items-center rounded-md border border-gray-200 bg-gray-50 px-3 text-xs font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
             <span>{{ form.employeeId }} - {{ form.name }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Base Salary & System (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Base Salary <span class="text-rose-500">*</span>
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.salary"
-              align="right"
-              :class="formControlClass"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Payroll System
-          </label>
-          <div :class="modalFormInputColClass">
-            <select v-model="form.system" :class="formControlClass">
-              <option v-for="s in systemOptions" :key="s" :value="s">
-                {{ s }}
-              </option>
-            </select>
-          </div>
+      <!-- Base Salary -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Base Salary (IDR) <span class="text-rose-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.salary"
+            align="right"
+            :class="formControlClass"
+            placeholder="0"
+          />
         </div>
       </div>
 
-      <!-- Overtime Rate & Status (2 Kolom) -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Overtime Rate / Hour
-          </label>
-          <div :class="modalFormInputColClass">
-            <CurrencyInput
-              v-model="form.overtimeRate"
-              align="right"
-              :class="formControlClass"
-              placeholder="15.000"
-            />
-          </div>
-        </div>
-
-        <div :class="modalFormRowClass">
-          <label :class="modalFormLabelClass">
-            Status
-          </label>
-          <div :class="modalFormInputColClass">
-            <select v-model="form.status" :class="formControlClass">
-              <option v-for="st in statusOptions" :key="st" :value="st">
-                {{ st }}
-              </option>
-            </select>
-          </div>
+      <!-- Payroll System -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Payroll System
+        </label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.system" :class="formControlClass">
+            <option v-for="s in systemOptions" :key="s" :value="s">
+              {{ s }}
+            </option>
+          </select>
         </div>
       </div>
 
-      <!-- Allowances Header -->
-      <div class="border-t border-gray-200 pt-3 dark:border-gray-700">
-        <div class="mb-2 flex items-center justify-between">
+      <!-- Overtime Rate -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Overtime Rate / Hour
+        </label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.overtimeRate"
+            align="right"
+            :class="formControlClass"
+            placeholder="15.000"
+          />
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Status
+        </label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option v-for="st in statusOptions" :key="st" :value="st">
+              {{ st }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Allowances Header & List -->
+      <div class="border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div class="mb-3 flex items-center justify-between">
           <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
             <FeatherIcon name="award" size="14" class="text-amber-500" />
             <span>Allowances / Tunjangan</span>
           </div>
-          <span class="text-xs font-semibold text-primary dark:text-primary-400">
+          <span class="text-xs font-bold text-primary dark:text-primary-400">
             Total: <CurrencyDisplay :value="totalAllowanceCalculated" />
           </span>
         </div>
 
-        <!-- Allowances Table / List -->
         <div class="space-y-2 rounded-lg border border-gray-200/80 bg-gray-50/50 p-3 dark:border-gray-700 dark:bg-gray-800/40">
+          <!-- Existing allowances -->
           <div
             v-for="(allowance, idx) in allowances"
             :key="allowance.id || idx"
@@ -248,20 +246,20 @@ function handleSubmit() {
             <input
               v-model="allowance.name"
               type="text"
-              placeholder="Allowance name (e.g. Transport, Makan)"
-              class="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 shadow-2xs dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              placeholder="Allowance name (e.g. Present Allowance)"
+              :class="[formControlClass, 'flex-1']"
             >
-            <div class="w-36">
+            <div class="w-36 shrink-0">
               <CurrencyInput
                 v-model="allowance.amount"
                 align="right"
-                class="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 shadow-2xs dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+                :class="formControlClass"
                 placeholder="0"
               />
             </div>
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-md border border-rose-200 bg-white text-rose-500 hover:bg-rose-50 dark:border-rose-800/50 dark:bg-gray-800 dark:hover:bg-rose-950/40"
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-rose-200 bg-white text-rose-500 shadow-2xs hover:bg-rose-50 dark:border-rose-800/50 dark:bg-gray-800 dark:hover:bg-rose-950/40"
               title="Remove allowance"
               @click="removeAllowance(idx)"
             >
@@ -269,25 +267,27 @@ function handleSubmit() {
             </button>
           </div>
 
-          <!-- Add new allowance line -->
+          <!-- Add new allowance row -->
           <div class="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
             <input
               v-model="newAllowanceName"
               type="text"
               placeholder="+ New allowance name..."
-              class="flex-1 rounded-md border border-dashed border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 shadow-2xs dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              :class="[formControlClass, 'flex-1 border-dashed']"
+              @keydown.enter.prevent="addAllowance"
             >
-            <div class="w-36">
+            <div class="w-36 shrink-0">
               <CurrencyInput
                 v-model="newAllowanceAmount"
                 align="right"
-                class="w-full rounded-md border border-dashed border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 shadow-2xs dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+                :class="[formControlClass, 'border-dashed']"
                 placeholder="0"
+                @keydown.enter.prevent="addAllowance"
               />
             </div>
             <button
               type="button"
-              class="inline-flex h-8 items-center gap-1 rounded-md bg-gray-200 px-3 text-xs font-semibold text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              class="inline-flex h-9 shrink-0 items-center gap-1 rounded-md border border-gray-300 bg-white px-3 text-xs font-semibold text-gray-700 shadow-2xs hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
               @click="addAllowance"
             >
               <FeatherIcon name="plus" size="13" />
