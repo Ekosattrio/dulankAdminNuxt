@@ -1,180 +1,219 @@
 <script setup lang="ts">
 import type { CustomerAddress, SupplierAddress, AddressFormData } from '~/types/address'
-import AddressStats from '~/components/address/AddressStats.vue'
-import AddressTable from '~/components/address/AddressTable.vue'
-import AddressViewModal from '~/components/address/AddressViewModal.vue'
-import AddressModal from '~/components/address/AddressModal.vue'
+import type { DateRangeValue } from '~/composables/useDateRange'
+import { useAddress } from '~/composables/useAddress'
+import { useTablePrint } from '~/composables/useTablePrint'
+import AddressStatsWidgets from '~/components/pages/address/AddressStatsWidgets.vue'
+import AddressRecordsTable from '~/components/pages/address/AddressRecordsTable.vue'
+import AddressFormModal from '~/components/pages/address/AddressFormModal.vue'
+import AddressViewModal from '~/components/pages/address/AddressViewModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Address List', sweetAlert: false })
 
-useHead({
-  title: 'Address List - Dulank Admin'
-})
+const { stats, customers, suppliers, pending, error, refresh, saveAddress, deleteAddress } = useAddress()
 
-const { stats, customers, suppliers, pending, refresh, saveAddress, deleteAddress } = useAddress()
-
+// Filters
 const activeTab = ref<'customer' | 'supplier'>('customer')
 const searchQuery = ref('')
 const filterStatus = ref('')
+const filterDateRange = ref<DateRangeValue | null>(null)
 
-const isAddModalOpen = ref(false)
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeAddressForEdit = ref<any | null>(null)
+
 const isViewModalOpen = ref(false)
-const selectedCustomer = ref<CustomerAddress | null>(null)
-const selectedSupplier = ref<SupplierAddress | null>(null)
+const activeAddressForView = ref<any | null>(null)
 
-const filteredCustomers = computed(() => {
-  return customers.value.filter((c) => {
-    const q = searchQuery.value.toLowerCase()
-    const matchSearch =
-      !q ||
-      c.name?.toLowerCase().includes(q) ||
-      c.city?.toLowerCase().includes(q) ||
-      c.province?.toLowerCase().includes(q) ||
-      c.contact?.toLowerCase().includes(q)
-    const matchStatus = !filterStatus.value || c.status.toLowerCase() === filterStatus.value.toLowerCase()
+const addressToDelete = ref<any | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+const currentItems = computed(() => {
+  const sourceList = activeTab.value === 'customer' ? customers.value : suppliers.value
+  return sourceList.filter((item: any) => {
+    const q = searchQuery.value.toLowerCase().trim()
+    const name = (item.name || item.user || '').toLowerCase()
+    const city = (item.city || '').toLowerCase()
+    const province = (item.province || '').toLowerCase()
+    const contact = (item.contact || item.phone || '').toLowerCase()
+    const detail = (item.detailAddress || '').toLowerCase()
+    const entityId = (item.customerId || item.supplierId || item.id || '').toLowerCase()
+
+    const matchSearch = !q || name.includes(q) || city.includes(q) || province.includes(q) || contact.includes(q) || detail.includes(q) || entityId.includes(q)
+    const matchStatus = !filterStatus.value || (item.status || '').toLowerCase() === filterStatus.value.toLowerCase()
+
     return matchSearch && matchStatus
   })
 })
 
-const filteredSuppliers = computed(() => {
-  return suppliers.value.filter((s) => {
-    const q = searchQuery.value.toLowerCase()
-    const matchSearch =
-      !q ||
-      s.user?.toLowerCase().includes(q) ||
-      s.city?.toLowerCase().includes(q) ||
-      s.province?.toLowerCase().includes(q) ||
-      s.phone?.toLowerCase().includes(q)
-    const matchStatus = !filterStatus.value || s.status.toLowerCase() === filterStatus.value.toLowerCase()
-    return matchSearch && matchStatus
-  })
-})
+function handleAdd() {
+  isEditMode.value = false
+  activeAddressForEdit.value = null
+  isFormModalOpen.value = true
+}
 
-const handleViewCustomer = (c: CustomerAddress) => {
-  selectedCustomer.value = c
-  selectedSupplier.value = null
+function handleEdit(item: any) {
+  isEditMode.value = true
+  activeAddressForEdit.value = item
+  isFormModalOpen.value = true
+}
+
+function handleView(item: any) {
+  activeAddressForView.value = item
   isViewModalOpen.value = true
 }
 
-const handleViewSupplier = (s: SupplierAddress) => {
-  selectedSupplier.value = s
-  selectedCustomer.value = null
-  isViewModalOpen.value = true
+function handleDeleteRequest(item: any) {
+  addressToDelete.value = item
 }
 
-const handleDeleteCustomer = async (id: string) => {
-  if (confirm(`Are you sure you want to delete customer address ${id}?`)) {
-    try {
-      await deleteAddress(id)
-    } catch (err) {
-      console.error('Failed to delete address:', err)
-    }
-  }
-}
-
-const handleDeleteSupplier = async (id: string) => {
-  if (confirm(`Are you sure you want to delete supplier address ${id}?`)) {
-    try {
-      await deleteAddress(id)
-    } catch (err) {
-      console.error('Failed to delete address:', err)
-    }
-  }
-}
-
-const handleSaveAddress = async (payload: AddressFormData) => {
+async function confirmDelete() {
+  if (!addressToDelete.value) return
+  isBusy.value = true
   try {
-    await saveAddress(payload)
-    isAddModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save address:', err)
+    const res = await deleteAddress(addressToDelete.value.id, activeTab.value)
+    showToast(res?.message || 'Address successfully deleted')
+    addressToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete address')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const printTable = () => {
-  window.print()
+async function handleFormSubmit(formData: any) {
+  isBusy.value = true
+  try {
+    const res = await saveAddress(formData, activeTab.value)
+    showToast(res?.message || 'Address saved successfully')
+    isFormModalOpen.value = false
+    activeAddressForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save address')
+  } finally {
+    isBusy.value = false
+  }
 }
 
-const exportPdf = () => {
-  alert('Exporting address data to PDF...')
-}
+// Print & PDF
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'id', label: 'ID Address' },
+  { key: 'customerId', label: 'Entity ID' },
+  { key: 'name', label: 'Name' },
+  { key: 'contact', label: 'Contact' },
+  { key: 'province', label: 'Province' },
+  { key: 'city', label: 'City' },
+  { key: 'district', label: 'District' },
+  { key: 'detailAddress', label: 'Detail Address' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+  { key: 'date', label: 'Date' },
+]
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <!-- Header -->
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Address List</h4>
-          <h6 class="text-muted mb-0">Kelola database alamat pengiriman customer & supplier</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="PDF" @click="exportPdf">
-                <img src="/assets/img/icons/pdf.svg" alt="pdf" width="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="isAddModalOpen = true">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Address</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- KPI Widgets -->
-      <AddressStats :stats="stats" />
-
-      <!-- Loading State -->
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <!-- Address Table Component -->
-      <AddressTable
-        v-else
-        v-model:active-tab="activeTab"
-        v-model:search-query="searchQuery"
-        v-model:filter-status="filterStatus"
-        :customers="filteredCustomers"
-        :suppliers="filteredSuppliers"
-        @view-customer="handleViewCustomer"
-        @delete-customer="handleDeleteCustomer"
-        @view-supplier="handleViewSupplier"
-        @delete-supplier="handleDeleteSupplier"
-      />
+  <div class="dulank-page dulank-page-address space-y-6">
+    <!-- Success Toast -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
     </div>
+
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Address List"
+      subtitle="Manage your Addresses & Locations"
+      add-label="Add New Address"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
+
+    <!-- KPI Widgets -->
+    <AddressStatsWidgets :stats="stats" />
+
+    <!-- Loading Feedback with Skeleton Loader -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="12"
+      :error="error ? 'Unable to load address records. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Table with Tab Customers / Supplier -->
+    <AddressRecordsTable
+      v-if="!pending && !error"
+      v-model:active-tab="activeTab"
+      v-model:search-query="searchQuery"
+      v-model:filter-status="filterStatus"
+      v-model:filter-date-range="filterDateRange"
+      :items="currentItems"
+      @view="handleView"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <AddressFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :address-data="activeAddressForEdit"
+      :active-type="activeTab"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
 
     <!-- View Modal -->
     <AddressViewModal
-      :is-open="isViewModalOpen"
-      :customer-data="selectedCustomer"
-      :supplier-data="selectedSupplier"
+      :open="isViewModalOpen"
+      :address-data="activeAddressForView"
       @close="isViewModalOpen = false"
     />
 
-    <!-- Add Modal -->
-    <AddressModal
-      :is-open="isAddModalOpen"
-      @close="isAddModalOpen = false"
-      @save="handleSaveAddress"
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="!!addressToDelete"
+      title="Delete Address"
+      :message="`Are you sure you want to delete address '${addressToDelete?.id}' (${addressToDelete?.name || addressToDelete?.user})?`"
+      :busy="isBusy"
+      @confirm="confirmDelete"
+      @close="addressToDelete = null"
+    />
+
+    <!-- Print & PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Address Report"
+      :columns="printColumns"
+      :items="currentItems"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

@@ -63,6 +63,8 @@ function onPdfClick() {
       >
         <FeatherIcon name="plus-circle" :size="16" />{{ addLabel }}
       </button>
+      <slot name="actions" />
+      <slot />
     </div>
   </header>
 </template>

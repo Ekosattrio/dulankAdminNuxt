@@ -1,151 +1,172 @@
 <script setup lang="ts">
-import type { CustomerType, CustomerTypeFormData } from '~/types/customer-type'
+import type { CustomerType, CustomerTypeFormData } from '#server/types/customer-type'
+import { useCustomerTypes } from '~/composables/useCustomerTypes'
+import { useTablePrint } from '~/composables/useTablePrint'
+import CustomerTypeRecordsTable from '~/components/pages/customer-type/CustomerTypeRecordsTable.vue'
+import CustomerTypeFormModal from '~/components/pages/customer-type/CustomerTypeFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Customer Type', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Customer Type',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { customerTypes, pending, refresh, saveCustomerType, deleteCustomerType } = useCustomerTypes()
-
+// Filter states
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const isModalOpen = ref(false)
-const isEdit = ref(false)
-const editData = ref<CustomerType | null>(null)
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  status: filterStatus.value,
+}))
+
+const { customerTypes, pending, error, refresh, saveCustomerType, deleteCustomerType } = useCustomerTypes(filterParams)
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeTypeForEdit = ref<CustomerType | null>(null)
+const typeToDelete = ref<CustomerType | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
 const toastMessage = ref('')
+let toastTimer: any = null
 
-const showToast = (msg: string) => {
+function showToast(msg: string) {
   toastMessage.value = msg
-  setTimeout(() => {
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
     toastMessage.value = ''
-  }, 3000)
+  }, 3500)
 }
 
-const filteredList = computed(() => {
-  return customerTypes.value.filter((item) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      item.type?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      item.code?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !filterStatus.value || item.status === filterStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
-const handleAdd = () => {
-  isEdit.value = false
-  editData.value = null
-  isModalOpen.value = true
+function handleAdd() {
+  isEditMode.value = false
+  activeTypeForEdit.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (item: CustomerType) => {
-  isEdit.value = true
-  editData.value = item
-  isModalOpen.value = true
+function handleEdit(item: CustomerType) {
+  isEditMode.value = true
+  activeTypeForEdit.value = item
+  isFormModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus tipe customer ini?')) {
-    try {
-      await deleteCustomerType(id)
-      showToast('Customer type deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete customer type:', err)
-      alert('Failed to delete customer type')
-    }
+function handleDeleteRequest(item: CustomerType) {
+  typeToDelete.value = item
+}
+
+async function confirmDelete() {
+  if (!typeToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteCustomerType(typeToDelete.value.id)
+    showToast(res?.message || 'Customer type deleted successfully')
+    typeToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete customer type')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const handleSubmit = async (formData: CustomerTypeFormData) => {
+async function handleFormSubmit(formData: CustomerTypeFormData) {
+  isBusy.value = true
   try {
     const res = await saveCustomerType(formData)
-    showToast(res?.message || 'Customer type saved successfully')
-    isModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save customer type:', err)
-    alert('Failed to save customer type')
+    showToast(res?.message || (formData.id ? 'Customer type updated successfully' : 'Customer type created successfully'))
+    isFormModalOpen.value = false
+    activeTypeForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save customer type')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const printTable = () => {
-  window.print()
-}
+// Print & PDF Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const exportPdf = () => {
-  showToast('Exporting Customer Types to PDF...')
-}
+const printColumns = [
+  { key: 'name', label: 'Customer Type' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+]
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
-
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Customer Types</h4>
-          <h6 class="text-muted mb-0">Kelola kelompok kategori jenis pelanggan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Customer Type</span>
-          </button>
-        </div>
-      </div>
-
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <PagesCustomerTypeTable
-        v-else
-        :customer-types="filteredList"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-type="handleAdd"
-        @edit-type="handleEdit"
-        @delete-type="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
+  <div class="dulank-page dulank-page-customer-type space-y-6">
+    <!-- Success Toast -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
     </div>
 
-    <PagesCustomerTypeModal
-      :is-open="isModalOpen"
-      :is-edit="isEdit"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @submit="handleSubmit"
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Customer Type"
+      subtitle="Manage your Customer Types"
+      add-label="Add Customer Type"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
+
+    <!-- Loading Feedback with Table Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="3"
+      :error="error ? 'Unable to load customer types. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Table -->
+    <CustomerTypeRecordsTable
+      v-if="!pending && !error"
+      :customer-types="customerTypes"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <CustomerTypeFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :type-data="activeTypeForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!typeToDelete"
+      title="Delete Customer Type"
+      :message="`Are you sure you want to delete customer type '${typeToDelete?.name}'?`"
+      :busy="isBusy"
+      @confirm="confirmDelete"
+      @close="typeToDelete = null"
+    />
+
+    <!-- Print & PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Customer Types Report"
+      :columns="printColumns"
+      :items="customerTypes"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

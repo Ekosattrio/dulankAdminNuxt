@@ -62,7 +62,12 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Utility Format IDR**| `currency.ts` | `app/utils/currency.ts` | `formatIDR(value)`, `formatMoney(value)`, `parseMoney(str)` |
 | **Assignee Select** | `AssigneeSelect.vue` | `app/components/common/AssigneeSelect.vue` | Pemilih petugas/karyawan/departemen standar |
 | **Stepper Jumlah** | `QuantityStepper.vue` | `app/components/common/QuantityStepper.vue` | Kontrol `[-] [ Qty ] [+]` standar |
+| **Skeleton Primitif**| `AppSkeleton.vue` | `app/components/common/AppSkeleton.vue` | `<AppSkeleton height="h-9" rounded="md" />` animasi pulse standar |
+| **Table Skeleton** | `TableSkeleton.vue` | `app/components/common/TableSkeleton.vue` | `<TableSkeleton :rows="6" :cols="10" />` mirror layout SalesDataTable |
+| **Card Skeleton** | `CardSkeleton.vue` | `app/components/common/CardSkeleton.vue` | `<CardSkeleton :count="4" />` placeholder metrik / KPI card |
+| **Loading Feedback** | `SalesFeedback.vue` | `app/components/sales/SalesFeedback.vue` | `:pending="pending" skeleton="table" \| "card"` |
 | **Kelas Form UI** | `salesUi.ts` | `app/utils/salesUi.ts` | `tableFilterControlClass`, `modalFormRowClass`, dll. |
+| **Bundled Data Server**| `data.ts` / `bundledData.ts`| `server/utils/data.ts` | `readJSON<T>()` otomatis fallback ke `bundledSources` agar data tampil di Netlify Functions |
 
 ---
 
@@ -91,6 +96,11 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Reviews** | `/reviews` | Tepat 3 widget KPI proporsional, ikon rating bintang emas, tanpa kolom Action. |
 | **Support Ticket**| `/support-ticket` | 4 widget KPI, modal Add Ticket, modal detail & live chat history, kolom Action aktif. |
 | **Contact Form** | `/contact-form` | Tepat 5 kolom literal (Name, Email, Phone, Message, Date), tanpa kolom Action. |
+| **Customers** | `/customers` | Peoples: 10 kolom literal, modal Add/Edit (Grid 12-kolom), View tab Details & Address, Modal Add Address, filter Type & DateRangePicker, TableSkeleton, Print Kop Surat resmi. |
+| **Customer Types** | `/customer-type` | Peoples: Tipe pelanggan (Reguler, Corporate, VIP, dll.), modal Add/Edit (Grid 12-kolom), TableSkeleton, Print Kop Surat resmi. |
+| **Address** | `/address` | Peoples: 4 KPI Cards (Total Address, Province, City, Postal Code), Tab Customers & Suppliers, Modal Add/Edit & View Details, TableSkeleton, Print Kop Surat resmi. |
+| **Supplier** | `/supplier` | Peoples: Pemasok bahan/kertas, 8 kolom literal, tombol baris "Address" modal & Edit/Delete, modal Add/Edit (Grid 12-kolom), TableSkeleton, Print Kop Surat resmi. |
+| **Branch Store** | `/store-list` | Peoples: Cabang gerai fisik & workshop cetak, 7 kolom literal, modal Add/Edit (Grid 12-kolom), filter status, TableSkeleton, Print Kop Surat resmi. |
 | **Print & PDF** | Seluruh modul di atas | Dialog `DocumentPrintModal`, Kop Surat PT. Dulank Semesta Cida, 2 kolom TTD resmi. |
 
 ### B. MODUL PENDING / BERIKUTNYA

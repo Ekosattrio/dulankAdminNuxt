@@ -1,168 +1,221 @@
 <script setup lang="ts">
-import type { Customer, CustomerFormData } from '~/types/customer'
+import type { Customer, CustomerFormData } from '#server/types/customer'
+import type { DateRangeValue } from '~/composables/useDateRange'
+import { useCustomers } from '~/composables/useCustomers'
+import { useTablePrint } from '~/composables/useTablePrint'
+import CustomerRecordsTable from '~/components/pages/customers/CustomerRecordsTable.vue'
+import CustomerFormModal from '~/components/pages/customers/CustomerFormModal.vue'
+import CustomerViewModal from '~/components/pages/customers/CustomerViewModal.vue'
+import CustomerAddAddressModal from '~/components/pages/customers/CustomerAddAddressModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Customers', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Customers',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { customers, pending, refresh, saveCustomer, deleteCustomer } = useCustomers()
-
+// Filter states
 const searchQuery = ref('')
-const filterStatus = ref('')
+const filterType = ref('')
+const filterDateRange = ref<DateRangeValue | null>(null)
 
-const isModalOpen = ref(false)
-const isEdit = ref(false)
-const editData = ref<Customer | null>(null)
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  type: filterType.value,
+  startDate: filterDateRange.value?.start || '',
+  endDate: filterDateRange.value?.end || '',
+}))
 
-const isViewOpen = ref(false)
-const viewData = ref<Customer | null>(null)
+const { customers, pending, error, refresh, saveCustomer, deleteCustomer } = useCustomers(filterParams)
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeCustomerForEdit = ref<Customer | null>(null)
+
+const isViewModalOpen = ref(false)
+const activeCustomerForView = ref<Customer | null>(null)
+
+const isAddAddressModalOpen = ref(false)
+const activeCustomerForAddress = ref<Customer | null>(null)
+
+const customerToDelete = ref<Customer | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
 const toastMessage = ref('')
+let toastTimer: any = null
 
-const showToast = (msg: string) => {
+function showToast(msg: string) {
   toastMessage.value = msg
-  setTimeout(() => {
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
     toastMessage.value = ''
-  }, 3000)
+  }, 3500)
 }
 
-const filteredCustomers = computed(() => {
-  return customers.value.filter((c) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      c.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      c.customerId?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      c.phone?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      c.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !filterStatus.value || c.status === filterStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
-const handleAdd = () => {
-  isEdit.value = false
-  editData.value = null
-  isModalOpen.value = true
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activeCustomerForEdit.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (c: Customer) => {
-  isEdit.value = true
-  editData.value = c
-  isModalOpen.value = true
+function handleEdit(customer: Customer) {
+  isEditMode.value = true
+  activeCustomerForEdit.value = customer
+  isFormModalOpen.value = true
 }
 
-const handleView = (c: Customer) => {
-  viewData.value = c
-  isViewOpen.value = true
+function handleView(customer: Customer) {
+  activeCustomerForView.value = customer
+  isViewModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data customer ini?')) {
-    try {
-      await deleteCustomer(id)
-      showToast('Customer deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete customer:', err)
-      alert('Failed to delete customer')
-    }
+function handleAddAddress(customer: Customer) {
+  activeCustomerForAddress.value = customer
+  isAddAddressModalOpen.value = true
+}
+
+function handleDeleteRequest(customer: Customer) {
+  customerToDelete.value = customer
+}
+
+async function confirmDelete() {
+  if (!customerToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteCustomer(customerToDelete.value.id)
+    showToast(res?.message || 'Customer deleted successfully')
+    customerToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete customer')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const handleSubmit = async (formData: CustomerFormData) => {
+async function handleFormSubmit(formData: CustomerFormData) {
+  isBusy.value = true
   try {
     const res = await saveCustomer(formData)
-    showToast(res?.message || 'Customer saved successfully')
-    isModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save customer:', err)
-    alert('Failed to save customer')
+    showToast(res?.message || (formData.id ? 'Customer updated successfully' : 'Customer created successfully'))
+    isFormModalOpen.value = false
+    activeCustomerForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save customer')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const printTable = () => {
-  window.print()
-}
+// Print & PDF Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const exportPdf = () => {
-  showToast('Exporting Customers to PDF...')
-}
+const printColumns = [
+  { key: 'customerId', label: 'Customer ID' },
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email' },
+  { key: 'type', label: 'Customer Type' },
+  { key: 'balance', label: 'Balance', align: 'right' as const },
+  { key: 'phone', label: 'Contact No' },
+  { key: 'channel', label: 'Join Channel' },
+  { key: 'dateJoin', label: 'Date Join' },
+]
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
-
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Customers / Pelanggan</h4>
-          <h6 class="text-muted mb-0">Kelola informasi kontak, profil, dan riwayat pelanggan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add New Customer</span>
-          </button>
-        </div>
-      </div>
-
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <PagesCustomerTable
-        v-else
-        :customers="filteredCustomers"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-customer="handleAdd"
-        @edit-customer="handleEdit"
-        @view-customer="handleView"
-        @delete-customer="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
+  <div class="dulank-page dulank-page-customers space-y-6">
+    <!-- Success / Info Toast -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
     </div>
 
-    <PagesCustomerModal
-      :is-open="isModalOpen"
-      :is-edit="isEdit"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @submit="handleSubmit"
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Customer List"
+      subtitle="Manage your customers & contacts"
+      add-label="Add New Customer"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
 
-    <PagesCustomerViewModal
-      :is-open="isViewOpen"
-      :customer-data="viewData"
-      @close="isViewOpen = false"
+    <!-- Loading / Error Feedback with Skeleton Loader -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="10"
+      :error="error ? 'Unable to load customers data. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Table -->
+    <CustomerRecordsTable
+      v-if="!pending && !error"
+      :customers="customers"
+      :search-query="searchQuery"
+      :filter-type="filterType"
+      :filter-date-range="filterDateRange"
+      @update:search-query="searchQuery = $event"
+      @update:filter-type="filterType = $event"
+      @update:filter-date-range="filterDateRange = $event"
+      @add-address="handleAddAddress"
+      @view="handleView"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <CustomerFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :customer-data="activeCustomerForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- View Customer Details Modal -->
+    <CustomerViewModal
+      :open="isViewModalOpen"
+      :customer="activeCustomerForView"
+      @close="isViewModalOpen = false"
+    />
+
+    <!-- Add Address Modal -->
+    <CustomerAddAddressModal
+      :open="isAddAddressModalOpen"
+      :customer="activeCustomerForAddress"
+      @close="isAddAddressModalOpen = false"
+      @success="showToast"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="!!customerToDelete"
+      title="Delete Customer"
+      :message="`Are you sure you want to delete customer '${customerToDelete?.name}' (${customerToDelete?.customerId})?`"
+      :busy="isBusy"
+      @confirm="confirmDelete"
+      @close="customerToDelete = null"
+    />
+
+    <!-- Document Print / PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Customers Report"
+      :columns="printColumns"
+      :items="customers"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>

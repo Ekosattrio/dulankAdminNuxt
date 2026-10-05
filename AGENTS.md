@@ -18,6 +18,7 @@ Panduan ini berlaku untuk seluruh repositori. Pola revisi menu SALES yang sudah 
 - Pertahankan halaman, route, alias `.html`, data JSON, `server/api/`, `server/types/`, dan utils yang sudah ada. Perubahan implementasi boleh dilakukan sesuai tugas, tanpa menghilangkan fitur atau kontrak lama.
 - Saat memecah kode menjadi komponen, pertahankan kompatibilitas pemanggil lama; gunakan adapter bila diperlukan. Jangan menghapus file hanya karena tampak tidak terpakai.
 - Jangan menimpa, mengosongkan, atau melakukan seed ulang data pengguna. `data/` adalah penyimpanan runtime; `server/data/` berisi JSON sumber. Keduanya bukan folder yang bisa saling ditimpa otomatis.
+- **Dukungan Serverless Netlify (`bundledSources`):** Seluruh 54 berkas JSON di `server/data/` terdaftar di `server/utils/bundledData.ts` dan di-bundle ke Nitro chunk. Fungsi `readJSON()` di `server/utils/data.ts` otomatis memakai data ter-bundle bila berkas fisik di disk tidak tersedia di lingkungan serverless Netlify, memastikan seluruh halaman menampilkan data tanpa kosong.
 - Array runtime kosong adalah data valid. JSON rusak harus menghasilkan error yang jelas, bukan diam-diam diganti seed. Request GET tidak boleh membuat atau mengubah data.
 - Jangan mengisi rincian transaksi lama yang tidak tersedia dengan produk, pembayaran, atau identitas contoh buatan. Pertahankan nilai yang diketahui dan tangani rincian kosong secara eksplisit.
 - Jangan mengedit `.nuxt/`, `.output/`, atau `node_modules/` sebagai solusi perubahan source. Jangan membatalkan perubahan pengguna yang sudah ada di working tree.
@@ -76,6 +77,9 @@ Gunakan komponen bersama berikut sebelum membuat variasi baru:
 | [AssigneeSelect.vue](app/components/common/AssigneeSelect.vue) | Pemilih assignee standar modal (`min-h-9`, radio Employees/Department, chips badge, floating dropdown). |
 | [QuantityStepper.vue](app/components/common/QuantityStepper.vue) | Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
 | [ImageUploadGrid.vue](app/components/common/ImageUploadGrid.vue) | Komponen pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
+| [AppSkeleton.vue](app/components/common/AppSkeleton.vue) | Primitif skeleton loader teranimasi pulse dengan bentuk dan ukuran fleksibel (rounded, circle, text line). |
+| [TableSkeleton.vue](app/components/common/TableSkeleton.vue) | Skeleton loader tabel terstruktur penuh yang meniru layout `SalesDataTable` (toolbar filter, search `h-9`, header, baris data, dan pagination). |
+| [CardSkeleton.vue](app/components/common/CardSkeleton.vue) | Skeleton loader metrik KPI / stat widget standar. |
 | [CurrencyInput.vue](app/components/common/CurrencyInput.vue) | Input mata uang / separator ribuan realtime (`h-9`), prefix 'Rp' opsional, justifikasi kanan (`align="right"`) atau kiri (`align="left"`), v-model angka murni. |
 | [CurrencyDisplay.vue](app/components/common/CurrencyDisplay.vue) | Display mata uang / separator ribuan standar (`Rp 10.000`), format monospaced tabular-nums, justifikasi kanan (`align="right"`) atau kiri (`align="left"`). |
 | [currency.ts](app/utils/currency.ts) | Utility pemformat & parser uang: `formatMoney()`, `formatIDR()`, `parseMoney()`, dan helper alignment `currencyAlignClass()`. |
@@ -139,7 +143,17 @@ Gunakan daftar ini sebagai batas regresi untuk grup menu Webstore (`https://perc
 - **Reviews (`/reviews`):** tabel ulasan pelanggan dengan 3 widget KPI proporsional (Total Review, Total Product, Total Publish), filter tanggal dan Rating (1-5), kolom Rating berikon bintang emas, Title, Review, dan badge Status. Tanpa kolom Action.
 - **Contact Form (`/contact-form`):** tabel formulir kontak dengan widget Total Contact, filter tanggal, 5 kolom literal (Name, Email, Phone, Message, Date) tanpa kolom Action sesuai template referensi Netlify.
 
-## 5.4 Perilaku PRINT & PDF EXPORT yang sudah disetujui
+## 5.4 Perilaku PEOPLES Group yang sudah disetujui
+
+Gunakan daftar ini sebagai batas regresi untuk grup menu Peoples:
+
+- **Customers (`/customers`):** tabel daftar pelanggan 10 kolom literal (Customer ID, Name, Email, Customer Type, Balance IDR rata kanan numerik murni, Contact No, Join Channel, Date Join, Last Seen, Action). Aksi per baris mencakup: tombol `+ Address`, View (tab detail & alamat), Edit (12-kolom CSS Grid), dan Delete dengan dialog konfirmasi `SalesConfirmDelete`. Filter toolbar mencakup `DateRangePicker.vue` dan dropdown filter `TableFilterSelect.vue` Customer Type. State loading dilengkapi reusable skeleton loader `TableSkeleton.vue` melalui `<SalesFeedback skeleton="table" />`. Fitur cetak/ekspor PDF menggunakan dialog `DocumentPrintModal.vue` lengkap dengan Kop Surat resmi Dulank dan kolom TTD.
+- **Customer Types (`/customer-type`):** tabel tipe klasifikasi pelanggan (Reguler, Corporate, VIP, Reseller, dll.), modal Add/Edit (12-kolom CSS Grid), TableSkeleton loader, dialog konfirmasi hapus `SalesConfirmDelete`, dan cetak/PDF via `DocumentPrintModal.vue`.
+- **Address (`/address`):** tabel master alamat relasional dengan 4 widget KPI (Total Address, Total Province, Total City, Total Pos Code), Tab navigasi Customers dan Suppliers, modal Add/Edit (12-kolom CSS Grid), modal View Detail, TableSkeleton loader, dan cetak/PDF via `DocumentPrintModal.vue`.
+- **Supplier (`/supplier`):** tabel rekanan pemasok bahan & kertas 8 kolom literal (ID Supplier, Supplier Name, Email, Contact, PIC Name, Status, Date, Action). Aksi per baris mencakup: tombol `+ Address` modal pemasok, Edit, dan Delete `SalesConfirmDelete`. Modal Add/Edit (12-kolom CSS Grid), modal Add Address pemasok, TableSkeleton loader, dan cetak/PDF via `DocumentPrintModal.vue`.
+- **Branch Store (`/store-list`):** tabel gerai cabang fisik & workshop cetak 7 kolom literal (Store Name, Manager / User, Address, Phone, Email, Status, Action). Aksi baris Edit dan Delete `SalesConfirmDelete`. Modal Add/Edit (12-kolom CSS Grid), filter status, TableSkeleton loader, dan cetak/PDF via `DocumentPrintModal.vue`.
+
+## 5.5 Perilaku PRINT & PDF EXPORT yang sudah disetujui
 
 Gunakan standar ini untuk fitur cetak (Print) dan ekspor PDF di seluruh repositori:
 

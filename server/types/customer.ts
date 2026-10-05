@@ -16,6 +16,8 @@ export interface CustomerFilterParams {
   search?: string
   type?: string
   channel?: string
+  startDate?: string
+  endDate?: string
 }
 
 export interface CustomerFormData {

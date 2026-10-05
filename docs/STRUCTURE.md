@@ -1659,6 +1659,106 @@ Sebelum standardisasi:
      - **SPK My Job / Job Order (`printJobDetailTicket`):** Lembar Surat Perintah Kerja teknis pengerjaan cetak.
      - **Invoice Details, Delivery Note Detail, Quotation Detail, Request Quotation Detail, Payslip Detail.**
 
+---
+
+## 27. Standardisasi Reusable Skeleton Loader Seluruh Halaman
+
+### 27.1 Latar Belakang & Kebutuhan
+Sebelumnya, feedback saat memuat data (*pending state*) hanya berupa teks biasa atau spinner kecil yang menimbulkan pergeseran tata letak (*layout shift*) saat data tiba. Untuk meningkatkan pengalaman pengguna (UX) ke standar modern SaaS:
+1. Diperlukan komponen skeleton loader yang meniru persis dimensi dan susunan komponen aslinya.
+2. Harus reusable agar dapat digunakan di seluruh 186 halaman admin Nuxt.
+
+### 27.2 Komponen Skeleton Reusable yang Disediakan
+1. **`AppSkeleton.vue` (`app/components/common/AppSkeleton.vue`):**
+   - Komponen primitif dengan animasi `animate-pulse`, warna adaptif Tailwind (`bg-gray-200/80 dark:bg-gray-700/60`), bentuk fleksibel (`rounded-sm`, `md`, `lg`, `xl`, `full` / circle), serta lebar dan tinggi yang dapat dikonfigurasi.
+2. **`TableSkeleton.vue` (`app/components/common/TableSkeleton.vue`):**
+   - Komponen skeleton tabel komprehensif yang meniru container kartu `SalesDataTable`:
+     - Toolbar baris atas: input pencarian `h-9` dan tombol dropdown filter `h-9`.
+     - Header tabel abu-abu halus.
+     - Baris data dinamis (`rows` & `cols`) dengan simulasi avatar, teks dengan variasi lebar realistis, dan tombol aksi baris.
+     - Pagination bar bawah lengkap dengan tombol navigasi halaman.
+3. **`CardSkeleton.vue` (`app/components/common/CardSkeleton.vue`):**
+   - Komponen skeleton kartu statistik/metrik KPI untuk dashboard dan laporan.
+4. **Integrasi ke `SalesFeedback.vue` (`app/components/sales/SalesFeedback.vue`):**
+   - Dilengkapi prop `skeleton="table" | "card" | "none"` dan `:skeleton-cols="10"` sehingga setiap halaman cukup menyertakan `<SalesFeedback :pending="pending" skeleton="table" />`.
+
+---
+
+## 28. Implementasi Menu Peoples: Customers (`/customers`)
+
+### 28.1 Ringkasan Implementasi
+Modul **Customers** di bawah grup menu **PEOPLES** telah direfaktor penuh dari template Bootstrap lama ke arsitektur Nuxt 4 + Tailwind CSS + Backend-ready sesuai acuan `legacy/static-source/customers.html` (`https://dulank-admin.netlify.app/customers.html`):
+
+1. **Halaman Tipis (`app/pages/customers.vue`):**
+   - Menggunakan `useLegacyPage({ title: 'Customers', sweetAlert: false })`.
+   - Mengintegrasikan toolbar header `SalesListHeader.vue` dengan aksi Refresh, Print, PDF, dan tombol "Add New Customer".
+   - Menggunakan feedback loading modern `<SalesFeedback :pending="pending" skeleton="table" :skeleton-cols="10" />`.
+2. **Tabel Data Pelanggan (`app/components/pages/customers/CustomerRecordsTable.vue`):**
+   - Menggunakan `SalesDataTable.vue` (`text-xs font-medium`).
+   - 10 kolom literal: Customer ID, Name, Email, Customer Type, Balance (rata kanan numerik via `<CurrencyDisplay>`), Contact No, Join Channel, Date Join, Last Seen, Action.
+   - Filter toolbar: Pencarian realtime, `DateRangePicker.vue`, dan dropdown filter `TableFilterSelect.vue` Customer Type.
+   - Aksi baris: Tombol `+ Address`, View detail, Edit, dan Delete.
+3. **Form Modal Tambah / Edit (`app/components/pages/customers/CustomerFormModal.vue`):**
+   - Menggunakan `SalesDialog.vue` ukuran medium.
+   - Tata letak 12-kolom CSS Grid (`modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`).
+   - Kontrol tinggi standar `h-9`.
+4. **Modal Detail & Alamat Pelanggan (`app/components/pages/customers/CustomerViewModal.vue`):**
+   - 2 Tab interaktif: "Customer Details" dan "Address" (menampilkan daftar alamat pengiriman yang terhubung).
+5. **Modal Tambah Alamat Baru (`app/components/pages/customers/CustomerAddAddressModal.vue`):**
+   - Form penambahan alamat langsung terhubung ke relasi data `customerId` dan endpoint `/api/address`.
+6. **Dialog Hapus & Cetak Resmi:**
+   - Konfirmasi hapus `SalesConfirmDelete.vue`.
+   - Cetak tabel dan ekspor PDF resmi via `DocumentPrintModal.vue` (Kop Surat resmi PT Dulank Semesta Cida dan kolom TTD).
+
+---
+
+## 29. Standarisasi Bundled JSON Registry untuk Deployment Netlify Serverless
+
+### 29.1 Latar Belakang & Masalah Lingkungan Serverless Netlify
+Saat aplikasi dideploy ke Netlify (`https://dulankadminnuxt.netlify.app/`), backend Nitro berjalan di lingkungan *serverless function* (AWS Lambda). Di lingkungan ini:
+1. Pembacaan berkas fisik melalui filesystem runtime (`readFileSync(join(process.cwd(), 'data', ...))`) gagal menemukan file karena isolasi kontainer serverless.
+2. Akibatnya, `readJSON` sebelumnya mengembalikan array kosong `[]`, menyebabkan tabel-tabel di seluruh halaman Netlify tidak menampilkan data (kosong).
+3. Modul Sales sebelumnya berhasil menampilkan data karena mengimpor berkas JSON secara statis di `salesData.ts`, sehingga datanya ikut terkompilasi (*in-memory bundle*) ke dalam Nitro chunk.
+
+### 29.2 Solusi Terpusat: `bundledData.ts` & `data.ts`
+Untuk menyelesaikan masalah ini secara menyeluruh di seluruh aplikasi tanpa mengubah puluhan endpoint API satu per satu:
+1. **Registry Terpusat (`server/utils/bundledData.ts`):**
+   - Mengimpor seluruh 54 berkas JSON di `server/data/` secara statis ke dalam objek map `bundledSources: Record<string, unknown>`.
+   - Semua dataset secara otomatis ikut ter-bundle ke dalam build produksi Nitro (`.output/server/`).
+2. **Fallback Cerdas di `readJSON()` (`server/utils/data.ts`):**
+   - **Tingkat 1:** Jika berkas fisik runtime di `data/` atau `server/data/` ditemukan (lingkungan lokal / dev / file yang dimutasi), sistem membaca dari disk.
+   - **Tingkat 2:** Jika berkas fisik tidak ditemukan (lingkungan serverless Netlify), sistem otomatis fallback ke `bundledSources[filename]`, mengembalikan data via `structuredClone()`.
+   - **Tingkat 3:** Jika tidak terdaftar, mengembalikan default value atau `[]`.
+3. **Proteksi Penulisan `writeJSON()`:**
+   - Penulisan ke disk pada sistem file read-only serverless diproteksi dengan `try / catch` sehingga tidak menyebabkan crash (500 Internal Server Error).
+
+---
+
+## 30. Implementasi Lengkap Seluruh Sub-Menu Kelompok PEOPLES
+
+Kelompok menu **PEOPLES** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, CSS grid 12-kolom kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, serta dialog cetak resmi `DocumentPrintModal.vue`:
+
+### 30.1 Customer Types (`/customer-type`)
+- **Thin Page**: `app/pages/customer-type.vue`
+- **Komponen Domain**: `app/components/pages/customer-type/CustomerTypeRecordsTable.vue`, `CustomerTypeFormModal.vue`.
+- **Fitur**: Master klasifikasi pelanggan percetakan (Reguler, Corporate, VIP, Reseller, Membership, dll.), Add/Edit form modal, `SalesConfirmDelete`, `SalesFeedback :skeleton="table"`, dan Print/PDF kop surat resmi.
+
+### 30.2 Address (`/address`)
+- **Thin Page**: `app/pages/address.vue`
+- **Komponen Domain**: `app/components/pages/address/AddressStatsWidgets.vue`, `AddressRecordsTable.vue`, `AddressFormModal.vue`, `AddressViewModal.vue`.
+- **Fitur**: Master alamat relasional dengan 4 KPI Card statistik, Tab navigasi Customers dan Suppliers, modal Add/Edit (12-kolom CSS Grid), modal View rincian alamat pengiriman, dan Print/PDF kop surat resmi.
+
+### 30.3 Supplier (`/supplier`)
+- **Thin Page**: `app/pages/supplier.vue`
+- **Komponen Domain**: `app/components/pages/supplier/SupplierRecordsTable.vue`, `SupplierFormModal.vue`, `SupplierAddAddressModal.vue`.
+- **Fitur**: Database rekanan pemasok bahan baku percetakan (kertas, tinta, pelat CTP). 8 Kolom tabel literal. Aksi baris tombol modal "+ Address" langsung terhubung ke relasi supplier, Edit, Delete, dan Print/PDF kop surat resmi.
+
+### 30.4 Branch Store (`/store-list`)
+- **Thin Page**: `app/pages/store-list.vue`
+- **Komponen Domain**: `app/components/pages/store-list/StoreListRecordsTable.vue`, `StoreListFormModal.vue`.
+- **Fitur**: Pengelolaan gerai cabang fisik & workshop percetakan. 7 Kolom tabel literal. Form modal Add/Edit dengan validasi Store Name, Manager/User, Phone, Email, dan Status. Print/PDF kop surat resmi.
+
+
 
 
 

@@ -1,4 +1,4 @@
-import type { Store, StoreFormData } from '~/types/store'
+import type { Store, StoreFormData } from '../../types/store'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<StoreFormData>(event)

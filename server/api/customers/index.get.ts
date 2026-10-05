@@ -19,6 +19,10 @@ export default defineEventHandler((event) => {
     customers = customers.filter(c => c.type.toLowerCase() === query.type!.toLowerCase())
   }
 
+  if (query.startDate || query.endDate) {
+    customers = customers.filter(c => isDateWithinRange(c.dateJoin, query.startDate, query.endDate))
+  }
+
   return createResponse(customers, { total: customers.length })
 })
 

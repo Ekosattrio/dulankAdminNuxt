@@ -1,152 +1,225 @@
 <script setup lang="ts">
-import type { Supplier, SupplierFormData } from '~/types/supplier'
+import type { Supplier, SupplierFormData } from '#server/types/supplier'
+import { useSuppliers } from '~/composables/useSuppliers'
+import { useTablePrint } from '~/composables/useTablePrint'
+import SupplierRecordsTable from '~/components/pages/supplier/SupplierRecordsTable.vue'
+import SupplierFormModal from '~/components/pages/supplier/SupplierFormModal.vue'
+import SupplierAddAddressModal from '~/components/pages/supplier/SupplierAddAddressModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Suppliers - Pemasok Kertas & Bahan', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Suppliers - Pemasok Kertas & Bahan',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { suppliers, pending, refresh, saveSupplier, deleteSupplier } = useSuppliers()
-
+// Filter states
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const isModalOpen = ref(false)
-const isEdit = ref(false)
-const editData = ref<Supplier | null>(null)
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  status: filterStatus.value,
+}))
+
+const { suppliers, pending, error, refresh, saveSupplier, deleteSupplier } = useSuppliers(filterParams)
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeSupplierForEdit = ref<Supplier | null>(null)
+
+const isAddAddressModalOpen = ref(false)
+const activeSupplierForAddress = ref<Supplier | null>(null)
+
+const supplierToDelete = ref<Supplier | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
 const toastMessage = ref('')
+let toastTimer: any = null
 
-const showToast = (msg: string) => {
+function showToast(msg: string) {
   toastMessage.value = msg
-  setTimeout(() => {
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
     toastMessage.value = ''
-  }, 3000)
+  }, 3500)
 }
 
-const filteredList = computed(() => {
-  return suppliers.value.filter((s) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      s.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      s.phone?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      s.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !filterStatus.value || s.status === filterStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
-const handleAdd = () => {
-  isEdit.value = false
-  editData.value = null
-  isModalOpen.value = true
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activeSupplierForEdit.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (s: Supplier) => {
-  isEdit.value = true
-  editData.value = s
-  isModalOpen.value = true
+function handleEdit(supplier: Supplier) {
+  isEditMode.value = true
+  activeSupplierForEdit.value = supplier
+  isFormModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data supplier ini?')) {
-    try {
-      await deleteSupplier(id)
-      showToast('Supplier deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete supplier:', err)
-      alert('Failed to delete supplier')
-    }
+function handleAddAddress(supplier: Supplier) {
+  activeSupplierForAddress.value = supplier
+  isAddAddressModalOpen.value = true
+}
+
+function handleDeleteRequest(supplier: Supplier) {
+  supplierToDelete.value = supplier
+}
+
+async function confirmDelete() {
+  if (!supplierToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteSupplier(supplierToDelete.value.id)
+    showToast(res?.message || 'Supplier deleted successfully')
+    supplierToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete supplier')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const handleSubmit = async (formData: SupplierFormData) => {
+async function handleFormSubmit(formData: SupplierFormData) {
+  isBusy.value = true
   try {
     const res = await saveSupplier(formData)
-    showToast(res?.message || 'Supplier saved successfully')
-    isModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save supplier:', err)
-    alert('Failed to save supplier')
+    showToast(res?.message || (isEditMode.value ? 'Supplier updated successfully' : 'Supplier created successfully'))
+    isFormModalOpen.value = false
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save supplier')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const printTable = () => {
-  window.print()
+// Print & PDF
+const {
+  isPrintModalOpen,
+  printTitle,
+  printColumns,
+  printRows,
+  openPrintModal,
+} = useTablePrint()
+
+function handlePrint() {
+  openPrintModal({
+    title: 'Suppliers Report - Pemasok Kertas & Bahan',
+    columns: [
+      { key: 'supplierId', label: 'ID Supplier' },
+      { key: 'name', label: 'Supplier Name' },
+      { key: 'email', label: 'Email' },
+      { key: 'contact', label: 'Contact' },
+      { key: 'picName', label: 'PIC Name' },
+      { key: 'status', label: 'Status' },
+      { key: 'date', label: 'Date Added' },
+    ],
+    rows: suppliers.value.map(s => ({
+      supplierId: s.supplierId || s.id,
+      name: s.name,
+      email: s.email,
+      contact: s.contact || '-',
+      picName: s.picName || '-',
+      status: s.status,
+      date: s.date || '-',
+    })),
+  })
 }
 
-const exportPdf = () => {
-  showToast('Exporting Suppliers to PDF...')
+function handleExportPdf() {
+  handlePrint()
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
+  <div class="space-y-4">
+    <!-- Toast notification -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="translate-y-2 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-2 opacity-0"
+    >
+      <div
+        v-if="toastMessage"
+        class="fixed right-6 top-20 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-xl"
+        role="alert"
+      >
         <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
+        <span>{{ toastMessage }}</span>
       </div>
+    </Transition>
 
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Suppliers / Pemasok</h4>
-          <h6 class="text-muted mb-0">Kelola database distributor bahan kertas, tinta, dan pelat cetak</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Supplier</span>
-          </button>
-        </div>
-      </div>
+    <!-- Header bar -->
+    <SalesListHeader
+      title="Suppliers / Pemasok"
+      subtitle="Kelola database distributor bahan kertas, tinta, dan pelat cetak"
+      add-label="Add Supplier"
+      @refresh="refresh"
+      @print="handlePrint"
+      @export-pdf="handleExportPdf"
+      @add="handleAdd"
+    />
 
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+    <!-- Table content with skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      :error="error ? 'Unable to load suppliers data. Please try again.' : ''"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      @retry="refresh"
+    />
 
-      <PagesSupplierTable
-        v-else
-        :suppliers="filteredList"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-supplier="handleAdd"
-        @edit-supplier="handleEdit"
-        @delete-supplier="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
+    <SupplierRecordsTable
+      v-if="!pending && !error"
+      :suppliers="suppliers"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @add-address="handleAddAddress"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
 
-    <PagesSupplierModal
-      :is-open="isModalOpen"
-      :is-edit="isEdit"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @submit="handleSubmit"
+    <!-- Modals -->
+    <SupplierFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :supplier-data="activeSupplierForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <SupplierAddAddressModal
+      :open="isAddAddressModalOpen"
+      :supplier="activeSupplierForAddress"
+      @close="isAddAddressModalOpen = false"
+      @success="showToast"
+    />
+
+    <SalesConfirmDelete
+      :open="!!supplierToDelete"
+      title="Delete Supplier"
+      :message="`Are you sure you want to delete supplier '${supplierToDelete?.name}'? This action cannot be undone.`"
+      :busy="isBusy"
+      @close="supplierToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      :title="printTitle"
+      :columns="printColumns"
+      :rows="printRows"
+      @close="isPrintModalOpen = false"
     />
   </div>
 </template>

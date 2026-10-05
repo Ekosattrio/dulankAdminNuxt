@@ -1,4 +1,4 @@
-import type { Store } from '~/types/store'
+import type { Store } from '../../types/store'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
