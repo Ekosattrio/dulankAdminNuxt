@@ -5,6 +5,7 @@ import { useCarts } from '~/composables/useCarts'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import CartStatsWidgets from '~/components/pages/cart/CartStatsWidgets.vue'
 import CartRecordsTable from '~/components/pages/cart/CartRecordsTable.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -60,14 +61,19 @@ const cartPrintColumns = [
     <!-- KPI Widgets -->
     <CartStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat data keranjang: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat data keranjang. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Cart Records Table -->
     <CartRecordsTable
+      v-if="!pending && !error"
       :carts="carts"
       v-model:search-query="searchQuery"
       v-model:filter-category="filterCategory"

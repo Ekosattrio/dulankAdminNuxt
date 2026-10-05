@@ -46,6 +46,9 @@ const paymentPrintColumns = [
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load payments. Please try again.' : ''"
       @retry="refresh()"
     />

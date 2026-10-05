@@ -5,6 +5,7 @@ import { useContactForms } from '~/composables/useContactForms'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import ContactFormStatsWidgets from '~/components/pages/contact-form/ContactFormStatsWidgets.vue'
 import ContactFormRecordsTable from '~/components/pages/contact-form/ContactFormRecordsTable.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -53,14 +54,19 @@ const contactPrintColumns = [
     <!-- KPI Widgets -->
     <ContactFormStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat pesan formulir kontak: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="5"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat pesan formulir kontak. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Contact Form Records Table (Name, Email, Phone, Message, Date - NO Action column) -->
     <ContactFormRecordsTable
+      v-if="!pending && !error"
       :contacts="contacts"
       v-model:search-query="searchQuery"
       v-model:filter-date-range="filterDateRange"

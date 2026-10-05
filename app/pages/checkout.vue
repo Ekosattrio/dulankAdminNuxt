@@ -5,6 +5,7 @@ import { useCheckouts } from '~/composables/useCheckouts'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import CheckoutStatsWidgets from '~/components/pages/checkout/CheckoutStatsWidgets.vue'
 import CheckoutRecordsTable from '~/components/pages/checkout/CheckoutRecordsTable.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -60,14 +61,19 @@ const checkoutPrintColumns = [
     <!-- KPI Widgets -->
     <CheckoutStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat data checkout: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat data checkout. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Checkout Records Table -->
     <CheckoutRecordsTable
+      v-if="!pending && !error"
       :checkouts="checkouts"
       v-model:search-query="searchQuery"
       v-model:filter-method="filterMethod"

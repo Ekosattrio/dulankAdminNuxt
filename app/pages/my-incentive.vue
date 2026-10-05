@@ -5,6 +5,7 @@ import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import MyIncentiveStatsWidgets from '~/components/pages/my-incentive/MyIncentiveStatsWidgets.vue'
 import MyIncentiveRecordsTable from '~/components/pages/my-incentive/MyIncentiveRecordsTable.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -57,14 +58,19 @@ const incentivePrintColumns = [
     <!-- KPI Widgets matching exact legacy row & styling -->
     <MyIncentiveStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat daftar insentif: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat daftar insentif. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Incentive Records Table (7 columns, tfoot sum, NO Action column) -->
     <MyIncentiveRecordsTable
+      v-if="!pending && !error"
       :items="myIncentives"
       :loading="pending"
       v-model:search-query="searchQuery"

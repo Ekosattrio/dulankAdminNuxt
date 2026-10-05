@@ -5,6 +5,7 @@ import { useReviews } from '~/composables/useReviews'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import ReviewsStatsWidgets from '~/components/pages/reviews/ReviewsStatsWidgets.vue'
 import ReviewsRecordsTable from '~/components/pages/reviews/ReviewsRecordsTable.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -58,14 +59,19 @@ const reviewPrintColumns = [
     <!-- KPI Widgets (3 cards matching legacy HTML) -->
     <ReviewsStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat ulasan pelanggan: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat ulasan pelanggan. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Reviews Records Table -->
     <ReviewsRecordsTable
+      v-if="!pending && !error"
       :reviews="reviews"
       v-model:search-query="searchQuery"
       v-model:filter-rating="filterRating"

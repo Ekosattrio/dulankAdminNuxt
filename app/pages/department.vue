@@ -188,19 +188,22 @@ function handleExportExcel() {
     <SalesFeedback
       v-if="toastMessage"
       :message="toastMessage"
-      @close="toastMessage = ''"
+      @dismiss="toastMessage = ''"
     />
 
-    <!-- Error State -->
-    <div
-      v-if="error"
-      class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-400"
-    >
-      Failed to load departments: {{ error.message }}
-    </div>
+    <!-- Skeleton and Error Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Failed to load departments. Please try again.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Department Records Table -->
     <DepartmentRecordsTable
+      v-if="!pending && !error"
       :departments="departments"
       :search-query="searchQuery"
       :filter-status="filterStatus"

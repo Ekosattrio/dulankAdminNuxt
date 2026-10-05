@@ -204,19 +204,22 @@ function handleExportExcel() {
     <SalesFeedback
       v-if="toastMessage"
       :message="toastMessage"
-      @close="toastMessage = ''"
+      @dismiss="toastMessage = ''"
     />
 
-    <!-- Error Banner -->
-    <div
-      v-if="error"
-      class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-400"
-    >
-      Failed to load employee salaries: {{ error.message }}
-    </div>
+    <!-- Skeleton & Error Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Failed to load employee salaries. Please try again.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Records Table -->
     <EmployeeSalaryRecordsTable
+      v-if="!pending && !error"
       :salaries="salaries"
       :search-query="searchQuery"
       :filter-system="filterSystem"

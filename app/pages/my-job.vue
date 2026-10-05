@@ -66,23 +66,20 @@ const handleStatusSubmit = async (payload: { status: JobStatus; qtyOk: string; q
   <div class="dulank-page dulank-page-my-job max-w-7xl mx-auto px-4 py-6">
     <SalesFeedback
       v-if="feedbackMessage"
-      :type="feedbackType"
       :message="feedbackMessage"
       class="mb-4"
       @dismiss="feedbackMessage = ''"
     />
 
-    <div v-if="pending" class="flex items-center justify-center py-20">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    </div>
-
-    <div v-else-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat daftar pekerjaan: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <SalesFeedback
+      :pending="pending"
+      skeleton="card"
+      :error="error ? (error.message || 'Gagal memuat daftar pekerjaan') : ''"
+      @retry="refresh"
+    />
 
     <MyJobCardGrid
-      v-else
+      v-if="!pending && !error"
       :jobs="myJobs"
       v-model:selected-priority="priorityFilter"
       @view-detail="handleViewDetail"

@@ -3,6 +3,7 @@ import type { SupportTicket, SupportTicketFilterQuery } from '#server/types/supp
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useSupportTickets } from '~/composables/useSupportTickets'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SupportTicketStatsWidgets from '~/components/pages/support-ticket/SupportTicketStatsWidgets.vue'
 import SupportTicketRecordsTable from '~/components/pages/support-ticket/SupportTicketRecordsTable.vue'
@@ -148,14 +149,19 @@ const supportTicketPrintColumns = [
     <!-- KPI Widgets -->
     <SupportTicketStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat tiket bantuan: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat tiket bantuan. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Support Ticket Records Table -->
     <SupportTicketRecordsTable
+      v-if="!pending && !error"
       :tickets="tickets"
       v-model:search-query="searchQuery"
       v-model:filter-priority="filterPriority"

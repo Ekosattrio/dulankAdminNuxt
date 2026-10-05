@@ -5,6 +5,7 @@ import { useWishlists } from '~/composables/useWishlists'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import WishlistStatsWidgets from '~/components/pages/wishlist/WishlistStatsWidgets.vue'
 import WishlistRecordsTable from '~/components/pages/wishlist/WishlistRecordsTable.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
@@ -59,14 +60,19 @@ const wishlistPrintColumns = [
     <!-- KPI Widgets -->
     <WishlistStatsWidgets :stats="stats" />
 
-    <!-- Error State -->
-    <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-      Gagal memuat data wishlist: {{ error.message }}
-      <button class="ml-2 underline font-semibold" @click="refresh">Coba lagi</button>
-    </div>
+    <!-- Error & Skeleton Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Gagal memuat data wishlist. Silakan coba lagi.') : ''"
+      @retry="refresh"
+    />
 
     <!-- Wishlist Records Table -->
     <WishlistRecordsTable
+      v-if="!pending && !error"
       :wishlists="wishlists"
       v-model:search-query="searchQuery"
       v-model:filter-category="filterCategory"
