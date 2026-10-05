@@ -153,7 +153,13 @@ Gunakan daftar ini sebagai batas regresi untuk grup menu Peoples:
 - **Supplier (`/supplier`):** tabel rekanan pemasok bahan & kertas 8 kolom literal (ID Supplier, Supplier Name, Email, Contact, PIC Name, Status, Date, Action). Aksi per baris mencakup: tombol `+ Address` modal pemasok, Edit, dan Delete `SalesConfirmDelete`. Modal Add/Edit (12-kolom CSS Grid), modal Add Address pemasok, TableSkeleton loader, dan cetak/PDF via `DocumentPrintModal.vue`.
 - **Branch Store (`/store-list`):** tabel gerai cabang fisik & workshop cetak 7 kolom literal (Store Name, Manager / User, Address, Phone, Email, Status, Action). Aksi baris Edit dan Delete `SalesConfirmDelete`. Modal Add/Edit (12-kolom CSS Grid), filter status, TableSkeleton loader, dan cetak/PDF via `DocumentPrintModal.vue`.
 
-## 5.5 Perilaku PRINT & PDF EXPORT yang sudah disetujui
+## 5.5 Perilaku HRM Group yang sudah disetujui
+
+Gunakan daftar ini sebagai batas regresi untuk grup menu HRM:
+
+- **Employees (`/employees`):** tabel master karyawan percetakan dengan 4 widget KPI (Total Employee, Active, Inactive/Resign, New Joiners), filter toolbar pencarian realtime, `DateRangePicker.vue` (Join date), filter Department, dan filter Status. Tabel 8 kolom literal (Employee ID, Name, Department, Alamat, Phone, Join, Status, Action). Aksi baris: View (Modal detail profil, darurat, akun), Edit (Modal form 12-kolom CSS Grid), Delete (`SalesConfirmDelete`). Dilengkapi `TableSkeleton.vue` loader dan dialog cetak/PDF resmi `DocumentPrintModal.vue` dengan Kop Surat PT Dulank Semesta Cida.
+
+## 5.6 Perilaku PRINT & PDF EXPORT yang sudah disetujui
 
 Gunakan standar ini untuk fitur cetak (Print) dan ekspor PDF di seluruh repositori:
 

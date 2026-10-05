@@ -1758,6 +1758,33 @@ Kelompok menu **PEOPLES** telah rampung 100% dan terstandarisasi penuh menggunak
 - **Komponen Domain**: `app/components/pages/store-list/StoreListRecordsTable.vue`, `StoreListFormModal.vue`.
 - **Fitur**: Pengelolaan gerai cabang fisik & workshop percetakan. 7 Kolom tabel literal. Form modal Add/Edit dengan validasi Store Name, Manager/User, Phone, Email, dan Status. Print/PDF kop surat resmi.
 
+---
+
+## 31. Implementasi Menu HRM: Employees (`/employees`)
+
+Sub-menu pertama pada kelompok **HRM (Human Resource Management)** telah distandarisasi penuh ke arsitektur Nuxt 4 + Tailwind CSS + Backend-ready sesuai acuan `legacy/static-source/employees.html`:
+
+### 31.1 Komponen Domain & Arsitektur
+1. **Halaman Tipis (`app/pages/employees.vue`):**
+   - Menggunakan `useLegacyPage({ title: 'Employees - Daftar Karyawan', sweetAlert: false })`.
+   - Mengintegrasikan toolbar header `SalesListHeader.vue` (Refresh, Print, PDF, tombol "Add Employee").
+   - 4 KPI Card metrik via `EmployeeStatsWidgets.vue` (Total Employee, Active, Inactive/Resign, New Joiners).
+   - Reusable skeleton loader via `SalesFeedback :pending="pending" skeleton="table" :skeleton-cols="8"`.
+   - Cetak & ekspor PDF resmi melalui `DocumentPrintModal.vue` + `useTablePrint.ts` (Kop Surat resmi PT Dulank Semesta Cida dan kolom TTD).
+2. **Tabel Data Karyawan (`app/components/pages/employees/EmployeeRecordsTable.vue`):**
+   - Menggunakan `SalesDataTable.vue`.
+   - 8 Kolom literal: Employee ID, Name (dengan avatar initial & email), Department badge, Alamat lengkap, Phone, Join Date, Status badge, dan Action.
+   - Filter toolbar: Pencarian realtime, `DateRangePicker.vue` (Join date), `TableFilterSelect.vue` Department, dan `TableFilterSelect.vue` Status.
+   - Aksi baris: View (Modal detail profil lengkap), Edit, dan Delete (`SalesConfirmDelete`).
+3. **Form Modal Tambah / Edit (`app/components/pages/employees/EmployeeFormModal.vue`):**
+   - Menggunakan `SalesDialog.vue` ukuran large.
+   - 12-kolom CSS grid layout (`modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`).
+   - Kontrol tinggi standar `h-9`.
+   - Field lengkap: ID Karyawan (auto/readonly), Nama Lengkap, Email, Phone, Department, Gender, Tanggal Lahir, Tanggal Bergabung, Join Channel, Alamat Wilayah, Detail Alamat, Kontak Darurat 1 & 2, Status.
+4. **Modal Detail Profil Karyawan (`app/components/pages/employees/EmployeeViewModal.vue`):**
+   - Mengadopsi rincian modal `#view-employee` dari acuan HTML: header profil avatar, rincian data pribadi, alamat, akun & kontak, serta kontak darurat.
+   - Tombol "Edit Employee" yang langsung mengalihkan ke mode edit.
+
 
 
 

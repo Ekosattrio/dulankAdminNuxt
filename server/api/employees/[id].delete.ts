@@ -1,5 +1,4 @@
-import { readData, writeData } from '~/server/utils/data'
-import type { EmployeeItem } from '~/types/employee'
+import type { EmployeeItem } from '../../types/employee'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')

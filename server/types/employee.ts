@@ -15,6 +15,8 @@ export interface EmployeeItem {
   contact2Name?: string
   contact2Phone?: string
   email?: string
+  avatar?: string
+  photoId?: string
 }
 
 export interface EmployeeFilterParams {
@@ -40,5 +42,7 @@ export interface EmployeeFormData {
   contact2Name?: string
   contact2Phone?: string
   email?: string
+  avatar?: string
+  photoId?: string
 }
 

@@ -1,5 +1,4 @@
-import { readData, writeData } from '~/server/utils/data'
-import type { EmployeeItem } from '~/types/employee'
+import type { EmployeeItem } from '../../types/employee'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<Partial<EmployeeItem>>(event)
@@ -40,7 +39,9 @@ export default defineEventHandler(async (event) => {
     contact1Phone: body.contact1Phone || '',
     contact2Name: body.contact2Name || '',
     contact2Phone: body.contact2Phone || '',
-    email: body.email || ''
+    email: body.email || '',
+    avatar: body.avatar || '',
+    photoId: body.photoId || '',
   }
 
   items.unshift(newEmp)

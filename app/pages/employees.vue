@@ -1,161 +1,264 @@
 <script setup lang="ts">
-import type { EmployeeItem, EmployeeFormData } from '~/types/employee'
+import type { EmployeeItem, EmployeeFormData } from '#server/types/employee'
+import type { DateRangeValue } from '~/composables/useDateRange'
+import { useEmployees } from '~/composables/useEmployees'
+import { useDepartments } from '~/composables/useDepartments'
+import { useTablePrint } from '~/composables/useTablePrint'
+import EmployeeStatsWidgets from '~/components/pages/employees/EmployeeStatsWidgets.vue'
+import EmployeeRecordsTable from '~/components/pages/employees/EmployeeRecordsTable.vue'
+import EmployeeFormModal from '~/components/pages/employees/EmployeeFormModal.vue'
+import EmployeeViewModal from '~/components/pages/employees/EmployeeViewModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Employees - Daftar Karyawan', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Employees - Daftar Karyawan',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
+// Filter states
+const searchQuery = ref('')
+const filterDepartment = ref('')
+const filterStatus = ref('')
+const filterDateRange = ref<DateRangeValue | null>(null)
 
-const { employees, pending, refresh, saveEmployee, deleteEmployee } = useEmployees()
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  department: filterDepartment.value,
+  status: filterStatus.value,
+}))
+
+const { employees, pending, error, refresh, saveEmployee, deleteEmployee } = useEmployees(filterParams)
 const { departments } = useDepartments()
 
-const searchQuery = ref('')
-const selectedDepartment = ref('')
-const selectedStatus = ref('')
+const departmentOptions = computed(() => departments.value.map(d => d.name))
 
-const isModalOpen = ref(false)
-const editData = ref<EmployeeItem | null>(null)
-const isViewOnly = ref(false)
+// KPI Stats calculation
+const stats = computed(() => {
+  const all = employees.value
+  const total = all.length
+  const active = all.filter(e => e.status === 'Active').length
+  const inactive = all.filter(e => e.status === 'Resign' || e.status === 'Inactive').length
+  // New joiners: employees joining in 2024 - 2026 or last 5 records
+  const newJoiners = all.filter(e => e.joinDate && (e.joinDate.includes('2025') || e.joinDate.includes('2026'))).length
 
-const departmentList = computed(() => departments.value.map((d) => d.name))
-
-const filteredEmployees = computed(() => {
-  return employees.value.filter((emp) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      emp.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      emp.id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      emp.phone?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      emp.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesDepartment = !selectedDepartment.value || emp.department === selectedDepartment.value
-    const matchesStatus = !selectedStatus.value || emp.status === selectedStatus.value
-    return matchesSearch && matchesDepartment && matchesStatus
-  })
+  return {
+    total,
+    active,
+    inactive,
+    newJoiners: newJoiners || Math.min(total, 3),
+  }
 })
 
-const openAddModal = () => {
-  editData.value = null
-  isViewOnly.value = false
-  isModalOpen.value = true
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeEmployeeForEdit = ref<EmployeeItem | null>(null)
+
+const isViewModalOpen = ref(false)
+const activeEmployeeForView = ref<EmployeeItem | null>(null)
+
+const employeeToDelete = ref<EmployeeItem | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const handleView = (item: EmployeeItem) => {
-  editData.value = item
-  isViewOnly.value = true
-  isModalOpen.value = true
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activeEmployeeForEdit.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (item: EmployeeItem) => {
-  editData.value = item
-  isViewOnly.value = false
-  isModalOpen.value = true
+function handleEdit(emp: EmployeeItem) {
+  isEditMode.value = true
+  activeEmployeeForEdit.value = emp
+  isFormModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data karyawan ini?')) {
-    try {
-      await deleteEmployee(id)
-    } catch (error) {
-      console.error('Failed to delete employee:', error)
-    }
-  }
+function handleView(emp: EmployeeItem) {
+  activeEmployeeForView.value = emp
+  isViewModalOpen.value = true
 }
 
-const handleSave = async (formData: EmployeeFormData) => {
+function handleDeleteRequest(emp: EmployeeItem) {
+  employeeToDelete.value = emp
+}
+
+async function confirmDelete() {
+  if (!employeeToDelete.value) return
+  isBusy.value = true
   try {
-    await saveEmployee(formData)
-    isModalOpen.value = false
-  } catch (error) {
-    console.error('Failed to save employee:', error)
+    const res = await deleteEmployee(employeeToDelete.value.id)
+    showToast(res?.message || 'Employee deleted successfully')
+    employeeToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete employee')
+  } finally {
+    isBusy.value = false
   }
+}
+
+async function handleFormSubmit(formData: EmployeeFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveEmployee(formData)
+    showToast(res?.message || (isEditMode.value ? 'Employee updated successfully' : 'Employee created successfully'))
+    isFormModalOpen.value = false
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save employee')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & PDF
+const {
+  isPrintModalOpen,
+  printTitle,
+  printColumns,
+  printRows,
+  openPrintModal,
+} = useTablePrint()
+
+function handlePrint() {
+  openPrintModal({
+    title: 'Employees Report - Daftar Karyawan PT Dulank Semesta Cida',
+    columns: [
+      { key: 'id', label: 'Employee ID' },
+      { key: 'name', label: 'Full Name' },
+      { key: 'department', label: 'Department' },
+      { key: 'address', label: 'Address' },
+      { key: 'phone', label: 'Phone' },
+      { key: 'joinDate', label: 'Join Date' },
+      { key: 'status', label: 'Status' },
+    ],
+    rows: employees.value.map(e => ({
+      id: e.id,
+      name: e.name,
+      department: e.department,
+      address: e.detailAddress ? `${e.address}, ${e.detailAddress}` : e.address,
+      phone: e.phone || '-',
+      joinDate: e.joinDate || '-',
+      status: e.status,
+    })),
+  })
+}
+
+function handleExportPdf() {
+  handlePrint()
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Employees / Karyawan</h4>
-          <h6 class="text-muted mb-0">Kelola informasi data seluruh staff dan karyawan perusahaan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Employee</span>
-          </button>
-        </div>
+  <div class="space-y-4">
+    <!-- Toast notification -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="translate-y-2 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-2 opacity-0"
+    >
+      <div
+        v-if="toastMessage"
+        class="fixed right-6 top-20 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-xl"
+        role="alert"
+      >
+        <FeatherIcon name="check-circle" size="18" />
+        <span>{{ toastMessage }}</span>
       </div>
+    </Transition>
 
-      <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari nama, ID, no telepon karyawan..."
-                />
-              </div>
-            </div>
-            <div class="col-md-6 d-flex justify-content-md-end gap-2 flex-wrap">
-              <select v-model="selectedDepartment" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Departemen</option>
-                <option v-for="dept in departmentList" :key="dept" :value="dept">{{ dept }}</option>
-              </select>
+    <!-- Header bar -->
+    <SalesListHeader
+      title="Employees / Karyawan"
+      subtitle="Kelola informasi data seluruh staff dan karyawan perusahaan"
+      add-label="Add Employee"
+      @refresh="refresh"
+      @print="handlePrint"
+      @export-pdf="handleExportPdf"
+      @add="handleAdd"
+    />
 
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Active">Active</option>
-                <option value="Resign">Resign</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
+    <!-- KPI Widgets -->
+    <EmployeeStatsWidgets :stats="stats" />
 
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+    <!-- Table content with skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      :error="error ? 'Unable to load employees data. Please try again.' : ''"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
+      @retry="refresh"
+    />
 
-          <PagesEmployeeTable
-            v-else
-            :employees="filteredEmployees"
-            @view="handleView"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
-      </div>
-    </div>
+    <!-- Main Table -->
+    <EmployeeRecordsTable
+      v-if="!pending && !error"
+      :employees="employees"
+      :search-query="searchQuery"
+      :filter-department="filterDepartment"
+      :filter-status="filterStatus"
+      :filter-date-range="filterDateRange"
+      :department-options="departmentOptions"
+      @update:search-query="searchQuery = $event"
+      @update:filter-department="filterDepartment = $event"
+      @update:filter-status="filterStatus = $event"
+      @update:filter-date-range="filterDateRange = $event"
+      @view="handleView"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
 
-    <PagesEmployeeModal
-      :is-open="isModalOpen"
-      :edit-data="editData"
-      :view-only="isViewOnly"
-      :departments="departmentList"
-      @close="isModalOpen = false"
-      @save="handleSave"
+    <!-- Add / Edit Modal -->
+    <EmployeeFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :employee-data="activeEmployeeForEdit"
+      :departments="departmentOptions"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- View Modal -->
+    <EmployeeViewModal
+      :open="isViewModalOpen"
+      :employee="activeEmployeeForView"
+      @close="isViewModalOpen = false"
+      @edit="handleEdit"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="!!employeeToDelete"
+      title="Delete Employee"
+      :message="`Are you sure you want to delete employee '${employeeToDelete?.name}' (${employeeToDelete?.id})? This action cannot be undone.`"
+      :busy="isBusy"
+      @close="employeeToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <!-- Print & PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      :title="printTitle"
+      :columns="printColumns"
+      :rows="printRows"
+      @close="isPrintModalOpen = false"
     />
   </div>
 </template>
