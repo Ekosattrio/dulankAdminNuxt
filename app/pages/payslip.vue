@@ -1,156 +1,254 @@
 <script setup lang="ts">
-import type { PayslipItem, PayslipFormData } from '~/types/payslip'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { PayslipItem, PayslipFormData } from '#server/types/payslip'
+import { usePayslips } from '~/composables/usePayslips'
+import { useEmployees } from '~/composables/useEmployees'
+import { useTablePrint } from '~/composables/useTablePrint'
+import { formatIDR } from '~/utils/currency'
+import PayslipStatsWidgets from '~/components/pages/payslip/PayslipStatsWidgets.vue'
+import PayslipRecordsTable from '~/components/pages/payslip/PayslipRecordsTable.vue'
+import PayslipFormModal from '~/components/pages/payslip/PayslipFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+useLegacyPage({ title: 'Payslips - Penggajian Karyawan', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Payslips - Penggajian Karyawan',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { payslips, pending, refresh, savePayslip, deletePayslip } = usePayslips()
-
+// Filter states
 const searchQuery = ref('')
-const selectedStatus = ref('')
+const filterStatus = ref('')
 
-const isModalOpen = ref(false)
-const editData = ref<PayslipItem | null>(null)
-const isViewOnly = ref(false)
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  status: filterStatus.value,
+}))
 
-const filteredPayslips = computed(() => {
-  return payslips.value.filter((p) => {
-    const matchSearch =
-      !searchQuery.value ||
-      p.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.slipNo?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchStatus = !selectedStatus.value || p.status === selectedStatus.value
-    return matchSearch && matchStatus
-  })
+const { payslips, pending, error, refresh, savePayslip, deletePayslip } = usePayslips(filterParams)
+const { employees } = useEmployees()
+
+// Stats calculation
+const stats = computed(() => {
+  const all = payslips.value
+  const totalSlips = all.length
+  const paidCount = all.filter(p => p.status === 'Paid').length
+  const unpaidCount = all.filter(p => p.status === 'Unpaid').length
+  const totalDisbursed = all.filter(p => p.status === 'Paid').reduce((sum, p) => sum + (Number(p.total) || 0), 0)
+
+  return {
+    totalSlips,
+    paidCount,
+    unpaidCount,
+    totalDisbursed,
+  }
 })
 
-const openAddModal = () => {
-  editData.value = null
-  isViewOnly.value = false
-  isModalOpen.value = true
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activePayslipForEdit = ref<PayslipItem | null>(null)
+const payslipToDelete = ref<PayslipItem | null>(null)
+const isBusy = ref(false)
+
+// Toast feedback
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const handleView = (item: PayslipItem) => {
-  editData.value = item
-  isViewOnly.value = true
-  isModalOpen.value = true
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activePayslipForEdit.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (item: PayslipItem) => {
-  editData.value = item
-  isViewOnly.value = false
-  isModalOpen.value = true
+function handleEdit(item: PayslipItem) {
+  isEditMode.value = true
+  activePayslipForEdit.value = item
+  isFormModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data slip gaji ini?')) {
-    try {
-      await deletePayslip(id)
-    } catch (error) {
-      console.error('Failed to delete payslip:', error)
-    }
-  }
+function handleDeleteRequest(item: PayslipItem) {
+  payslipToDelete.value = item
 }
 
-const handleSave = async (payload: PayslipFormData) => {
+async function confirmDelete() {
+  if (!payslipToDelete.value) return
+  isBusy.value = true
   try {
-    await savePayslip(payload)
-    isModalOpen.value = false
-  } catch (error) {
-    console.error('Failed to save payslip:', error)
+    const res = await deletePayslip(payslipToDelete.value.id)
+    showToast(res?.message || 'Payslip record deleted successfully')
+    payslipToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete payslip')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const printList = () => {
-  window.print()
+async function handleFormSubmit(formData: PayslipFormData) {
+  isBusy.value = true
+  try {
+    const res = await savePayslip(formData)
+    showToast(res?.message || (isEditMode.value ? 'Payslip updated successfully' : 'Payslip created successfully'))
+    isFormModalOpen.value = false
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save payslip')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & PDF
+const {
+  isPrintModalOpen,
+  printTitle,
+  printColumns,
+  printRows,
+  openPrintModal,
+} = useTablePrint()
+
+function handlePrint() {
+  openPrintModal({
+    title: 'Payroll & Payslips Report - PT Dulank Semesta Cida',
+    columns: [
+      { key: 'slipNo', label: 'Slip No' },
+      { key: 'name', label: 'Employee Name' },
+      { key: 'period', label: 'Period' },
+      { key: 'salaryRate', label: 'Salary Rate (IDR)' },
+      { key: 'dayWorked', label: 'Days Worked' },
+      { key: 'allowance', label: 'Allowance (IDR)' },
+      { key: 'overtime', label: 'Overtime (IDR)' },
+      { key: 'deduction', label: 'Deduction (IDR)' },
+      { key: 'total', label: 'Total Net Pay (IDR)' },
+      { key: 'status', label: 'Status' },
+      { key: 'paidDate', label: 'Paid Date' },
+    ],
+    rows: payslips.value.map(p => ({
+      slipNo: p.slipNo,
+      name: p.name,
+      period: p.period,
+      salaryRate: formatIDR(p.salaryRate),
+      dayWorked: `${p.dayWorked} hari`,
+      allowance: formatIDR(p.allowance),
+      overtime: formatIDR(p.overtime),
+      deduction: formatIDR(p.deduction),
+      total: formatIDR(p.total),
+      status: p.status,
+      paidDate: p.paidDate || '-',
+    })),
+  })
+}
+
+function handleExportPdf() {
+  handlePrint()
+}
+
+function handleExportExcel() {
+  const header = ['Slip No', 'Name', 'Period', 'Salary Rate', 'Days Worked', 'Allowance', 'Overtime', 'Deduction', 'Total Net Pay', 'Status', 'Paid Date']
+  const rows = payslips.value.map(p => [
+    `"${p.slipNo}"`,
+    `"${p.name}"`,
+    `"${p.period}"`,
+    `"${p.salaryRate}"`,
+    `"${p.dayWorked}"`,
+    `"${p.allowance}"`,
+    `"${p.overtime}"`,
+    `"${p.deduction}"`,
+    `"${p.total}"`,
+    `"${p.status}"`,
+    `"${p.paidDate || ''}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `payslips_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Payslips exported to CSV successfully')
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Payslips / Slip Gaji</h4>
-          <h6 class="text-muted mb-0">Kelola payroll, slip gaji bulanan/mingguan seluruh karyawan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printList">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Create Payslip</span>
-          </button>
-        </div>
-      </div>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="Payslips / Slip Gaji"
+      subtitle="Manage employee payroll, slips, allowances, and disbursements"
+      add-label="Add Payslip"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="handlePrint"
+      @export-pdf="handleExportPdf"
+      @export-excel="handleExportExcel"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari nama karyawan atau no slip..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end gap-2">
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Paid">Paid</option>
-                <option value="Unpaid">Unpaid</option>
-              </select>
-            </div>
-          </div>
+    <!-- KPI Stats Widgets -->
+    <PayslipStatsWidgets :stats="stats" />
 
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+    <!-- Feedback Toast -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @close="toastMessage = ''"
+    />
 
-          <PagesPayslipTable
-            v-else
-            :payslips="filteredPayslips"
-            @view="handleView"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
-      </div>
+    <!-- Error Banner -->
+    <div
+      v-if="error"
+      class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-400"
+    >
+      Failed to load payslips: {{ error.message }}
     </div>
 
-    <PagesPayslipModal
-      :is-open="isModalOpen"
-      :edit-data="editData"
-      :view-only="isViewOnly"
-      @close="isModalOpen = false"
-      @save="handleSave"
+    <!-- Records Table -->
+    <PayslipRecordsTable
+      :payslips="payslips"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <PayslipFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :payslip-data="activePayslipForEdit"
+      :employees="employees"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!payslipToDelete"
+      title="Delete Payslip"
+      :message="`Are you sure you want to delete payslip '${payslipToDelete?.slipNo}' for ${payslipToDelete?.name}?`"
+      :busy="isBusy"
+      @close="payslipToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <!-- Print & PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      :title="printTitle"
+      :columns="printColumns"
+      :rows="printRows"
+      @close="isPrintModalOpen = false"
     />
   </div>
 </template>
