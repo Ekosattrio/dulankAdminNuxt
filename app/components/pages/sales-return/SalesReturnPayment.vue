@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SalesReturn, ReturnPayment } from '#server/types/sales-return'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 const props = defineProps<{ record: SalesReturn | null; busy: boolean; error: string }>()
 defineEmits<{ close: []; submit: [form: ReturnPayment] }>()
 const { formatRupiah } = useFormatters()
@@ -63,12 +64,9 @@ watch(
           ><label :class="salesLabel">Reference<input v-model="form.reference" :class="salesField" /></label>
         </div>
         <label :class="salesLabel"
-          >Paying Amount *<input
-            v-model.number="form.amount"
-            type="number"
-            :min="record?.total"
-            :max="record?.total"
-            :class="salesField"
+          >Paying Amount *<CurrencyInput
+            v-model="form.amount"
+            thousand-separator=","
             required
         /></label>
         <div class="flex justify-between text-xs">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Sale } from '#server/types/sale'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 const props = defineProps<{ record: Sale | null }>()
 const emit = defineEmits<{ close: []; saved: [] }>()
 const { formatRupiah } = useFormatters()
@@ -80,12 +81,10 @@ async function save() {
             <option>Debit Card</option>
           </select></label
         ><label :class="salesLabel"
-          >Paying Amount *<input
-            v-model.number="amount"
-            type="number"
-            min="1"
+          >Paying Amount *<CurrencyInput
+            v-model="amount"
+            thousand-separator=","
             :max="due"
-            :class="salesField"
             required
         /></label>
         <p class="text-xs">Total Due: {{ formatRupiah(due) }}</p>

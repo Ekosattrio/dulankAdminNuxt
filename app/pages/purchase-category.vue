@@ -1,254 +1,220 @@
+<script setup lang="ts">
+import type { PurchaseCategory, PurchaseCategoryFormData } from '#server/types/purchase-category'
+import { usePurchaseCategories } from '~/composables/usePurchaseCategories'
+import { usePurchaseItems } from '~/composables/usePurchaseItems'
+import { useTablePrint } from '~/composables/useTablePrint'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import PurchaseCategoryStatsWidgets from '~/components/pages/purchase-category/PurchaseCategoryStatsWidgets.vue'
+import PurchaseCategoryRecordsTable from '~/components/pages/purchase-category/PurchaseCategoryRecordsTable.vue'
+import PurchaseCategoryFormModal from '~/components/pages/purchase-category/PurchaseCategoryFormModal.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Purchase Category - Kategori Pembelian',
+  sweetAlert: false
+})
+
+// Filter states
+const searchQuery = ref('')
+const filterStatus = ref('')
+
+const filterParams = computed(() => ({
+  search: searchQuery.value,
+  status: filterStatus.value,
+}))
+
+const { categories, pending, error, refresh, saveCategory, deleteCategory } = usePurchaseCategories(filterParams)
+const { items: allItems } = usePurchaseItems()
+
+// KPI stats calculation
+const stats = computed(() => {
+  const all = categories.value
+  const totalCategories = all.length
+  const activeCategories = all.filter(c => c.status === 'Active').length
+  const deactiveCategories = all.filter(c => c.status === 'Deactive').length
+  const totalItems = allItems.value.length
+
+  return {
+    totalCategories,
+    activeCategories,
+    deactiveCategories,
+    totalItems,
+  }
+})
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeCategoryForEdit = ref<PurchaseCategory | null>(null)
+const categoryToDelete = ref<PurchaseCategory | null>(null)
+const isBusy = ref(false)
+
+// Toast feedback
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+}
+
+// Handlers
+function handleAdd() {
+  isEditMode.value = false
+  activeCategoryForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(category: PurchaseCategory) {
+  isEditMode.value = true
+  activeCategoryForEdit.value = category
+  isFormModalOpen.value = true
+}
+
+function handleDeleteRequest(category: PurchaseCategory) {
+  categoryToDelete.value = category
+}
+
+async function handleFormSubmit(formData: PurchaseCategoryFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveCategory(formData)
+    isFormModalOpen.value = false
+    showToast(res.message || (isEditMode.value ? 'Purchase category updated successfully' : 'Purchase category created successfully'))
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save purchase category')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function confirmDelete() {
+  if (!categoryToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteCategory(categoryToDelete.value.id)
+    showToast(`Category '${categoryToDelete.value.name}' deleted successfully`)
+    categoryToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete purchase category')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'id', label: 'ID' },
+  { key: 'name', label: 'Category Name' },
+  { key: 'itemCount', label: 'Total Items', align: 'center' as const },
+  { key: 'created', label: 'Created' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+]
+
+function handleExportExcel() {
+  const header = ['ID', 'Category Name', 'Total Items', 'Created', 'Status']
+  const rows = categories.value.map(c => [
+    `"${c.id}"`,
+    `"${c.name}"`,
+    `"${c.itemCount ?? 0}"`,
+    `"${c.created || ''}"`,
+    `"${c.status}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `purchase_categories_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Purchase category list exported to CSV successfully')
+}
+</script>
+
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Purchase Category</h4>
-          <h6>Manage your purchase categories</h6>
-        </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printList">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printList">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshList">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-      <div class="page-btn">
-        <a href="#" class="btn btn-added" @click.prevent="openAddModal">
-          <i class="feather-plus-circle me-2"></i>Add Purchase Product
-        </a>
-      </div>
-    </div>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="Purchase Category"
+      subtitle="Manage your purchase categories"
+      add-label="Add Purchase Category"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @export-pdf="openPrintModal('pdf')"
+      @export-excel="handleExportExcel"
+    />
 
-    <!-- Category List Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <!-- Filter -->
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <!-- Search Input -->
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input v-model="searchQuery" type="text" placeholder="Search category..." class="form-control form-control-sm" />
-            </div>
-            <!-- Date Range -->
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <!-- KPI Stats Widgets -->
+    <PurchaseCategoryStatsWidgets :stats="stats" />
 
-          <div class="filters d-flex justify-content-end gap-2">
-            <div class="dropdown">
-              <button
-                class="btn btn-outline-primary dropdown-toggle btn-sm"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {{ statusFilter || "Status" }}
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = ''">All Status</a></li>
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = 'Active'">Active</a></li>
-                <li><a class="dropdown-item cursor-pointer" @click="statusFilter = 'Deactive'">Deactive</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- /Filter -->
+    <!-- Feedback Toast -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @dismiss="toastMessage = ''"
+    />
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Product (Category Name)</th>
-                <th>Created</th>
-                <th>Status</th>
-                <th class="no-sort">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredCategories" :key="item.id">
-                <td class="fw-bold">{{ item.name }}</td>
-                <td>{{ item.created }}</td>
-                <td>
-                  <span class="badge" :class="item.status === 'Active' ? 'bg-outline-success' : 'bg-outline-danger'">
-                    {{ item.status }}
-                  </span>
-                </td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action d-flex align-items-center gap-2">
-                    <a class="p-2 text-info cursor-pointer" @click.prevent="openEditModal(item)" title="Edit">
-                      <i class="feather-edit"></i>
-                    </a>
-                    <a class="p-2 text-danger cursor-pointer" @click.prevent="deleteCategory(item)" title="Delete">
-                      <i class="feather-trash-2"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="filteredCategories.length === 0">
-                <td colspan="4" class="text-center py-4 text-muted">No categories found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!-- Skeleton & Error Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="5"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Failed to load purchase categories. Please try again.') : ''"
+      @retry="refresh"
+    />
 
-    <!-- Add/Edit Category Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">{{ isEdit ? "Edit Purchase Category" : "Add Purchase Category" }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4">
-            <form @submit.prevent="saveCategory">
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Category Name</label>
-                <input type="text" class="form-control" v-model="formData.name" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Status</label>
-                <select class="form-select" v-model="formData.status">
-                  <option>Active</option>
-                  <option>Deactive</option>
-                </select>
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end p-0 pt-3 border-top gap-2">
-                <button type="button" class="btn btn-dark" @click="showModal = false">Cancel</button>
-                <button type="submit" class="btn btn-warning text-white fw-bold">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Records Table -->
+    <PurchaseCategoryRecordsTable
+      v-if="!pending && !error"
+      :categories="categories"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
+
+    <!-- Add / Edit Modal -->
+    <PurchaseCategoryFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :category-data="activeCategoryForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!categoryToDelete"
+      title="Delete Purchase Category"
+      :message="`Are you sure you want to delete purchase category '${categoryToDelete?.name}'? Items under this category may be affected.`"
+      :busy="isBusy"
+      @close="categoryToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <!-- Table Print / PDF Preview Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Laporan Kategori Pembelian (Purchase Category List)"
+      :columns="printColumns"
+      :items="categories"
+      date-field="created"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-const categories = ref([
-  { id: 1, name: "Kertas & Bahan Baku Cetak", created: "Admin, 02/01/2026, 08:00", status: "Active" },
-  { id: 2, name: "Tinta & Toner", created: "Admin, 02/01/2026, 08:15", status: "Active" },
-  { id: 3, name: "Bahan Finishing & Jilid", created: "Admin, 02/01/2026, 08:30", status: "Active" },
-  { id: 4, name: "Sparepart Mesin", created: "Admin, 02/01/2026, 08:45", status: "Active" },
-  { id: 5, name: "Packaging & Kemasan", created: "Admin, 02/01/2026, 09:00", status: "Deactive" },
-]);
-
-const searchQuery = ref("");
-const statusFilter = ref("");
-const selectedDateRangeLabel = ref("");
-const showDateDropdown = ref(false);
-
-const setDateRange = (range: string) => {
-  if (range === "kemarin") selectedDateRangeLabel.value = "Kemarin";
-  else if (range === "7hari") selectedDateRangeLabel.value = "7 Hari Terakhir";
-  else if (range === "bulanIni") selectedDateRangeLabel.value = "Bulan Ini";
-  else if (range === "bulanLalu") selectedDateRangeLabel.value = "Bulan Lalu";
-  else selectedDateRangeLabel.value = "";
-  showDateDropdown.value = false;
-};
-
-const filteredCategories = computed(() => {
-  return categories.value.filter((c) => {
-    const q = searchQuery.value.toLowerCase();
-    const matchesSearch = !q || c.name.toLowerCase().includes(q);
-    const matchesStatus = !statusFilter.value || c.status.toLowerCase() === statusFilter.value.toLowerCase();
-    return matchesSearch && matchesStatus;
-  });
-});
-
-const showModal = ref(false);
-const isEdit = ref(false);
-const formData = ref<any>({ name: "", status: "Active" });
-
-const openAddModal = () => {
-  isEdit.value = false;
-  formData.value = { name: "", status: "Active" };
-  showModal.value = true;
-};
-
-const openEditModal = (item: any) => {
-  isEdit.value = true;
-  formData.value = { ...item };
-  showModal.value = true;
-};
-
-const saveCategory = () => {
-  if (isEdit.value) {
-    const idx = categories.value.findIndex((c) => c.id === formData.value.id);
-    if (idx !== -1) {
-      categories.value[idx] = { ...formData.value };
-    }
-  } else {
-    categories.value.unshift({
-      id: Date.now(),
-      name: formData.value.name,
-      created: `Admin, ${new Date().toLocaleDateString("id-ID")}`,
-      status: formData.value.status,
-    });
-  }
-  showModal.value = false;
-};
-
-const deleteCategory = (item: any) => {
-  if (confirm(`Are you sure you want to delete ${item.name}?`)) {
-    categories.value = categories.value.filter((c) => c.id !== item.id);
-  }
-};
-
-const printList = () => {
-  window.print();
-};
-
-const refreshList = () => {
-  searchQuery.value = "";
-  statusFilter.value = "";
-};
-
-const toggleHeader = () => {
-  // header toggle
-};
-</script>

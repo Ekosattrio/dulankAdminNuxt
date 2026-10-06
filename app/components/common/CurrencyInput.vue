@@ -22,19 +22,22 @@ interface Props {
   size?: 'sm' | 'md'
   /** Kelas tambahan untuk input */
   inputClass?: string
+  /** Pemisah ribuan: koma (,) atau titik (.) */
+  thousandSeparator?: ',' | '.'
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: 0,
   align: 'right',
-  prefix: 'Rp',
+  prefix: '',
   placeholder: '0',
   disabled: false,
   readonly: false,
   min: undefined,
   max: undefined,
   size: 'md',
-  inputClass: ''
+  inputClass: '',
+  thousandSeparator: ','
 })
 
 const emit = defineEmits<{
@@ -52,7 +55,7 @@ watch(
   () => props.modelValue,
   (newVal) => {
     const numeric = typeof newVal === 'number' ? newVal : parseMoney(newVal)
-    const formatted = numeric === 0 && props.placeholder ? '' : formatMoney(numeric)
+    const formatted = numeric === 0 && props.placeholder ? '' : formatMoney(numeric, { prefix: '', thousandSeparator: props.thousandSeparator })
     const isFocused = typeof document !== 'undefined' && document.activeElement === inputRef.value
     if (formatted !== displayValue.value && !isFocused) {
       displayValue.value = formatted
@@ -77,7 +80,7 @@ function onInput(event: Event) {
   if (props.max !== undefined && numeric > props.max) numeric = props.max
 
   // Format ulang teks input
-  const formatted = numeric === 0 && !rawInput ? '' : formatMoney(numeric)
+  const formatted = numeric === 0 && !rawInput ? '' : formatMoney(numeric, { prefix: '', thousandSeparator: props.thousandSeparator })
   displayValue.value = formatted
   target.value = formatted
 
@@ -105,7 +108,7 @@ function onInput(event: Event) {
 function onBlur(evt: FocusEvent) {
   // Format rapi saat blur
   const numeric = parseMoney(displayValue.value)
-  displayValue.value = numeric === 0 && props.placeholder ? '' : formatMoney(numeric)
+  displayValue.value = numeric === 0 && props.placeholder ? '' : formatMoney(numeric, { prefix: '', thousandSeparator: props.thousandSeparator })
   emit('change', numeric)
   emit('blur', evt)
 }

@@ -37,6 +37,11 @@ import payslipsData from '../data/payslips.json'
 import posProductsData from '../data/pos-products.json'
 import printingMachinesData from '../data/printing-machines.json'
 import productsData from '../data/products.json'
+import purchaseCategoriesData from '../data/purchase-categories.json'
+import purchaseItemsData from '../data/purchase-items.json'
+import purchaseOrdersData from '../data/purchase-orders.json'
+import purchaseReturnsData from '../data/purchase-returns.json'
+import purchasesData from '../data/purchases.json'
 import quotationsData from '../data/quotations.json'
 import requestQuotationsData from '../data/request-quotations.json'
 import reviewsData from '../data/reviews.json'
@@ -93,6 +98,11 @@ export const bundledSources: Record<string, unknown> = {
   'pos-products.json': posProductsData,
   'printing-machines.json': printingMachinesData,
   'products.json': productsData,
+  'purchase-categories.json': purchaseCategoriesData,
+  'purchase-items.json': purchaseItemsData,
+  'purchase-orders.json': purchaseOrdersData,
+  'purchase-returns.json': purchaseReturnsData,
+  'purchases.json': purchasesData,
   'quotations.json': quotationsData,
   'request-quotations.json': requestQuotationsData,
   'reviews.json': reviewsData,

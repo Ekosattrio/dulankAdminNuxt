@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProductVariant } from '#server/types/product'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import SalesDialog from '~/components/sales/SalesDialog.vue'
 import {
   formControlClass,
@@ -82,12 +83,11 @@ function handleSubmit() {
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Price (IDR)</label>
         <div :class="modalFormInputColClass">
-          <input
-            v-model.number="form.price"
-            type="number"
-            min="0"
+          <CurrencyInput
+            v-model="form.price"
+            thousand-separator=","
             required
-            :class="formControlClass"
+            :disabled="busy"
           />
         </div>
       </div>

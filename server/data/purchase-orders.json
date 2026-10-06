@@ -1,0 +1,97 @@
+[
+  {
+    "id": "po-1",
+    "noPO": "PO-000001",
+    "date": "05/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000001",
+    "supplier": "PT Kertas Jaya",
+    "amount": 1500000,
+    "poStatus": "Sent",
+    "goodsStatus": "Complete",
+    "goodsDate": "05/10/2025",
+    "goodsBy": "Admin",
+    "termOfPayment": "30 Days",
+    "deliveryDate": "05/10/2025",
+    "deliveryAddress": "Gudang Percetakan Dulank, Jl. Manunggal VII No. 12, Karawang Barat",
+    "items": [
+      { "name": "Kertas Art Paper 150gsm", "qty": 10, "unit": "Ream", "price": 150000 }
+    ]
+  },
+  {
+    "id": "po-2",
+    "noPO": "PO-000002",
+    "date": "08/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000003",
+    "supplier": "Global Inkindo",
+    "amount": 850000,
+    "poStatus": "Sent",
+    "goodsStatus": "Scheduled",
+    "goodsDate": "",
+    "goodsBy": "",
+    "termOfPayment": "Cash",
+    "deliveryDate": "12/10/2025",
+    "deliveryAddress": "Gudang Percetakan Dulank, Karawang Barat",
+    "items": [
+      { "name": "Tinta Offset Cyan 1kg", "qty": 2, "unit": "Pcs", "price": 425000 }
+    ]
+  },
+  {
+    "id": "po-3",
+    "noPO": "PO-000003",
+    "date": "15/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000005",
+    "supplier": "Indo Material",
+    "amount": 1950000,
+    "poStatus": "Cancel",
+    "goodsStatus": "Cancel",
+    "goodsDate": "15/10/2025",
+    "goodsBy": "Admin",
+    "termOfPayment": "14 Days",
+    "deliveryDate": "15/10/2025",
+    "deliveryAddress": "Workshop Dulank Pusat",
+    "items": [
+      { "name": "Plat CTP Thermal 650x550", "qty": 15, "unit": "Pcs", "price": 130000 }
+    ]
+  },
+  {
+    "id": "po-4",
+    "noPO": "PO-000004",
+    "date": "20/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000008",
+    "supplier": "Global Inkindo",
+    "amount": 3300000,
+    "poStatus": "Sent",
+    "goodsStatus": "Complete",
+    "goodsDate": "21/10/2025",
+    "goodsBy": "Admin",
+    "termOfPayment": "30 Days",
+    "deliveryDate": "21/10/2025",
+    "deliveryAddress": "Gudang Percetakan Dulank, Karawang",
+    "items": [
+      { "name": "Tinta CMYK 1 Set (4 Galon)", "qty": 2, "unit": "Box", "price": 1650000 }
+    ]
+  },
+  {
+    "id": "po-5",
+    "noPO": "PO-000005",
+    "date": "26/10/2025",
+    "created": "Admin",
+    "noPurchase": "PR-000010",
+    "supplier": "PT Cipta Kreasi",
+    "amount": 2400000,
+    "poStatus": "Draft",
+    "goodsStatus": "Pending",
+    "goodsDate": "",
+    "goodsBy": "",
+    "termOfPayment": "Cash",
+    "deliveryDate": "30/10/2025",
+    "deliveryAddress": "Gudang Bahan Karawang",
+    "items": [
+      { "name": "Kertas HVS 80gsm A4", "qty": 40, "unit": "Ream", "price": 60000 }
+    ]
+  }
+]

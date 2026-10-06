@@ -12,10 +12,12 @@ export interface FormatMoneyOptions {
   decimalPlaces?: number
   /** Nilai pengganti jika null / undefined / NaN (default: '0') */
   fallback?: string
+  /** Pemisah ribuan: koma (,) atau titik (.) (default: ',') */
+  thousandSeparator?: ',' | '.'
 }
 
 /**
- * Format angka atau string angka ke format ribuan Indonesia dengan titik (cth: 1.500.000)
+ * Format angka atau string angka ke format ribuan (cth: 50,000 atau 50.000)
  */
 export function formatMoney(
   value: number | string | null | undefined,
@@ -25,7 +27,8 @@ export function formatMoney(
     prefix = '',
     suffix = '',
     decimalPlaces = 0,
-    fallback = '0'
+    fallback = '0',
+    thousandSeparator = ','
   } = options
 
   if (value === null || value === undefined || value === '') {
@@ -42,10 +45,10 @@ export function formatMoney(
   const isNegative = num < 0
   const absNum = Math.abs(num)
 
-  // Format integer part dengan separator titik
+  // Format integer part dengan separator yang dipilih (default koma ',')
   const parts = absNum.toFixed(decimalPlaces).split('.')
-  const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  const decimalPart = parts[1] ? `,${parts[1]}` : ''
+  const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator)
+  const decimalPart = parts[1] ? (thousandSeparator === '.' ? `,${parts[1]}` : `.${parts[1]}`) : ''
 
   const formatted = `${isNegative ? '-' : ''}${integerPart}${decimalPart}`
 
@@ -58,15 +61,16 @@ export function formatMoney(
 export function formatIDR(
   value: number | string | null | undefined,
   withSpace = true,
-  fallback = '0'
+  fallback = '0',
+  thousandSeparator: ',' | '.' = '.'
 ): string {
   const prefix = withSpace ? 'Rp ' : 'Rp'
-  return formatMoney(value, { prefix, fallback })
+  return formatMoney(value, { prefix, fallback, thousandSeparator })
 }
 
 /**
  * Parse string uang / format separator ribuan kembali menjadi number murni
- * Contoh: "Rp 1.500.000" -> 1500000, "10.000" -> 10000, "-25.000" -> -25000
+ * Contoh: "Rp 1,500,000" -> 1500000, "50,000" -> 50000, "10.000" -> 10000
  */
 export function parseMoney(value: string | number | null | undefined): number {
   if (value === null || value === undefined || value === '') return 0
@@ -78,15 +82,11 @@ export function parseMoney(value: string | number | null | undefined): number {
   // Tangani tanda minus
   const isNegative = str.startsWith('-') || str.includes('(-')
 
-  // Buang semua karakter selain angka dan koma desimal
-  // Asumsi format Indonesia: titik (.) = ribuan, koma (,) = desimal
-  let clean = str.replace(/[^\d,]/g, '')
-  if (clean.includes(',')) {
-    const parts = clean.split(',')
-    clean = parts[0] + '.' + parts.slice(1).join('')
-  }
+  // Buang semua karakter selain angka
+  const clean = str.replace(/[^\d]/g, '')
+  if (!clean) return 0
 
-  const num = parseFloat(clean)
+  const num = parseInt(clean, 10)
   if (Number.isNaN(num)) return 0
 
   return isNegative ? -Math.abs(num) : Math.abs(num)

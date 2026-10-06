@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Invoice, InvoiceFormData } from '#server/types/invoice'
 import type { Sale } from '#server/types/sale'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 
 const props = defineProps<{
   isOpen: boolean
@@ -117,12 +118,10 @@ const handleSubmit = () => {
               :for="formId + '-field-2'"
               >Total Amount (IDR) <span class="text-danger">*</span></label
             >
-            <input
+            <CurrencyInput
               :id="formId + '-field-2'"
-              v-model.number="form.amount"
-              type="number"
-              min="0"
-              class="block w-full rounded border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              v-model="form.amount"
+              thousand-separator=","
               placeholder="0"
               required
             />
@@ -134,12 +133,10 @@ const handleSubmit = () => {
               :for="formId + '-field-3'"
               >Amount Paid (IDR)</label
             >
-            <input
+            <CurrencyInput
               :id="formId + '-field-3'"
-              v-model.number="form.paid"
-              type="number"
-              min="0"
-              class="block w-full rounded border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              v-model="form.paid"
+              thousand-separator=","
               placeholder="0"
             />
           </div>

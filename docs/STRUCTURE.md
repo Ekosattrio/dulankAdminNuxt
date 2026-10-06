@@ -1785,6 +1785,38 @@ Sub-menu pertama pada kelompok **HRM (Human Resource Management)** telah distand
    - Mengadopsi rincian modal `#view-employee` dari acuan HTML: header profil avatar, rincian data pribadi, alamat, akun & kontak, serta kontak darurat.
    - Tombol "Edit Employee" yang langsung mengalihkan ke mode edit.
 
+---
+
+## 32. Implementasi Lengkap Seluruh Sub-Menu Kelompok PURCHASES
+
+Kelompok menu **PURCHASES** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, CSS grid 12-kolom kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, live currency formatting `CurrencyInput.vue` (pemisah koma `,`), serta dialog cetak resmi `DocumentPrintModal.vue`:
+
+### 32.1 Purchase (`/purchase`)
+- **Thin Page**: `app/pages/purchase.vue`
+- **Komponen Domain**: `PurchaseStatsWidgets.vue`, `PurchaseRecordsTable.vue`, `PurchaseFormModal.vue`, `PurchaseDetailModal.vue`.
+- **Fitur**: Daftar transaksi pembelian bahan/barang operasional percetakan, 4 widget KPI statistik, modal form input multi-item dinamis dengan `max-w-5xl`, dialog cetak/PDF resmi ber-Kop Surat Dulank dan TTD.
+
+### 32.2 Purchase Item (`/purchase-item`)
+- **Thin Page**: `app/pages/purchase-item.vue`
+- **Komponen Domain**: `PurchaseItemStatsWidgets.vue`, `PurchaseItemRecordsTable.vue`, `PurchaseItemFormModal.vue`, `PurchaseItemDetailModal.vue`.
+- **Fitur**: Master katalog barang & bahan baku pembelian (kertas, tinta, lem, plate CTP), satuan unit, harga beli, supplier rujukan, Add/Edit form modal, dan cetak laporan master bahan.
+
+### 32.3 Purchase Category (`/purchase-category`)
+- **Thin Page**: `app/pages/purchase-category.vue`
+- **Komponen Domain**: `PurchaseCategoryStatsWidgets.vue`, `PurchaseCategoryRecordsTable.vue`, `PurchaseCategoryFormModal.vue`.
+- **Fitur**: Master kategori klasifikasi belanja percetakan (Bahan Baku Kertas, Tinta & Kimia, Sparepart Mesin, Perlengkapan Finishing), Add/Edit form modal, `SalesConfirmDelete`.
+
+### 32.4 Purchase Order (`/purchase-order`)
+- **Thin Page**: `app/pages/purchase-order.vue`
+- **Komponen Domain**: `PurchaseOrderStatsWidgets.vue`, `PurchaseOrderRecordsTable.vue`, `PurchaseOrderFormModal.vue`, `PurchaseOrderDetailModal.vue`.
+- **Fitur**: Pengelolaan Surat Pesanan Pembelian (PO) resmi ke supplier/vendor, spesifikasi teknis barang, termin pembayaran (TOP), tanggal & alamat pengiriman, status penerimaan barang (*Goods Receiving Status*), dan cetak PO resmi.
+
+### 32.5 Purchase Return (`/purchase-return`)
+- **Thin Page**: `app/pages/purchase-return.vue`
+- **Komponen Domain**: `PurchaseReturnStatsWidgets.vue`, `PurchaseReturnRecordsTable.vue`, `PurchaseReturnFormModal.vue`, `PurchaseReturnDetailModal.vue`.
+- **Fitur**: Pengelolaan retur barang rusak/cacat/salah spesifikasi ke rekanan supplier, kalkulasi otomatis dana pengembalian (Refund/Paid & Due), rincian alasan retur per baris barang, dan cetak nota retur resmi.
+
+
 
 
 

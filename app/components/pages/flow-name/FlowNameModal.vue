@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FlowName, FlowNameFormData } from '#server/types/flow-name'
 import AssigneeSelect from '~/components/common/AssigneeSelect.vue'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import SalesDialog from '~/components/sales/SalesDialog.vue'
 import {
   formControlClass,
@@ -188,12 +189,11 @@ function submit() {
             <div :class="modalFormRowClass">
               <label :class="modalFormLabelClass">Incentive Amount</label>
               <div :class="modalFormInputColClass">
-                <input
-                  v-model.number="form.incentiveAmount"
-                  type="number"
-                  min="0"
+                <CurrencyInput
+                  v-model="form.incentiveAmount"
+                  thousand-separator=","
                   placeholder="0"
-                  :class="formControlClass"
+                  :disabled="busy"
                 />
               </div>
             </div>

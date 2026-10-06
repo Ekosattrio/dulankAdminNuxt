@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { MyIncentive, MyIncentiveFormData } from '#server/types/my-incentive'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import SalesDialog from '~/components/sales/SalesDialog.vue'
 import {
   modalFormRowClass,
@@ -171,13 +172,11 @@ const handleSubmit = () => {
           Incentive (Rp) <span class="text-red-500">*</span>
         </label>
         <div :class="modalFormInputColClass">
-          <input
+          <CurrencyInput
             id="incRate"
-            v-model.number="form.incentive"
-            type="number"
-            min="0"
-            placeholder="1000"
-            :class="formControlClass"
+            v-model="form.incentive"
+            thousand-separator=","
+            placeholder="1,000"
             :disabled="busy"
           />
         </div>

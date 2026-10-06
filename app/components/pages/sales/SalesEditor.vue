@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Sale, SaleFormData } from '#server/types/sale'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
 const props = defineProps<{
   isOpen: boolean
   busy?: boolean
@@ -106,13 +107,11 @@ const productId = useId()
               </select></label
             >
             <label :class="salesLabel" class="lg:col-span-2"
-              >Price (IDR)<input
-                v-model.number="item.price"
-                type="number"
-                min="0"
-                :class="salesField"
+              >Price (IDR)<CurrencyInput
+                v-model="item.price"
+                thousand-separator=","
                 required
-                @input="legacyTax = null"
+                @update:model-value="legacyTax = null"
             /></label>
             <label :class="salesLabel" class="lg:col-span-2"
               >Amount (IDR)<input :value="formatRupiah(item.qty * item.price)" :class="salesField" readonly
@@ -125,7 +124,7 @@ const productId = useId()
           </div>
         </div>
         <label v-if="!items.length && legacySubtotal" :class="salesLabel"
-          >Sub Total<input v-model.number="legacySubtotal" type="number" min="0" :class="salesField"
+          >Sub Total<CurrencyInput v-model="legacySubtotal" thousand-separator=","
         /></label>
         <button type="button" class="inline-flex items-center gap-2 text-xs text-primary" @click="addItem">
           <FeatherIcon name="plus-circle" :size="14" />add New blank
@@ -150,12 +149,10 @@ const productId = useId()
             /></label>
           </div>
           <label :class="salesLabel"
-            >Shipping Costs<input
-              v-model.number="deliveryFee"
-              type="number"
-              min="0"
-              :class="salesField"
-              @input="legacyTax = null"
+            >Shipping Costs<CurrencyInput
+              v-model="deliveryFee"
+              thousand-separator=","
+              @update:model-value="legacyTax = null"
           /></label>
           <label :class="salesLabel"
             >Tax<select
