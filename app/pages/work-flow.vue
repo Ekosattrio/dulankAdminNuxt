@@ -76,7 +76,14 @@ function printTable() {
       @print="printTable"
     />
 
-    <SalesFeedback :pending="pending" :error="error ? 'Unable to load workflows. Please try again.' : ''" @retry="refresh()" />
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="6"
+      :error="error ? 'Unable to load workflows. Please try again.' : ''"
+      @retry="refresh()"
+    />
 
     <WorkFlowRecordsTable
       v-if="!pending && !error"

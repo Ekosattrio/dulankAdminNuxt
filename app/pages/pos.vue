@@ -15,7 +15,7 @@ const pos = reactive(usePos())
       @transactions="() => { pos.refreshSales(); pos.transactionsModalOpen = true }"
     />
     <SalesFeedback
-      :pending="pos.pending"
+      :pending="false"
       :error="pos.error ? 'Unable to load products.' : pos.actionError"
       @retry="pos.refresh()"
     />
@@ -25,6 +25,7 @@ const pos = reactive(usePos())
         v-model:search="pos.productSearchQuery"
         :categories="pos.categories"
         :filtered-products="pos.filteredProducts"
+        :pending="pos.pending"
         @add="pos.addToCart"
       />
       <PosOrderSummary

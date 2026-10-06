@@ -33,6 +33,9 @@ const {
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load request quotations.' : actionError"
       :message="toastMessage"
       @retry="refresh()"

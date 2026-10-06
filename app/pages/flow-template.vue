@@ -82,6 +82,9 @@ function printTable() {
 
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="4"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load flow templates. Please try again.' : ''"
       @retry="refresh()"
     />

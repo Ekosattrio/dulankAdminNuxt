@@ -68,6 +68,9 @@ const salesPrintColumns = [
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="13"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load sales. Please try again.' : ''"
       :message="toastMessage"
       @retry="refresh()"

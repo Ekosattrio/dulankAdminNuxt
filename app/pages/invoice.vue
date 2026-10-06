@@ -48,6 +48,9 @@ watch(
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="8"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load invoice. Please try again.' : ''"
       :message="toastMessage"
       @retry="refresh()"

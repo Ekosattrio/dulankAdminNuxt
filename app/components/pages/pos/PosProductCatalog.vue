@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { POSCategory, POSProduct } from '#server/types/pos'
-defineProps<{ categories: POSCategory[]; filteredProducts: POSProduct[] }>()
+import AppSkeleton from '~/components/common/AppSkeleton.vue'
+defineProps<{ categories: POSCategory[]; filteredProducts: POSProduct[]; pending?: boolean }>()
 const selectedCategory = defineModel<string>('category', { required: true })
 const productSearchQuery = defineModel<string>('search', { required: true })
 const emit = defineEmits<{ add: [product: POSProduct] }>()
@@ -25,7 +26,22 @@ const { formatRupiah } = useFormatters()
         </div>
       </div>
 
-      <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+      <!-- Categories Loading Skeleton -->
+      <div v-if="pending" class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+        <div
+          v-for="i in 6"
+          :key="`cat-skel-${i}`"
+          class="flex shrink-0 items-center gap-2.5 rounded-xl border border-gray-200 bg-white p-2.5 dark:border-gray-800 dark:bg-gray-900 shadow-sm"
+        >
+          <AppSkeleton width="36px" height="36px" rounded="lg" />
+          <div class="space-y-1.5">
+            <AppSkeleton height="h-3" rounded="sm" class="w-16" />
+            <AppSkeleton height="h-2.5" rounded="sm" class="w-10" />
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
         <button
           v-for="cat in categories"
           :key="cat.id"
@@ -50,7 +66,29 @@ const { formatRupiah } = useFormatters()
     <!-- Products Grid -->
     <div class="flex-1">
       <h5 class="mb-3 text-sm font-bold text-gray-900 dark:text-white">Products</h5>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4">
+
+      <!-- Products Loading Skeleton Grid -->
+      <div v-if="pending" class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4">
+        <div
+          v-for="i in 8"
+          :key="`prod-skel-${i}`"
+          class="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-3 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+        >
+          <div class="mb-2 flex h-28 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+            <AppSkeleton width="100%" height="100%" rounded="lg" />
+          </div>
+          <div class="space-y-2">
+            <AppSkeleton height="h-2.5" rounded="sm" class="w-14" />
+            <AppSkeleton height="h-3.5" rounded="sm" class="w-full" />
+            <div class="mt-2 flex items-center justify-between">
+              <AppSkeleton height="h-2.5" rounded="sm" class="w-10" />
+              <AppSkeleton height="h-3.5" rounded="sm" class="w-16" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4">
         <button
           type="button"
           v-for="prod in filteredProducts"

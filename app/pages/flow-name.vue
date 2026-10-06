@@ -90,6 +90,9 @@ function printTable() {
 
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="9"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load flow names. Please try again.' : ''"
       @retry="refresh()"
     />

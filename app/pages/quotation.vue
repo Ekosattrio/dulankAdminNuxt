@@ -40,6 +40,9 @@ const {
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="10"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load quotation list. Please try again.' : ''"
       :message="toastMessage"
       @retry="refresh()"

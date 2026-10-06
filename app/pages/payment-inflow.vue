@@ -92,6 +92,9 @@ function printTable() {
     />
     <SalesFeedback
       :pending="pending"
+      skeleton="table"
+      :skeleton-cols="10"
+      :skeleton-rows="6"
       :error="error ? 'Unable to load payment inflow. Please try again.' : ''"
       @retry="refresh()"
     />
