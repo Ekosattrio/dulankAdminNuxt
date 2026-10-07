@@ -32,6 +32,12 @@ export interface SupplierAddress {
   channel: string
   dateAdded: string
   status: string
+  name?: string
+  contact?: string
+  detailAddress?: string
+  date?: string
+  otherDetail?: string
+  supplierId?: string
 }
 
 export interface AddressFilterParams {
@@ -58,4 +64,5 @@ export interface AddressFormData {
   detailAddress?: string
   otherDetail?: string
   status?: string
+  type?: 'customer' | 'supplier'
 }

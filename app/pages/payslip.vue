@@ -18,13 +18,18 @@ useLegacyPage({ title: 'Payslips - Penggajian Karyawan', sweetAlert: false })
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  status: filterStatus.value,
-}))
-
-const { payslips, pending, error, refresh, savePayslip, deletePayslip } = usePayslips(filterParams)
+const { payslips, pending, error, refresh, savePayslip, deletePayslip } = usePayslips()
 const { employees } = useEmployees()
+
+// Client-side filtering for 0ms smooth search without skeleton flicker
+const filteredPayslips = computed(() => {
+  return payslips.value.filter((p) => {
+    if (filterStatus.value && p.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
+      return false
+    }
+    return true
+  })
+})
 
 // Stats calculation
 const stats = computed(() => {
@@ -130,7 +135,7 @@ function handlePrint() {
       { key: 'status', label: 'Status' },
       { key: 'paidDate', label: 'Paid Date' },
     ],
-    rows: payslips.value.map(p => ({
+    rows: filteredPayslips.value.map(p => ({
       slipNo: p.slipNo,
       name: p.name,
       period: p.period,
@@ -152,7 +157,7 @@ function handleExportPdf() {
 
 function handleExportExcel() {
   const header = ['Slip No', 'Name', 'Period', 'Salary Rate', 'Days Worked', 'Allowance', 'Overtime', 'Deduction', 'Total Net Pay', 'Status', 'Paid Date']
-  const rows = payslips.value.map(p => [
+  const rows = filteredPayslips.value.map(p => [
     `"${p.slipNo}"`,
     `"${p.name}"`,
     `"${p.period}"`,
@@ -215,7 +220,7 @@ function handleExportExcel() {
     <!-- Records Table -->
     <PayslipRecordsTable
       v-if="!pending && !error"
-      :payslips="payslips"
+      :payslips="filteredPayslips"
       :search-query="searchQuery"
       :filter-status="filterStatus"
       @update:search-query="searchQuery = $event"

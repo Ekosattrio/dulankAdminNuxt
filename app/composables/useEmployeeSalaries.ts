@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useEmployeeSalaries(filterParams?: Ref<EmployeeSalaryFilterParams> | EmployeeSalaryFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useEmployeeSalaries() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/employee-salaries', {
-    key: 'employee-salaries-list',
-    query: params
+    key: 'employee-salaries-list'
   })
 
   const salaries = computed<EmployeeSalaryItem[]>(() => data.value?.data ?? [])

@@ -16,12 +16,16 @@ useLegacyPage({ title: 'Stores - Toko & Cabang Percetakan', sweetAlert: false })
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  status: filterStatus.value,
-}))
+const { stores, pending, error, refresh, saveStore, deleteStore } = useStores()
 
-const { stores, pending, error, refresh, saveStore, deleteStore } = useStores(filterParams)
+const filteredStores = computed(() => {
+  return stores.value.filter((item) => {
+    if (filterStatus.value && filterStatus.value !== 'All' && filterStatus.value !== '') {
+      if (item.status?.toLowerCase() !== filterStatus.value.toLowerCase()) return false
+    }
+    return true
+  })
+})
 
 // Modal states
 const isFormModalOpen = ref(false)
@@ -80,6 +84,7 @@ async function handleFormSubmit(formData: StoreFormData) {
     const res = await saveStore(formData)
     showToast(res?.message || (isEditMode.value ? 'Store updated successfully' : 'Store created successfully'))
     isFormModalOpen.value = false
+    activeStoreForEdit.value = null
   } catch (err: any) {
     showToast(err?.data?.message || err?.message || 'Failed to save store')
   } finally {
@@ -107,7 +112,7 @@ function handlePrint() {
       { key: 'email', label: 'Email' },
       { key: 'status', label: 'Status' },
     ],
-    rows: stores.value.map(s => ({
+    rows: filteredStores.value.map(s => ({
       storeName: s.storeName,
       userName: s.userName,
       address: s.address || '-',
@@ -124,7 +129,7 @@ function handleExportPdf() {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="dulank-page dulank-page-store-list space-y-6">
     <!-- Toast notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -149,9 +154,10 @@ function handleExportPdf() {
       title="Stores / Cabang Toko"
       subtitle="Kelola gerai fisik dan cabang percetakan online"
       add-label="Add Store"
-      @refresh="refresh"
+      :refreshing="pending"
+      @refresh="refresh()"
       @print="handlePrint"
-      @export-pdf="handleExportPdf"
+      @pdf="handleExportPdf"
       @add="handleAdd"
     />
 
@@ -162,12 +168,12 @@ function handleExportPdf() {
       skeleton="table"
       :skeleton-cols="7"
       :skeleton-rows="5"
-      @retry="refresh"
+      @retry="refresh()"
     />
 
     <StoreListRecordsTable
       v-if="!pending && !error"
-      :stores="stores"
+      :stores="filteredStores"
       :search-query="searchQuery"
       :filter-status="filterStatus"
       @update:search-query="searchQuery = $event"

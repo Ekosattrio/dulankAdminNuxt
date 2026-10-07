@@ -16,12 +16,16 @@ useLegacyPage({ title: 'Customer Type', sweetAlert: false })
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  status: filterStatus.value,
-}))
+const { customerTypes, pending, error, refresh, saveCustomerType, deleteCustomerType } = useCustomerTypes()
 
-const { customerTypes, pending, error, refresh, saveCustomerType, deleteCustomerType } = useCustomerTypes(filterParams)
+const filteredCustomerTypes = computed(() => {
+  return customerTypes.value.filter((item) => {
+    if (filterStatus.value && filterStatus.value !== 'All' && filterStatus.value !== '') {
+      if (item.status?.toLowerCase() !== filterStatus.value.toLowerCase()) return false
+    }
+    return true
+  })
+})
 
 // Modal states
 const isFormModalOpen = ref(false)
@@ -130,7 +134,7 @@ const printColumns = [
     <!-- Main Table -->
     <CustomerTypeRecordsTable
       v-if="!pending && !error"
-      :customer-types="customerTypes"
+      :customer-types="filteredCustomerTypes"
       :search-query="searchQuery"
       :filter-status="filterStatus"
       @update:search-query="searchQuery = $event"
@@ -164,7 +168,7 @@ const printColumns = [
       :open="isPrintModalOpen"
       title="Customer Types Report"
       :columns="printColumns"
-      :items="customerTypes"
+      :items="filteredCustomerTypes"
       :default-action="defaultPrintAction"
       @close="closePrintModal"
     />

@@ -1,4 +1,4 @@
-import type { Customer, CustomerFormData, CustomerFilterParams } from '#server/types/customer'
+import type { Customer, CustomerFormData } from '#server/types/customer'
 
 interface ResponseData {
   success: boolean
@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useCustomers(filterParams?: Ref<CustomerFilterParams> | CustomerFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useCustomers() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/customers', {
-    key: 'customers-list',
-    query: params
+    key: 'customers-list'
   })
 
   const customers = computed<Customer[]>(() => data.value?.data ?? [])

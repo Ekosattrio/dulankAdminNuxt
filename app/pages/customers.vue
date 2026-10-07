@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Customer, CustomerFormData } from '#server/types/customer'
-import type { DateRangeValue } from '~/composables/useDateRange'
+import { type DateRangeValue, isDateInRange } from '~/composables/useDateRange'
 import { useCustomers } from '~/composables/useCustomers'
 import { useTablePrint } from '~/composables/useTablePrint'
 import CustomerRecordsTable from '~/components/pages/customers/CustomerRecordsTable.vue'
@@ -20,14 +20,19 @@ const searchQuery = ref('')
 const filterType = ref('')
 const filterDateRange = ref<DateRangeValue | null>(null)
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  type: filterType.value,
-  startDate: filterDateRange.value?.start || '',
-  endDate: filterDateRange.value?.end || '',
-}))
+const { customers, pending, error, refresh, saveCustomer, deleteCustomer } = useCustomers()
 
-const { customers, pending, error, refresh, saveCustomer, deleteCustomer } = useCustomers(filterParams)
+const filteredCustomers = computed(() => {
+  return customers.value.filter((c) => {
+    if (filterType.value && filterType.value !== 'All' && filterType.value !== '') {
+      if (c.type?.toLowerCase() !== filterType.value.toLowerCase()) return false
+    }
+    if (filterDateRange.value) {
+      if (!isDateInRange(c.dateJoin, filterDateRange.value)) return false
+    }
+    return true
+  })
+})
 
 // Modal states
 const isFormModalOpen = ref(false)
@@ -160,7 +165,7 @@ const printColumns = [
     <!-- Main Table -->
     <CustomerRecordsTable
       v-if="!pending && !error"
-      :customers="customers"
+      :customers="filteredCustomers"
       :search-query="searchQuery"
       :filter-type="filterType"
       :filter-date-range="filterDateRange"
@@ -213,7 +218,7 @@ const printColumns = [
       :open="isPrintModalOpen"
       title="Customers Report"
       :columns="printColumns"
-      :items="customers"
+      :items="filteredCustomers"
       :default-action="defaultPrintAction"
       @close="closePrintModal"
     />

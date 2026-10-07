@@ -17,12 +17,16 @@ useLegacyPage({ title: 'Suppliers - Pemasok Kertas & Bahan', sweetAlert: false }
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  status: filterStatus.value,
-}))
+const { suppliers, pending, error, refresh, saveSupplier, deleteSupplier } = useSuppliers()
 
-const { suppliers, pending, error, refresh, saveSupplier, deleteSupplier } = useSuppliers(filterParams)
+const filteredSuppliers = computed(() => {
+  return suppliers.value.filter((item) => {
+    if (filterStatus.value && filterStatus.value !== 'All' && filterStatus.value !== '') {
+      if (item.status?.toLowerCase() !== filterStatus.value.toLowerCase()) return false
+    }
+    return true
+  })
+})
 
 // Modal states
 const isFormModalOpen = ref(false)
@@ -89,6 +93,7 @@ async function handleFormSubmit(formData: SupplierFormData) {
     const res = await saveSupplier(formData)
     showToast(res?.message || (isEditMode.value ? 'Supplier updated successfully' : 'Supplier created successfully'))
     isFormModalOpen.value = false
+    activeSupplierForEdit.value = null
   } catch (err: any) {
     showToast(err?.data?.message || err?.message || 'Failed to save supplier')
   } finally {
@@ -117,7 +122,7 @@ function handlePrint() {
       { key: 'status', label: 'Status' },
       { key: 'date', label: 'Date Added' },
     ],
-    rows: suppliers.value.map(s => ({
+    rows: filteredSuppliers.value.map(s => ({
       supplierId: s.supplierId || s.id,
       name: s.name,
       email: s.email,
@@ -135,7 +140,7 @@ function handleExportPdf() {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="dulank-page dulank-page-supplier space-y-6">
     <!-- Toast notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -160,9 +165,10 @@ function handleExportPdf() {
       title="Suppliers / Pemasok"
       subtitle="Kelola database distributor bahan kertas, tinta, dan pelat cetak"
       add-label="Add Supplier"
-      @refresh="refresh"
+      :refreshing="pending"
+      @refresh="refresh()"
       @print="handlePrint"
-      @export-pdf="handleExportPdf"
+      @pdf="handleExportPdf"
       @add="handleAdd"
     />
 
@@ -173,12 +179,12 @@ function handleExportPdf() {
       skeleton="table"
       :skeleton-cols="8"
       :skeleton-rows="6"
-      @retry="refresh"
+      @retry="refresh()"
     />
 
     <SupplierRecordsTable
       v-if="!pending && !error"
-      :suppliers="suppliers"
+      :suppliers="filteredSuppliers"
       :search-query="searchQuery"
       :filter-status="filterStatus"
       @update:search-query="searchQuery = $event"

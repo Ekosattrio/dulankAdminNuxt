@@ -22,16 +22,31 @@ const filterDepartment = ref('')
 const filterStatus = ref('')
 const filterDateRange = ref<DateRangeValue | null>(null)
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  department: filterDepartment.value,
-  status: filterStatus.value,
-}))
-
-const { employees, pending, error, refresh, saveEmployee, deleteEmployee } = useEmployees(filterParams)
+const { employees, pending, error, refresh, saveEmployee, deleteEmployee } = useEmployees()
 const { departments } = useDepartments()
 
 const departmentOptions = computed(() => departments.value.map(d => d.name))
+
+// Client-side filtering for 0ms latency without skeleton flicker
+const filteredEmployees = computed(() => {
+  return employees.value.filter((emp) => {
+    if (filterDepartment.value && emp.department.toLowerCase() !== filterDepartment.value.toLowerCase()) {
+      return false
+    }
+    if (filterStatus.value && emp.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
+      return false
+    }
+    if (filterDateRange.value?.start && filterDateRange.value?.end) {
+      if (!emp.joinDate) return false
+      const parts = emp.joinDate.split('/')
+      const empDate = parts.length === 3 ? `${parts[2]}-${parts[1]}-${parts[0]}` : emp.joinDate
+      if (empDate < filterDateRange.value.start || empDate > filterDateRange.value.end) {
+        return false
+      }
+    }
+    return true
+  })
+})
 
 // KPI Stats calculation
 const stats = computed(() => {
@@ -143,7 +158,7 @@ function handlePrint() {
       { key: 'joinDate', label: 'Join Date' },
       { key: 'status', label: 'Status' },
     ],
-    rows: employees.value.map(e => ({
+    rows: filteredEmployees.value.map(e => ({
       id: e.id,
       name: e.name,
       department: e.department,
@@ -158,10 +173,33 @@ function handlePrint() {
 function handleExportPdf() {
   handlePrint()
 }
+
+function handleExportExcel() {
+  const header = ['Employee ID', 'Name', 'Department', 'Address', 'Phone', 'Join Date', 'Status']
+  const rows = filteredEmployees.value.map(e => [
+    `"${e.id}"`,
+    `"${e.name}"`,
+    `"${e.department}"`,
+    `"${(e.detailAddress ? `${e.address}, ${e.detailAddress}` : e.address).replace(/"/g, '""')}"`,
+    `"${e.phone || '-'}"`,
+    `"${e.joinDate || '-'}"`,
+    `"${e.status}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `employees_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Employees list exported to CSV successfully')
+}
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 p-4 md:p-6">
     <!-- Toast notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -189,6 +227,7 @@ function handleExportPdf() {
       @refresh="refresh"
       @print="handlePrint"
       @export-pdf="handleExportPdf"
+      @export-excel="handleExportExcel"
       @add="handleAdd"
     />
 
@@ -208,7 +247,7 @@ function handleExportPdf() {
     <!-- Main Table -->
     <EmployeeRecordsTable
       v-if="!pending && !error"
-      :employees="employees"
+      :employees="filteredEmployees"
       :search-query="searchQuery"
       :filter-department="filterDepartment"
       :filter-status="filterStatus"

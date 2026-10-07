@@ -15,14 +15,15 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     // Update
     const idx = allTypes.findIndex(t => t.id === body.id)
-    if (idx !== -1) {
+    if (idx !== -1 && allTypes[idx]) {
+      const existing = allTypes[idx]!
       allTypes[idx] = {
-        ...allTypes[idx],
+        ...existing,
         name: body.name,
         status: body.status || 'Active'
       }
       await writeJSON('customer-types.json', allTypes)
-      return createResponse(allTypes[idx], 'Customer type updated successfully')
+      return createResponse(allTypes[idx]!, 'Customer type updated successfully')
     }
   }
 

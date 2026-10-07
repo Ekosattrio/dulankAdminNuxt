@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useEmployees(filterParams?: Ref<EmployeeFilterParams> | EmployeeFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useEmployees() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/employees', {
-    key: 'employees-list',
-    query: params
+    key: 'employees-list'
   })
 
   const employees = computed<EmployeeItem[]>(() => data.value?.data ?? [])

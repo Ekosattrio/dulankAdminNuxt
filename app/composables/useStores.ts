@@ -1,4 +1,4 @@
-import type { Store, StoreFormData, StoreFilterParams } from '#server/types/store'
+import type { Store, StoreFormData } from '#server/types/store'
 
 interface ResponseData {
   success: boolean
@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useStores(filterParams?: Ref<StoreFilterParams> | StoreFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useStores() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/stores', {
-    key: 'stores-list',
-    query: params
+    key: 'stores-list'
   })
 
   const stores = computed<Store[]>(() => data.value?.data ?? [])

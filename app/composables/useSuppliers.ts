@@ -1,4 +1,4 @@
-import type { Supplier, SupplierFormData, SupplierFilterParams } from '#server/types/supplier'
+import type { Supplier, SupplierFormData } from '#server/types/supplier'
 
 interface ResponseData {
   success: boolean
@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useSuppliers(filterParams?: Ref<SupplierFilterParams> | SupplierFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useSuppliers() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/suppliers', {
-    key: 'suppliers-list',
-    query: params
+    key: 'suppliers-list'
   })
 
   const suppliers = computed<Supplier[]>(() => data.value?.data ?? [])

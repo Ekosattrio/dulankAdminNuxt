@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { CustomerAddress, SupplierAddress, AddressFormData } from '~/types/address'
-import type { DateRangeValue } from '~/composables/useDateRange'
+import type { CustomerAddress, SupplierAddress, AddressFormData } from '#server/types/address'
+import { type DateRangeValue, isDateInRange } from '~/composables/useDateRange'
 import { useAddress } from '~/composables/useAddress'
 import { useTablePrint } from '~/composables/useTablePrint'
 import AddressStatsWidgets from '~/components/pages/address/AddressStatsWidgets.vue'
@@ -49,18 +49,11 @@ function showToast(msg: string) {
 const currentItems = computed(() => {
   const sourceList = activeTab.value === 'customer' ? customers.value : suppliers.value
   return sourceList.filter((item: any) => {
-    const q = searchQuery.value.toLowerCase().trim()
-    const name = (item.name || item.user || '').toLowerCase()
-    const city = (item.city || '').toLowerCase()
-    const province = (item.province || '').toLowerCase()
-    const contact = (item.contact || item.phone || '').toLowerCase()
-    const detail = (item.detailAddress || '').toLowerCase()
-    const entityId = (item.customerId || item.supplierId || item.id || '').toLowerCase()
+    const matchStatus = !filterStatus.value || filterStatus.value === 'All' || (item.status || '').toLowerCase() === filterStatus.value.toLowerCase()
+    const itemDate = item.date || item.dateAdded
+    const matchDate = !filterDateRange.value || isDateInRange(itemDate, filterDateRange.value)
 
-    const matchSearch = !q || name.includes(q) || city.includes(q) || province.includes(q) || contact.includes(q) || detail.includes(q) || entityId.includes(q)
-    const matchStatus = !filterStatus.value || (item.status || '').toLowerCase() === filterStatus.value.toLowerCase()
-
-    return matchSearch && matchStatus
+    return matchStatus && matchDate
   })
 })
 

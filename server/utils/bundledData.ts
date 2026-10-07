@@ -12,6 +12,7 @@ import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
 import employeesData from '../data/employees.json'
+import employeeSalariesData from '../data/employeeSalaries.json'
 import expenseCategoriesData from '../data/expense-categories.json'
 import expensesData from '../data/expenses.json'
 import flowCategoriesData from '../data/flow-categories.json'
@@ -74,6 +75,8 @@ export const bundledSources: Record<string, unknown> = {
   'departments.json': departmentsData,
   'designations.json': designationsData,
   'employees.json': employeesData,
+  'employeeSalaries.json': employeeSalariesData,
+  'employee-salaries.json': employeeSalariesData,
   'expense-categories.json': expenseCategoriesData,
   'expenses.json': expensesData,
   'flow-categories.json': flowCategoriesData,

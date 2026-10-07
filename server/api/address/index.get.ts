@@ -11,7 +11,14 @@ export default defineEventHandler((event): AddressResponse => {
 
   const stats = addressData.stats
   let customers: CustomerAddress[] = [...(addressData.customers || [])]
-  let suppliers: SupplierAddress[] = [...(addressData.suppliers || [])]
+  let suppliers: SupplierAddress[] = (addressData.suppliers || []).map(s => ({
+    ...s,
+    supplierId: s.supplierId || s.userId || s.id,
+    name: s.name || s.user,
+    contact: s.contact || s.phone,
+    detailAddress: s.detailAddress || s.fullAddress,
+    date: s.date || s.dateAdded,
+  }))
 
   // Filter Search
   if (query.search) {

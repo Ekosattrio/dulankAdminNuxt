@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function useDepartments(filterParams?: Ref<DepartmentFilterParams> | DepartmentFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function useDepartments() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/departments', {
-    key: 'departments-list',
-    query: params
+    key: 'departments-list'
   })
 
   const departments = computed<Department[]>(() => data.value?.data ?? [])

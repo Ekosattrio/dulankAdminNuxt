@@ -13,16 +13,17 @@ export default defineEventHandler(async (event) => {
 
   if (body.id) {
     const idx = suppliers.findIndex(s => s.id === body.id)
-    if (idx !== -1) {
-      suppliers[idx] = {
-        ...suppliers[idx],
+    if (idx !== -1 && suppliers[idx]) {
+      const existing = suppliers[idx]!
+      resultItem = {
+        ...existing,
         name: body.name,
         email: body.email,
-        contact: body.contact || suppliers[idx].contact,
-        picName: body.picName || suppliers[idx].picName,
-        status: body.status || suppliers[idx].status
+        contact: body.contact || existing.contact,
+        picName: body.picName || existing.picName,
+        status: body.status || existing.status
       }
-      resultItem = suppliers[idx]
+      suppliers[idx] = resultItem
     } else {
       return { success: false, message: 'Supplier not found' }
     }

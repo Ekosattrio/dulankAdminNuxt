@@ -16,16 +16,17 @@ export default defineEventHandler(async (event) => {
 
   if (body.id) {
     const idx = customers.findIndex(c => c.id === body.id)
-    if (idx !== -1) {
-      customers[idx] = {
-        ...customers[idx],
+    if (idx !== -1 && customers[idx]) {
+      const existing = customers[idx]!
+      resultItem = {
+        ...existing,
         name: body.name,
         email: body.email,
-        type: body.type || customers[idx].type,
-        phone: body.phone || customers[idx].phone,
-        balance: body.balance !== undefined ? body.balance : customers[idx].balance
+        type: body.type || existing.type,
+        phone: body.phone || existing.phone,
+        balance: body.balance !== undefined ? body.balance : existing.balance
       }
-      resultItem = customers[idx]
+      customers[idx] = resultItem
     } else {
       return { success: false, message: 'Customer not found' }
     }

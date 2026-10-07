@@ -20,14 +20,21 @@ const searchQuery = ref('')
 const filterSystem = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  system: filterSystem.value,
-  status: filterStatus.value,
-}))
-
-const { salaries, pending, error, refresh, saveSalary, deleteSalary } = useEmployeeSalaries(filterParams)
+const { salaries, pending, error, refresh, saveSalary, deleteSalary } = useEmployeeSalaries()
 const { employees } = useEmployees()
+
+// Client-side filtering for 0ms smooth search without skeleton flicker
+const filteredSalaries = computed(() => {
+  return salaries.value.filter((s) => {
+    if (filterSystem.value && s.system.toLowerCase() !== filterSystem.value.toLowerCase()) {
+      return false
+    }
+    if (filterStatus.value && s.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
+      return false
+    }
+    return true
+  })
+})
 
 // Stats calculation
 const stats = computed(() => {
@@ -143,7 +150,7 @@ function handlePrint() {
       { key: 'overtimeRate', label: 'Overtime Rate (IDR)' },
       { key: 'status', label: 'Status' },
     ],
-    rows: salaries.value.map(s => ({
+    rows: filteredSalaries.value.map(s => ({
       employeeId: s.employeeId,
       name: s.name,
       salary: formatIDR(s.salary),
@@ -161,7 +168,7 @@ function handleExportPdf() {
 
 function handleExportExcel() {
   const header = ['Employee ID', 'Name', 'Base Salary', 'System', 'Allowance Total', 'Overtime Rate', 'Status']
-  const rows = salaries.value.map(s => [
+  const rows = filteredSalaries.value.map(s => [
     `"${s.employeeId}"`,
     `"${s.name}"`,
     `"${s.salary}"`,
@@ -220,7 +227,7 @@ function handleExportExcel() {
     <!-- Records Table -->
     <EmployeeSalaryRecordsTable
       v-if="!pending && !error"
-      :salaries="salaries"
+      :salaries="filteredSalaries"
       :search-query="searchQuery"
       :filter-system="filterSystem"
       :filter-status="filterStatus"

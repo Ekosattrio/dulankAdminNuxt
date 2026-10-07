@@ -17,17 +17,22 @@ useLegacyPage({ title: 'Departments - Departemen Karyawan', sweetAlert: false })
 const searchQuery = ref('')
 const filterStatus = ref('')
 
-const filterParams = computed(() => ({
-  search: searchQuery.value,
-  status: filterStatus.value,
-}))
-
-const { departments, pending, error, refresh, saveDepartment, deleteDepartment } = useDepartments(filterParams)
+const { departments, pending, error, refresh, saveDepartment, deleteDepartment } = useDepartments()
 const { employees } = useEmployees()
 
 // Available employee names for quick pick
 const availableMembers = computed(() => {
   return employees.value.map(e => e.name)
+})
+
+// Client-side filtering for 0ms smooth search without skeleton flicker
+const filteredDepartments = computed(() => {
+  return departments.value.filter((d) => {
+    if (filterStatus.value && d.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
+      return false
+    }
+    return true
+  })
 })
 
 // KPI Stats calculation
@@ -129,7 +134,7 @@ function handlePrint() {
       { key: 'createdDate', label: 'Created Date' },
       { key: 'status', label: 'Status' },
     ],
-    rows: departments.value.map(d => ({
+    rows: filteredDepartments.value.map(d => ({
       id: d.id,
       name: d.name,
       members: d.members && d.members.length > 0 ? d.members.join(', ') : '-',
@@ -146,7 +151,7 @@ function handleExportPdf() {
 
 function handleExportExcel() {
   const header = ['ID', 'Department Name', 'Members', 'Total Members', 'Created Date', 'Status']
-  const rows = departments.value.map(d => [
+  const rows = filteredDepartments.value.map(d => [
     `"${d.id}"`,
     `"${d.name}"`,
     `"${(d.members || []).join('; ')}"`,
@@ -204,7 +209,7 @@ function handleExportExcel() {
     <!-- Department Records Table -->
     <DepartmentRecordsTable
       v-if="!pending && !error"
-      :departments="departments"
+      :departments="filteredDepartments"
       :search-query="searchQuery"
       :filter-status="filterStatus"
       @update:search-query="searchQuery = $event"

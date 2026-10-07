@@ -143,8 +143,8 @@ function getItemContact(item: any) {
       </template>
 
       <template #cell(detailAddress)="{ item }">
-        <span class="text-gray-600 dark:text-gray-400 max-w-xs truncate block" :title="item.detailAddress">
-          {{ item.detailAddress || '-' }}
+        <span class="text-gray-600 dark:text-gray-400 max-w-xs truncate block" :title="item.detailAddress || item.fullAddress">
+          {{ item.detailAddress || item.fullAddress || '-' }}
         </span>
       </template>
 
@@ -161,7 +161,7 @@ function getItemContact(item: any) {
       </template>
 
       <template #cell(date)="{ item }">
-        <span class="text-gray-500 dark:text-gray-400 text-[11px]">{{ item.date || '-' }}</span>
+        <span class="text-gray-500 dark:text-gray-400 text-[11px]">{{ item.date || item.dateAdded || '-' }}</span>
       </template>
 
       <template #cell(actions)="{ item }">

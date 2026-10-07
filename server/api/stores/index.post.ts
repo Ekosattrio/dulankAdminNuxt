@@ -15,18 +15,19 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     // Update
     const idx = allStores.findIndex(s => s.id === body.id)
-    if (idx !== -1) {
+    if (idx !== -1 && allStores[idx]) {
+      const existing = allStores[idx]!
       allStores[idx] = {
-        ...allStores[idx],
+        ...existing,
         storeName: body.storeName,
-        userName: body.userName || allStores[idx].userName,
-        address: body.address || allStores[idx].address,
-        phone: body.phone || allStores[idx].phone,
-        email: body.email || allStores[idx].email,
+        userName: body.userName || existing.userName,
+        address: body.address || existing.address,
+        phone: body.phone || existing.phone,
+        email: body.email || existing.email,
         status: body.status || 'Active'
       }
       await writeJSON('stores.json', allStores)
-      return createResponse(allStores[idx], 'Store updated successfully')
+      return createResponse(allStores[idx]!, 'Store updated successfully')
     }
   }
 

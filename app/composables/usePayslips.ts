@@ -6,12 +6,9 @@ interface ResponseData {
   message?: string
 }
 
-export function usePayslips(filterParams?: Ref<PayslipFilterParams> | PayslipFilterParams) {
-  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-
+export function usePayslips() {
   const { data, pending, error, refresh } = useFetch<ResponseData>('/api/payslips', {
-    key: 'payslips-list',
-    query: params
+    key: 'payslips-list'
   })
 
   const payslips = computed<PayslipItem[]>(() => data.value?.data ?? [])
