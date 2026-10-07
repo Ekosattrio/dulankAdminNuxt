@@ -1821,3 +1821,226 @@ Kelompok menu **PURCHASES** telah rampung 100% dan terstandarisasi penuh menggun
 
 
 
+
+
+---
+
+## 33. Implementasi Lengkap Seluruh Modul USER MANAGEMENT (5 Sub-Menu)
+
+Modul **USER MANAGEMENT** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, in-memory zero-flicker reactive search, persistensi JSON, dialog cetak resmi `DocumentPrintModal.vue`, dan hierarki granular permission:
+
+### 33.1 All Members (`/user`)
+- **Thin Page**: `app/pages/user.vue`
+- **Komponen Domain**: `MemberRecordsTable.vue`, `MemberFormModal.vue`.
+- **Fitur**: Daftar anggota toko, filter status reaktif, DateRangePicker, modal input/edit anggota tersimpan ke `users.json`, zero skeleton flicker saat pencarian, cetak PDF/Print dan ekspor Excel.
+
+### 33.2 User Admin (`/user-admin`)
+- **Thin Page**: `app/pages/user-admin.vue`
+- **Komponen Domain**: `UserAdminRecordsTable.vue`, `UserAdminFormModal.vue`.
+- **Fitur**: Pengelolaan akun admin & staf toko, multi-toko assignment (`stores`), role assignment, modal Add/Edit persisten ke `user-admins.json`, dan status active/inactive.
+
+### 33.3 Roles List (`/role-permissions`)
+- **Thin Page**: `app/pages/role-permissions.vue`
+- **Komponen Domain**: `RoleRecordsTable.vue`, `RoleFormModal.vue`.
+- **Fitur**: Daftar master role (`roles.json`), modal Add/Edit role yang tersinkronisasi bersih saat dibuka, navigasi ke matriks permission, dan hapus role via `SalesConfirmDelete`.
+
+### 33.4 Permissions Matrix (`/role`)
+- **Thin Page**: `app/pages/role.vue`
+- **Composable**: `usePermissions.ts`
+- **Fitur**: Matriks hak akses berjenjang 14 Menu Group dan 97 Sub-Page riil aplikasi (Dashboard, Sales, Payment, Orders, Purchases, HRM, Content, User Management, Setting, dll). Dilengkapi collapsible accordion table, toggle bulk *Allow All Menu Group*, pencarian halaman cepat, dan tombol *Save Permissions* persisten ke `permissions.json`.
+
+### 33.5 Delete Account Request (`/delete-account`)
+- **Thin Page**: `app/pages/delete-account.vue`
+- **Komponen Domain**: `DeleteAccountRecordsTable.vue`.
+- **Fitur**: Moderasi dan persetujuan penghapusan akun pengguna, tanggal permintaan & requisition, dialog konfirmasi persetujuan hapus akun permanen.
+
+---
+
+## 34. Standarisasi Penuh Modul PEOPLE (5 Sub-Menu)
+
+Seluruh 5 sub-menu pada modul **PEOPLE** telah distandarisasi untuk mengeliminasi skeleton flicker pada pencarian dan memastikan integritas data:
+
+1. **Customers (`/customers`)**: In-memory client search 0ms, filter status & DateRangePicker, modal Add/Edit/View, persistensi `customers.json`.
+2. **Customer Types (`/customer-type`)**: Master tipe pelanggan (Reguler, VIP, Corporate), modal Add/Edit, persistensi `customer-types.json`.
+3. **Address (`/address`)**: Dukungan multi-entitas (Customer & Supplier), tab navigasi, modal Add/Edit dinamis, normalisasi field alamat di `address.json`.
+4. **Supplier (`/supplier`)**: Master rekanan vendor dan supplier bahan cetak, modal Add/Edit form, tombol sub-modal alamat, persistensi `suppliers.json`.
+5. **Branch Store (`/store-list`)**: Master cabang gerai toko fisik dan workshop cetak, status aktif/inaktif, modal Add/Edit persisten ke `stores.json`.
+
+---
+
+## 35. Standarisasi Penuh Modul HRM (4 Sub-Menu)
+
+Seluruh 4 sub-menu pada modul **HRM** telah distandarisasi dengan zero-flicker table reactivity dan persistensi payroll:
+
+1. **Employees (`/employees`)**: 4 KPI cards statistik, 8 kolom tabel, filter departemen dan status, modal Add/Edit/View karyawan lengkap, persistensi `employees.json`.
+2. **Department (`/department`)**: 4 KPI cards, modal Add/Edit anggota departemen dengan member chips, persistensi `departments.json`.
+3. **Employee Salary (`/employee-salary`)**: 4 KPI cards, CurrencyDisplay right-align, modal rincian gaji pokok dan tunjangan dinamis, persistensi `employeeSalaries.json`.
+4. **Payslip (`/payslip`)**: 4 KPI cards, modal kalkulasi slip gaji otomatis, cetak slip gaji A4, persistensi `payslips.json`.
+
+---
+
+## 36. Modernisasi & Standarisasi Penuh Modul CONTENT (9 Sub-Menu)
+
+Seluruh 9 sub-menu pada kelompok **CONTENT** telah dimodernisasi dari template legacy HTML ke standar Nuxt 4 Tailwind CSS Dulank:
+
+1. **All Blog (`/all-blog`)**: Tampilan Card Grid responsif 2 kolom dengan **preview gambar besar**, badge kategori toska, badge status pill, baris meta tanggal/penulis, tombol aksi cepat edit/delete, filter status/sort, modal CRUD `BlogFormModal.vue`, dan skeleton card loader estetik.
+2. **Blog Category (`/blog-category`)**: Pengelolaan master kategori blog, slug, deskripsi, modal CRUD `BlogCategoryFormModal.vue`, persistensi `blog-categories.json`.
+3. **Blog Tag (`/blog-tag`)**: Pengelolaan tagar artikel blog, slug, modal CRUD `BlogTagFormModal.vue`, persistensi `blog-tags.json`.
+4. **Blog Comment (`/blog-comment`)**: Moderasi komentar artikel, rating bintang, quick inline status modifier (Approved/Pending/Spam), modal `BlogCommentModal.vue`.
+5. **FAQ Question (`/faq`)**: Tanya jawab interaktif, pengelompokan kategori FAQ dinamis dari API master kategori, urutan tampil, modal `FaqFormModal.vue`, tab navigasi terpadu ke Categories, persistensi `faqs.json`.
+6. **Our Client (`/our-client`)**: Katalog logo rekanan/klien industri, thumbnail preview, URL website, modal `ClientFormModal.vue`, persistensi `clients.json`.
+7. **Download Files (`/download-files`)**: Pengelolaan file unduhan publik/user, ukuran file, icon tipe, counter jumlah unduh, modal `DownloadFileFormModal.vue`.
+8. **Footer (`/footer`)**: Pengelolaan link dan section navigasi footer webstore, urutan menu, target jendela, modal `FooterFormModal.vue`.
+9. **Banner (`/banner`)**: Pengelolaan slider banner promo webstore, pratinjau gambar, link pengalihan, tanggal tayang awal & akhir, modal `BannerFormModal.vue`.
+
+---
+
+## 37. Pemisahan Route & Standarisasi Penuh Modul FAQ
+
+Sebelumnya di `AppSidebar.vue`, sub-menu **Category** dan **FAQ Question** sama-sama mengarah ke route `/faq`, sehingga keduanya aktif bersamaan dan tidak ada halaman terpisah untuk mengelola kategori FAQ. Kini telah dipisahkan secara bersih:
+
+1. **Sidebar Navigation (`app/components/layout/AppSidebar.vue`)**:
+   - `Category` diarahkan ke route tersendiri: `to: "/faq-category"`.
+   - `FAQ Question` diarahkan ke route: `to: "/faq"`.
+   - State aktif kini independen dan tidak menyala bersamaan.
+
+2. **FAQ Category Page (`app/pages/faq-category.vue`)**:
+   - Dikosongkan menjadi placeholder clean empty state sederhana, sesuai kenyataan bahwa di template bawaan asli (`legacy/static-source/`) file `faq-category.html` tidak ada.
+   - Sub-navigation tabs pada `faq.vue` dibersihkan sehingga `/faq` kembali menjadi halaman FAQ tunggal yang bersih sesuai acuan `faq.html`.
+
+3. **Backend & Persistence API**:
+   - Type definition di `server/types/faq.ts`: `FaqCategory` & `FaqCategoryFormData`.
+   - Endpoint GET & POST di `server/api/faq-categories/index.get.ts` & `server/api/faq-categories/index.post.ts`.
+   - Endpoint DELETE di `server/api/faq-categories/[id].delete.ts`.
+   - Dataset persisten di `server/data/faq-categories.json` terdaftar di `server/utils/bundledData.ts`.
+
+---
+
+## 38. Standarisasi Tampilan Interaktif Our Client (`/our-client`) - Draggable Card Grid
+
+Sesuai dengan acuan template visual `dulank-admin.netlify.app/our-client.html`:
+
+1. **Card Grid Responsif (6 Kolom)**:
+   - Menggunakan layout grid 6 kolom (`grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6`).
+   - Setiap kartu menampilkan logo vektor SVG resmi (YouTube, Google, Facebook, Pinterest, Behance, Discord, SpaceX, Microsoft, Amazon, Android, WordPress, Dropbox) dengan kualitas tinggi dan preserve aspect ratio.
+   - Tampilan bersih tanpa banner teks petunjuk tambahan yang mengganggu visual.
+2. **Interaktivitas Drag & Drop (HTML5 Native Drag API)**:
+   - Kartu dapat di-drag dan di-drop untuk mengubah urutan posisi secara instan (*zero latency*).
+   - Efek visual saat drag: kartu yang ditarik menjadi elevated dengan bayangan tebal (`shadow-2xl`), border aktif, dan kursor `cursor-grab / grabbing`.
+   - Target drop disorot dengan highlight border dan feedback posisi (`#1` sampai `#12`).
+3. **Persistensi Urutan**:
+   - Endpoint baru: `server/api/clients/reorder.post.ts` menyimpan array ID baru secara persisten ke `clients.json`.
+   - Composable `app/composables/useClients.ts` dilengkapi fungsi `reorderClients(ids)`.
+   - Tersedia tombol `Reset Order` untuk mengembalikan urutan alfabetis.
+4. **Manajemen CRUD Modal**:
+   - Tetap terintegrasi dengan `ClientFormModal.vue` untuk menambah/mengedit client logo dan `SalesConfirmDelete.vue` untuk menghapus.
+
+---
+
+## 39. Standarisasi Tampilan Modern Download Files (`/download-files`) - Full File Manager
+
+Sesuai dengan acuan template visual `dulank-admin.netlify.app/download-files.html`:
+
+1. **Header & Navigation Toolbar**:
+   - Judul `Download Files` dan subtitle `Manage your files`.
+   - Filter kepemilikan: `Owned By Me`, `Owned by Anyone`, `Not Owned by Me` dengan ikon sliders.
+   - Tombol reload reaktif (`rotate-ccw`), collapse header, dan tombol utama `+ Upload Files` (warna oranye `#F97316`).
+   - Garis pemisah dengan toggle circle button (`<` / `>`) untuk menyembunyikan atau menampilkan sidebar kiri secara responsif.
+2. **Sidebar Manajemen File Kiri (`DownloadFileSidebar.vue`)**:
+   - Header ikon folder `Files`.
+   - Tombol `+ New` dengan dropdown menu interaktif: `Upload File`, `Upload Folder`, dan `Create folder`.
+   - Indikator penggunaan kapasitas: `Storage 70%`, danger progress bar merah (75%), dan rincian `78.5 GB of 1 TB Free Used`.
+3. **Filter & Pencarian Toolbar Atas**:
+   - Dropdown `Sort by Date` (Relevance, Size, Order Ascending, Order Descending).
+   - Input search instan tanpa reload (*zero-latency reactive filtering*).
+   - Dropdown `Recent` (Last Week, Last Month).
+   - Dropdown `All File types` (Folders, PDF, Images, Videos, Audios, Excel).
+4. **Bagian Files Unggulan / Pinned Grid (`DownloadFileCardGrid.vue`)**:
+   - Header bagian `Files` dengan tombol toggle `Hide` / `Show`.
+   - Grid 2-kolom kartu file dengan ikon vektor asli (`pdf-02.svg`, `xls.svg`, `video.svg`, `audio.svg`, `folder.svg`).
+   - Tombol toggle bintang favorit (kuning emas saat aktif) dan dropdown opsi per kartu (`more-vertical`).
+   - Meta info literal: waktu edit, jumlah members, dan ukuran berkas.
+5. **Bagian All Files (`DownloadFileTable.vue`)**:
+   - Header `All Files` dengan view switchers: List View, Layout View (2-kolom), dan Grid View.
+   - Dropdown filter `Last Modified`.
+   - Tabel list view dengan kolom: `Name` (ikon + nama berkas), `Last Modified` (tanggal & pengunggah), `Size`, `Owned Member` (avatar badge inisial/foto), dan `Action` (bintang favorit + dropdown menu).
+   - Kontrol pagination: `1 - 5 of 5 items` dengan navigasi halaman.
+6. **Modals & Dialogs**:
+   - `UploadFileModal.vue`: Area drag & drop file interaktif (`drag-drop.svg`), progress upload bar, daftar upload queue dengan tombol hapus, serta tombol submit/cancel.
+   - `CreateFolderModal.vue`: Modal pembuatan folder baru.
+   - `DownloadFileFormModal.vue`: Form modal edit/rename file.
+   - `SalesConfirmDelete.vue`: Modal konfirmasi hapus permanen.
+
+---
+
+## 40. Standarisasi Tampilan Konfigurasi Footer (`/footer`)
+
+Sesuai dengan acuan template asli `legacy/static-source/footer.html`:
+
+Halaman `/footer` bukanlah tabel data generik, melainkan formulir konfigurasi lengkap untuk tata letak dan konten footer toko online/sistem:
+
+1. **Konten Utama**:
+   - `Judul`: Nama perusahaan / entitas percetakan.
+   - `Teks singkat (deskripsi)`: Tagline atau ringkasan profil perusahaan.
+   - `Copyright`: Format hak cipta resmi tahun berjalan.
+2. **Info Kami (Quick Links)**:
+   - Pengelolaan tautan cepat dinamis (Judul link dan URL tujuan).
+   - Fitur tambah tautan baru dan hapus baris (*inline dynamic array*).
+3. **Panduan Pelanggan Baru**:
+   - Pengelolaan tautan panduan/manual pelanggan baru (Judul dan URL).
+   - Fitur tambah panduan baru dan hapus baris.
+4. **Kontak & Alamat**:
+   - Alamat fisik workshop / kantor percetakan.
+   - Nomor telepon kantor & alamat email resmi.
+5. **Social Media**:
+   - Input URL lengkap untuk Facebook, Instagram, Twitter / X, LinkedIn, dan YouTube.
+6. **Live Footer Preview**:
+   - Tampilan visual langsung (*live preview*) di bagian bawah halaman yang memvisualisasikan bagaimana footer akan tampil di toko online publik secara real-time.
+7. **Penyimpanan & Persistensi**:
+   - Disimpan persisten melalui endpoint `server/api/footer-config/index.post.ts` ke `server/data/footer-config.json` dan terdaftar di `server/utils/bundledData.ts`.
+
+---
+
+## 41. Standarisasi Tampilan Halaman Banner (`/banner`) - Dual Column Card Layout
+
+Sesuai dengan acuan template visual asli `legacy/static-source/banner.html` dan `dulank-admin.netlify.app/banner.html`:
+
+1. **Tata Letak 2 Kolom Sejajar (Main Banner & Product Banner)**:
+   - Bagian kiri (`col-12 col-lg-6`): **Main Banner**, dilengkapi tombol `Add Main Banner` (`#F97316`).
+   - Bagian kanan (`col-12 col-lg-6`): **Product Banner**, dilengkapi tombol `Add Product Banner` (`#F97316`).
+2. **Kartu Banner Interaktif (`.banner-item`)**:
+   - Grid kartu 2-kolom responsif (`col-12 col-sm-6`).
+   - Badge jadwal di pojok kiri atas thumbnail: `Active` (badge hijau) atau `Inactive` (badge abu-abu) berdasarkan status dan rentang tanggal aktif.
+   - Tombol aksi cepat di pojok kanan atas thumbnail:
+     - Tombol Edit (putih/light dengan ikon `edit`).
+     - Tombol Delete (merah dengan ikon `trash-2`).
+   - Preview thumbnail gambar dengan tinggi 120px, object-fit cover, dan border radius rapi.
+   - Rincian banner di bawah thumbnail: Judul tebal, deskripsi singkat (text-truncate), waktu Start, dan waktu End.
+3. **Modal Add / Edit Banner (`BannerFormModal.vue`)**:
+   - Dukungan input URL Gambar maupun upload file gambar langsung (dengan instant FileReader preview).
+   - Tombol preset cepat gambar percetakan (Brosur Promo, Buku Yasin, Kaos Custom).
+   - Input Title, Description, serta rentang jadwal Start & End menggunakan format `datetime-local`.
+   - Live visual preview thumbnail di dalam formulir modal sebelum disimpan.
+   - Tombol aksi Cancel & Submit.
+4. **Backend & Persistensi**:
+   - Type definition di `server/types/banner.ts` mendukung tipe `'main' | 'product'`, `src`, `desc`, `start`, `end`.
+   - Dataset tersimpan di `server/data/banners.json` dan terdaftar di `server/utils/bundledData.ts`.
+   - Endpoints CRUD: `server/api/banners/index.get.ts`, `server/api/banners/index.post.ts`, dan `server/api/banners/[id].delete.ts`.
+
+---
+
+## 42. Standarisasi Skeleton Loader pada Seluruh Sub-Menu Content
+
+Penyelarasan visual saat data dimuat (*loading state*) telah diimplementasikan pada seluruh 10 sub-menu grup Content untuk mencegah *layout shift* (CLS):
+
+1. **Banner (`/banner`)**: Dual-Column Card Grid Skeleton (`grid-cols-1 lg:grid-cols-2` memuat `grid-cols-1 sm:grid-cols-2` kartu dengan thumbnail 120px dan baris teks beranimasi pulse).
+2. **Download Files (`/download-files`)**: Files Manager Skeleton mencakup 4 quick-access file cards placeholder dan 5 baris file table placeholder.
+3. **Footer (`/footer`)**: Multi-Section Form Skeleton dengan 4 blok form placeholder beranimasi pulse untuk label, input, dan textarea.
+4. **All Blog (`/all-blog`)**: 2-Column Card Grid Skeleton dengan placeholder preview gambar besar 192px (h-48), tag, judul, dan ringkasan artikel.
+5. **Our Client (`/our-client`)**: 6-Column Grid Skeleton dengan 12 kotak placeholder logo beranimasi pulse.
+6. **Blog Tag, Blog Category, Blog Comment, FAQ Question**: Menggunakan `TableSkeleton` via `SalesFeedback.vue` yang seragam dan presisi untuk tampilan data tabular.
+7. **FAQ Category**: Render instan placeholder clean empty-state.
+
+
+
+

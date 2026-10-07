@@ -1,515 +1,486 @@
+<script setup lang="ts">
+import type { Blog, BlogFormData } from '#server/types/blog'
+import { useBlogs } from '~/composables/useBlogs'
+import { useBlogCategories } from '~/composables/useBlogCategories'
+import { useTablePrint } from '~/composables/useTablePrint'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import BlogFormModal from '~/components/blog/BlogFormModal.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+
+useLegacyPage({ title: 'All Blogs', sweetAlert: false })
+
+const { blogs, pending, error, refresh, saveBlog, deleteBlog } = useBlogs()
+const { categories } = useBlogCategories()
+
+// Filter states
+const searchQuery = ref('')
+const filterStatus = ref('')
+const filterCategory = ref('')
+const sortBy = ref('newest')
+
+// Modal state
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeBlogForEdit = ref<Blog | null>(null)
+const blogToDelete = ref<Blog | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+const categoryNames = computed(() => categories.value.map(c => c.name))
+
+function formatBlogDate(dateStr?: string) {
+  if (!dateStr) return '-'
+  try {
+    const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return dateStr
+    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d)
+  } catch {
+    return dateStr
+  }
+}
+
+// In-memory instant client-side filtering & sorting (0ms delay, ZERO skeleton flicker)
+const filteredBlogs = computed(() => {
+  let list = [...blogs.value]
+
+  // Search filter
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
+    list = list.filter((b) =>
+      b.title.toLowerCase().includes(q) ||
+      (b.author && b.author.toLowerCase().includes(q)) ||
+      (b.category && b.category.toLowerCase().includes(q)) ||
+      (b.excerpt && b.excerpt.toLowerCase().includes(q)) ||
+      (Array.isArray(b.tags) && b.tags.some(t => t.toLowerCase().includes(q)))
+    )
+  }
+
+  // Category filter
+  if (filterCategory.value && filterCategory.value !== 'All') {
+    list = list.filter(b => b.category === filterCategory.value)
+  }
+
+  // Status filter
+  if (filterStatus.value && filterStatus.value !== 'All') {
+    list = list.filter(b => b.status.toLowerCase() === filterStatus.value.toLowerCase())
+  }
+
+  // Sort by
+  if (sortBy.value === 'newest') {
+    list.sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''))
+  } else if (sortBy.value === 'oldest') {
+    list.sort((a, b) => (a.publishedAt || '').localeCompare(b.publishedAt || ''))
+  } else if (sortBy.value === 'popular') {
+    list.sort((a, b) => (b.viewsCount ?? 0) - (a.viewsCount ?? 0))
+  } else if (sortBy.value === 'title') {
+    list.sort((a, b) => a.title.localeCompare(b.title))
+  }
+
+  return list
+})
+
+function handleAdd() {
+  isEditMode.value = false
+  activeBlogForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(blog: Blog) {
+  isEditMode.value = true
+  activeBlogForEdit.value = blog
+  isFormModalOpen.value = true
+}
+
+function handleDeleteRequest(blog: Blog) {
+  blogToDelete.value = blog
+}
+
+async function confirmDelete() {
+  if (!blogToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteBlog(blogToDelete.value.id)
+    showToast(res?.message || `Blog '${blogToDelete.value.title}' deleted successfully`)
+    blogToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete blog')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function handleFormSubmit(formData: BlogFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveBlog(formData)
+    showToast(res?.message || (formData.id ? 'Blog updated successfully' : 'Blog created successfully'))
+    isFormModalOpen.value = false
+    activeBlogForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save blog')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & PDF
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'title', label: 'Title' },
+  { key: 'category', label: 'Category' },
+  { key: 'author', label: 'Author' },
+  { key: 'publishedAt', label: 'Publish Date' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+  { key: 'viewsCount', label: 'Views', align: 'center' as const },
+  { key: 'commentsCount', label: 'Comments', align: 'center' as const },
+]
+
+function handleExportExcel() {
+  const header = ['ID', 'Title', 'Slug', 'Category', 'Author', 'Publish Date', 'Status', 'Views', 'Comments', 'Tags']
+  const rows = filteredBlogs.value.map(b => [
+    `"${b.id}"`,
+    `"${(b.title || '').replace(/"/g, '""')}"`,
+    `"${(b.slug || '').replace(/"/g, '""')}"`,
+    `"${b.category || ''}"`,
+    `"${b.author || ''}"`,
+    `"${b.publishedAt || ''}"`,
+    `"${b.status}"`,
+    `"${b.viewsCount ?? 0}"`,
+    `"${b.commentsCount ?? 0}"`,
+    `"${(Array.isArray(b.tags) ? b.tags.join(', ') : (b.tags || '')).replace(/"/g, '""')}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `blogs_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Blogs list exported to Excel (CSV) successfully')
+}
+</script>
+
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Blogs</h4>
-            <h6>Manage your blogs</h6>
-          </div>
+  <div class="dulank-page dulank-page-blogs space-y-6 p-4 md:p-6">
+    <!-- Success Toast Notification -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
+    </div>
+
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Blogs"
+      subtitle="Manage your blogs"
+      add-label="Add Blog"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
+
+    <!-- Filter Control Card -->
+    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <!-- Search Input with Icon -->
+        <div class="relative w-full sm:max-w-xs">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search"
+            class="w-full rounded-lg border border-gray-200 bg-white py-2 ps-3 pe-9 text-xs text-gray-800 placeholder-gray-400 focus:border-[#FE9F43] focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+          />
+          <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3 text-gray-400">
+            <FeatherIcon name="search" size="14" />
+          </span>
         </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printBlogs"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refreshBlogs"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Blog
+
+        <!-- Filter Dropdowns -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Status Dropdown -->
+          <div class="relative">
+            <select
+              v-model="filterStatus"
+              class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-700 focus:border-[#FE9F43] focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 cursor-pointer pe-7"
+            >
+              <option value="">Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="relative">
+            <select
+              v-model="sortBy"
+              class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-700 focus:border-[#FE9F43] focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 cursor-pointer pe-7"
+            >
+              <option value="newest">Sort By : Last 7 Days</option>
+              <option value="oldest">Sort By : Oldest</option>
+              <option value="popular">Sort By : Most Popular</option>
+              <option value="title">Sort By : Title</option>
+            </select>
+          </div>
+
+          <!-- Excel Export Button -->
+          <button
+            type="button"
+            title="Export Excel (CSV)"
+            class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            @click="handleExportExcel"
+          >
+            <FeatherIcon name="download" size="13" />
+            <span class="hidden sm:inline">Excel</span>
           </button>
         </div>
       </div>
+    </div>
 
-      <!-- Filter Controls -->
-      <div class="card mb-4">
-        <div class="card-body pb-3">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-            <div class="search-set mb-0">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search blog title or category..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-3 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                  type="button"
-                  @click="statusDropdownOpen = !statusDropdownOpen"
-                >
-                  Status: {{ filterStatus || "All" }}
-                  <i class="ti ti-chevron-down ms-1"></i>
-                </button>
-                <ul
-                  v-if="statusDropdownOpen"
-                  class="dropdown-menu dropdown-menu-end p-2 show"
-                  style="display: block; position: absolute"
-                >
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = '';
-                        statusDropdownOpen = false;
-                      "
-                      >All Status</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = 'Active';
-                        statusDropdownOpen = false;
-                      "
-                      >Active</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        filterStatus = 'Inactive';
-                        statusDropdownOpen = false;
-                      "
-                      >Inactive</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                  type="button"
-                  @click="sortDropdownOpen = !sortDropdownOpen"
-                >
-                  Sort By: {{ sortByLabel }}
-                  <i class="ti ti-chevron-down ms-1"></i>
-                </button>
-                <ul
-                  v-if="sortDropdownOpen"
-                  class="dropdown-menu dropdown-menu-end p-2 show"
-                  style="display: block; position: absolute"
-                >
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'recent';
-                        sortDropdownOpen = false;
-                      "
-                      >Recently Added</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'asc';
-                        sortDropdownOpen = false;
-                      "
-                      >Ascending</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0);"
-                      class="dropdown-item rounded-1"
-                      @click="
-                        sortBy = 'desc';
-                        sortDropdownOpen = false;
-                      "
-                      >Descending</a
-                    >
-                  </li>
-                </ul>
-              </div>
+    <!-- Skeleton Loader for Large Image Card Grid -->
+    <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div
+        v-for="i in 4"
+        :key="i"
+        class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden dark:border-gray-800 dark:bg-gray-900 animate-pulse"
+      >
+        <!-- Big Image Placeholder -->
+        <div class="w-full aspect-[16/10] sm:aspect-[16/9] bg-gray-200 dark:bg-gray-800 relative">
+          <div class="absolute top-3 left-3 h-6 w-20 rounded bg-gray-300 dark:bg-gray-700" />
+          <div class="absolute top-3 right-3 h-6 w-16 rounded-full bg-gray-300 dark:bg-gray-700" />
+        </div>
+        <!-- Card Body Placeholder -->
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="h-4 w-40 rounded bg-gray-200 dark:bg-gray-800" />
+            <div class="flex gap-2">
+              <div class="h-4 w-4 rounded bg-gray-200 dark:bg-gray-800" />
+              <div class="h-4 w-4 rounded bg-gray-200 dark:bg-gray-800" />
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Blog Grid -->
-      <div class="row g-4">
-        <div v-for="blog in filteredBlogs" :key="blog.id" class="col-xxl-4 col-md-6">
-          <div class="card h-100 shadow-sm border">
-            <div class="card-body d-flex flex-column">
-              <div class="w-100 position-relative mb-3 overflow-hidden rounded">
-                <img class="w-100 object-fit-cover rounded" style="height: 220px" :src="blog.image" :alt="blog.title" />
-                <div class="position-absolute top-2 start-2 d-flex gap-2">
-                  <span class="badge bg-info badge-custom fs-11 fw-medium px-2 py-1">{{ blog.category }}</span>
-                  <span
-                    class="badge badge-status fs-11 fw-medium px-2 py-1"
-                    :class="blog.status === 'Active' ? 'bg-success' : 'bg-secondary'"
-                  >
-                    • {{ blog.status }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Author and Date -->
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <div class="d-flex align-items-center text-muted small">
-                  <span class="me-3 d-flex align-items-center"> <i class="ti ti-calendar me-1"></i> {{ blog.date }} </span>
-                  <span class="border-start ps-2 d-flex align-items-center">
-                    <i class="ti ti-user me-1"></i> {{ blog.author }}
-                  </span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <button type="button" class="btn btn-sm btn-icon text-primary p-0" title="Edit" @click="openEditModal(blog)">
-                    <i class="ti ti-edit fs-16"></i>
-                  </button>
-                  <button type="button" class="btn btn-sm btn-icon text-danger p-0" title="Delete" @click="deleteBlog(blog.id)">
-                    <i class="ti ti-trash fs-16"></i>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Title and Excerpt -->
-              <h5 class="card-title mb-2">
-                <a href="javascript:void(0);" class="text-dark hover:text-primary text-decoration-none fw-semibold">
-                  {{ blog.title }}
-                </a>
-              </h5>
-              <p class="text-muted small flex-grow-1 line-clamp-2">{{ blog.excerpt }}</p>
-
-              <!-- Tags -->
-              <div class="d-flex flex-wrap gap-1 mt-2 pt-2 border-top">
-                <span v-for="tag in blog.tags" :key="tag" class="badge bg-light text-secondary border fs-11"> #{{ tag }} </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="filteredBlogs.length === 0" class="col-12 text-center py-5">
-          <i class="ti ti-article-off text-muted" style="font-size: 3rem"></i>
-          <p class="text-muted mt-2">No blogs found matching your criteria.</p>
+          <div class="h-6 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
         </div>
       </div>
     </div>
 
-    <!-- Add/Edit Blog Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" style="background-color: rgba(0, 0, 0, 0.5)" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ isEdit ? "Edit Blog" : "Add Blog" }}</h4>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+    <!-- Error State -->
+    <div
+      v-else-if="error"
+      class="rounded-xl border border-rose-200 bg-rose-50 p-6 text-center dark:border-rose-900/40 dark:bg-rose-950/20"
+    >
+      <FeatherIcon name="alert-triangle" size="24" class="mx-auto mb-2 text-rose-500" />
+      <p class="text-sm font-semibold text-rose-800 dark:text-rose-300">
+        {{ error?.message || 'Failed to load blog posts. Please try again.' }}
+      </p>
+      <button
+        type="button"
+        class="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-rose-700"
+        @click="refresh()"
+      >
+        <FeatherIcon name="rotate-cw" size="13" />
+        <span>Retry</span>
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      v-else-if="filteredBlogs.length === 0"
+      class="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900"
+    >
+      <div class="mx-auto flex size-14 items-center justify-center rounded-full bg-gray-100 text-gray-400 dark:bg-gray-800">
+        <FeatherIcon name="file-text" size="24" />
+      </div>
+      <h3 class="mt-3 text-sm font-bold text-gray-900 dark:text-white">No blog posts found</h3>
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        {{ searchQuery ? `No articles matching "${searchQuery}". Try adjusting your filters.` : 'Start by creating your first blog article.' }}
+      </p>
+      <button
+        v-if="searchQuery || filterStatus || filterCategory"
+        type="button"
+        class="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
+        @click="searchQuery = ''; filterStatus = ''; filterCategory = ''"
+      >
+        <FeatherIcon name="x" size="13" />
+        <span>Clear Filters</span>
+      </button>
+      <button
+        v-else
+        type="button"
+        class="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#FE9F43] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#e08933]"
+        @click="handleAdd"
+      >
+        <FeatherIcon name="plus" size="14" />
+        <span>Add Blog</span>
+      </button>
+    </div>
+
+    <!-- Large Preview Image Card Grid (2 Columns as in Screenshot) -->
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <article
+        v-for="blog in filteredBlogs"
+        :key="blog.id"
+        class="group relative flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 overflow-hidden"
+      >
+        <!-- Big Image Preview Area -->
+        <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <img
+            :src="blog.image || 'https://images.unsplash.com/photo-1556742049-0a67e55722ee?w=800&auto=format&fit=crop&q=60'"
+            :alt="blog.title"
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+
+          <!-- Category Badge (Top Left) -->
+          <div class="absolute top-3.5 left-3.5">
+            <span class="inline-flex items-center rounded-md bg-[#00A389] px-3 py-1 text-xs font-semibold text-white shadow-md tracking-wide">
+              {{ blog.category || 'General' }}
+            </span>
           </div>
-          <form @submit.prevent="saveBlog">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-12">
-                  <label class="form-label">Image URL / Preview</label>
-                  <div class="d-flex gap-3 align-items-center mb-2">
-                    <img
-                      :src="
-                        form.image ||
-                        'https://assets.penguinrandomhouse.com/wp-content/uploads/2025/02/08160313/PRH_BooksBeforeYouDie-1200x628-1.jpg'
-                      "
-                      alt="Preview"
-                      class="rounded border object-fit-cover"
-                      style="width: 100px; height: 70px"
-                    />
-                    <div class="flex-grow-1">
-                      <input v-model="form.image" type="text" class="form-control" placeholder="https://example.com/image.jpg" />
-                    </div>
-                  </div>
-                </div>
 
-                <div class="col-md-12">
-                  <label class="form-label">Blog Title <span class="text-danger">*</span></label>
-                  <input v-model="form.title" type="text" class="form-control" required placeholder="Enter blog title" />
-                </div>
+          <!-- Status Badge (Top Right) -->
+          <div class="absolute top-3.5 right-3.5">
+            <span
+              :class="[
+                'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-md backdrop-blur-md',
+                blog.status === 'Active'
+                  ? 'bg-emerald-500/90 text-white'
+                  : 'bg-rose-500/90 text-white'
+              ]"
+            >
+              <span class="size-1.5 rounded-full bg-white animate-pulse" />
+              <span>{{ blog.status }}</span>
+            </span>
+          </div>
+        </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Category <span class="text-danger">*</span></label>
-                  <select v-model="form.category" class="form-select form-select-lg" required>
-                    <option value="Features">Features</option>
-                    <option value="Guide">Guide</option>
-                    <option value="Security">Security</option>
-                    <option value="Printing & Packaging">Printing & Packaging</option>
-                    <option value="Business Tips">Business Tips</option>
-                  </select>
+        <!-- Card Body Content -->
+        <div class="flex flex-1 flex-col justify-between p-5">
+          <div class="space-y-3">
+            <!-- Meta Row: Date, Author & Actions -->
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div class="flex items-center gap-4">
+                <!-- Date -->
+                <div class="flex items-center gap-1.5">
+                  <FeatherIcon name="calendar" size="14" class="text-gray-400" />
+                  <span>{{ formatBlogDate(blog.publishedAt) }}</span>
                 </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Tags (comma-separated)</label>
-                  <input v-model="tagsInput" type="text" class="form-control" placeholder="Retail, POS, Guide" />
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">Excerpt / Short Description</label>
-                  <textarea
-                    v-model="form.excerpt"
-                    rows="2"
-                    class="form-control"
-                    placeholder="Brief summary of article..."
-                  ></textarea>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">Content Description <span class="text-danger">*</span></label>
-                  <textarea
-                    v-model="form.content"
-                    rows="4"
-                    class="form-control"
-                    placeholder="Write blog content here..."
-                    required
-                  ></textarea>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="d-flex align-items-center mb-3">
-                    <label class="form-label mb-0 me-3">Status Active</label>
-                    <div class="form-check form-switch">
-                      <input
-                        v-model="formStatusBool"
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="blogStatusSwitch"
-                      />
-                    </div>
-                  </div>
+                <!-- Author -->
+                <div class="flex items-center gap-1.5">
+                  <FeatherIcon name="user" size="14" class="text-gray-400" />
+                  <span>{{ blog.author || 'Admin' }}</span>
                 </div>
               </div>
+
+              <!-- Action Buttons (Edit & Delete) -->
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  title="Edit Blog"
+                  aria-label="Edit Blog"
+                  class="rounded p-1 text-gray-400 transition hover:bg-gray-100 hover:text-[#FE9F43] dark:hover:bg-gray-800"
+                  @click="handleEdit(blog)"
+                >
+                  <FeatherIcon name="edit" size="15" />
+                </button>
+                <button
+                  type="button"
+                  title="Delete Blog"
+                  aria-label="Delete Blog"
+                  class="rounded p-1 text-gray-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40"
+                  @click="handleDeleteRequest(blog)"
+                >
+                  <FeatherIcon name="trash-2" size="15" />
+                </button>
+              </div>
             </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? "Update Blog" : "Submit Blog" }}
-              </button>
+
+            <!-- Blog Title -->
+            <h3
+              class="text-base sm:text-lg font-bold text-gray-900 transition-colors line-clamp-2 hover:text-[#FE9F43] dark:text-white cursor-pointer"
+              :title="blog.title"
+              @click="handleEdit(blog)"
+            >
+              {{ blog.title }}
+            </h3>
+
+            <!-- Short Excerpt (Optional) -->
+            <p v-if="blog.excerpt" class="text-xs text-gray-500 line-clamp-2 dark:text-gray-400">
+              {{ blog.excerpt }}
+            </p>
+          </div>
+
+          <!-- Bottom Tags & Engagement info -->
+          <div v-if="blog.tags && blog.tags.length" class="mt-4 flex flex-wrap items-center gap-1.5 pt-3 border-t border-gray-100 dark:border-gray-800">
+            <span
+              v-for="tag in (Array.isArray(blog.tags) ? blog.tags : [blog.tags])"
+              :key="tag"
+              class="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+            >
+              #{{ tag }}
+            </span>
+            <div class="ms-auto flex items-center gap-3 text-[11px] text-gray-400">
+              <span class="inline-flex items-center gap-1" title="Views">
+                <FeatherIcon name="eye" size="12" />
+                {{ blog.viewsCount ?? 0 }}
+              </span>
+              <span class="inline-flex items-center gap-1" title="Comments">
+                <FeatherIcon name="message-square" size="12" />
+                {{ blog.commentsCount ?? 0 }}
+              </span>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
+
+    <!-- Add / Edit Modal -->
+    <BlogFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :blog-data="activeBlogForEdit"
+      :categories="categoryNames"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!blogToDelete"
+      :busy="isBusy"
+      title="Delete Blog"
+      :description="`Are you sure you want to delete blog '${blogToDelete?.title}'? This action cannot be undone.`"
+      @confirm="confirmDelete"
+      @close="blogToDelete = null"
+    />
+
+    <!-- Document Print / PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Blogs List Report"
+      :columns="printColumns"
+      :items="filteredBlogs"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from "vue";
-
-interface Blog {
-  id: number;
-  title: string;
-  category: string;
-  status: "Active" | "Inactive";
-  date: string;
-  author: string;
-  image: string;
-  excerpt: string;
-  tags: string[];
-  content: string;
-}
-
-const blogs = ref<Blog[]>([
-  {
-    id: 1,
-    title: "What is a POS System? A Beginner’s Guide",
-    category: "Features",
-    status: "Active",
-    date: "25 Nov 2024",
-    author: "Gertrude Bowie",
-    image: "https://assets.penguinrandomhouse.com/wp-content/uploads/2025/02/08160313/PRH_BooksBeforeYouDie-1200x628-1.jpg",
-    excerpt: "Comprehensive overview on how point of sale systems modernize printing businesses and transactions.",
-    tags: ["Retail", "POS", "Tech"],
-    content: "Full beginner guide explaining POS hardware, software, and accounting integration...",
-  },
-  {
-    id: 2,
-    title: "Top 10 Tips for Offset Printing Maintenance",
-    category: "Guide",
-    status: "Active",
-    date: "20 Nov 2024",
-    author: "Sarah Jenkins",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=60",
-    excerpt: "Essential daily, weekly, and monthly maintenance steps for Heidelberg and Komori offset presses.",
-    tags: ["Offset", "Maintenance", "Quality"],
-    content: "Keeping your cylinder rollers clean and dampening system balanced ensures sharp dot reproduction...",
-  },
-  {
-    id: 3,
-    title: "Securing Customer Data and Financial Privacy",
-    category: "Security",
-    status: "Inactive",
-    date: "15 Nov 2024",
-    author: "Alex Thorne",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=60",
-    excerpt: "Best practices for handling corporate customer printing files, contracts, and banking information securely.",
-    tags: ["Security", "Privacy", "Compliance"],
-    content: "Cloud encrypted storage and strict RBAC privileges ensure that sensitive print orders remain confidential...",
-  },
-  {
-    id: 4,
-    title: "How to Choose the Right Paper Stock for Packaging Boxes",
-    category: "Printing & Packaging",
-    status: "Active",
-    date: "10 Nov 2024",
-    author: "Gertrude Bowie",
-    image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=800&auto=format&fit=crop&q=60",
-    excerpt: "Understanding GSM, calipers, Duplex vs Ivory, and corrugated fluting for maximum durability.",
-    tags: ["Packaging", "Paper", "Duplex"],
-    content: "Packaging structural rigidity depends heavily on choosing between 310gsm Ivory board vs Kraft fluting...",
-  },
-  {
-    id: 5,
-    title: "Automating Quotations & Work Orders with Nuxt ERP",
-    category: "Features",
-    status: "Active",
-    date: "02 Nov 2024",
-    author: "David Tan",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60",
-    excerpt: "Eliminate manual calculator errors by utilizing dynamic paper cost formulas and automated job ticket generation.",
-    tags: ["ERP", "Automation", "Workflow"],
-    content: "Direct calculation algorithms allow real-time margin adjustments and fast customer estimates...",
-  },
-]);
-
-const searchQuery = ref("");
-const filterStatus = ref("");
-const sortBy = ref<"recent" | "asc" | "desc">("recent");
-
-const statusDropdownOpen = ref(false);
-const sortDropdownOpen = ref(false);
-
-const sortByLabel = computed(() => {
-  if (sortBy.value === "asc") return "Ascending";
-  if (sortBy.value === "desc") return "Descending";
-  return "Recently Added";
-});
-
-const filteredBlogs = computed(() => {
-  return blogs.value
-    .filter((b) => {
-      const matchSearch =
-        !searchQuery.value ||
-        b.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        b.category.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        b.tags.some((t) => t.toLowerCase().includes(searchQuery.value.toLowerCase()));
-      const matchStatus = !filterStatus.value || b.status === filterStatus.value;
-      return matchSearch && matchStatus;
-    })
-    .sort((a, b) => {
-      if (sortBy.value === "asc") return a.title.localeCompare(b.title);
-      if (sortBy.value === "desc") return b.title.localeCompare(a.title);
-      return b.id - a.id;
-    });
-});
-
-// Modal state
-const modalVisible = ref(false);
-const isEdit = ref(false);
-const currentBlogId = ref<number | null>(null);
-const tagsInput = ref("");
-
-const form = ref({
-  title: "",
-  category: "Features",
-  status: "Active" as "Active" | "Inactive",
-  image: "",
-  excerpt: "",
-  content: "",
-});
-
-const formStatusBool = computed({
-  get: () => form.value.status === "Active",
-  set: (val: boolean) => {
-    form.value.status = val ? "Active" : "Inactive";
-  },
-});
-
-function openAddModal() {
-  isEdit.value = false;
-  currentBlogId.value = null;
-  form.value = {
-    title: "",
-    category: "Features",
-    status: "Active",
-    image: "https://assets.penguinrandomhouse.com/wp-content/uploads/2025/02/08160313/PRH_BooksBeforeYouDie-1200x628-1.jpg",
-    excerpt: "",
-    content: "",
-  };
-  tagsInput.value = "Retail, POS";
-  modalVisible.value = true;
-}
-
-function openEditModal(blog: Blog) {
-  isEdit.value = true;
-  currentBlogId.value = blog.id;
-  form.value = {
-    title: blog.title,
-    category: blog.category,
-    status: blog.status,
-    image: blog.image,
-    excerpt: blog.excerpt,
-    content: blog.content,
-  };
-  tagsInput.value = blog.tags.join(", ");
-  modalVisible.value = true;
-}
-
-function closeModal() {
-  modalVisible.value = false;
-}
-
-function saveBlog() {
-  const parsedTags = tagsInput.value
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
-
-  if (isEdit.value && currentBlogId.value !== null) {
-    const idx = blogs.value.findIndex((b) => b.id === currentBlogId.value);
-    if (idx !== -1) {
-      blogs.value[idx] = {
-        ...blogs.value[idx],
-        ...form.value,
-        tags: parsedTags,
-      };
-    }
-  } else {
-    const newId = blogs.value.length ? Math.max(...blogs.value.map((b) => b.id)) + 1 : 1;
-    blogs.value.unshift({
-      id: newId,
-      ...form.value,
-      date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-      author: "Admin",
-      tags: parsedTags,
-    });
-  }
-  closeModal();
-}
-
-function deleteBlog(id: number) {
-  if (confirm("Are you sure you want to delete this blog?")) {
-    blogs.value = blogs.value.filter((b) => b.id !== id);
-  }
-}
-
-function exportPdf() {
-  alert("Exporting blog list as PDF...");
-}
-
-function printBlogs() {
-  window.print();
-}
-
-function refreshBlogs() {
-  searchQuery.value = "";
-  filterStatus.value = "";
-  sortBy.value = "recent";
-}
-</script>

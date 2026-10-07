@@ -1,376 +1,385 @@
-<template>
-  <div class="page-wrapper">
-    <div class="content">
-      <div class="page-header mt-3">
-        <div class="page-title">
-          <h4>Banners Management</h4>
-          <h6>Manage store main hero sliders and product promo banners</h6>
-        </div>
-      </div>
-
-      <div class="row g-4 mb-4">
-        <!-- Main Banner Section -->
-        <div class="col-lg-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
-              <h5 class="card-title mb-0 fw-bold">Main Banner</h5>
-              <button type="button" class="btn btn-sm btn-primary" @click="openAddModal('main')">
-                <i class="ti ti-plus me-1"></i>Add Main Banner
-              </button>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div v-for="b in mainBanners" :key="b.id" class="col-12">
-                  <div class="card border mb-0 overflow-hidden">
-                    <div class="position-relative">
-                      <img
-                        :src="b.src"
-                        :alt="b.title"
-                        class="w-100 object-fit-cover"
-                        style="height: 180px;"
-                      />
-                      <span class="position-absolute top-2 start-2 badge bg-dark bg-opacity-75 text-white fs-11">
-                        {{ b.id }}
-                      </span>
-                      <div class="position-absolute top-2 end-2 d-flex gap-2">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm shadow-sm py-1 px-2"
-                          title="Edit"
-                          @click="openEditModal(b, 'main')"
-                        >
-                          <i class="ti ti-edit fs-14"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm shadow-sm py-1 px-2"
-                          title="Delete"
-                          @click="deleteBanner(b.id, 'main')"
-                        >
-                          <i class="ti ti-trash fs-14"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="card-body p-3">
-                      <h6 class="fw-bold mb-1">{{ b.title || 'Untitled Banner' }}</h6>
-                      <p class="text-muted small mb-2">{{ b.desc || 'No description provided' }}</p>
-                      <div class="d-flex flex-wrap gap-2 text-muted fs-12 border-top pt-2">
-                        <span><i class="ti ti-calendar-event me-1"></i>Start: {{ formatDate(b.start) }}</span>
-                        <span><i class="ti ti-calendar-off me-1"></i>End: {{ formatDate(b.end) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="mainBanners.length === 0" class="col-12 text-center py-5 text-muted">
-                  <i class="ti ti-photo-off fs-1 text-muted"></i>
-                  <p class="mt-2">No main banners added yet.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product Banner Section -->
-        <div class="col-lg-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
-              <h5 class="card-title mb-0 fw-bold">Product Banner</h5>
-              <button type="button" class="btn btn-sm btn-primary" @click="openAddModal('product')">
-                <i class="ti ti-plus me-1"></i>Add Product Banner
-              </button>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div v-for="b in productBanners" :key="b.id" class="col-12">
-                  <div class="card border mb-0 overflow-hidden">
-                    <div class="position-relative">
-                      <img
-                        :src="b.src"
-                        :alt="b.title"
-                        class="w-100 object-fit-cover"
-                        style="height: 180px;"
-                      />
-                      <span class="position-absolute top-2 start-2 badge bg-dark bg-opacity-75 text-white fs-11">
-                        {{ b.id }}
-                      </span>
-                      <div class="position-absolute top-2 end-2 d-flex gap-2">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm shadow-sm py-1 px-2"
-                          title="Edit"
-                          @click="openEditModal(b, 'product')"
-                        >
-                          <i class="ti ti-edit fs-14"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm shadow-sm py-1 px-2"
-                          title="Delete"
-                          @click="deleteBanner(b.id, 'product')"
-                        >
-                          <i class="ti ti-trash fs-14"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="card-body p-3">
-                      <h6 class="fw-bold mb-1">{{ b.title || 'Untitled Banner' }}</h6>
-                      <p class="text-muted small mb-2">{{ b.desc || 'No description provided' }}</p>
-                      <div class="d-flex flex-wrap gap-2 text-muted fs-12 border-top pt-2">
-                        <span><i class="ti ti-calendar-event me-1"></i>Start: {{ formatDate(b.start) }}</span>
-                        <span><i class="ti ti-calendar-off me-1"></i>End: {{ formatDate(b.end) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="productBanners.length === 0" class="col-12 text-center py-5 text-muted">
-                  <i class="ti ti-photo-off fs-1 text-muted"></i>
-                  <p class="mt-2">No product banners added yet.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add/Edit Banner Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ isEdit ? 'Edit Banner' : 'Add Banner' }} ({{ targetType === 'main' ? 'Main' : 'Product' }})</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveBanner">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-8">
-                  <label class="form-label">Image URL</label>
-                  <input
-                    v-model="form.src"
-                    class="form-control"
-                    placeholder="https://example.com/image.jpg"
-                    required
-                  />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Upload Preset</label>
-                  <select class="form-select" @change="applySampleImage($event)">
-                    <option value="">Select Sample...</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/brosur.jpg">Brosur Promo</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/yasin.jpg">Buku Yasin</option>
-                    <option value="https://percetakan-dulank.netlify.app/images/kaos.jpg">Kaos Custom</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Title</label>
-                  <input v-model="form.title" class="form-control" placeholder="Optional promo title" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Description</label>
-                  <input v-model="form.desc" class="form-control" placeholder="Optional description / tagline" />
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Start Date & Time</label>
-                  <input v-model="form.start" type="datetime-local" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">End Date & Time</label>
-                  <input v-model="form.end" type="datetime-local" class="form-control" />
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label">Banner Preview</label>
-                  <div class="p-2 border rounded text-center bg-light">
-                    <img
-                      v-if="form.src"
-                      :src="form.src"
-                      alt="Banner Preview"
-                      class="img-fluid rounded"
-                      style="max-height: 200px; object-fit: contain;"
-                    />
-                    <span v-else class="text-muted small">No image URL specified</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update Banner' : 'Submit Banner' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { BannerItem, BannerFormData } from '#server/types/banner'
+import { useBanners } from '~/composables/useBanners'
+import BannerFormModal from '~/components/pages/banner/BannerFormModal.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 
-interface BannerItem {
-  id: string
-  src: string
-  title: string
-  desc: string
-  start: string
-  end: string
-  created: string
-}
-
-const mainBanners = ref<BannerItem[]>([
-  {
-    id: 'm1',
-    src: 'https://percetakan-dulank.netlify.app/images/brosur.jpg',
-    title: 'Promo Utama 1',
-    desc: 'Diskon besar-besaran cetak brosur A4 & A5',
-    start: '2024-11-01T08:00',
-    end: '2024-12-31T23:59',
-    created: '2024-11-01T08:00'
-  },
-  {
-    id: 'm2',
-    src: 'https://percetakan-dulank.netlify.app/images/yasin.jpg',
-    title: 'Promo Utama 2',
-    desc: 'Penawaran terbatas cetak buku Yasin hard cover',
-    start: '2024-11-05T08:00',
-    end: '2024-12-25T23:59',
-    created: '2024-11-05T08:00'
-  }
-])
-
-const productBanners = ref<BannerItem[]>([
-  {
-    id: 'p1',
-    src: 'https://percetakan-dulank.netlify.app/images/yasin.jpg',
-    title: 'Produk Pilihan',
-    desc: 'Koleksi blangko dan cover terlengkap',
-    start: '2024-11-10T08:00',
-    end: '2024-12-20T23:59',
-    created: '2024-11-10T08:00'
-  },
-  {
-    id: 'p2',
-    src: 'https://percetakan-dulank.netlify.app/images/kaos.jpg',
-    title: 'Diskon Sablon Kaos',
-    desc: 'Hemat biaya cetak sablon DTF lusinan',
-    start: '2024-11-15T08:00',
-    end: '2024-12-15T23:59',
-    created: '2024-11-15T08:00'
-  }
-])
-
-const modalVisible = ref(false)
-const isEdit = ref(false)
-const targetType = ref<'main' | 'product'>('main')
-const currentId = ref<string | null>(null)
-
-const form = ref({
-  src: '',
-  title: '',
-  desc: '',
-  start: '',
-  end: ''
+definePageMeta({
+  layout: 'default',
 })
 
-function formatDate(val: string) {
-  if (!val) return '-'
+useLegacyPage({
+  title: 'Banner - Percetakan Dulank',
+  sweetAlert: false,
+})
+
+const { banners, pending, error, refresh, saveBanner, deleteBanner } = useBanners()
+
+// Separate main banners and product banners
+const mainBanners = computed(() => {
+  return banners.value.filter(
+    (b) => b.type === 'main' || (!b.type && !b.position?.toLowerCase().includes('product')),
+  )
+})
+
+const productBanners = computed(() => {
+  return banners.value.filter(
+    (b) => b.type === 'product' || (b.position && b.position.toLowerCase().includes('product')),
+  )
+})
+
+function isVisibleNow(b: BannerItem): boolean {
+  if (b.status === 'Inactive') return false
+  const now = new Date()
+  if (b.start) {
+    const s = new Date(b.start)
+    if (!isNaN(s.getTime()) && now < s) return false
+  }
+  if (b.end) {
+    const e = new Date(b.end)
+    if (!isNaN(e.getTime()) && now > e) return false
+  }
+  return true
+}
+
+function formatScheduleDate(dateStr?: string): string {
+  if (!dateStr) return '—'
+  const d = new Date(dateStr)
+  if (isNaN(d.getTime())) return '—'
+  return d.toLocaleString()
+}
+
+// Modal management
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const targetType = ref<'main' | 'product'>('main')
+const activeBannerForEdit = ref<BannerItem | null>(null)
+const bannerToDelete = ref<BannerItem | null>(null)
+const isBusy = ref(false)
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+function handleAddMain() {
+  targetType.value = 'main'
+  isEditMode.value = false
+  activeBannerForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleAddProduct() {
+  targetType.value = 'product'
+  isEditMode.value = false
+  activeBannerForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(item: BannerItem) {
+  targetType.value = item.type || (item.position?.toLowerCase().includes('product') ? 'product' : 'main')
+  isEditMode.value = true
+  activeBannerForEdit.value = item
+  isFormModalOpen.value = true
+}
+
+async function handleFormSubmit(formData: BannerFormData) {
+  isBusy.value = true
   try {
-    const d = new Date(val)
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-  } catch {
-    return val
+    const res = await saveBanner(formData)
+    isFormModalOpen.value = false
+    showToast(res?.message || (isEditMode.value ? 'Banner updated successfully' : 'Banner created successfully'))
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save banner')
+  } finally {
+    isBusy.value = false
   }
 }
 
-function openAddModal(type: 'main' | 'product') {
-  isEdit.value = false
-  targetType.value = type
-  currentId.value = null
-  form.value = {
-    src: 'https://percetakan-dulank.netlify.app/images/brosur.jpg',
-    title: '',
-    desc: '',
-    start: new Date().toISOString().slice(0, 16),
-    end: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 16)
-  }
-  modalVisible.value = true
-}
-
-function openEditModal(b: BannerItem, type: 'main' | 'product') {
-  isEdit.value = true
-  targetType.value = type
-  currentId.value = b.id
-  form.value = {
-    src: b.src,
-    title: b.title,
-    desc: b.desc,
-    start: b.start ? b.start.slice(0, 16) : '',
-    end: b.end ? b.end.slice(0, 16) : ''
-  }
-  modalVisible.value = true
-}
-
-function applySampleImage(e: Event) {
-  const select = e.target as HTMLSelectElement
-  if (select.value) {
-    form.value.src = select.value
-  }
-}
-
-function closeModal() {
-  modalVisible.value = false
-}
-
-function saveBanner() {
-  const targetList = targetType.value === 'main' ? mainBanners : productBanners
-  if (isEdit.value && currentId.value !== null) {
-    const idx = targetList.value.findIndex(b => b.id === currentId.value)
-    if (idx !== -1) {
-      targetList.value[idx] = {
-        ...targetList.value[idx],
-        src: form.value.src,
-        title: form.value.title,
-        desc: form.value.desc,
-        start: form.value.start,
-        end: form.value.end
-      }
-    }
-  } else {
-    const prefix = targetType.value === 'main' ? 'm' : 'p'
-    const newId = `${prefix}${Date.now()}`
-    targetList.value.push({
-      id: newId,
-      src: form.value.src,
-      title: form.value.title,
-      desc: form.value.desc,
-      start: form.value.start,
-      end: form.value.end,
-      created: new Date().toISOString()
-    })
-  }
-  closeModal()
-}
-
-function deleteBanner(id: string, type: 'main' | 'product') {
-  if (confirm('Are you sure you want to delete this banner?')) {
-    if (type === 'main') {
-      mainBanners.value = mainBanners.value.filter(b => b.id !== id)
-    } else {
-      productBanners.value = productBanners.value.filter(b => b.id !== id)
-    }
+async function handleConfirmDelete() {
+  if (!bannerToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteBanner(bannerToDelete.value.id)
+    showToast(`Banner '${bannerToDelete.value.title}' deleted successfully`)
+    bannerToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete banner')
+  } finally {
+    isBusy.value = false
   }
 }
 </script>
+
+<template>
+  <div class="content p-4 md:p-6 space-y-5">
+    <!-- Page Header -->
+    <div class="page-header mt-1 mb-2 flex items-center justify-between">
+      <div class="page-title">
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">Banner</h4>
+        <h6 class="text-xs text-gray-500 dark:text-gray-400">Manage Main & Product Promotional Banners</h6>
+      </div>
+      <button
+        type="button"
+        title="Refresh data"
+        class="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+        :disabled="pending"
+        @click="refresh"
+      >
+        <FeatherIcon name="rotate-cw" :size="15" :class="{ 'animate-spin': pending }" />
+      </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @dismiss="toastMessage = ''"
+    />
+
+    <!-- Skeleton Loader for 2-Column Banner Layout -->
+    <div v-if="pending" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div
+        v-for="col in 2"
+        :key="`banner-col-skel-${col}`"
+        class="rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-gray-900"
+      >
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4 dark:border-gray-800">
+          <div class="h-5 w-28 rounded bg-gray-200 dark:bg-gray-800 animate-pulse" />
+          <div class="h-7 w-32 rounded bg-gray-200 dark:bg-gray-800 animate-pulse" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <div
+            v-for="item in 2"
+            :key="`banner-item-skel-${col}-${item}`"
+            class="rounded-lg border border-gray-100 bg-gray-50/50 p-2.5 dark:border-gray-800 dark:bg-gray-800/40 animate-pulse space-y-2.5"
+          >
+            <div class="h-[120px] w-full rounded-md bg-gray-200 dark:bg-gray-800" />
+            <div class="h-3.5 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
+            <div class="h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
+            <div class="h-2.5 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
+            <div class="h-2.5 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div
+      v-else-if="error"
+      class="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-400"
+    >
+      <p class="font-semibold mb-2">{{ error ? (error.message || 'Failed to load banners') : '' }}</p>
+      <button
+        type="button"
+        class="rounded-md bg-red-600 px-3 py-1.5 text-xs text-white hover:bg-red-700"
+        @click="refresh"
+      >
+        Retry
+      </button>
+    </div>
+
+    <!-- Main Content: 2-Column Banner Cards Grid (Main Banner & Product Banner side by side) -->
+    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <!-- 1. Main Banner Column -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-xs dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
+        <div class="flex items-center justify-between border-b border-gray-100 p-4 dark:border-gray-800">
+          <h5 class="text-base font-bold text-gray-900 dark:text-white">Main Banner</h5>
+          <button
+            id="addMainBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-md bg-[#f97316] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#ea580c] transition-colors"
+            @click="handleAddMain"
+          >
+            <FeatherIcon name="plus" :size="13" />
+            <span>Add Main Banner</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <div v-if="mainBanners.length === 0" class="py-12 text-center text-xs text-gray-400">
+            No banners yet.
+          </div>
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              v-for="b in mainBanners"
+              :key="b.id"
+              class="rounded-lg border border-gray-100 bg-gray-50/50 p-2.5 transition hover:shadow-sm dark:border-gray-800 dark:bg-gray-800/40"
+            >
+              <!-- Thumbnail Container with Badges & Actions -->
+              <div class="relative mb-2.5 overflow-hidden rounded-md bg-gray-100 dark:bg-gray-800">
+                <!-- Status Badge -->
+                <span
+                  :class="[
+                    'absolute top-2 left-2 z-10 rounded px-2 py-0.5 text-[11px] font-semibold text-white shadow-xs',
+                    isVisibleNow(b) ? 'bg-[#28c76f]' : 'bg-[#6c757d]'
+                  ]"
+                >
+                  {{ isVisibleNow(b) ? 'Active' : 'Inactive' }}
+                </span>
+
+                <!-- Action Buttons -->
+                <div class="absolute top-2 right-2 z-10 flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    class="flex h-7 w-7 items-center justify-center rounded bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-primary transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                    title="Edit"
+                    @click="handleEdit(b)"
+                  >
+                    <FeatherIcon name="edit" :size="13" />
+                  </button>
+                  <button
+                    type="button"
+                    class="flex h-7 w-7 items-center justify-center rounded bg-[#ef4444] text-white shadow-sm hover:bg-red-600 transition-colors"
+                    title="Delete"
+                    @click="bannerToDelete = b"
+                  >
+                    <FeatherIcon name="trash-2" :size="13" />
+                  </button>
+                </div>
+
+                <!-- Banner Image -->
+                <a :href="b.src || b.imageUrl" target="_blank" rel="noopener noreferrer" class="block">
+                  <img
+                    :src="b.src || b.imageUrl"
+                    :alt="b.title"
+                    class="h-[120px] w-full object-cover transition-transform duration-300 hover:scale-105"
+                    @error="($event.target as HTMLImageElement).src = 'https://percetakan-dulank.netlify.app/images/brosur.jpg'"
+                  />
+                </a>
+              </div>
+
+              <!-- Information Details -->
+              <div class="space-y-0.5 pt-0.5">
+                <strong class="block text-xs font-bold text-gray-900 truncate dark:text-white">
+                  {{ b.title }}
+                </strong>
+                <p class="text-[11px] text-gray-500 truncate dark:text-gray-400 mb-1">
+                  {{ b.desc || b.description || '—' }}
+                </p>
+                <div class="text-[11px] text-gray-500 dark:text-gray-400 space-y-0.5">
+                  <div>Start: {{ formatScheduleDate(b.start || b.startDate) }}</div>
+                  <div>End: {{ formatScheduleDate(b.end || b.endDate) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Product Banner Column -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-xs dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
+        <div class="flex items-center justify-between border-b border-gray-100 p-4 dark:border-gray-800">
+          <h5 class="text-base font-bold text-gray-900 dark:text-white">Product Banner</h5>
+          <button
+            id="addProductBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-md bg-[#f97316] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#ea580c] transition-colors"
+            @click="handleAddProduct"
+          >
+            <FeatherIcon name="plus" :size="13" />
+            <span>Add Product Banner</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <div v-if="productBanners.length === 0" class="py-12 text-center text-xs text-gray-400">
+            No banners yet.
+          </div>
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              v-for="b in productBanners"
+              :key="b.id"
+              class="rounded-lg border border-gray-100 bg-gray-50/50 p-2.5 transition hover:shadow-sm dark:border-gray-800 dark:bg-gray-800/40"
+            >
+              <!-- Thumbnail Container with Badges & Actions -->
+              <div class="relative mb-2.5 overflow-hidden rounded-md bg-gray-100 dark:bg-gray-800">
+                <!-- Status Badge -->
+                <span
+                  :class="[
+                    'absolute top-2 left-2 z-10 rounded px-2 py-0.5 text-[11px] font-semibold text-white shadow-xs',
+                    isVisibleNow(b) ? 'bg-[#28c76f]' : 'bg-[#6c757d]'
+                  ]"
+                >
+                  {{ isVisibleNow(b) ? 'Active' : 'Inactive' }}
+                </span>
+
+                <!-- Action Buttons -->
+                <div class="absolute top-2 right-2 z-10 flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    class="flex h-7 w-7 items-center justify-center rounded bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-primary transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                    title="Edit"
+                    @click="handleEdit(b)"
+                  >
+                    <FeatherIcon name="edit" :size="13" />
+                  </button>
+                  <button
+                    type="button"
+                    class="flex h-7 w-7 items-center justify-center rounded bg-[#ef4444] text-white shadow-sm hover:bg-red-600 transition-colors"
+                    title="Delete"
+                    @click="bannerToDelete = b"
+                  >
+                    <FeatherIcon name="trash-2" :size="13" />
+                  </button>
+                </div>
+
+                <!-- Banner Image -->
+                <a :href="b.src || b.imageUrl" target="_blank" rel="noopener noreferrer" class="block">
+                  <img
+                    :src="b.src || b.imageUrl"
+                    :alt="b.title"
+                    class="h-[120px] w-full object-cover transition-transform duration-300 hover:scale-105"
+                    @error="($event.target as HTMLImageElement).src = 'https://percetakan-dulank.netlify.app/images/brosur.jpg'"
+                  />
+                </a>
+              </div>
+
+              <!-- Information Details -->
+              <div class="space-y-0.5 pt-0.5">
+                <strong class="block text-xs font-bold text-gray-900 truncate dark:text-white">
+                  {{ b.title }}
+                </strong>
+                <p class="text-[11px] text-gray-500 truncate dark:text-gray-400 mb-1">
+                  {{ b.desc || b.description || '—' }}
+                </p>
+                <div class="text-[11px] text-gray-500 dark:text-gray-400 space-y-0.5">
+                  <div>Start: {{ formatScheduleDate(b.start || b.startDate) }}</div>
+                  <div>End: {{ formatScheduleDate(b.end || b.endDate) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add / Edit Modal -->
+    <BannerFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :banner-data="activeBannerForEdit"
+      :banner-type="targetType"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!bannerToDelete"
+      :busy="isBusy"
+      title="Delete Banner"
+      :message="`Are you sure you want to delete banner '${bannerToDelete?.title}'?`"
+      @close="bannerToDelete = null"
+      @confirm="handleConfirmDelete"
+    />
+  </div>
+</template>
+
+<style scoped>
+/* Page Banner Layout Styles */
+</style>
 

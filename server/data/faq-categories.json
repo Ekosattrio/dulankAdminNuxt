@@ -1,0 +1,38 @@
+[
+  {
+    "id": "faq-cat-1",
+    "name": "Fitur",
+    "slug": "fitur",
+    "description": "Pertanyaan seputar modul dan fungsionalitas sistem kasir, POS, dan workflow cetak.",
+    "questionsCount": 2,
+    "status": "Active",
+    "createdDate": "2026-02-01"
+  },
+  {
+    "id": "faq-cat-2",
+    "name": "Percetakan",
+    "slug": "percetakan",
+    "description": "Panduan teknis cetak, kalkulator potong plano master, dan spesifikasi format file desain.",
+    "questionsCount": 2,
+    "status": "Active",
+    "createdDate": "2026-02-02"
+  },
+  {
+    "id": "faq-cat-3",
+    "name": "Hardware",
+    "slug": "hardware",
+    "description": "Dukungan perangkat printer kasir ESC/POS, barcode scanner, dan konektivitas mesin.",
+    "questionsCount": 1,
+    "status": "Active",
+    "createdDate": "2026-02-05"
+  },
+  {
+    "id": "faq-cat-4",
+    "name": "Umum",
+    "slug": "umum",
+    "description": "Informasi umum implementasi sistem, tipe bisnis yang cocok, dan lisensi software.",
+    "questionsCount": 1,
+    "status": "Active",
+    "createdDate": "2026-02-10"
+  }
+]

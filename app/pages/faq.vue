@@ -1,366 +1,229 @@
-<template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>FAQ</h4>
-            <h6>Manage your frequently asked questions</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img"></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add FAQ
-          </button>
-        </div>
-      </div>
-
-      <div class="card table-list-card">
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-          <div class="search-set">
-            <div class="search-input">
-              <span class="btn-searchset"><i class="ti ti-search"></i></span>
-              <input v-model="searchQuery" type="text" class="form-control" placeholder="Search questions or answers..." />
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-3">
-            <div class="dropdown">
-              <button
-                class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                type="button"
-                @click="catDropdownOpen = !catDropdownOpen"
-              >
-                Category: {{ filterCategory || 'All' }}
-                <i class="ti ti-chevron-down ms-1"></i>
-              </button>
-              <ul v-if="catDropdownOpen" class="dropdown-menu dropdown-menu-end p-2 show" style="display: block; position: absolute;">
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCategory = ''; catDropdownOpen = false">All Categories</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCategory = 'General'; catDropdownOpen = false">General</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCategory = 'Features'; catDropdownOpen = false">Features</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCategory = 'Hardware'; catDropdownOpen = false">Hardware</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="filterCategory = 'Printing'; catDropdownOpen = false">Printing</a></li>
-              </ul>
-            </div>
-            <div class="dropdown">
-              <button
-                class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                type="button"
-                @click="sortDropdownOpen = !sortDropdownOpen"
-              >
-                Sort By: {{ sortByLabel }}
-                <i class="ti ti-chevron-down ms-1"></i>
-              </button>
-              <ul v-if="sortDropdownOpen" class="dropdown-menu dropdown-menu-end p-2 show" style="display: block; position: absolute;">
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'recent'; sortDropdownOpen = false">Recently Added</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'asc'; sortDropdownOpen = false">Ascending</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'desc'; sortDropdownOpen = false">Descending</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th class="no-sort" style="width: 40px;">
-                    <div class="form-check form-check-md">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :checked="selectAll"
-                        @change="toggleSelectAll"
-                      />
-                    </div>
-                  </th>
-                  <th style="min-width: 250px;">Question</th>
-                  <th style="min-width: 320px;">Answer</th>
-                  <th>Category</th>
-                  <th class="text-center" style="width: 100px;">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="faq in filteredFaqs" :key="faq.id">
-                  <td>
-                    <div class="form-check form-check-md">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :value="faq.id"
-                        v-model="selectedIds"
-                      />
-                    </div>
-                  </td>
-                  <td class="text-dark fw-semibold">{{ faq.question }}</td>
-                  <td class="text-muted small text-wrap">{{ faq.answer }}</td>
-                  <td>
-                    <span class="badge bg-light text-dark border px-2 py-1 fs-12">{{ faq.category }}</span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="Edit"
-                        @click="openEditModal(faq)"
-                      >
-                        <i class="ti ti-edit fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete"
-                        @click="deleteFaq(faq.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredFaqs.length === 0">
-                  <td colspan="5" class="text-center py-4 text-muted">
-                    No FAQs found matching your criteria.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add/Edit FAQ Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ isEdit ? 'Edit FAQ' : 'Add FAQ' }}</h4>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveFaq">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-12">
-                  <label class="form-label">Category <span class="text-danger">*</span></label>
-                  <select v-model="form.category" class="form-select" required>
-                    <option value="General">General</option>
-                    <option value="Features">Features</option>
-                    <option value="Hardware">Hardware</option>
-                    <option value="Printing">Printing</option>
-                    <option value="Payment">Payment</option>
-                  </select>
-                </div>
-                <div class="col-md-12">
-                  <label class="form-label">Question <span class="text-danger">*</span></label>
-                  <input
-                    v-model="form.question"
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter question"
-                    required
-                  />
-                </div>
-                <div class="col-md-12">
-                  <label class="form-label">Answer <span class="text-danger">*</span></label>
-                  <textarea
-                    v-model="form.answer"
-                    rows="4"
-                    class="form-control"
-                    placeholder="Enter detailed answer"
-                    required
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update' : 'Submit' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import type { FaqItem, FaqFormData } from '#server/types/faq'
+import { useFaqs } from '~/composables/useFaqs'
+import { useTablePrint } from '~/composables/useTablePrint'
+import FaqRecordsTable from '~/components/pages/faq/FaqRecordsTable.vue'
+import FaqFormModal from '~/components/pages/faq/FaqFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 
-interface FAQItem {
-  id: number
-  question: string
-  answer: string
-  category: string
-}
+definePageMeta({
+  layout: 'default',
+})
 
-const faqs = ref<FAQItem[]>([
-  {
-    id: 1,
-    question: 'Does it support multiple payment methods?',
-    answer: 'Yes, including cash, bank transfer, QRIS, e-wallets, credit cards, and customer deposit accounts.',
-    category: 'Features'
-  },
-  {
-    id: 2,
-    question: 'What is a POS platform?',
-    answer: 'A software system that processes sales, calculates paper layout efficiency, manages job tickets, and syncs inventory.',
-    category: 'General'
-  },
-  {
-    id: 3,
-    question: 'Who uses it?',
-    answer: 'Commercial printers, packaging manufacturers, copy centers, digital printing houses, and screen printers.',
-    category: 'General'
-  },
-  {
-    id: 4,
-    question: 'What are the key features?',
-    answer: 'Automated print sheet estimation, paper wastage calculations, multi-station job order workflow, and thermal receipt printing.',
-    category: 'Features'
-  },
-  {
-    id: 5,
-    question: 'Can I connect thermal receipt and barcode printers?',
-    answer: 'Yes, the system is plug-and-play compatible with standard ESC/POS 80mm and 58mm thermal printers.',
-    category: 'Hardware'
-  },
-  {
-    id: 6,
-    question: 'How do paper plan formulas calculate cuts per plano?',
-    answer: 'The calculator tests both grain directions (parallel and perpendicular) to maximize yield and minimize scrap waste.',
-    category: 'Printing'
-  }
-])
+useLegacyPage({
+  title: 'FAQ - Frequently Asked Questions',
+  sweetAlert: false,
+})
 
+const { faqs, pending, error, refresh, saveFaq, deleteFaq } = useFaqs()
+
+// Client-side instant filtering (Zero flicker)
 const searchQuery = ref('')
 const filterCategory = ref('')
-const sortBy = ref<'recent' | 'asc' | 'desc'>('recent')
-const catDropdownOpen = ref(false)
-const sortDropdownOpen = ref(false)
-const selectedIds = ref<number[]>([])
+const filterStatus = ref('')
 
-const sortByLabel = computed(() => {
-  if (sortBy.value === 'asc') return 'Ascending'
-  if (sortBy.value === 'desc') return 'Descending'
-  return 'Recently Added'
+const availableCategories = computed(() => {
+  const cats = new Set(faqs.value.map(f => f.category).filter(Boolean))
+  return Array.from(cats)
 })
 
 const filteredFaqs = computed(() => {
-  return faqs.value
-    .filter(f => {
-      const matchCat = !filterCategory.value || f.category === filterCategory.value
-      const matchQuery = !searchQuery.value ||
-        f.question.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        f.answer.toLowerCase().includes(searchQuery.value.toLowerCase())
-      return matchCat && matchQuery
-    })
-    .sort((a, b) => {
-      if (sortBy.value === 'asc') return a.question.localeCompare(b.question)
-      if (sortBy.value === 'desc') return b.question.localeCompare(a.question)
-      return b.id - a.id
-    })
-})
-
-const selectAll = computed(() => {
-  return filteredFaqs.value.length > 0 && selectedIds.value.length === filteredFaqs.value.length
-})
-
-function toggleSelectAll(e: Event) {
-  const target = e.target as HTMLInputElement
-  if (target.checked) {
-    selectedIds.value = filteredFaqs.value.map(f => f.id)
-  } else {
-    selectedIds.value = []
-  }
-}
-
-// Modal state
-const modalVisible = ref(false)
-const isEdit = ref(false)
-const currentId = ref<number | null>(null)
-const form = ref({
-  question: '',
-  answer: '',
-  category: 'General'
-})
-
-function openAddModal() {
-  isEdit.value = false
-  currentId.value = null
-  form.value = {
-    question: '',
-    answer: '',
-    category: 'General'
-  }
-  modalVisible.value = true
-}
-
-function openEditModal(f: FAQItem) {
-  isEdit.value = true
-  currentId.value = f.id
-  form.value = {
-    question: f.question,
-    answer: f.answer,
-    category: f.category
-  }
-  modalVisible.value = true
-}
-
-function closeModal() {
-  modalVisible.value = false
-}
-
-function saveFaq() {
-  if (isEdit.value && currentId.value !== null) {
-    const idx = faqs.value.findIndex(f => f.id === currentId.value)
-    if (idx !== -1) {
-      faqs.value[idx] = {
-        ...faqs.value[idx],
-        ...form.value
-      }
+  return faqs.value.filter((item) => {
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.trim().toLowerCase()
+      const match =
+        item.question.toLowerCase().includes(q) ||
+        item.answer.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q)
+      if (!match) return false
     }
-  } else {
-    const newId = faqs.value.length ? Math.max(...faqs.value.map(f => f.id)) + 1 : 1
-    faqs.value.unshift({
-      id: newId,
-      ...form.value
-    })
+    if (filterCategory.value && item.category !== filterCategory.value) {
+      return false
+    }
+    if (filterStatus.value && item.status !== filterStatus.value) {
+      return false
+    }
+    return true
+  })
+})
+
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeFaqForEdit = ref<FaqItem | null>(null)
+const faqToDelete = ref<FaqItem | null>(null)
+const isBusy = ref(false)
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+function handleAdd() {
+  isEditMode.value = false
+  activeFaqForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(faq: FaqItem) {
+  isEditMode.value = true
+  activeFaqForEdit.value = faq
+  isFormModalOpen.value = true
+}
+
+async function handleFormSubmit(formData: FaqFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveFaq(formData)
+    isFormModalOpen.value = false
+    showToast(res?.message || (isEditMode.value ? 'FAQ updated successfully' : 'FAQ created successfully'))
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save FAQ')
+  } finally {
+    isBusy.value = false
   }
-  closeModal()
 }
 
-function deleteFaq(id: number) {
-  if (confirm('Are you sure you want to delete this FAQ?')) {
-    faqs.value = faqs.value.filter(f => f.id !== id)
-    selectedIds.value = selectedIds.value.filter(item => item !== id)
+async function handleConfirmDelete() {
+  if (!faqToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteFaq(faqToDelete.value.id)
+    showToast(`FAQ '${faqToDelete.value.question}' deleted successfully`)
+    faqToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete FAQ')
+  } finally {
+    isBusy.value = false
   }
 }
 
-function exportPdf() {
-  alert('Exporting FAQ list as PDF...')
-}
+// Print, PDF & Excel export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-function refresh() {
-  searchQuery.value = ''
-  filterCategory.value = ''
-  sortBy.value = 'recent'
-  selectedIds.value = []
+const printColumns = [
+  { key: 'order', label: 'Order', align: 'center' as const },
+  { key: 'category', label: 'Category' },
+  { key: 'question', label: 'Question' },
+  { key: 'answer', label: 'Answer' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+]
+
+function handleExportExcel() {
+  const header = ['Order', 'Category', 'Question', 'Answer', 'Status']
+  const rows = filteredFaqs.value.map((f) => [
+    `"${f.order || ''}"`,
+    `"${(f.category || '').replace(/"/g, '""')}"`,
+    `"${(f.question || '').replace(/"/g, '""')}"`,
+    `"${(f.answer || '').replace(/"/g, '""')}"`,
+    `"${f.status || ''}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [header.join(','), ...rows.map((r) => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `faq_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('FAQs exported to Excel/CSV successfully')
 }
 </script>
 
+<template>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="FAQ"
+      subtitle="Manage your FAQ"
+      add-label="Add FAQ"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button
+          type="button"
+          title="Export Excel / CSV"
+          aria-label="Export Excel"
+          class="flex size-9 items-center justify-center rounded border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+          @click="handleExportExcel"
+        >
+          <FeatherIcon name="download" :size="16" />
+        </button>
+      </template>
+    </SalesListHeader>
+
+    <!-- Feedback Toast -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @dismiss="toastMessage = ''"
+    />
+
+    <!-- Skeleton Loader & Error -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="5"
+      :error="error ? (error.message || 'Failed to load FAQs') : ''"
+      @retry="refresh"
+    />
+
+    <!-- Table -->
+    <FaqRecordsTable
+      v-if="!pending && !error"
+      :faqs="filteredFaqs"
+      :search-query="searchQuery"
+      :filter-category="filterCategory"
+      :filter-status="filterStatus"
+      :categories="availableCategories"
+      @update:search-query="searchQuery = $event"
+      @update:filter-category="filterCategory = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit="handleEdit"
+      @delete="faqToDelete = $event"
+    />
+
+    <!-- Add / Edit Modal -->
+    <FaqFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :faq-data="activeFaqForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!faqToDelete"
+      :busy="isBusy"
+      title="Delete FAQ"
+      :message="`Are you sure you want to delete FAQ '${faqToDelete?.question}'?`"
+      @close="faqToDelete = null"
+      @confirm="handleConfirmDelete"
+    />
+
+    <!-- Print / PDF Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Daftar FAQ (Pertanyaan Umum)"
+      :columns="printColumns"
+      :items="filteredFaqs"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

@@ -1,293 +1,448 @@
-<template>
-  <div class="page-wrapper notes-page-wrapper file-manager mt-3">
-    <div class="content">
-      <div class="page-header page-add-notes d-flex align-items-center justify-content-between flex-wrap gap-2">
-        <div class="add-item d-flex align-items-center">
-          <div class="page-title">
-            <h4>Download Files</h4>
-            <p>Manage and download documents and assets</p>
-          </div>
-        </div>
-        <div class="d-sm-flex align-items-center gap-2">
-          <div class="form-sort owned-by w-auto">
-            <select v-model="filterOwner" class="form-select form-select-sm">
-              <option value="all">Owned by Anyone</option>
-              <option value="me">Owned By Me</option>
-              <option value="others">Not Owned by Me</option>
-            </select>
-          </div>
-          <button type="button" class="btn btn-primary btn-added" @click="showUploadModal = true">
-            <i class="ti ti-upload me-1"></i>Upload Files
-          </button>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <!-- Sidebar -->
-        <div class="col-lg-3 col-md-12">
-          <aside class="card file-manager-sidebar p-3 mb-0">
-            <h5 class="d-flex align-items-center mb-3">
-              <i class="ti ti-folder fs-20 text-primary me-2"></i>Files & Storage
-            </h5>
-
-            <div class="dropdown mb-4">
-              <button class="btn btn-primary w-100 dropdown-toggle d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="dropdown">
-                <i class="ti ti-circle-plus"></i> New
-              </button>
-              <ul class="dropdown-menu w-100">
-                <li><a class="dropdown-item" href="javascript:void(0);" @click="showUploadModal = true"><i class="ti ti-upload me-2"></i>Upload File</a></li>
-                <li><a class="dropdown-item" href="javascript:void(0);" @click="showCreateFolderModal = true"><i class="ti ti-folder-plus me-2"></i>Create Folder</a></li>
-              </ul>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-              <div class="d-flex align-items-center gap-1 text-muted small">
-                <i class="ti ti-device-floppy"></i>
-                <span>Storage</span>
-              </div>
-              <span class="small fw-bold">70%</span>
-            </div>
-            <div class="progress mb-2" style="height: 6px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 70%"></div>
-            </div>
-            <span class="text-muted small">78.5 GB of 1 TB Used</span>
-
-            <hr class="my-3" />
-
-            <div class="list-group list-group-flush">
-              <a
-                href="javascript:void(0);"
-                class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-2 py-2 rounded"
-                :class="{ 'bg-light text-primary fw-bold': selectedType === '' }"
-                @click="selectedType = ''"
-              >
-                <span><i class="ti ti-files me-2"></i>All Files</span>
-                <span class="badge bg-secondary rounded-pill">{{ fileList.length }}</span>
-              </a>
-              <a
-                href="javascript:void(0);"
-                class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-2 py-2 rounded"
-                :class="{ 'bg-light text-primary fw-bold': selectedType === 'pdf' }"
-                @click="selectedType = 'pdf'"
-              >
-                <span><i class="ti ti-file-text me-2 text-danger"></i>PDF Documents</span>
-              </a>
-              <a
-                href="javascript:void(0);"
-                class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-2 py-2 rounded"
-                :class="{ 'bg-light text-primary fw-bold': selectedType === 'excel' }"
-                @click="selectedType = 'excel'"
-              >
-                <span><i class="ti ti-file-spreadsheet me-2 text-success"></i>Spreadsheets</span>
-              </a>
-              <a
-                href="javascript:void(0);"
-                class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-2 py-2 rounded"
-                :class="{ 'bg-light text-primary fw-bold': selectedType === 'image' }"
-                @click="selectedType = 'image'"
-              >
-                <span><i class="ti ti-photo me-2 text-info"></i>Images / Proofs</span>
-              </a>
-            </div>
-          </aside>
-        </div>
-
-        <!-- Main Content -->
-        <div class="col-lg-9">
-          <!-- Filter toolbar -->
-          <div class="card p-3 mb-4">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <div class="search-input" style="min-width: 250px;">
-                <input v-model="searchQuery" type="text" class="form-control form-control-sm" placeholder="Search file name..." />
-              </div>
-
-              <div class="d-flex align-items-center gap-2">
-                <select v-model="selectedType" class="form-select form-select-sm" style="width: auto;">
-                  <option value="">All File Types</option>
-                  <option value="pdf">PDF</option>
-                  <option value="excel">Excel</option>
-                  <option value="image">Image</option>
-                </select>
-                <select v-model="sortBy" class="form-select form-select-sm" style="width: auto;">
-                  <option value="name">Sort by Name</option>
-                  <option value="size">Sort by Size</option>
-                  <option value="date">Sort by Date</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Files Grid -->
-          <div class="row g-3">
-            <div v-for="file in filteredFiles" :key="file.id" class="col-md-4 col-sm-6 col-12">
-              <div class="card h-100 p-3 shadow-sm border position-relative">
-                <div class="d-flex align-items-start justify-content-between mb-2">
-                  <div class="p-2 rounded bg-light">
-                    <i v-if="file.type === 'pdf'" class="ti ti-file-text text-danger fs-28"></i>
-                    <i v-else-if="file.type === 'excel'" class="ti ti-file-spreadsheet text-success fs-28"></i>
-                    <i v-else-if="file.type === 'image'" class="ti ti-photo text-info fs-28"></i>
-                    <i v-else class="ti ti-file text-secondary fs-28"></i>
-                  </div>
-                  <div class="dropdown">
-                    <button class="btn btn-sm btn-white border-0" type="button" data-bs-toggle="dropdown">
-                      <i class="ti ti-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="javascript:void(0);" @click="downloadFile(file)"><i class="ti ti-download me-2"></i>Download</a></li>
-                      <li><a class="dropdown-item text-danger" href="javascript:void(0);" @click="deleteFile(file.id)"><i class="ti ti-trash me-2"></i>Delete</a></li>
-                    </ul>
-                  </div>
-                </div>
-
-                <h6 class="fw-bold text-dark text-truncate mb-1" :title="file.name">{{ file.name }}</h6>
-                <div class="d-flex align-items-center justify-content-between text-muted small mt-2">
-                  <span>{{ file.size }}</span>
-                  <span>{{ file.date }}</span>
-                </div>
-
-                <div class="mt-3 pt-2 border-top">
-                  <button type="button" class="btn btn-sm btn-outline-primary w-100" @click="downloadFile(file)">
-                    <i class="ti ti-download me-1"></i>Download
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="filteredFiles.length === 0" class="col-12 text-center py-5 text-muted">
-              No files found matching your search.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Upload Modal -->
-      <div v-if="showUploadModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Upload File</h5>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="showUploadModal = false">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body text-center p-4">
-              <div class="border border-dashed p-4 rounded mb-3">
-                <i class="ti ti-cloud-upload fs-40 text-primary mb-2"></i>
-                <p class="mb-1">Drag and drop file here or click to browse</p>
-                <input type="file" class="form-control" @change="onFileSelected" />
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="showUploadModal = false">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Create Folder Modal -->
-      <div v-if="showCreateFolderModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Create Folder</h5>
-              <button type="button" class="close bg-danger text-white fs-16 border-0 rounded-circle" @click="showCreateFolderModal = false">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <label class="form-label">Folder Name</label>
-              <input v-model="newFolderName" type="text" class="form-control" placeholder="e.g. Design Proofs 2026" />
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="showCreateFolderModal = false">Cancel</button>
-              <button type="button" class="btn btn-primary" @click="createFolder">Create</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import type { DownloadFileItem, DownloadFileFormData } from '#server/types/download-file'
+import { useDownloadFiles } from '~/composables/useDownloadFiles'
+import DownloadFileSidebar from '~/components/pages/download-files/DownloadFileSidebar.vue'
+import DownloadFileCardGrid from '~/components/pages/download-files/DownloadFileCardGrid.vue'
+import DownloadFileTable from '~/components/pages/download-files/DownloadFileTable.vue'
+import UploadFileModal from '~/components/pages/download-files/UploadFileModal.vue'
+import CreateFolderModal from '~/components/pages/download-files/CreateFolderModal.vue'
+import DownloadFileFormModal from '~/components/pages/download-files/DownloadFileFormModal.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+
+definePageMeta({
+  layout: 'default',
+})
 
 useLegacyPage({
-  title: 'Download Files',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  title: 'Download Files - Manage your files',
+  sweetAlert: false,
 })
 
-interface FileItem {
-  id: number
-  name: string
-  type: 'pdf' | 'excel' | 'image' | 'file'
-  size: string
-  date: string
-}
+const { files, pending, error, refresh, saveFile, deleteFile, toggleFavorite } = useDownloadFiles()
 
-const filterOwner = ref('all')
-const selectedType = ref('')
-const sortBy = ref('name')
+// Controls & Filters
+const ownedFilter = ref('Owned By Me')
+const sortBy = ref('Sort by Date')
+const recentFilter = ref('Recent')
+const fileTypeFilter = ref('All File types')
 const searchQuery = ref('')
-const showUploadModal = ref(false)
-const showCreateFolderModal = ref(false)
-const newFolderName = ref('')
+const isSidebarOpen = ref(true)
+const isBusy = ref(false)
+const toastMessage = ref('')
 
-const fileList = ref<FileItem[]>([
-  { id: 1, name: 'Sportsmodel.pdf', type: 'pdf', size: '2.4 MB', date: '01 Feb 2026' },
-  { id: 2, name: 'Projectdetails.xls', type: 'excel', size: '850 KB', date: '02 Feb 2026' },
-  { id: 3, name: 'Catalog_Dulank_Print_2026.pdf', type: 'pdf', size: '14.2 MB', date: '05 Feb 2026' },
-  { id: 4, name: 'SPK_Template_Offset.xlsx', type: 'excel', size: '1.1 MB', date: '10 Feb 2026' },
-  { id: 5, name: 'Proofing_Logo_Kacetak.png', type: 'image', size: '3.6 MB', date: '12 Feb 2026' },
-  { id: 6, name: 'Tarif_Harga_Cetak_2026.pdf', type: 'pdf', size: '4.8 MB', date: '14 Feb 2026' }
-])
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
 
-const filteredFiles = computed(() => {
-  return fileList.value.filter(file => {
-    const q = searchQuery.value.toLowerCase()
-    const matchSearch = !q || file.name.toLowerCase().includes(q)
-    const matchType = !selectedType.value || file.type === selectedType.value
-    return matchSearch && matchType
-  }).sort((a, b) => {
-    if (sortBy.value === 'name') return a.name.localeCompare(b.name)
-    if (sortBy.value === 'date') return b.date.localeCompare(a.date)
-    return 0
-  })
+// Separate files into Pinned (Top Section "Files") and All Files (Bottom Section)
+const pinnedFiles = computed(() => {
+  return files.value.filter(f => f.isPinned)
 })
 
-const downloadFile = (file: FileItem) => {
-  alert(`Downloading ${file.name}...`)
-}
-
-const deleteFile = (id: number) => {
-  if (confirm('Delete this file?')) {
-    fileList.value = fileList.value.filter(f => f.id !== id)
+const tableFiles = computed(() => {
+  let list = files.value.filter(f => !f.isPinned)
+  if (list.length === 0) {
+    list = files.value
   }
-}
 
-const onFileSelected = (e: any) => {
-  const file = e.target.files[0]
-  if (file) {
-    fileList.value.unshift({
-      id: Date.now(),
-      name: file.name,
-      type: file.name.endsWith('.pdf') ? 'pdf' : file.name.endsWith('.xlsx') || file.name.endsWith('.xls') ? 'excel' : 'file',
-      size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-      date: new Date().toLocaleDateString('en-GB')
+  // Filter by search
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
+    list = list.filter(item =>
+      item.name.toLowerCase().includes(q) ||
+      item.category.toLowerCase().includes(q) ||
+      (item.ownedBy && item.ownedBy.toLowerCase().includes(q))
+    )
+  }
+
+  // Filter by File Type
+  if (fileTypeFilter.value !== 'All File types') {
+    const ft = fileTypeFilter.value.toLowerCase()
+    list = list.filter(item => {
+      if (ft === 'folders') return item.fileType === 'folder'
+      if (ft === 'pdf') return item.fileType === 'pdf'
+      if (ft === 'images') return item.fileType === 'image'
+      if (ft === 'videos') return item.fileType === 'video'
+      if (ft === 'audios') return item.fileType === 'audio'
+      if (ft === 'excel') return item.fileType === 'excel'
+      return true
     })
-    showUploadModal.value = false
+  }
+
+  // Sort by
+  if (sortBy.value === 'Sort By Size') {
+    list = [...list].sort((a, b) => (parseFloat(b.size) || 0) - (parseFloat(a.size) || 0))
+  } else if (sortBy.value === 'Order Ascending') {
+    list = [...list].sort((a, b) => a.name.localeCompare(b.name))
+  } else if (sortBy.value === 'Order Descending') {
+    list = [...list].sort((a, b) => b.name.localeCompare(a.name))
+  }
+
+  return list
+})
+
+// Modals
+const isUploadModalOpen = ref(false)
+const isCreateFolderModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+const activeFileForEdit = ref<DownloadFileItem | null>(null)
+const fileToDelete = ref<DownloadFileItem | null>(null)
+
+function handleOpenUpload() {
+  isUploadModalOpen.value = true
+}
+
+function handleOpenCreateFolder() {
+  isCreateFolderModalOpen.value = true
+}
+
+function handleEditFile(item: DownloadFileItem) {
+  activeFileForEdit.value = item
+  isEditModalOpen.value = true
+}
+
+function handleDeleteRequest(item: DownloadFileItem) {
+  fileToDelete.value = item
+}
+
+async function handleUploadSubmit(formData: DownloadFileFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveFile(formData)
+    isUploadModalOpen.value = false
+    showToast(res?.message || 'File berhasil diunggah')
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Gagal mengunggah file')
+  } finally {
+    isBusy.value = false
   }
 }
 
-const createFolder = () => {
-  if (newFolderName.value.trim()) {
-    alert(`Folder "${newFolderName.value}" created successfully!`)
-    newFolderName.value = ''
-    showCreateFolderModal.value = false
+async function handleCreateFolderSubmit(folderName: string) {
+  isBusy.value = true
+  try {
+    const res = await saveFile({
+      name: folderName,
+      category: 'Folders',
+      fileType: 'folder',
+      size: '0 KB',
+      uploadedBy: 'Me',
+      ownedBy: 'Me',
+    })
+    isCreateFolderModalOpen.value = false
+    showToast(res?.message || `Folder '${folderName}' berhasil dibuat`)
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Gagal membuat folder')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function handleEditSubmit(formData: DownloadFileFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveFile(formData)
+    isEditModalOpen.value = false
+    showToast(res?.message || 'File berhasil diperbarui')
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Gagal memperbarui file')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function confirmDelete() {
+  if (!fileToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteFile(fileToDelete.value.id)
+    showToast(`File '${fileToDelete.value.name}' berhasil dihapus`)
+    fileToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Gagal menghapus file')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function handleToggleFavorite(item: DownloadFileItem) {
+  try {
+    await toggleFavorite(item)
+    showToast(item.isFavorite ? 'Dihapus dari favorit' : 'Ditambahkan ke favorit')
+  } catch (err: any) {
+    showToast('Gagal mengubah status favorit')
+  }
+}
+
+function handleDownload(item: DownloadFileItem) {
+  if (item.fileUrl) {
+    window.open(item.fileUrl, '_blank')
+  } else {
+    showToast(`Mengunduh ${item.name}...`)
   }
 }
 </script>
 
+<template>
+  <div class="dulank-page dulank-page-download-files space-y-5 p-4 md:p-6">
+    <!-- Success Toast Notification -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
+    </div>
+
+    <!-- Header Section (Matching Screenshot 1) -->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Download Files</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manage your files</p>
+      </div>
+
+      <!-- Header Right Toolbar -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <!-- Owned By Me Dropdown -->
+        <div class="relative inline-flex items-center">
+          <select
+            v-model="ownedFilter"
+            class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option>Owned By Me</option>
+            <option>Owned by Anyone</option>
+            <option>Not Owned by Me</option>
+          </select>
+          <FeatherIcon
+            name="sliders"
+            :size="14"
+            class="pointer-events-none absolute left-2.5 text-gray-400"
+          />
+        </div>
+
+        <!-- Reload / Refresh button -->
+        <button
+          type="button"
+          class="flex size-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition"
+          title="Refresh"
+          @click="refresh"
+        >
+          <FeatherIcon name="rotate-ccw" :size="15" />
+        </button>
+
+        <!-- Collapse Header Icon -->
+        <button
+          type="button"
+          class="flex size-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition"
+          title="Collapse"
+        >
+          <FeatherIcon name="chevron-up" :size="15" />
+        </button>
+
+        <!-- Upload Files Button -->
+        <button
+          type="button"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#F97316] px-4 text-xs font-semibold text-white shadow-sm hover:bg-[#EA580C] transition"
+          @click="handleOpenUpload"
+        >
+          <FeatherIcon name="upload" :size="15" />
+          <span>Upload Files</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Divider line with collapse toggle circle button -->
+    <div class="relative border-t border-gray-200 dark:border-gray-800 my-2">
+      <button
+        type="button"
+        class="absolute -top-3.5 left-4 flex size-7 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition"
+        :title="isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'"
+        @click="isSidebarOpen = !isSidebarOpen"
+      >
+        <FeatherIcon
+          :name="isSidebarOpen ? 'chevron-left' : 'chevron-right'"
+          :size="14"
+        />
+      </button>
+    </div>
+
+    <!-- Main Content Area: 2 Columns -->
+    <div class="flex flex-col lg:flex-row gap-6 items-start pt-2">
+      <!-- Left Sidebar (Files, + New, Storage) -->
+      <div
+        v-show="isSidebarOpen"
+        class="w-full lg:w-64 shrink-0 transition-all duration-200"
+      >
+        <DownloadFileSidebar
+          :total-files="files.length"
+          @upload-file="handleOpenUpload"
+          @upload-folder="handleOpenUpload"
+          @create-folder="handleOpenCreateFolder"
+        />
+      </div>
+
+      <!-- Right Main Content Area -->
+      <div class="flex-1 space-y-6 w-full min-w-0">
+        <!-- Filter Bar (Sort by Date, Search, Recent, All File types) -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <!-- Left: Sort by Date & Search -->
+          <div class="flex items-center gap-2.5 flex-1 max-w-md">
+            <!-- Sort by Date -->
+            <div class="relative inline-flex items-center">
+              <select
+                v-model="sortBy"
+                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option>Sort by Date</option>
+                <option>Sort By Relevance</option>
+                <option>Sort By Size</option>
+                <option>Order Ascending</option>
+                <option>Order Descending</option>
+              </select>
+              <FeatherIcon
+                name="sliders"
+                :size="14"
+                class="pointer-events-none absolute left-2.5 text-gray-400"
+              />
+            </div>
+
+            <!-- Search input -->
+            <div class="relative flex-1">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search"
+                class="h-9 w-full rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-xs font-medium text-gray-700 placeholder-gray-400 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              />
+              <FeatherIcon
+                name="search"
+                :size="14"
+                class="pointer-events-none absolute left-2.5 top-2.5 text-gray-400"
+              />
+            </div>
+          </div>
+
+          <!-- Right: Recent & All File types -->
+          <div class="flex items-center gap-2.5">
+            <!-- Recent Dropdown -->
+            <div class="relative inline-flex items-center">
+              <select
+                v-model="recentFilter"
+                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option>Recent</option>
+                <option>Last Week</option>
+                <option>Last Month</option>
+              </select>
+              <FeatherIcon
+                name="clock"
+                :size="14"
+                class="pointer-events-none absolute left-2.5 text-gray-400"
+              />
+            </div>
+
+            <!-- All File Types Dropdown -->
+            <div class="relative inline-flex items-center">
+              <select
+                v-model="fileTypeFilter"
+                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option>All File types</option>
+                <option>Folders</option>
+                <option>PDF</option>
+                <option>Images</option>
+                <option>Videos</option>
+                <option>Audios</option>
+                <option>Excel</option>
+              </select>
+              <FeatherIcon
+                name="filter"
+                :size="14"
+                class="pointer-events-none absolute left-2.5 text-gray-400"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Skeleton Loader for Files & Table -->
+        <div v-if="pending" class="space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div
+              v-for="i in 4"
+              :key="`file-card-skel-${i}`"
+              class="rounded-xl border border-gray-100 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-gray-900 animate-pulse space-y-3"
+            >
+              <div class="flex items-center justify-between">
+                <div class="h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800" />
+                <div class="h-4 w-4 rounded bg-gray-200 dark:bg-gray-800" />
+              </div>
+              <div class="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
+              <div class="h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
+            </div>
+          </div>
+          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-gray-900 animate-pulse space-y-3">
+            <div class="h-8 w-full rounded bg-gray-200 dark:bg-gray-800" />
+            <div v-for="r in 5" :key="`file-row-skel-${r}`" class="h-12 w-full rounded bg-gray-100 dark:bg-gray-800" />
+          </div>
+        </div>
+
+        <template v-else>
+          <!-- Section 1: Pinned / Quick Access "Files" Grid -->
+          <DownloadFileCardGrid
+            :files="pinnedFiles"
+            @toggle-favorite="handleToggleFavorite"
+            @download="handleDownload"
+            @delete="handleDeleteRequest"
+            @edit="handleEditFile"
+          />
+
+          <!-- Section 2: "All Files" Table / Grid with View Switchers -->
+          <DownloadFileTable
+            :files="tableFiles"
+            @toggle-favorite="handleToggleFavorite"
+            @download="handleDownload"
+            @delete="handleDeleteRequest"
+            @edit="handleEditFile"
+          />
+        </template>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <UploadFileModal
+      :open="isUploadModalOpen"
+      :busy="isBusy"
+      @close="isUploadModalOpen = false"
+      @submit="handleUploadSubmit"
+    />
+
+    <CreateFolderModal
+      :open="isCreateFolderModalOpen"
+      :busy="isBusy"
+      @close="isCreateFolderModalOpen = false"
+      @submit="handleCreateFolderSubmit"
+    />
+
+    <DownloadFileFormModal
+      :open="isEditModalOpen"
+      :is-edit="true"
+      :file-data="activeFileForEdit"
+      :busy="isBusy"
+      @close="isEditModalOpen = false"
+      @submit="handleEditSubmit"
+    />
+
+    <SalesConfirmDelete
+      :open="!!fileToDelete"
+      :title="fileToDelete?.name ? `Hapus File '${fileToDelete.name}'?` : 'Hapus File?'"
+      :message="`Apakah Anda yakin ingin menghapus file ini? Tindakan ini tidak dapat dibatalkan.`"
+      :busy="isBusy"
+      @confirm="confirmDelete"
+      @close="fileToDelete = null"
+    />
+  </div>
+</template>

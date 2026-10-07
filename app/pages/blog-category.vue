@@ -1,319 +1,306 @@
-<template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Blog Categories</h4>
-            <h6>Manage your blog categories</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button type="button" class="btn btn-primary" @click="openAddModal">
-            <i class="ti ti-circle-plus me-1"></i>Add Categories
-          </button>
-        </div>
-      </div>
-
-      <div class="card table-list-card">
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-          <div class="search-set">
-            <div class="search-input">
-              <span class="btn-searchset"><i class="ti ti-search"></i></span>
-              <input v-model="searchQuery" type="text" class="form-control" placeholder="Search category..." />
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-3">
-            <div class="dropdown">
-              <button
-                class="btn btn-white dropdown-toggle d-inline-flex align-items-center"
-                type="button"
-                @click="sortDropdownOpen = !sortDropdownOpen"
-              >
-                Sort By: {{ sortByLabel }}
-                <i class="ti ti-chevron-down ms-1"></i>
-              </button>
-              <ul v-if="sortDropdownOpen" class="dropdown-menu dropdown-menu-end p-2 show" style="display: block; position: absolute;">
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'recent'; sortDropdownOpen = false">Recently Added</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'asc'; sortDropdownOpen = false">Ascending</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item rounded-1" @click="sortBy = 'desc'; sortDropdownOpen = false">Descending</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th class="no-sort" style="width: 40px;">
-                    <div class="form-check form-check-md">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :checked="selectAll"
-                        @change="toggleSelectAll"
-                      />
-                    </div>
-                  </th>
-                  <th>Category</th>
-                  <th>Created Date</th>
-                  <th>Status</th>
-                  <th class="text-center" style="width: 100px;">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="cat in filteredCategories" :key="cat.id">
-                  <td>
-                    <div class="form-check form-check-md">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :value="cat.id"
-                        v-model="selectedIds"
-                      />
-                    </div>
-                  </td>
-                  <td class="text-dark fw-medium">{{ cat.name }}</td>
-                  <td>{{ cat.createdDate }}</td>
-                  <td>
-                    <span
-                      class="badge rounded"
-                      :class="cat.status === 'Active' ? 'badge-success' : 'badge-secondary'"
-                    >
-                      • {{ cat.status }}
-                    </span>
-                  </td>
-                  <td class="action-table-data">
-                    <div class="edit-delete-action justify-content-center gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-primary p-1"
-                        title="Edit"
-                        @click="openEditModal(cat)"
-                      >
-                        <i class="ti ti-edit fs-16"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-icon text-danger p-1"
-                        title="Delete"
-                        @click="deleteCategory(cat.id)"
-                      >
-                        <i class="ti ti-trash fs-16"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredCategories.length === 0">
-                  <td colspan="5" class="text-center py-4 text-muted">
-                    No categories found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add/Edit Category Modal -->
-    <div
-      v-if="modalVisible"
-      class="modal fade show d-block"
-      style="background-color: rgba(0,0,0,0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ isEdit ? 'Edit Blog Category' : 'Add Blog Category' }}</h4>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <form @submit.prevent="saveCategory">
-            <div class="modal-body pb-0">
-              <div class="row g-3">
-                <div class="col-md-12">
-                  <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                  <input
-                    v-model="form.name"
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter category name"
-                    required
-                  />
-                </div>
-                <div class="col-md-12">
-                  <div class="d-flex align-items-center justify-content-between my-2">
-                    <label class="form-label mb-0">Status</label>
-                    <div class="form-check form-switch">
-                      <input
-                        v-model="statusActive"
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="catStatusSwitch"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer modal-action-footer justify-content-end gap-2">
-              <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Cancel</button>
-              <button type="submit" class="btn btn-warning modal-action-submit">
-                {{ isEdit ? 'Update' : 'Submit' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import type { BlogCategory, BlogCategoryFormData } from '#server/types/blog'
+import { useBlogCategories } from '~/composables/useBlogCategories'
+import { useTablePrint } from '~/composables/useTablePrint'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import BlogCategoryFormModal from '~/components/blog/BlogCategoryFormModal.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-interface BlogCategory {
-  id: number
-  name: string
-  createdDate: string
-  status: 'Active' | 'Inactive'
-}
+useLegacyPage({ title: 'Blog Categories', sweetAlert: false })
 
-const categories = ref<BlogCategory[]>([
-  { id: 1, name: 'PointOfSale', createdDate: '12 Sep 2024', status: 'Active' },
-  { id: 2, name: 'Features', createdDate: '15 Sep 2024', status: 'Active' },
-  { id: 3, name: 'Innovations', createdDate: '20 Sep 2024', status: 'Active' },
-  { id: 4, name: 'Printing Technology', createdDate: '01 Oct 2024', status: 'Active' },
-  { id: 5, name: 'Packaging Guide', createdDate: '10 Oct 2024', status: 'Inactive' }
-])
+const { categories, pending, error, refresh, saveCategory, deleteCategory } = useBlogCategories()
 
+// Filter states
 const searchQuery = ref('')
-const sortBy = ref<'recent' | 'asc' | 'desc'>('recent')
-const sortDropdownOpen = ref(false)
-const selectedIds = ref<number[]>([])
+const filterStatus = ref('')
 
-const sortByLabel = computed(() => {
-  if (sortBy.value === 'asc') return 'Ascending'
-  if (sortBy.value === 'desc') return 'Descending'
-  return 'Recently Added'
-})
+// Modal states
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeCategoryForEdit = ref<BlogCategory | null>(null)
+const categoryToDelete = ref<BlogCategory | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
 
 const filteredCategories = computed(() => {
-  return categories.value
-    .filter(c => !searchQuery.value || c.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    .sort((a, b) => {
-      if (sortBy.value === 'asc') return a.name.localeCompare(b.name)
-      if (sortBy.value === 'desc') return b.name.localeCompare(a.name)
-      return b.id - a.id
-    })
-})
-
-const selectAll = computed(() => {
-  return filteredCategories.value.length > 0 && selectedIds.value.length === filteredCategories.value.length
-})
-
-function toggleSelectAll(e: Event) {
-  const target = e.target as HTMLInputElement
-  if (target.checked) {
-    selectedIds.value = filteredCategories.value.map(c => c.id)
-  } else {
-    selectedIds.value = []
-  }
-}
-
-// Modal state
-const modalVisible = ref(false)
-const isEdit = ref(false)
-const currentId = ref<number | null>(null)
-const form = ref({
-  name: '',
-  status: 'Active' as 'Active' | 'Inactive'
-})
-
-const statusActive = computed({
-  get: () => form.value.status === 'Active',
-  set: (val: boolean) => {
-    form.value.status = val ? 'Active' : 'Inactive'
-  }
-})
-
-function openAddModal() {
-  isEdit.value = false
-  currentId.value = null
-  form.value = {
-    name: '',
-    status: 'Active'
-  }
-  modalVisible.value = true
-}
-
-function openEditModal(cat: BlogCategory) {
-  isEdit.value = true
-  currentId.value = cat.id
-  form.value = {
-    name: cat.name,
-    status: cat.status
-  }
-  modalVisible.value = true
-}
-
-function closeModal() {
-  modalVisible.value = false
-}
-
-function saveCategory() {
-  if (isEdit.value && currentId.value !== null) {
-    const idx = categories.value.findIndex(c => c.id === currentId.value)
-    if (idx !== -1) {
-      categories.value[idx].name = form.value.name
-      categories.value[idx].status = form.value.status
+  return categories.value.filter((item) => {
+    if (filterStatus.value && filterStatus.value !== 'All' && item.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
+      return false
     }
-  } else {
-    const newId = categories.value.length ? Math.max(...categories.value.map(c => c.id)) + 1 : 1
-    categories.value.unshift({
-      id: newId,
-      name: form.value.name,
-      createdDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-      status: form.value.status
-    })
+    return true
+  })
+})
+
+function handleAdd() {
+  isEditMode.value = false
+  activeCategoryForEdit.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(item: BlogCategory) {
+  isEditMode.value = true
+  activeCategoryForEdit.value = item
+  isFormModalOpen.value = true
+}
+
+function handleDeleteRequest(item: BlogCategory) {
+  categoryToDelete.value = item
+}
+
+async function confirmDelete() {
+  if (!categoryToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteCategory(categoryToDelete.value.id)
+    showToast(res?.message || `Category '${categoryToDelete.value.name}' deleted successfully`)
+    categoryToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete category')
+  } finally {
+    isBusy.value = false
   }
-  closeModal()
 }
 
-function deleteCategory(id: number) {
-  if (confirm('Are you sure you want to delete this category?')) {
-    categories.value = categories.value.filter(c => c.id !== id)
-    selectedIds.value = selectedIds.value.filter(item => item !== id)
+async function handleFormSubmit(formData: BlogCategoryFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveCategory(formData)
+    showToast(res?.message || (formData.id ? 'Category updated successfully' : 'Category created successfully'))
+    isFormModalOpen.value = false
+    activeCategoryForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save category')
+  } finally {
+    isBusy.value = false
   }
 }
 
-function exportPdf() {
-  alert('Exporting categories as PDF...')
-}
+// Columns definition
+const columns = [
+  { key: 'name', label: 'Category Name', sortable: true },
+  { key: 'slug', label: 'Slug', sortable: true },
+  { key: 'description', label: 'Description', sortable: false },
+  { key: 'postCount', label: 'Post Count', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'status', label: 'Status', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'createdDate', label: 'Created On', sortable: true },
+  { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center whitespace-nowrap' },
+]
 
-function printTable() {
-  window.print()
-}
+// Print & PDF Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-function refresh() {
-  searchQuery.value = ''
-  sortBy.value = 'recent'
-  selectedIds.value = []
+const printColumns = [
+  { key: 'name', label: 'Category Name' },
+  { key: 'slug', label: 'Slug' },
+  { key: 'description', label: 'Description' },
+  { key: 'postCount', label: 'Post Count', align: 'center' as const },
+  { key: 'status', label: 'Status', align: 'center' as const },
+  { key: 'createdDate', label: 'Created On' },
+]
+
+function handleExportExcel() {
+  const header = ['ID', 'Category Name', 'Slug', 'Description', 'Post Count', 'Status', 'Created On']
+  const rows = filteredCategories.value.map(c => [
+    `"${c.id}"`,
+    `"${(c.name || '').replace(/"/g, '""')}"`,
+    `"${(c.slug || '').replace(/"/g, '""')}"`,
+    `"${(c.description || '').replace(/"/g, '""')}"`,
+    `"${c.postCount ?? 0}"`,
+    `"${c.status}"`,
+    `"${c.createdDate || ''}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `blog_categories_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Blog categories exported to Excel (CSV) successfully')
 }
 </script>
 
+<template>
+  <div class="dulank-page dulank-page-blog-category space-y-6">
+    <!-- Success Toast Notification -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
+    </div>
+
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Blog Categories"
+      subtitle="Manage your blog categories and content taxonomy"
+      add-label="Add Category"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
+
+    <!-- Loading Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :error="error ? 'Unable to load blog categories. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Data Table -->
+    <SalesDataTable
+      v-if="!pending && !error"
+      :columns="columns"
+      :items="filteredCategories"
+      :search="searchQuery"
+      search-placeholder="Search category name or slug..."
+      @update:search="searchQuery = $event"
+      @print="openPrintModal('print')"
+      @export-pdf="openPrintModal('pdf')"
+      @export-excel="handleExportExcel"
+    >
+      <!-- Filters -->
+      <template #filters>
+        <TableFilterSelect
+          :model-value="filterStatus"
+          placeholder="All Status"
+          :options="['Active', 'Inactive']"
+          @update:model-value="filterStatus = $event"
+        />
+        <button
+          type="button"
+          title="Export to Excel"
+          class="flex h-9 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
+          @click="handleExportExcel"
+        >
+          <FeatherIcon name="download" size="14" />
+          <span>Excel</span>
+        </button>
+      </template>
+
+      <!-- Cell: Category Name -->
+      <template #cell(name)="{ item }">
+        <span class="font-semibold text-gray-900 dark:text-gray-100">
+          {{ item.name }}
+        </span>
+      </template>
+
+      <!-- Cell: Slug -->
+      <template #cell(slug)="{ item }">
+        <code class="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+          {{ item.slug }}
+        </code>
+      </template>
+
+      <!-- Cell: Description -->
+      <template #cell(description)="{ item }">
+        <span class="text-xs text-gray-600 line-clamp-1 max-w-sm dark:text-gray-400" :title="item.description">
+          {{ item.description || '-' }}
+        </span>
+      </template>
+
+      <!-- Cell: Post Count -->
+      <template #cell(postCount)="{ item }">
+        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+          {{ item.postCount ?? 0 }} posts
+        </span>
+      </template>
+
+      <!-- Cell: Status -->
+      <template #cell(status)="{ item }">
+        <span
+          :class="[
+            'inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold',
+            item.status === 'Active'
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
+              : 'bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'
+          ]"
+        >
+          • {{ item.status }}
+        </span>
+      </template>
+
+      <!-- Cell: Created On -->
+      <template #cell(createdDate)="{ item }">
+        <span class="text-xs text-gray-600 dark:text-gray-400">
+          {{ item.createdDate }}
+        </span>
+      </template>
+
+      <!-- Cell: Actions -->
+      <template #cell(actions)="{ item }">
+        <div class="flex items-center justify-center gap-1.5">
+          <button
+            type="button"
+            title="Edit Category"
+            aria-label="Edit Category"
+            class="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 transition hover:border-primary/40 hover:bg-primary/5 hover:text-primary dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
+            @click="handleEdit(item)"
+          >
+            <FeatherIcon name="edit" size="14" />
+          </button>
+          <button
+            type="button"
+            title="Delete Category"
+            aria-label="Delete Category"
+            class="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white text-rose-500 transition hover:border-rose-400 hover:bg-rose-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-rose-950/40"
+            @click="handleDeleteRequest(item)"
+          >
+            <FeatherIcon name="trash-2" size="14" />
+          </button>
+        </div>
+      </template>
+    </SalesDataTable>
+
+    <!-- Add / Edit Modal -->
+    <BlogCategoryFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :category-data="activeCategoryForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation Modal -->
+    <SalesConfirmDelete
+      :open="!!categoryToDelete"
+      :busy="isBusy"
+      @confirm="confirmDelete"
+      @close="categoryToDelete = null"
+    />
+
+    <!-- Document Print / PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Blog Categories Report"
+      :columns="printColumns"
+      :items="filteredCategories"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

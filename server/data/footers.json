@@ -1,0 +1,83 @@
+[
+  {
+    "id": "foot-1",
+    "sectionName": "Info Kami",
+    "linkTitle": "Tentang Kami & Profil Percetakan",
+    "url": "/about-us",
+    "order": 1,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-2",
+    "sectionName": "Info Kami",
+    "linkTitle": "Kebijakan Privasi & Data",
+    "url": "/privacy",
+    "order": 2,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-3",
+    "sectionName": "Info Kami",
+    "linkTitle": "Blog Edukasi Percetakan & Kertas",
+    "url": "/all-blog",
+    "order": 3,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-4",
+    "sectionName": "Info Kami",
+    "linkTitle": "Syarat & Ketentuan Layanan Cetak",
+    "url": "/terms",
+    "order": 4,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-5",
+    "sectionName": "Panduan Pelanggan",
+    "linkTitle": "Kalkulator Ukuran Lembar Plano",
+    "url": "/kalkulator-dashboard",
+    "order": 1,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-6",
+    "sectionName": "Panduan Pelanggan",
+    "linkTitle": "Cara Order & Persiapan File Cetak",
+    "url": "/faq",
+    "order": 2,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-7",
+    "sectionName": "Panduan Pelanggan",
+    "linkTitle": "Konfirmasi Pembayaran & Deposit",
+    "url": "/contact-form",
+    "order": 3,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-8",
+    "sectionName": "Layanan Populer",
+    "linkTitle": "Cetak Full Color Offset Packaging",
+    "url": "/cetak-full-color",
+    "order": 1,
+    "status": "Active",
+    "target": "_self"
+  },
+  {
+    "id": "foot-9",
+    "sectionName": "Layanan Populer",
+    "linkTitle": "Download File Desain & Template SPK",
+    "url": "/download-files",
+    "order": 2,
+    "status": "Active",
+    "target": "_self"
+  }
+]

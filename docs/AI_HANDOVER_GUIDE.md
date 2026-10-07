@@ -58,25 +58,23 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Modal Print & PDF**| `DocumentPrintModal.vue`| `app/components/common/DocumentPrintModal.vue`| `:open="isPrintOpen" :columns="cols" :items="data" @close="..."` |
 | **Composable Print** | `useTablePrint.ts` | `app/composables/useTablePrint.ts` | `const { isPrintModalOpen, openPrintModal, closePrintModal } = useTablePrint()` |
 | **Display Uang** | `CurrencyDisplay.vue` | `app/components/common/CurrencyDisplay.vue` | `<CurrencyDisplay :value="item.price" align="right" />` |
-| **Input Uang** | `CurrencyInput.vue` | `app/components/common/CurrencyInput.vue` | `<CurrencyInput v-model="price" prefix="Rp" align="right" />` |
-| **Utility Format IDR**| `currency.ts` | `app/utils/currency.ts` | `formatIDR(value)`, `formatMoney(value)`, `parseMoney(str)` |
-| **Assignee Select** | `AssigneeSelect.vue` | `app/components/common/AssigneeSelect.vue` | Pemilih petugas/karyawan/departemen standar |
-| **Stepper Jumlah** | `QuantityStepper.vue` | `app/components/common/QuantityStepper.vue` | Kontrol `[-] [ Qty ] [+]` standar |
-| **Kelas Form UI** | `salesUi.ts` | `app/utils/salesUi.ts` | `tableFilterControlClass`, `modalFormRowClass`, dll. |
+| **Input Uang** | `CurrencyInput.vue` | `app/components/common/CurrencyInput.vue` | `v-model="form.price" class="h-9"` (auto pemisah ribuan) |
+| **Icon Standar** | `FeatherIcon.vue` | `app/components/common/FeatherIcon.vue` | `<FeatherIcon name="edit" :size="14" />` |
+| **Skeleton Loader**| `TableSkeleton.vue` | `app/components/sales/TableSkeleton.vue` | `<TableSkeleton :cols="8" :rows="5" />` |
+| **Alert/Konfirmasi**| `SweetAlert2` helper | `app/utils/alert.ts` | `showSuccessAlert('Berhasil!')`, `showConfirmDialog()` |
 
 ---
 
-## 4. STATUS MODUL (MODULE PROGRESS MATRIX)
+## 4. MATRIX STATUS MODUL (COMPLETION MATRIX)
 
-### A. MODUL SELESAI (SUDAH DISETUJUI - DILARANG MERESET/MENGUBAH SEMBARANGAN)
-
-| Modul | Route / File Utama | Keterangan & Karakteristik |
+### A. MODUL RAMPUNG 100% & PRODUCTION-READY (STATUS: HIJAU)
+| Modul | Halaman Route | Fitur Kunci & Standarisasi |
 |---|---|---|
-| **Sales** | `/sales`, `/sales-note`, `/sales-receipt` | Header toolbar, modal add/edit lengkap, detail dialog, thermal receipt 80mm, nota penjualan resmi. |
-| **Invoice** | `/invoice` | Daftar invoice dari More Sales, aksi view/hapus sesuai acuan. |
-| **Delivery Note** | `/delivery-note` | Surat jalan barang, modal form berbentuk dokumen lengkap. |
-| **Sales Return** | `/sales-return` | Refund barang & uang, detail payment OUT. |
-| **Quotation** | `/quotation`, `/add-quotation`, `/edit-quotation` | Halaman dokumen penawaran harga terpisah, validasi backend. |
+| **Sales** | `/sales` | In-memory filtering, tabel 13 kolom, modal Add/Edit Sales multi-item, Print Kop Surat resmi, view payment history. |
+| **Invoice** | `/invoice`, `/invoice-details` | Filter tanggal, cetak invoice formal, preview dokumen A4, status pembayaran (Paid/Unpaid/Partial). |
+| **Delivery Note** | `/delivery-note`, `/delivery-note-detail` | Surat jalan resmi, checklist item terkirim, cetak delivery note formal. |
+| **Sales Return** | `/sales-return` | Retur penjualan, kalkulasi refund, modal tambah/edit retur multi-item, print nota retur resmi. |
+| **Quotation** | `/quotation`, `/quotation-detail`, `/add-quotation`, `/edit-quotation` | Penawaran harga lengkap, kalkulasi pajak/diskon, konversi otomatis ke invoice. |
 | **Request Quotation**| `/request-quotation` | Form permintaan penawaran, duplikasi ke penerima pilihan. |
 | **Payments** | `/payments`, `/payment-inflow`, `/payment-outflow` | Composable `usePayments`, tabel arus kas, modal add inflow/outflow. |
 | **Orders** | `/orders` | Filter tanggal, shipping, status pesanan, modal ubah status 12-kolom CSS grid. |
@@ -91,10 +89,24 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Reviews** | `/reviews` | Tepat 3 widget KPI proporsional, ikon rating bintang emas, tanpa kolom Action. |
 | **Support Ticket**| `/support-ticket` | 4 widget KPI, modal Add Ticket, modal detail & live chat history, kolom Action aktif. |
 | **Contact Form** | `/contact-form` | Tepat 5 kolom literal (Name, Email, Phone, Message, Date), tanpa kolom Action. |
+| **Purchases** | `/purchase`, `/purchase-order`, `/purchase-return`, `/purchase-item`, `/purchase-category` | 5 sub-menu lengkap, modal multi-item, PO & Retur resmi, KPI stats, cetak Kop Surat resmi. |
+| **User Management** | `/user`, `/user-admin`, `/role-permissions`, `/role`, `/delete-account` | 5 sub-menu lengkap, All Members (smooth search), User Admin, Roles master, Permissions Matrix 14 Group & 97 Page hierarki collapsible, Delete Account request. |
+| **Customers** | `/customers` | Peoples: 10 kolom literal, modal Add/Edit (Grid 12-kolom), View tab Details & Address, Modal Add Address, filter Type & DateRangePicker, zero-flicker search, Print Kop Surat resmi. |
+| **Customer Types** | `/customer-type` | Peoples: Tipe pelanggan (Reguler, Corporate, VIP, dll.), modal Add/Edit (Grid 12-kolom), zero-flicker search, Print Kop Surat resmi. |
+| **Address** | `/address` | Peoples: 4 KPI Cards (Total Address, Province, City, Postal Code), Tab Customers & Suppliers dinamis, Modal Add/Edit & View Details, normalisasi field di `address.json`. |
+| **Supplier** | `/supplier` | Peoples: Pemasok bahan/kertas, 8 kolom literal, tombol baris "Address" modal & Edit/Delete, modal Add/Edit (Grid 12-kolom), zero-flicker search, Print Kop Surat resmi. |
+| **Branch Store** | `/store-list` | Peoples: Cabang gerai fisik & workshop cetak, 7 kolom literal, modal Add/Edit (Grid 12-kolom), filter status, zero-flicker search, Print Kop Surat resmi. |
+| **Employees** | `/employees` | HRM: 4 KPI Cards (Total, Active, Inactive, New Joiners), 8 kolom literal, filter DateRangePicker & Department & Status, Modal Add/Edit (Grid 12-kolom), Modal View profil lengkap, zero-flicker search, Print Kop Surat resmi. |
+| **Department** | `/department` | HRM: 4 KPI Cards (Total Departments, Total Members, Active, Disabled), 6 kolom literal, modal Add/Edit (Member chips & quick pick, status toggle), export CSV & Print Kop Surat resmi. |
+| **Employee Salary** | `/employee-salary` | HRM: 4 KPI Cards (Total, Active Payroll, Total Base, Total Allowance), 8 kolom literal, CurrencyDisplay right align, CurrencyInput, View modal rincian & Edit/Add dynamic allowances, Export CSV & Print Kop Surat resmi. |
+| **Payslip** | `/payslip` | HRM: 4 KPI Cards (Total Slips, Paid, Unpaid, Total Disbursed), 12 kolom literal, Add/Edit modal kalkulasi otomatis, Payslip Detail sheet A4, Export CSV & Print Kop Surat resmi. |
+| **Content** | `/all-blog`, `/blog-category`, `/blog-tag`, `/blog-comment`, `/faq`, `/faq-category`, `/our-client`, `/download-files`, `/footer`, `/banner` | 10 sub-menu lengkap modern Dulank Nuxt 4, All Blogs dengan 2-kolom Card Grid preview gambar besar, FAQ Questions (`/faq`) halaman tunggal bersih sesuai acuan `faq.html`, FAQ Category (`/faq-category`) placeholder kosong sesuai template asli, Our Client (`/our-client`) 6-kolom draggable card grid bersih dengan SVG resmi & persistensi urutan, Download Files (`/download-files`) Full File Manager 2-kolom persis acuan visual, Footer (`/footer`) Formulir Konfigurasi Footer lengkap persis acuan visual `footer.html`, Banner (`/banner`) Dual Column Card Layout (Main Banner & Product Banner) persis acuan visual `banner.html` dengan Active/Inactive status badge, thumbnail preview 120px, quick edit/delete buttons, modal CRUD dengan upload & preview gambar, serta persistensi JSON. |
 | **Print & PDF** | Seluruh modul di atas | Dialog `DocumentPrintModal`, Kop Surat PT. Dulank Semesta Cida, 2 kolom TTD resmi. |
 
 ### B. MODUL PENDING / BERIKUTNYA
-- Sesuai instruksi pengguna berikutnya (misalnya modul POS ditunda sampai diminta, laporan keuangan, produk, inventori, pembelian/purchase, dll.).
+- **REPORT**: 15 sub-menu laporan (`sales-report`, `purchase-report`, `invoice-report`, `supplier-report`, `customer-report`, dll).
+- **SETTING**: ~11 sub-menu pengaturan sistem & toko (`company-setting`, `profile`, `locations`, `invoice-setting`, `system-setting`, dll).
+- **POS**: Ditunda sesuai arahan sampai diminta lagi.
 
 ---
 
@@ -126,3 +138,26 @@ Ikuti langkah-langkah presisi ini:
    - Pastikan halaman merender status 200 OK.
    - Pastikan 0-byte file check bersih.
    - Dokumentasikan hasil revisi ke `AGENTS.md` dan `docs/STRUCTURE.md`.
+
+---
+
+## 6. KEWAJIBAN CATAT PROGRES SETIAP AI
+
+Setiap AI yang mengubah kode, data, atau dokumentasi wajib meninggalkan catatan progres yang bisa dipahami AI berikutnya.
+
+Minimal catatan progres di laporan akhir harus mencakup:
+- File yang diubah.
+- Menu/modul yang disentuh.
+- Flow yang sudah tersambung.
+- Reusable component/composable/utility yang dibuat atau dipakai.
+- Validasi yang benar-benar dijalankan.
+- Validasi yang tidak dijalankan beserta alasannya.
+- Sisa risiko, kekurangan, atau pekerjaan lanjutan.
+
+Jika sebuah menu resmi selesai, berubah status, atau menjadi batas regresi baru, perbarui dokumen yang relevan:
+- `AI_HANDOVER_GUIDE.md` untuk matrix status modul.
+- `AGENTS.md` untuk aturan kerja dan batas regresi.
+- `docs/STRUCTURE.md` untuk dokumentasi arsitektur/status implementasi.
+- `docs/MENU_IMPLEMENTATION_COMMAND.md` untuk workflow command "kerjakan menu".
+
+Jangan mengklaim modul selesai tanpa implementasi, flow, dan validasi yang jelas. Catatan progres harus spesifik, bukan sekadar "done".

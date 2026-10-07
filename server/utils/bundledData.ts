@@ -1,23 +1,33 @@
 import addressData from '../data/address.json'
+import bannersData from '../data/banners.json'
 import blogsData from '../data/blogs.json'
+import blogCategoriesData from '../data/blog-categories.json'
+import blogTagsData from '../data/blog-tags.json'
+import blogCommentsData from '../data/blog-comments.json'
 import calendarSettingsData from '../data/calendar-settings.json'
 import cartsData from '../data/carts.json'
 import categoriesData from '../data/categories.json'
 import cetakFullColorData from '../data/cetak-full-color.json'
 import checkoutsData from '../data/checkouts.json'
+import clientsData from '../data/clients.json'
 import contactFormsData from '../data/contact-forms.json'
 import customerTypesData from '../data/customer-types.json'
 import customersData from '../data/customers.json'
 import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
+import downloadFilesData from '../data/download-files.json'
 import employeesData from '../data/employees.json'
 import employeeSalariesData from '../data/employeeSalaries.json'
 import expenseCategoriesData from '../data/expense-categories.json'
 import expensesData from '../data/expenses.json'
+import faqsData from '../data/faqs.json'
+import faqCategoriesData from '../data/faq-categories.json'
 import flowCategoriesData from '../data/flow-categories.json'
 import flowNamesData from '../data/flow-names.json'
 import flowTemplatesData from '../data/flow-templates.json'
+import footersData from '../data/footers.json'
+import footerConfigData from '../data/footer-config.json'
 import incentivesData from '../data/incentives.json'
 import incomesData from '../data/incomes.json'
 import invoicesData from '../data/invoices.json'
@@ -62,26 +72,36 @@ import workFlowsData from '../data/work-flows.json'
 
 export const bundledSources: Record<string, unknown> = {
   'address.json': addressData,
+  'banners.json': bannersData,
   'blogs.json': blogsData,
+  'blog-categories.json': blogCategoriesData,
+  'blog-tags.json': blogTagsData,
+  'blog-comments.json': blogCommentsData,
   'calendar-settings.json': calendarSettingsData,
   'carts.json': cartsData,
   'categories.json': categoriesData,
   'cetak-full-color.json': cetakFullColorData,
   'checkouts.json': checkoutsData,
+  'clients.json': clientsData,
   'contact-forms.json': contactFormsData,
   'customer-types.json': customerTypesData,
   'customers.json': customersData,
   'delivery-notes.json': deliveryNotesData,
   'departments.json': departmentsData,
   'designations.json': designationsData,
+  'download-files.json': downloadFilesData,
   'employees.json': employeesData,
   'employeeSalaries.json': employeeSalariesData,
   'employee-salaries.json': employeeSalariesData,
   'expense-categories.json': expenseCategoriesData,
   'expenses.json': expensesData,
+  'faqs.json': faqsData,
+  'faq-categories.json': faqCategoriesData,
   'flow-categories.json': flowCategoriesData,
   'flow-names.json': flowNamesData,
   'flow-templates.json': flowTemplatesData,
+  'footers.json': footersData,
+  'footer-config.json': footerConfigData,
   'incentives.json': incentivesData,
   'incomes.json': incomesData,
   'invoices.json': invoicesData,

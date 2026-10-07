@@ -335,7 +335,7 @@ const menuGroups: MenuGroup[] = [
         title: "FAQ",
         icon: "help-circle",
         submenus: [
-          { title: "Category", to: "/faq" },
+          { title: "Category", to: "/faq-category" },
           { title: "FAQ Question", to: "/faq" },
         ],
       },
