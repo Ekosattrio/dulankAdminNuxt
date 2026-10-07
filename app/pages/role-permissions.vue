@@ -1,200 +1,201 @@
-<template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Roles & Permission</h4>
-            <h6>Manage your roles</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New Role</button>
-        </div>
-      </div>
-
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input position-relative">
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search Role..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="sortOrder" class="form-select form-select-sm" style="min-width: 140px">
-                <option value="newest">Sort by: Newest</option>
-                <option value="oldest">Sort by: Oldest</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead>
-                <tr>
-                  <th>Role Name</th>
-                  <th>Created On</th>
-                  <th class="text-end no-sort">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(r, idx) in filteredRoles" :key="idx">
-                  <td class="fw-semibold text-dark">{{ r.name }}</td>
-                  <td>{{ r.createdOn }}</td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-outline-primary p-1" title="Edit Role" @click="openEditModal(r)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <NuxtLink to="/permissions" class="btn btn-sm btn-outline-info p-1" title="Permissions Matrix">
-                        <i class="ti ti-shield"></i>
-                      </NuxtLink>
-                      <button class="btn btn-sm btn-outline-danger p-1" title="Delete Role" @click="deleteRole(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredRoles.length === 0">
-                  <td colspan="3" class="text-center py-4 text-muted">No roles found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit Role Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? "Edit Role" : "Create Role" }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveRole">
-                <div class="mb-3">
-                  <label class="form-label">Role Name</label>
-                  <input v-model="currentRole.name" type="text" class="form-control" required placeholder="e.g. Supervisor" />
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import type { SystemRole } from '#server/types/user-management'
+import { useRoles } from '~/composables/useRoles'
+import { useTablePrint } from '~/composables/useTablePrint'
+import RoleRecordsTable from '~/components/pages/roles/RoleRecordsTable.vue'
+import RoleFormModal from '~/components/pages/roles/RoleFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+
+definePageMeta({
+  layout: 'default',
+})
 
 useLegacyPage({
-  title: 'Roles & Permission',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-});
+  title: 'Roles & Permission - User Management',
+  sweetAlert: false,
+})
 
-const searchQuery = ref("");
-const sortOrder = ref("newest");
-const showModal = ref(false);
-const isEditing = ref(false);
+const searchQuery = ref('')
+const sortOrder = ref('newest')
 
-interface RoleItem {
-  id?: number;
-  name: string;
-  createdOn: string;
+const { roles, pending, error, refresh, saveRole, deleteRole } = useRoles()
+
+// Smooth client-side filtering and sorting for roles
+const filteredRoles = computed(() => {
+  let list = [...roles.value]
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
+    list = list.filter((r) =>
+      r.name.toLowerCase().includes(q) || (r.description && r.description.toLowerCase().includes(q))
+    )
+  }
+  list.sort((a, b) => {
+    const diff = (a.createdOn || '').localeCompare(b.createdOn || '')
+    return sortOrder.value === 'newest' ? -diff : diff
+  })
+  return list
+})
+
+// Modals
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeRoleForEdit = ref<SystemRole | null>(null)
+const roleToDelete = ref<SystemRole | null>(null)
+const isBusy = ref(false)
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const roles = ref<RoleItem[]>([
-  { id: 1, name: "Admin", createdOn: "25 May 2023" },
-  { id: 2, name: "Customer", createdOn: "30 May 2023" },
-  { id: 3, name: "Shop Owner", createdOn: "20 Apr 2023" },
-  { id: 4, name: "Manager", createdOn: "12 Jan 2023" },
-]);
+function handleAdd() {
+  isEditMode.value = false
+  activeRoleForEdit.value = null
+  isFormModalOpen.value = true
+}
 
-const currentRole = ref<RoleItem>({
-  name: "",
-  createdOn: "",
-});
+function handleEdit(role: SystemRole) {
+  isEditMode.value = true
+  activeRoleForEdit.value = role
+  isFormModalOpen.value = true
+}
 
-const filteredRoles = computed(() => {
-  return roles.value.filter((r) => r.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
-});
-
-const openAddModal = () => {
-  isEditing.value = false;
-  currentRole.value = {
-    name: "",
-    createdOn: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-  };
-  showModal.value = true;
-};
-
-const openEditModal = (r: RoleItem) => {
-  isEditing.value = true;
-  currentRole.value = { ...r };
-  showModal.value = true;
-};
-
-const saveRole = () => {
-  if (isEditing.value) {
-    const idx = roles.value.findIndex((r) => r.id === currentRole.value.id);
-    if (idx !== -1) {
-      roles.value[idx] = { ...currentRole.value };
-    }
-  } else {
-    roles.value.unshift({
-      id: Date.now(),
-      name: currentRole.value.name,
-      createdOn: currentRole.value.createdOn,
-    });
+async function handleFormSubmit(payload: Partial<SystemRole>) {
+  isBusy.value = true
+  try {
+    await saveRole(payload)
+    await refresh()
+    isFormModalOpen.value = false
+    activeRoleForEdit.value = null
+    showToast(isEditMode.value ? 'Role updated successfully' : 'Role created successfully')
+  } catch (err: any) {
+    showToast(err?.message || 'Failed to save Role')
+  } finally {
+    isBusy.value = false
   }
-  showModal.value = false;
-};
+}
 
-const deleteRole = (idx: number) => {
-  if (confirm("Are you sure you want to delete this role?")) {
-    roles.value.splice(idx, 1);
+async function handleConfirmDelete() {
+  if (!roleToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteRole(roleToDelete.value.id)
+    showToast(`Role '${roleToDelete.value.name}' deleted successfully`)
+    roleToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.message || 'Failed to delete Role')
+  } finally {
+    isBusy.value = false
   }
-};
+}
 
-const exportPdf = () => {
-  window.print();
-};
+// Print & Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const printTable = () => {
-  window.print();
-};
+const printColumns = [
+  { key: 'name', label: 'Role Name' },
+  { key: 'createdOn', label: 'Created On' },
+  { key: 'description', label: 'Description' },
+]
 
-const refresh = () => {
-  // refresh
-};
+function handleExportExcel() {
+  const header = ['Role Name', 'Created On', 'Description']
+  const rows = filteredRoles.value.map((r) => [
+    `"${r.name.replace(/"/g, '""')}"`,
+    `"${r.createdOn}"`,
+    `"${(r.description || '').replace(/"/g, '""')}"`,
+  ])
 
-const toggleCollapse = () => {
-  // collapse
-};
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map((r) => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `roles_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Roles exported to CSV successfully')
+}
 </script>
+
+<template>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="Roles & Permission"
+      subtitle="Manage your roles"
+      add-label="Add New Role"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @export-pdf="openPrintModal('pdf')"
+      @export-excel="handleExportExcel"
+    />
+
+    <!-- Feedback Toast -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @dismiss="toastMessage = ''"
+    />
+
+    <!-- Skeleton Loader & Error -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="3"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Failed to load roles. Please try again.') : ''"
+      @retry="refresh"
+    />
+
+    <!-- Table -->
+    <RoleRecordsTable
+      v-if="!pending && !error"
+      :roles="filteredRoles"
+      :search-query="searchQuery"
+      :sort-order="sortOrder"
+      @update:search-query="searchQuery = $event"
+      @update:sort-order="sortOrder = $event"
+      @edit="handleEdit"
+      @delete="roleToDelete = $event"
+    />
+
+    <!-- Add / Edit Modal -->
+    <RoleFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :role="activeRoleForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation -->
+    <SalesConfirmDelete
+      :open="!!roleToDelete"
+      :busy="isBusy"
+      title="Delete Role"
+      :description="`Are you sure you want to delete role '${roleToDelete?.name}'? This action cannot be undone.`"
+      @close="roleToDelete = null"
+      @confirm="handleConfirmDelete"
+    />
+
+    <!-- Print Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Daftar Peran Pengguna (System Roles)"
+      :columns="printColumns"
+      :items="roles"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

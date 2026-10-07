@@ -1,332 +1,218 @@
-<template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>User Admin</h4>
-            <h6>Kelola User & Role Toko</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="page-btn">
-          <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New User</button>
-        </div>
-      </div>
-
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input position-relative">
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search User Admin..." />
-              </div>
-            </div>
-            <div class="filters d-flex justify-content-end gap-2">
-              <select v-model="selectedRole" class="form-select form-select-sm" style="min-width: 130px">
-                <option value="">All Roles</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Supervisor">Supervisor</option>
-                <option value="Staff">Staff</option>
-              </select>
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="min-width: 130px">
-                <option value="">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead>
-                <tr>
-                  <th>User ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Store</th>
-                  <th>Status</th>
-                  <th class="text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(u, idx) in filteredAdmins" :key="idx">
-                  <td class="fw-bold text-primary">{{ u.id }}</td>
-                  <td>{{ u.name }}</td>
-                  <td>{{ u.email }}</td>
-                  <td>
-                    <span :class="getRoleBadgeClass(u.role)">{{ u.role }}</span>
-                  </td>
-                  <td>
-                    <div class="d-flex flex-wrap gap-1">
-                      <span v-for="(store, sIdx) in u.stores" :key="sIdx" class="badge bg-primary text-xs">
-                        {{ store }}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <span :class="u.status === 'Active' ? 'badge bg-outline-success' : 'badge bg-outline-danger'">
-                      {{ u.status }}
-                    </span>
-                  </td>
-                  <td class="text-end">
-                    <div class="d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(u)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteAdmin(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredAdmins.length === 0">
-                  <td colspan="7" class="text-center py-4 text-muted">No admin users found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? "Edit Admin User" : "Add Admin User" }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveAdmin">
-                <div class="row g-3">
-                  <div class="col-lg-6">
-                    <label class="form-label">Full Name</label>
-                    <input v-model="currentAdmin.name" type="text" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Email</label>
-                    <input v-model="currentAdmin.email" type="email" class="form-control" required />
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Role</label>
-                    <select v-model="currentAdmin.role" class="form-select">
-                      <option value="Admin">Admin</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Supervisor">Supervisor</option>
-                      <option value="Staff">Staff</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-6">
-                    <label class="form-label">Status</label>
-                    <select v-model="currentAdmin.status" class="form-select">
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-12">
-                    <label class="form-label d-block fw-semibold mb-2">Assigned Stores</label>
-                    <div class="row g-2">
-                      <div v-for="st in availableStores" :key="st" class="col-sm-6">
-                        <div class="form-check">
-                          <input
-                            :id="'store-' + st"
-                            type="checkbox"
-                            class="form-check-input"
-                            :value="st"
-                            :checked="currentAdmin.stores.includes(st)"
-                            @change="toggleStore(st)"
-                          />
-                          <label :for="'store-' + st" class="form-check-label">{{ st }}</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end mt-4 pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import type { UserAdmin } from '#server/types/user-management'
+import { useUserAdmins } from '~/composables/useUserAdmins'
+import { useTablePrint } from '~/composables/useTablePrint'
+import UserAdminRecordsTable from '~/components/pages/user-admin/UserAdminRecordsTable.vue'
+import UserAdminFormModal from '~/components/pages/user-admin/UserAdminFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+
+definePageMeta({
+  layout: 'default',
+})
 
 useLegacyPage({
-  title: 'User Admin',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-});
+  title: 'User Admin - User Management',
+  sweetAlert: false,
+})
 
-const searchQuery = ref("");
-const selectedRole = ref("");
-const selectedStatus = ref("");
-const showModal = ref(false);
-const isEditing = ref(false);
+const searchQuery = ref('')
+const selectedRole = ref('')
+const selectedStatus = ref('')
 
-const availableStores = ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 2", "Toko Cabang 3"];
+const { userAdmins, pending, error, refresh, saveUserAdmin, deleteUserAdmin } = useUserAdmins()
 
-interface AdminItem {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  stores: string[];
-  status: string;
+// Smooth client-side filtering for user admins
+const filteredUserAdmins = computed(() => {
+  return userAdmins.value.filter((adm) => {
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.trim().toLowerCase()
+      const match =
+        (adm.name && adm.name.toLowerCase().includes(q)) ||
+        (adm.email && adm.email.toLowerCase().includes(q)) ||
+        (adm.userId && adm.userId.toLowerCase().includes(q)) ||
+        (adm.phone && adm.phone.toLowerCase().includes(q))
+      if (!match) return false
+    }
+    if (selectedRole.value && adm.role !== selectedRole.value) return false
+    if (selectedStatus.value && adm.status !== selectedStatus.value) return false
+    return true
+  })
+})
+
+// Modals
+const isFormModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeAdminForEdit = ref<UserAdmin | null>(null)
+const adminToDelete = ref<UserAdmin | null>(null)
+const isBusy = ref(false)
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const admins = ref<AdminItem[]>([
-  {
-    id: "U001",
-    name: "Budi Santoso",
-    email: "budi.santoso@email.com",
-    role: "Admin",
-    stores: ["Toko Pusat", "Toko Cabang 1"],
-    status: "Active",
-  },
-  {
-    id: "U002",
-    name: "Siti Aminah",
-    email: "siti.aminah@email.com",
-    role: "Manager",
-    stores: ["Toko Cabang 2"],
-    status: "Active",
-  },
-  {
-    id: "U003",
-    name: "Ahmad Fauzi",
-    email: "ahmad.fauzi@email.com",
-    role: "Supervisor",
-    stores: ["Toko Pusat", "Toko Cabang 1", "Toko Cabang 3"],
-    status: "Active",
-  },
-  {
-    id: "U004",
-    name: "Diana Putri",
-    email: "diana.putri@email.com",
-    role: "Staff",
-    stores: ["Toko Cabang 2"],
-    status: "Inactive",
-  },
-]);
+function handleAdd() {
+  isEditMode.value = false
+  activeAdminForEdit.value = null
+  isFormModalOpen.value = true
+}
 
-const currentAdmin = ref<AdminItem>({
-  id: "",
-  name: "",
-  email: "",
-  role: "Admin",
-  stores: [],
-  status: "Active",
-});
+function handleEdit(user: UserAdmin) {
+  isEditMode.value = true
+  activeAdminForEdit.value = user
+  isFormModalOpen.value = true
+}
 
-const getRoleBadgeClass = (role: string) => {
-  switch (role) {
-    case "Admin":
-      return "badge bg-info";
-    case "Manager":
-      return "badge bg-warning";
-    case "Supervisor":
-      return "badge bg-success";
-    default:
-      return "badge bg-secondary";
+async function handleFormSubmit(payload: Partial<UserAdmin>) {
+  isBusy.value = true
+  try {
+    await saveUserAdmin(payload)
+    isFormModalOpen.value = false
+    showToast(isEditMode.value ? 'User Admin updated successfully' : 'User Admin created successfully')
+  } catch (err: any) {
+    showToast(err?.message || 'Failed to save User Admin')
+  } finally {
+    isBusy.value = false
   }
-};
+}
 
-const filteredAdmins = computed(() => {
-  return admins.value.filter((u) => {
-    const q = searchQuery.value.toLowerCase();
-    const matchQ = u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q) || u.id.toLowerCase().includes(q);
-    const matchRole = !selectedRole.value || u.role === selectedRole.value;
-    const matchStatus = !selectedStatus.value || u.status === selectedStatus.value;
-    return matchQ && matchRole && matchStatus;
-  });
-});
-
-const toggleStore = (storeName: string) => {
-  const idx = currentAdmin.value.stores.indexOf(storeName);
-  if (idx === -1) {
-    currentAdmin.value.stores.push(storeName);
-  } else {
-    currentAdmin.value.stores.splice(idx, 1);
+async function handleConfirmDelete() {
+  if (!adminToDelete.value) return
+  isBusy.value = true
+  try {
+    await deleteUserAdmin(adminToDelete.value.id)
+    showToast(`User Admin '${adminToDelete.value.name}' deleted successfully`)
+    adminToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.message || 'Failed to delete User Admin')
+  } finally {
+    isBusy.value = false
   }
-};
+}
 
-const openAddModal = () => {
-  isEditing.value = false;
-  const nextNum = admins.value.length + 1;
-  currentAdmin.value = {
-    id: `U00${nextNum}`,
-    name: "",
-    email: "",
-    role: "Admin",
-    stores: ["Toko Pusat"],
-    status: "Active",
-  };
-  showModal.value = true;
-};
+// Print & Export
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const openEditModal = (u: AdminItem) => {
-  isEditing.value = true;
-  currentAdmin.value = { ...u, stores: [...u.stores] };
-  showModal.value = true;
-};
+const printColumns = [
+  { key: 'userId', label: 'User ID' },
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email' },
+  { key: 'role', label: 'Role' },
+  { key: 'storesText', label: 'Stores' },
+  { key: 'status', label: 'Status' },
+]
 
-const saveAdmin = () => {
-  if (isEditing.value) {
-    const idx = admins.value.findIndex((a) => a.id === currentAdmin.value.id);
-    if (idx !== -1) {
-      admins.value[idx] = { ...currentAdmin.value };
-    }
-  } else {
-    admins.value.unshift({ ...currentAdmin.value });
-  }
-  showModal.value = false;
-};
+const printableAdmins = computed(() =>
+  filteredUserAdmins.value.map((a) => ({
+    ...a,
+    storesText: a.stores.join(', '),
+  }))
+)
 
-const deleteAdmin = (idx: number) => {
-  if (confirm("Are you sure you want to delete this admin user?")) {
-    admins.value.splice(idx, 1);
-  }
-};
+function handleExportExcel() {
+  const header = ['User ID', 'Name', 'Email', 'Role', 'Stores', 'Status', 'Phone']
+  const rows = filteredUserAdmins.value.map((a) => [
+    `"${a.userId}"`,
+    `"${a.name.replace(/"/g, '""')}"`,
+    `"${a.email}"`,
+    `"${a.role}"`,
+    `"${a.stores.join(', ')}"`,
+    `"${a.status}"`,
+    `"${a.phone || ''}"`,
+  ])
 
-const exportPdf = () => {
-  window.print();
-};
-
-const printTable = () => {
-  window.print();
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map((r) => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `user_admins_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('User Admins exported to CSV successfully')
+}
 </script>
+
+<template>
+  <div class="space-y-4 p-4 md:p-6">
+    <!-- Header -->
+    <SalesListHeader
+      title="User Admin"
+      subtitle="Kelola User & Role Toko"
+      add-label="Add New User"
+      @add="handleAdd"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @export-pdf="openPrintModal('pdf')"
+      @export-excel="handleExportExcel"
+    />
+
+    <!-- Feedback Toast -->
+    <SalesFeedback
+      v-if="toastMessage"
+      :message="toastMessage"
+      @dismiss="toastMessage = ''"
+    />
+
+    <!-- Skeleton Loader & Error -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :skeleton-rows="6"
+      :error="error ? (error.message || 'Failed to load user admins. Please try again.') : ''"
+      @retry="refresh"
+    />
+
+    <!-- Table -->
+    <UserAdminRecordsTable
+      v-if="!pending && !error"
+      :user-admins="filteredUserAdmins"
+      :search-query="searchQuery"
+      :selected-role="selectedRole"
+      :selected-status="selectedStatus"
+      @update:search-query="searchQuery = $event"
+      @update:selected-role="selectedRole = $event"
+      @update:selected-status="selectedStatus = $event"
+      @edit="handleEdit"
+      @delete="adminToDelete = $event"
+    />
+
+    <!-- Add / Edit Modal -->
+    <UserAdminFormModal
+      :open="isFormModalOpen"
+      :is-edit="isEditMode"
+      :user="activeAdminForEdit"
+      :busy="isBusy"
+      @close="isFormModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Delete Confirmation -->
+    <SalesConfirmDelete
+      :open="!!adminToDelete"
+      :busy="isBusy"
+      title="Delete User Admin"
+      :description="`Are you sure you want to delete user admin '${adminToDelete?.name}'? This action cannot be undone.`"
+      @close="adminToDelete = null"
+      @confirm="handleConfirmDelete"
+    />
+
+    <!-- Print Modal -->
+    <DocumentPrintModal
+      v-if="isPrintModalOpen"
+      :open="isPrintModalOpen"
+      title="Daftar Pengguna Administrator Toko"
+      :columns="printColumns"
+      :items="printableAdmins"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

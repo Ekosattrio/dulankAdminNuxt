@@ -1,0 +1,86 @@
+[
+  {
+    "id": "mem-1791341817372",
+    "customerId": "ID000007",
+    "name": "dafa",
+    "email": "dafa@gmail.com",
+    "phone": "0812345678",
+    "verifiedEmail": true,
+    "subscription": true,
+    "status": "Suspended",
+    "avatar": "/assets/img/users/user-01.jpg",
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "mem-1",
+    "customerId": "ID000001",
+    "name": "Budi Santoso",
+    "email": "budi.santoso@email.com",
+    "verifiedEmail": true,
+    "subscription": true,
+    "status": "Active Member",
+    "phone": "081234567890",
+    "avatar": "/assets/img/users/user-01.jpg",
+    "createdAt": "2024-01-10"
+  },
+  {
+    "id": "mem-2",
+    "customerId": "ID000002",
+    "name": "PT Maju Jaya",
+    "email": "info@majujaya.co.id",
+    "verifiedEmail": true,
+    "subscription": true,
+    "status": "Active Member",
+    "phone": "0215551234",
+    "avatar": "/assets/img/users/user-02.jpg",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "mem-3",
+    "customerId": "ID000003",
+    "name": "Siti Aminah",
+    "email": "siti.aminah@email.com",
+    "verifiedEmail": true,
+    "subscription": false,
+    "status": "Active Member",
+    "phone": "081398765432",
+    "avatar": "/assets/img/users/user-03.jpg",
+    "createdAt": "2024-02-01"
+  },
+  {
+    "id": "mem-4",
+    "customerId": "ID000004",
+    "name": "Toko Berkah",
+    "email": "toko.berkah@email.com",
+    "verifiedEmail": false,
+    "subscription": false,
+    "status": "Active Member",
+    "phone": "085712345678",
+    "avatar": "/assets/img/users/user-04.jpg",
+    "createdAt": "2024-02-12"
+  },
+  {
+    "id": "mem-5",
+    "customerId": "ID000005",
+    "name": "CV Creative Design",
+    "email": "admin@creativedesign.com",
+    "verifiedEmail": true,
+    "subscription": true,
+    "status": "Active Member",
+    "phone": "0227891234",
+    "avatar": "/assets/img/users/user-05.jpg",
+    "createdAt": "2024-03-05"
+  },
+  {
+    "id": "mem-6",
+    "customerId": "ID000006",
+    "name": "Ahmad Fauzi",
+    "email": "ahmad.fauzi@email.com",
+    "verifiedEmail": true,
+    "subscription": false,
+    "status": "Suspended",
+    "phone": "081987654321",
+    "avatar": "/assets/img/users/user-06.jpg",
+    "createdAt": "2024-03-18"
+  }
+]

@@ -45,6 +45,7 @@ import purchasesData from '../data/purchases.json'
 import quotationsData from '../data/quotations.json'
 import requestQuotationsData from '../data/request-quotations.json'
 import reviewsData from '../data/reviews.json'
+import rolesData from '../data/roles.json'
 import salesHistoryData from '../data/sales-history.json'
 import salesReturnsData from '../data/sales-returns.json'
 import salesVouchersData from '../data/sales-vouchers.json'
@@ -106,6 +107,7 @@ export const bundledSources: Record<string, unknown> = {
   'quotations.json': quotationsData,
   'request-quotations.json': requestQuotationsData,
   'reviews.json': reviewsData,
+  'roles.json': rolesData,
   'sales-history.json': salesHistoryData,
   'sales-returns.json': salesReturnsData,
   'sales-vouchers.json': salesVouchersData,
