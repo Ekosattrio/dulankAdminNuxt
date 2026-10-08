@@ -1,0 +1,23 @@
+{
+  "id": "pos-setting-1",
+  "defaultCustomerId": "ID000002",
+  "defaultCustomerName": "Siti Aminah (General / Walk-in)",
+  "defaultWarehouseId": "1",
+  "defaultWarehouseName": "Kacetak Pusat Karawang Barat",
+  "printerType": "Thermal 80mm",
+  "autoPrintReceipt": true,
+  "enableSoundEffect": true,
+  "barcodeScannerMode": "instant_add",
+  "allowedPaymentMethods": [
+    "Cash",
+    "QRIS",
+    "Card / EDC",
+    "Bank Transfer"
+  ],
+  "receiptHeaderNotes": "SELAMAT DATANG DI KACETAK POS",
+  "receiptFooterNotes": "Barang yang sudah dibeli tidak dapat ditukar atau dikembalikan kecuali cacat produksi. Terima kasih atas kunjungan Anda!",
+  "showTaxOnReceipt": true,
+  "showCashierName": true,
+  "showCustomerDetails": true,
+  "updatedAt": "2026-10-08T08:00:00.000Z"
+}

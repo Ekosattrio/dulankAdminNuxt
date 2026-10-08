@@ -2041,6 +2041,37 @@ Penyelarasan visual saat data dimuat (*loading state*) telah diimplementasikan p
 6. **Blog Tag, Blog Category, Blog Comment, FAQ Question**: Menggunakan `TableSkeleton` via `SalesFeedback.vue` yang seragam dan presisi untuk tampilan data tabular.
 7. **FAQ Category**: Render instan placeholder clean empty-state.
 
+---
+
+## 43. Standarisasi Grup Menu SETTING (11 Sub-Menu Lengkap)
+
+Modul **SETTING** telah dirombak secara holistik dari kode Bootstrap statis lama menjadi arsitektur modern berbasis Nuxt 4 + Tailwind CSS, didukung API Nitro backend-ready dan persistensi data JSON:
+
+### 43.1 Webstore Setting (`/profile` & `/company-setting`)
+- `/profile`: Profil akun admin (Rian Dharmawan - Super Admin & Head of Production), avatar upload preview via FileReader, form kontak/domisili, modal ubah password dengan validasi keamanan dan toggle show/hide mata sandi, skeleton loader saat pending.
+- `/company-setting`: Data profil legal percetakan (PT. Dulank Semesta Cida, slogan percetakan offset & digital printing, NPWP, kontak kantor, alamat pabrik industri percetakan), slot upload branding 4 gambar (Logo Utama, Logo Dark, App Icon, Favicon), skeleton loader saat pending.
+- Backend: `server/types/profile.ts`, `server/types/company-setting.ts`, `server/data/profile.json`, `server/data/company-setting.json`, API `/api/profile`, `/api/company-setting`.
+
+### 43.2 Locations (`/province`, `/regency`, `/district`)
+- `/province`: Master 11 provinsi Indonesia, `SalesDataTable.vue`, pencarian instan, multi-sorting, modal Add/Edit (`ProvinceModal.vue`), ekspor CSV, print/PDF dialog, dan `TableSkeleton`.
+- `/regency`: Master 20 kota/kabupaten Indonesia, filter provinsi dinamis, badge tipe (Kota/Kabupaten), modal Add/Edit (`RegencyModal.vue`) dengan cascading select provinsi relasional.
+- `/district`: Master 20 kecamatan lengkap dengan kode pos, filter provinsi dan kota, modal Add/Edit (`DistrictModal.vue`) dengan fitur cascading select (pilihan provinsi otomatis memfilter kota/kabupaten).
+- Backend: `server/types/location.ts`, `server/data/provinces.json`, `server/data/regencies.json`, `server/data/districts.json`, API `/api/provinces`, `/api/regencies`, `/api/districts`.
+
+### 43.3 App Setting (`/invoice-setting`, `/invoice-template`, & `/pos-settings`)
+- `/invoice-setting`: Logo faktur upload preview, Prefix (`INV-`), digit penomoran, due date default, PPN (%), pembulatan (Round Off), terms, footer notes, rekening transfer bank, serta **Interactive Live Invoice Preview** real-time yang langsung berubah saat form diubah.
+- `/invoice-template`: Halaman template faktur yang disediakan sebagai halaman kanvas kosong (*clean blank canvas/page*) sesuai kebutuhan kustomisasi mendatang.
+- `/pos-settings`: Konfigurasi kasir POS: Default Customer, Default Store, Tipe printer (Thermal 80mm, 58mm, A4), Barcode Scanner mode (Instant Add, Manual Qty Focus, Bulk Continuous), izin metode pembayaran (Cash, QRIS, EDC, Transfer), pesan header/footer, dan **Live Thermal Receipt Preview**.
+- Backend: `server/types/invoice-setting.ts`, `server/types/pos-setting.ts`, `server/data/invoice-settings.json`, `server/data/pos-settings.json`, API `/api/invoice-settings`, `/api/pos-settings`.
+
+### 43.4 System Setting & Prefixes (`/email-setting`, `/language`, `/otp`, `/prefixes`)
+- `/email-setting`: Konfigurasi SMTP (Host, Port 587/465 dengan preset, User, Password, TLS/SSL, From Email/Name), pilihan driver (SMTP, SendGrid, PHP Mailer), dan modal **Send Test Email** terhubung ke API `/api/email-settings/test`.
+- `/language`: Disediakan sebagai halaman kanvas kosong (*clean blank canvas/page*) sementara waktu sesuai instruksi pengguna.
+- `/otp`: Konfigurasi 2FA OTP: toggle aktif di header, pilihan kanal (WhatsApp Wablas/Gateway, SMS, Email), panjang digit (4, 6, 8), masa aktif expire, jeda kirim ulang, dan simulator pratinjau pesan OTP.
+- `/prefixes`: Master prefix dokumen transaksi (15 field input terstruktur dalam grid 4 kolom: Product SKU, Supplier, Purchase, Purchase Return, Sales, Sales Return, Customer, Expense, Stock Transfer, Stock Adjustmentt, Sales Order, POS Invoice, Estimation, Transaction, Employee) dengan tombol Cancel & Save Changes terintegrasi API dan skeleton loader.
+- Backend: `server/types/system-settings.ts`, `server/data/email-settings.json`, `server/data/languages.json`, `server/data/otp-settings.json`, `server/data/prefixes.json`, API `/api/email-settings`, `/api/languages`, `/api/otp-settings`, `/api/prefixes`.
+
+
 
 
 

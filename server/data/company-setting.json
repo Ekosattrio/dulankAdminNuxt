@@ -1,0 +1,22 @@
+{
+  "id": "COMP-DLK-001",
+  "companyName": "PT. Dulank Semesta Cida",
+  "tagline": "Pusat Solusi Percetakan Offset & Digital Printing Berkualitas Tinggi",
+  "email": "kontak@dulanksemesta.com",
+  "phone": "+62 21 4256 7890",
+  "fax": "+62 21 4256 7891",
+  "website": "https://dulanksemesta.com",
+  "npwp": "01.345.678.9-012.000",
+  "currency": "IDR",
+  "address": "Kawasan Percetakan Industri Modern, Blok D2 No. 14, Jl. Daan Mogot KM 19",
+  "country": "Indonesia",
+  "province": "DKI Jakarta",
+  "city": "Jakarta Barat",
+  "postalCode": "11840",
+  "images": {
+    "logo": "/assets/img/logo-small.png",
+    "icon": "/assets/img/logo-small.png",
+    "favicon": "/assets/img/kacetak.jpeg",
+    "darkLogo": "/assets/img/logo-small.png"
+  }
+}

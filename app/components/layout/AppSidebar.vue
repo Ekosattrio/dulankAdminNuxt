@@ -380,7 +380,7 @@ const menuGroups: MenuGroup[] = [
         icon: "smartphone",
         submenus: [
           { title: "Invoice setting", to: "/invoice-setting" },
-          { title: "Invoice template", to: "/invoice-setting" },
+          { title: "Invoice template", to: "/invoice-template" },
           { title: "POS", to: "/pos-settings" },
         ],
       },

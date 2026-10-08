@@ -1,257 +1,332 @@
-<template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Province List</h4>
-            <h6>Manage your Province</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-        <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New Province</button>
-          <button class="btn btn-outline-primary" @click="showImportModal = true">
-            <i class="ti ti-download me-1"></i> Import Province
-          </button>
-        </div>
-      </div>
-
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div class="search-set d-block d-md-flex align-items-center gap-2">
-              <div class="search-input position-relative">
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search Province..." />
-              </div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <select v-model="sortOrder" class="form-select form-select-sm" style="min-width: 140px">
-                <option value="newest">Sort by Date: Newest</option>
-                <option value="oldest">Sort by Date: Oldest</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead>
-                <tr>
-                  <th>Province</th>
-                  <th>Added</th>
-                  <th>Created by</th>
-                  <th class="text-end no-sort">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(prov, idx) in filteredProvinces" :key="idx">
-                  <td class="fw-semibold text-dark">{{ prov.name }}</td>
-                  <td>{{ prov.added }}</td>
-                  <td>
-                    <div class="userimgname d-flex align-items-center gap-2">
-                      <a href="javascript:void(0);" class="product-img">
-                        <img
-                          :src="prov.avatar"
-                          alt="user"
-                          class="rounded-circle"
-                          style="width: 30px; height: 30px; object-fit: cover"
-                        />
-                      </a>
-                      <span class="text-muted">{{ prov.createdBy }}</span>
-                    </div>
-                  </td>
-                  <td class="action-table-data text-end">
-                    <div class="edit-delete-action d-inline-flex gap-2">
-                      <button class="btn btn-sm btn-outline-info p-1" title="View" @click="viewProvince(prov)">
-                        <i class="ti ti-eye"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(prov)">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deleteProvince(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="filteredProvinces.length === 0">
-                  <td colspan="4" class="text-center py-4 text-muted">No provinces found.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>{{ isEditing ? "Edit Province" : "Add New Province" }}</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveProvince">
-                <div class="mb-3">
-                  <label class="form-label">Province Name</label>
-                  <input v-model="currentProvince.name" type="text" class="form-control" required placeholder="e.g. Jawa Barat" />
-                </div>
-                <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
-                  <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Import Modal -->
-      <div v-if="showImportModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header border-0 custom-modal-header pb-0">
-              <div class="page-title">
-                <h4>Import Province Data</h4>
-              </div>
-              <button type="button" class="btn-close" @click="showImportModal = false"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <div class="mb-3">
-                <label class="form-label">Choose CSV / Excel File</label>
-                <input type="file" class="form-control" accept=".csv,.xlsx,.xls" />
-              </div>
-              <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
-                <button type="button" class="btn btn-light" @click="showImportModal = false">Cancel</button>
-                <button type="button" class="btn btn-warning text-white" @click="showImportModal = false">Import</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import type { Province, ProvinceFormData } from '#server/types/location'
+import { useProvinces } from '~/composables/useLocations'
+import { useTablePrint } from '~/composables/useTablePrint'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import SalesActionButton from '~/components/sales/SalesActionButton.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import ProvinceModal from '~/components/pages/location/ProvinceModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-useLegacyPage({
-  title: 'Province List',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-});
+useLegacyPage({ title: 'Province List', sweetAlert: false })
 
-const searchQuery = ref("");
-const sortOrder = ref("newest");
-const showModal = ref(false);
-const showImportModal = ref(false);
-const isEditing = ref(false);
+const { provinces, pending, error, refresh, saveProvince, deleteProvince } = useProvinces()
 
-interface ProvinceItem {
-  id?: number;
-  name: string;
-  added: string;
-  createdBy: string;
-  avatar: string;
+// Filter and search
+const searchQuery = ref('')
+const filterStatus = ref('')
+const sortOrder = ref<'newest' | 'oldest' | 'name-asc' | 'name-desc'>('newest')
+
+// Modal states
+const isModalOpen = ref(false)
+const isEditMode = ref(false)
+const activeProvinceForEdit = ref<Province | null>(null)
+const provinceToDelete = ref<Province | null>(null)
+const isBusy = ref(false)
+
+// Toast notification
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-const provinces = ref<ProvinceItem[]>([
-  { id: 1, name: "DKI Jakarta", added: "2025-08-28", createdBy: "Arroon", avatar: "/assets/img/users/user-30.jpg" },
-  { id: 2, name: "Jawa Barat", added: "2025-08-27", createdBy: "Kenneth", avatar: "/assets/img/users/user-13.jpg" },
-  { id: 3, name: "Jawa Tengah", added: "2025-08-26", createdBy: "Gart", avatar: "/assets/img/users/user-11.jpg" },
-  { id: 4, name: "Jawa Timur", added: "2025-08-25", createdBy: "Steven", avatar: "/assets/img/users/user-01.jpg" },
-  { id: 5, name: "Banten", added: "2025-08-24", createdBy: "Susan", avatar: "/assets/img/users/user-02.jpg" },
-  { id: 6, name: "DI Yogyakarta", added: "2025-08-23", createdBy: "Robert", avatar: "/assets/img/users/user-03.jpg" },
-  { id: 7, name: "Bali", added: "2025-08-22", createdBy: "Janet", avatar: "/assets/img/users/user-06.jpg" },
-]);
+const statusOptions = ['Active', 'Inactive']
 
-const currentProvince = ref<ProvinceItem>({
-  name: "",
-  added: "",
-  createdBy: "Admin",
-  avatar: "/assets/img/users/user-01.jpg",
-});
+// Columns configuration
+const columns = [
+  { key: 'name', label: 'Province', sortable: true },
+  { key: 'added', label: 'Added', sortable: true },
+  { key: 'createdBy', label: 'Created by', sortable: true },
+  { key: 'status', label: 'Status', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center whitespace-nowrap' },
+]
 
+// Print columns
+const printColumns = [
+  { key: 'id', label: 'ID' },
+  { key: 'name', label: 'Province' },
+  { key: 'code', label: 'Code' },
+  { key: 'added', label: 'Added' },
+  { key: 'createdBy', label: 'Created by' },
+  { key: 'status', label: 'Status', align: 'center' as const },
+]
+
+// Filtered and sorted items
 const filteredProvinces = computed(() => {
-  return provinces.value.filter((p) => p.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
-});
+  let list = [...provinces.value]
 
-const openAddModal = () => {
-  isEditing.value = false;
-  currentProvince.value = {
-    name: "",
-    added: new Date().toISOString().split("T")[0],
-    createdBy: "Admin",
-    avatar: "/assets/img/users/user-01.jpg",
-  };
-  showModal.value = true;
-};
-
-const openEditModal = (p: ProvinceItem) => {
-  isEditing.value = true;
-  currentProvince.value = { ...p };
-  showModal.value = true;
-};
-
-const viewProvince = (p: ProvinceItem) => {
-  alert(`Province: ${p.name}\nAdded on: ${p.added}\nCreated by: ${p.createdBy}`);
-};
-
-const saveProvince = () => {
-  if (isEditing.value) {
-    const idx = provinces.value.findIndex((p) => p.id === currentProvince.value.id);
-    if (idx !== -1) {
-      provinces.value[idx] = { ...currentProvince.value };
-    }
-  } else {
-    provinces.value.unshift({
-      id: Date.now(),
-      name: currentProvince.value.name,
-      added: currentProvince.value.added,
-      createdBy: currentProvince.value.createdBy,
-      avatar: currentProvince.value.avatar,
-    });
+  if (filterStatus.value) {
+    list = list.filter((p) => p.status?.toLowerCase() === filterStatus.value.toLowerCase())
   }
-  showModal.value = false;
-};
 
-const deleteProvince = (idx: number) => {
-  if (confirm("Are you sure you want to delete this province?")) {
-    provinces.value.splice(idx, 1);
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase()
+    list = list.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.code && p.code.toLowerCase().includes(q)) ||
+        p.createdBy.toLowerCase().includes(q)
+    )
   }
-};
 
-const exportPdf = () => {
-  window.print();
-};
+  if (sortOrder.value === 'newest') {
+    list.sort((a, b) => (b.added || '').localeCompare(a.added || ''))
+  } else if (sortOrder.value === 'oldest') {
+    list.sort((a, b) => (a.added || '').localeCompare(b.added || ''))
+  } else if (sortOrder.value === 'name-asc') {
+    list.sort((a, b) => a.name.localeCompare(b.name))
+  } else if (sortOrder.value === 'name-desc') {
+    list.sort((a, b) => b.name.localeCompare(a.name))
+  }
 
-const printTable = () => {
-  window.print();
-};
+  return list
+})
 
-const refresh = () => {
-  // refresh
-};
+function handleAdd() {
+  isEditMode.value = false
+  activeProvinceForEdit.value = null
+  isModalOpen.value = true
+}
 
-const toggleCollapse = () => {
-  // collapse
-};
+function handleEdit(prov: Province) {
+  isEditMode.value = true
+  activeProvinceForEdit.value = prov
+  isModalOpen.value = true
+}
+
+function handleDeleteRequest(prov: Province) {
+  provinceToDelete.value = prov
+}
+
+async function confirmDelete() {
+  if (!provinceToDelete.value) return
+  isBusy.value = true
+  try {
+    const res = await deleteProvince(provinceToDelete.value.id)
+    showToast(res?.message || 'Province deleted successfully')
+    provinceToDelete.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to delete province')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+async function handleFormSubmit(formData: ProvinceFormData) {
+  isBusy.value = true
+  try {
+    const res = await saveProvince(formData)
+    showToast(res?.message || 'Province saved successfully')
+    isModalOpen.value = false
+    activeProvinceForEdit.value = null
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save province')
+  } finally {
+    isBusy.value = false
+  }
+}
+
+// Print & PDF
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+// CSV Export
+function exportCsv() {
+  if (filteredProvinces.value.length === 0) {
+    showToast('No province data to export')
+    return
+  }
+
+  const header = ['ID', 'Province Name', 'Code', 'Added Date', 'Created By', 'Status']
+  const rows = filteredProvinces.value.map((p) => [
+    `"${p.id}"`,
+    `"${p.name}"`,
+    `"${p.code || ''}"`,
+    `"${p.added || ''}"`,
+    `"${p.createdBy || ''}"`,
+    `"${p.status || 'Active'}"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map((r) => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `provinces_export_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Province list exported to CSV successfully')
+}
 </script>
+
+<template>
+  <div class="dulank-page dulank-page-province space-y-6">
+    <!-- Success Toast -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+    >
+      <FeatherIcon name="check-circle" size="16" />
+      <span>{{ toastMessage }}</span>
+    </div>
+
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Province List"
+      subtitle="Manage your Province"
+      add-label="Add New Province"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button
+          type="button"
+          title="Export CSV"
+          aria-label="Export CSV"
+          class="inline-flex min-h-9 items-center gap-1.5 rounded border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+          @click="exportCsv"
+        >
+          <FeatherIcon name="download" :size="14" />
+          <span>Export CSV</span>
+        </button>
+      </template>
+    </SalesListHeader>
+
+    <!-- Feedback / TableSkeleton when pending -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="5"
+      :error="error ? 'Unable to load province records. Please try again.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Data Table -->
+    <SalesDataTable
+      v-if="!pending && !error"
+      :columns="columns"
+      :items="filteredProvinces"
+      :search="searchQuery"
+      search-placeholder="Search Province..."
+      @update:search="searchQuery = $event"
+    >
+      <!-- Custom Filters Slot -->
+      <template #filters>
+        <!-- Status Filter -->
+        <TableFilterSelect
+          v-model="filterStatus"
+          :options="statusOptions"
+          placeholder="All Status"
+          aria-label="Filter status"
+        />
+
+        <!-- Sort Select -->
+        <select
+          v-model="sortOrder"
+          aria-label="Sort order"
+          class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+        >
+          <option value="newest">Sort: Newest</option>
+          <option value="oldest">Sort: Oldest</option>
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+        </select>
+      </template>
+
+      <!-- Custom Cells -->
+      <template #cell(name)="{ item }">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span>
+          <span
+            v-if="item.code"
+            class="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary dark:bg-primary/20"
+          >
+            {{ item.code }}
+          </span>
+        </div>
+      </template>
+
+      <template #cell(added)="{ item }">
+        <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.added }}</span>
+      </template>
+
+      <template #cell(createdBy)="{ item }">
+        <div class="flex items-center gap-2">
+          <img
+            :src="item.avatar || '/assets/img/users/user-30.jpg'"
+            :alt="item.createdBy"
+            class="size-7 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+            @error="($event.target as HTMLImageElement).src = '/assets/img/users/user-30.jpg'"
+          />
+          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ item.createdBy }}</span>
+        </div>
+      </template>
+
+      <template #cell(status)="{ item }">
+        <span
+          class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium"
+          :class="item.status === 'Inactive' ? 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-400' : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'"
+        >
+          {{ item.status || 'Active' }}
+        </span>
+      </template>
+
+      <template #cell(actions)="{ item }">
+        <div class="flex items-center justify-center gap-1.5">
+          <SalesActionButton
+            icon="edit"
+            label="Edit Province"
+            @click="handleEdit(item)"
+          />
+          <SalesActionButton
+            icon="trash-2"
+            label="Delete Province"
+            @click="handleDeleteRequest(item)"
+          />
+        </div>
+      </template>
+    </SalesDataTable>
+
+    <!-- Add/Edit Modal -->
+    <ProvinceModal
+      :open="isModalOpen"
+      :is-edit="isEditMode"
+      :province-data="activeProvinceForEdit"
+      :busy="isBusy"
+      @close="isModalOpen = false"
+      @submit="handleFormSubmit"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="!!provinceToDelete"
+      :busy="isBusy"
+      title="Delete Province"
+      :message="`Are you sure you want to delete '${provinceToDelete?.name}'?`"
+      @close="provinceToDelete = null"
+      @confirm="confirmDelete"
+    />
+
+    <!-- Document Print / PDF Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Province List Report"
+      :columns="printColumns"
+      :items="filteredProvinces"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

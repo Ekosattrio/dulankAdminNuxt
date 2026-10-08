@@ -1,0 +1,92 @@
+[
+  {
+    "id": "PRF-01",
+    "key": "product_sku",
+    "name": "Product (SKU)",
+    "prefix": "SKU - "
+  },
+  {
+    "id": "PRF-02",
+    "key": "supplier",
+    "name": "Supplier",
+    "prefix": "SUP - "
+  },
+  {
+    "id": "PRF-03",
+    "key": "purchase",
+    "name": "Purchase",
+    "prefix": "PU - "
+  },
+  {
+    "id": "PRF-04",
+    "key": "purchase_return",
+    "name": "Purchase Return",
+    "prefix": "PR - "
+  },
+  {
+    "id": "PRF-05",
+    "key": "sales",
+    "name": "Sales",
+    "prefix": "SA - "
+  },
+  {
+    "id": "PRF-06",
+    "key": "sales_return",
+    "name": "Sales Return",
+    "prefix": "SR - "
+  },
+  {
+    "id": "PRF-07",
+    "key": "customer",
+    "name": "Customer",
+    "prefix": "CT - "
+  },
+  {
+    "id": "PRF-08",
+    "key": "expense",
+    "name": "Expense",
+    "prefix": "EX - "
+  },
+  {
+    "id": "PRF-09",
+    "key": "stock_transfer",
+    "name": "Stock Transfer",
+    "prefix": "ST - "
+  },
+  {
+    "id": "PRF-10",
+    "key": "stock_adjustment",
+    "name": "Stock Adjustmentt",
+    "prefix": "SA - "
+  },
+  {
+    "id": "PRF-11",
+    "key": "sales_order",
+    "name": "Sales Order",
+    "prefix": "SO - "
+  },
+  {
+    "id": "PRF-12",
+    "key": "pos_invoice",
+    "name": "POS Invoice",
+    "prefix": "PINV - "
+  },
+  {
+    "id": "PRF-13",
+    "key": "estimation",
+    "name": "Estimation",
+    "prefix": "EST - "
+  },
+  {
+    "id": "PRF-14",
+    "key": "transaction",
+    "name": "Transaction",
+    "prefix": "TRN - "
+  },
+  {
+    "id": "PRF-15",
+    "key": "employee",
+    "name": "Employee",
+    "prefix": "EMP - "
+  }
+]

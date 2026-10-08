@@ -10,13 +10,16 @@ import categoriesData from '../data/categories.json'
 import cetakFullColorData from '../data/cetak-full-color.json'
 import checkoutsData from '../data/checkouts.json'
 import clientsData from '../data/clients.json'
+import companySettingData from '../data/company-setting.json'
 import contactFormsData from '../data/contact-forms.json'
 import customerTypesData from '../data/customer-types.json'
 import customersData from '../data/customers.json'
 import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
+import districtsData from '../data/districts.json'
 import downloadFilesData from '../data/download-files.json'
+import emailSettingsData from '../data/email-settings.json'
 import employeesData from '../data/employees.json'
 import employeeSalariesData from '../data/employeeSalaries.json'
 import expenseCategoriesData from '../data/expense-categories.json'
@@ -30,14 +33,17 @@ import footersData from '../data/footers.json'
 import footerConfigData from '../data/footer-config.json'
 import incentivesData from '../data/incentives.json'
 import incomesData from '../data/incomes.json'
+import invoiceSettingsData from '../data/invoice-settings.json'
 import invoicesData from '../data/invoices.json'
 import jobBranchesHistoryData from '../data/job-branches-history.json'
 import jobBranchesData from '../data/job-branches.json'
 import jobListData from '../data/job-list.json'
 import jobOrdersData from '../data/job-orders.json'
+import languagesData from '../data/languages.json'
 import myIncentivesData from '../data/my-incentives.json'
 import myJobsData from '../data/my-jobs.json'
 import ordersData from '../data/orders.json'
+import otpSettingsData from '../data/otp-settings.json'
 import paperPricesData from '../data/paper-prices.json'
 import paperSizesData from '../data/paper-sizes.json'
 import paymentBalancesData from '../data/payment-balances.json'
@@ -46,14 +52,19 @@ import paymentOutflowsData from '../data/payment-outflows.json'
 import paymentsData from '../data/payments.json'
 import payslipsData from '../data/payslips.json'
 import posProductsData from '../data/pos-products.json'
+import posSettingsData from '../data/pos-settings.json'
+import prefixesData from '../data/prefixes.json'
 import printingMachinesData from '../data/printing-machines.json'
+import profileData from '../data/profile.json'
 import productsData from '../data/products.json'
+import provincesData from '../data/provinces.json'
 import purchaseCategoriesData from '../data/purchase-categories.json'
 import purchaseItemsData from '../data/purchase-items.json'
 import purchaseOrdersData from '../data/purchase-orders.json'
 import purchaseReturnsData from '../data/purchase-returns.json'
 import purchasesData from '../data/purchases.json'
 import quotationsData from '../data/quotations.json'
+import regenciesData from '../data/regencies.json'
 import requestQuotationsData from '../data/request-quotations.json'
 import reviewsData from '../data/reviews.json'
 import rolesData from '../data/roles.json'
@@ -83,13 +94,16 @@ export const bundledSources: Record<string, unknown> = {
   'cetak-full-color.json': cetakFullColorData,
   'checkouts.json': checkoutsData,
   'clients.json': clientsData,
+  'company-setting.json': companySettingData,
   'contact-forms.json': contactFormsData,
   'customer-types.json': customerTypesData,
   'customers.json': customersData,
   'delivery-notes.json': deliveryNotesData,
   'departments.json': departmentsData,
   'designations.json': designationsData,
+  'districts.json': districtsData,
   'download-files.json': downloadFilesData,
+  'email-settings.json': emailSettingsData,
   'employees.json': employeesData,
   'employeeSalaries.json': employeeSalariesData,
   'employee-salaries.json': employeeSalariesData,
@@ -104,14 +118,17 @@ export const bundledSources: Record<string, unknown> = {
   'footer-config.json': footerConfigData,
   'incentives.json': incentivesData,
   'incomes.json': incomesData,
+  'invoice-settings.json': invoiceSettingsData,
   'invoices.json': invoicesData,
   'job-branches-history.json': jobBranchesHistoryData,
   'job-branches.json': jobBranchesData,
   'job-list.json': jobListData,
   'job-orders.json': jobOrdersData,
+  'languages.json': languagesData,
   'my-incentives.json': myIncentivesData,
   'my-jobs.json': myJobsData,
   'orders.json': ordersData,
+  'otp-settings.json': otpSettingsData,
   'paper-prices.json': paperPricesData,
   'paper-sizes.json': paperSizesData,
   'payment-balances.json': paymentBalancesData,
@@ -120,14 +137,19 @@ export const bundledSources: Record<string, unknown> = {
   'payments.json': paymentsData,
   'payslips.json': payslipsData,
   'pos-products.json': posProductsData,
+  'pos-settings.json': posSettingsData,
+  'prefixes.json': prefixesData,
   'printing-machines.json': printingMachinesData,
+  'profile.json': profileData,
   'products.json': productsData,
+  'provinces.json': provincesData,
   'purchase-categories.json': purchaseCategoriesData,
   'purchase-items.json': purchaseItemsData,
   'purchase-orders.json': purchaseOrdersData,
   'purchase-returns.json': purchaseReturnsData,
   'purchases.json': purchasesData,
   'quotations.json': quotationsData,
+  'regencies.json': regenciesData,
   'request-quotations.json': requestQuotationsData,
   'reviews.json': reviewsData,
   'roles.json': rolesData,

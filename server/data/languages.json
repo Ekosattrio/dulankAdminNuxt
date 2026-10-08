@@ -1,0 +1,72 @@
+[
+  {
+    "id": "LANG-01",
+    "code": "en",
+    "name": "English",
+    "flag": "/assets/img/icons/flag-01.svg",
+    "rtl": false,
+    "totalKeys": 2145,
+    "doneKeys": 2145,
+    "progress": 100,
+    "status": "active",
+    "isDefault": true,
+    "createdAt": "2026-01-10",
+    "updatedAt": "2026-10-08"
+  },
+  {
+    "id": "LANG-02",
+    "code": "id",
+    "name": "Bahasa Indonesia",
+    "flag": "/assets/img/icons/flag-04.svg",
+    "rtl": false,
+    "totalKeys": 2145,
+    "doneKeys": 2060,
+    "progress": 96,
+    "status": "active",
+    "isDefault": false,
+    "createdAt": "2026-01-15",
+    "updatedAt": "2026-10-08"
+  },
+  {
+    "id": "LANG-03",
+    "code": "ar",
+    "name": "Arabic",
+    "flag": "/assets/img/icons/flag-02.svg",
+    "rtl": true,
+    "totalKeys": 2145,
+    "doneKeys": 1716,
+    "progress": 80,
+    "status": "active",
+    "isDefault": false,
+    "createdAt": "2026-02-01",
+    "updatedAt": "2026-10-08"
+  },
+  {
+    "id": "LANG-04",
+    "code": "zh",
+    "name": "Chinese",
+    "flag": "/assets/img/icons/flag-03.svg",
+    "rtl": false,
+    "totalKeys": 2145,
+    "doneKeys": 1501,
+    "progress": 70,
+    "status": "active",
+    "isDefault": false,
+    "createdAt": "2026-02-10",
+    "updatedAt": "2026-10-08"
+  },
+  {
+    "id": "LANG-05",
+    "code": "hi",
+    "name": "Hindi",
+    "flag": "/assets/img/icons/flag-04.svg",
+    "rtl": false,
+    "totalKeys": 2145,
+    "doneKeys": 1145,
+    "progress": 53,
+    "status": "inactive",
+    "isDefault": false,
+    "createdAt": "2026-03-01",
+    "updatedAt": "2026-10-08"
+  }
+]

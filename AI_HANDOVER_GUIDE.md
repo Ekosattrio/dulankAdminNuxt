@@ -108,12 +108,14 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Employee Salary** | `/employee-salary` | HRM: 4 KPI Cards (Total, Active Payroll, Total Base, Total Allowance), 8 kolom literal, CurrencyDisplay right align, CurrencyInput, View modal rincian & Edit/Add dynamic allowances, Export CSV & Print Kop Surat resmi. |
 | **Payslip** | `/payslip` | HRM: 4 KPI Cards (Total Slips, Paid, Unpaid, Total Disbursed), 12 kolom literal, Add/Edit modal kalkulasi otomatis, Payslip Detail sheet A4, Export CSV & Print Kop Surat resmi. |
 | **Content** | `/all-blog`, `/blog-category`, `/blog-tag`, `/blog-comment`, `/faq`, `/faq-category`, `/our-client`, `/download-files`, `/footer`, `/banner` | 10 sub-menu lengkap modern Dulank Nuxt 4, All Blogs dengan 2-kolom Card Grid preview gambar besar, FAQ Questions (`/faq`) halaman tunggal bersih sesuai acuan `faq.html`, FAQ Category (`/faq-category`) placeholder kosong sesuai template asli, Our Client (`/our-client`) 6-kolom draggable card grid bersih dengan SVG resmi & persistensi urutan, Download Files (`/download-files`) Full File Manager 2-kolom persis acuan visual, Footer (`/footer`) Formulir Konfigurasi Footer lengkap persis acuan visual `footer.html`, Banner (`/banner`) Dual Column Card Layout (Main Banner & Product Banner) persis acuan visual `banner.html` dengan Active/Inactive status badge, thumbnail preview 120px, quick edit/delete buttons, modal CRUD dengan upload & preview gambar, serta persistensi JSON. |
+| **Setting** | `/profile`, `/company-setting`, `/province`, `/regency`, `/district`, `/invoice-setting`, `/pos-settings`, `/email-setting`, `/language`, `/otp`, `/prefixes` | 11 sub-menu lengkap modern Dulank Nuxt 4, Profile admin (avatar upload preview, ubah password modal), Company Setting (legal Dulank, logo branding upload), Master Wilayah (cascading select Provinsi -> Kota -> Kecamatan, CSV export, Print), Invoice Setting (Interactive Live Invoice Preview, prefix INV-, format nomor, due date), POS Settings (Thermal 80mm/58mm Live Receipt Preview, scanner barcode mode, default store/customer), Email Setting (SMTP config, driver selector, Send Test Email modal), Language (master translasi bahasa), OTP (2FA gateway multi-channel, simulator pesan OTP), Prefixes (master kode dokumen INV, SO, PO, SPK, DN dengan inline editing). |
 | **Print & PDF** | Seluruh modul di atas | Dialog `DocumentPrintModal`, Kop Surat PT. Dulank Semesta Cida, 2 kolom TTD resmi. |
 
 ### B. MODUL PENDING / BERIKUTNYA
 - **REPORT**: 15 sub-menu laporan (`sales-report`, `purchase-report`, `invoice-report`, `supplier-report`, `customer-report`, dll).
-- **SETTING**: ~11 sub-menu pengaturan sistem & toko (`company-setting`, `profile`, `locations`, `invoice-setting`, `system-setting`, dll).
 - **POS**: Ditunda sesuai arahan sampai diminta lagi.
+- **INVENTORY & PROMO**: `category`, `sub-category`, `unit`, `variant`, `voucher`, `discount-plan`, `discount`.
+- **FINANCE & ACCOUNT**: `expenses`, `income`, `balance-account`, `bank-account`, `money-transfer`, `balance-sheet`, `cash-flow`, `cash-advance`, `tax`.
 
 ---
 

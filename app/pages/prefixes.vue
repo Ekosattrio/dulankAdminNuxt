@@ -1,136 +1,200 @@
-<template>
-  <div class="page-wrapper mt-3">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Settings</h4>
-            <h6>Manage your settings on portal</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="settings-wrapper d-flex">
-            <div class="settings-page-wrap w-100">
-              <form @submit.prevent="savePrefixes">
-                <div class="setting-title mb-4">
-                  <h4 class="fs-18 fw-bold">Prefixes</h4>
-                </div>
-
-                <div class="bg-white p-4 rounded border shadow-sm mb-4">
-                  <div class="row g-4">
-                    <div v-for="(val, key) in prefixes" :key="key" class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-                      <div class="mb-0">
-                        <label class="form-label fw-semibold text-capitalize">{{ formatLabel(key) }}</label>
-                        <input v-model="prefixes[key]" type="text" class="form-control" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="prefix-settings d-flex justify-content-end">
-                  <button type="button" class="btn btn-secondary me-2" @click="resetPrefixes">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from 'vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { PrefixItem } from '#server/types/system-settings'
 
 useLegacyPage({
   title: 'Prefix Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-});
+  sweetAlert: false,
+})
 
-const defaultPrefixes: Record<string, string> = {
-  productSku: "SKU -",
-  supplier: "SUP -",
-  purchase: "PU -",
-  purchaseReturn: "PR -",
-  sales: "SA -",
-  salesReturn: "SR -",
-  customer: "CT -",
-  expense: "EX -",
-  stockTransfer: "ST -",
-  stockAdjustment: "SA -",
-  salesOrder: "SO -",
-  posInvoice: "PINV -",
-  estimation: "EST -",
-  transaction: "TRN -",
-  employee: "EMP -",
-};
+const { prefixes, pending, refresh, savePrefixes } = usePrefixes()
 
-const prefixes = ref<Record<string, string>>({ ...defaultPrefixes });
+interface PrefixFieldDef {
+  key: string
+  label: string
+  defaultPrefix: string
+}
 
-const formatLabel = (key: string) => {
-  switch (key) {
-    case "productSku":
-      return "Product (SKU)";
-    case "supplier":
-      return "Supplier";
-    case "purchase":
-      return "Purchase";
-    case "purchaseReturn":
-      return "Purchase Return";
-    case "sales":
-      return "Sales";
-    case "salesReturn":
-      return "Sales Return";
-    case "customer":
-      return "Customer";
-    case "expense":
-      return "Expense";
-    case "stockTransfer":
-      return "Stock Transfer";
-    case "stockAdjustment":
-      return "Stock Adjustment";
-    case "salesOrder":
-      return "Sales Order";
-    case "posInvoice":
-      return "POS Invoice";
-    case "estimation":
-      return "Estimation";
-    case "transaction":
-      return "Transaction";
-    case "employee":
-      return "Employee";
-    default:
-      return key;
+const prefixFields: PrefixFieldDef[] = [
+  { key: 'product_sku', label: 'Product (SKU)', defaultPrefix: 'SKU - ' },
+  { key: 'supplier', label: 'Supplier', defaultPrefix: 'SUP - ' },
+  { key: 'purchase', label: 'Purchase', defaultPrefix: 'PU - ' },
+  { key: 'purchase_return', label: 'Purchase Return', defaultPrefix: 'PR - ' },
+  { key: 'sales', label: 'Sales', defaultPrefix: 'SA - ' },
+  { key: 'sales_return', label: 'Sales Return', defaultPrefix: 'SR - ' },
+  { key: 'customer', label: 'Customer', defaultPrefix: 'CT - ' },
+  { key: 'expense', label: 'Expense', defaultPrefix: 'EX - ' },
+  { key: 'stock_transfer', label: 'Stock Transfer', defaultPrefix: 'ST - ' },
+  { key: 'stock_adjustment', label: 'Stock Adjustmentt', defaultPrefix: 'SA - ' },
+  { key: 'sales_order', label: 'Sales Order', defaultPrefix: 'SO - ' },
+  { key: 'pos_invoice', label: 'POS Invoice', defaultPrefix: 'PINV - ' },
+  { key: 'estimation', label: 'Estimation', defaultPrefix: 'EST - ' },
+  { key: 'transaction', label: 'Transaction', defaultPrefix: 'TRN - ' },
+  { key: 'employee', label: 'Employee', defaultPrefix: 'EMP - ' },
+]
+
+// Form model binding keyed by field key
+const formData = ref<Record<string, string>>({})
+const isSaving = ref(false)
+const toastMessage = ref('')
+const toastType = ref<'success' | 'info'>('success')
+let toastTimer: any = null
+
+function showToast(msg: string, type: 'success' | 'info' = 'success') {
+  toastMessage.value = msg
+  toastType.value = type
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+function initFormData(items: PrefixItem[] = []) {
+  const map: Record<string, string> = {}
+  prefixFields.forEach((field) => {
+    const existing = items.find((i) => i.key === field.key)
+    map[field.key] = existing?.prefix ?? field.defaultPrefix
+  })
+  formData.value = map
+}
+
+watch(
+  prefixes,
+  (val) => {
+    if (val && val.length > 0) {
+      initFormData(val)
+    } else {
+      initFormData()
+    }
+  },
+  { immediate: true },
+)
+
+function handleCancel() {
+  initFormData(prefixes.value || [])
+  showToast('Perubahan dibatalkan.', 'info')
+}
+
+async function handleSave() {
+  isSaving.value = true
+  try {
+    const updatedList: PrefixItem[] = prefixFields.map((field, idx) => {
+      const existing = (prefixes.value || []).find((i) => i.key === field.key)
+      return {
+        id: existing?.id || `PRF-${String(idx + 1).padStart(2, '0')}`,
+        key: field.key,
+        name: field.label,
+        prefix: formData.value[field.key] ?? field.defaultPrefix,
+        format: existing?.format || `${formData.value[field.key] ?? field.defaultPrefix}{YYYY}{MM}-{SEQ:4}`,
+        sample: existing?.sample || `${formData.value[field.key] ?? field.defaultPrefix}0001`,
+        updatedAt: new Date().toISOString().split('T')[0],
+      }
+    })
+
+    const res = await savePrefixes(updatedList)
+    showToast(res?.message || 'Prefixes updated successfully!', 'success')
+  } catch (err: any) {
+    showToast(err?.data?.message || err?.message || 'Failed to save prefixes.', 'info')
+  } finally {
+    isSaving.value = false
   }
-};
-
-const savePrefixes = () => {
-  alert("Transaction prefixes saved successfully!");
-};
-
-const resetPrefixes = () => {
-  prefixes.value = { ...defaultPrefixes };
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};
+}
 </script>
+
+<template>
+  <div class="dulank-page dulank-page-prefixes space-y-6">
+    <!-- Success / Info Toast -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
+      :class="toastType === 'success' ? 'bg-emerald-600' : 'bg-slate-700'"
+    >
+      <FeatherIcon :name="toastType === 'success' ? 'check-circle' : 'info'" size="16" />
+      <span>{{ toastMessage }}</span>
+    </div>
+
+    <!-- Header Section -->
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">Settings</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Manage your settings on portal</p>
+      </div>
+
+      <!-- Action Icons (Refresh & Collapse) -->
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          title="Refresh"
+          aria-label="Refresh"
+          class="inline-flex size-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+          @click="refresh()"
+        >
+          <FeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': pending }" />
+        </button>
+        <button
+          type="button"
+          title="Collapse"
+          aria-label="Collapse"
+          class="inline-flex size-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+        >
+          <FeatherIcon name="chevron-up" size="16" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <!-- Section Title -->
+      <div class="mb-6">
+        <h3 class="text-base font-bold text-gray-900 dark:text-white">Prefixes</h3>
+      </div>
+
+      <!-- Skeleton Loader saat pending -->
+      <div v-if="pending" class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div v-for="n in 15" :key="n" class="space-y-2">
+          <div class="h-4 w-28 animate-pulse rounded bg-slate-200 dark:bg-slate-700"></div>
+          <div class="h-10 w-full animate-pulse rounded-md bg-slate-100 dark:bg-slate-800"></div>
+        </div>
+      </div>
+
+      <!-- Form Grid 4 Kolom Sesuai Benchmark -->
+      <form v-else @submit.prevent="handleSave">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div v-for="field in prefixFields" :key="field.key" class="space-y-1.5">
+            <label :for="`prefix-${field.key}`" class="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+              {{ field.label }}
+            </label>
+            <input
+              :id="`prefix-${field.key}`"
+              v-model="formData[field.key]"
+              type="text"
+              :placeholder="field.defaultPrefix"
+              class="w-full rounded-md border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 transition focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500"
+            />
+          </div>
+        </div>
+
+        <!-- Action Buttons di Kanan Bawah -->
+        <div class="mt-8 flex items-center justify-end gap-3 pt-4">
+          <button
+            type="button"
+            :disabled="isSaving"
+            class="rounded-md bg-slate-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
+            @click="handleCancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            :disabled="isSaving"
+            class="inline-flex items-center gap-2 rounded-md bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 disabled:opacity-50"
+          >
+            <span v-if="isSaving">Saving...</span>
+            <span v-else>Save Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
