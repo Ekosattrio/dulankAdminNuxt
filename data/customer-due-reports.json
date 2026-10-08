@@ -1,0 +1,266 @@
+[
+  {
+    "id": "CDR-001",
+    "customerId": "CUST-004",
+    "customerName": "PT. Sinar Abadi",
+    "orderDue": 3,
+    "amountDue": 12500000,
+    "overdueAmount": 12500000,
+    "daysDue": 15,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "18/02/2026",
+    "history": [
+      {
+        "date": "18/02/2026",
+        "invoiceNo": "INV-202602-029",
+        "amount": 12500000,
+        "paid": 0,
+        "due": 12500000,
+        "daysOverdue": 15
+      }
+    ]
+  },
+  {
+    "id": "CDR-002",
+    "customerId": "CUST-005",
+    "customerName": "Universitas Terbuka",
+    "orderDue": 1,
+    "amountDue": 8200000,
+    "overdueAmount": 8200000,
+    "daysDue": 5,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "22/02/2026",
+    "history": [
+      {
+        "date": "22/02/2026",
+        "invoiceNo": "INV-202602-033",
+        "amount": 8200000,
+        "paid": 0,
+        "due": 8200000,
+        "daysOverdue": 5
+      }
+    ]
+  },
+  {
+    "id": "CDR-003",
+    "customerId": "CUST-001",
+    "customerName": "CV. Maju Jaya",
+    "orderDue": 5,
+    "amountDue": 3450000,
+    "overdueAmount": 0,
+    "daysDue": 0,
+    "status": "Received",
+    "paymentMethod": "Transfer",
+    "date": "01/03/2026",
+    "history": [
+      {
+        "date": "01/03/2026",
+        "invoiceNo": "INV-202603-001",
+        "amount": 3450000,
+        "paid": 0,
+        "due": 3450000,
+        "daysOverdue": 0
+      }
+    ]
+  },
+  {
+    "id": "CDR-004",
+    "customerId": "CUST-006",
+    "customerName": "Yayasan Pendidikan Islam",
+    "orderDue": 2,
+    "amountDue": 4750000,
+    "overdueAmount": 4750000,
+    "daysDue": 12,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "25/02/2026",
+    "history": [
+      {
+        "date": "25/02/2026",
+        "invoiceNo": "INV-202602-035",
+        "amount": 4750000,
+        "paid": 0,
+        "due": 4750000,
+        "daysOverdue": 12
+      }
+    ]
+  },
+  {
+    "id": "CDR-005",
+    "customerId": "CUST-015",
+    "customerName": "PT. Delta Property",
+    "orderDue": 1,
+    "amountDue": 15000000,
+    "overdueAmount": 15000000,
+    "daysDue": 22,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "15/02/2026",
+    "history": [
+      {
+        "date": "15/02/2026",
+        "invoiceNo": "INV-202602-025",
+        "amount": 15000000,
+        "paid": 0,
+        "due": 15000000,
+        "daysOverdue": 22
+      }
+    ]
+  },
+  {
+    "id": "CDR-006",
+    "customerId": "CUST-011",
+    "customerName": "Toko Buku Pintar",
+    "orderDue": 4,
+    "amountDue": 2100000,
+    "overdueAmount": 2100000,
+    "daysDue": 2,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "27/02/2026",
+    "history": [
+      {
+        "date": "27/02/2026",
+        "invoiceNo": "INV-202602-037",
+        "amount": 2100000,
+        "paid": 0,
+        "due": 2100000,
+        "daysOverdue": 2
+      }
+    ]
+  },
+  {
+    "id": "CDR-007",
+    "customerId": "CUST-009",
+    "customerName": "PT. Logistik Cepat",
+    "orderDue": 2,
+    "amountDue": 5600000,
+    "overdueAmount": 5600000,
+    "daysDue": 8,
+    "status": "Overdue",
+    "paymentMethod": "Credit Card",
+    "date": "24/02/2026",
+    "history": [
+      {
+        "date": "24/02/2026",
+        "invoiceNo": "INV-202602-034",
+        "amount": 5600000,
+        "paid": 0,
+        "due": 5600000,
+        "daysOverdue": 8
+      }
+    ]
+  },
+  {
+    "id": "CDR-008",
+    "customerId": "CUST-010",
+    "customerName": "Sekolah Harapan",
+    "orderDue": 3,
+    "amountDue": 7800000,
+    "overdueAmount": 7800000,
+    "daysDue": 10,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "26/02/2026",
+    "history": [
+      {
+        "date": "26/02/2026",
+        "invoiceNo": "INV-202602-036",
+        "amount": 7800000,
+        "paid": 0,
+        "due": 7800000,
+        "daysOverdue": 10
+      }
+    ]
+  },
+  {
+    "id": "CDR-009",
+    "customerId": "CUST-017",
+    "customerName": "Kantor Desa Karawang",
+    "orderDue": 1,
+    "amountDue": 1250000,
+    "overdueAmount": 1250000,
+    "daysDue": 3,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "28/02/2026",
+    "history": [
+      {
+        "date": "28/02/2026",
+        "invoiceNo": "INV-202602-040",
+        "amount": 1250000,
+        "paid": 0,
+        "due": 1250000,
+        "daysOverdue": 3
+      }
+    ]
+  },
+  {
+    "id": "CDR-010",
+    "customerId": "CUST-019",
+    "customerName": "Koperasi Mandiri",
+    "orderDue": 2,
+    "amountDue": 2900000,
+    "overdueAmount": 2900000,
+    "daysDue": 7,
+    "status": "Overdue",
+    "paymentMethod": "Transfer",
+    "date": "01/03/2026",
+    "history": [
+      {
+        "date": "01/03/2026",
+        "invoiceNo": "INV-202603-003",
+        "amount": 2900000,
+        "paid": 0,
+        "due": 2900000,
+        "daysOverdue": 7
+      }
+    ]
+  },
+  {
+    "id": "CDR-011",
+    "customerId": "CUST-014",
+    "customerName": "Cafe Kopi Senja",
+    "orderDue": 1,
+    "amountDue": 1100000,
+    "overdueAmount": 1100000,
+    "daysDue": 14,
+    "status": "Unpaid",
+    "paymentMethod": "Credit Card",
+    "date": "04/03/2026",
+    "history": [
+      {
+        "date": "04/03/2026",
+        "invoiceNo": "INV-202603-007",
+        "amount": 1100000,
+        "paid": 0,
+        "due": 1100000,
+        "daysOverdue": 14
+      }
+    ]
+  },
+  {
+    "id": "CDR-012",
+    "customerId": "CUST-007",
+    "customerName": "Resto Sedap Malam",
+    "orderDue": 2,
+    "amountDue": 1850000,
+    "overdueAmount": 1850000,
+    "daysDue": 18,
+    "status": "Unpaid",
+    "paymentMethod": "Credit Card",
+    "date": "02/03/2026",
+    "history": [
+      {
+        "date": "02/03/2026",
+        "invoiceNo": "INV-202603-004",
+        "amount": 1850000,
+        "paid": 0,
+        "due": 1850000,
+        "daysOverdue": 18
+      }
+    ]
+  }
+]

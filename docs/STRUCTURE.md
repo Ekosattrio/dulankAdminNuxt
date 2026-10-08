@@ -2071,6 +2071,44 @@ Modul **SETTING** telah dirombak secara holistik dari kode Bootstrap statis lama
 - `/prefixes`: Master prefix dokumen transaksi (15 field input terstruktur dalam grid 4 kolom: Product SKU, Supplier, Purchase, Purchase Return, Sales, Sales Return, Customer, Expense, Stock Transfer, Stock Adjustmentt, Sales Order, POS Invoice, Estimation, Transaction, Employee) dengan tombol Cancel & Save Changes terintegrasi API dan skeleton loader.
 - Backend: `server/types/system-settings.ts`, `server/data/email-settings.json`, `server/data/languages.json`, `server/data/otp-settings.json`, `server/data/prefixes.json`, API `/api/email-settings`, `/api/languages`, `/api/otp-settings`, `/api/prefixes`.
 
+---
+
+## 44. Standarisasi Kelompok Menu REPORTS (14 Sub-Menu Lengkap)
+
+Seluruh 14 halaman laporan pada modul **REPORTS** telah dirombak secara komprehensif ke arsitektur modern Nuxt 4 + Tailwind CSS murni, terintegrasi 4 KPI Summary Cards, Date Range Picker (`h-9`), Table Filter Select (`h-9`), Export CSV, Table Skeleton (`SalesFeedback.vue`), dialog cetak resmi Kop Surat PT. DULANK SEMESTA CIDA (`DocumentPrintModal.vue`), serta backend API Nitro dengan data numerik murni:
+
+### 44.1 Cluster 1: Transaksi Penjualan & Pembelian
+- `/sales-report`: 8 KPI Summary Cards responsif (2 baris x 4 kolom: Total Sold Unit, Total Sales, Total Sales Due, Total Sales Amount, Point of Sales, Website, Quotation, Sales Staff), tabel menampilkan tanda strip (-) jika Total Sales Due = 0, baris pertama kategori "Cetak Dokumen", breakdown modal produk via `SalesDialog.vue`, tabel akumulasi kategori, CSV export, print dialog resmi.
+- `/best-seller`: Card pertama berlabel "Top Product", rank badges (#1, #2, #3), filter kategori dan tanggal, CSV export, print dialog.
+- `/purchase-report`: 4 KPI Cards (Total Purchase Unit, Total Purchase, Total Purchase Due, Total Purchase Amount), modal breakdown rincian item pembelian, CSV export, print dialog.
+- `/invoice-report`: 4 KPI Cards (Total Invoices, Total Gross Revenue, Total Net Sales, Avg Collection Rate), filter Month & Year, dinamis badge collection rate, CSV export, print dialog.
+- Backend: `server/types/reports-sales.ts`, data JSON (`sales-reports.json`, `best-seller-reports.json`, `purchase-reports.json`, `invoice-reports.json`), API `/api/reports/sales`, `/api/reports/best-seller`, `/api/reports/purchases`, `/api/reports/invoices`, composable `useSalesReports.ts`.
+
+### 44.2 Cluster 2: Mitra & Pelanggan (Stakeholders)
+- `/supplier-report`: 4 KPI Cards (Total Mitra Pemasok, Total Pembelian, Total Terbayar, Sisa Hutang), modal riwayat transaksi vendor, filter status/kategori, CSV export, print dialog.
+- `/supplier-due-report`: 4 KPI Cards (Total Mitra Terhutang, Total PO Jatuh Tempo, Terbayar Parsial, Total Hutang Due), modal detail faktur tertunggak, badge overdue, CSV export, print dialog.
+- `/customer-report`: 4 KPI Cards (Total Pelanggan, Total Pesanan Cetak, Total Penjualan, Sisa Piutang Berjalan), modal detail order pelanggan, filter payment method & status, CSV export, print dialog.
+- `/customer-due-report`: 4 KPI Cards (Total Klien Berhutang, Total Faktur Due, Total Piutang Due, Piutang Menunggak), modal aging faktur, filter metode bayar, CSV export, print dialog.
+- Backend: `server/types/reports-stakeholders.ts`, data JSON (`supplier-reports.json`, `supplier-due-reports.json`, `customer-reports.json`, `customer-due-reports.json`), API `/api/reports/suppliers`, `/api/reports/supplier-dues`, `/api/reports/customers`, `/api/reports/customer-dues`, composable `useStakeholderReports.ts`.
+
+### 44.3 Cluster 3: Operasional & Arus Kas
+- `/product-report`: 4 KPI Cards (Total Produk Dipesan, Total Revenue, Kategori Terlaris, Rata-rata/Produk), footer persentase dan total pesanan, filter kategori & tanggal, CSV export, print dialog.
+- `/expense-report`: 4 KPI Cards (Total Transaksi Beban, Total Pengeluaran, Beban Terbesar, Rata-rata/Kategori), breakdown pos pengeluaran operasional percetakan, CSV export, print dialog.
+- `/income-report`: 4 KPI Cards (Total Transaksi Masuk, Total Pemasukan, Pendapatan Terbesar, Rata-rata/Kategori), breakdown pemasukan non-sales percetakan, CSV export, print dialog.
+- Backend: `server/types/reports-operations.ts`, data JSON (`product-reports.json`, `expense-reports.json`, `income-reports.json`), API `/api/reports/products`, `/api/reports/expenses`, `/api/reports/incomes`, composable `useOperationalReports.ts`.
+
+### 44.4 Cluster 4: Finansial, Pajak & Laba Rugi
+- `/tax-report`: 4 KPI Cards (Pajak Keluaran PPN, Pajak Masukan PPN, Kompensasi Lebih Bayar, Status Net Kurang/Lebih Bayar), rekapitulasi SPT Masa PPN 2024-2025, CSV export, print dialog.
+- `/profit-and-loss`: Format presisi acuan desain & template legacy (`profit-and-loss.html`): Dark control bar `#0c2847` lengkap tombol Generate Report & selector tahun, Statement Table 3-kolom (Description, Value IDR, Percentage %), 6 seksi akuntansi hierarkis (REVENUE, COGS, GROSS PROFIT, OPERATING EXPENSES, EBT, NET PROFIT), CSV export, print dialog resmi.
+- `/annual-reports`: 4 KPI Cards (Total Pendapatan Tahunan, Total COGS, Total Laba Bersih, Rata-rata Margin %), komparasi performa 12 bulan dan tren tahunan, CSV export, print dialog.
+- Backend: `server/types/reports-financial.ts`, data JSON (`tax-reports.json`, `profit-loss-reports.json`, `annual-reports.json`), API `/api/reports/taxes`, `/api/reports/profit-loss`, `/api/reports/annual`, composable `useFinancialReports.ts`.
+
+### 44.5 Optimasi Performa & Zero-Flicker Search Table
+- Seluruh 14 halaman tabel laporan telah dibersihkan dari query reaktif `search` pada `useFetch()`.
+- Data di-fetch 1 kali secara stabil saat inisiasi halaman/refresh. Pencarian kata kunci didelegasikan 100% ke filter in-memory client-side pada `SalesDataTable.vue` melalui helper `matchesSearch()` rekursif (mencakup pencarian teks, angka ribuan terformat, nested objects, dan tanggal).
+- Pengetikan di search bar kini 100% instan (0ms search latency) tanpa memicu skeleton loader (`pending = false`).
+
+
 
 
 

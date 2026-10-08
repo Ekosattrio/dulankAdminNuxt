@@ -1,322 +1,359 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { usePurchaseReport } from '~/composables/useSalesReports'
+import { useTablePrint } from '~/composables/useTablePrint'
+import { formatIDR } from '~/utils/currency'
+import type { PurchaseReportItem } from '~~/server/types/reports-sales'
+
+// Components
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
+import DateRangePicker from '~/components/common/DateRangePicker.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+
+useHead({
+  title: 'Purchase Report - Kacetak System',
+})
+
+const { items, search, category, dateRange, pending, error, refresh, stats } = usePurchaseReport()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+// Detail Modal
+const selectedItem = ref<PurchaseReportItem | null>(null)
+const isDetailOpen = ref(false)
+
+function openDetailModal(item: PurchaseReportItem) {
+  selectedItem.value = item
+  isDetailOpen.value = true
+}
+
+function closeDetailModal() {
+  isDetailOpen.value = false
+  selectedItem.value = null
+}
+
+// Toast
+const toastMessage = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+// Columns definition for SalesDataTable
+const columns = [
+  { key: 'category', label: 'Purchase Category', sortable: true },
+  { key: 'purchaseQty', label: 'Purchase Qty', sortable: true, align: 'center' as const },
+  { key: 'unit', label: 'Unit', sortable: true },
+  { key: 'totalPurchase', label: 'Total Purchase', sortable: true, align: 'end' as const },
+  { key: 'totalDue', label: 'Total Purchase Due', sortable: true, align: 'end' as const },
+  { key: 'totalAmount', label: 'Total Purchase Amount', sortable: true, align: 'end' as const },
+  { key: 'percentage', label: 'Percentage', sortable: true, align: 'end' as const },
+  { key: 'action', label: 'Action', align: 'center' as const },
+]
+
+// Print columns
+const printColumns = [
+  { key: 'category', label: 'Purchase Category' },
+  { key: 'purchaseQty', label: 'Purchase Qty', align: 'center' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'totalPurchase', label: 'Total Purchase', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'totalDue', label: 'Total Purchase Due', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'totalAmount', label: 'Total Purchase Amount', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'percentage', label: 'Percentage', align: 'right' as const, format: (v: number) => `${Number(v).toFixed(2)}%` },
+]
+
+// Category options
+const categoryOptions = computed(() => {
+  const set = new Set(items.value.map(i => i.category))
+  return Array.from(set)
+})
+
+// Export CSV
+function exportCsv() {
+  if (items.value.length === 0) {
+    showToast('No purchase report data to export')
+    return
+  }
+
+  const headers = ['Purchase Category', 'Purchase Qty', 'Unit', 'Total Purchase', 'Total Due', 'Total Amount', 'Percentage']
+  const rows = items.value.map(item => [
+    `"${item.category}"`,
+    item.purchaseQty,
+    `"${item.unit}"`,
+    item.totalPurchase,
+    item.totalDue,
+    item.totalAmount,
+    `"${Number(item.percentage).toFixed(2)}%"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `purchase_report_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Purchase report exported to CSV successfully')
+}
+</script>
+
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Purchase Report</h4>
-          <h6>Manage Your Purchase Report</h6>
-        </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+  <div class="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
+    <!-- Header -->
+    <SalesListHeader
+      title="Purchase Report"
+      subtitle="Manage and analyze your purchase expenses by category"
+      :refreshing="pending"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button
+          type="button"
+          title="Export CSV"
+          aria-label="Export CSV"
+          class="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+          @click="exportCsv"
+        >
+          <FeatherIcon name="download" :size="14" />
+          <span>Export CSV</span>
+        </button>
+      </template>
+    </SalesListHeader>
 
-    <!-- Stat Cards -->
-    <div class="row mt-4">
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-package"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Purchase Unit</h6>
-            <h5><span>7.525</span></h5>
-          </div>
+    <!-- 4 KPI Summary Cards -->
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-950/40 dark:text-purple-400">
+          <FeatherIcon name="package" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Purchase Unit</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            {{ stats.totalPurchaseUnit.toLocaleString('id-ID') }}
+          </h3>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash1 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-shopping-cart"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Purchase</h6>
-            <h5>Rp <span>87.802.500</span></h5>
-          </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+          <FeatherIcon name="shopping-cart" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Purchase</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            <CurrencyDisplay :value="stats.totalPurchase" :bold="true" align="left" />
+          </h3>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash2 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-credit-card"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Purchase Due</h6>
-            <h5>Rp <span>12.253.000</span></h5>
-          </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
+          <FeatherIcon name="credit-card" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Purchase Due</p>
+          <h3 class="truncate text-lg font-bold text-amber-600 dark:text-amber-400">
+            <CurrencyDisplay :value="stats.totalDue" :bold="true" align="left" />
+          </h3>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash3 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-dollar-sign"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Purchase Amount</h6>
-            <h5>Rp <span>75.549.500</span></h5>
-          </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <FeatherIcon name="dollar-sign" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Purchase Amount</p>
+          <h3 class="truncate text-lg font-bold text-emerald-600 dark:text-emerald-400">
+            <CurrencyDisplay :value="stats.totalAmount" :bold="true" align="left" />
+          </h3>
         </div>
       </div>
     </div>
 
-    <!-- Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search purchase category..."
-                class="form-control form-control-sm"
-              />
-            </div>
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date Range"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <!-- Feedback & Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      :error="error?.message || ''"
+      :message="toastMessage"
+      skeleton="table"
+      :skeleton-rows="6"
+      :skeleton-cols="8"
+      @retry="refresh"
+      @dismiss="toastMessage = ''"
+    >
+      <!-- SalesDataTable directly mounted without double cards -->
+      <SalesDataTable
+        :columns="columns"
+        :items="items"
+        v-model:search="search"
+        search-placeholder="Search purchase report..."
+      >
+        <!-- Filter slot -->
+        <template #filters>
+          <DateRangePicker v-model="dateRange" placeholder="Date" />
+          <TableFilterSelect
+            v-model="category"
+            :options="categoryOptions"
+            placeholder="All Categories"
+            aria-label="Filter by Category"
+          />
+        </template>
+
+        <!-- Cell overrides -->
+        <template #cell(purchaseQty)="{ item }">
+          <span class="font-medium text-gray-900 dark:text-white">
+            {{ Number(item.purchaseQty).toLocaleString('id-ID') }}
+          </span>
+        </template>
+
+        <template #cell(totalPurchase)="{ item }">
+          <CurrencyDisplay :value="item.totalPurchase" />
+        </template>
+
+        <template #cell(totalDue)="{ item }">
+          <CurrencyDisplay :value="item.totalDue" custom-class="text-amber-600 dark:text-amber-400" />
+        </template>
+
+        <template #cell(totalAmount)="{ item }">
+          <CurrencyDisplay :value="item.totalAmount" custom-class="text-emerald-600 dark:text-emerald-400" />
+        </template>
+
+        <template #cell(percentage)="{ item }">
+          <span class="font-semibold text-gray-700 dark:text-gray-300">
+            {{ Number(item.percentage).toFixed(2) }}%
+          </span>
+        </template>
+
+        <template #cell(action)="{ item }">
+          <div class="flex items-center justify-center">
+            <button
+              type="button"
+              title="View Detail Purchase Category"
+              aria-label="View Detail Purchase Category"
+              class="inline-flex size-8 items-center justify-center rounded border border-gray-200 text-gray-600 transition-colors hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400 dark:hover:text-primary"
+              @click="openDetailModal(item)"
+            >
+              <FeatherIcon name="eye" :size="14" />
+            </button>
+          </div>
+        </template>
+
+        <!-- Footer Total -->
+        <template #footer="{ items: filteredList }">
+          <tr class="font-bold text-gray-900 dark:text-white">
+            <td class="px-4 py-3">Total</td>
+            <td class="px-4 py-3 text-center">
+              {{ filteredList.reduce((acc, i) => acc + (i.purchaseQty || 0), 0).toLocaleString('id-ID') }}
+            </td>
+            <td class="px-4 py-3 text-gray-500">-</td>
+            <td class="px-4 py-3 text-end">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalPurchase || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end text-amber-600 dark:text-amber-400">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalDue || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end text-emerald-600 dark:text-emerald-400">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalAmount || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end">100%</td>
+            <td class="px-4 py-3 text-center">-</td>
+          </tr>
+        </template>
+      </SalesDataTable>
+    </SalesFeedback>
+
+    <!-- Detail Breakdown Modal -->
+    <SalesDialog
+      :open="isDetailOpen"
+      title="Detail Purchase Category"
+      @close="closeDetailModal"
+    >
+      <div v-if="selectedItem" class="space-y-4">
+        <div class="grid grid-cols-1 gap-2 rounded-lg bg-gray-50 p-4 text-xs sm:grid-cols-2 dark:bg-gray-800/50">
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Purchase Category:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">{{ selectedItem.category }}</span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Supplier:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">{{ selectedItem.supplier || '-' }}</span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Total Purchase:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">
+              <CurrencyDisplay :value="selectedItem.totalPurchase" align="left" />
+            </span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Total Due:</span>
+            <span class="ms-2 font-bold text-amber-600 dark:text-amber-400">
+              <CurrencyDisplay :value="selectedItem.totalDue" align="left" />
+            </span>
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
+        <div v-if="selectedItem.details && selectedItem.details.length > 0" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+          <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+            <thead class="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-400">
               <tr>
-                <th>Purchase Category</th>
-                <th>Purchase Qty</th>
-                <th>Unit</th>
-                <th>Total Purchase</th>
-                <th>Total Purchase Due</th>
-                <th>Total Purchase Amount</th>
-                <th>Percentage</th>
-                <th class="no-sort">Action</th>
+                <th class="px-3 py-2 text-start">Item</th>
+                <th class="px-3 py-2 text-center">Qty</th>
+                <th class="px-3 py-2 text-start">Unit</th>
+                <th class="px-3 py-2 text-end">Total Cost</th>
+                <th class="px-3 py-2 text-end">Percentage</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="item in filteredRows" :key="item.category">
-                <td class="fw-bold">{{ item.category }}</td>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ formatNumber(item.total) }}</td>
-                <td :class="item.due > 0 ? 'text-danger' : 'text-muted'">{{ formatNumber(item.due) }}</td>
-                <td class="fw-semibold text-success">{{ formatNumber(item.amount) }}</td>
-                <td class="text-end fw-bold">{{ item.percentage }}%</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewDetail(item)" title="View Detail">
-                      <i class="feather-eye"></i>
-                    </a>
-                  </div>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              <tr v-for="(detail, idx) in selectedItem.details" :key="idx" class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
+                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white">{{ detail.item }}</td>
+                <td class="px-3 py-2 text-center">{{ detail.purchaseQty.toLocaleString('id-ID') }}</td>
+                <td class="px-3 py-2">{{ detail.unit }}</td>
+                <td class="px-3 py-2 text-end">
+                  <CurrencyDisplay :value="detail.totalCost" />
                 </td>
+                <td class="px-3 py-2 text-end font-semibold">{{ Number(detail.percentage).toFixed(2) }}%</td>
               </tr>
             </tbody>
-            <tfoot>
-              <tr>
-                <td class="fw-bold">Total</td>
-                <td class="fw-bold">{{ totalQty }}</td>
-                <td></td>
-                <td class="fw-bold">{{ formatNumber(sumTotal) }}</td>
-                <td class="fw-bold text-danger">{{ formatNumber(sumDue) }}</td>
-                <td class="fw-bold text-success">{{ formatNumber(sumAmount) }}</td>
-                <td class="text-end fw-bold">100%</td>
-                <td></td>
-              </tr>
-            </tfoot>
           </table>
         </div>
-      </div>
-    </div>
+        <p v-else class="text-center text-xs text-gray-500 dark:text-gray-400">
+          No sub-item breakdown data for this category.
+        </p>
 
-    <!-- View Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Purchase Details - {{ activeItem?.category }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="activeItem">
-            <table class="table table-bordered align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>Item Name</th>
-                  <th class="text-center">Qty</th>
-                  <th class="text-end">Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(p, idx) in activeItem.items" :key="idx">
-                  <td class="fw-semibold">{{ p.name }}</td>
-                  <td class="text-center">{{ p.qty }} {{ activeItem.unit }}</td>
-                  <td class="text-end fw-bold">Rp {{ formatNumber(p.cost) }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end">
-              <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-            </div>
-          </div>
+        <div class="flex justify-end pt-2">
+          <button
+            type="button"
+            class="inline-flex min-h-9 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+            @click="closeDetailModal"
+          >
+            Close
+          </button>
         </div>
       </div>
-    </div>
+    </SalesDialog>
+
+    <!-- Standard Document Print & PDF Modal (Kop Surat PT. DULANK SEMESTA CIDA) -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Purchase Report"
+      subtitle="Laporan Pembelian Berdasarkan Kategori"
+      :columns="printColumns"
+      :items="items"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from "vue";
-import { formatNumber } from "~/composables/useFormatters";
-
-const rows = ref([
-  {
-    category: "Kertas & Bahan Baku Cetak",
-    qty: 50,
-    unit: "Rim",
-    total: 35000000,
-    due: 5000000,
-    amount: 30000000,
-    percentage: "39.71",
-    items: [
-      { name: "Art Paper 150gr Plano", qty: 30, cost: 21000000 },
-      { name: "HVS 80gr Plano", qty: 20, cost: 14000000 },
-    ],
-  },
-  {
-    category: "Tinta & Toner (Ink/Toner)",
-    qty: 20,
-    unit: "Set",
-    total: 22000000,
-    due: 2000000,
-    amount: 20000000,
-    percentage: "26.47",
-    items: [
-      { name: "Tinta Offset Cyan/Magenta/Yellow/Black", qty: 15, cost: 16500000 },
-      { name: "Toner Konica Minolta Cyan", qty: 5, cost: 5500000 },
-    ],
-  },
-  {
-    category: "Bahan Sticker & Vinyl",
-    qty: 15,
-    unit: "Roll",
-    total: 16500000,
-    due: 3253000,
-    amount: 13247000,
-    percentage: "17.53",
-    items: [
-      { name: "Vinyl Ritrama Glossy 1.26m", qty: 10, cost: 11000000 },
-      { name: "Sticker Kromo Camel", qty: 5, cost: 5500000 },
-    ],
-  },
-  {
-    category: "Bahan Display (Banner/X-Banner)",
-    qty: 100,
-    unit: "Pcs",
-    total: 8000000,
-    due: 1000000,
-    amount: 7000000,
-    percentage: "9.27",
-    items: [
-      { name: "Stand X-Banner 60x160", qty: 60, cost: 4800000 },
-      { name: "Stand Roll Banner 85x200", qty: 40, cost: 3200000 },
-    ],
-  },
-  {
-    category: "Material Finishing (Laminasi/Lem)",
-    qty: 25,
-    unit: "Roll",
-    total: 6302500,
-    due: 1000000,
-    amount: 5302500,
-    percentage: "7.02",
-    items: [
-      { name: "Plastik Laminasi Doff 32mic", qty: 15, cost: 3781500 },
-      { name: "Lem Panas Jilid Buku", qty: 10, cost: 2521000 },
-    ],
-  },
-]);
-
-const searchQuery = ref("");
-const selectedDateRangeLabel = ref("");
-const showDateDropdown = ref(false);
-
-const setDateRange = (range: string) => {
-  if (range === "kemarin") selectedDateRangeLabel.value = "Kemarin";
-  else if (range === "7hari") selectedDateRangeLabel.value = "7 Hari Terakhir";
-  else if (range === "bulanIni") selectedDateRangeLabel.value = "Bulan Ini";
-  else if (range === "bulanLalu") selectedDateRangeLabel.value = "Bulan Lalu";
-  else selectedDateRangeLabel.value = "";
-  showDateDropdown.value = false;
-};
-
-const filteredRows = computed(() => {
-  return rows.value.filter((r) => {
-    return !searchQuery.value || r.category.toLowerCase().includes(searchQuery.value.toLowerCase());
-  });
-});
-
-const totalQty = computed(() => filteredRows.value.reduce((acc, r) => acc + r.qty, 0));
-const sumTotal = computed(() => filteredRows.value.reduce((acc, r) => acc + r.total, 0));
-const sumDue = computed(() => filteredRows.value.reduce((acc, r) => acc + r.due, 0));
-const sumAmount = computed(() => filteredRows.value.reduce((acc, r) => acc + r.amount, 0));
-
-const showModal = ref(false);
-const activeItem = ref<any>(null);
-
-const viewDetail = (item: any) => {
-  activeItem.value = item;
-  showModal.value = true;
-};
-
-const printReport = () => {
-  window.print();
-};
-
-const refreshReport = () => {
-  searchQuery.value = "";
-};
-
-const toggleHeader = () => {
-  // toggle
-};
-</script>

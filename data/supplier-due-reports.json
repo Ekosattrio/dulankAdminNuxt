@@ -1,0 +1,225 @@
+[
+  {
+    "id": "SDR-001",
+    "supplierId": "SUP-002",
+    "supplierName": "CV. Tinta Pelangi",
+    "date": "08/03/2026",
+    "category": "Tinta & Kimia",
+    "purchaseItem": "Cairan Isopropyl Alcohol (IPA)",
+    "qty": 2,
+    "amount": 1400000,
+    "purchasesDue": 2,
+    "amountDue": 1400000,
+    "daysDue": 15,
+    "status": "Overdue",
+    "avgLeadTime": "6 Days",
+    "history": [
+      {
+        "date": "25/12/2025",
+        "purchaseNo": "PR-2512000016",
+        "amount": 12500000,
+        "paid": 0,
+        "due": 12500000
+      },
+      {
+        "date": "01/12/2026",
+        "purchaseNo": "PR-2512000017",
+        "amount": 3500000,
+        "paid": 2000000,
+        "due": 1500000
+      }
+    ]
+  },
+  {
+    "id": "SDR-002",
+    "supplierId": "SUP-001",
+    "supplierName": "Berkah Packaging",
+    "date": "10/03/2026",
+    "category": "Bahan Rigid",
+    "purchaseItem": "Board No. 40 (77x110)",
+    "qty": 15,
+    "amount": 2100000,
+    "purchasesDue": 1,
+    "amountDue": 2100000,
+    "daysDue": 22,
+    "status": "Unpaid",
+    "avgLeadTime": "5 Days",
+    "history": [
+      {
+        "date": "10/03/2026",
+        "purchaseNo": "PR-2603000010",
+        "amount": 2100000,
+        "paid": 0,
+        "due": 2100000
+      }
+    ]
+  },
+  {
+    "id": "SDR-003",
+    "supplierId": "SUP-005",
+    "supplierName": "PT. Surya Paperindo",
+    "date": "05/03/2026",
+    "category": "Kertas Digital",
+    "purchaseItem": "Art Carton 260gr A3+",
+    "qty": 50,
+    "amount": 6250000,
+    "purchasesDue": 3,
+    "amountDue": 6250000,
+    "daysDue": 10,
+    "status": "Overdue",
+    "avgLeadTime": "3 Days",
+    "history": [
+      {
+        "date": "05/03/2026",
+        "purchaseNo": "PR-2603000005",
+        "amount": 6250000,
+        "paid": 0,
+        "due": 6250000
+      }
+    ]
+  },
+  {
+    "id": "SDR-004",
+    "supplierId": "SUP-006",
+    "supplierName": "PT. Heidelberg Parts Indonesia",
+    "date": "06/03/2026",
+    "category": "Sparepart & Maintenance",
+    "purchaseItem": "Roller Karet Mesin SM52",
+    "qty": 4,
+    "amount": 3200000,
+    "purchasesDue": 1,
+    "amountDue": 3200000,
+    "daysDue": 5,
+    "status": "Overdue",
+    "avgLeadTime": "7 Days",
+    "history": [
+      {
+        "date": "06/03/2026",
+        "purchaseNo": "PR-2603000006",
+        "amount": 3200000,
+        "paid": 0,
+        "due": 3200000
+      }
+    ]
+  },
+  {
+    "id": "SDR-005",
+    "supplierId": "SUP-004",
+    "supplierName": "CV. Mitra Finishing",
+    "date": "04/03/2026",
+    "category": "Finishing & Jilid",
+    "purchaseItem": "Kawat Spiral (Spool) 1/4\"",
+    "qty": 2,
+    "amount": 1800000,
+    "purchasesDue": 2,
+    "amountDue": 1800000,
+    "daysDue": 12,
+    "status": "Overdue",
+    "avgLeadTime": "4 Days",
+    "history": [
+      {
+        "date": "04/03/2026",
+        "purchaseNo": "PR-2603000004",
+        "amount": 1800000,
+        "paid": 0,
+        "due": 1800000
+      }
+    ]
+  },
+  {
+    "id": "SDR-006",
+    "supplierId": "SUP-003",
+    "supplierName": "PT. Grafika Media Utama",
+    "date": "04/03/2026",
+    "category": "Bahan Large Format",
+    "purchaseItem": "Vinyl Ritrama Glossy 1.26m",
+    "qty": 5,
+    "amount": 3750000,
+    "purchasesDue": 1,
+    "amountDue": 3750000,
+    "daysDue": 8,
+    "status": "Received",
+    "avgLeadTime": "2 Days",
+    "history": [
+      {
+        "date": "04/03/2026",
+        "purchaseNo": "PR-2603000003",
+        "amount": 3750000,
+        "paid": 0,
+        "due": 3750000
+      }
+    ]
+  },
+  {
+    "id": "SDR-007",
+    "supplierId": "SUP-007",
+    "supplierName": "CV. Prepress Indo",
+    "date": "07/03/2026",
+    "category": "Bahan Penunjang",
+    "purchaseItem": "Plat CTP (Thermal)",
+    "qty": 100,
+    "amount": 4500000,
+    "purchasesDue": 2,
+    "amountDue": 4500000,
+    "daysDue": 18,
+    "status": "Overdue",
+    "avgLeadTime": "3 Days",
+    "history": [
+      {
+        "date": "07/03/2026",
+        "purchaseNo": "PR-2603000007",
+        "amount": 4500000,
+        "paid": 0,
+        "due": 4500000
+      }
+    ]
+  },
+  {
+    "id": "SDR-008",
+    "supplierId": "SUP-008",
+    "supplierName": "Toko Kertas Sinar Mas",
+    "date": "11/03/2026",
+    "category": "Kertas Plano",
+    "purchaseItem": "HVS 80gr Plano",
+    "qty": 30,
+    "amount": 5200000,
+    "purchasesDue": 2,
+    "amountDue": 5200000,
+    "daysDue": 25,
+    "status": "Overdue",
+    "avgLeadTime": "5 Days",
+    "history": [
+      {
+        "date": "11/03/2026",
+        "purchaseNo": "PR-2603000011",
+        "amount": 5200000,
+        "paid": 0,
+        "due": 5200000
+      }
+    ]
+  },
+  {
+    "id": "SDR-009",
+    "supplierId": "SUP-009",
+    "supplierName": "UD. Baut & Mesin Perkasa",
+    "date": "12/03/2026",
+    "category": "Sparepart & Maintenance",
+    "purchaseItem": "Pisau Pond Cutter",
+    "qty": 5,
+    "amount": 950000,
+    "purchasesDue": 1,
+    "amountDue": 950000,
+    "daysDue": 3,
+    "status": "Unpaid",
+    "avgLeadTime": "2 Days",
+    "history": [
+      {
+        "date": "12/03/2026",
+        "purchaseNo": "PR-2603000012",
+        "amount": 950000,
+        "paid": 0,
+        "due": 950000
+      }
+    ]
+  }
+]

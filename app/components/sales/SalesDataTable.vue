@@ -56,16 +56,32 @@ const handleSort = (key: string, sortable?: boolean) => {
   }
 }
 
+function matchesSearch(val: unknown, q: string): boolean {
+  if (val === null || val === undefined) return false
+  if (typeof val === 'number') {
+    const raw = String(val)
+    const formatted = val.toLocaleString('id-ID')
+    return raw.includes(q) || formatted.includes(q)
+  }
+  if (typeof val === 'string' || typeof val === 'boolean') {
+    return String(val).toLowerCase().includes(q)
+  }
+  if (Array.isArray(val)) {
+    return val.some((sub) => matchesSearch(sub, q))
+  }
+  if (typeof val === 'object') {
+    return Object.values(val).some((sub) => matchesSearch(sub, q))
+  }
+  return false
+}
+
 const filteredItems = computed(() => {
   let result = Array.isArray(props.items) ? [...props.items] : []
 
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.toLowerCase()
+  if (searchQuery.value && searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
     result = result.filter((item) => {
-      return Object.values(item).some((val) => {
-        if (val === null || val === undefined) return false
-        return String(val).toLowerCase().includes(q)
-      })
+      return Object.values(item).some((val) => matchesSearch(val, q))
     })
   }
 

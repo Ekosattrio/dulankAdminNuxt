@@ -1,191 +1,367 @@
-<template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Customer Report</h4>
-          <h6>Manage customer order and performance reports</h6>
-        </div>
-      </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search customer..."
-                class="form-control form-control-sm"
-              />
-            </div>
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date Range"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div v-if="showDateDropdown" class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3">
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
-              <tr>
-                <th>Customer Name</th>
-                <th class="text-center">Total Order</th>
-                <th class="text-end">Amount (IDR)</th>
-                <th class="text-center">Avg. Lead Time</th>
-                <th class="no-sort">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredCustomers" :key="item.name">
-                <td class="fw-bold">{{ item.name }}</td>
-                <td class="text-center">{{ item.totalOrder }}</td>
-                <td class="text-end fw-bold text-success">{{ formatNumber(item.amount) }}</td>
-                <td class="text-center">{{ item.avgLeadTime }}</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewCustomer(item)" title="View Details">
-                      <i class="feather-eye"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="filteredCustomers.length === 0">
-                <td colspan="5" class="text-center py-4 text-muted">No records found.</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr class="fw-bold table-light">
-                <td>Total</td>
-                <td class="text-center">{{ totalOrders }}</td>
-                <td class="text-end text-primary">{{ formatNumber(totalAmount) }}</td>
-                <td class="text-center">3.4 Days</td>
-                <td></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- View Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0,0,0,0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Customer Order Summary - {{ activeCustomer?.name }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="activeCustomer">
-            <p><strong>Total Lifetime Orders:</strong> {{ activeCustomer.totalOrder }} orders</p>
-            <p><strong>Total Value:</strong> Rp {{ formatNumber(activeCustomer.amount) }}</p>
-            <p><strong>Avg. Turnaround Time:</strong> {{ activeCustomer.avgLeadTime }}</p>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end mt-4">
-              <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { formatNumber } from '~/composables/useFormatters'
+import type { CustomerReportItem } from '~~/server/types/reports-stakeholders'
+import { useCustomerReport } from '~/composables/useStakeholderReports'
+import { useTablePrint } from '~/composables/useTablePrint'
+import { formatIDR } from '~/utils/currency'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import DateRangePicker from '~/components/common/DateRangePicker.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
 
-const customers = ref([
-  { name: 'CV. Maju Jaya', totalOrder: 45, amount: 67500000, avgLeadTime: '3 Days' },
-  { name: 'Toko Berkah', totalOrder: 38, amount: 12400000, avgLeadTime: '2 Days' },
-  { name: 'Bpk. Heru', totalOrder: 12, amount: 4500000, avgLeadTime: '1 Days' },
-  { name: 'PT. Sinar Abadi', totalOrder: 30, amount: 85000000, avgLeadTime: '5 Days' },
-  { name: 'Universitas Terbuka', totalOrder: 15, amount: 42000000, avgLeadTime: '7 Days' },
-  { name: 'Yayasan Pendidikan Islam', totalOrder: 22, amount: 18750000, avgLeadTime: '4 Days' },
-  { name: 'Resto Sedap Malam', totalOrder: 55, amount: 9350000, avgLeadTime: '2 Days' }
-])
+useLegacyPage({ title: 'Customer Report', sweetAlert: false })
 
-const searchQuery = ref('')
-const selectedDateRangeLabel = ref('')
-const showDateDropdown = ref(false)
+const { items, search, status, paymentMethod, dateRange, pending, error, refresh, stats } = useCustomerReport()
 
-const setDateRange = (range: string) => {
-  if (range === 'kemarin') selectedDateRangeLabel.value = 'Kemarin'
-  else if (range === '7hari') selectedDateRangeLabel.value = '7 Hari Terakhir'
-  else if (range === 'bulanIni') selectedDateRangeLabel.value = 'Bulan Ini'
-  else if (range === 'bulanLalu') selectedDateRangeLabel.value = 'Bulan Lalu'
-  else selectedDateRangeLabel.value = ''
-  showDateDropdown.value = false
+// Columns definition
+const columns = [
+  { key: 'customerName', label: 'Customer Name', sortable: true },
+  { key: 'totalOrder', label: 'Total Order', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'amount', label: 'Amount', sortable: true, align: 'end' as const, class: 'text-end' },
+  { key: 'avgLeadTime', label: 'Avg. Lead Time', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'paymentMethod', label: 'Payment Method', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'status', label: 'Status', sortable: true, align: 'center' as const, class: 'text-center' },
+  { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center' },
+]
+
+// Print & PDF
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'customerName', label: 'Customer Name' },
+  { key: 'totalOrder', label: 'Total Order', align: 'center' as const },
+  { key: 'amount', label: 'Amount (IDR)', align: 'right' as const, format: (val: number) => formatIDR(val) },
+  { key: 'avgLeadTime', label: 'Avg. Lead Time', align: 'center' as const },
+  { key: 'paymentMethod', label: 'Payment Method', align: 'center' as const },
+  { key: 'status', label: 'Status', align: 'center' as const },
+]
+
+// CSV Export
+function handleExportCsv() {
+  const header = ['ID', 'Customer Name', 'Total Order', 'Amount', 'Avg Lead Time', 'Payment Method', 'Status']
+  const rows = items.value.map(item => [
+    `"${item.id}"`,
+    `"${(item.customerName || '').replace(/"/g, '""')}"`,
+    `"${item.totalOrder}"`,
+    `"${item.amount}"`,
+    `"${item.avgLeadTime}"`,
+    `"${item.paymentMethod || ''}"`,
+    `"${item.status || ''}"`,
+  ])
+  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [header.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `customer_report_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
-const filteredCustomers = computed(() => {
-  return customers.value.filter(c => !searchQuery.value || c.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+// Modal Detail View
+const isDetailModalOpen = ref(false)
+const selectedCustomer = ref<CustomerReportItem | null>(null)
+
+function viewCustomer(item: CustomerReportItem) {
+  selectedCustomer.value = item
+  isDetailModalOpen.value = true
+}
+
+const totalFilteredOrders = computed(() => {
+  return items.value.reduce((sum, i) => sum + (i.totalOrder || 0), 0)
 })
 
-const totalOrders = computed(() => filteredCustomers.value.reduce((acc, c) => acc + c.totalOrder, 0))
-const totalAmount = computed(() => filteredCustomers.value.reduce((acc, c) => acc + c.amount, 0))
-
-const showModal = ref(false)
-const activeCustomer = ref<any>(null)
-
-const viewCustomer = (item: any) => {
-  activeCustomer.value = item
-  showModal.value = true
-}
-
-const printReport = () => {
-  window.print()
-}
-
-const refreshReport = () => {
-  searchQuery.value = ''
-}
-
-const toggleHeader = () => {
-  // toggle
-}
+const totalFilteredAmount = computed(() => {
+  return items.value.reduce((sum, i) => sum + (i.amount || 0), 0)
+})
 </script>
 
+<template>
+  <div class="dulank-page dulank-page-customer-report space-y-6">
+    <!-- Header Toolbar -->
+    <SalesListHeader
+      title="Customer Report"
+      subtitle="Manage customer order and performance reports"
+      :refreshing="pending"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    />
+
+    <!-- 4 KPI Summary Cards -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <!-- Card 1: Total Pelanggan -->
+      <div class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
+          <FeatherIcon name="users" size="22" />
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Pelanggan</p>
+          <h4 class="mt-1 font-mono text-xl font-bold text-gray-900 dark:text-gray-100">
+            {{ stats.totalCustomers }} <span class="text-xs font-normal text-gray-500">Klien</span>
+          </h4>
+        </div>
+      </div>
+
+      <!-- Card 2: Total Pesanan -->
+      <div class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+          <FeatherIcon name="shopping-cart" size="22" />
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Pesanan Cetak</p>
+          <h4 class="mt-1 font-mono text-xl font-bold text-gray-900 dark:text-gray-100">
+            {{ stats.totalOrders }} <span class="text-xs font-normal text-gray-500">Order</span>
+          </h4>
+        </div>
+      </div>
+
+      <!-- Card 3: Total Omset / Terbayar -->
+      <div class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
+          <FeatherIcon name="trending-up" size="22" />
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Nilai Penjualan</p>
+          <h4 class="mt-1 font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400">
+            {{ formatIDR(stats.totalAmount) }}
+          </h4>
+        </div>
+      </div>
+
+      <!-- Card 4: Total Piutang Pelanggan -->
+      <div class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400">
+          <FeatherIcon name="clock" size="22" />
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Sisa Piutang Berjalan</p>
+          <h4 class="mt-1 font-mono text-xl font-bold text-amber-600 dark:text-amber-400">
+            {{ formatIDR(stats.totalDue) }}
+          </h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading & Error Feedback -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="7"
+      :error="error ? 'Gagal memuat laporan pelanggan. Silakan coba lagi.' : ''"
+      @retry="refresh()"
+    />
+
+    <!-- Main Data Table -->
+    <SalesDataTable
+      v-if="!pending && !error"
+      :columns="columns"
+      :items="items"
+      :search="search"
+      search-placeholder="Search customer name or payment..."
+      @update:search="search = $event"
+      @print="openPrintModal('print')"
+      @export-pdf="openPrintModal('pdf')"
+      @export-excel="handleExportCsv"
+    >
+      <!-- Filters Slot -->
+      <template #filters>
+        <!-- Date Range Filter -->
+        <div class="w-auto">
+          <DateRangePicker
+            :model-value="dateRange"
+            placeholder="Rentang Tanggal"
+            input-class="h-9 text-xs"
+            @update:model-value="dateRange = $event"
+          />
+        </div>
+
+        <!-- Payment Method Filter -->
+        <TableFilterSelect
+          :model-value="paymentMethod"
+          placeholder="Semua Metode Bayar"
+          :options="['Transfer', 'Credit Card', 'Cash']"
+          @update:model-value="paymentMethod = $event"
+        />
+
+        <!-- Status Filter -->
+        <TableFilterSelect
+          :model-value="status"
+          placeholder="Semua Status"
+          :options="['Received', 'Overdue', 'Unpaid']"
+          @update:model-value="status = $event"
+        />
+
+        <!-- CSV Export Button -->
+        <button
+          type="button"
+          title="Export CSV"
+          class="flex h-9 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
+          @click="handleExportCsv"
+        >
+          <FeatherIcon name="download" size="14" />
+          <span>CSV</span>
+        </button>
+      </template>
+
+      <!-- Cell: Amount -->
+      <template #cell(amount)="{ item }">
+        <span class="font-mono font-medium text-emerald-600 dark:text-emerald-400">
+          {{ formatIDR(item.amount) }}
+        </span>
+      </template>
+
+      <!-- Cell: Avg Lead Time -->
+      <template #cell(avgLeadTime)="{ item }">
+        <span class="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+          {{ item.avgLeadTime }}
+        </span>
+      </template>
+
+      <!-- Cell: Payment Method -->
+      <template #cell(paymentMethod)="{ item }">
+        <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+          {{ item.paymentMethod || 'Transfer' }}
+        </span>
+      </template>
+
+      <!-- Cell: Status -->
+      <template #cell(status)="{ item }">
+        <span
+          class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+          :class="{
+            'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300': item.status === 'Received',
+            'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300': item.status === 'Overdue',
+            'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300': item.status === 'Unpaid',
+          }"
+        >
+          {{ item.status || 'Received' }}
+        </span>
+      </template>
+
+      <!-- Cell: Actions -->
+      <template #cell(actions)="{ item }">
+        <div class="flex items-center justify-center">
+          <button
+            type="button"
+            title="Lihat Detail Pelanggan"
+            class="flex size-8 items-center justify-center rounded-lg text-primary hover:bg-primary/10 transition-colors"
+            @click="viewCustomer(item)"
+          >
+            <FeatherIcon name="eye" size="16" />
+          </button>
+        </div>
+      </template>
+
+      <!-- Table Footer with Totals -->
+      <template #footer>
+        <tr>
+          <td class="px-4 py-3 text-start font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+            TOTAL
+          </td>
+          <td class="px-4 py-3 text-center font-mono font-bold text-gray-900 dark:text-white">
+            {{ totalFilteredOrders }}
+          </td>
+          <td class="px-4 py-3 text-end font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            {{ formatIDR(totalFilteredAmount) }}
+          </td>
+          <td class="px-4 py-3 text-center text-xs text-gray-500">
+            Avg. 3.4 Days
+          </td>
+          <td colspan="3"></td>
+        </tr>
+      </template>
+    </SalesDataTable>
+
+    <!-- Modal View Detail Customer -->
+    <SalesDialog
+      :open="isDetailModalOpen"
+      :title="`Ringkasan Pelanggan: ${selectedCustomer?.customerName || '-'}`"
+      size="lg"
+      @close="isDetailModalOpen = false"
+    >
+      <div v-if="selectedCustomer" class="space-y-6">
+        <!-- Customer Meta Grid -->
+        <div class="grid grid-cols-1 gap-4 rounded-xl border border-gray-100 bg-gray-50/75 p-4 sm:grid-cols-2 dark:border-gray-800 dark:bg-gray-800/50">
+          <div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Nama Pelanggan</span>
+            <p class="font-semibold text-gray-900 dark:text-white">{{ selectedCustomer.customerName }}</p>
+          </div>
+          <div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Total Order Percetakan</span>
+            <p class="font-semibold text-gray-900 dark:text-white">{{ selectedCustomer.totalOrder }} Pesanan</p>
+          </div>
+          <div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Akumulasi Belanja</span>
+            <p class="font-mono font-bold text-emerald-600">{{ formatIDR(selectedCustomer.amount) }}</p>
+          </div>
+          <div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Rata-rata Waktu Pengerjaan</span>
+            <p class="font-semibold text-gray-900 dark:text-white">{{ selectedCustomer.avgLeadTime }}</p>
+          </div>
+        </div>
+
+        <!-- History Order Table -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-gray-900 dark:text-white">Riwayat Transaksi Pelanggan</h4>
+            <span class="text-xs text-gray-500">History Orders</span>
+          </div>
+          <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+            <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+              <thead class="bg-gray-50 border-b border-gray-200 font-semibold dark:bg-gray-800 dark:border-gray-700">
+                <tr>
+                  <th class="px-3 py-2 text-start">Tanggal</th>
+                  <th class="px-3 py-2 text-start">No. Faktur</th>
+                  <th class="px-3 py-2 text-start">Produk Pesanan</th>
+                  <th class="px-3 py-2 text-center">Qty</th>
+                  <th class="px-3 py-2 text-end">Nilai Transaksi</th>
+                  <th class="px-3 py-2 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                <tr v-for="(h, idx) in (selectedCustomer.history || [{ date: '01/03/2026', invoiceNo: 'INV-202603-001', product: 'Pesanan Percetakan Custom', qty: selectedCustomer.totalOrder, amount: selectedCustomer.amount, status: selectedCustomer.status || 'Paid' }])" :key="idx">
+                  <td class="px-3 py-2">{{ h.date }}</td>
+                  <td class="px-3 py-2 font-mono font-medium">{{ h.invoiceNo }}</td>
+                  <td class="px-3 py-2">{{ h.product }}</td>
+                  <td class="px-3 py-2 text-center">{{ h.qty }}</td>
+                  <td class="px-3 py-2 text-end font-mono">{{ formatIDR(h.amount) }}</td>
+                  <td class="px-3 py-2 text-center">
+                    <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      {{ h.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <button
+          type="button"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+          @click="isDetailModalOpen = false"
+        >
+          Tutup
+        </button>
+      </template>
+    </SalesDialog>
+
+    <!-- Document Print Modal Resmi Kop Surat PT. DULANK SEMESTA CIDA -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Laporan Transaksi Pelanggan (Customer Report)"
+      subtitle="PT. DULANK SEMESTA CIDA - Sistem Manajemen Administrasi Percetakan"
+      :columns="printColumns"
+      :items="items"
+      :default-action="defaultPrintAction"
+      date-field="date"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

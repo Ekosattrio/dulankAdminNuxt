@@ -1,0 +1,102 @@
+[
+  {
+    "id": "BS-001",
+    "rank": 1,
+    "category": "Packaging",
+    "product": "Sticker Label",
+    "soldQty": 15000,
+    "unit": "pcs",
+    "total": 750000000,
+    "date": "2025-01-10"
+  },
+  {
+    "id": "BS-002",
+    "rank": 2,
+    "category": "Marketing",
+    "product": "Brosur A4",
+    "soldQty": 13800,
+    "unit": "lembar",
+    "total": 680000000,
+    "date": "2025-01-12"
+  },
+  {
+    "id": "BS-003",
+    "rank": 3,
+    "category": "Publishing",
+    "product": "Buku Modul A5",
+    "soldQty": 12600,
+    "unit": "box",
+    "total": 610000000,
+    "date": "2025-01-15"
+  },
+  {
+    "id": "BS-004",
+    "rank": 4,
+    "category": "Marketing",
+    "product": "Katalog Produk",
+    "soldQty": 11400,
+    "unit": "lembar",
+    "total": 540000000,
+    "date": "2025-01-18"
+  },
+  {
+    "id": "BS-005",
+    "rank": 5,
+    "category": "Stationery",
+    "product": "ID Card Panitia",
+    "soldQty": 10200,
+    "unit": "pcs",
+    "total": 470000000,
+    "date": "2025-01-20"
+  },
+  {
+    "id": "BS-006",
+    "rank": 6,
+    "category": "Stationery",
+    "product": "Kartu Nama",
+    "soldQty": 9000,
+    "unit": "pcs",
+    "total": 400000000,
+    "date": "2025-01-22"
+  },
+  {
+    "id": "BS-007",
+    "rank": 7,
+    "category": "Outdoor Media",
+    "product": "Spanduk Flexi",
+    "soldQty": 7800,
+    "unit": "meter",
+    "total": 330000000,
+    "date": "2025-01-24"
+  },
+  {
+    "id": "BS-008",
+    "rank": 8,
+    "category": "Packaging",
+    "product": "Dus Kemasan",
+    "soldQty": 6600,
+    "unit": "box",
+    "total": 260000000,
+    "date": "2025-01-26"
+  },
+  {
+    "id": "BS-009",
+    "rank": 9,
+    "category": "Outdoor Media",
+    "product": "Banner Roll-Up",
+    "soldQty": 5400,
+    "unit": "meter",
+    "total": 190000000,
+    "date": "2025-01-28"
+  },
+  {
+    "id": "BS-010",
+    "rank": 10,
+    "category": "Packaging",
+    "product": "Paper Bag Custom",
+    "soldQty": 4200,
+    "unit": "pcs",
+    "total": 120000000,
+    "date": "2025-01-30"
+  }
+]

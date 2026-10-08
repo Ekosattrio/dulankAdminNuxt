@@ -1,0 +1,309 @@
+[
+  {
+    "id": "SR-001",
+    "supplierId": "SUP-001",
+    "supplierName": "Berkah Packaging",
+    "date": "02/03/2026",
+    "category": "Kertas Plano",
+    "purchaseItem": "Art Paper 120gr (65x100)",
+    "qty": 20,
+    "amount": 4400000,
+    "totalPurchased": 35000000,
+    "totalPaid": 30600000,
+    "balanceDue": 4400000,
+    "status": "Received",
+    "avgLeadTime": "6 Days",
+    "totalTransactions": 20,
+    "history": [
+      {
+        "date": "02/03/2026",
+        "category": "Kertas Plano",
+        "purchaseItem": "Art Paper 120gr (65x100)",
+        "qty": 20,
+        "amount": 4400000
+      },
+      {
+        "date": "15/02/2026",
+        "category": "Kertas Plano",
+        "purchaseItem": "Art Carton 210gr (65x100)",
+        "qty": 15,
+        "amount": 3300000
+      }
+    ]
+  },
+  {
+    "id": "SR-002",
+    "supplierId": "SUP-002",
+    "supplierName": "CV. Tinta Pelangi",
+    "date": "03/03/2026",
+    "category": "Tinta & Kimia",
+    "purchaseItem": "Tinta Black Offset (1kg)",
+    "qty": 10,
+    "amount": 2500000,
+    "totalPurchased": 18500000,
+    "totalPaid": 16000000,
+    "balanceDue": 2500000,
+    "status": "Received",
+    "avgLeadTime": "3 Days",
+    "totalTransactions": 12,
+    "history": [
+      {
+        "date": "03/03/2026",
+        "category": "Tinta & Kimia",
+        "purchaseItem": "Tinta Black Offset (1kg)",
+        "qty": 10,
+        "amount": 2500000
+      }
+    ]
+  },
+  {
+    "id": "SR-003",
+    "supplierId": "SUP-003",
+    "supplierName": "PT. Grafika Media Utama",
+    "date": "04/03/2026",
+    "category": "Bahan Large Format",
+    "purchaseItem": "Vinyl Ritrama Glossy 1.26m",
+    "qty": 5,
+    "amount": 3750000,
+    "totalPurchased": 22000000,
+    "totalPaid": 22000000,
+    "balanceDue": 0,
+    "status": "Received",
+    "avgLeadTime": "4 Days",
+    "totalTransactions": 14,
+    "history": [
+      {
+        "date": "04/03/2026",
+        "category": "Bahan Large Format",
+        "purchaseItem": "Vinyl Ritrama Glossy 1.26m",
+        "qty": 5,
+        "amount": 3750000
+      }
+    ]
+  },
+  {
+    "id": "SR-004",
+    "supplierId": "SUP-004",
+    "supplierName": "CV. Mitra Finishing",
+    "date": "04/03/2026",
+    "category": "Finishing & Jilid",
+    "purchaseItem": "Kawat Spiral (Spool) 1/4\"",
+    "qty": 2,
+    "amount": 1800000,
+    "totalPurchased": 9500000,
+    "totalPaid": 7700000,
+    "balanceDue": 1800000,
+    "status": "Received",
+    "avgLeadTime": "5 Days",
+    "totalTransactions": 8,
+    "history": [
+      {
+        "date": "04/03/2026",
+        "category": "Finishing & Jilid",
+        "purchaseItem": "Kawat Spiral (Spool) 1/4\"",
+        "qty": 2,
+        "amount": 1800000
+      }
+    ]
+  },
+  {
+    "id": "SR-005",
+    "supplierId": "SUP-005",
+    "supplierName": "PT. Surya Paperindo",
+    "date": "05/03/2026",
+    "category": "Kertas Digital",
+    "purchaseItem": "Art Carton 260gr A3+",
+    "qty": 50,
+    "amount": 6250000,
+    "totalPurchased": 48000000,
+    "totalPaid": 41750000,
+    "balanceDue": 6250000,
+    "status": "Received",
+    "avgLeadTime": "2 Days",
+    "totalTransactions": 28,
+    "history": [
+      {
+        "date": "05/03/2026",
+        "category": "Kertas Digital",
+        "purchaseItem": "Art Carton 260gr A3+",
+        "qty": 50,
+        "amount": 6250000
+      }
+    ]
+  },
+  {
+    "id": "SR-006",
+    "supplierId": "SUP-006",
+    "supplierName": "PT. Heidelberg Parts Indonesia",
+    "date": "06/03/2026",
+    "category": "Sparepart & Maintenance",
+    "purchaseItem": "Roller Karet Mesin SM52",
+    "qty": 4,
+    "amount": 3200000,
+    "totalPurchased": 15000000,
+    "totalPaid": 11800000,
+    "balanceDue": 3200000,
+    "status": "Received",
+    "avgLeadTime": "7 Days",
+    "totalTransactions": 6,
+    "history": [
+      {
+        "date": "06/03/2026",
+        "category": "Sparepart & Maintenance",
+        "purchaseItem": "Roller Karet Mesin SM52",
+        "qty": 4,
+        "amount": 3200000
+      }
+    ]
+  },
+  {
+    "id": "SR-007",
+    "supplierId": "SUP-007",
+    "supplierName": "CV. Prepress Indo",
+    "date": "07/03/2026",
+    "category": "Bahan Penunjang",
+    "purchaseItem": "Plat CTP (Thermal)",
+    "qty": 100,
+    "amount": 4500000,
+    "totalPurchased": 32000000,
+    "totalPaid": 27500000,
+    "balanceDue": 4500000,
+    "status": "Received",
+    "avgLeadTime": "3 Days",
+    "totalTransactions": 16,
+    "history": [
+      {
+        "date": "07/03/2026",
+        "category": "Bahan Penunjang",
+        "purchaseItem": "Plat CTP (Thermal)",
+        "qty": 100,
+        "amount": 4500000
+      }
+    ]
+  },
+  {
+    "id": "SR-008",
+    "supplierId": "SUP-002",
+    "supplierName": "CV. Tinta Pelangi",
+    "date": "08/03/2026",
+    "category": "Tinta & Kimia",
+    "purchaseItem": "Cairan Isopropyl Alcohol (IPA)",
+    "qty": 2,
+    "amount": 1400000,
+    "totalPurchased": 18500000,
+    "totalPaid": 17100000,
+    "balanceDue": 1400000,
+    "status": "Overdue",
+    "avgLeadTime": "3 Days",
+    "totalTransactions": 12,
+    "history": [
+      {
+        "date": "08/03/2026",
+        "category": "Tinta & Kimia",
+        "purchaseItem": "Cairan Isopropyl Alcohol (IPA)",
+        "qty": 2,
+        "amount": 1400000
+      }
+    ]
+  },
+  {
+    "id": "SR-009",
+    "supplierId": "SUP-001",
+    "supplierName": "Berkah Packaging",
+    "date": "09/03/2026",
+    "category": "Packaging",
+    "purchaseItem": "Lem Panas (Side Glue)",
+    "qty": 10,
+    "amount": 850000,
+    "totalPurchased": 35000000,
+    "totalPaid": 34150000,
+    "balanceDue": 850000,
+    "status": "Received",
+    "avgLeadTime": "6 Days",
+    "totalTransactions": 20,
+    "history": [
+      {
+        "date": "09/03/2026",
+        "category": "Packaging",
+        "purchaseItem": "Lem Panas (Side Glue)",
+        "qty": 10,
+        "amount": 850000
+      }
+    ]
+  },
+  {
+    "id": "SR-010",
+    "supplierId": "SUP-001",
+    "supplierName": "Berkah Packaging",
+    "date": "10/03/2026",
+    "category": "Bahan Rigid",
+    "purchaseItem": "Board No. 40 (77x110)",
+    "qty": 15,
+    "amount": 2100000,
+    "totalPurchased": 35000000,
+    "totalPaid": 32900000,
+    "balanceDue": 2100000,
+    "status": "Unpaid",
+    "avgLeadTime": "6 Days",
+    "totalTransactions": 20,
+    "history": [
+      {
+        "date": "10/03/2026",
+        "category": "Bahan Rigid",
+        "purchaseItem": "Board No. 40 (77x110)",
+        "qty": 15,
+        "amount": 2100000
+      }
+    ]
+  },
+  {
+    "id": "SR-011",
+    "supplierId": "SUP-008",
+    "supplierName": "Toko Kertas Sinar Mas",
+    "date": "11/03/2026",
+    "category": "Kertas Plano",
+    "purchaseItem": "HVS 80gr Plano (65x100)",
+    "qty": 30,
+    "amount": 5200000,
+    "totalPurchased": 28000000,
+    "totalPaid": 22800000,
+    "balanceDue": 5200000,
+    "status": "Overdue",
+    "avgLeadTime": "4 Days",
+    "totalTransactions": 15,
+    "history": [
+      {
+        "date": "11/03/2026",
+        "category": "Kertas Plano",
+        "purchaseItem": "HVS 80gr Plano (65x100)",
+        "qty": 30,
+        "amount": 5200000
+      }
+    ]
+  },
+  {
+    "id": "SR-012",
+    "supplierId": "SUP-009",
+    "supplierName": "UD. Baut & Mesin Perkasa",
+    "date": "12/03/2026",
+    "category": "Sparepart & Maintenance",
+    "purchaseItem": "Pisau Pond Cutter Standard",
+    "qty": 5,
+    "amount": 950000,
+    "totalPurchased": 6500000,
+    "totalPaid": 5550000,
+    "balanceDue": 950000,
+    "status": "Unpaid",
+    "avgLeadTime": "2 Days",
+    "totalTransactions": 5,
+    "history": [
+      {
+        "date": "12/03/2026",
+        "category": "Sparepart & Maintenance",
+        "purchaseItem": "Pisau Pond Cutter Standard",
+        "qty": 5,
+        "amount": 950000
+      }
+    ]
+  }
+]

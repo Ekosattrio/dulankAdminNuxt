@@ -1,171 +1,262 @@
-<template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header">
-        <div class="add-item d-flex">
-          <div class="page-title">
-            <h4>Bestseller Products Report</h4>
-            <h6>View Reports of Best Selling Products</h6>
-          </div>
-        </div>
-        <ul class="table-top-head">
-          <li>
-            <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
-          </li>
-          <li>
-            <a title="Print" href="javascript:void(0);" @click="printReport"><i class="ti ti-printer"></i></a>
-          </li>
-          <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Filter and Table Card -->
-      <div class="card table-list-card">
-        <div class="card-body">
-          <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <div class="search-set d-flex align-items-center gap-2 flex-wrap">
-              <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control" placeholder="Search bestseller product..." />
-              </div>
-            </div>
-            <div class="filters d-flex align-items-center gap-2 flex-wrap">
-              <div class="dropdown">
-                <button
-                  class="btn btn-outline-primary dropdown-toggle"
-                  type="button"
-                  @click="catDropdownOpen = !catDropdownOpen"
-                >
-                  Category: {{ filterCategory || 'All Categories' }}
-                </button>
-                <ul v-if="catDropdownOpen" class="dropdown-menu show" style="display: block; position: absolute;">
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = ''; catDropdownOpen = false">All Categories</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = 'Packaging'; catDropdownOpen = false">Packaging</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = 'Marketing'; catDropdownOpen = false">Marketing</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = 'Publishing'; catDropdownOpen = false">Publishing</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = 'Stationery'; catDropdownOpen = false">Stationery</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" @click="filterCategory = 'Outdoor Media'; catDropdownOpen = false">Outdoor Media</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table datanew">
-              <thead class="thead-light">
-                <tr>
-                  <th class="text-center" style="width: 70px;">Rank</th>
-                  <th>Category</th>
-                  <th>Product</th>
-                  <th class="text-end">Sold Qty</th>
-                  <th>Unit</th>
-                  <th class="text-end">Total Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredProducts" :key="item.rank">
-                  <td class="text-center">
-                    <span
-                      class="badge rounded-circle p-2 fs-12 fw-bold"
-                      :class="{
-                        'bg-warning text-dark': item.rank === 1,
-                        'bg-secondary text-white': item.rank === 2,
-                        'bg-danger bg-opacity-75 text-white': item.rank === 3,
-                        'bg-light text-dark border': item.rank > 3
-                      }"
-                    >
-                      #{{ item.rank }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge bg-light text-dark border">{{ item.category }}</span>
-                  </td>
-                  <td class="fw-semibold text-dark">{{ item.product }}</td>
-                  <td class="text-end fw-bold">{{ formatNumber(item.sold) }}</td>
-                  <td>{{ item.unit }}</td>
-                  <td class="text-end fw-bold text-dark">Rp {{ formatNumber(item.total) }}</td>
-                </tr>
-                <tr v-if="filteredProducts.length === 0">
-                  <td colspan="6" class="text-center py-4 text-muted">
-                    No bestseller records found.
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot class="table-light">
-                <tr class="fw-bold">
-                  <td colspan="3" class="text-start">Total</td>
-                  <td class="text-end">{{ formatNumber(totalSold) }}</td>
-                  <td></td>
-                  <td class="text-end">Rp {{ formatNumber(totalRevenue) }}</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useBestSellerReport } from '~/composables/useSalesReports'
+import { useTablePrint } from '~/composables/useTablePrint'
+import { formatIDR } from '~/utils/currency'
 
-interface BestsellerItem {
-  rank: number
-  category: string
-  product: string
-  sold: number
-  unit: string
-  total: number
-}
+// Components
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import DateRangePicker from '~/components/common/DateRangePicker.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-const products = ref<BestsellerItem[]>([
-  { rank: 1, category: 'Packaging', product: 'Sticker Label Kromo / Vinyl A3+', sold: 15000, unit: 'pcs', total: 750000000 },
-  { rank: 2, category: 'Marketing', product: 'Brosur A4 Art Paper 150g Lipat 3', sold: 13800, unit: 'lembar', total: 680000000 },
-  { rank: 3, category: 'Publishing', product: 'Buku Modul A5 Jahit Kawat Softcover', sold: 12600, unit: 'box', total: 610000000 },
-  { rank: 4, category: 'Marketing', product: 'Katalog Produk Art Carton 260g', sold: 11400, unit: 'lembar', total: 540000000 },
-  { rank: 5, category: 'Stationery', product: 'ID Card Panitia & Tali Lanyard', sold: 10200, unit: 'pcs', total: 470000000 },
-  { rank: 6, category: 'Stationery', product: 'Kartu Nama Box Plastik UV Doff', sold: 9000, unit: 'pcs', total: 400000000 },
-  { rank: 7, category: 'Outdoor Media', product: 'Spanduk Flexi Korea 440g High Res', sold: 7800, unit: 'meter', total: 330000000 },
-  { rank: 8, category: 'Packaging', product: 'Dus Kemasan Makanan Ivory Food Grade', sold: 6600, unit: 'box', total: 260000000 },
-  { rank: 9, category: 'Outdoor Media', product: 'Banner Roll-Up Aluminium Stand', sold: 5400, unit: 'meter', total: 190000000 },
-  { rank: 10, category: 'Packaging', product: 'Paper Bag Custom Kraft Coklat Sablon', sold: 4200, unit: 'pcs', total: 120000000 }
-])
-
-const searchQuery = ref('')
-const filterCategory = ref('')
-const catDropdownOpen = ref(false)
-
-const filteredProducts = computed(() => {
-  return products.value.filter(p => {
-    const matchCat = !filterCategory.value || p.category === filterCategory.value
-    const matchSearch = !searchQuery.value ||
-      p.product.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.value.toLowerCase())
-    return matchCat && matchSearch
-  })
+useHead({
+  title: 'Bestseller Products Report - Kacetak System',
 })
 
-const totalSold = computed(() => filteredProducts.value.reduce((sum, p) => sum + p.sold, 0))
-const totalRevenue = computed(() => filteredProducts.value.reduce((sum, p) => sum + p.total, 0))
+const { items, search, category, dateRange, pending, error, refresh, stats } = useBestSellerReport()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-function formatNumber(val: number) {
-  return val.toLocaleString('id-ID')
+// Toast
+const toastMessage = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
 }
 
-function exportPdf() {
-  alert('Exporting Bestseller report as PDF...')
-}
+// Columns definition for SalesDataTable
+const columns = [
+  { key: 'rank', label: 'Rank', sortable: true, align: 'center' as const },
+  { key: 'category', label: 'Category', sortable: true },
+  { key: 'product', label: 'Product', sortable: true },
+  { key: 'soldQty', label: 'Sold', sortable: true, align: 'center' as const },
+  { key: 'unit', label: 'Unit', sortable: true },
+  { key: 'total', label: 'Total', sortable: true, align: 'end' as const },
+]
 
-function printReport() {
-  window.print()
-}
+// Print columns
+const printColumns = [
+  { key: 'rank', label: 'Rank', align: 'center' as const },
+  { key: 'category', label: 'Category' },
+  { key: 'product', label: 'Product' },
+  { key: 'soldQty', label: 'Sold', align: 'center' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'total', label: 'Total', align: 'right' as const, format: (v: number) => formatIDR(v) },
+]
 
-function refresh() {
-  searchQuery.value = ''
-  filterCategory.value = ''
+// Category options
+const categoryOptions = computed(() => {
+  const set = new Set(items.value.map(i => i.category))
+  return Array.from(set)
+})
+
+// Export CSV
+function exportCsv() {
+  if (items.value.length === 0) {
+    showToast('No bestseller report data to export')
+    return
+  }
+
+  const headers = ['Rank', 'Category', 'Product', 'Sold', 'Unit', 'Total']
+  const rows = items.value.map(item => [
+    item.rank,
+    `"${item.category}"`,
+    `"${item.product}"`,
+    item.soldQty,
+    `"${item.unit}"`,
+    item.total,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `bestseller_report_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Bestseller report exported to CSV successfully')
 }
 </script>
 
+<template>
+  <div class="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
+    <!-- Header -->
+    <SalesListHeader
+      title="Bestseller Products Report"
+      subtitle="View rankings and total revenue of best selling products"
+      :refreshing="pending"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button
+          type="button"
+          title="Export CSV"
+          aria-label="Export CSV"
+          class="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+          @click="exportCsv"
+        >
+          <FeatherIcon name="download" :size="14" />
+          <span>Export CSV</span>
+        </button>
+      </template>
+    </SalesListHeader>
+
+    <!-- 4 KPI Summary Cards -->
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400">
+          <FeatherIcon name="award" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Top Product</p>
+          <h3 class="truncate text-base font-bold text-gray-900 dark:text-white" :title="stats.topProduct">
+            {{ stats.topProduct }}
+          </h3>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+          <FeatherIcon name="package" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Ranked Items</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            {{ stats.totalProducts }} Products
+          </h3>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400">
+          <FeatherIcon name="shopping-bag" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Quantity Sold</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            {{ stats.totalSoldQty.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <FeatherIcon name="dollar-sign" :size="22" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Bestseller Value</p>
+          <h3 class="truncate text-lg font-bold text-emerald-600 dark:text-emerald-400">
+            <CurrencyDisplay :value="stats.totalSalesValue" :bold="true" align="left" />
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback & Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      :error="error?.message || ''"
+      :message="toastMessage"
+      skeleton="table"
+      :skeleton-rows="6"
+      :skeleton-cols="6"
+      @retry="refresh"
+      @dismiss="toastMessage = ''"
+    >
+      <!-- SalesDataTable directly mounted without double cards -->
+      <SalesDataTable
+        :columns="columns"
+        :items="items"
+        v-model:search="search"
+        search-placeholder="Search bestseller product..."
+      >
+        <!-- Filter slot -->
+        <template #filters>
+          <DateRangePicker v-model="dateRange" placeholder="Date" />
+          <TableFilterSelect
+            v-model="category"
+            :options="categoryOptions"
+            placeholder="All Categories"
+            aria-label="Filter by Category"
+          />
+        </template>
+
+        <!-- Cell overrides -->
+        <template #cell(rank)="{ item }">
+          <span
+            :class="[
+              'inline-flex size-6 items-center justify-center rounded-full text-xs font-bold',
+              item.rank === 1
+                ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300'
+                : item.rank === 2
+                  ? 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                  : item.rank === 3
+                    ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300'
+                    : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+            ]"
+          >
+            {{ item.rank }}
+          </span>
+        </template>
+
+        <template #cell(category)="{ item }">
+          <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+            {{ item.category }}
+          </span>
+        </template>
+
+        <template #cell(product)="{ item }">
+          <span class="font-semibold text-gray-900 dark:text-white">
+            {{ item.product }}
+          </span>
+        </template>
+
+        <template #cell(soldQty)="{ item }">
+          <span class="font-medium text-gray-900 dark:text-white">
+            {{ Number(item.soldQty).toLocaleString('id-ID') }}
+          </span>
+        </template>
+
+        <template #cell(total)="{ item }">
+          <CurrencyDisplay :value="item.total" />
+        </template>
+
+        <!-- Footer Total -->
+        <template #footer="{ items: filteredList }">
+          <tr class="font-bold text-gray-900 dark:text-white">
+            <td colspan="3" class="px-4 py-3">Total</td>
+            <td class="px-4 py-3 text-center">
+              {{ filteredList.reduce((acc, i) => acc + (i.soldQty || 0), 0).toLocaleString('id-ID') }}
+            </td>
+            <td class="px-4 py-3 text-gray-500">-</td>
+            <td class="px-4 py-3 text-end text-emerald-600 dark:text-emerald-400">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.total || 0), 0)" :bold="true" />
+            </td>
+          </tr>
+        </template>
+      </SalesDataTable>
+    </SalesFeedback>
+
+    <!-- Standard Document Print & PDF Modal (Kop Surat PT. DULANK SEMESTA CIDA) -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Bestseller Products Report"
+      subtitle="Laporan Produk Terlaris (Bestseller)"
+      :columns="printColumns"
+      :items="items"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
+  </div>
+</template>

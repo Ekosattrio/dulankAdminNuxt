@@ -80,6 +80,20 @@ import unitsData from '../data/units.json'
 import variantsData from '../data/variants.json'
 import wishlistsData from '../data/wishlists.json'
 import workFlowsData from '../data/work-flows.json'
+import salesReportsData from '../data/sales-reports.json'
+import bestSellerReportsData from '../data/best-seller-reports.json'
+import purchaseReportsData from '../data/purchase-reports.json'
+import invoiceReportsData from '../data/invoice-reports.json'
+import productReportsData from '../data/product-reports.json'
+import expenseReportsData from '../data/expense-reports.json'
+import incomeReportsData from '../data/income-reports.json'
+import taxReportsData from '../data/tax-reports.json'
+import profitLossReportsData from '../data/profit-loss-reports.json'
+import annualReportsData from '../data/annual-reports.json'
+import supplierReportsData from '../data/supplier-reports.json'
+import supplierDueReportsData from '../data/supplier-due-reports.json'
+import customerReportsData from '../data/customer-reports.json'
+import customerDueReportsData from '../data/customer-due-reports.json'
 
 export const bundledSources: Record<string, unknown> = {
   'address.json': addressData,
@@ -165,4 +179,18 @@ export const bundledSources: Record<string, unknown> = {
   'variants.json': variantsData,
   'wishlists.json': wishlistsData,
   'work-flows.json': workFlowsData,
+  'sales-reports.json': salesReportsData,
+  'best-seller-reports.json': bestSellerReportsData,
+  'purchase-reports.json': purchaseReportsData,
+  'invoice-reports.json': invoiceReportsData,
+  'product-reports.json': productReportsData,
+  'expense-reports.json': expenseReportsData,
+  'income-reports.json': incomeReportsData,
+  'tax-reports.json': taxReportsData,
+  'profit-loss-reports.json': profitLossReportsData,
+  'annual-reports.json': annualReportsData,
+  'supplier-reports.json': supplierReportsData,
+  'supplier-due-reports.json': supplierDueReportsData,
+  'customer-reports.json': customerReportsData,
+  'customer-due-reports.json': customerDueReportsData,
 }

@@ -1,365 +1,419 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useSalesReport } from '~/composables/useSalesReports'
+import { useTablePrint } from '~/composables/useTablePrint'
+import { formatIDR } from '~/utils/currency'
+import type { SalesReportItem } from '~~/server/types/reports-sales'
+
+// Components
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
+import DateRangePicker from '~/components/common/DateRangePicker.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+
+useHead({
+  title: 'Sales Report - Kacetak System',
+})
+
+const { items, search, category, channel, dateRange, pending, error, refresh, stats } = useSalesReport()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+// Detail Modal
+const selectedItem = ref<SalesReportItem | null>(null)
+const isDetailOpen = ref(false)
+
+function openDetailModal(item: SalesReportItem) {
+  selectedItem.value = item
+  isDetailOpen.value = true
+}
+
+function closeDetailModal() {
+  isDetailOpen.value = false
+  selectedItem.value = null
+}
+
+// Toast
+const toastMessage = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+function showToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 3500)
+}
+
+// Columns definition for SalesDataTable
+const columns = [
+  { key: 'category', label: 'Product Category', sortable: true },
+  { key: 'soldQty', label: 'Sold Qty', sortable: true, align: 'center' as const },
+  { key: 'unit', label: 'Unit', sortable: true },
+  { key: 'totalSales', label: 'Total Sales', sortable: true, align: 'end' as const },
+  { key: 'totalDue', label: 'Total Sales Due', sortable: true, align: 'end' as const },
+  { key: 'totalAmount', label: 'Total Sales Amount', sortable: true, align: 'end' as const },
+  { key: 'percentage', label: 'Percentage', sortable: true, align: 'end' as const },
+  { key: 'action', label: 'Action', align: 'center' as const },
+]
+
+// Print columns
+const printColumns = [
+  { key: 'category', label: 'Product Category' },
+  { key: 'soldQty', label: 'Sold Qty', align: 'center' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'totalSales', label: 'Total Sales', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'totalDue', label: 'Total Sales Due', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'totalAmount', label: 'Total Sales Amount', align: 'right' as const, format: (v: number) => formatIDR(v) },
+  { key: 'percentage', label: 'Percentage', align: 'right' as const, format: (v: number) => `${Number(v).toFixed(2)}%` },
+]
+
+// Category options
+const categoryOptions = computed(() => {
+  const set = new Set(items.value.map(i => i.category))
+  return Array.from(set)
+})
+
+// Channel options
+const channelOptions = ['POS', 'Website', 'Quotation', 'Sales Staff']
+
+// Export CSV
+function exportCsv() {
+  if (items.value.length === 0) {
+    showToast('No sales report data to export')
+    return
+  }
+
+  const headers = ['Category', 'Sold Qty', 'Unit', 'Total Sales', 'Total Due', 'Total Amount', 'Percentage']
+  const rows = items.value.map(item => [
+    `"${item.category}"`,
+    item.soldQty,
+    `"${item.unit}"`,
+    item.totalSales,
+    item.totalDue,
+    item.totalAmount,
+    `"${Number(item.percentage).toFixed(2)}%"`,
+  ])
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', `sales_report_${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Sales report exported to CSV successfully')
+}
+</script>
+
 <template>
-  <div class="content">
-    <div class="page-header">
-      <div class="add-item d-flex">
-        <div class="page-title">
-          <h4>Sales Report</h4>
-          <h6>Manage Your Sales Report</h6>
+  <div class="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
+    <!-- Header -->
+    <SalesListHeader
+      title="Sales Report"
+      subtitle="Manage Your Sales Report"
+      :refreshing="pending"
+      @refresh="refresh"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button
+          type="button"
+          title="Export CSV"
+          aria-label="Export CSV"
+          class="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+          @click="exportCsv"
+        >
+          <FeatherIcon name="download" :size="14" />
+          <span>Export CSV</span>
+        </button>
+      </template>
+    </SalesListHeader>
+
+    <!-- 8 KPI Summary Cards (2 rows x 4 columns) -->
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Row 1: Total Sold Unit -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-orange-50 text-orange-500 dark:bg-orange-950/40 dark:text-orange-400">
+          <FeatherIcon name="package" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Total Sold Unit</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            {{ stats.totalSoldUnit.toLocaleString('id-ID') }}
+          </h3>
         </div>
       </div>
-      <ul class="table-top-head">
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf" @click.prevent="printReport">
-            <img src="/assets/img/icons/pdf.svg" alt="img" />
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Print" @click.prevent="printReport">
-            <i class="feather-printer"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh" @click.prevent="refreshReport">
-            <i class="feather-rotate-ccw"></i>
-          </a>
-        </li>
-        <li>
-          <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header" @click.prevent="toggleHeader">
-            <i class="feather-chevron-up"></i>
-          </a>
-        </li>
-      </ul>
+
+      <!-- Row 1: Total Sales -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <FeatherIcon name="dollar-sign" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Total Sales</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.totalSales.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 1: Total Sales Due -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 dark:bg-cyan-950/40 dark:text-cyan-400">
+          <FeatherIcon name="arrow-down" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Total Sales Due</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.totalDue.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 1: Total Sales Amount -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-rose-50 text-rose-500 dark:bg-rose-950/40 dark:text-rose-400">
+          <FeatherIcon name="arrow-up" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Total Sales Amount</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.totalAmount.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 2: Point of Sales -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-rose-50 text-rose-500 dark:bg-rose-950/40 dark:text-rose-400">
+          <FeatherIcon name="shopping-bag" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Point of Sales</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.posSales.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 2: Website -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <FeatherIcon name="globe" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Website</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.websiteSales.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 2: Quotation -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 dark:bg-cyan-950/40 dark:text-cyan-400">
+          <FeatherIcon name="file-text" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Quotation</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.quotationSales.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Row 2: Sales Staff -->
+      <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-rose-50 text-rose-500 dark:bg-rose-950/40 dark:text-rose-400">
+          <FeatherIcon name="users" :size="20" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">Sales Staff</p>
+          <h3 class="truncate text-lg font-bold text-gray-900 dark:text-white">
+            Rp{{ stats.staffSales.toLocaleString('id-ID') }}
+          </h3>
+        </div>
+      </div>
     </div>
 
-    <!-- Metric Cards Row 1 -->
-    <div class="row mt-4">
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash1.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sold Unit</h6>
-            <h5><span>307.144</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash1 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash2.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales</h6>
-            <h5>Rp <span>481.002.000</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash2 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash3.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales Due</h6>
-            <h5>Rp <span>38.565.000</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash3 w-100">
-          <div class="dash-widgetimg">
-            <span><img src="/assets/img/icons/dash4.svg" alt="img" /></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Total Sales Amount</h6>
-            <h5>Rp <span>442.437.000</span></h5>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Feedback & Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      :error="error?.message || ''"
+      :message="toastMessage"
+      skeleton="table"
+      :skeleton-rows="6"
+      :skeleton-cols="8"
+      @retry="refresh"
+      @dismiss="toastMessage = ''"
+    >
+      <!-- SalesDataTable directly mounted without double cards -->
+      <SalesDataTable
+        :columns="columns"
+        :items="items"
+        v-model:search="search"
+        search-placeholder="Search"
+      >
+        <!-- Filter slot -->
+        <template #filters>
+          <DateRangePicker v-model="dateRange" placeholder="Date" />
+        </template>
 
-    <!-- Metric Cards Row 2 (Channel breakdown) -->
-    <div class="row">
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-shopping-bag"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Point of Sales</h6>
-            <h5>Rp <span>215.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash1 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-globe"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Website</h6>
-            <h5>Rp <span>52.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash2 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-file-text"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Quotation</h6>
-            <h5>Rp <span>75.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 col-12 d-flex">
-        <div class="dash-widget dash3 w-100">
-          <div class="dash-widgetimg">
-            <span><i class="feather-users"></i></span>
-          </div>
-          <div class="dash-widgetcontent">
-            <h6>Sales Staff</h6>
-            <h5>Rp <span>138.250.500</span></h5>
-          </div>
-        </div>
-      </div>
-    </div>
+        <!-- Cell overrides -->
+        <template #cell(soldQty)="{ item }">
+          <span class="font-normal text-gray-900 dark:text-white">
+            {{ Number(item.soldQty).toLocaleString('id-ID') }}
+          </span>
+        </template>
 
-    <!-- Report Table Card -->
-    <div class="card table-list-card">
-      <div class="card-body">
-        <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div class="search-set d-block d-md-flex align-items-center gap-2">
-            <div class="search-input">
-              <input v-model="searchQuery" type="text" placeholder="Search category..." class="form-control form-control-sm" />
-            </div>
-            <div class="my-2">
-              <div class="pemilihrentang-container position-relative">
-                <input
-                  type="text"
-                  class="pemilihrentang-input form-control form-control-sm cursor-pointer"
-                  readonly
-                  placeholder="Date Range"
-                  :value="selectedDateRangeLabel"
-                  @click="showDateDropdown = !showDateDropdown"
-                  style="height: fit-content !important; width: 100% !important"
-                />
-                <div
-                  v-if="showDateDropdown"
-                  class="pemilihrentang-panel position-absolute bg-white border rounded shadow p-2 mt-1 z-3"
-                >
-                  <div class="opsi-cepat">
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('kemarin')">Kemarin</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('7hari')">7 Hari Terakhir</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanIni')">Bulan Ini</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer" @click="setDateRange('bulanLalu')">Bulan Lalu</div>
-                    <div class="p-1 hover:bg-gray-100 cursor-pointer text-muted" @click="setDateRange('semua')">Semua</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <template #cell(totalSales)="{ item }">
+          <span class="font-normal text-gray-900 dark:text-white">
+            {{ Number(item.totalSales).toLocaleString('id-ID') }}
+          </span>
+        </template>
+
+        <template #cell(totalDue)="{ item }">
+          <span v-if="!item.totalDue || item.totalDue === 0" class="font-medium text-gray-400">-</span>
+          <span v-else class="font-normal text-gray-900 dark:text-white">
+            {{ Number(item.totalDue).toLocaleString('id-ID') }}
+          </span>
+        </template>
+
+        <template #cell(totalAmount)="{ item }">
+          <span class="font-normal text-gray-900 dark:text-white">
+            {{ Number(item.totalAmount).toLocaleString('id-ID') }}
+          </span>
+        </template>
+
+        <template #cell(percentage)="{ item }">
+          <span class="font-normal text-gray-900 dark:text-white">
+            {{ Number(item.percentage).toFixed(2) }}%
+          </span>
+        </template>
+
+        <template #cell(action)="{ item }">
+          <div class="flex items-center justify-center">
+            <button
+              type="button"
+              title="View Detail Report Product"
+              aria-label="View Detail Report Product"
+              class="inline-flex size-8 items-center justify-center rounded border border-gray-200 text-gray-600 transition-colors hover:border-primary hover:text-primary dark:border-gray-700 dark:text-gray-400 dark:hover:text-primary"
+              @click="openDetailModal(item)"
+            >
+              <FeatherIcon name="eye" :size="14" />
+            </button>
+          </div>
+        </template>
+
+        <!-- Footer Total -->
+        <template #footer="{ items: filteredList }">
+          <tr class="font-bold text-gray-900 dark:text-white">
+            <td class="px-4 py-3">TOTAL</td>
+            <td class="px-4 py-3 text-center">
+              {{ filteredList.reduce((acc, i) => acc + (i.soldQty || 0), 0).toLocaleString('id-ID') }}
+            </td>
+            <td class="px-4 py-3 text-gray-500">-</td>
+            <td class="px-4 py-3 text-end">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalSales || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end text-amber-600 dark:text-amber-400">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalDue || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end text-emerald-600 dark:text-emerald-400">
+              <CurrencyDisplay :value="filteredList.reduce((acc, i) => acc + (i.totalAmount || 0), 0)" :bold="true" />
+            </td>
+            <td class="px-4 py-3 text-end">100%</td>
+            <td class="px-4 py-3 text-center">-</td>
+          </tr>
+        </template>
+      </SalesDataTable>
+    </SalesFeedback>
+
+    <!-- Detail Breakdown Modal -->
+    <SalesDialog
+      :open="isDetailOpen"
+      title="Detail Report Product"
+      @close="closeDetailModal"
+    >
+      <div v-if="selectedItem" class="space-y-4">
+        <div class="grid grid-cols-1 gap-2 rounded-lg bg-gray-50 p-4 text-xs sm:grid-cols-2 dark:bg-gray-800/50">
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Product Category:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">{{ selectedItem.category }}</span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Unit:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">{{ selectedItem.unit }}</span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Total Sales:</span>
+            <span class="ms-2 font-bold text-gray-900 dark:text-white">
+              <CurrencyDisplay :value="selectedItem.totalSales" align="left" />
+            </span>
+          </div>
+          <div>
+            <span class="text-gray-500 dark:text-gray-400">Total Due:</span>
+            <span class="ms-2 font-bold text-amber-600 dark:text-amber-400">
+              <CurrencyDisplay :value="selectedItem.totalDue" align="left" />
+            </span>
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table datanew">
-            <thead>
+        <div v-if="selectedItem.details && selectedItem.details.length > 0" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+          <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+            <thead class="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-400">
               <tr>
-                <th>Product Category</th>
-                <th>Sold Qty</th>
-                <th>Unit</th>
-                <th>Total Sales</th>
-                <th>Total Sales Due</th>
-                <th>Total Sales Amount</th>
-                <th>Percentage</th>
-                <th class="no-sort">Action</th>
+                <th class="px-3 py-2 text-start">Product</th>
+                <th class="px-3 py-2 text-center">Sold Qty</th>
+                <th class="px-3 py-2 text-start">Unit</th>
+                <th class="px-3 py-2 text-end">Total Revenue</th>
+                <th class="px-3 py-2 text-end">Percentage</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="item in filteredRows" :key="item.category">
-                <td class="fw-bold">{{ item.category }}</td>
-                <td>{{ item.soldQty }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ formatNumber(item.totalSales) }}</td>
-                <td :class="item.due > 0 ? 'text-danger' : 'text-muted'">{{ formatNumber(item.due) }}</td>
-                <td class="fw-semibold text-success">{{ formatNumber(item.amount) }}</td>
-                <td class="fw-bold">{{ item.percentage }}%</td>
-                <td class="action-table-data">
-                  <div class="edit-delete-action">
-                    <a class="p-2 text-primary cursor-pointer" @click.prevent="viewDetail(item)" title="View Detail">
-                      <i class="feather-eye"></i>
-                    </a>
-                  </div>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              <tr v-for="(detail, idx) in selectedItem.details" :key="idx" class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
+                <td class="px-3 py-2 font-medium text-gray-900 dark:text-white">{{ detail.product }}</td>
+                <td class="px-3 py-2 text-center">{{ detail.soldQty.toLocaleString('id-ID') }}</td>
+                <td class="px-3 py-2">{{ detail.unit }}</td>
+                <td class="px-3 py-2 text-end">
+                  <CurrencyDisplay :value="detail.totalRevenue" />
                 </td>
+                <td class="px-3 py-2 text-end font-semibold">{{ Number(detail.percentage).toFixed(2) }}%</td>
               </tr>
             </tbody>
-            <tfoot>
-              <tr>
-                <td class="fw-bold">Total</td>
-                <td class="fw-bold">{{ totalQty }}</td>
-                <td></td>
-                <td class="fw-bold">{{ formatNumber(sumSales) }}</td>
-                <td class="fw-bold text-danger">{{ formatNumber(sumDue) }}</td>
-                <td class="fw-bold text-success">{{ formatNumber(sumAmount) }}</td>
-                <td class="fw-bold">100%</td>
-                <td></td>
-              </tr>
-            </tfoot>
           </table>
         </div>
-      </div>
-    </div>
+        <p v-else class="text-center text-xs text-gray-500 dark:text-gray-400">
+          No sub-product breakdown data for this category.
+        </p>
 
-    <!-- View Modal -->
-    <div v-if="showModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h4 class="modal-title">Sales Category Breakdown - {{ activeItem?.category }}</h4>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body p-4" v-if="activeItem">
-            <table class="table table-bordered align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>Product</th>
-                  <th class="text-center">Sold Qty</th>
-                  <th class="text-end">Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(p, idx) in activeItem.products" :key="idx">
-                  <td class="fw-semibold">{{ p.name }}</td>
-                  <td class="text-center">{{ p.qty }} {{ activeItem.unit }}</td>
-                  <td class="text-end fw-bold">Rp {{ formatNumber(p.revenue) }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="modal-footer p-0 pt-3 border-top justify-content-end">
-              <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-            </div>
-          </div>
+        <div class="flex justify-end pt-2">
+          <button
+            type="button"
+            class="inline-flex min-h-9 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+            @click="closeDetailModal"
+          >
+            Close
+          </button>
         </div>
       </div>
-    </div>
+    </SalesDialog>
+
+    <!-- Standard Document Print & PDF Modal (Kop Surat PT. DULANK SEMESTA CIDA) -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Sales Report"
+      subtitle="Laporan Penjualan Berdasarkan Kategori Produk"
+      :columns="printColumns"
+      :items="items"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
+    />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from "vue";
-import { formatNumber } from "~/composables/useFormatters";
-
-const rows = ref([
-  {
-    category: "Cetak Offset",
-    soldQty: 10500,
-    unit: "Lembar",
-    totalSales: 130000000,
-    due: 15000000,
-    amount: 115000000,
-    percentage: "27.02",
-    products: [
-      { name: "Brosur Full Color A4", qty: 6500, revenue: 65000000 },
-      { name: "Buku Agenda Custom", qty: 4000, revenue: 50000000 },
-    ],
-  },
-  {
-    category: "Digital Print A3+",
-    soldQty: 15400,
-    unit: "Lembar",
-    totalSales: 110000000,
-    due: 5000000,
-    amount: 105000000,
-    percentage: "22.87",
-    products: [
-      { name: "Sticker Vinyl Ritrama", qty: 8400, revenue: 58800000 },
-      { name: "Poster Art Carton 260gr", qty: 7000, revenue: 46200000 },
-    ],
-  },
-  {
-    category: "Large Format / Banner",
-    soldQty: 8200,
-    unit: "Meter",
-    totalSales: 125000000,
-    due: 10000000,
-    amount: 115000000,
-    percentage: "25.99",
-    products: [
-      { name: "Banner Flexi China 280gr", qty: 5200, revenue: 65000000 },
-      { name: "Banner Flexi Korea 440gr", qty: 3000, revenue: 50000000 },
-    ],
-  },
-  {
-    category: "Merchandise & Sablon",
-    soldQty: 4200,
-    unit: "Pcs",
-    totalSales: 66000000,
-    due: 4500000,
-    amount: 61500000,
-    percentage: "13.72",
-    products: [
-      { name: "Mug Custom Digital", qty: 2200, revenue: 33000000 },
-      { name: "Kaos Sablon DTF", qty: 2000, revenue: 28500000 },
-    ],
-  },
-  {
-    category: "Finishing & Jilid",
-    soldQty: 1200,
-    unit: "Buku",
-    totalSales: 50002000,
-    due: 4065000,
-    amount: 45937000,
-    percentage: "10.40",
-    products: [
-      { name: "Hardcover Skripsi", qty: 700, revenue: 28000000 },
-      { name: "Jilid Spiral Kawat", qty: 500, revenue: 17937000 },
-    ],
-  },
-]);
-
-const searchQuery = ref("");
-const selectedDateRangeLabel = ref("");
-const showDateDropdown = ref(false);
-
-const setDateRange = (range: string) => {
-  if (range === "kemarin") selectedDateRangeLabel.value = "Kemarin";
-  else if (range === "7hari") selectedDateRangeLabel.value = "7 Hari Terakhir";
-  else if (range === "bulanIni") selectedDateRangeLabel.value = "Bulan Ini";
-  else if (range === "bulanLalu") selectedDateRangeLabel.value = "Bulan Lalu";
-  else selectedDateRangeLabel.value = "";
-  showDateDropdown.value = false;
-};
-
-const filteredRows = computed(() => {
-  return rows.value.filter((r) => {
-    return !searchQuery.value || r.category.toLowerCase().includes(searchQuery.value.toLowerCase());
-  });
-});
-
-const totalQty = computed(() => filteredRows.value.reduce((acc, r) => acc + r.soldQty, 0));
-const sumSales = computed(() => filteredRows.value.reduce((acc, r) => acc + r.totalSales, 0));
-const sumDue = computed(() => filteredRows.value.reduce((acc, r) => acc + r.due, 0));
-const sumAmount = computed(() => filteredRows.value.reduce((acc, r) => acc + r.amount, 0));
-
-const showModal = ref(false);
-const activeItem = ref<any>(null);
-
-const viewDetail = (item: any) => {
-  activeItem.value = item;
-  showModal.value = true;
-};
-
-const printReport = () => {
-  window.print();
-};
-
-const refreshReport = () => {
-  searchQuery.value = "";
-};
-
-const toggleHeader = () => {
-  // toggle
-};
-</script>
