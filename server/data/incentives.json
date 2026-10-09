@@ -1,0 +1,48 @@
+[
+  {
+    "id": "1",
+    "code": "INC-01",
+    "employee": "Desman Dwi",
+    "period": "2025-08",
+    "qtyComplete": 10,
+    "totalAmount": 50000,
+    "status": "Paid"
+  },
+  {
+    "id": "2",
+    "code": "INC-02",
+    "employee": "Eko Satrio",
+    "period": "2025-08",
+    "qtyComplete": 8,
+    "totalAmount": 24000,
+    "status": "Pending"
+  },
+  {
+    "id": "3",
+    "code": "INC-03",
+    "employee": "Rina Melati",
+    "period": "2025-07",
+    "qtyComplete": 15,
+    "totalAmount": 75000,
+    "status": "Paid"
+  },
+  {
+    "id": "4",
+    "code": "INC-04",
+    "employee": "Budi Santoso",
+    "period": "2025-07",
+    "qtyComplete": 12,
+    "totalAmount": 36000,
+    "status": "Paid"
+  },
+  {
+    "id": "5",
+    "code": "INC-05",
+    "employee": "Santi Dewi",
+    "period": "2025-08",
+    "qtyComplete": 5,
+    "totalAmount": 15000,
+    "status": "Pending"
+  }
+]
+

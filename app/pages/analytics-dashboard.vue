@@ -2,8 +2,11 @@
   layout: "default",
 });
 
-useHead({
-  title: "Analytics Dashboard - Kacetak System",
+useLegacyPage({
+  title: 'Analytics Dashboard',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 // --- State: Controls & Feedback ---

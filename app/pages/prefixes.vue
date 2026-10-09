@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content settings-content">
@@ -131,3 +132,23 @@ const toggleCollapse = () => {
   // collapse
 };
 </script>
+=======
+<script setup lang="ts">
+import PrefixesSettingWorkspace from '~/components/pages/setting/PrefixesSettingWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Prefix Settings',
+  sweetAlert: false
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-prefixes">
+    <PrefixesSettingWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">const { data: departmentData } = await useFetch<DepartmentItem[]>('/api/department')
 const departments = ref<DepartmentItem[]>(departmentData.value ?? [])
 useMockSync('department', departments);
@@ -227,5 +228,16 @@ const deleteDepartment = (id: string) => {
         <CommonModalFooter submitLabel="Submit" @cancel="isEditModalOpen = false" />
       </form>
     </CommonBaseModal>
+=======
+<script setup lang="ts">
+import DepartmentWorkspace from '~/components/pages/department/DepartmentWorkspace.vue'
+
+useLegacyPage({ title: 'Departments - Departemen Karyawan', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-department">
+    <DepartmentWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="content">
     <div class="page-header">
@@ -231,3 +232,23 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+=======
+<script setup lang="ts">
+import ProfitAndLossWorkspace from '~/components/pages/reports/ProfitAndLossWorkspace.vue'
+
+definePageMeta({
+  layout: 'default',
+})
+
+useLegacyPage({
+  title: 'Profit & Loss - Kacetak System',
+  sweetAlert: false,
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-profit-and-loss p-4 md:p-6">
+    <ProfitAndLossWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

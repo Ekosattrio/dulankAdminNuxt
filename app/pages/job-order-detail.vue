@@ -2,8 +2,11 @@
 const route = useRoute();
 const joNo = computed(() => (route.query.no as string) || "JO-0001");
 
-useHead({
-  title: computed(() => `Job Order SPK #${joNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Job Order Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const handlePrint = () => {

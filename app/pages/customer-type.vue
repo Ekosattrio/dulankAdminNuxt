@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
@@ -195,3 +196,16 @@ function refresh() {
   filterStatus.value = ''
 }
 </script>
+=======
+<script setup lang="ts">
+import CustomerTypeWorkspace from '~/components/pages/customer-type/CustomerTypeWorkspace.vue'
+
+useLegacyPage({ title: 'Customer Type', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-customer-type">
+    <CustomerTypeWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

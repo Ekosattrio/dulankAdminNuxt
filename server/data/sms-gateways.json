@@ -1,0 +1,35 @@
+{
+  "nexmo": {
+    "name": "Nexmo (Vonage)",
+    "desc": "Global SMS & OTP API provider",
+    "enabled": true,
+    "apiKey": "nx_live_89823472",
+    "apiSecret": "••••••••••••",
+    "senderId": "KACETAK"
+  },
+  "twoFactor": {
+    "name": "2Factor SMS",
+    "desc": "High speed transactional SMS service",
+    "enabled": false,
+    "apiKey": "",
+    "apiSecret": "",
+    "senderId": "KACETAK"
+  },
+  "twilio": {
+    "name": "Twilio SMS",
+    "desc": "Enterprise communications platform",
+    "enabled": false,
+    "apiKey": "",
+    "apiSecret": "",
+    "senderId": "+1234567890"
+  },
+  "zenziva": {
+    "name": "Zenziva SMS / WhatsApp",
+    "desc": "Indonesian local SMS & WA Gateway",
+    "enabled": true,
+    "apiKey": "zen_live_091823",
+    "apiSecret": "••••••••••••",
+    "senderId": "KACETAK"
+  }
+}
+

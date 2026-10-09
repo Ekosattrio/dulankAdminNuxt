@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CAT-001",
+    "name": "Kertas & Bahan Baku Cetak",
+    "created": "Admin, 02/01/2026, 08:00",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-002",
+    "name": "Tinta & Toner",
+    "created": "Admin, 02/01/2026, 08:15",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-003",
+    "name": "Bahan Finishing & Jilid",
+    "created": "Admin, 02/01/2026, 08:30",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-004",
+    "name": "Sparepart Mesin",
+    "created": "Admin, 02/01/2026, 08:45",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-005",
+    "name": "Packaging & Kemasan",
+    "created": "Admin, 02/01/2026, 09:00",
+    "status": "Deactive"
+  }
+]

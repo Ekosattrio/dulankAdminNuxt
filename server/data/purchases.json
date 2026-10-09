@@ -1,0 +1,122 @@
+[
+  {
+    "id": "PR-2512000001",
+    "noPurchase": "PR-2512000001",
+    "date": "01/10/2025",
+    "created": "Sales Staff",
+    "supplier": "PT Kertas Jaya",
+    "product": "Kertas Art Paper 150gr, Tinta Offset Merah",
+    "status": "Ordered",
+    "amount": 1500000,
+    "paid": 750000,
+    "due": 750000,
+    "paymentStatus": "Partial",
+    "notes": "Pembelian rutin bulanan",
+    "shippingCost": 50000,
+    "tax": 143694,
+    "items": [
+      {
+        "name": "Kertas Art Paper 150gr",
+        "qty": 500,
+        "unit": "Lembar",
+        "price": 1250
+      },
+      {
+        "name": "Tinta Offset Merah",
+        "qty": 2,
+        "unit": "Kg",
+        "price": 337500
+      }
+    ]
+  },
+  {
+    "id": "PR-2512000002",
+    "noPurchase": "PR-2512000002",
+    "date": "03/10/2025",
+    "created": "Sales Staff",
+    "supplier": "CV Kimia Prima",
+    "product": "Plastisol T-shirt Putih, Emulsion",
+    "status": "Received",
+    "amount": 2800000,
+    "paid": 2800000,
+    "due": 0,
+    "paymentStatus": "Paid",
+    "notes": "Pesanan kilat sablon",
+    "shippingCost": 0,
+    "tax": 277477,
+    "items": [
+      {
+        "name": "Plastisol T-shirt Putih",
+        "qty": 5,
+        "unit": "Kg",
+        "price": 350000
+      },
+      {
+        "name": "Emulsion Screen",
+        "qty": 3,
+        "unit": "Botol",
+        "price": 350000
+      }
+    ]
+  },
+  {
+    "id": "PR-2512000003",
+    "noPurchase": "PR-2512000003",
+    "date": "05/10/2025",
+    "created": "Sales Staff",
+    "supplier": "Global Inkindo",
+    "product": "Tinta UV LED, Cleaner Roll",
+    "status": "Pending",
+    "amount": 850000,
+    "paid": 0,
+    "due": 850000,
+    "paymentStatus": "Unpaid",
+    "notes": "Menunggu konfirmasi ketersediaan",
+    "shippingCost": 25000,
+    "tax": 81757,
+    "items": [
+      {
+        "name": "Tinta UV LED Cyan",
+        "qty": 1,
+        "unit": "Botol",
+        "price": 600000
+      },
+      {
+        "name": "Cleaner Roll",
+        "qty": 1,
+        "unit": "Roll",
+        "price": 225000
+      }
+    ]
+  },
+  {
+    "id": "PR-2512000004",
+    "noPurchase": "PR-2512000004",
+    "date": "08/10/2025",
+    "created": "Admin Warehouse",
+    "supplier": "PT Sinar Grafika",
+    "product": "Plat CTP Thermal, Developer Solution",
+    "status": "Complete",
+    "amount": 3200000,
+    "paid": 3200000,
+    "due": 0,
+    "paymentStatus": "Paid",
+    "notes": "Stok bahan cetak offset mingguan",
+    "shippingCost": 100000,
+    "tax": 307207,
+    "items": [
+      {
+        "name": "Plat CTP Thermal 650x550",
+        "qty": 50,
+        "unit": "Lembar",
+        "price": 45000
+      },
+      {
+        "name": "Developer Solution 20L",
+        "qty": 1,
+        "unit": "Box",
+        "price": 850000
+      }
+    ]
+  }
+]

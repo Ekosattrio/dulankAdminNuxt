@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -283,3 +284,10 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapsible header
 };</script>
+=======
+<script setup lang="ts">
+import OutputTaxWorkspace from '~/components/pages/tax/OutputTaxWorkspace.vue'
+useLegacyPage({ title: 'Output Tax', sweetAlert: false })
+</script>
+<template><div class="dulank-page dulank-page-output-tax"><OutputTaxWorkspace /></div></template>
+>>>>>>> origin/eko

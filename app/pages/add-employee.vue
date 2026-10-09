@@ -1,42 +1,88 @@
 <script setup lang="ts">
+<<<<<<< HEAD
+import { reactive, ref, computed } from 'vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import PageHeader from '~/components/common/PageHeader.vue'
+import AddressCascader from '~/components/forms/AddressCascader.vue'
+import { useEmployees } from '~/composables/useEmployees'
+
+const props = withDefaults(
+  defineProps<{
+    mode?: 'add' | 'edit'
+  }>(),
+  {
+    mode: 'add'
+  }
+)
+
 const router = useRouter()
 
+const isEdit = computed(() => props.mode === 'edit')
+
 const form = reactive({
-  fullName: '',
-  gender: '',
-  dob: '1995-01-01',
-  joinDate: new Date().toISOString().split('T')[0],
-  address: '',
-  detailAddress: '',
-  department: '',
-  contactPerson1: '',
-  contactPhone1: '',
-  contactPerson2: '',
-  contactPhone2: '',
-  email: '',
-  phone: '',
-  password: '',
-  confirmPassword: ''
+  fullName: isEdit.value ? 'Budi Setiadi' : '',
+  gender: isEdit.value ? 'Male' : '',
+  dob: isEdit.value ? '1990-02-12' : '1995-01-01',
+  joinDate: isEdit.value ? '2023-01-15' : new Date().toISOString().split('T')[0],
+  address: isEdit.value ? 'Jawa Barat, Kab. Karawang, Karawang Barat' : '',
+  detailAddress: isEdit.value ? 'Perum Griya Indah Blok E2 No.55' : '',
+  department: isEdit.value ? 'Produksi' : '',
+  contactPerson1: isEdit.value ? 'Dudung Sukaya' : '',
+  contactPhone1: isEdit.value ? '6258454455555' : '',
+  contactPerson2: isEdit.value ? 'Mimin Mintarsih' : '',
+  contactPhone2: isEdit.value ? '62854515422255' : '',
+  email: isEdit.value ? 'budi2548@gmail.com' : '',
+  phone: isEdit.value ? '+6281234567001' : '',
+  password: isEdit.value ? '••••••••' : '',
+  confirmPassword: isEdit.value ? '••••••••' : ''
 })
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+const { saveEmployee } = useEmployees()
+const isSubmitting = ref(false)
 
 const handleAddressSelect = (addr: { province?: string; city?: string; district?: string }) => {
   const parts = [addr.province, addr.city, addr.district].filter(Boolean)
   form.address = parts.join(', ')
 }
 
-const submitForm = () => {
-  alert('Employee created successfully!')
-  router.push('/employees')
+const submitForm = async () => {
+  isSubmitting.value = true
+  try {
+    await saveEmployee({
+      fullName: form.fullName,
+      gender: form.gender as 'Male' | 'Female',
+      dob: form.dob,
+      joinDate: form.joinDate,
+      address: form.address,
+      detailAddress: form.detailAddress,
+      department: form.department,
+      contactPerson1: form.contactPerson1,
+      contactPhone1: form.contactPhone1,
+      contactPerson2: form.contactPerson2,
+      contactPhone2: form.contactPhone2,
+      email: form.email,
+      phone: form.phone,
+      password: form.password,
+      confirmPassword: form.confirmPassword
+    })
+    router.push('/employees')
+  } catch (err) {
+    console.error('Failed to save employee:', err)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
-    <CommonPageHeader title="New Employee" subtitle="Create new Employee">
+    <PageHeader
+      :title="isEdit ? 'Edit Employee' : 'New Employee'"
+      :subtitle="isEdit ? 'Update employee information' : 'Create new Employee'"
+    >
       <template #actions>
         <NuxtLink
           to="/employees"
@@ -46,7 +92,7 @@ const submitForm = () => {
           <span>Back to Employee List</span>
         </NuxtLink>
       </template>
-    </CommonPageHeader>
+    </PageHeader>
 
     <!-- Main Card Form -->
     <form @submit.prevent="submitForm">
@@ -128,7 +174,7 @@ const submitForm = () => {
 
             <div class="relative">
               <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Address (Provinsi, Kota, Kecamatan)</label>
-              <FormsAddressCascader
+              <AddressCascader
                 v-model="form.address"
                 placeholder="Select Province, City, District"
                 @select="handleAddressSelect"
@@ -298,6 +344,24 @@ const submitForm = () => {
         </div>
       </div>
     </form>
+=======
+import EmployeePageForm from '~/components/pages/employees/EmployeePageForm.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'New Employee',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-add-employee">
+    <EmployeePageForm mode="add" />
+>>>>>>> origin/eko
   </div>
 </template>
-

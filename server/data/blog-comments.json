@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "blogId": "1",
+    "blogTitle": "What is a POS System? A Beginner's Guide",
+    "commenterName": "Budi Santoso",
+    "email": "budi.santoso@perusahaan.co.id",
+    "commentBody": "Thanks for the detailed guide on POS Systems! It really clarified how hardware and cloud sync interact for our multi-branch print shop.",
+    "rating": 5,
+    "createdDate": "2024-12-01",
+    "status": "Approved"
+  },
+  {
+    "id": "2",
+    "blogId": "2",
+    "blogTitle": "Top 10 Tips for Offset Printing Maintenance",
+    "commenterName": "Ahmad Rizky",
+    "email": "ahmad.rizky@offsetindo.com",
+    "commentBody": "Regarding roller dampening balance, how often should we calibrate the fountain solution conductivity?",
+    "rating": 4,
+    "createdDate": "2024-12-02",
+    "status": "Approved"
+  },
+  {
+    "id": "3",
+    "blogId": "4",
+    "blogTitle": "How to Choose the Right Paper Stock for Packaging Boxes",
+    "commenterName": "Clara Wijaya",
+    "email": "clara.w@creativebox.id",
+    "commentBody": "Could you provide a comparison chart between 310gsm Ivory and 350gsm Duplex board in terms of tear resistance?",
+    "rating": 5,
+    "createdDate": "2024-12-03",
+    "status": "Pending"
+  },
+  {
+    "id": "4",
+    "blogId": "3",
+    "blogTitle": "Securing Customer Data and Financial Privacy in Print ERP",
+    "commenterName": "Crypt0 King",
+    "email": "crypto_promo99@fastbot.xyz",
+    "commentBody": "Win free coins now by clicking our quick affiliate redirect link right here http://spam-bot.click",
+    "rating": 1,
+    "createdDate": "2024-12-04",
+    "status": "Spam"
+  },
+  {
+    "id": "5",
+    "blogId": "5",
+    "blogTitle": "Automating Quotations & Work Orders with Nuxt ERP",
+    "commenterName": "Denny Setiawan",
+    "email": "denny.s@percetakanmaju.com",
+    "commentBody": "This calculation algorithm saved our sales team hours of manual spreadsheet quotes. Highly recommended!",
+    "rating": 5,
+    "createdDate": "2024-12-05",
+    "status": "Approved"
+  },
+  {
+    "id": "6",
+    "blogId": "1",
+    "blogTitle": "What is a POS System? A Beginner's Guide",
+    "commenterName": "Eko Prasetyo",
+    "email": "eko.prasetyo@gmail.com",
+    "commentBody": "Does this system integrate seamlessly with thermal receipt printers over network Ethernet?",
+    "rating": 4,
+    "createdDate": "2024-12-06",
+    "status": "Pending"
+  }
+]

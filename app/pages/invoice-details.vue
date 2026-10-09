@@ -4,8 +4,11 @@ const invoiceNo = computed(() => (route.query.no as string) || "INV00001");
 
 const isProforma = ref(false);
 
-useHead({
-  title: computed(() => `${isProforma.value ? "Proforma Invoice" : "Invoice"} Details - Kacetak System`),
+useLegacyPage({
+  title: 'Invoice Details',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const handlePrint = () => {

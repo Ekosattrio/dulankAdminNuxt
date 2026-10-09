@@ -1,3 +1,94 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref, computed } from "vue";
+import type { PrinterSetting } from '#server/types/printer-setting'
+import { usePrinterSettings } from '~/composables/usePrinterSettings'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
+const { items: printers, pending, error, refresh, saveItem, deleteItem } = usePrinterSettings()
+
+const searchQuery = ref("");
+const showModal = ref(false);
+const isEditing = ref(false);
+const isSaving = ref(false);
+
+const itemToDelete = ref<PrinterSetting | null>(null);
+const isDeleting = ref(false);
+
+const currentPrinter = ref<{
+  id?: string;
+  printerName: string;
+  connectionType: 'Network' | 'USB' | 'Bluetooth';
+  ipAddress: string;
+  port: number;
+  status: 'active' | 'inactive';
+}>({
+  printerName: "",
+  connectionType: "Network",
+  ipAddress: "",
+  port: 9100,
+  status: "active"
+});
+
+const filteredPrinters = computed(() => {
+  return printers.value.filter((p) => p.printerName.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
+
+const openAddModal = () => {
+  isEditing.value = false;
+  currentPrinter.value = {
+    printerName: "",
+    connectionType: "Network",
+    ipAddress: "",
+    port: 9100,
+    status: "active"
+  };
+  showModal.value = true;
+};
+
+const openEditModal = (p: PrinterSetting) => {
+  isEditing.value = true;
+  currentPrinter.value = {
+    id: p.id,
+    printerName: p.printerName,
+    connectionType: p.connectionType,
+    ipAddress: p.ipAddress || '',
+    port: p.port || 9100,
+    status: p.status
+  };
+  showModal.value = true;
+};
+
+const handleSavePrinter = async () => {
+  isSaving.value = true;
+  try {
+    await saveItem(currentPrinter.value);
+    showModal.value = false;
+  } catch (err) {
+    console.error('Failed to save printer:', err);
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+const openDeleteConfirm = (p: PrinterSetting) => {
+  itemToDelete.value = p;
+};
+
+const handleConfirmDelete = async () => {
+  if (!itemToDelete.value) return;
+  isDeleting.value = true;
+  try {
+    await deleteItem(itemToDelete.value.id);
+    itemToDelete.value = null;
+  } catch (err) {
+    console.error('Failed to delete printer:', err);
+  } finally {
+    isDeleting.value = false;
+  }
+};
+</script>
+
 <template>
   <div class="page-wrapper">
     <div class="content settings-content">
@@ -11,9 +102,6 @@
         <ul class="table-top-head">
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
-          </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
           </li>
         </ul>
       </div>
@@ -51,19 +139,19 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="(p, idx) in filteredPrinters" :key="idx">
-                          <td class="fw-semibold text-dark">{{ p.name }}</td>
+                        <tr v-for="p in filteredPrinters" :key="p.id">
+                          <td class="fw-semibold text-dark">{{ p.printerName }}</td>
                           <td>
                             <span class="badge bg-light-primary text-primary">{{ p.connectionType }}</span>
                           </td>
-                          <td class="font-mono text-sm">{{ p.ipAddress }}</td>
+                          <td class="font-mono text-sm">{{ p.ipAddress || '-' }}</td>
                           <td>{{ p.port }}</td>
                           <td class="action-table-data text-end">
                             <div class="edit-delete-action d-inline-flex gap-2">
                               <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(p)">
                                 <i class="ti ti-edit"></i>
                               </button>
-                              <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="deletePrinter(idx)">
+                              <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="openDeleteConfirm(p)">
                                 <i class="ti ti-trash"></i>
                               </button>
                             </div>
@@ -93,11 +181,11 @@
               <button type="button" class="btn-close" @click="showModal = false"></button>
             </div>
             <div class="modal-body custom-modal-body">
-              <form @submit.prevent="savePrinter">
+              <form @submit.prevent="handleSavePrinter">
                 <div class="mb-3">
                   <label class="form-label">Printer Name</label>
                   <input
-                    v-model="currentPrinter.name"
+                    v-model="currentPrinter.printerName"
                     type="text"
                     class="form-control"
                     required
@@ -118,20 +206,33 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Port</label>
-                  <input v-model="currentPrinter.port" type="text" class="form-control" placeholder="9100" />
+                  <input v-model.number="currentPrinter.port" type="number" class="form-control" placeholder="9100" />
                 </div>
                 <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
                   <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
+                  <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">
+                    {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Delete Confirmation Modal -->
+      <SalesConfirmDelete
+        :open="!!itemToDelete"
+        :title="itemToDelete ? `Delete ${itemToDelete.printerName}` : ''"
+        message="Are you sure you want to delete this printer configuration? This action cannot be undone."
+        :is-loading="isDeleting"
+        @confirm="handleConfirmDelete"
+        @close="itemToDelete = null"
+      />
     </div>
   </div>
 </template>
+<<<<<<<< HEAD:app/pages/printer-settings.vue
 
 <script setup lang="ts">import { ref, computed } from "vue";
 
@@ -203,3 +304,22 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapse
 };</script>
+========
+>>>>>>>> origin/eko:app/components/pages/setting/PrinterSettingsWorkspace.vue
+=======
+import PrinterSettingsWorkspace from '~/components/pages/setting/PrinterSettingsWorkspace.vue'
+
+useLegacyPage({
+  title: 'Printer Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-printer-settings">
+    <PrinterSettingsWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

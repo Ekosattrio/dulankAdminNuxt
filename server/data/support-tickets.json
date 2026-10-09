@@ -1,0 +1,192 @@
+[
+  {
+    "id": "1501",
+    "ticketNo": "#1501",
+    "customerId": "ID000001",
+    "requestedBy": "Aditya Pratama",
+    "customerEmail": "aditya.pratama@gmail.com",
+    "customerPhone": "+6281234567890",
+    "avatar": "/assets/img/users/user-23.jpg",
+    "address": "Jl. MH Thamrin No. 45",
+    "city": "Jakarta Pusat",
+    "country": "Indonesia",
+    "subject": "Payment processing error on checkout",
+    "assignee": "Desman Dwi",
+    "priority": "High",
+    "status": "Open",
+    "createdDate": "15/01/2024",
+    "dueDate": "20/01/2024",
+    "description": "Saat melakukan pembayaran checkout menggunakan Virtual Account BCA, status transaksi di webstore tidak terupdate otomatis dan kartu pesanan tertahan.",
+    "tags": [
+      "Payment",
+      "Checkout",
+      "Virtual Account"
+    ],
+    "activities": [
+      {
+        "type": "created",
+        "title": "Ticket Created",
+        "description": "Ticket submitted regarding payment processing webhook error.",
+        "author": "Ethan Hunt",
+        "timeAgo": "15 Jan 2024, 09:30"
+      },
+      {
+        "type": "assigned",
+        "title": "Assigned to Agent",
+        "description": "Ticket assigned to Desman Dwi for technical reconciliation.",
+        "author": "System",
+        "timeAgo": "15 Jan 2024, 10:00"
+      }
+    ],
+    "chat": [
+      {
+        "id": "c1",
+        "senderName": "Ethan Hunt",
+        "isMe": false,
+        "message": "Halo, saya sudah transfer VA BCA tapi pesanan masih berstatus menunggu pembayaran.",
+        "time": "09:32 am"
+      },
+      {
+        "id": "c2",
+        "senderName": "Desman Dwi",
+        "isMe": true,
+        "message": "Halo Pak Ethan, mohon kirimkan bukti struk/screenshot mutasi transfer agar kami bantu verifikasi ke payment gateway.",
+        "time": "09:40 am"
+      },
+      {
+        "id": "c3",
+        "senderName": "Ethan Hunt",
+        "isMe": false,
+        "message": "Sudah saya email ke support dengan ref ORD-501. Mohon dicek ya.",
+        "time": "09:45 am"
+      }
+    ]
+  },
+  {
+    "id": "1502",
+    "ticketNo": "#1502",
+    "customerId": "ID000002",
+    "requestedBy": "Siti Aminah",
+    "customerEmail": "siti.aminah@yahoo.co.id",
+    "customerPhone": "+6281398765432",
+    "avatar": "/assets/img/users/user-24.jpg",
+    "address": "Jl. Gatot Subroto No. 12",
+    "city": "Bandung",
+    "country": "Indonesia",
+    "subject": "Can't log in after password reset",
+    "assignee": "Eko Satrio",
+    "priority": "Medium",
+    "status": "Closed",
+    "createdDate": "05/12/2023",
+    "dueDate": "15/12/2023",
+    "description": "Tautan reset password expired terlalu cepat sehingga tidak bisa membuat password baru.",
+    "tags": [
+      "Auth",
+      "Security",
+      "Login"
+    ],
+    "activities": [
+      {
+        "type": "resolved",
+        "title": "Ticket Resolved",
+        "description": "Sent a fresh password reset link and verified successful login.",
+        "author": "Eko Satrio",
+        "timeAgo": "05 Dec 2023, 11:20"
+      }
+    ],
+    "chat": [
+      {
+        "id": "c4",
+        "senderName": "Jane Doe",
+        "isMe": false,
+        "message": "Link reset password tidak bisa dibuka, katanya token expired.",
+        "time": "10:15 am"
+      },
+      {
+        "id": "c5",
+        "senderName": "Eko Satrio",
+        "isMe": true,
+        "message": "Sudah kami reset dari admin panel, silakan cek email terbaru sekarang.",
+        "time": "10:30 am"
+      }
+    ]
+  },
+  {
+    "id": "1503",
+    "ticketNo": "#1503",
+    "customerId": "ID000003",
+    "requestedBy": "Budi Santoso",
+    "customerEmail": "budi.santoso@outlook.com",
+    "customerPhone": "+625211223344",
+    "avatar": "/assets/img/users/user-23.jpg",
+    "address": "Jl. Sudirman Kav 20",
+    "city": "Surabaya",
+    "country": "Indonesia",
+    "subject": "Inquiry about new feature pricing & bulk order",
+    "assignee": "Desman Dwi",
+    "priority": "Low",
+    "status": "Open",
+    "createdDate": "22/11/2023",
+    "dueDate": "29/11/2023",
+    "description": "Menanyakan diskon khusus untuk cetak offset brosur 10.000 rim dan opsi pembayaran termin 30 hari.",
+    "tags": [
+      "Sales",
+      "Quotation",
+      "Bulk Order"
+    ],
+    "activities": [],
+    "chat": []
+  },
+  {
+    "id": "1504",
+    "ticketNo": "#1504",
+    "customerId": "ID000004",
+    "requestedBy": "Dewi Lestari",
+    "customerEmail": "dewi.lestari@gmail.com",
+    "customerPhone": "+6281155667788",
+    "avatar": "/assets/img/users/user-24.jpg",
+    "address": "Jl. Pemuda No. 10",
+    "city": "Semarang",
+    "country": "Indonesia",
+    "subject": "Website is loading very slowly on product catalog",
+    "assignee": "Eko Satrio",
+    "priority": "High",
+    "status": "Closed",
+    "createdDate": "10/10/2023",
+    "dueDate": "12/10/2023",
+    "description": "Halaman katalog banner butuh waktu lebih dari 10 detik untuk membuka gambar resolusi tinggi.",
+    "tags": [
+      "Performance",
+      "Optimization",
+      "CDN"
+    ],
+    "activities": [],
+    "chat": []
+  },
+  {
+    "id": "1505",
+    "ticketNo": "#1505",
+    "customerId": "ID000005",
+    "requestedBy": "Eko Wahyudi",
+    "customerEmail": "eko.wahyudi@perusahaan.com",
+    "customerPhone": "+6282199001122",
+    "avatar": "/assets/img/users/user-23.jpg",
+    "address": "Jl. Diponegoro No. 8",
+    "city": "Yogyakarta",
+    "country": "Indonesia",
+    "subject": "Request for a refund on recent duplicate order",
+    "assignee": "Desman Dwi",
+    "priority": "Medium",
+    "status": "Pending",
+    "createdDate": "01/09/2023",
+    "dueDate": "08/09/2023",
+    "description": "Customer tidak sengaja tertekan checkout 2 kali pada pesanan spanduk, ingin refund pesanan yang kedua.",
+    "tags": [
+      "Refund",
+      "Payment",
+      "Order"
+    ],
+    "activities": [],
+    "chat": []
+  }
+]

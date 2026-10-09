@@ -1,0 +1,12 @@
+{
+  "mailHost": "smtp.gmail.com",
+  "mailPort": 587,
+  "mailUsername": "admin@kacetak.com",
+  "mailPassword": "••••••••••••••••",
+  "mailEncryption": "tls",
+  "fromEmail": "noreply@kacetak.com",
+  "fromName": "Kacetak POS & Printing System",
+  "mailEngine": "smtp",
+  "status": true,
+  "updatedAt": "2026-10-08T08:00:00.000Z"
+}

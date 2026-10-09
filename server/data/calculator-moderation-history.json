@@ -1,0 +1,29 @@
+[
+  {
+    "id": "MOD-001",
+    "listingId": "offset-001",
+    "partnerId": "print-shop-001",
+    "action": "Approve",
+    "reason": "Listing memenuhi standar spesifikasi dan kelengkapan harga",
+    "moderator": "Admin Utama",
+    "date": "2025-09-10 14:30:00"
+  },
+  {
+    "id": "MOD-002",
+    "listingId": "offset-002",
+    "partnerId": "print-shop-002",
+    "action": "Approve",
+    "reason": "Harga dan kuota minimum sesuai perjanjian mitra percetakan",
+    "moderator": "Admin Percetakan",
+    "date": "2025-09-12 10:15:00"
+  },
+  {
+    "id": "MOD-003",
+    "listingId": "offset-003",
+    "partnerId": "print-shop-003",
+    "action": "Review",
+    "reason": "Penyesuaian spesifikasi mesin pond dan kelipatan lembar plano",
+    "moderator": "Supervisor Workshop",
+    "date": "2025-09-15 16:45:00"
+  }
+]

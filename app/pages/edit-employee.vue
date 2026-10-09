@@ -1,4 +1,5 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 const router = useRouter();
 const route = useRoute();
 
@@ -301,5 +302,24 @@ const submitForm = () => {
         </div>
       </div>
     </form>
+=======
+import EmployeePageForm from '~/components/pages/employees/EmployeePageForm.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Edit Employee',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-edit-employee">
+    <EmployeePageForm mode="edit" />
+>>>>>>> origin/eko
   </div>
 </template>

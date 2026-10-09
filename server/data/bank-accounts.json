@@ -1,0 +1,72 @@
+[
+  {
+    "id": "bank-account-001",
+    "branchId": "1",
+    "accountTypeId": "bank-account-type-001",
+    "accountName": "PT Dulank Semesta Cida",
+    "bankName": "Bank Mandiri",
+    "accountNo": "1230009876543",
+    "openingBalance": 5500000,
+    "ifsc": "BMRIIDJA",
+    "description": "Rekening operasional utama perusahaan",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-002",
+    "branchId": "1",
+    "accountTypeId": "bank-account-type-001",
+    "accountName": "Cecep Sudirman",
+    "bankName": "Bank BCA",
+    "accountNo": "4567891230",
+    "openingBalance": 2100000,
+    "ifsc": "CENAIDJA",
+    "description": "Rekening penerimaan cabang",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-003",
+    "branchId": "1",
+    "accountTypeId": "bank-account-type-002",
+    "accountName": "PT Dulank Semesta Cida",
+    "bankName": "Bank BNI",
+    "accountNo": "876543210123",
+    "openingBalance": 8250000,
+    "ifsc": "BNINIDJA",
+    "description": "Rekening giro operasional",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-004",
+    "branchId": "1",
+    "accountTypeId": "bank-account-type-001",
+    "accountName": "Cecep Sudirman",
+    "bankName": "Bank BRI",
+    "accountNo": "1020304050607",
+    "openingBalance": 2000000,
+    "ifsc": "BRINIDJA",
+    "description": "Rekening lama yang sudah tidak aktif",
+    "status": "Inactive",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-005",
+    "branchId": "1",
+    "accountTypeId": "bank-account-type-003",
+    "accountName": "Cash Account",
+    "bankName": "Cash Account",
+    "accountNo": "1001",
+    "openingBalance": 0,
+    "ifsc": "CASH",
+    "description": "Kas tunai operasional",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  }
+]

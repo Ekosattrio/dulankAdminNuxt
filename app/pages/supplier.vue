@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
@@ -258,3 +259,16 @@ function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
 }</script>
+=======
+<script setup lang="ts">
+import SupplierWorkspace from '~/components/pages/supplier/SupplierWorkspace.vue'
+
+useLegacyPage({ title: 'Suppliers - Pemasok Kertas & Bahan', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-supplier">
+    <SupplierWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

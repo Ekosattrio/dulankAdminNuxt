@@ -2,8 +2,11 @@
 const route = useRoute();
 const quoteNo = computed(() => (route.query.no as string) || "#Q21000220213");
 
-useHead({
-  title: computed(() => `Quotation ${quoteNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Quotation Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const quoteStatus = ref<"pending" | "accepted" | "rejected">("pending");

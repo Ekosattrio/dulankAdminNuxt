@@ -1,0 +1,56 @@
+[
+  {
+    "id": "INC-REP-001",
+    "category": "Jasa Layout & Setting Buku",
+    "totalIncome": 15,
+    "amount": 7500000,
+    "percentage": 40.0,
+    "paymentMethod": "Bank Transfer",
+    "date": "2025-05-04"
+  },
+  {
+    "id": "INC-REP-002",
+    "category": "Penjualan Limbah Plat Alumunium",
+    "totalIncome": 4,
+    "amount": 4800000,
+    "percentage": 25.6,
+    "paymentMethod": "Cash",
+    "date": "2025-05-09"
+  },
+  {
+    "id": "INC-REP-003",
+    "category": "Jasa Desain Grafis & Logo",
+    "totalIncome": 25,
+    "amount": 3750000,
+    "percentage": 20.0,
+    "paymentMethod": "QRIS",
+    "date": "2025-05-14"
+  },
+  {
+    "id": "INC-REP-004",
+    "category": "Penjualan Limbah Kertas (Kiloan)",
+    "totalIncome": 12,
+    "amount": 1500000,
+    "percentage": 8.0,
+    "paymentMethod": "Cash",
+    "date": "2025-05-19"
+  },
+  {
+    "id": "INC-REP-005",
+    "category": "Jasa Pengetikan & Scan Dokumen",
+    "totalIncome": 30,
+    "amount": 750000,
+    "percentage": 4.0,
+    "paymentMethod": "Cash",
+    "date": "2025-05-23"
+  },
+  {
+    "id": "INC-REP-006",
+    "category": "Penjualan Limbah Selongsong/Core",
+    "totalIncome": 8,
+    "amount": 450000,
+    "percentage": 2.4,
+    "paymentMethod": "Cash",
+    "date": "2025-05-27"
+  }
+]

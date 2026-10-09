@@ -1,0 +1,44 @@
+[
+  {
+    "id": "CA001",
+    "employeeId": "ST001",
+    "bankAccountId": "bank-account-005",
+    "date": "2025-08-28",
+    "totalCash": 550000,
+    "installmentCount": 5,
+    "period": "Weekly",
+    "note": "Cash advance karyawan",
+    "createdAt": "2025-08-28T00:00:00.000Z",
+    "updatedAt": "2025-08-28T00:00:00.000Z",
+    "history": [{"id":"cash-advance-history-001","date":"2025-08-28","amount":550000,"installment":110000,"period":"Weekly","tenorTotal":5,"note":"Cash advance karyawan","status":"On"}],
+    "payments": [{"id":"cash-advance-payment-001","date":"2025-09-04","amount":110000},{"id":"cash-advance-payment-002","date":"2025-09-11","amount":110000},{"id":"cash-advance-payment-003","date":"2025-09-18","amount":110000}]
+  },
+  {
+    "id": "CA002",
+    "employeeId": "ST002",
+    "bankAccountId": "bank-account-005",
+    "date": "2025-09-02",
+    "totalCash": 300000,
+    "installmentCount": 4,
+    "period": "Monthly",
+    "note": "Kebutuhan keluarga",
+    "createdAt": "2025-09-02T00:00:00.000Z",
+    "updatedAt": "2025-09-02T00:00:00.000Z",
+    "history": [{"id":"cash-advance-history-002","date":"2025-09-02","amount":300000,"installment":75000,"period":"Monthly","tenorTotal":4,"note":"Kebutuhan keluarga","status":"On"}],
+    "payments": [{"id":"cash-advance-payment-004","date":"2025-10-02","amount":75000},{"id":"cash-advance-payment-005","date":"2025-11-02","amount":75000},{"id":"cash-advance-payment-006","date":"2025-12-02","amount":75000}]
+  },
+  {
+    "id": "CA003",
+    "employeeId": "ST003",
+    "bankAccountId": "bank-account-005",
+    "date": "2025-08-15",
+    "totalCash": 600000,
+    "installmentCount": 6,
+    "period": "Monthly",
+    "note": "Kebutuhan keluarga",
+    "createdAt": "2025-08-15T00:00:00.000Z",
+    "updatedAt": "2026-02-15T00:00:00.000Z",
+    "history": [{"id":"cash-advance-history-003","date":"2025-08-15","amount":600000,"installment":100000,"period":"Monthly","tenorTotal":6,"note":"Kebutuhan keluarga","status":"Close"}],
+    "payments": [{"id":"cash-advance-payment-007","date":"2025-09-15","amount":100000},{"id":"cash-advance-payment-008","date":"2025-10-15","amount":100000},{"id":"cash-advance-payment-009","date":"2025-11-15","amount":100000},{"id":"cash-advance-payment-010","date":"2025-12-15","amount":100000},{"id":"cash-advance-payment-011","date":"2026-01-15","amount":100000},{"id":"cash-advance-payment-012","date":"2026-02-15","amount":100000}]
+  }
+]

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">const { data: designationData } = await useFetch<DesignationItem[]>('/api/designation')
 const designations = ref<DesignationItem[]>(designationData.value ?? [])
 useMockSync('designation', designations);
@@ -212,5 +213,25 @@ const deleteItem = (id: string) => {
         <CommonModalFooter submitLabel="Submit" @cancel="isEditModalOpen = false" />
       </form>
     </CommonBaseModal>
+=======
+<script setup lang="ts">
+import DesignationWorkspace from '~/components/designation/DesignationWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Designation - Jabatan Karyawan',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-designation">
+    <DesignationWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

@@ -1,0 +1,222 @@
+[
+  {
+    "id": "payment-001",
+    "date": "01/02/2026",
+    "refNo": "PAY-001",
+    "name": "Seluruh Staff",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 4500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-002",
+    "date": "02/02/2026",
+    "refNo": "ADV-010",
+    "name": "Ahmad (Admin)",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-003",
+    "date": "03/02/2026",
+    "refNo": "PUR-201",
+    "name": "PT. Maju Jaya",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 12500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-004",
+    "date": "04/02/2026",
+    "refNo": "EXP-101",
+    "name": "PLN Persero",
+    "type": "Payment-Out",
+    "method": "Transfer",
+    "amount": 1450000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-005",
+    "date": "05/02/2026",
+    "refNo": "SR-012",
+    "name": "Toko Berkah",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 250000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-006",
+    "date": "06/02/2026",
+    "refNo": "ADV-011",
+    "name": "Rian (Kurir)",
+    "type": "Payment-Out",
+    "method": "Cash",
+    "amount": 300000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-007",
+    "date": "07/02/2026",
+    "refNo": "PAY-002",
+    "name": "Andi",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 1500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-008",
+    "date": "08/02/2026",
+    "refNo": "PUR-203",
+    "name": "Distributor ABC",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 850000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-009",
+    "date": "09/02/2026",
+    "refNo": "EXP-104",
+    "name": "Pemilik Ruko",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 5000000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-010",
+    "date": "10/02/2026",
+    "refNo": "ADV-012",
+    "name": "Siska (Marketing)",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 2500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-011",
+    "date": "11/02/2026",
+    "refNo": "EXP-105",
+    "name": "Toko ATK Jaya",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 430000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-012",
+    "date": "12/02/2026",
+    "refNo": "SR-018",
+    "name": "Toko Laris",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 600000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-013",
+    "date": "13/02/2026",
+    "refNo": "PUR-202",
+    "name": "CV. Utama",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 7500000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-014",
+    "date": "14/02/2026",
+    "refNo": "PAY-003",
+    "name": "Seluruh Staff",
+    "type": "Payment-Out",
+    "method": "Transfer",
+    "amount": 3200000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-015",
+    "date": "15/02/2026",
+    "refNo": "PUR-205",
+    "name": "Supplier Kayu",
+    "type": "Payment-Out",
+    "method": "Transfer",
+    "amount": 4200000,
+    "status": "Partial",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-016",
+    "date": "16/02/2026",
+    "refNo": "ADV-013",
+    "name": "Ahmad (Admin)",
+    "type": "Payment-Out",
+    "method": "Cash",
+    "amount": 200000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-017",
+    "date": "17/02/2026",
+    "refNo": "EXP-107",
+    "name": "Pertamina",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 120000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-018",
+    "date": "18/02/2026",
+    "refNo": "PAY-004",
+    "name": "Budi (Gudang)",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 450000,
+    "status": "Paid",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-019",
+    "date": "18/02/2026",
+    "refNo": "PUR-206",
+    "name": "PT. Sumber Rejeki",
+    "type": "Payment-In",
+    "method": "Transfer",
+    "amount": 3500000,
+    "status": "Partial",
+    "created": "Admin"
+  },
+  {
+    "id": "payment-020",
+    "date": "18/02/2026",
+    "refNo": "EXP-109",
+    "name": "Laundry Bersih",
+    "type": "Payment-In",
+    "method": "Cash",
+    "amount": 150000,
+    "status": "Paid",
+    "created": "Admin"
+  }
+]

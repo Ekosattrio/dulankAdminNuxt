@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -134,6 +135,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Fixed Component" message="Are you sure you want to delete this fixed component variable?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Fixed Components & Work Shift Capacities" :columns="printColumns" :items="filteredComponents" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -144,6 +147,15 @@ const components = ref<FixedComponent[]>(komponenFiksData.value ?? [])
 useMockSync('komponen-fiks', components)
 
 const searchQuery = ref('')
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Component' },
+  { key: 'value', label: 'Capacity', align: 'right' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'update', label: 'Updated' },
+]
 
 const filteredComponents = computed(() => {
   return components.value.filter(c => {
@@ -221,20 +233,143 @@ function saveComponent() {
 }
 
 function deleteComponent(id: number) {
-  if (confirm('Are you sure you want to delete this fixed component variable?')) {
-    components.value = components.value.filter(c => c.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  components.value = components.value.filter(c => c.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting fixed components as PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {
   searchQuery.value = ''
 }</script>
 
+=======
+<script setup lang="ts">
+import type { KomponenFiksItem, KomponenFiksFormData } from '#server/types/calculator-components'
+import KomponenFiksRecordsTable from '~/components/pages/calculator/components/KomponenFiksRecordsTable.vue'
+import KomponenFiksFormModal from '~/components/pages/calculator/components/KomponenFiksFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+
+definePageMeta({ layout: 'default' })
+
+useLegacyPage({
+  title: 'Fixed Components & Work Shift Capacities',
+  sweetAlert: false
+})
+
+const { items, stats, pending, error, refresh, saveItem, deleteItem } = useKomponenFiks()
+
+const isFormModalOpen = ref(false)
+const selectedItem = ref<KomponenFiksItem | null>(null)
+
+const isDeleteModalOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+const isSaving = ref(false)
+
+function openAddModal() {
+  selectedItem.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(item: KomponenFiksItem) {
+  selectedItem.value = item
+  isFormModalOpen.value = true
+}
+
+function handleDelete(id: string) {
+  deleteTargetId.value = id
+  isDeleteModalOpen.value = true
+}
+
+async function confirmDelete() {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deleteItem(deleteTargetId.value)
+    isDeleteModalOpen.value = false
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete fixed component:', err)
+  } finally {
+    isDeleting.value = false
+  }
+}
+
+async function handleSave(payload: KomponenFiksFormData) {
+  isSaving.value = true
+  try {
+    await saveItem(payload)
+    isFormModalOpen.value = false
+    selectedItem.value = null
+  } catch (err) {
+    console.error('Failed to save fixed component:', err)
+  } finally {
+    isSaving.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-komponen-fiks space-y-6">
+    <SalesListHeader
+      title="Fixed Components & Work Shift Capacities"
+      subtitle="Kelola variabel kapasitas produksi dasar dan durasi shift pengerjaan"
+      :refreshing="pending"
+      @refresh="refresh"
+      @add="openAddModal"
+    />
+
+    <!-- Feedback State -->
+    <SalesFeedback
+      v-if="pending && !items.length"
+      loading
+    />
+    <SalesFeedback
+      v-else-if="error"
+      :error="error.message || 'Gagal memuat komponen fiks'"
+      @retry="refresh"
+    />
+
+    <!-- Records Table -->
+    <KomponenFiksRecordsTable
+      v-else
+      :items="items"
+      @edit="handleEdit"
+      @delete="handleDelete"
+    />
+
+    <!-- Add / Edit Modal -->
+    <KomponenFiksFormModal
+      :open="isFormModalOpen"
+      :item="selectedItem"
+      :busy="isSaving"
+      @close="isFormModalOpen = false"
+      @submit="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteModalOpen"
+      title="Hapus Komponen Fiks"
+      message="Apakah Anda yakin ingin menghapus data komponen fiks ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @cancel="isDeleteModalOpen = false"
+      @confirm="confirmDelete"
+    />
+  </div>
+</template>
+>>>>>>> origin/eko

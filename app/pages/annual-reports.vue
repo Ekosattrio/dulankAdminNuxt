@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
@@ -130,3 +131,18 @@ const toggleHeader = () => {
 };
 useMockSync('annual-reports', rows);
 </script>
+=======
+<script setup lang="ts">
+import AnnualReportsWorkspace from '~/components/pages/reports/AnnualReportsWorkspace.vue'
+
+useHead({
+  title: 'Annual Report (Laporan Rekapitulasi Tahunan) - Kacetak System'
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-annual-reports">
+    <AnnualReportsWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

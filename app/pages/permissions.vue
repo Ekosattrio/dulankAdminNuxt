@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper">
     <div class="content container-fluid">
@@ -22,6 +23,10 @@
             <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
           </li>
         </ul>
+      </div>
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="card table-list-card">
@@ -124,10 +129,6 @@
 
 <script setup lang="ts">import { ref, computed } from "vue";
 
-useHead({
-  title: "Permissions - Kacetak System",
-});
-
 const searchQuery = ref("");
 const selectedRole = ref("Admin");
 const showFilter = ref(false);
@@ -166,22 +167,47 @@ const resetMatrix = () => {
   });
 };
 
+const toastMessage = ref('')
+const isSaving = ref(false)
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3000)
+}
+
 const saveMatrix = () => {
-  alert(`Permissions for ${selectedRole.value} saved successfully!`);
-};
-
-const exportPdf = () => {
-  window.print();
-};
-
-const printTable = () => {
-  window.print();
-};
+  showToast(`Permissions for ${selectedRole.value} saved successfully!`)
+}
 
 const refresh = () => {
   // refresh
-};
+}
 
 const toggleCollapse = () => {
   // collapse
+<<<<<<<< HEAD:app/pages/permissions.vue
 };</script>
+========
+}
+</script>
+>>>>>>>> origin/eko:app/components/pages/roles/PermissionsWorkspace.vue
+=======
+<script setup lang="ts">
+import PermissionsWorkspace from '~/components/pages/roles/PermissionsWorkspace.vue'
+
+useLegacyPage({
+  title: 'Permissions',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-permissions">
+    <PermissionsWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

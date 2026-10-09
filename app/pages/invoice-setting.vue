@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper">
     <div class="content settings-content">
@@ -185,3 +186,23 @@ const toggleCollapse = () => {
 }
 </script>
 
+=======
+<script setup lang="ts">
+import InvoiceSettingWorkspace from '~/components/pages/setting/InvoiceSettingWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Invoice Settings - Konfigurasi & Preview Faktur',
+  sweetAlert: false
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-invoice-setting">
+    <InvoiceSettingWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

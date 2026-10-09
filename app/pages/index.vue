@@ -1,7 +1,10 @@
 <script setup lang="ts">
 
-useHead({
-  title: "Dashboard Admin - Kacetak System",
+useLegacyPage({
+  title: 'Dashboard Admin',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const isAlertVisible = ref(true);

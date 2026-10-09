@@ -1,5 +1,18 @@
+<<<<<<< HEAD
 <script setup lang="ts">useHead({
   title: "Subscriptions - Kacetak System",
+=======
+<script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
+import BaseModal from "~/components/modal/BaseModal.vue";
+import ConfirmModal from "~/components/modal/ConfirmModal.vue";
+
+useLegacyPage({
+  title: 'Subscriptions',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+>>>>>>> origin/eko
 });
 
 // Initial records matching legacy subscriptions.html
@@ -66,6 +79,28 @@ const filteredSubs = computed(() => {
   return list;
 });
 
+const print = useTablePrint();
+const printColumns = [
+  { key: 'subscriber', label: 'Subscriber' },
+  { key: 'plan', label: 'Plan' },
+  { key: 'billingCycle', label: 'Billing Cycle' },
+  { key: 'method', label: 'Payment Method' },
+  { key: 'amount', label: 'Amount (IDR)', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'createdDate', label: 'Created Date' },
+  { key: 'expiringOn', label: 'Expiring On' },
+  { key: 'status', label: 'Status' }
+];
+
+const openSubscriptionPrint = (action: 'print' | 'pdf') => {
+  print.openPrintModal({
+    title: 'Subscription Report',
+    subtitle: 'Daftar langganan dan status pembayaran',
+    columns: printColumns,
+    rows: filteredSubs.value,
+    action
+  });
+};
+
 const totalAmount = computed(() => {
   return filteredSubs.value.reduce((sum, item) => sum + (item.amount || 0), 0);
 });
@@ -86,11 +121,11 @@ const formatNumber = (num: number) => {
 
 // Header Actions
 const exportPdf = () => {
-  window.print();
+  openSubscriptionPrint('pdf');
 };
 
 const printTable = () => {
-  window.print();
+  openSubscriptionPrint('print');
 };
 
 const refreshData = () => {
@@ -803,6 +838,16 @@ const handleConfirmDelete = () => {
       confirm-text="Yes, Delete"
       variant="danger"
       @confirm="handleConfirmDelete"
+    />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="createdDate"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

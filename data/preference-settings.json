@@ -1,0 +1,6 @@
+{
+  "label": "Maintenance Mode",
+  "icon": "ti ti-alert-triangle",
+  "key": "maintenance",
+  "enabled": false
+}

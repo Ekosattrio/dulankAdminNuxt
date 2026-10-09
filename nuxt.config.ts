@@ -1,11 +1,49 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://nuxt.com/docs/4.x/api/nuxt-config
 export default defineNuxtConfig({
+  // Frontend uses Nuxt 4's app/ directory; backend and public assets stay at root.
+  serverDir: './server',
   compatibilityDate: '2025-01-01',
+  debug: false,
+  nitro: {
+    timing: false
+  },
   devtools: { enabled: false },
   modules: [
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt'
   ],
+<<<<<<< HEAD
+=======
+  alias: {
+    '#server': fileURLToPath(new URL('./server', import.meta.url)),
+    '~/server': fileURLToPath(new URL('./server', import.meta.url)),
+    '@/server': fileURLToPath(new URL('./server', import.meta.url)),
+    '~/types': fileURLToPath(new URL('./server/types', import.meta.url)),
+    '@/types': fileURLToPath(new URL('./server/types', import.meta.url))
+  },
+  vite: {
+    plugins: [tailwindcss()]
+  },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+      // Compatibility files remain importable by path but must not collide with newer page components.
+      ignore: [
+        'address/AddressViewModal.vue',
+        'customers/CustomerViewModal.vue',
+        'department/DepartmentModal.vue',
+        'department/DepartmentTable.vue',
+        'my-incentive/**',
+        'my-job/**',
+        'payslip/PayslipModal.vue',
+        'payslip/PayslipTable.vue'
+      ]
+    }
+  ],
+>>>>>>> origin/eko
   app: {
     head: {
       title: 'Kacetak System',
@@ -47,4 +85,3 @@ export default defineNuxtConfig({
     }
   }
 })
-

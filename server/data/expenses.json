@@ -1,0 +1,71 @@
+[
+  {
+    "id": "1",
+    "noExpense": "EX000001",
+    "date": "01/10/2025",
+    "category": "Biaya Gaji & Upah",
+    "name": "Toko Berkah",
+    "status": "Paid",
+    "amount": 1000000,
+    "paid": 1000000,
+    "due": 0,
+    "description": "Pembayaran gaji lembur staf produksi.",
+    "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-001"
+  },
+  {
+    "id": "2",
+    "noExpense": "EX000002",
+    "date": "03/10/2025",
+    "category": "Bahan Baku Utama",
+    "name": "PT. Maju Jaya",
+    "status": "Unpaid",
+    "amount": 1150000,
+    "paid": 0,
+    "due": 1150000,
+    "description": "Pembelian tinta sablon UV.",
+    "paymentMethod": "-"
+  },
+  {
+    "id": "3",
+    "noExpense": "EX000003",
+    "date": "05/10/2025",
+    "category": "Perawatan Mesin",
+    "name": "Bank Mandiri",
+    "status": "Unpaid",
+    "amount": 550000,
+    "paid": 0,
+    "due": 550000,
+    "description": "Servis rutin mesin die-cut.",
+    "paymentMethod": "-"
+  },
+  {
+    "id": "4",
+    "noExpense": "EX000004",
+    "date": "07/10/2025",
+    "category": "Biaya Listrik & Air",
+    "name": "Ibu Siti",
+    "status": "Partial",
+    "amount": 800000,
+    "paid": 300000,
+    "due": 500000,
+    "description": "Pembayaran tagihan listrik bulan September.",
+    "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-001"
+  },
+  {
+    "id": "5",
+    "noExpense": "EX000005",
+    "date": "10/10/2025",
+    "category": "Transportasi & Kurir",
+    "name": "PT. Maju Jaya",
+    "status": "Paid",
+    "amount": 250000,
+    "paid": 250000,
+    "due": 0,
+    "description": "Ongkos kirim pesanan Jakarta.",
+    "paymentMethod": "Tunai / Cash",
+    "bankAccountId": "bank-account-005"
+  }
+]
+

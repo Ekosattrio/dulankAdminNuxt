@@ -1,0 +1,387 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Brosur",
+      "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
+      "paperTypes": "Art Paper 150gr, Art Paper 120gr",
+      "machine": "SM 52 4 Warna",
+      "active": true,
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+      "images": [
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+        "/assets/img/products/brosur.png",
+        "https://upload.wikimedia.org/wikipedia/commons/c/c9/Tri_Fold_Brochure_Mockup_01.jpg",
+        "/assets/img/products/pos-product-01.png"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Kartu Nama",
+      "defaultSize": "90x54mm (Default)",
+      "paperTypes": "Art Carton 260gr",
+      "machine": "Digital Press Fuji Xerox",
+      "active": true,
+      "image": "/assets/img/products/pos-product-01.png",
+      "images": [
+        "/assets/img/products/pos-product-01.png",
+        "/assets/img/products/product1.jpg",
+        "/assets/img/products/product2.jpg",
+        "/assets/img/products/product3.jpg"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Flyer",
+      "defaultSize": "A5 (210x148mm) (Default), DL (210x99mm)",
+      "paperTypes": "Art Paper 120gr, HVS 80gr",
+      "machine": "SM 52 4 Warna",
+      "active": true,
+      "image": "/assets/img/products/pos-product-04.png",
+      "images": [
+        "/assets/img/products/pos-product-04.png",
+        "/assets/img/products/product4.jpg",
+        "/assets/img/products/product5.jpg",
+        "/assets/img/products/pos-product-02.png"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Kalender Meja",
+      "defaultSize": "210x150mm Horizontal",
+      "paperTypes": "Art Carton 230gr, Board No. 30",
+      "machine": "Komori Lithrone 4 Warna",
+      "active": true,
+      "image": "/assets/img/products/pos-product-10.png",
+      "images": [
+        "/assets/img/products/pos-product-10.png",
+        "/assets/img/products/product10.jpg",
+        "/assets/img/products/product11.jpg",
+        "/assets/img/products/pos-product-03.png"
+      ]
+    }
+  ],
+  "sizes": [
+    {
+      "id": "1",
+      "name": "A4",
+      "widthMm": 210,
+      "heightMm": 297,
+      "isStandard": true
+    },
+    {
+      "id": "2",
+      "name": "A5",
+      "widthMm": 148,
+      "heightMm": 210,
+      "isStandard": true
+    },
+    {
+      "id": "3",
+      "name": "A3",
+      "widthMm": 297,
+      "heightMm": 420,
+      "isStandard": true
+    },
+    {
+      "id": "4",
+      "name": "A3+",
+      "widthMm": 320,
+      "heightMm": 480,
+      "isStandard": true
+    },
+    {
+      "id": "5",
+      "name": "F4 / Folio",
+      "widthMm": 215,
+      "heightMm": 330,
+      "isStandard": true
+    },
+    {
+      "id": "6",
+      "name": "Kartu Nama Standard",
+      "widthMm": 90,
+      "heightMm": 54,
+      "isStandard": true
+    }
+  ],
+  "papers": [
+    {
+      "id": "1",
+      "name": "Art Paper 120gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 2200
+    },
+    {
+      "id": "2",
+      "name": "Art Paper 150gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 2750
+    },
+    {
+      "id": "3",
+      "name": "Art Carton 210gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 3400
+    },
+    {
+      "id": "4",
+      "name": "Art Carton 260gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 4200
+    },
+    {
+      "id": "5",
+      "name": "HVS 70gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 1600
+    },
+    {
+      "id": "6",
+      "name": "HVS 80gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 1850
+    },
+    {
+      "id": "7",
+      "name": "Matte Paper 150gr",
+      "plano": "65 x 100 cm",
+      "pricePlano": 2900
+    }
+  ],
+  "machines": [
+    {
+      "id": "1",
+      "name": "Heidelberg SM 52 (4 Warna)",
+      "maxArea": "360 x 520 mm",
+      "plateCost": 45000,
+      "runChargeMin": 150000
+    },
+    {
+      "id": "2",
+      "name": "Komori Lithrone 26 (4 Warna)",
+      "maxArea": "480 x 650 mm",
+      "plateCost": 65000,
+      "runChargeMin": 250000
+    },
+    {
+      "id": "3",
+      "name": "Oliver 58 (1 Warna)",
+      "maxArea": "440 x 570 mm",
+      "plateCost": 35000,
+      "runChargeMin": 75000
+    },
+    {
+      "id": "4",
+      "name": "Konica Minolta C1085 (Digital)",
+      "maxArea": "320 x 480 mm",
+      "plateCost": 0,
+      "runChargeMin": 2500
+    }
+  ],
+  "laminates": [
+    {
+      "id": "1",
+      "name": "Tanpa Laminasi",
+      "costPerSide": 0
+    },
+    {
+      "id": "2",
+      "name": "Laminasi Doff Panas 1 Sisi",
+      "costPerSide": 450
+    },
+    {
+      "id": "3",
+      "name": "Laminasi Glossy Panas 1 Sisi",
+      "costPerSide": 400
+    },
+    {
+      "id": "4",
+      "name": "Laminasi Doff Panas 2 Sisi",
+      "costPerSide": 900
+    },
+    {
+      "id": "5",
+      "name": "Laminasi Glossy Panas 2 Sisi",
+      "costPerSide": 800
+    },
+    {
+      "id": "6",
+      "name": "Spot UV Custom",
+      "costPerSide": 1200
+    }
+  ],
+  "folds": [
+    {
+      "id": "1",
+      "name": "Tanpa Lipatan",
+      "costPer1000": 0
+    },
+    {
+      "id": "2",
+      "name": "Lipat 2 (Half Fold)",
+      "costPer1000": 25000
+    },
+    {
+      "id": "3",
+      "name": "Lipat 3 (Tri-Fold / Z-Fold)",
+      "costPer1000": 45000
+    },
+    {
+      "id": "4",
+      "name": "Lipat 3 (Gate Fold)",
+      "costPer1000": 60000
+    }
+  ],
+  "printSides": [
+    {
+      "id": "1",
+      "name": "1 Sisi (4/0)",
+      "plateMultiplier": 1,
+      "runMultiplier": 1
+    },
+    {
+      "id": "2",
+      "name": "2 Sisi Bolak-Balik Sama (4/4 Work & Turn)",
+      "plateMultiplier": 1,
+      "runMultiplier": 2
+    },
+    {
+      "id": "3",
+      "name": "2 Sisi Bolak-Balik Beda (4/4 Sheetwise)",
+      "plateMultiplier": 2,
+      "runMultiplier": 2
+    }
+  ],
+  "components": [
+    {
+      "id": "1",
+      "name": "Cover Depan & Belakang",
+      "type": "Cover"
+    },
+    {
+      "id": "2",
+      "name": "Lembar Isi Buku / Brosur",
+      "type": "Content"
+    },
+    {
+      "id": "3",
+      "name": "Finishing Jilid / Staples",
+      "type": "Binding"
+    },
+    {
+      "id": "4",
+      "name": "Packaging Box & Shrink Wrap",
+      "type": "Packing"
+    }
+  ],
+  "workflowSteps": [
+    {
+      "step": 1,
+      "name": "Pre-Press / CTCP Plate Making",
+      "department": "Pre-Press"
+    },
+    {
+      "step": 2,
+      "name": "Cutting Bahan Baku (Paper Sheeting)",
+      "department": "Potong"
+    },
+    {
+      "step": 3,
+      "name": "Printing Offset (Cetak)",
+      "department": "Produksi Cetak"
+    },
+    {
+      "step": 4,
+      "name": "Laminating Doff / Glossy",
+      "department": "Finishing"
+    },
+    {
+      "step": 5,
+      "name": "Folding / Creasing (Lipat)",
+      "department": "Finishing"
+    },
+    {
+      "step": 6,
+      "name": "Final Trimming (Potong Jadi)",
+      "department": "Potong"
+    },
+    {
+      "step": 7,
+      "name": "Quality Control & Packaging",
+      "department": "Packing"
+    }
+  ],
+  "profitTiers": [
+    {
+      "id": "1",
+      "minQty": 1,
+      "maxQty": 500,
+      "profitPosPercent": 35,
+      "profitWebstorePercent": 25
+    },
+    {
+      "id": "2",
+      "minQty": 501,
+      "maxQty": 1000,
+      "profitPosPercent": 30,
+      "profitWebstorePercent": 20
+    },
+    {
+      "id": "3",
+      "minQty": 1001,
+      "maxQty": 5000,
+      "profitPosPercent": 25,
+      "profitWebstorePercent": 18
+    },
+    {
+      "id": "4",
+      "minQty": 5001,
+      "maxQty": 10000,
+      "profitPosPercent": 20,
+      "profitWebstorePercent": 15
+    },
+    {
+      "id": "5",
+      "minQty": 10001,
+      "maxQty": 50000,
+      "profitPosPercent": 15,
+      "profitWebstorePercent": 10
+    }
+  ],
+  "logTransactions": [
+    {
+      "id": "1",
+      "customerId": null,
+      "date": "01/12/2025 14:22",
+      "customer": "PT Makmur Abadi",
+      "product": "Brosur A4 150gr",
+      "qty": 2500,
+      "totalCost": 850000,
+      "sellingPrice": 1332000,
+      "status": "Quoted"
+    },
+    {
+      "id": "2",
+      "customerId": null,
+      "date": "02/12/2025 10:05",
+      "customer": "Toko Buku Cerdas",
+      "product": "Flyer A5 120gr",
+      "qty": 5000,
+      "totalCost": 2250000,
+      "sellingPrice": 3552000,
+      "status": "In Production"
+    },
+    {
+      "id": "3",
+      "customerId": null,
+      "date": "03/12/2025 16:40",
+      "customer": "Bpk. Rahmat",
+      "product": "Kartu Nama 260gr",
+      "qty": 500,
+      "totalCost": 380000,
+      "sellingPrice": 610500,
+      "status": "Completed"
+    }
+  ]
+}

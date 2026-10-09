@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="content">
     <div class="page-header">
@@ -160,3 +161,10 @@ const toggleHeader = () => {
 }
 </script>
 
+=======
+<script setup lang="ts">
+import CashFlowWorkspace from '~/components/pages/reports/CashFlowWorkspace.vue'
+useLegacyPage({ title: 'Cash Flow', sweetAlert: false })
+</script>
+<template><div class="dulank-page dulank-page-cash-flow"><CashFlowWorkspace /></div></template>
+>>>>>>> origin/eko

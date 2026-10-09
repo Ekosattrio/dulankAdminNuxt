@@ -1,0 +1,72 @@
+[
+  {
+    "id": "CNT-5001",
+    "name": "John Doe",
+    "email": "john.doe@email.com",
+    "phone": "+62 812 3456 7890",
+    "subject": "Penawaran Kerjasama Percetakan Perusahaan",
+    "message": "Halo tim Dulank, kami ingin mendiskusikan kontrak pengadaan cetak berkala untuk kebutuhan kantor pusat kami.",
+    "date": "20/01/2024",
+    "status": "Replied"
+  },
+  {
+    "id": "CNT-5002",
+    "name": "Jane Smith",
+    "email": "jane.smith@email.com",
+    "phone": "+62 823 4567 8901",
+    "subject": "Pricelist Grosir Brosur & Flyer",
+    "message": "Bisakah saya meminta price list lengkap untuk pemesanan brosur offset kuantiti di atas 50 rim?",
+    "date": "15/01/2024",
+    "status": "Read"
+  },
+  {
+    "id": "CNT-5003",
+    "name": "Michael Brown",
+    "email": "michael.brown@email.com",
+    "phone": "+62 834 5678 9012",
+    "subject": "Pertanyaan Terkait Pesanan Terakhir",
+    "message": "Saya ingin menanyakan estimasi pengiriman pesanan banner saya yang kemarin dengan resi JNE.",
+    "date": "05/12/2023",
+    "status": "Replied"
+  },
+  {
+    "id": "CNT-5004",
+    "name": "Sarah Jones",
+    "email": "sarah.jones@email.com",
+    "phone": "+62 845 6789 0123",
+    "subject": "Pengiriman Luar Pulau Jawa",
+    "message": "Apakah percetakan Dulank melayani pengiriman kargo laut ke wilayah Kalimantan Timur?",
+    "date": "22/11/2023",
+    "status": "Read"
+  },
+  {
+    "id": "CNT-5005",
+    "name": "David Williams",
+    "email": "david.williams@email.com",
+    "phone": "+62 856 7890 1234",
+    "subject": "Apresiasi Hasil Cetak Kartu Nama",
+    "message": "Terima kasih untuk respon cepat dan hasil cetak kartu nama doff-nya sangat memuaskan!",
+    "date": "10/10/2023",
+    "status": "Read"
+  },
+  {
+    "id": "CNT-5006",
+    "name": "Emily Davis",
+    "email": "emily.davis@email.com",
+    "phone": "+62 867 8901 2345",
+    "subject": "Peluang Menjadi Reseller / Dropshipper",
+    "message": "Apakah ada program reseller dengan diskon khusus untuk agency digital marketing?",
+    "date": "01/09/2023",
+    "status": "Unread"
+  },
+  {
+    "id": "CNT-5007",
+    "name": "Chris Wilson",
+    "email": "chris.wilson@email.com",
+    "phone": "+62 878 9012 3456",
+    "subject": "Bantuan Teknis Upload File Desain AI/PDF",
+    "message": "File PDF outline font saya ukurannya 45MB gagal di-upload di form checkout, bagaimana solusinya?",
+    "date": "19/08/2023",
+    "status": "Unread"
+  }
+]

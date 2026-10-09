@@ -1,0 +1,22 @@
+[
+  {
+    "bankAccount": "Cash Box",
+    "accountName": "Cash Box",
+    "amountBalance": 1350500
+  },
+  {
+    "bankAccount": "Bank Mandiri",
+    "accountName": "PT. Dulank Semesta Cida",
+    "amountBalance": 0
+  },
+  {
+    "bankAccount": "Bank BCA",
+    "accountName": "PT. Dulank Semesta Cida",
+    "amountBalance": -750000
+  },
+  {
+    "bankAccount": "Qris Mandiri",
+    "accountName": "Percetakan Dulank",
+    "amountBalance": 250000
+  }
+]

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="content">
     <div class="page-header">
@@ -188,3 +189,21 @@ const toggleHeader = () => {
   // toggle
 };
 </script>
+=======
+<script setup lang="ts">
+import BalanceSheetWorkspace from '~/components/pages/reports/BalanceSheetWorkspace.vue'
+
+useLegacyPage({
+  title: 'Balance Sheet',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-balance-sheet">
+    <BalanceSheetWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

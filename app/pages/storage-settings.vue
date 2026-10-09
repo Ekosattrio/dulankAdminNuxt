@@ -1,3 +1,65 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref } from "vue";
+import { useStorageSettings } from "~/composables/useStorageSettings";
+
+const { storage, pending, error, refresh, saveSettings } = useStorageSettings();
+
+const showAwsModal = ref(false);
+const toastMessage = ref("");
+const isSaving = ref(false);
+
+function showToast(msg: string) {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    toastMessage.value = "";
+  }, 3000);
+}
+
+const openConfig = (type: string) => {
+  if (type === "aws") {
+    showAwsModal.value = true;
+  } else {
+    showToast("Local storage is managed by internal server path.");
+  }
+};
+
+const saveAwsConfig = async () => {
+  isSaving.value = true;
+  try {
+    await saveSettings(storage.value);
+    showAwsModal.value = false;
+    showToast("AWS Storage configuration saved successfully!");
+  } catch (err) {
+    console.error("Failed to save AWS config:", err);
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+const handleToggleLocal = async () => {
+  try {
+    await saveSettings(storage.value);
+    showToast("Storage settings updated.");
+  } catch (err) {
+    console.error("Failed to update storage settings:", err);
+  }
+};
+
+const handleToggleAws = async () => {
+  try {
+    await saveSettings(storage.value);
+    showToast("Storage settings updated.");
+  } catch (err) {
+    console.error("Failed to update storage settings:", err);
+  }
+};
+
+const sendTestEmail = () => {
+  showToast("Test notification sent successfully!");
+};
+</script>
+
 <template>
   <div class="page-wrapper mt-3">
     <div class="content settings-content">
@@ -12,10 +74,12 @@
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
           </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
         </ul>
+      </div>
+
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="row">
@@ -50,7 +114,7 @@
                           <i class="ti ti-settings fs-18"></i>
                         </a>
                         <div class="form-check form-switch mb-0">
-                          <input v-model="storage.local.enabled" class="form-check-input" type="checkbox" role="switch" />
+                          <input v-model="storage.local.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleLocal" />
                         </div>
                       </li>
                     </ul>
@@ -72,7 +136,7 @@
                           <i class="ti ti-settings fs-18"></i>
                         </a>
                         <div class="form-check form-switch mb-0">
-                          <input v-model="storage.aws.enabled" class="form-check-input" type="checkbox" role="switch" />
+                          <input v-model="storage.aws.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleAws" />
                         </div>
                       </li>
                     </ul>
@@ -125,7 +189,9 @@
                     </div>
                     <div class="modal-footer modal-action-footer justify-content-end p-0 pt-3 border-top">
                       <button type="button" class="btn btn-secondary me-2" @click="showAwsModal = false">Cancel</button>
-                      <button type="submit" class="btn btn-warning text-white">Submit</button>
+                      <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">
+                        {{ isSaving ? "Saving..." : "Submit" }}
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -135,54 +201,20 @@
         </div>
       </div>
     </div>
+=======
+import StorageSettingsWorkspace from '~/components/pages/setting/StorageSettingsWorkspace.vue'
+
+useLegacyPage({
+  title: 'Storage Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-storage-settings">
+    <StorageSettingsWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-
-useHead({
-  title: "Storage Settings - Kacetak System",
-});
-
-const showAwsModal = ref(false);
-
-const storage = ref({
-  local: {
-    enabled: true,
-  },
-  aws: {
-    enabled: true,
-    accessKey: "AKIAIOSFODNN7EXAMPLE",
-    secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-    bucketName: "kacetak-storage",
-    region: "ap-southeast-1",
-    baseUrl: "https://s3.ap-southeast-1.amazonaws.com/kacetak-storage",
-  },
-});
-
-const openConfig = (type: string) => {
-  if (type === "aws") {
-    showAwsModal.value = true;
-  } else {
-    alert("Local storage is managed by internal server path.");
-  }
-};
-
-const saveAwsConfig = () => {
-  showAwsModal.value = false;
-  alert("AWS Storage configuration saved successfully!");
-};
-
-const sendTestEmail = () => {
-  alert("Test notification sent!");
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};
-</script>

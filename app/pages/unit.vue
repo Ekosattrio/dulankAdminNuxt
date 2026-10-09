@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">const { data: unitData } = await useFetch<UnitItem[]>('/api/unit')
 const units = ref<UnitItem[]>(unitData.value ?? [])
 useMockSync('unit', units);
@@ -191,5 +192,25 @@ const deleteUnit = (id: string) => {
         <CommonModalFooter submitLabel="Save Changes" @cancel="isEditModalOpen = false" />
       </form>
     </CommonBaseModal>
+=======
+<script setup lang="ts">
+import UnitWorkspace from '~/components/unit/UnitWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Unit',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-unit">
+    <UnitWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "EXP-REP-001",
+    "category": "Bahan Baku Percetakan",
+    "totalExpense": 18,
+    "amount": 45500000,
+    "percentage": 38.41,
+    "paymentMethod": "Bank Transfer",
+    "date": "2025-05-02"
+  },
+  {
+    "id": "EXP-REP-002",
+    "category": "Gaji Karyawan & Operator",
+    "totalExpense": 1,
+    "amount": 32000000,
+    "percentage": 27.02,
+    "paymentMethod": "Bank Transfer",
+    "date": "2025-05-05"
+  },
+  {
+    "id": "EXP-REP-003",
+    "category": "Sewa Gedung / Ruko",
+    "totalExpense": 1,
+    "amount": 12000000,
+    "percentage": 10.13,
+    "paymentMethod": "Bank Transfer",
+    "date": "2025-05-01"
+  },
+  {
+    "id": "EXP-REP-004",
+    "category": "Utilitas (Listrik & Air)",
+    "totalExpense": 4,
+    "amount": 7200000,
+    "percentage": 6.08,
+    "paymentMethod": "Auto Debit",
+    "date": "2025-05-08"
+  },
+  {
+    "id": "EXP-REP-005",
+    "category": "Pemeliharaan Mesin",
+    "totalExpense": 3,
+    "amount": 5800000,
+    "percentage": 4.89,
+    "paymentMethod": "Bank Transfer",
+    "date": "2025-05-12"
+  },
+  {
+    "id": "EXP-REP-006",
+    "category": "Pemasaran & Iklan Digital",
+    "totalExpense": 6,
+    "amount": 4500000,
+    "percentage": 3.8,
+    "date": "2025-05-15",
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "EXP-REP-007",
+    "category": "Logistik & Pengiriman",
+    "totalExpense": 25,
+    "amount": 3750000,
+    "percentage": 3.17,
+    "paymentMethod": "Cash",
+    "date": "2025-05-18"
+  },
+  {
+    "id": "EXP-REP-008",
+    "category": "Perlengkapan Kantor (ATK)",
+    "totalExpense": 12,
+    "amount": 2850000,
+    "percentage": 2.41,
+    "paymentMethod": "Petty Cash",
+    "date": "2025-05-20"
+  },
+  {
+    "id": "EXP-REP-009",
+    "category": "Biaya Keamanan & Kebersihan",
+    "totalExpense": 2,
+    "amount": 2500000,
+    "percentage": 2.11,
+    "paymentMethod": "Cash",
+    "date": "2025-05-22"
+  },
+  {
+    "id": "EXP-REP-010",
+    "category": "Biaya Tak Terduga",
+    "totalExpense": 5,
+    "amount": 2350000,
+    "percentage": 1.98,
+    "paymentMethod": "Petty Cash",
+    "date": "2025-05-25"
+  }
+]

@@ -126,8 +126,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-useHead({
-  title: "Ticket Detail - Kacetak System",
+useLegacyPage({
+  title: 'Ticket Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const ticketStatus = ref("Pending");
@@ -152,7 +155,7 @@ const sendMessage = () => {
 };
 
 const editTicket = () => {
-  alert("Edit ticket dialog opened.");
+  navigateTo({ path: "/support-ticket", query: { action: "edit" } });
 };
 
 const toggleTicketClose = () => {

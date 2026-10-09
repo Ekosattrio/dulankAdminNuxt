@@ -1,3 +1,56 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref } from "vue";
+import type { GatewayKey, GatewayConfig } from '#server/types/sms-gateway'
+import { useSmsGateway } from '~/composables/useSmsGateway'
+
+const { gateways, pending, error, refresh, saveGateways } = useSmsGateway()
+
+const showModal = ref(false);
+const activeKey = ref<GatewayKey>("nexmo");
+const selectedGw = ref<GatewayConfig | null>(null);
+const toastMessage = ref("");
+const isSaving = ref(false);
+
+function showToast(msg: string) {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    toastMessage.value = "";
+  }, 3000);
+}
+
+const openConfigModal = (key: GatewayKey) => {
+  activeKey.value = key;
+  selectedGw.value = { ...gateways.value[key] };
+  showModal.value = true;
+};
+
+const handleSaveGateway = async () => {
+  if (selectedGw.value) {
+    gateways.value[activeKey.value] = { ...selectedGw.value };
+  }
+  isSaving.value = true;
+  try {
+    await saveGateways(gateways.value);
+    showModal.value = false;
+    showToast("SMS Gateway configuration updated successfully!");
+  } catch (err) {
+    console.error("Failed to update SMS gateway:", err);
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+const handleToggleSwitch = async () => {
+  try {
+    await saveGateways(gateways.value);
+    showToast("SMS Gateway status updated.");
+  } catch (err) {
+    console.error("Failed to toggle SMS gateway:", err);
+  }
+};
+</script>
+
 <template>
   <div class="page-wrapper">
     <div class="content settings-content">
@@ -12,10 +65,12 @@
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
           </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
         </ul>
+      </div>
+
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="row">
@@ -50,7 +105,7 @@
                         <i class="ti ti-settings me-1"></i> Configure
                       </button>
                       <div class="form-check form-switch mb-0">
-                        <input v-model="gw.enabled" class="form-check-input" type="checkbox" role="switch" />
+                        <input v-model="gw.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleSwitch" />
                       </div>
                     </div>
                   </div>
@@ -72,7 +127,7 @@
               <button type="button" class="btn-close" @click="showModal = false"></button>
             </div>
             <div class="modal-body custom-modal-body">
-              <form @submit.prevent="saveGateway">
+              <form @submit.prevent="handleSaveGateway">
                 <div class="mb-3">
                   <label class="form-label">API Key / Account SID</label>
                   <input v-model="selectedGw!.apiKey" type="text" class="form-control" required />
@@ -87,7 +142,9 @@
                 </div>
                 <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
                   <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
+                  <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">
+                    {{ isSaving ? "Saving..." : "Save Changes" }}
+                  </button>
                 </div>
               </form>
             </div>
@@ -97,6 +154,7 @@
     </div>
   </div>
 </template>
+<<<<<<<< HEAD:app/pages/sms-gateway.vue
 
 <script setup lang="ts">import { ref } from "vue";
 
@@ -164,3 +222,22 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapse
 };</script>
+========
+>>>>>>>> origin/eko:app/components/pages/setting/SmsGatewayWorkspace.vue
+=======
+import SmsGatewayWorkspace from '~/components/pages/setting/SmsGatewayWorkspace.vue'
+
+useLegacyPage({
+  title: 'SMS Gateways',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-sms-gateway">
+    <SmsGatewayWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

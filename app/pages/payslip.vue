@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const { data: payslipData } = await useFetch<PayslipItem[]>('/api/payslip')
@@ -139,5 +140,16 @@ const deletePayslip = (slipNo: string) => {
         </template>
       </TablesDataTable>
     </div>
+=======
+<script setup lang="ts">
+import PayslipWorkspace from '~/components/pages/payslip/PayslipWorkspace.vue'
+
+useLegacyPage({ title: 'Payslips - Penggajian Karyawan', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-payslip">
+    <PayslipWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

@@ -1,0 +1,22 @@
+[
+  {"id":"metric-print-001","partnerId":"print-shop-001","paper":150,"group":0,"size":0,"type":0,"offset":6,"laminate":3,"dieCutting":5,"hotPrint":9,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-002","partnerId":"print-shop-002","paper":98,"group":0,"size":0,"type":0,"offset":4,"laminate":2,"dieCutting":3,"hotPrint":7,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-003","partnerId":"print-shop-003","paper":125,"group":0,"size":0,"type":0,"offset":5,"laminate":1,"dieCutting":4,"hotPrint":6,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-004","partnerId":"print-shop-004","paper":110,"group":0,"size":0,"type":0,"offset":3,"laminate":2,"dieCutting":2,"hotPrint":5,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-005","partnerId":"print-shop-005","paper":135,"group":0,"size":0,"type":0,"offset":7,"laminate":4,"dieCutting":6,"hotPrint":10,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-006","partnerId":"print-shop-006","paper":75,"group":0,"size":0,"type":0,"offset":2,"laminate":0,"dieCutting":1,"hotPrint":3,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-007","partnerId":"print-shop-007","paper":105,"group":0,"size":0,"type":0,"offset":4,"laminate":3,"dieCutting":4,"hotPrint":8,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-008","partnerId":"print-shop-008","paper":88,"group":0,"size":0,"type":0,"offset":3,"laminate":1,"dieCutting":0,"hotPrint":2,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-009","partnerId":"print-shop-009","paper":140,"group":0,"size":0,"type":0,"offset":6,"laminate":2,"dieCutting":5,"hotPrint":7,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-print-010","partnerId":"print-shop-010","paper":115,"group":0,"size":0,"type":0,"offset":5,"laminate":3,"dieCutting":4,"hotPrint":6,"recordedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"metric-paper-001","partnerId":"paper-shop-001","paper":117,"group":114,"size":197,"type":4,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-002","partnerId":"paper-shop-002","paper":92,"group":95,"size":65,"type":3,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-003","partnerId":"paper-shop-003","paper":130,"group":110,"size":180,"type":5,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-004","partnerId":"paper-shop-004","paper":110,"group":134,"size":198,"type":2,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-005","partnerId":"paper-shop-005","paper":100,"group":54,"size":84,"type":4,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-006","partnerId":"paper-shop-006","paper":80,"group":75,"size":120,"type":3,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-007","partnerId":"paper-shop-007","paper":150,"group":100,"size":210,"type":5,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-008","partnerId":"paper-shop-008","paper":125,"group":130,"size":155,"type":4,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-009","partnerId":"paper-shop-009","paper":98,"group":88,"size":145,"type":3,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"},
+  {"id":"metric-paper-010","partnerId":"paper-shop-010","paper":140,"group":120,"size":170,"type":6,"offset":0,"laminate":0,"dieCutting":0,"hotPrint":0,"recordedAt":"2025-12-15T00:00:00.000Z"}
+]

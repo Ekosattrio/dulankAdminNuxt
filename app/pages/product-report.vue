@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="content">
     <div class="page-header">
@@ -130,3 +131,18 @@ const toggleHeader = () => {
 </script>
 
 useMockSync('product-report', products);
+=======
+<script setup lang="ts">
+import ProductReportWorkspace from '~/components/pages/reports/ProductReportWorkspace.vue'
+
+useHead({
+  title: 'Product Report - Kacetak System'
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-product-report">
+    <ProductReportWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

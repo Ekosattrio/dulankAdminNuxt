@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -140,6 +141,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Minimum Component" message="Are you sure you want to delete this minimum charge rule?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Minimum Charges & Finishing Base Rates" :columns="printColumns" :items="filteredComponents" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -150,6 +153,16 @@ const components = ref<MinimumComponent[]>(komponenMinimumData.value ?? [])
 useMockSync('komponen-minimum', components)
 
 const searchQuery = ref('')
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Service / Finishing' },
+  { key: 'rate', label: 'Rate', align: 'right' as const },
+  { key: 'minim', label: 'Minimum Charge', align: 'right' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'update', label: 'Updated' },
+]
 
 const filteredComponents = computed(() => {
   return components.value.filter(c => {
@@ -232,20 +245,143 @@ function saveComponent() {
 }
 
 function deleteComponent(id: number) {
-  if (confirm('Are you sure you want to delete this minimum charge rule?')) {
-    components.value = components.value.filter(c => c.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  components.value = components.value.filter(c => c.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting minimum components as PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {
   searchQuery.value = ''
 }</script>
 
+=======
+<script setup lang="ts">
+import type { KomponenMinimumItem, KomponenMinimumFormData } from '#server/types/calculator-components'
+import KomponenMinimumRecordsTable from '~/components/pages/calculator/components/KomponenMinimumRecordsTable.vue'
+import KomponenMinimumFormModal from '~/components/pages/calculator/components/KomponenMinimumFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+
+definePageMeta({ layout: 'default' })
+
+useLegacyPage({
+  title: 'Minimum Charges & Finishing Base Rates',
+  sweetAlert: false
+})
+
+const { items, stats, pending, error, refresh, saveItem, deleteItem } = useKomponenMinimum()
+
+const isFormModalOpen = ref(false)
+const selectedItem = ref<KomponenMinimumItem | null>(null)
+
+const isDeleteModalOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+const isSaving = ref(false)
+
+function openAddModal() {
+  selectedItem.value = null
+  isFormModalOpen.value = true
+}
+
+function handleEdit(item: KomponenMinimumItem) {
+  selectedItem.value = item
+  isFormModalOpen.value = true
+}
+
+function handleDelete(id: string) {
+  deleteTargetId.value = id
+  isDeleteModalOpen.value = true
+}
+
+async function confirmDelete() {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deleteItem(deleteTargetId.value)
+    isDeleteModalOpen.value = false
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete minimum component:', err)
+  } finally {
+    isDeleting.value = false
+  }
+}
+
+async function handleSave(payload: KomponenMinimumFormData) {
+  isSaving.value = true
+  try {
+    await saveItem(payload)
+    isFormModalOpen.value = false
+    selectedItem.value = null
+  } catch (err) {
+    console.error('Failed to save minimum component:', err)
+  } finally {
+    isSaving.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-komponen-minimum space-y-6">
+    <SalesListHeader
+      title="Minimum Charges & Finishing Base Rates"
+      subtitle="Kelola threshold minimum biaya dan tarif dasar finishing pasca cetak"
+      :refreshing="pending"
+      @refresh="refresh"
+      @add="openAddModal"
+    />
+
+    <!-- Feedback State -->
+    <SalesFeedback
+      v-if="pending && !items.length"
+      loading
+    />
+    <SalesFeedback
+      v-else-if="error"
+      :error="error.message || 'Gagal memuat komponen minimum'"
+      @retry="refresh"
+    />
+
+    <!-- Records Table -->
+    <KomponenMinimumRecordsTable
+      v-else
+      :items="items"
+      @edit="handleEdit"
+      @delete="handleDelete"
+    />
+
+    <!-- Add / Edit Modal -->
+    <KomponenMinimumFormModal
+      :open="isFormModalOpen"
+      :item="selectedItem"
+      :busy="isSaving"
+      @close="isFormModalOpen = false"
+      @submit="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteModalOpen"
+      title="Hapus Komponen Minimum"
+      message="Apakah Anda yakin ingin menghapus data komponen minimum ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @cancel="isDeleteModalOpen = false"
+      @confirm="confirmDelete"
+    />
+  </div>
+</template>
+>>>>>>> origin/eko

@@ -23,6 +23,7 @@
           <NuxtLink to="/add-sales" class="btn btn-primary"> <i class="ti ti-circle-plus me-1"></i>Add Sales </NuxtLink>
         </div>
       </div>
+      <p v-if="feedbackMessage" role="status" class="alert alert-success py-2">{{ feedbackMessage }}</p>
 
       <!-- Table List Card -->
       <div class="card table-list-card">
@@ -230,15 +231,42 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Remove POS Order"
+      message="Are you sure you want to remove this POS order? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      title="POS Orders"
+      :columns="printColumns"
+      :items="filteredOrders"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
+<<<<<<< HEAD
 <script setup lang="ts">definePageMeta({
+=======
+<script setup lang="ts">
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue';
+
+definePageMeta({
+>>>>>>> origin/eko
   layout: "default",
 });
 
-useHead({
-  title: "POS Orders - Kacetak System",
+useLegacyPage({
+  title: 'POS Orders',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const { data: posOrderData } = await useFetch<PosOrder[]>('/api/pos-order')
@@ -248,6 +276,18 @@ useMockSync('pos-order', orders);
 const searchQuery = ref("");
 const filterStatus = ref("");
 const filterPayment = ref("");
+const feedbackMessage = ref("");
+const print = useTablePrint();
+const printColumns = [
+  { key: "reference", label: "Reference" },
+  { key: "customer", label: "Customer" },
+  { key: "date", label: "Date" },
+  { key: "status", label: "Status" },
+  { key: "grandTotal", label: "Grand Total", align: "right" as const },
+  { key: "paid", label: "Paid", align: "right" as const },
+  { key: "due", label: "Due", align: "right" as const },
+  { key: "paymentStatus", label: "Payment Status" },
+];
 
 const filteredOrders = computed(() => {
   return orders.value.filter((o) => {
@@ -277,7 +317,8 @@ function viewDetail(order: PosOrder) {
 }
 
 function openPayments(order: PosOrder) {
-  alert(`Payment history for ${order.reference}: Paid Rp ${formatNumber(order.paid)}`);
+  selectedOrder.value = order;
+  detailModalVisible.value = true;
 }
 
 function openCreatePayment(order: PosOrder) {
@@ -294,23 +335,33 @@ function submitPayment() {
       selectedOrder.value.paymentStatus = "Paid";
       selectedOrder.value.status = "Complete";
     }
-    alert(`Payment recorded successfully!`);
+    feedbackMessage.value = `Payment for ${selectedOrder.value.reference} recorded successfully.`;
   }
   createPaymentVisible.value = false;
 }
 
+const isDeleteConfirmOpen = ref(false);
+const deleteTargetId = ref<number | null>(null);
+
 function deleteOrder(id: number) {
-  if (confirm("Are you sure you want to remove this POS order?")) {
-    orders.value = orders.value.filter((o) => o.id !== id);
+  deleteTargetId.value = id;
+  isDeleteConfirmOpen.value = true;
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value !== null) {
+    orders.value = orders.value.filter((o) => o.id !== deleteTargetId.value);
+    isDeleteConfirmOpen.value = false;
+    deleteTargetId.value = null;
   }
 }
 
 function exportPdf() {
-  alert("Exporting POS orders as PDF...");
+  print.openPrintModal("pdf");
 }
 
 function printTable() {
-  window.print();
+  print.openPrintModal("print");
 }
 
 function refresh() {

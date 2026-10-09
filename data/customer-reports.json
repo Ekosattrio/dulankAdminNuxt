@@ -1,0 +1,460 @@
+[
+  {
+    "id": "CR-001",
+    "customerId": "ID000001",
+    "customerName": "CV. Maju Jaya",
+    "totalOrder": 45,
+    "amount": 67500000,
+    "totalSpent": 67500000,
+    "totalPaid": 64050000,
+    "balanceDue": 3450000,
+    "avgLeadTime": "3 Days",
+    "paymentMethod": "Transfer",
+    "status": "Received",
+    "date": "02/03/2026",
+    "history": [
+      {
+        "date": "01/03/2026",
+        "invoiceNo": "INV-202603-001",
+        "product": "Brosur Art Paper 150gr A4",
+        "qty": 5000,
+        "amount": 4500000,
+        "status": "Paid"
+      },
+      {
+        "date": "20/02/2026",
+        "invoiceNo": "INV-202602-042",
+        "product": "Company Profile Hardcover",
+        "qty": 200,
+        "amount": 12000000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Aditya Pratama"
+  },
+  {
+    "id": "CR-002",
+    "customerId": "ID000002",
+    "customerName": "Toko Berkah",
+    "totalOrder": 38,
+    "amount": 12400000,
+    "totalSpent": 12400000,
+    "totalPaid": 12400000,
+    "balanceDue": 0,
+    "avgLeadTime": "2 Days",
+    "paymentMethod": "Transfer",
+    "status": "Received",
+    "date": "03/03/2026",
+    "history": [
+      {
+        "date": "28/02/2026",
+        "invoiceNo": "INV-202602-038",
+        "product": "Nota 2 Play NCR Folio",
+        "qty": 50,
+        "amount": 1850000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Siti Aminah"
+  },
+  {
+    "id": "CR-003",
+    "customerId": "ID000003",
+    "customerName": "Bpk. Heru",
+    "totalOrder": 12,
+    "amount": 4500000,
+    "totalSpent": 4500000,
+    "totalPaid": 4500000,
+    "balanceDue": 0,
+    "avgLeadTime": "1 Days",
+    "paymentMethod": "Cash",
+    "status": "Received",
+    "date": "03/03/2026",
+    "history": [
+      {
+        "date": "02/03/2026",
+        "invoiceNo": "INV-202603-005",
+        "product": "Kartu Nama Matte Doff 2 Sisi",
+        "qty": 10,
+        "amount": 350000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Budi Santoso"
+  },
+  {
+    "id": "CR-004",
+    "customerId": "ID000004",
+    "customerName": "PT. Sinar Abadi",
+    "totalOrder": 30,
+    "amount": 85000000,
+    "totalSpent": 85000000,
+    "totalPaid": 72500000,
+    "balanceDue": 12500000,
+    "avgLeadTime": "5 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "04/03/2026",
+    "history": [
+      {
+        "date": "18/02/2026",
+        "invoiceNo": "INV-202602-029",
+        "product": "Kalender Dinding Spiral 2026",
+        "qty": 2000,
+        "amount": 25000000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Dewi Lestari"
+  },
+  {
+    "id": "CR-005",
+    "customerId": "ID000005",
+    "customerName": "Universitas Terbuka",
+    "totalOrder": 15,
+    "amount": 42000000,
+    "totalSpent": 42000000,
+    "totalPaid": 33800000,
+    "balanceDue": 8200000,
+    "avgLeadTime": "7 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "04/03/2026",
+    "history": [
+      {
+        "date": "22/02/2026",
+        "invoiceNo": "INV-202602-033",
+        "product": "Buku Panduan Mahasiswa B5",
+        "qty": 1500,
+        "amount": 16500000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Eko Wahyudi"
+  },
+  {
+    "id": "CR-006",
+    "customerId": "ID000006",
+    "customerName": "Yayasan Pendidikan Islam",
+    "totalOrder": 22,
+    "amount": 18750000,
+    "totalSpent": 18750000,
+    "totalPaid": 14000000,
+    "balanceDue": 4750000,
+    "avgLeadTime": "4 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "05/03/2026",
+    "history": [
+      {
+        "date": "25/02/2026",
+        "invoiceNo": "INV-202602-035",
+        "product": "Map Raport K13 Emboss Foil Emas",
+        "qty": 350,
+        "amount": 7875000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Fitri Handayani"
+  },
+  {
+    "id": "CR-007",
+    "customerId": "ID000007",
+    "customerName": "Resto Sedap Malam",
+    "totalOrder": 55,
+    "amount": 9350000,
+    "totalSpent": 9350000,
+    "totalPaid": 7500000,
+    "balanceDue": 1850000,
+    "avgLeadTime": "2 Days",
+    "paymentMethod": "Credit Card",
+    "status": "Received",
+    "date": "05/03/2026",
+    "history": [
+      {
+        "date": "02/03/2026",
+        "invoiceNo": "INV-202603-004",
+        "product": "Buku Menu Laminasi Doff Spiral",
+        "qty": 30,
+        "amount": 1850000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Guntur Saputra"
+  },
+  {
+    "id": "CR-008",
+    "customerId": "ID000008",
+    "customerName": "Ibu Sarah (Wedding)",
+    "totalOrder": 2,
+    "amount": 15000000,
+    "totalSpent": 15000000,
+    "totalPaid": 15000000,
+    "balanceDue": 0,
+    "avgLeadTime": "14 Days",
+    "paymentMethod": "Transfer",
+    "status": "Received",
+    "date": "06/03/2026",
+    "history": [
+      {
+        "date": "20/02/2026",
+        "invoiceNo": "INV-202602-031",
+        "product": "Undangan Hardcover Amplop Foil Emas",
+        "qty": 500,
+        "amount": 15000000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Hana Pertiwi"
+  },
+  {
+    "id": "CR-009",
+    "customerId": "ID000009",
+    "customerName": "PT. Logistik Cepat",
+    "totalOrder": 18,
+    "amount": 24600000,
+    "totalSpent": 24600000,
+    "totalPaid": 19000000,
+    "balanceDue": 5600000,
+    "avgLeadTime": "5 Days",
+    "paymentMethod": "Credit Card",
+    "status": "Overdue",
+    "date": "06/03/2026",
+    "history": [
+      {
+        "date": "24/02/2026",
+        "invoiceNo": "INV-202602-034",
+        "product": "Stiker Barcode Vinyl Roll",
+        "qty": 100,
+        "amount": 7500000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Indra Kusuma"
+  },
+  {
+    "id": "CR-010",
+    "customerId": "ID000010",
+    "customerName": "Sekolah Harapan",
+    "totalOrder": 25,
+    "amount": 31000000,
+    "totalSpent": 31000000,
+    "totalPaid": 23200000,
+    "balanceDue": 7800000,
+    "avgLeadTime": "6 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "07/03/2026",
+    "history": [
+      {
+        "date": "26/02/2026",
+        "invoiceNo": "INV-202602-036",
+        "product": "Buku Tahunan Siswa (Yearbook)",
+        "qty": 120,
+        "amount": 18000000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Joko Widodo"
+  },
+  {
+    "id": "CR-011",
+    "customerId": "ID000011",
+    "customerName": "Toko Buku Pintar",
+    "totalOrder": 42,
+    "amount": 21000000,
+    "totalSpent": 21000000,
+    "totalPaid": 18900000,
+    "balanceDue": 2100000,
+    "avgLeadTime": "4 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "07/03/2026",
+    "history": [
+      {
+        "date": "27/02/2026",
+        "invoiceNo": "INV-202602-037",
+        "product": "Sampul Mika & Pembatas Buku",
+        "qty": 1000,
+        "amount": 3200000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Kartika Sari"
+  },
+  {
+    "id": "CR-012",
+    "customerId": "ID000012",
+    "customerName": "Salon Cantik",
+    "totalOrder": 10,
+    "amount": 1500000,
+    "totalSpent": 1500000,
+    "totalPaid": 1500000,
+    "balanceDue": 0,
+    "avgLeadTime": "2 Days",
+    "paymentMethod": "Cash",
+    "status": "Received",
+    "date": "08/03/2026",
+    "history": [
+      {
+        "date": "01/03/2026",
+        "invoiceNo": "INV-202603-002",
+        "product": "Voucher Member Card Laminasi Glossy",
+        "qty": 500,
+        "amount": 450000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Lukman Hakim"
+  },
+  {
+    "id": "CR-013",
+    "customerId": "ID000013",
+    "customerName": "Bengkel Jaya Motor",
+    "totalOrder": 14,
+    "amount": 2800000,
+    "totalSpent": 2800000,
+    "totalPaid": 2800000,
+    "balanceDue": 0,
+    "avgLeadTime": "2 Days",
+    "paymentMethod": "Cash",
+    "status": "Received",
+    "date": "08/03/2026",
+    "history": [
+      {
+        "date": "03/03/2026",
+        "invoiceNo": "INV-202603-006",
+        "product": "Kupon Ganti Oli & Faktur Servis",
+        "qty": 30,
+        "amount": 650000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Maya Indah"
+  },
+  {
+    "id": "CR-014",
+    "customerId": "ID000014",
+    "customerName": "Cafe Kopi Senja",
+    "totalOrder": 50,
+    "amount": 7500000,
+    "totalSpent": 7500000,
+    "totalPaid": 6400000,
+    "balanceDue": 1100000,
+    "avgLeadTime": "2 Days",
+    "paymentMethod": "Credit Card",
+    "status": "Received",
+    "date": "09/03/2026",
+    "history": [
+      {
+        "date": "04/03/2026",
+        "invoiceNo": "INV-202603-007",
+        "product": "Cup Sleeves & Coaster Kertas",
+        "qty": 1000,
+        "amount": 1200000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Nanang Kosim"
+  },
+  {
+    "id": "CR-015",
+    "customerId": "ID000015",
+    "customerName": "PT. Delta Property",
+    "totalOrder": 5,
+    "amount": 45000000,
+    "totalSpent": 45000000,
+    "totalPaid": 30000000,
+    "balanceDue": 15000000,
+    "avgLeadTime": "10 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "09/03/2026",
+    "history": [
+      {
+        "date": "15/02/2026",
+        "invoiceNo": "INV-202602-025",
+        "product": "Brosur Perumahan Hardbox Exclusive",
+        "qty": 300,
+        "amount": 28000000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Olivia Putri"
+  },
+  {
+    "id": "CR-016",
+    "customerId": "ID000016",
+    "customerName": "Apotek Medika",
+    "totalOrder": 12,
+    "amount": 4200000,
+    "totalSpent": 4200000,
+    "totalPaid": 4200000,
+    "balanceDue": 0,
+    "avgLeadTime": "3 Days",
+    "paymentMethod": "Transfer",
+    "status": "Received",
+    "date": "10/03/2026",
+    "history": [
+      {
+        "date": "05/03/2026",
+        "invoiceNo": "INV-202603-008",
+        "product": "Plastik Klip Obat Custom Sablon",
+        "qty": 2000,
+        "amount": 950000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Panji Asmoro"
+  },
+  {
+    "id": "CR-017",
+    "customerId": "ID000017",
+    "customerName": "Kantor Desa Karawang",
+    "totalOrder": 7,
+    "amount": 8900000,
+    "totalSpent": 8900000,
+    "totalPaid": 7650000,
+    "balanceDue": 1250000,
+    "avgLeadTime": "5 Days",
+    "paymentMethod": "Transfer",
+    "status": "Overdue",
+    "date": "10/03/2026",
+    "history": [
+      {
+        "date": "28/02/2026",
+        "invoiceNo": "INV-202602-040",
+        "product": "Banner Spanduk APBDes 2026",
+        "qty": 10,
+        "amount": 1850000,
+        "status": "Unpaid"
+      }
+    ],
+    "customer": "Ratna Juwita"
+  },
+  {
+    "id": "CR-018",
+    "customerId": "ID000018",
+    "customerName": "Bpk. Ahmad",
+    "totalOrder": 3,
+    "amount": 600000,
+    "totalSpent": 600000,
+    "totalPaid": 600000,
+    "balanceDue": 0,
+    "avgLeadTime": "1 Days",
+    "paymentMethod": "Cash",
+    "status": "Received",
+    "date": "11/03/2026",
+    "history": [
+      {
+        "date": "08/03/2026",
+        "invoiceNo": "INV-202603-010",
+        "product": "Yasin Hardcover Bludru",
+        "qty": 50,
+        "amount": 600000,
+        "status": "Paid"
+      }
+    ],
+    "customer": "Surya Kencana"
+  }
+]
