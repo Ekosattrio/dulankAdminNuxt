@@ -1,3 +1,4 @@
+<script setup lang="ts">
 import { ref } from 'vue'
 import type { DownloadFileItem } from '#server/types/download-file'
 import { useDownloadFiles } from '~/composables/useDownloadFiles'
