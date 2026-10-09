@@ -1,0 +1,24 @@
+[
+  {
+    "id": "DP001",
+    "planName": "Standard Plan",
+    "customers": "All Customers",
+    "status": "Active",
+    "createdAt": "2026-01-01T08:00:00.000Z"
+  },
+  {
+    "id": "DP002",
+    "planName": "Membership",
+    "customers": "Members Only",
+    "status": "Active",
+    "createdAt": "2026-01-10T08:00:00.000Z"
+  },
+  {
+    "id": "DP003",
+    "planName": "VIP Partner",
+    "customers": "High-Spending Customers",
+    "status": "Active",
+    "createdAt": "2026-02-01T08:00:00.000Z"
+  }
+]
+

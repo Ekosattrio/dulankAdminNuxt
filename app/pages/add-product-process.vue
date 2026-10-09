@@ -72,6 +72,7 @@ async function handleSave(payload: ProductProcessFormData) {
     <SalesListHeader
       title="Product Process List"
       subtitle="Petakan operasi manufaktur dan alur kerja spesifik ke produk katalog"
+      add-label="Add Process"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"

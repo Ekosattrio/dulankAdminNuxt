@@ -5,7 +5,10 @@ import CetakFullColorWorkspace from '~/components/pages/products-services/CetakF
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/cetak-full-color.html'],
+})
 useLegacyPage({ title: 'Cetak Full Color', sweetAlert: false })
 
 const { config, pending, error, refresh, saveConfig } = useCetakFullColor()

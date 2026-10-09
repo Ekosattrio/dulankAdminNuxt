@@ -1,6 +1,11 @@
-import type { FooterLinkItem } from '#server/types/footer'
+import { getFooters } from '~~/server/utils/contentDomainData'
 
-export default defineEventHandler(async () => {
-  const allFooters = await readJSON<FooterLinkItem[]>('footers.json', [])
-  return createResponse(allFooters, 'Footer links fetched successfully')
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const footers = await getFooters({
+    section: query.section as string,
+    status: query.status as string,
+  })
+
+  return createResponse(footers, 'Footer links fetched successfully')
 })

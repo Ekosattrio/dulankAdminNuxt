@@ -2,7 +2,8 @@
 import PayrollPageForm from '~/components/pages/employee-salary/PayrollPageForm.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/edit-payroll.html']
 })
 
 useLegacyPage({

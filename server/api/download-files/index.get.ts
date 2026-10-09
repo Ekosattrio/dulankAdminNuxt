@@ -1,6 +1,12 @@
-import type { DownloadFileItem } from '#server/types/download-file'
+import { getDownloadFiles } from '~~/server/utils/contentDomainData'
 
-export default defineEventHandler(async () => {
-  const allFiles = await readJSON<DownloadFileItem[]>('download-files.json', [])
-  return createResponse(allFiles, 'Download files fetched successfully')
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const files = await getDownloadFiles({
+    search: query.search as string,
+    category: query.category as string,
+    fileType: query.fileType as string,
+  })
+
+  return createResponse(files, 'Download files fetched successfully')
 })

@@ -2,14 +2,13 @@
 import KalkulatorDashboardWorkspace from '~/components/pages/calculator/KalkulatorDashboardWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/kalkulator-dashboard.html'],
 })
 
 useLegacyPage({
   title: 'Kalkulator Dashboard',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

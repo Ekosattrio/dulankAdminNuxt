@@ -3,6 +3,7 @@ import DeleteAccountWorkspace from '~/components/pages/delete-account/DeleteAcco
 
 definePageMeta({
   layout: 'default',
+  alias: ['/delete-account.html'],
 })
 
 useLegacyPage({

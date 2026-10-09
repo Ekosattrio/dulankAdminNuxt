@@ -1,10 +1,8 @@
-import { defineEventHandler, readBody } from 'h3'
-import { writeJSON } from '~~/server/utils/data'
-import type { GdprSetting } from '~~/server/types/gdpr-setting'
+import type { GdprSetting } from '#server/types/gdpr-setting'
+import { saveGdprSetting } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<GdprSetting>(event)
-  await writeJSON('gdpr-settings.json', body)
-  return { success: true, data: body }
+  const saved = saveGdprSetting(body)
+  return { success: true, data: saved }
 })
-

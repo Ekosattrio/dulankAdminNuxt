@@ -1,0 +1,39 @@
+[
+  {
+    "id": "VCH001",
+    "name": "New Year Special",
+    "code": "NY2026",
+    "type": "Fixed",
+    "discount": 50000,
+    "limit": 100,
+    "used": 34,
+    "valid": "2026-02-28",
+    "status": "Active",
+    "createdAt": "2026-01-01T08:00:00.000Z"
+  },
+  {
+    "id": "VCH002",
+    "name": "Member Exclusive",
+    "code": "VIPMEMBER",
+    "type": "Percentage",
+    "discount": 20,
+    "limit": 50,
+    "used": 19,
+    "valid": "2026-06-30",
+    "status": "Active",
+    "createdAt": "2026-01-15T08:00:00.000Z"
+  },
+  {
+    "id": "VCH003",
+    "name": "Printing Discount",
+    "code": "PRINT15",
+    "type": "Percentage",
+    "discount": 15,
+    "limit": 200,
+    "used": 88,
+    "valid": "2026-05-31",
+    "status": "Active",
+    "createdAt": "2026-02-01T08:00:00.000Z"
+  }
+]
+

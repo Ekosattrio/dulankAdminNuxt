@@ -1,0 +1,48 @@
+[
+  {
+    "id": "DSC001",
+    "name": "Weekend Deal",
+    "value": 70,
+    "type": "Percentage",
+    "discountPlanId": "DP001",
+    "discountPlanName": "Standard Plan",
+    "validFrom": "2026-05-22",
+    "validTill": "2026-06-24",
+    "days": ["Sat", "Sun"],
+    "products": "All Products",
+    "used": 7,
+    "status": "Active",
+    "createdAt": "2026-05-01T08:00:00.000Z"
+  },
+  {
+    "id": "DSC002",
+    "name": "Loyalty Reward",
+    "value": 40000,
+    "type": "Flat",
+    "discountPlanId": "DP002",
+    "discountPlanName": "Membership",
+    "validFrom": "2026-04-16",
+    "validTill": "2026-05-16",
+    "days": ["Mon", "Tue", "Thu", "Fri"],
+    "products": "Specific Products",
+    "used": 15,
+    "status": "Active",
+    "createdAt": "2026-04-01T08:00:00.000Z"
+  },
+  {
+    "id": "DSC003",
+    "name": "Flash Sale",
+    "value": 60,
+    "type": "Percentage",
+    "discountPlanId": "DP001",
+    "discountPlanName": "Standard Plan",
+    "validFrom": "2026-03-20",
+    "validTill": "2026-04-20",
+    "days": ["Thu", "Fri", "Sat", "Sun"],
+    "products": "All Products",
+    "used": 28,
+    "status": "Active",
+    "createdAt": "2026-03-10T08:00:00.000Z"
+  }
+]
+

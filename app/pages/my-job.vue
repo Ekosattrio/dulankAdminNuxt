@@ -7,11 +7,12 @@ import MyJobStatusModal from '~/components/pages/my-job/MyJobStatusModal.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/my-job.html']
 })
 
 useLegacyPage({
-  title: 'My Job - Dulank Admin',
+  title: 'My Job',
   sweetAlert: false
 })
 

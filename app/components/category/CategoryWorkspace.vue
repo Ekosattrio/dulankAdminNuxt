@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type { Category, CategoryFormData } from '~/types/category'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import PagesCategoryModal from '~/components/category/CategoryModal.vue'
-import PagesCategoryTable from '~/components/category/CategoryTable.vue'
-
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Category',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
+import type { Category, CategoryFormData } from '#server/types/category'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import CategoryTable from '~/components/category/CategoryTable.vue'
+import CategoryModal from '~/components/category/CategoryModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
 const { categories, pending, refresh, saveCategory, deleteCategory } = useCategories()
 
@@ -24,6 +17,11 @@ const isModalOpen = ref(false)
 const isEdit = ref(false)
 const editData = ref<Category | null>(null)
 const toastMessage = ref('')
+const actionError = ref('')
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
 
 const showToast = (msg: string) => {
   toastMessage.value = msg
@@ -32,31 +30,14 @@ const showToast = (msg: string) => {
   }, 3000)
 }
 
-const filteredCategories = computed(() => {
-  return categories.value.filter((c) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      c.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      c.code?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !selectedStatus.value || c.status === selectedStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
 const print = useTablePrint()
 const printColumns = [
-  { key: 'code', label: 'Category Code' },
   { key: 'name', label: 'Category Name' },
-  { key: 'createdDate', label: 'Created Date' },
+  { key: 'code', label: 'Category Slug' },
   { key: 'createdBy', label: 'Created By' },
-  { key: 'status', label: 'Status' }
+  { key: 'createdDate', label: 'Created Date' },
+  { key: 'status', label: 'Status' },
 ]
-
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-
-const isDeleteConfirmOpen = ref(false)
-const deleteTargetId = ref<string | null>(null)
-const isDeleting = ref(false)
 
 const openAddModal = () => {
   isEdit.value = false
@@ -85,7 +66,7 @@ const confirmDelete = async () => {
     deleteTargetId.value = null
   } catch (err: any) {
     console.error('Failed to delete category:', err)
-    showToast(err?.message || 'Failed to delete category')
+    actionError.value = err?.message || 'Failed to delete category'
   } finally {
     isDeleting.value = false
   }
@@ -107,8 +88,8 @@ const printTable = () => {
     title: 'Product Category',
     subtitle: 'Daftar kategori produk percetakan',
     columns: printColumns,
-    rows: filteredCategories.value,
-    action: 'print'
+    rows: categories.value,
+    action: 'print',
   })
 }
 
@@ -117,77 +98,51 @@ const exportPdf = () => {
     title: 'Product Category',
     subtitle: 'Daftar kategori produk percetakan',
     columns: printColumns,
-    rows: filteredCategories.value,
-    action: 'pdf'
+    rows: categories.value,
+    action: 'pdf',
   })
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <!-- Toast Alert -->
-      <div
-        v-if="toastMessage"
-        class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2"
-        role="alert"
-      >
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
+  <div class="space-y-4">
+    <!-- Standard Header -->
+    <SalesListHeader
+      title="Product Category"
+      subtitle="Kelola dan atur kategori produk percetakan"
+      add-label="Add New Category"
+      :refreshing="pending"
+      @add="openAddModal"
+      @refresh="refresh"
+      @print="printTable"
+      @pdf="exportPdf"
+    />
 
-      <!-- Page Header -->
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Product Category</h4>
-          <h6 class="text-muted mb-0">Kelola dan atur kategori produk percetakan</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add New Category</span>
-          </button>
-        </div>
-      </div>
+    <!-- Feedback / Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="6"
+      :message="toastMessage"
+      :error="actionError"
+      @dismiss="toastMessage = ''; actionError = ''"
+    />
 
-      <!-- Loading State -->
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+    <!-- Data Table -->
+    <CategoryTable
+      v-if="!pending"
+      :categories="categories"
+      :search-query="searchQuery"
+      :filter-status="selectedStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="selectedStatus = $event"
+      @edit-category="handleEdit"
+      @delete-category="handleDelete"
+    />
 
-      <!-- Table Component -->
-      <PagesCategoryTable
-        v-else
-        :categories="filteredCategories"
-        :search-query="searchQuery"
-        :filter-status="selectedStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="selectedStatus = $event"
-        @add-category="openAddModal"
-        @edit-category="handleEdit"
-        @delete-category="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
-
-    <!-- Modal Component -->
-    <PagesCategoryModal
+    <!-- Add/Edit Modal -->
+    <CategoryModal
       :is-open="isModalOpen"
       :is-edit="isEdit"
       :edit-data="editData"
@@ -198,13 +153,14 @@ const exportPdf = () => {
     <!-- Confirm Delete Modal -->
     <SalesConfirmDelete
       :open="isDeleteConfirmOpen"
-      title="Hapus Kategori"
-      message="Apakah Anda yakin ingin menghapus kategori produk ini? Tindakan ini tidak dapat dibatalkan."
+      title="Delete Category"
+      message="Are you sure you want to delete this category? This action cannot be undone."
       :busy="isDeleting"
-      @cancel="isDeleteConfirmOpen = false"
+      @close="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
 
+    <!-- Standard Document Print/PDF Modal -->
     <DocumentPrintModal
       :open="print.isPrintModalOpen.value"
       :title="print.printTitle.value"

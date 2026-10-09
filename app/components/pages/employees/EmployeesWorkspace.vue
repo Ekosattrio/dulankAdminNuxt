@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { EmployeeItem, EmployeeFormData } from '#server/types/employee'
-import type { DateRangeValue } from '~/composables/useDateRange'
 import { useEmployees } from '~/composables/useEmployees'
 import { useDepartments } from '~/composables/useDepartments'
+import { useEmployeeFiltersAndStats } from '~/composables/useEmployeeFiltersAndStats'
 import { useTablePrint } from '~/composables/useTablePrint'
 import EmployeeStatsWidgets from '~/components/pages/employees/EmployeeStatsWidgets.vue'
 import EmployeeRecordsTable from '~/components/pages/employees/EmployeeRecordsTable.vue'
@@ -15,63 +15,25 @@ import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-// Filter states
-const searchQuery = ref('')
-const filterDepartment = ref('')
-const filterStatus = ref('')
-const filterDateRange = ref<DateRangeValue | null>(null)
-
 const { employees, pending, error, refresh, saveEmployee, deleteEmployee } = useEmployees()
 const { departments } = useDepartments()
+const {
+  searchQuery,
+  filterDepartment,
+  filterStatus,
+  filterDateRange,
+  filteredEmployees,
+  stats,
+} = useEmployeeFiltersAndStats(employees)
 
 const departmentOptions = computed(() => departments.value.map(d => d.name))
-
-// Client-side filtering for 0ms latency without skeleton flicker
-const filteredEmployees = computed(() => {
-  return employees.value.filter((emp) => {
-    if (filterDepartment.value && emp.department.toLowerCase() !== filterDepartment.value.toLowerCase()) {
-      return false
-    }
-    if (filterStatus.value && emp.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
-      return false
-    }
-    if (filterDateRange.value?.start && filterDateRange.value?.end) {
-      if (!emp.joinDate) return false
-      const parts = emp.joinDate.split('/')
-      const empDate = parts.length === 3 ? `${parts[2]}-${parts[1]}-${parts[0]}` : emp.joinDate
-      if (empDate < filterDateRange.value.start || empDate > filterDateRange.value.end) {
-        return false
-      }
-    }
-    return true
-  })
-})
-
-// KPI Stats calculation
-const stats = computed(() => {
-  const all = employees.value
-  const total = all.length
-  const active = all.filter(e => e.status === 'Active').length
-  const inactive = all.filter(e => e.status === 'Resign' || e.status === 'Inactive').length
-  // New joiners: employees joining in 2024 - 2026 or last 5 records
-  const newJoiners = all.filter(e => e.joinDate && (e.joinDate.includes('2025') || e.joinDate.includes('2026'))).length
-
-  return {
-    total,
-    active,
-    inactive,
-    newJoiners: newJoiners || Math.min(total, 3),
-  }
-})
 
 // Modal states
 const isFormModalOpen = ref(false)
 const isEditMode = ref(false)
 const activeEmployeeForEdit = ref<EmployeeItem | null>(null)
-
 const isViewModalOpen = ref(false)
 const activeEmployeeForView = ref<EmployeeItem | null>(null)
-
 const employeeToDelete = ref<EmployeeItem | null>(null)
 const isBusy = ref(false)
 
@@ -87,7 +49,6 @@ function showToast(msg: string) {
   }, 3500)
 }
 
-// Handlers
 function handleAdd() {
   isEditMode.value = false
   activeEmployeeForEdit.value = null
@@ -169,10 +130,6 @@ function handlePrint() {
   })
 }
 
-function handleExportPdf() {
-  handlePrint()
-}
-
 function handleExportExcel() {
   const header = ['Employee ID', 'Name', 'Department', 'Address', 'Phone', 'Join Date', 'Status']
   const rows = filteredEmployees.value.map(e => [
@@ -225,7 +182,7 @@ function handleExportExcel() {
       add-label="Add Employee"
       @refresh="refresh"
       @print="handlePrint"
-      @export-pdf="handleExportPdf"
+      @export-pdf="handlePrint"
       @export-excel="handleExportExcel"
       @add="handleAdd"
     />
@@ -300,4 +257,3 @@ function handleExportExcel() {
     />
   </div>
 </template>
-

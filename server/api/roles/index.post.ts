@@ -1,6 +1,5 @@
-import { initialRoles } from '~~/server/utils/userManagementStore'
 import type { SystemRole } from '~~/server/types/user-management'
-import { readJSON, writeJSON } from '~~/server/utils/data'
+import { saveRole } from '~~/server/utils/rolesData'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<Partial<SystemRole>>(event)
@@ -12,38 +11,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const roles = readJSON<SystemRole[]>('roles.json', initialRoles)
-  const existingIdx = body.id ? roles.findIndex((r) => r.id === body.id) : -1
+  const { role, isNew } = saveRole(body as Partial<SystemRole> & { name: string })
 
-  if (existingIdx !== -1) {
-    const current = roles[existingIdx]
-    if (!current) throw createError({ statusCode: 404, statusMessage: 'Role not found' })
-    const updated: SystemRole = {
-      ...current,
-      name: body.name,
-      description: body.description !== undefined ? body.description : (current.description || ''),
-    }
-    roles[existingIdx] = updated
-    writeJSON('roles.json', roles)
-    return {
-      success: true,
-      message: 'Role updated successfully',
-      data: updated,
-    }
-  } else {
-    const today = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date())
-    const newRole: SystemRole = {
-      id: body.id || `role-${Date.now()}`,
-      name: body.name,
-      createdOn: today,
-      description: body.description || '',
-    }
-    roles.unshift(newRole)
-    writeJSON('roles.json', roles)
-    return {
-      success: true,
-      message: 'Role created successfully',
-      data: newRole,
-    }
+  return {
+    success: true,
+    message: isNew ? 'Role created successfully' : 'Role updated successfully',
+    data: role,
   }
 })

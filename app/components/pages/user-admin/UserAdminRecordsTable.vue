@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UserAdmin } from '#server/types/user-management'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import SalesActionButton from '~/components/sales/SalesActionButton.vue'
 
 defineProps<{
   userAdmins: UserAdmin[]
@@ -141,22 +142,16 @@ const getRoleBadge = (role: string) => {
             </td>
             <td class="px-4 py-3.5 text-end">
               <div class="inline-flex items-center gap-1.5">
-                <button
-                  type="button"
-                  class="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-[#FE9F43] dark:text-gray-400 dark:hover:bg-gray-800"
-                  title="Edit User Admin"
+                <SalesActionButton
+                  action="edit"
+                  label="Edit User Admin"
                   @click="emit('edit', adm)"
-                >
-                  <FeatherIcon name="edit" size="14" />
-                </button>
-                <button
-                  type="button"
-                  class="rounded p-1 text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
-                  title="Delete User Admin"
+                />
+                <SalesActionButton
+                  action="delete"
+                  label="Delete User Admin"
                   @click="emit('delete', adm)"
-                >
-                  <FeatherIcon name="trash-2" size="14" />
-                </button>
+                />
               </div>
             </td>
           </tr>

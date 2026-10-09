@@ -167,19 +167,18 @@ function getItemContact(item: any) {
       <template #cell(actions)="{ item }">
         <div class="flex items-center justify-center gap-1.5">
           <SalesActionButton
-            icon="eye"
-            tooltip="View Address"
+            action="view"
+            label="View Address"
             @click="emit('view', item)"
           />
           <SalesActionButton
-            icon="edit"
-            tooltip="Edit Address"
+            action="edit"
+            label="Edit Address"
             @click="emit('edit', item)"
           />
           <SalesActionButton
-            icon="trash-2"
-            tooltip="Delete Address"
-            danger
+            action="delete"
+            label="Delete Address"
             @click="emit('delete', item)"
           />
         </div>

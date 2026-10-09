@@ -7,17 +7,36 @@ import PaperListViewModal from '~/components/pages/paper-shop/PaperListViewModal
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/kertas-jenis-self.html']
+})
 
 useLegacyPage({
-  title: 'Internal Paper Stock & Specs - Daftar Kertas',
+  title: 'Jenis Kertas List',
   sweetAlert: false
 })
 
 const { items, stats, pending, error, refresh, saveItem, deleteItem } = usePaperItemsSelf()
 const { groups } = usePaperGroupsSelf()
 const { sizes } = usePaperSizesSelf()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'name', label: 'Paper Name' },
+  { key: 'merk', label: 'Merk' },
+  { key: 'price', label: 'Price', align: 'right' as const },
+  { key: 'priceType', label: 'Price Type', align: 'center' as const },
+  { key: 'unitPrice', label: 'Unit', align: 'center' as const },
+  { key: 'gsm', label: 'GSM', align: 'center' as const },
+  { key: 'paperSize', label: 'Paper Size' },
+  { key: 'stock', label: 'Stock', align: 'right' as const },
+  { key: 'unitStock', label: 'Unit Stock', align: 'center' as const },
+  { key: 'status', label: 'Status', align: 'center' as const }
+]
 
 const isFormModalOpen = ref(false)
 const isViewModalOpen = ref(false)
@@ -28,25 +47,10 @@ const deleteTargetId = ref<string | null>(null)
 const isDeleting = ref(false)
 const isSaving = ref(false)
 
-function openAddModal() {
-  selectedItem.value = null
-  isFormModalOpen.value = true
-}
-
-function handleView(item: PaperItem) {
-  selectedItem.value = item
-  isViewModalOpen.value = true
-}
-
-function handleEdit(item: PaperItem) {
-  selectedItem.value = item
-  isFormModalOpen.value = true
-}
-
-function handleDelete(id: string) {
-  deleteTargetId.value = id
-  isDeleteModalOpen.value = true
-}
+function openAddModal() { selectedItem.value = null; isFormModalOpen.value = true }
+function handleView(item: PaperItem) { selectedItem.value = item; isViewModalOpen.value = true }
+function handleEdit(item: PaperItem) { selectedItem.value = item; isFormModalOpen.value = true }
+function handleDelete(id: string) { deleteTargetId.value = id; isDeleteModalOpen.value = true }
 
 async function confirmDelete() {
   if (!deleteTargetId.value) return
@@ -79,26 +83,22 @@ async function handleSave(payload: PaperItemFormData) {
 <template>
   <div class="dulank-page dulank-page-kertas-jenis-self space-y-6">
     <SalesListHeader
-      title="Paper Stock & Specifications"
-      subtitle="Master daftar varian kertas, gramatur, dimensi, dan stok gudang"
+      title="Jenis Kertas List"
+      subtitle="Manage your Jenis Kertas"
+      add-label="Add New Jenis Kertas"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
 
     <!-- Stats Widgets -->
     <PaperListStatsWidgets :stats="stats" />
 
     <!-- Feedback State -->
-    <SalesFeedback
-      v-if="pending && !items.length"
-      loading
-    />
-    <SalesFeedback
-      v-else-if="error"
-      :error="error.message || 'Gagal memuat data item kertas'"
-      @retry="refresh"
-    />
+    <SalesFeedback v-if="pending && !items.length" loading />
+    <SalesFeedback v-else-if="error" :error="error.message || 'Gagal memuat data item kertas'" @retry="refresh" />
 
     <!-- Records Table -->
     <PaperListRecordsTable
@@ -122,10 +122,16 @@ async function handleSave(payload: PaperItemFormData) {
     />
 
     <!-- View Detail Modal -->
-    <PaperListViewModal
-      :open="isViewModalOpen"
-      :item="selectedItem"
-      @close="isViewModalOpen = false"
+    <PaperListViewModal :open="isViewModalOpen" :item="selectedItem" @close="isViewModalOpen = false" />
+
+    <!-- Print Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Jenis Kertas List"
+      :columns="printColumns"
+      :data="items"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
 
     <!-- Confirm Delete Modal -->

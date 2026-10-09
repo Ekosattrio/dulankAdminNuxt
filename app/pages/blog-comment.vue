@@ -3,6 +3,7 @@ import BlogCommentWorkspace from '~/components/blog/BlogCommentWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/blog-comment.html'],
 })
 
 useLegacyPage({

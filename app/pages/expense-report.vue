@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import ExpenseReportWorkspace from '~/components/pages/reports/ExpenseReportWorkspace.vue'
 
-useHead({
-  title: 'Expense Report - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/expense-report.html'],
+})
+
+useLegacyPage({
+  title: 'Expense Report - Kacetak System',
+  sweetAlert: false,
 })
 </script>
 

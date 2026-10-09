@@ -3,6 +3,7 @@ import BlogTagWorkspace from '~/components/blog/BlogTagWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/blog-tag.html'],
 })
 
 useLegacyPage({

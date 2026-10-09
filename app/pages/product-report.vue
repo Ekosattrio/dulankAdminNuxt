@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import ProductReportWorkspace from '~/components/pages/reports/ProductReportWorkspace.vue'
 
-useHead({
-  title: 'Product Report - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/product-report.html'],
+})
+
+useLegacyPage({
+  title: 'Product Report - Kacetak System',
+  sweetAlert: false,
 })
 </script>
 

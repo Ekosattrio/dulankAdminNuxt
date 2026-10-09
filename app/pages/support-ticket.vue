@@ -10,7 +10,10 @@ import SupportTicketDetailModal from '~/components/pages/support-ticket/SupportT
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/support-ticket.html'],
+})
 useLegacyPage({ title: 'Support Ticket List - Dulank Admin', sweetAlert: false })
 
 const {

@@ -1,31 +1,6 @@
-import type { InvoiceSetting } from '#server/types/invoice-setting'
+import { getInvoiceSettings } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async () => {
-  const defaultSettings: InvoiceSetting = {
-    id: 'inv-setting-1',
-    logoUrl: '/assets/img/logo.png',
-    companyName: 'PT. Dulank Semesta Cida',
-    companyEmail: 'billing@dulanksemesta.com',
-    companyPhone: '+62 21 4256 7890',
-    companyAddress: 'Jl. Percetakan Negara No. 88, Jakarta Pusat, DKI Jakarta 10560',
-    prefix: 'INV-',
-    numberPadding: 4,
-    nextNumber: 1042,
-    dueDays: 7,
-    roundOffEnabled: true,
-    roundOffType: 'Round Off Up',
-    showCompanyDetails: true,
-    headerTerms: 'Terima kasih atas pesanan Anda di Percetakan Kacetak Dulank System.',
-    footerTerms: 'Pembayaran wajib ditransfer ke rekening resmi sebelum tanggal jatuh tempo. Harap simpan bukti pembayaran ini sebagai bukti transaksi sah.',
-    bankDetails: {
-      bankName: 'Bank Central Asia (BCA)',
-      accountNumber: '8830-1928-3341',
-      accountHolder: 'PT DULANK SEMESTA CIDA'
-    },
-    taxPercentage: 11,
-    updatedAt: new Date().toISOString()
-  }
-
-  const settings = await readJSON<InvoiceSetting>('invoice-settings.json', defaultSettings)
+  const settings = getInvoiceSettings()
   return createResponse(settings, 'Invoice settings retrieved successfully')
 })

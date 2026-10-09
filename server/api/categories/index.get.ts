@@ -1,25 +1,11 @@
-import type { Category } from '~/types/category'
+import { getCategories } from '~~/server/utils/productTaxonomyData'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const search = (query.search as string || '').toLowerCase().trim()
-  const status = query.status as string || ''
+  const categories = await getCategories({
+    search: query.search as string,
+    status: query.status as string,
+  })
 
-  const allCategories = await readJSON<Category[]>('categories.json', [])
-
-  let filtered = allCategories
-
-  if (search) {
-    filtered = filtered.filter(item =>
-      item.name.toLowerCase().includes(search) ||
-      item.code.toLowerCase().includes(search)
-    )
-  }
-
-  if (status) {
-    filtered = filtered.filter(item => item.status === status)
-  }
-
-  return createResponse(filtered, 'Categories fetched successfully')
+  return createResponse(categories, 'Categories fetched successfully')
 })
-

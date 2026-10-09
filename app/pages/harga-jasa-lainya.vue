@@ -7,7 +7,10 @@ import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/harga-jasa-lainya.html'],
+})
 
 useLegacyPage({
   title: 'Komponen Cetak & Jasa Lainnya',
@@ -78,6 +81,7 @@ async function handleSave(payload: JasaLainFormData) {
     <SalesListHeader
       title="Komponen Cetak & Jasa Lainnya"
       subtitle="Kelola tarif komponen cetak dan jasa finishing kalkulator"
+      add-label="Add New Jasa Lainya"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"

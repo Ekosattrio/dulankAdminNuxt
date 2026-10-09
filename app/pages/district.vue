@@ -2,7 +2,8 @@
 import DistrictWorkspace from '~/components/pages/location/DistrictWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/district.html'],
 })
 
 useLegacyPage({

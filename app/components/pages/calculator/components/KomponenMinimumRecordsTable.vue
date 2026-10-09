@@ -17,14 +17,23 @@ const emit = defineEmits<{
 
 const searchQuery = ref('')
 const filterStatus = ref('')
+const filterUnit = ref('')
+
+const unitOptions = computed(() => {
+  const units = Array.from(new Set(props.items.map((i) => i.unit).filter(Boolean)))
+  return [
+    { label: 'Semua Satuan', value: '' },
+    ...units.map((u) => ({ label: u, value: u }))
+  ]
+})
 
 const columns = [
-  { key: 'name', label: 'Nama Jasa / Finishing', sortable: true },
-  { key: 'rate', label: 'Tarif Satuan', sortable: true, align: 'right' as const },
-  { key: 'minim', label: 'Minim Biaya (Floor)', sortable: true, align: 'right' as const },
+  { key: 'name', label: 'Nama Jasa', sortable: true },
+  { key: 'rate', label: 'Harga', sortable: true, align: 'right' as const },
+  { key: 'minim', label: 'Minim Harga', sortable: true, align: 'right' as const },
   { key: 'unit', label: 'Satuan', sortable: true, align: 'center' as const },
-  { key: 'used', label: 'Formula Usage', sortable: true, align: 'center' as const },
-  { key: 'update', label: 'Last Update', sortable: true },
+  { key: 'used', label: 'Used', sortable: true, align: 'center' as const },
+  { key: 'update', label: 'Update', sortable: true },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
   { key: 'actions', label: 'Action', align: 'center' as const }
 ]
@@ -32,11 +41,12 @@ const columns = [
 const filteredItems = computed(() => {
   return props.items.filter((item) => {
     const matchStatus = !filterStatus.value || item.status === filterStatus.value
+    const matchUnit = !filterUnit.value || item.unit.toLowerCase() === filterUnit.value.toLowerCase()
     const matchSearch =
       !searchQuery.value ||
       item.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       item.unit.toLowerCase().includes(searchQuery.value.toLowerCase())
-    return matchStatus && matchSearch
+    return matchStatus && matchUnit && matchSearch
   })
 })
 </script>
@@ -46,9 +56,14 @@ const filteredItems = computed(() => {
     :rows="filteredItems"
     :columns="columns"
     v-model:search="searchQuery"
-    search-placeholder="Search finishing process..."
+    search-placeholder="Search jasa / finishing..."
   >
     <template #filters>
+      <TableFilterSelect
+        v-model="filterUnit"
+        :options="unitOptions"
+        placeholder="Satuan"
+      />
       <TableFilterSelect
         v-model="filterStatus"
         :options="[
@@ -80,7 +95,7 @@ const filteredItems = computed(() => {
 
     <template #cell-used="{ row }">
       <span class="inline-flex rounded-md bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 text-xs font-semibold">
-        {{ row.used }} calculations
+        {{ row.used }}
       </span>
     </template>
 
@@ -96,16 +111,15 @@ const filteredItems = computed(() => {
       <div class="inline-flex items-center gap-1.5 justify-center">
         <SalesActionButton
           action="edit"
-          label="Edit Component"
+          label="Edit Jasa"
           @click="emit('edit', row)"
         />
         <SalesActionButton
           action="delete"
-          label="Delete Component"
+          label="Delete Jasa"
           @click="emit('delete', row.id)"
         />
       </div>
     </template>
   </SalesDataTable>
 </template>
-

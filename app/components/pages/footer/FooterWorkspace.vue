@@ -2,6 +2,10 @@
 import { ref, watch } from 'vue'
 import type { FooterConfig } from '#server/types/footer'
 import { useFooterConfig } from '~/composables/useFooterConfig'
+import FooterLinksSection from '~/components/pages/footer/FooterLinksSection.vue'
+import FooterContactSection from '~/components/pages/footer/FooterContactSection.vue'
+import FooterSocialsSection from '~/components/pages/footer/FooterSocialsSection.vue'
+import FooterLivePreview from '~/components/pages/footer/FooterLivePreview.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
 const { config, pending, error, refresh, saveConfig } = useFooterConfig()
@@ -51,49 +55,6 @@ watch(
   { immediate: true },
 )
 
-// Add New Quick Link state
-const newQlText = ref('')
-const newQlHref = ref('')
-
-function addInfoKami() {
-  if (!newQlText.value.trim() || !newQlHref.value.trim()) {
-    showToast('Isi judul dan URL quick link.')
-    return
-  }
-  form.value.infoKami.push({
-    text: newQlText.value.trim(),
-    href: newQlHref.value.trim(),
-  })
-  newQlText.value = ''
-  newQlHref.value = ''
-}
-
-function removeInfoKami(idx: number) {
-  form.value.infoKami.splice(idx, 1)
-}
-
-// Add New Guide state
-const newPdText = ref('')
-const newPdHref = ref('')
-
-function addPanduan() {
-  if (!newPdText.value.trim() || !newPdHref.value.trim()) {
-    showToast('Isi judul dan URL panduan.')
-    return
-  }
-  form.value.panduan.push({
-    text: newPdText.value.trim(),
-    href: newPdHref.value.trim(),
-  })
-  newPdText.value = ''
-  newPdHref.value = ''
-}
-
-function removePanduan(idx: number) {
-  form.value.panduan.splice(idx, 1)
-}
-
-// Save action
 const isBusy = ref(false)
 const toastMessage = ref('')
 
@@ -102,6 +63,22 @@ function showToast(msg: string) {
   setTimeout(() => {
     toastMessage.value = ''
   }, 3500)
+}
+
+function handleAddInfoKami(item: { text: string; href: string }) {
+  form.value.infoKami.push(item)
+}
+
+function handleRemoveInfoKami(idx: number) {
+  form.value.infoKami.splice(idx, 1)
+}
+
+function handleAddPanduan(item: { text: string; href: string }) {
+  form.value.panduan.push(item)
+}
+
+function handleRemovePanduan(idx: number) {
+  form.value.panduan.splice(idx, 1)
 }
 
 async function handleSave() {
@@ -227,238 +204,32 @@ async function handleSave() {
       </div>
 
       <!-- 2. Info Kami (Quick Links) -->
-      <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h5 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-          Info Kami
-        </h5>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
-          Tambahkan link yang sering tampil di footer. Urutan akan mengikuti daftar.
-        </p>
-
-        <!-- Dynamic List -->
-        <div class="space-y-2 mb-3">
-          <div
-            v-for="(ql, idx) in form.infoKami"
-            :key="idx"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="ql.text"
-              type="text"
-              placeholder="Judul link"
-              class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-            <input
-              v-model="ql.href"
-              type="text"
-              placeholder="URL (https://...)"
-              class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-            <button
-              type="button"
-              class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 transition"
-              title="Hapus"
-              @click="removeInfoKami(idx)"
-            >
-              <FeatherIcon name="trash-2" size="14" />
-            </button>
-          </div>
-        </div>
-
-        <!-- Add New Row -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-dashed border-gray-200 dark:border-gray-800">
-          <input
-            v-model="newQlText"
-            type="text"
-            placeholder="Judul link (mis. Tentang Kami)"
-            class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            @keyup.enter="addInfoKami"
-          />
-          <input
-            v-model="newQlHref"
-            type="text"
-            placeholder="URL (https://...)"
-            class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            @keyup.enter="addInfoKami"
-          />
-          <button
-            type="button"
-            class="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 text-xs font-semibold text-white shadow-sm hover:bg-primary/90 transition"
-            @click="addInfoKami"
-          >
-            <FeatherIcon name="plus" size="14" />
-            <span>Tambah</span>
-          </button>
-        </div>
-      </div>
+      <FooterLinksSection
+        title="Info Kami"
+        subtitle="Tambahkan link yang sering tampil di footer. Urutan akan mengikuti daftar."
+        placeholder-text="Judul link (mis. Tentang Kami)"
+        :items="form.infoKami"
+        @add="handleAddInfoKami"
+        @remove="handleRemoveInfoKami"
+        @error="showToast"
+      />
 
       <!-- 3. Panduan Pelanggan Baru -->
-      <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h5 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-          Panduan Pelanggan Baru
-        </h5>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
-          Tambahkan link panduan atau manual untuk pelanggan baru.
-        </p>
-
-        <!-- Dynamic List -->
-        <div class="space-y-2 mb-3">
-          <div
-            v-for="(pd, idx) in form.panduan"
-            :key="idx"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="pd.text"
-              type="text"
-              placeholder="Judul panduan"
-              class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-            <input
-              v-model="pd.href"
-              type="text"
-              placeholder="URL (https://...)"
-              class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-            <button
-              type="button"
-              class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 transition"
-              title="Hapus"
-              @click="removePanduan(idx)"
-            >
-              <FeatherIcon name="trash-2" size="14" />
-            </button>
-          </div>
-        </div>
-
-        <!-- Add New Row -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-dashed border-gray-200 dark:border-gray-800">
-          <input
-            v-model="newPdText"
-            type="text"
-            placeholder="Judul panduan (mis. Cara Pembelian)"
-            class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            @keyup.enter="addPanduan"
-          />
-          <input
-            v-model="newPdHref"
-            type="text"
-            placeholder="URL (https://...)"
-            class="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            @keyup.enter="addPanduan"
-          />
-          <button
-            type="button"
-            class="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 text-xs font-semibold text-white shadow-sm hover:bg-primary/90 transition"
-            @click="addPanduan"
-          >
-            <FeatherIcon name="plus" size="14" />
-            <span>Tambah</span>
-          </button>
-        </div>
-      </div>
+      <FooterLinksSection
+        title="Panduan Pelanggan Baru"
+        subtitle="Tambahkan link panduan atau manual untuk pelanggan baru."
+        placeholder-text="Judul panduan (mis. Cara Pembelian)"
+        :items="form.panduan"
+        @add="handleAddPanduan"
+        @remove="handleRemovePanduan"
+        @error="showToast"
+      />
 
       <!-- 4. Kontak & Alamat -->
-      <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h5 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
-          Kontak & Alamat
-        </h5>
-
-        <div class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Alamat</label>
-            <textarea
-              v-model="form.alamat"
-              rows="2"
-              placeholder="Alamat kantor / workshop..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            ></textarea>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Telepon</label>
-              <input
-                v-model="form.telepon"
-                type="text"
-                placeholder="+62 21 ..."
-                class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
-              <input
-                v-model="form.email"
-                type="text"
-                placeholder="info@..."
-                class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <FooterContactSection :form="form" />
 
       <!-- 5. Social Media -->
-      <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h5 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-          Social Media
-        </h5>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
-          Masukan URL lengkap (https://...)
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Facebook</label>
-            <input
-              v-model="form.socials.facebook"
-              type="url"
-              placeholder="https://facebook.com/..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Instagram</label>
-            <input
-              v-model="form.socials.instagram"
-              type="url"
-              placeholder="https://instagram.com/..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Twitter / X</label>
-            <input
-              v-model="form.socials.twitter"
-              type="url"
-              placeholder="https://twitter.com/..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">LinkedIn</label>
-            <input
-              v-model="form.socials.linkedin"
-              type="url"
-              placeholder="https://linkedin.com/..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">YouTube</label>
-            <input
-              v-model="form.socials.youtube"
-              type="url"
-              placeholder="https://youtube.com/..."
-              class="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-xs font-medium text-gray-800 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
-          </div>
-        </div>
-      </div>
+      <FooterSocialsSection :socials="form.socials" />
 
       <!-- Save Button Footer -->
       <div class="flex items-center justify-end gap-3 pt-2">
@@ -473,70 +244,8 @@ async function handleSave() {
         </button>
       </div>
 
-      <!-- Live Footer Preview -->
-      <div class="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 shadow-inner dark:border-gray-800 dark:bg-gray-900/50 mt-8">
-        <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-5">
-          <FeatherIcon name="eye" size="14" />
-          <span>Live Footer Preview (Tampilan Publik Toko)</span>
-        </div>
-
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs">
-            <!-- Col 1: Brand & Desc -->
-            <div class="space-y-2 md:col-span-1">
-              <h4 class="font-bold text-gray-900 dark:text-gray-100 text-sm">{{ form.judul || 'Nama Perusahaan' }}</h4>
-              <p class="text-gray-500 dark:text-gray-400 text-[11px] leading-relaxed">
-                {{ form.desc || 'Deskripsi perusahaan...' }}
-              </p>
-            </div>
-
-            <!-- Col 2: Info Kami -->
-            <div class="space-y-2">
-              <h5 class="font-bold text-gray-900 dark:text-gray-100">Info Kami</h5>
-              <ul class="space-y-1.5 text-gray-600 dark:text-gray-300 text-[11px]">
-                <li v-for="(ql, i) in form.infoKami" :key="i">
-                  <a :href="ql.href" class="hover:text-primary transition">{{ ql.text }}</a>
-                </li>
-                <li v-if="form.infoKami.length === 0" class="text-gray-400 italic">Belum ada link</li>
-              </ul>
-            </div>
-
-            <!-- Col 3: Panduan -->
-            <div class="space-y-2">
-              <h5 class="font-bold text-gray-900 dark:text-gray-100">Panduan Pelanggan</h5>
-              <ul class="space-y-1.5 text-gray-600 dark:text-gray-300 text-[11px]">
-                <li v-for="(pd, i) in form.panduan" :key="i">
-                  <a :href="pd.href" class="hover:text-primary transition">{{ pd.text }}</a>
-                </li>
-                <li v-if="form.panduan.length === 0" class="text-gray-400 italic">Belum ada link</li>
-              </ul>
-            </div>
-
-            <!-- Col 4: Kontak & Socials -->
-            <div class="space-y-2">
-              <h5 class="font-bold text-gray-900 dark:text-gray-100">Kontak Kami</h5>
-              <p v-if="form.alamat" class="text-gray-500 dark:text-gray-400 text-[11px]">{{ form.alamat }}</p>
-              <p v-if="form.telepon" class="text-gray-600 dark:text-gray-300 text-[11px] font-medium">📞 {{ form.telepon }}</p>
-              <p v-if="form.email" class="text-gray-600 dark:text-gray-300 text-[11px] font-medium">✉️ {{ form.email }}</p>
-
-              <!-- Social links -->
-              <div class="flex items-center gap-2 pt-2 text-gray-500">
-                <a v-if="form.socials.facebook" :href="form.socials.facebook" target="_blank" class="hover:text-primary"><FeatherIcon name="facebook" size="14" /></a>
-                <a v-if="form.socials.instagram" :href="form.socials.instagram" target="_blank" class="hover:text-primary"><FeatherIcon name="instagram" size="14" /></a>
-                <a v-if="form.socials.twitter" :href="form.socials.twitter" target="_blank" class="hover:text-primary"><FeatherIcon name="twitter" size="14" /></a>
-                <a v-if="form.socials.linkedin" :href="form.socials.linkedin" target="_blank" class="hover:text-primary"><FeatherIcon name="linkedin" size="14" /></a>
-                <a v-if="form.socials.youtube" :href="form.socials.youtube" target="_blank" class="hover:text-primary"><FeatherIcon name="youtube" size="14" /></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Copyright -->
-          <div class="mt-6 border-t border-gray-100 pt-4 text-center text-[11px] text-gray-400 dark:border-gray-700">
-            {{ form.copyright }}
-          </div>
-        </div>
-      </div>
+      <!-- Live Footer Preview Component -->
+      <FooterLivePreview :form="form" />
     </div>
   </div>
 </template>
-

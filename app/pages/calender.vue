@@ -5,7 +5,10 @@ import CalendarWorkspace from '~/components/pages/products-services/CalendarWork
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/calender.html'],
+})
 useLegacyPage({ title: 'Calender', sweetAlert: false })
 
 const { config, pending, error, refresh, saveCalendarConfig } = useCalendarSettings()

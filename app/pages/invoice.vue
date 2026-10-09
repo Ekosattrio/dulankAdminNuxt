@@ -41,6 +41,7 @@ watch(
     <SalesListHeader
       title="Invoice"
       subtitle="Manage Your Invoice"
+      add-label="Add Invoice"
       :refreshing="pending"
       @add="handleAdd"
       @refresh="refresh()"

@@ -14,6 +14,8 @@ Targetnya bukan hanya membuat tampilan mirip, tetapi membuat menu tersebut **bac
 Struktur wajibnya bernama **Backend-Ready Vertical Slice (BRVS)** dan dijelaskan di `docs/BACKEND_READY_VERTICAL_SLICE.md`.
 Pemecahan UI wajib mengikuti **BRVS-UI** pada `docs/UI_DECOMPOSITION_STANDARD.md`.
 
+Untuk command umum `lanjutkan todo` yang belum menyebut menu, gunakan `docs/CONTINUE_TODO_COMMAND.md` lebih dulu. Setelah command tersebut memilih scope menu, workflow pada dokumen ini menjadi wajib.
+
 ---
 
 ## 1. Prinsip Utama
@@ -30,6 +32,7 @@ Saat mengerjakan menu, ikuti pola **Sales** dan **Payment** yang sudah disetujui
 - Fitur umum dibuat reusable jika kemungkinan dipakai menu lain.
 - Style umum dibuat reusable jika muncul di lebih dari satu menu. Jangan membuat control yang fungsinya sama tetapi tinggi, radius, warna, spacing, atau focus state berbeda.
 - HTML legacy dan referensi Netlify tetap menjadi sumber label, kolom, tombol, flow, modal, dan interaksi.
+- Gunakan `docs/LEGACY_ACTION_MODAL_PARITY.md` untuk menginventarisasi setiap toolbar action, row action, More menu, modal/submodal, field, dynamic interaction, selected-record flow, dan efek backend. Menu tidak boleh disebut parity-complete hanya karena tabel dan modal utama sudah terlihat.
 - Peta flow, business logic, data/Netlify, status audit, dan revisi klien dibaca dari `docs/obsidian-vault/00-HOME.md`; jangan membuat matrix status duplikat.
 - Quality gate pekerjaan mengikuti `docs/AI_WORK_QUALITY_FRAMEWORK.md`; implementasi wajib melalui check dan dua tahap re-check sebelum status diperbarui.
 - Setiap layer BRVS harus terhubung pada route aktif. Adanya type, composable, API, atau JSON yang tidak dipakai page tidak membuktikan menu mengikuti pola Sales.
@@ -86,6 +89,7 @@ Sebelum mengubah kode:
    - fitur reusable yang terlihat
 7. Untuk dataset/API baru, pastikan basename JSON di `server/data/` terdaftar di `server/utils/bundledData.ts` dan GET tidak melakukan write.
 8. Isi Architecture Evidence Matrix BRVS dan tandai setiap layer sebagai `missing`, `present-unused`, `present-wrong-responsibility`, atau `connected`.
+9. Isi Legacy Action and Modal Parity Matrix untuk seluruh trigger dan target pada route terkait.
 
 Jangan mulai implementasi hanya dari nama menu. Legacy HTML adalah sumber flow.
 

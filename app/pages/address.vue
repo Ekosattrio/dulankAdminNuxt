@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import AddressWorkspace from '~/components/pages/address/AddressWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/address.html'],
+})
+
 useLegacyPage({ title: 'Address List', sweetAlert: false })
 </script>
 

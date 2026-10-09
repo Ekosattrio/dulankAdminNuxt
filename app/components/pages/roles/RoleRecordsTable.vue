@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SystemRole } from '#server/types/user-management'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import SalesActionButton from '~/components/sales/SalesActionButton.vue'
 
 defineProps<{
   roles: SystemRole[]
@@ -67,29 +68,21 @@ const emit = defineEmits<{
             <td class="px-4 py-3.5 text-gray-600 dark:text-gray-400">{{ r.createdOn }}</td>
             <td class="px-4 py-3.5 text-end">
               <div class="inline-flex items-center gap-1.5">
-                <button
-                  type="button"
-                  class="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-[#FE9F43] dark:text-gray-400 dark:hover:bg-gray-800"
-                  title="Edit Role"
+                <SalesActionButton
+                  action="edit"
+                  label="Edit Role"
                   @click="emit('edit', r)"
-                >
-                  <FeatherIcon name="edit" size="14" />
-                </button>
-                <NuxtLink
+                />
+                <SalesActionButton
+                  icon="shield"
+                  label="Permissions Matrix"
                   to="/role"
-                  class="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-sky-600 dark:text-gray-400 dark:hover:bg-gray-800"
-                  title="Permissions Matrix"
-                >
-                  <FeatherIcon name="shield" size="14" />
-                </NuxtLink>
-                <button
-                  type="button"
-                  class="rounded p-1 text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
-                  title="Delete Role"
+                />
+                <SalesActionButton
+                  action="delete"
+                  label="Delete Role"
                   @click="emit('delete', r)"
-                >
-                  <FeatherIcon name="trash-2" size="14" />
-                </button>
+                />
               </div>
             </td>
           </tr>

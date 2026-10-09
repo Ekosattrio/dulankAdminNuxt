@@ -1,8 +1,8 @@
-import type { FaqCategory } from '#server/types/faq'
+import { defineEventHandler, getRouterParam, createError } from 'h3'
+import { deleteFaqCategory } from '~~/server/utils/faqData'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-
   if (!id) {
     throw createError({
       statusCode: 400,
@@ -10,17 +10,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const allCategories = await readJSON<FaqCategory[]>('faq-categories.json', [])
-  const newCategories = allCategories.filter(c => String(c.id) !== String(id))
+  const removed = await deleteFaqCategory(id)
 
-  if (allCategories.length === newCategories.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Category not found',
-    })
+  return {
+    success: true,
+    message: 'FAQ Category deleted successfully',
+    data: removed,
   }
-
-  await writeJSON('faq-categories.json', newCategories)
-
-  return createResponse({ id }, 'FAQ Category deleted successfully')
 })

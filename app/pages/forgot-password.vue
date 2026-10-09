@@ -1,92 +1,13 @@
-<template>
-  <div class="account-content w-100">
-    <div class="login-wrapper login-new">
-      <div class="container">
-        <div class="login-content user-login">
-          <div class="login-logo text-center mb-4">
-            <NuxtLink to="/">
-              <img src="/assets/img/logo.png" alt="img" class="mx-auto" />
-            </NuxtLink>
-          </div>
-          <form @submit.prevent="handleSubmit">
-            <div class="login-userset">
-              <div class="login-userheading">
-                <h3>Forgot password?</h3>
-                <h4>If you forgot your password, well, then we’ll email you instructions to reset your password.</h4>
-              </div>
-              <div class="form-login mb-3">
-                <label class="form-label">Email</label>
-                <div class="form-addons position-relative">
-                  <input
-                    v-model="email"
-                    type="email"
-                    class="form-control"
-                    placeholder="Enter your email"
-                    required
-                  />
-                  <img src="/assets/img/icons/mail.svg" alt="img" class="position-absolute end-0 top-50 translate-middle-y me-3" />
-                </div>
-              </div>
-              <div class="form-login mb-3">
-                <button type="submit" class="btn btn-login w-100 btn-primary py-2 text-white font-semibold">
-                  Send Reset Link
-                </button>
-              </div>
-              <p v-if="submitted" role="status" class="mb-3 rounded border border-success p-2 text-sm text-success">
-                If an account exists for {{ email }}, a password reset link has been sent.
-              </p>
-              <div class="signinform text-center mb-3">
-                <h4 class="text-sm">
-                  Return to
-                  <NuxtLink to="/signin" class="hover-a text-primary font-medium"> login</NuxtLink>
-                </h4>
-              </div>
-              <div class="form-setlogin or-text text-center my-3 position-relative">
-                <h4 class="text-muted text-xs bg-white px-2 d-inline-block position-relative z-1">OR</h4>
-                <div class="border-top position-absolute top-50 start-0 end-0 z-0"></div>
-              </div>
-              <div class="form-sociallink">
-                <ul class="d-flex justify-content-center gap-3 list-unstyled mb-0">
-                  <li>
-                    <a href="javascript:void(0);" class="facebook-logo p-2 border rounded d-inline-block hover:shadow-sm">
-                      <img src="/assets/img/icons/facebook-logo.svg" alt="Facebook" style="width: 24px; height: 24px;" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0);" class="google-logo p-2 border rounded d-inline-block hover:shadow-sm">
-                      <img src="/assets/img/icons/google.png" alt="Google" style="width: 24px; height: 24px;" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0);" class="apple-logo p-2 border rounded d-inline-block hover:shadow-sm">
-                      <img src="/assets/img/icons/apple-logo.svg" alt="Apple" style="width: 24px; height: 24px;" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="my-4 d-flex justify-content-center align-items-center copyright-text text-muted text-sm">
-          <p>Copyright &copy; 2023 DreamsPOS. All rights reserved</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
 })
 
 useLegacyPage({
   title: 'Forgot Password',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 
 const email = ref('')
@@ -97,25 +18,83 @@ const handleSubmit = () => {
 }
 </script>
 
-<style scoped>
-.login-content {
-  max-width: 450px;
-  margin: 0 auto;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-.btn-login {
-  background-color: #ff9f43;
-  border-color: #ff9f43;
-  color: #fff;
-  border-radius: 8px;
-  padding: 10px;
-}
-.btn-login:hover {
-  background-color: #e08730;
-  border-color: #e08730;
-}
-</style>
+<template>
+  <div class="dulank-page dulank-page-forgot-password min-h-screen w-full flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950">
+    <div class="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-xl dark:border-gray-800 dark:bg-gray-900">
+      <!-- Logo -->
+      <div class="text-center mb-6">
+        <NuxtLink to="/">
+          <img src="/assets/img/logo.png" alt="logo" class="mx-auto h-10 object-contain" />
+        </NuxtLink>
+      </div>
 
+      <form @submit.prevent="handleSubmit" class="space-y-4">
+        <div class="text-center space-y-1">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">Forgot password?</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">If you forgot your password, well, then we'll email you instructions to reset your password.</p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
+          <div class="relative">
+            <input
+              v-model="email"
+              type="email"
+              placeholder="Enter your email"
+              required
+              class="w-full rounded-lg border border-gray-200 bg-white py-2.5 ps-3.5 pe-10 text-xs text-gray-800 placeholder-gray-400 focus:border-[#FE9F43] focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+            />
+            <img
+              src="/assets/img/icons/mail.svg"
+              alt="mail"
+              class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 size-4 opacity-50"
+            />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-[#FE9F43] py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#e08933] transition-colors"
+          >
+            Send Reset Link
+          </button>
+        </div>
+
+        <p v-if="submitted" role="status" class="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-300 text-center">
+          If an account exists for {{ email }}, a password reset link has been sent.
+        </p>
+
+        <div class="text-center pt-1">
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            Return to
+            <NuxtLink to="/signin" class="text-[#FE9F43] font-medium hover:underline"> login</NuxtLink>
+          </p>
+        </div>
+
+        <!-- OR Divider -->
+        <div class="relative my-4 text-center">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200 dark:border-gray-800"></div>
+          </div>
+          <span class="relative bg-white px-3 text-xs text-gray-400 dark:bg-gray-900">OR</span>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex justify-center gap-3">
+          <a href="javascript:void(0);" class="inline-flex size-10 items-center justify-center rounded-lg border border-gray-200 p-2 hover:bg-gray-50 hover:shadow-sm dark:border-gray-700 dark:hover:bg-gray-800 transition">
+            <img src="/assets/img/icons/facebook-logo.svg" alt="Facebook" class="size-5" />
+          </a>
+          <a href="javascript:void(0);" class="inline-flex size-10 items-center justify-center rounded-lg border border-gray-200 p-2 hover:bg-gray-50 hover:shadow-sm dark:border-gray-700 dark:hover:bg-gray-800 transition">
+            <img src="/assets/img/icons/google.png" alt="Google" class="size-5" />
+          </a>
+          <a href="javascript:void(0);" class="inline-flex size-10 items-center justify-center rounded-lg border border-gray-200 p-2 hover:bg-gray-50 hover:shadow-sm dark:border-gray-700 dark:hover:bg-gray-800 transition">
+            <img src="/assets/img/icons/apple-logo.svg" alt="Apple" class="size-5" />
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

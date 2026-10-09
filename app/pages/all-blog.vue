@@ -3,6 +3,7 @@ import AllBlogWorkspace from '~/components/blog/AllBlogWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/all-blog.html'],
 })
 
 useLegacyPage({

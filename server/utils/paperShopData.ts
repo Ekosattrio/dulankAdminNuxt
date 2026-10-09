@@ -72,6 +72,11 @@ export function savePaperGroup(payload: PaperGroupFormData): PaperGroup {
         name: payload.name.trim(),
         merk: payload.merk.trim(),
         priceType: payload.priceType || 'Yes',
+        priceDetail: payload.priceDetail || current.priceDetail,
+        price: payload.price !== undefined ? Number(payload.price) : current.price,
+        unitPrice: payload.unitPrice || current.unitPrice,
+        gramature: payload.gramature !== undefined ? Number(payload.gramature) : current.gramature,
+        paperSize: payload.paperSize || current.paperSize,
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
@@ -87,6 +92,11 @@ export function savePaperGroup(payload: PaperGroupFormData): PaperGroup {
     name: payload.name.trim(),
     merk: payload.merk.trim(),
     priceType: payload.priceType || 'Yes',
+    priceDetail: payload.priceDetail,
+    price: payload.price !== undefined ? Number(payload.price) : undefined,
+    unitPrice: payload.unitPrice,
+    gramature: payload.gramature !== undefined ? Number(payload.gramature) : undefined,
+    paperSize: payload.paperSize,
     status: payload.status || 'Active',
     update: nowTimestamp()
   }
@@ -237,19 +247,39 @@ export function savePaperItem(payload: PaperItemFormData): PaperItem {
     if (idx !== -1) {
       const current = all[idx]
       if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper item not found' })
+
+      let newStock = Number(payload.stock) || current.stock
+      const history = [...(current.stockHistory || [])]
+      if (payload.addStock && Number(payload.addStock) !== 0) {
+        newStock += Number(payload.addStock)
+        history.unshift({
+          date: nowTimestamp(),
+          reff: 'Update Stock',
+          qty: Number(payload.addStock),
+          unit: payload.unitStock || current.unitStock || 'Pcs',
+          created: 'Admin'
+        })
+      }
+
       const updated: PaperItem = {
         ...current,
-        groupId: String(payload.groupId || ''),
-        sizeId: payload.sizeId ? String(payload.sizeId) : undefined,
+        groupId: String(payload.groupId || current.groupId),
+        sizeId: payload.sizeId ? String(payload.sizeId) : current.sizeId,
         name: payload.name.trim(),
         merk: payload.merk.trim(),
         price: Number(payload.price) || 0,
-        priceType: payload.priceType || 'Group',
-        unitPrice: payload.unitPrice || 'Kg',
-        gsm: Number(payload.gsm) || 0,
-        paperSize: payload.paperSize || '',
-        stock: Number(payload.stock) || 0,
-        unitStock: payload.unitStock || 'Lembar',
+        priceType: payload.priceType || current.priceType || 'Group',
+        unitPrice: payload.unitPrice || current.unitPrice || 'Kg',
+        gsm: Number(payload.gsm) || current.gsm,
+        paperSize: payload.paperSize || current.paperSize,
+        paperWidth: payload.paperWidth !== undefined ? Number(payload.paperWidth) : current.paperWidth,
+        paperHeight: payload.paperHeight !== undefined ? Number(payload.paperHeight) : current.paperHeight,
+        stock: newStock,
+        unitStock: payload.unitStock || current.unitStock || 'Lembar',
+        minOrder: payload.minOrder !== undefined ? payload.minOrder : current.minOrder,
+        stepOrder: payload.stepOrder !== undefined ? payload.stepOrder : current.stepOrder,
+        minTransaction: payload.minTransaction !== undefined ? Number(payload.minTransaction) : current.minTransaction,
+        stockHistory: history,
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
@@ -260,6 +290,7 @@ export function savePaperItem(payload: PaperItemFormData): PaperItem {
   }
 
   const nextId = all.length > 0 ? String(Math.max(...all.map((i) => Number(i.id) || 0)) + 1) : '1'
+  const initialStock = Number(payload.stock) || 0
   const newItem: PaperItem = {
     id: nextId,
     groupId: String(payload.groupId || ''),
@@ -271,8 +302,22 @@ export function savePaperItem(payload: PaperItemFormData): PaperItem {
     unitPrice: payload.unitPrice || 'Kg',
     gsm: Number(payload.gsm) || 0,
     paperSize: payload.paperSize || '',
-    stock: Number(payload.stock) || 0,
+    paperWidth: payload.paperWidth !== undefined ? Number(payload.paperWidth) : undefined,
+    paperHeight: payload.paperHeight !== undefined ? Number(payload.paperHeight) : undefined,
+    stock: initialStock,
     unitStock: payload.unitStock || 'Lembar',
+    minOrder: payload.minOrder,
+    stepOrder: payload.stepOrder,
+    minTransaction: payload.minTransaction !== undefined ? Number(payload.minTransaction) : undefined,
+    stockHistory: [
+      {
+        date: nowTimestamp(),
+        reff: 'Initial Stock',
+        qty: initialStock,
+        unit: payload.unitStock || 'Lembar',
+        created: 'Admin'
+      }
+    ],
     status: payload.status || 'Active',
     update: nowTimestamp()
   }
@@ -335,6 +380,17 @@ export function getPaperPrices(params?: PaperPriceFilterParams): {
 
 export function savePaperPrice(payload: PaperPriceFormData): PaperPrice {
   const all = readJSON<PaperPrice[]>(PAPER_PRICES_FILE, [])
+  const minOrderStr = payload.minOrder
+    ? payload.minOrderUnit
+      ? `${payload.minOrder} ${payload.minOrderUnit.toLowerCase()}`
+      : payload.minOrder
+    : '1 rim'
+  const kelipatanStr = payload.kelipatan
+    ? payload.kelipatanUnit
+      ? `${payload.kelipatan} ${payload.kelipatanUnit.toLowerCase()}`
+      : payload.kelipatan
+    : '1 rim'
+  const ukuranStr = payload.ukuran || (payload.panjang && payload.lebar ? `${payload.panjang}x${payload.lebar}` : '')
 
   if (payload.id) {
     const idx = all.findIndex((p) => String(p.id) === String(payload.id))
@@ -348,11 +404,13 @@ export function savePaperPrice(payload: PaperPriceFormData): PaperPrice {
         nama: payload.nama.trim(),
         group: payload.group.trim(),
         merk: payload.merk.trim(),
-        ukuran: payload.ukuran.trim(),
-        satuan: payload.satuan.trim(),
+        panjang: payload.panjang !== undefined ? Number(payload.panjang) : current.panjang,
+        lebar: payload.lebar !== undefined ? Number(payload.lebar) : current.lebar,
+        ukuran: ukuranStr || current.ukuran,
+        satuan: payload.satuan?.trim() || current.satuan,
         gramatur: Number(payload.gramatur) || 0,
-        minOrder: payload.minOrder || '1 rim',
-        kelipatan: payload.kelipatan || '1 rim',
+        minOrder: minOrderStr,
+        kelipatan: kelipatanStr,
         harga: Number(payload.harga) || 0,
         status: payload.status || 'Active',
         update: nowTimestamp()
@@ -371,11 +429,13 @@ export function savePaperPrice(payload: PaperPriceFormData): PaperPrice {
     nama: payload.nama.trim(),
     group: payload.group.trim(),
     merk: payload.merk.trim(),
-    ukuran: payload.ukuran.trim(),
-    satuan: payload.satuan.trim(),
+    panjang: payload.panjang !== undefined ? Number(payload.panjang) : undefined,
+    lebar: payload.lebar !== undefined ? Number(payload.lebar) : undefined,
+    ukuran: ukuranStr,
+    satuan: payload.satuan?.trim() || 'cm',
     gramatur: Number(payload.gramatur) || 0,
-    minOrder: payload.minOrder || '1 rim',
-    kelipatan: payload.kelipatan || '1 rim',
+    minOrder: minOrderStr,
+    kelipatan: kelipatanStr,
     harga: Number(payload.harga) || 0,
     status: payload.status || 'Active',
     update: nowTimestamp()

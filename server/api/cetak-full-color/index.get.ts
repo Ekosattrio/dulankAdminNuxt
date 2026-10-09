@@ -1,12 +1,10 @@
-import { readJSON } from '~/server/utils/data'
-import type { CetakFullColorConfig } from '~/types/cetak-full-color'
+import { getCetakFullColorConfig } from '~~/server/utils/calculatorComponentsData'
 
 export default defineEventHandler(async () => {
-  const config = readJSON<CetakFullColorConfig>('cetak-full-color.json')
+  const config = getCetakFullColorConfig()
 
   return {
     success: true,
-    data: config
+    data: config,
   }
 })
-

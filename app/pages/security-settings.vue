@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import SecuritySettingsWorkspace from '~/components/pages/setting/SecuritySettingsWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/security-settings.html'],
+})
+
 useLegacyPage({
   title: 'Security Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

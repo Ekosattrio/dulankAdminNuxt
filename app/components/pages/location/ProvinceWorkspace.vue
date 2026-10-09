@@ -5,12 +5,10 @@ import { useProvinces } from '~/composables/useLocations'
 import { useTablePrint } from '~/composables/useTablePrint'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesDataTable from '~/components/sales/SalesDataTable.vue'
-import SalesActionButton from '~/components/sales/SalesActionButton.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
-import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
 import ProvinceModal from '~/components/pages/location/ProvinceModal.vue'
+import ProvinceTable from '~/components/pages/location/ProvinceTable.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
 const { provinces, pending, error, refresh, saveProvince, deleteProvince } = useProvinces()
@@ -29,7 +27,7 @@ const isBusy = ref(false)
 
 // Toast notification
 const toastMessage = ref('')
-let toastTimer: any = null
+let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 function showToast(msg: string) {
   toastMessage.value = msg
@@ -41,16 +39,6 @@ function showToast(msg: string) {
 
 const statusOptions = ['Active', 'Inactive']
 
-// Columns configuration
-const columns = [
-  { key: 'name', label: 'Province', sortable: true },
-  { key: 'added', label: 'Added', sortable: true },
-  { key: 'createdBy', label: 'Created by', sortable: true },
-  { key: 'status', label: 'Status', sortable: true, align: 'center' as const, class: 'text-center' },
-  { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center whitespace-nowrap' },
-]
-
-// Print columns
 const printColumns = [
   { key: 'id', label: 'ID' },
   { key: 'name', label: 'Province' },
@@ -60,7 +48,6 @@ const printColumns = [
   { key: 'status', label: 'Status', align: 'center' as const },
 ]
 
-// Filtered and sorted items
 const filteredProvinces = computed(() => {
   let list = [...provinces.value]
 
@@ -155,7 +142,7 @@ function exportCsv() {
     `"${p.status || 'Active'}"`,
   ])
 
-  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map((r) => r.join(','))].join('\n')
+  const csvContent = 'data:text/csv;charset=utf-8,' + [header.join(','), ...rows.map((p) => p.join(','))].join('\n')
   const encodedUri = encodeURI(csvContent)
   const link = document.createElement('a')
   link.setAttribute('href', encodedUri)
@@ -185,7 +172,7 @@ function exportCsv() {
       add-label="Add New Province"
       :refreshing="pending"
       @add="handleAdd"
-      @refresh="refresh()"
+      @refresh="refresh"
       @print="openPrintModal('print')"
       @pdf="openPrintModal('pdf')"
     >
@@ -203,100 +190,29 @@ function exportCsv() {
       </template>
     </SalesListHeader>
 
-    <!-- Feedback / TableSkeleton when pending -->
+    <!-- Feedback / Skeleton when pending -->
     <SalesFeedback
       :pending="pending"
       skeleton="table"
       :skeleton-cols="5"
       :error="error ? 'Unable to load province records. Please try again.' : ''"
-      @retry="refresh()"
+      @retry="refresh"
     />
 
-    <!-- Main Data Table -->
-    <SalesDataTable
+    <!-- Main Data Table Component -->
+    <ProvinceTable
       v-if="!pending && !error"
-      :columns="columns"
       :items="filteredProvinces"
-      :search="searchQuery"
-      search-placeholder="Search Province..."
-      @update:search="searchQuery = $event"
-    >
-      <!-- Custom Filters Slot -->
-      <template #filters>
-        <!-- Status Filter -->
-        <TableFilterSelect
-          v-model="filterStatus"
-          :options="statusOptions"
-          placeholder="All Status"
-          aria-label="Filter status"
-        />
-
-        <!-- Sort Select -->
-        <select
-          v-model="sortOrder"
-          aria-label="Sort order"
-          class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-        >
-          <option value="newest">Sort: Newest</option>
-          <option value="oldest">Sort: Oldest</option>
-          <option value="name-asc">Name: A to Z</option>
-          <option value="name-desc">Name: Z to A</option>
-        </select>
-      </template>
-
-      <!-- Custom Cells -->
-      <template #cell(name)="{ item }">
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span>
-          <span
-            v-if="item.code"
-            class="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary dark:bg-primary/20"
-          >
-            {{ item.code }}
-          </span>
-        </div>
-      </template>
-
-      <template #cell(added)="{ item }">
-        <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.added }}</span>
-      </template>
-
-      <template #cell(createdBy)="{ item }">
-        <div class="flex items-center gap-2">
-          <img
-            :src="item.avatar || '/assets/img/users/user-30.jpg'"
-            :alt="item.createdBy"
-            class="size-7 rounded-full object-cover border border-gray-200 dark:border-gray-700"
-            @error="($event.target as HTMLImageElement).src = '/assets/img/users/user-30.jpg'"
-          />
-          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ item.createdBy }}</span>
-        </div>
-      </template>
-
-      <template #cell(status)="{ item }">
-        <span
-          class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium"
-          :class="item.status === 'Inactive' ? 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-400' : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'"
-        >
-          {{ item.status || 'Active' }}
-        </span>
-      </template>
-
-      <template #cell(actions)="{ item }">
-        <div class="flex items-center justify-center gap-1.5">
-          <SalesActionButton
-            icon="edit"
-            label="Edit Province"
-            @click="handleEdit(item)"
-          />
-          <SalesActionButton
-            icon="trash-2"
-            label="Delete Province"
-            @click="handleDeleteRequest(item)"
-          />
-        </div>
-      </template>
-    </SalesDataTable>
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      :sort-order="sortOrder"
+      :status-options="statusOptions"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @update:sort-order="sortOrder = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
 
     <!-- Add/Edit Modal -->
     <ProvinceModal
@@ -329,4 +245,3 @@ function exportCsv() {
     />
   </div>
 </template>
-

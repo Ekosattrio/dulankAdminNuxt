@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import LanguageWorkspace from '~/components/pages/language/LanguageWorkspace.vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/language.html'],
+})
 useLegacyPage({ title: 'Language', sweetAlert: false })
 </script>
 

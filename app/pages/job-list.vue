@@ -9,6 +9,11 @@ import JobListRecordsTable from '~/components/pages/job-list/JobListRecordsTable
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/job-list.html'],
+})
+
 useLegacyPage({ title: 'All Job List', sweetAlert: false })
 
 const searchQuery = ref('')

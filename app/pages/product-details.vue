@@ -3,7 +3,10 @@ import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import { printDocument } from '~/utils/documentPrinter'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/product-details.html'],
+})
 useLegacyPage({ title: 'Product Details', sweetAlert: false })
 
 const route = useRoute()

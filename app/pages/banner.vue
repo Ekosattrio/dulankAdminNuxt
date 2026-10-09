@@ -3,6 +3,7 @@ import BannerWorkspace from '~/components/pages/banner/BannerWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/banner.html'],
 })
 
 useLegacyPage({

@@ -5,23 +5,37 @@ import KomponenMinimumFormModal from '~/components/pages/calculator/components/K
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/komponen-minimum.html']
+})
 
 useLegacyPage({
-  title: 'Minimum Charges & Finishing Base Rates',
+  title: 'Harga Jasa Lainnya',
   sweetAlert: false
 })
 
-const { items, stats, pending, error, refresh, saveItem, deleteItem } = useKomponenMinimum()
+const { items, pending, error, refresh, saveItem, deleteItem } = useKomponenMinimum()
 
 const isFormModalOpen = ref(false)
 const selectedItem = ref<KomponenMinimumItem | null>(null)
-
 const isDeleteModalOpen = ref(false)
 const deleteTargetId = ref<string | null>(null)
 const isDeleting = ref(false)
 const isSaving = ref(false)
+
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Nama Jasa' },
+  { key: 'rate', label: 'Harga' },
+  { key: 'minim', label: 'Minim Harga' },
+  { key: 'unit', label: 'Satuan' },
+  { key: 'used', label: 'Used' },
+  { key: 'update', label: 'Update' }
+]
 
 function openAddModal() {
   selectedItem.value = null
@@ -64,30 +78,36 @@ async function handleSave(payload: KomponenMinimumFormData) {
     isSaving.value = false
   }
 }
+
+function handlePrint(action: 'print' | 'pdf' = 'print') {
+  print.openPrintModal({
+    title: 'Harga Jasa Lainnya',
+    subtitle: 'Daftar threshold minimum biaya dan tarif dasar finishing',
+    columns: printColumns,
+    rows: items.value,
+    action
+  })
+}
 </script>
 
 <template>
   <div class="dulank-page dulank-page-komponen-minimum space-y-6">
     <SalesListHeader
-      title="Minimum Charges & Finishing Base Rates"
+      title="Harga Jasa Lainnya"
       subtitle="Kelola threshold minimum biaya dan tarif dasar finishing pasca cetak"
+      add-label="Add Minimum Component"
       :refreshing="pending"
+      :show-print="true"
+      :show-pdf="true"
       @refresh="refresh"
       @add="openAddModal"
+      @print="handlePrint('print')"
+      @pdf="handlePrint('pdf')"
     />
 
-    <!-- Feedback State -->
-    <SalesFeedback
-      v-if="pending && !items.length"
-      loading
-    />
-    <SalesFeedback
-      v-else-if="error"
-      :error="error.message || 'Gagal memuat komponen minimum'"
-      @retry="refresh"
-    />
+    <SalesFeedback v-if="pending && !items.length" loading />
+    <SalesFeedback v-else-if="error" :error="error.message || 'Gagal memuat komponen minimum'" @retry="refresh" />
 
-    <!-- Records Table -->
     <KomponenMinimumRecordsTable
       v-else
       :items="items"
@@ -95,7 +115,6 @@ async function handleSave(payload: KomponenMinimumFormData) {
       @delete="handleDelete"
     />
 
-    <!-- Add / Edit Modal -->
     <KomponenMinimumFormModal
       :open="isFormModalOpen"
       :item="selectedItem"
@@ -104,7 +123,6 @@ async function handleSave(payload: KomponenMinimumFormData) {
       @submit="handleSave"
     />
 
-    <!-- Confirm Delete Modal -->
     <SalesConfirmDelete
       :open="isDeleteModalOpen"
       title="Hapus Komponen Minimum"
@@ -112,6 +130,12 @@ async function handleSave(payload: KomponenMinimumFormData) {
       :busy="isDeleting"
       @cancel="isDeleteModalOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isOpen.value"
+      :config="print.config.value"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

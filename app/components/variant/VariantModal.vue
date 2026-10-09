@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import type { Variant, VariantFormData } from '~/types/variant'
+import type { Variant, VariantFormData } from '#server/types/variant'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
+import {
+  formControlClass,
+  modalFormRowClass,
+  modalFormLabelClass,
+  modalFormInputColClass,
+  salesPrimaryButton,
+  salesSecondaryButton,
+} from '~/utils/salesUi'
 
 const props = defineProps<{
   isOpen: boolean
@@ -16,111 +25,96 @@ const form = reactive<VariantFormData>({
   id: '',
   name: '',
   values: '',
-  status: 'Active'
+  status: 'Active',
 })
 
 watch(
-  () => props.editData,
-  (val) => {
-    if (val && props.isEdit) {
-      form.id = val.id
-      form.name = val.name
-      form.values = val.values
-      form.status = val.status || 'Active'
-    } else {
-      form.id = ''
-      form.name = ''
-      form.values = ''
-      form.status = 'Active'
+  () => props.isOpen,
+  (open) => {
+    if (open) {
+      if (props.isEdit && props.editData) {
+        form.id = props.editData.id
+        form.name = props.editData.name
+        form.values = props.editData.values
+        form.status = props.editData.status
+      } else {
+        form.id = ''
+        form.name = ''
+        form.values = ''
+        form.status = 'Active'
+      }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const handleSubmit = () => {
+  if (!form.name.trim() || !form.values.trim()) return
   emit('submit', { ...form })
 }
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop-custom">
-    <div class="modal-dialog-centered custom-modal-two" style="max-width: 500px; width: 100%; margin: auto;">
-      <div class="modal-content bg-white rounded-3 shadow border-0 overflow-hidden">
-        <div class="p-4">
-          <!-- Header -->
-          <div class="modal-header border-0 p-0 pb-3 mb-3 d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold mb-0 text-dark">
-              {{ isEdit ? 'Edit Variant' : 'Add Variant' }}
-            </h4>
-            <button type="button" class="btn-close" @click="emit('close')"></button>
-          </div>
-
-          <!-- Body -->
-          <form @submit.prevent="handleSubmit">
-            <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Variant / Attribute Name <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.name"
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g. Size, Color, Paper Weight"
-                  required
-                />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Values (Comma separated) <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.values"
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g. S, M, L, XL or Red, Blue, Green"
-                  required
-                />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Status</label>
-                <select v-model="form.status" class="form-select">
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="modal-footer justify-content-end p-0 pt-4 mt-3 border-top d-flex gap-2">
-              <button type="button" class="btn btn-secondary" @click="emit('close')">
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary px-4 fw-semibold"
-              >
-                {{ isEdit ? 'Save Changes' : 'Create Variant' }}
-              </button>
-            </div>
-          </form>
+  <SalesDialog
+    :open="isOpen"
+    :title="isEdit ? 'Edit Attributes' : 'Create Variant'"
+    size="md"
+    @close="emit('close')"
+  >
+    <form id="variant-form" class="space-y-4" @submit.prevent="handleSubmit">
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Variant Name <span class="text-red-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.name"
+            type="text"
+            :class="formControlClass"
+            placeholder="e.g. Color, Size, Gramatur"
+            required
+          />
         </div>
       </div>
-    </div>
-  </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Variant Values <span class="text-red-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.values"
+            type="text"
+            :class="formControlClass"
+            placeholder="e.g. Red, Blue, Green (comma separated)"
+            required
+          />
+          <span class="mt-1 block text-xs text-gray-500">
+            Enter values separated by comma
+          </span>
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Status
+        </label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <template #footer>
+      <button type="button" :class="salesSecondaryButton" @click="emit('close')">
+        Cancel
+      </button>
+      <button type="submit" form="variant-form" :class="salesPrimaryButton">
+        {{ isEdit ? 'Save Changes' : 'Submit' }}
+      </button>
+    </template>
+  </SalesDialog>
 </template>
-
-<style scoped>
-.modal-backdrop-custom {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-  padding: 15px;
-}
-</style>
-

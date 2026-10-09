@@ -2,14 +2,26 @@
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import { formatNumber } from '~/composables/useFormatters'
 
-defineProps<{
-  stats: {
+const props = defineProps<{
+  stats?: {
     totalPurchases: number
     totalAmount: number
     totalPaid: number
     totalDue: number
   }
+  purchases?: any[]
 }>()
+
+const computedStats = computed(() => {
+  if (props.stats) return props.stats
+  const all = props.purchases || []
+  return {
+    totalPurchases: all.length,
+    totalAmount: all.reduce((sum, p) => sum + (Number(p.amount) || 0), 0),
+    totalPaid: all.reduce((sum, p) => sum + (Number(p.paid) || 0), 0),
+    totalDue: all.reduce((sum, p) => sum + (Number(p.due) || 0), 0),
+  }
+})
 </script>
 
 <template>
@@ -22,7 +34,7 @@ defineProps<{
             Total Purchases
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.totalPurchases }}
+            {{ computedStats.totalPurchases }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-400">
@@ -39,7 +51,7 @@ defineProps<{
             Total Amount
           </p>
           <h3 class="mt-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Rp {{ formatNumber(stats.totalAmount) }}
+            Rp {{ formatNumber(computedStats.totalAmount) }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
@@ -56,7 +68,7 @@ defineProps<{
             Total Paid
           </p>
           <h3 class="mt-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Rp {{ formatNumber(stats.totalPaid) }}
+            Rp {{ formatNumber(computedStats.totalPaid) }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -73,7 +85,7 @@ defineProps<{
             Total Due / Debt
           </p>
           <h3 class="mt-2 text-xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
-            Rp {{ formatNumber(stats.totalDue) }}
+            Rp {{ formatNumber(computedStats.totalDue) }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400">

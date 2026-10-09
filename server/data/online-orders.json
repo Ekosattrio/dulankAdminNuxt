@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "customer": "Joko Widodo",
+    "avatar": "/assets/img/customer/customer1.jpg",
+    "reference": "ONL001",
+    "date": "2026-03-24",
+    "status": "Complete",
+    "grandTotal": 450000,
+    "paid": 450000,
+    "due": 0,
+    "paymentStatus": "Paid",
+    "biller": "Webstore",
+    "channel": "Website Official",
+    "paymentMethod": "Midtrans"
+  },
+  {
+    "id": 2,
+    "customer": "Carl Evans",
+    "avatar": "/assets/img/customer/customer2.jpg",
+    "reference": "ONL002",
+    "date": "2026-03-23",
+    "status": "Pending",
+    "grandTotal": 1250000,
+    "paid": 500000,
+    "due": 750000,
+    "paymentStatus": "Unpaid",
+    "biller": "Marketplace",
+    "channel": "Shopee Dulank",
+    "paymentMethod": "Xendit"
+  },
+  {
+    "id": 3,
+    "customer": "Minerva Davis",
+    "avatar": "/assets/img/customer/customer3.jpg",
+    "reference": "ONL003",
+    "date": "2026-03-22",
+    "status": "Complete",
+    "grandTotal": 890000,
+    "paid": 890000,
+    "due": 0,
+    "paymentStatus": "Paid",
+    "biller": "Webstore",
+    "channel": "Website Official",
+    "paymentMethod": "Bank BCA"
+  },
+  {
+    "id": 4,
+    "customer": "Budi Santoso",
+    "avatar": "/assets/img/customer/customer4.jpg",
+    "reference": "ONL004",
+    "date": "2026-03-21",
+    "status": "Complete",
+    "grandTotal": 1500000,
+    "paid": 1500000,
+    "due": 0,
+    "paymentStatus": "Paid",
+    "biller": "Marketplace",
+    "channel": "Tokopedia Dulank",
+    "paymentMethod": "Xendit QRIS"
+  },
+  {
+    "id": 5,
+    "customer": "Siti Rahma",
+    "avatar": "/assets/img/customer/customer5.jpg",
+    "reference": "ONL005",
+    "date": "2026-03-20",
+    "status": "Pending",
+    "grandTotal": 620000,
+    "paid": 0,
+    "due": 620000,
+    "paymentStatus": "Unpaid",
+    "biller": "Webstore",
+    "channel": "Website Official",
+    "paymentMethod": "Midtrans VA"
+  }
+]
+

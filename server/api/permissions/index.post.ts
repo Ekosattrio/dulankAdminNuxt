@@ -1,17 +1,8 @@
-import { writeJSON } from '~~/server/utils/data'
+import { savePermissionsMatrix } from '~~/server/utils/rolesData'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const matrix = (body && typeof body === 'object' && 'matrix' in body) ? body.matrix : body
-
-  if (!matrix || typeof matrix !== 'object' || Object.keys(matrix).length === 0) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Permissions matrix payload is required',
-    })
-  }
-
-  writeJSON('permissions.json', matrix)
+  const matrix = savePermissionsMatrix(body)
 
   return {
     success: true,

@@ -2,7 +2,8 @@
 import ProfileWorkspace from '~/components/pages/setting/ProfileWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/profile.html'],
 })
 
 useLegacyPage({

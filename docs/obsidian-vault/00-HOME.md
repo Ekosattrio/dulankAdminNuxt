@@ -42,6 +42,8 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 - [Struktur dan riwayat implementasi](../STRUCTURE.md)
 - [Status handover](../../AI_HANDOVER_GUIDE.md)
 - [Command implementasi menu](../MENU_IMPLEMENTATION_COMMAND.md)
+- [Command lanjutkan TODO](../CONTINUE_TODO_COMMAND.md)
+- [Legacy Action and Modal Parity](../LEGACY_ACTION_MODAL_PARITY.md)
 - [Standar tipografi](../TYPOGRAPHY_STANDARD.md)
 - [Standar ikon](../ICON_STANDARD.md)
 - [Framework kerja dan re-check AI](../AI_WORK_QUALITY_FRAMEWORK.md)
@@ -57,7 +59,7 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 ## Prinsip Navigasi
 
 - Untuk aturan kerja, `AGENTS.md` menang.
-- Untuk status modul terbaru, `AI_HANDOVER_GUIDE.md` root menang.
+- Untuk status aktif dan TODO terbaru, `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` menang; `AI_HANDOVER_GUIDE.md` adalah ringkasan handover.
 - Untuk detail arsitektur dan riwayat, `docs/STRUCTURE.md` menang.
-- Untuk workflow command, `docs/MENU_IMPLEMENTATION_COMMAND.md` menang.
+- Untuk command `lanjutkan todo`, `docs/CONTINUE_TODO_COMMAND.md` menang. Setelah scope menu dipilih, workflow `docs/MENU_IMPLEMENTATION_COMMAND.md` berlaku.
 - Jika catatan vault berbeda dengan kode, kode dan hasil validasi aktual menjadi bukti utama lalu dokumentasi harus diperbarui.

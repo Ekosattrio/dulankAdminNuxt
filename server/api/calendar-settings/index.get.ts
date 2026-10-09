@@ -1,12 +1,6 @@
-import { readJSON } from '~/server/utils/data'
-import type { CalendarConfig } from '~/types/calendar-setting'
+import { getCalendarConfig } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async () => {
-  const config = readJSON<CalendarConfig>('calendar-settings.json')
-
-  return {
-    success: true,
-    data: config
-  }
+  const data = await getCalendarConfig()
+  return { success: true, data }
 })
-

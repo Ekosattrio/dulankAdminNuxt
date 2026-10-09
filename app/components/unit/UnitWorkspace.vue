@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type { Unit, UnitFormData } from '~/types/unit'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import PagesUnitModal from '~/components/unit/UnitModal.vue'
-import PagesUnitTable from '~/components/unit/UnitTable.vue'
-
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Units - Satuan Produk',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
+import type { Unit, UnitFormData } from '#server/types/unit'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import UnitTable from '~/components/unit/UnitTable.vue'
+import UnitModal from '~/components/unit/UnitModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
 const { units, pending, refresh, saveUnit, deleteUnit } = useUnits()
 
@@ -24,6 +17,11 @@ const isModalOpen = ref(false)
 const isEdit = ref(false)
 const editData = ref<Unit | null>(null)
 const toastMessage = ref('')
+const actionError = ref('')
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
 
 const showToast = (msg: string) => {
   toastMessage.value = msg
@@ -32,24 +30,13 @@ const showToast = (msg: string) => {
   }, 3000)
 }
 
-const filteredUnits = computed(() => {
-  return units.value.filter((u) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      u.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      u.shortName?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesStatus = !selectedStatus.value || u.status === selectedStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
 const print = useTablePrint()
 const printColumns = [
-  { key: 'name', label: 'Unit Name' },
+  { key: 'name', label: 'Unit' },
   { key: 'shortName', label: 'Short Name' },
-  { key: 'itemUsed', label: 'Item Used', align: 'right' as const },
+  { key: 'itemUsed', label: 'Item Used' },
   { key: 'createdOn', label: 'Created On' },
-  { key: 'status', label: 'Status' }
+  { key: 'status', label: 'Status' },
 ]
 
 const openAddModal = () => {
@@ -57,12 +44,6 @@ const openAddModal = () => {
   editData.value = null
   isModalOpen.value = true
 }
-
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-
-const isDeleteConfirmOpen = ref(false)
-const deleteTargetId = ref<string | null>(null)
-const isDeleting = ref(false)
 
 const handleEdit = (u: Unit) => {
   isEdit.value = true
@@ -85,7 +66,7 @@ const confirmDelete = async () => {
     deleteTargetId.value = null
   } catch (err: any) {
     console.error('Failed to delete unit:', err)
-    showToast(err?.message || 'Failed to delete unit')
+    actionError.value = err?.message || 'Failed to delete unit'
   } finally {
     isDeleting.value = false
   }
@@ -104,90 +85,64 @@ const handleSubmit = async (formData: UnitFormData) => {
 
 const printTable = () => {
   print.openPrintModal({
-    title: 'Product Unit',
-    subtitle: 'Daftar satuan produk dan layanan',
+    title: 'Product Units',
+    subtitle: 'Daftar satuan unit produk percetakan',
     columns: printColumns,
-    rows: filteredUnits.value,
-    action: 'print'
+    rows: units.value,
+    action: 'print',
   })
 }
 
 const exportPdf = () => {
   print.openPrintModal({
-    title: 'Product Unit',
-    subtitle: 'Daftar satuan produk dan layanan',
+    title: 'Product Units',
+    subtitle: 'Daftar satuan unit produk percetakan',
     columns: printColumns,
-    rows: filteredUnits.value,
-    action: 'pdf'
+    rows: units.value,
+    action: 'pdf',
   })
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <!-- Toast Alert -->
-      <div
-        v-if="toastMessage"
-        class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2"
-        role="alert"
-      >
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
+  <div class="space-y-4">
+    <!-- Standard Header -->
+    <SalesListHeader
+      title="Units"
+      subtitle="Kelola dan atur satuan unit produk percetakan"
+      add-label="Add Unit"
+      :refreshing="pending"
+      @add="openAddModal"
+      @refresh="refresh"
+      @print="printTable"
+      @pdf="exportPdf"
+    />
 
-      <!-- Page Header -->
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Units / Satuan</h4>
-          <h6 class="text-muted mb-0">Kelola daftar satuan ukuran produk (pcs, rim, meter, box, dll)</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add New Unit</span>
-          </button>
-        </div>
-      </div>
+    <!-- Feedback / Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="6"
+      :message="toastMessage"
+      :error="actionError"
+      @dismiss="toastMessage = ''; actionError = ''"
+    />
 
-      <!-- Loading State -->
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+    <!-- Data Table -->
+    <UnitTable
+      v-if="!pending"
+      :units="units"
+      :search-query="searchQuery"
+      :filter-status="selectedStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="selectedStatus = $event"
+      @edit-unit="handleEdit"
+      @delete-unit="handleDelete"
+    />
 
-      <!-- Table Component -->
-      <PagesUnitTable
-        v-else
-        :units="filteredUnits"
-        :search-query="searchQuery"
-        :filter-status="selectedStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="selectedStatus = $event"
-        @add-unit="openAddModal"
-        @edit-unit="handleEdit"
-        @delete-unit="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
-
-    <!-- Modal Component -->
-    <PagesUnitModal
+    <!-- Add/Edit Modal -->
+    <UnitModal
       :is-open="isModalOpen"
       :is-edit="isEdit"
       :edit-data="editData"
@@ -198,13 +153,14 @@ const exportPdf = () => {
     <!-- Confirm Delete Modal -->
     <SalesConfirmDelete
       :open="isDeleteConfirmOpen"
-      title="Hapus Satuan Unit"
-      message="Apakah Anda yakin ingin menghapus data satuan unit ini? Tindakan ini tidak dapat dibatalkan."
+      title="Delete Unit"
+      message="Are you sure you want to delete this unit? This action cannot be undone."
       :busy="isDeleting"
-      @cancel="isDeleteConfirmOpen = false"
+      @close="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
 
+    <!-- Document Print/PDF Modal -->
     <DocumentPrintModal
       :open="print.isPrintModalOpen.value"
       :title="print.printTitle.value"

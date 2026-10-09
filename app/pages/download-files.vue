@@ -3,6 +3,7 @@ import DownloadFilesWorkspace from '~/components/pages/download-files/DownloadFi
 
 definePageMeta({
   layout: 'default',
+  alias: ['/download-files.html'],
 })
 
 useLegacyPage({

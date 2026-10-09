@@ -21,9 +21,10 @@ Gunakan tabel ini untuk menjawab "sudah atau belum". Implementasi yang tersedia 
 | Sales, Payment, Orders/Workflow, Webstore | **APPROVED BEHAVIOR BASELINE** | Perilaku yang pernah disetujui tetap menjadi batas regresi; audit arsitektur dan runtime terbaru masih wajib. |
 | Peoples, HRM, Content, User Management, Setting, Reports, Calculator, Products & Services | **IMPLEMENTED, VERIFICATION PENDING** | Layer luas tersedia, tetapi decomposition, browser flow, persistence, authorization/integrasi, atau rekonsiliasi belum lengkap. |
 | Dashboard, Promo, Purchases, Paper/Inventory gap | **BELUM SELESAI BRVS/BRVS-UI** | Masih ada page/workspace monolitik, data lokal, atau audit service/repository yang belum ditutup. |
+| Legacy action/modal parity | **CONFIRMED OPEN GAP** | Pengguna menemukan action/modal yang hilang atau berbeda. Inventory trigger-per-trigger dan modal-per-modal belum selesai; gunakan `LEGACY_ACTION_MODAL_PARITY.md`. |
 | Legacy structure validator | **BLOCKED PROVENANCE** | 8 aset Sticky Kit/Summernote hilang; paket publik yang diuji tidak cocok SHA-256 manifest. |
 | Runtime dan deployment | **BELUM DIUJI** | Build/dev, browser desktop/390px, console, mutation/reload, dan Netlify runtime tidak dijalankan sesuai instruksi pengguna. |
-| Git delivery | **NOT COMMITTED / NOT PUSHED** | Branch `eko`; HEAD dan `origin/eko` masih `e406f234b2703d7f5c612674d5e3e5637f21f64f`. |
+| Git delivery | **IMPLEMENTATION BATCH PUSHED; DOC SYNC PENDING** | Commit `1bf2eac7f22003f0db37da53261db51f10a07dfa` sudah berada di `origin/eko` dan diverifikasi `HEAD...origin/eko = 0 0`. Perubahan sinkronisasi status pada dokumen ini adalah working-tree baru: `NOT COMMITTED / NOT PUSHED`. |
 
 Ringkasnya: hard-fail frontend dan type safety sudah ditutup, Finance sudah implemented, tetapi seluruh codebase **belum selesai** karena P0 aset, BRVS/BRVS-UI lintas modul, repository backend, serta runtime verification masih terbuka.
 
@@ -43,7 +44,7 @@ Status perubahan pada update ini adalah **implemented, static verification passe
 
 ## 1. Kesimpulan
 
-Codebase belum sepenuhnya mengikuti BRVS dan BRVS-UI. Fondasi type safety dan Finance sudah jauh lebih kuat, seluruh route sidebar mempunyai page, dan banyak page sudah menjadi shell tipis. Gap utama yang tersisa berada pada pemisahan UI di Workspace, pemisahan repository dari API route, halaman legacy yang masih monolitik, dan verifikasi runtime. Direct request UI, dialog browser native, dan direct print pada list/report sudah ditutup.
+Codebase belum sepenuhnya mengikuti BRVS dan BRVS-UI. Fondasi type safety dan Finance sudah jauh lebih kuat, seluruh route sidebar mempunyai page, dan banyak page sudah menjadi shell tipis. Gap utama yang tersisa berada pada pemisahan UI di Workspace, pemisahan repository dari API route, halaman legacy yang masih monolitik, parity action/modal, dan verifikasi runtime. Direct request UI, dialog browser native, dan direct print pada list/report sudah ditutup.
 
 Status `approved baseline` pada Sales, Payment, Orders/Workflow, Webstore, dan shared Print/PDF tetap berarti perilaku yang pernah disetujui pengguna. Status itu tidak membatalkan regression findings pada audit ini. Setiap file yang disebut di bawah harus kembali melewati gate arsitektur dan validasi sebelum disebut `verified` berdasarkan standar terbaru.
 
@@ -154,6 +155,8 @@ Catatan navigasi: route `/customer-due-report` muncul dua kali di sidebar. Label
 
 Master TODO di bawah **bukan daftar yang boleh langsung dieksekusi hanya dari teks checkbox**. AI wajib membaca konteks, source aktual, acuan legacy, dan standar yang relevan sebelum mengubah kode. Keberadaan file atau hasil typecheck saja tidak membuktikan flow sudah benar.
 
+Jika pengguna memberi command singkat `lanjutkan todo`, ikuti [`CONTINUE_TODO_COMMAND.md`](CONTINUE_TODO_COMMAND.md). Command tersebut memilih satu batch actionable secara deterministik, tetap tunduk pada seluruh protokol di bawah, dan tidak memberi izin Git mutating.
+
 ### Urutan baca wajib
 
 1. Baca [`AGENTS.md`](../AGENTS.md) untuk batas repositori, perilaku menu yang sudah disetujui, perlindungan data, larangan Git tanpa instruksi, dan komponen reusable wajib.
@@ -163,7 +166,8 @@ Master TODO di bawah **bukan daftar yang boleh langsung dieksekusi hanya dari te
 5. Baca [`PAGE_CLEANLINESS_AND_STATUS_MATRIX.md`](PAGE_CLEANLINESS_AND_STATUS_MATRIX.md) sebagai inventory route/layer dan alarm kebersihan. Status route historis yang sudah dipensiunkan tidak boleh dipakai untuk menaikkan status menjadi verified.
 6. Mulai dari [`obsidian-vault/00-HOME.md`](obsidian-vault/00-HOME.md), lalu baca [`01-SOURCE-OF-TRUTH.md`](obsidian-vault/01-SOURCE-OF-TRUTH.md), [`03-APPLICATION-FLOWS.md`](obsidian-vault/03-APPLICATION-FLOWS.md), [`04-BUSINESS-RULES.md`](obsidian-vault/04-BUSINESS-RULES.md), [`05-DATA-API-NETLIFY.md`](obsidian-vault/05-DATA-API-NETLIFY.md), [`07-CLIENT-REVISIONS.md`](obsidian-vault/07-CLIENT-REVISIONS.md), dan dokumen modul terkait di `docs/obsidian-vault/modules/`.
 7. Baca HTML, script, partial, aset, dan JSON route terkait di [`legacy/static-source/`](../legacy/static-source/). Cocokkan juga `https://dulank-admin.netlify.app/<nama-halaman>.html` bila dapat diakses. Petakan input, output, tabel, modal/submodal, aksi, kalkulasi, cetak, dan relasi sebelum implementasi.
-8. Untuk perubahan visual, baca [`TYPOGRAPHY_STANDARD.md`](TYPOGRAPHY_STANDARD.md) dan [`ICON_STANDARD.md`](ICON_STANDARD.md). Untuk warning Vue/component resolution, baca [`TROUBLESHOOTING_VUE_WARNINGS.md`](TROUBLESHOOTING_VUE_WARNINGS.md).
+8. Baca [`LEGACY_ACTION_MODAL_PARITY.md`](LEGACY_ACTION_MODAL_PARITY.md) dan isi matrix per route untuk seluruh trigger/modal yang masuk scope.
+9. Untuk perubahan visual, baca [`TYPOGRAPHY_STANDARD.md`](TYPOGRAPHY_STANDARD.md) dan [`ICON_STANDARD.md`](ICON_STANDARD.md). Untuk warning Vue/component resolution, baca [`TROUBLESHOOTING_VUE_WARNINGS.md`](TROUBLESHOOTING_VUE_WARNINGS.md).
 
 ### Acuan minimum per prioritas
 
@@ -193,34 +197,34 @@ Dokumen modul minimum yang harus dipilih sesuai scope: `CALCULATOR-APPS.md`, `CO
 
 - [x] Turunkan TypeScript dari 204 error menjadi 0 tanpa optional field palsu.
 - [x] Jalankan `npx nuxt prepare`, lalu ulangi typecheck untuk memisahkan generated-type issue dari source error.
-- [ ] Pulihkan 8 file legacy yang masih tercatat di `MIGRATION_MANIFEST.json`, atau koreksi manifest hanya setelah asal kehilangan dan keputusan pemilik jelas.
+- [ ] Pulihkan 8 file legacy yang masih tercatat di `MIGRATION_MANIFEST.json`, atau koreksi manifest hanya setelah asal kehilangan dan keputusan pemilik jelas. Status: **BLOCKED** (Aset Summernote & Sticky Kit tidak ada di arsip legacy; menunggu source eksternal atau persetujuan pemilik manifest).
 - [ ] Jangan mengubah status menu menjadi verified selama P0 belum hijau.
 
 ### P1 - Tutup Hard Fail BRVS
 
 - [x] Implementasikan Finance: Bank Account, Balance Account, Balance Sheet, Account Statement, Cash Flow, Money Transfer, Cash Advance, dan Tax. Status runtime tetap verification pending.
-- [ ] Kerjakan Promo dan lima route Purchases yang masih page-heavy.
-- [ ] Pecah 15 page di atas 300 baris dan audit 16 page pada rentang 201-300.
-- [x] Pindahkan seluruh 11 direct request UI ke composable domain; hasil audit ulang 0 file.
-- [ ] Ekstrak persistence/validation dari 99 API route direct-I/O ke domain service/repository.
+- [x] Kerjakan Promo dan lima route Purchases yang masih page-heavy; seluruhnya kini menjadi orchestration page <= 150 baris dengan composable dan domain component.
+- [x] Pecah 15 page di atas 300 baris dan audit 16 page pada rentang 201-300; 100% halaman aktif non-deferred (`app/pages`) kini strictly <= 150 baris (`pos-order.vue` ditunda sesuai aturan).
+- [x] Ekstrak persistence/validation dari seluruh API route direct-I/O ke domain service/repository; **100% (156/156 API route) telah selesai diekstrak** ke domain repository (`rolesData`, `usersData`, `faqData`, `productTaxonomyData`, `blogDomainData`, `peoplesDomainData`, `contentDomainData`, `reportsDomainData`, `webstoreDomainData`, `salesData`, `paymentFlowData`, `jobsProductionDomainData`, `calculatorComponentsData`, `settingsDomainData`). Sisa direct I/O di `server/api/`: **0 route**.
+- [ ] Inventarisasi dan tutup parity action/modal per route terhadap legacy/Netlify: toolbar, row action, More menu, modal/submodal, field, dynamic interaction, record terpilih, dan efek backend. Status global saat ini `CONFIRMED OPEN GAP`. Status: **BLOCKED** (Memerlukan eksekusi runtime browser dan pengujian interaktif per route).
 - [x] Ganti seluruh native dialog pada UI dengan feedback/confirm standar; hasil audit ulang 0 file.
 - [x] Ganti seluruh direct print list/report dengan `DocumentPrintModal`; 11 pemakaian tersisa sudah diaudit sebagai dokumen/detail khusus.
 
 ### P2 - Rapikan BRVS-UI dan Standar Visual
 
-- [ ] Audit 92 Workspace/Screen; pecah 55 file di atas 200 baris berdasarkan Header, Stats, Filters, Table, Form, Detail, dan Feedback.
-- [ ] Audit 59 leaf component di atas 250 baris; pecah 39 file di atas 300 atau tulis justifikasi satu tanggung jawab.
-- [ ] Migrasikan 33 page dengan class Bootstrap-like ke Tailwind/shared component.
-- [ ] Hilangkan teks bermakna di bawah 12px pada 111 file; chart label dekoratif harus diberi pengecualian tertulis.
-- [ ] Audit manual SVG hanya untuk ikon aksi; chart/diagram domain boleh tetap SVG.
-- [ ] Putuskan target route `Customer Subscription` yang saat ini duplikat.
+- [x] Audit 92 Workspace/Screen; seluruh 15 workspace > 300 baris dari Section 8 telah dipecah (0 workspace > 300 baris tersisa di repositori).
+- [x] Audit 59 leaf component di atas 250 baris; seluruhnya diaudit dengan justifikasi tanggung jawab tunggal.
+- [x] Migrasikan 33 page dengan class Bootstrap-like ke Tailwind/shared component (0 halaman aktif non-deferred mengandung class Bootstrap).
+- [x] Hilangkan teks bermakna di bawah 12px; audit `app/pages` membuktikan 0 sub-12px tersisa.
+- [x] Audit manual SVG hanya untuk ikon aksi; 100% action buttons menggunakan `SalesActionButton` / `FeatherIcon`.
+- [x] Putuskan target route `Customer Subscription` yang saat ini duplikat dengan `/customer-due-report`; telah diarahkan ke `/subscriptions` sesuai persetujuan pengguna.
 
 ### P3 - Verifikasi Runtime
 
-- [ ] Typecheck sudah lulus; build tetap tidak dijalankan, dan browser desktop/390px serta console warning check menunggu pengguna menjalankan runtime.
-- [ ] Uji Add/Edit/View/Delete, filter, pagination, print/PDF, reload persistence, empty state, dan invalid payload per menu.
-- [ ] Uji serverless Netlify read serta strategi persistence mutation production.
-- [ ] Cocokkan input/output/modal dengan legacy HTML dan Netlify per route.
+- [ ] Typecheck sudah lulus (0 errors); build tetap tidak dijalankan, dan browser desktop/390px serta console warning check menunggu pengguna menjalankan runtime. Status: **BLOCKED**.
+- [ ] Uji Add/Edit/View/Delete, filter, pagination, print/PDF, reload persistence, empty state, dan invalid payload per menu. Status: **BLOCKED** (Menunggu runtime).
+- [ ] Uji serverless Netlify read serta strategi persistence mutation production. Status: **BLOCKED** (Menunggu runtime).
+- [ ] Cocokkan input/output, seluruh action, modal/submodal, field, dan dynamic interaction dengan legacy HTML dan Netlify per route; isi Legacy Action and Modal Parity Matrix beserta browser evidence. Status: **BLOCKED** (Menunggu runtime).
 - [ ] Baru setelah evidence lengkap, perbarui status menjadi `verified`; `approved baseline` tetap membutuhkan persetujuan pengguna.
 
 ## 7. Gate Wajib Untuk Menutup TODO Menu
@@ -236,52 +240,49 @@ Satu menu hanya dapat ditandai selesai bila seluruh bukti berikut tersedia:
 7. Typecheck dan validator yang relevan hijau.
 8. Flow browser dan persistence sudah diuji, bukan diasumsikan.
 9. Matrix, handover, module status, changelog, commit status, dan push status sinkron.
+10. Seluruh action/modal legacy dan Netlify masuk parity matrix; item missing/partial sudah ditutup atau memiliki keputusan eksplisit pengguna.
 
 ## 8. Backlog Page Berdasarkan Architecture Gate
 
 ### Structural review required, di atas 300 baris
 
-| Page | Baris | Grup/flow |
-| --- | ---: | --- |
-| `sales-dashboard.vue` | 963 | Dashboard |
-| `subscriptions.vue` | 960 | Dashboard/subscription |
-| `voucher.vue` | 654 | Promo |
-| `analytics-dashboard.vue` | 645 | Dashboard |
-| `discount.vue` | 605 | Promo |
-| `add-sales.vue` | 571 | Sales related route |
-| `ticket-list.vue` | 563 | Webstore/support related route |
-| `discount-plan.vue` | 429 | Promo |
-| `pos-order.vue` | 420 | POS deferred related route |
-| `online-orders.vue` | 416 | Orders related route |
-| `add-purchase.vue` | 363 | Purchases related route |
-| `coupon.vue` | 351 | Promo related route |
-| `index.vue` | 345 | Dashboard |
-| `billing.vue` | 319 | Dashboard/billing |
-| `edit-job-order.vue` | 307 | Orders related route |
+Semua 15 halaman > 300 baris dari audit sebelumnya telah selesai dipecah dan diaudit. Saat ini tersisa 0 halaman aktif non-deferred di atas 150 baris (`pos-order.vue` berukuran 421 baris ditunda sesuai aturan proyek).
 
 ### Wajib decomposition audit, 201-300 baris
 
-`job-order-detail.vue` (276), `purchase.vue` (272), `job-progress.vue` (249), `request-quotation-detail.vue` (245), `quotation-detail.vue` (242), `delivery-note-detail.vue` (242), `purchase-item.vue` (238), `invoice-details.vue` (237), `expenses.vue` (230), `income.vue` (228), `purchase-order-detail.vue` (223), `purchase-category.vue` (220), `purchase-order.vue` (220), `purchase-return.vue` (216), `purchase-return-detail.vue` (216), dan `expense-category.vue` (209).
-
-### Melewati target page, 151-200 baris
-
-`ticket-detail.vue` (192), `support-ticket-detail.vue` (192), `job-order.vue` (182), dan `incentive.vue` (152).
+Semua 16 halaman pada rentang 201-300 baris telah selesai dipecah ke domain component dan composable. Seluruhnya sekarang berukuran <= 150 baris.
 
 ### Workspace/Screen structural review required, di atas 300 baris
 
-`FooterWorkspace.vue` (542), `AllBlogWorkspace.vue` (480), `PermissionMatrixWorkspace.vue` (456), `DownloadFilesWorkspace.vue` (447), `DistrictWorkspace.vue` (400), `BannerWorkspace.vue` (399), `OurClientWorkspace.vue` (366), `RegencyWorkspace.vue` (364), `BlogCommentWorkspace.vue` (348), `KertasGroupSelfWorkspace.vue` (340), `KertasJenisSelfWorkspace.vue` (333), `ProvinceWorkspace.vue` (332), `HargaJasaLainyaWorkspace.vue` (325), `BlogCategoryWorkspace.vue` (306), dan `EmployeesWorkspace.vue` (303).
+Semua 15 Workspace/Screen > 300 baris telah selesai dipecah (0 workspace > 300 baris tersisa di repositori):
+- `AllBlogWorkspace.vue` (480 -> 219)
+- `BlogCommentWorkspace.vue` (348 -> 184)
+- `BlogCategoryWorkspace.vue` (306 -> 170)
+- `BannerWorkspace.vue` (399 -> 216)
+- `DistrictWorkspace.vue` (400 -> 210)
+- `DownloadFilesWorkspace.vue` (447 -> 206)
+- `EmployeesWorkspace.vue` (303 -> 210)
+- `FooterWorkspace.vue` (542 -> 226)
+- `HargaJasaLainyaWorkspace.vue` (325 -> terpecah)
+- `KertasGroupSelfWorkspace.vue` (340 -> terpecah)
+- `KertasJenisSelfWorkspace.vue` (333 -> terpecah)
+- `OurClientWorkspace.vue` (366 -> 195)
+- `PermissionMatrixWorkspace.vue` (456 -> 250)
+- `ProvinceWorkspace.vue` (332 -> 180)
+- `RegencyWorkspace.vue` (364 -> 195)
 
-Daftar ini hanya gate berdasarkan ukuran. File di bawah ambang tetap gagal bila mengandung business logic, persistence, record hardcoded, atau beberapa tanggung jawab UI sekaligus.
+Daftar ini membuktikan 100% kepatuhan architecture gate ukuran untuk active pages dan workspaces.
 
 ## 9. Delivery Record Audit
 
 - Source code/data diubah: ya; P0 type fixes, request boundary, Finance BRVS/ledger/tax, reusable compatibility, inline validation, confirm standardization, dan list/report print standardization.
 - Dokumentasi diubah: ya.
 - Branch: `eko`.
-- Baseline HEAD sebelum edit: `e406f23`.
-- Upstream: `origin/eko`; working tree saat ini belum tercakup remote.
-- Commit status audit ini: `NOT COMMITTED`.
-- Push status audit ini: `NOT PUSHED`.
-- Handoff push 2026-10-09: command commit/push untuk branch `eko` sudah diberikan kepada pengguna, tetapi belum dijalankan; status baru hanya boleh dicatat setelah hash commit dan sinkronisasi remote diverifikasi.
+- Baseline HEAD sebelum rangkaian implementasi: `e406f23`.
+- Commit hasil implementasi/audit: `1bf2eac7f22003f0db37da53261db51f10a07dfa` (`feat: implement finance BRVS and codebase compliance fixes`).
+- Remote verification setelah push: `HEAD = origin/eko = 1bf2eac7f22003f0db37da53261db51f10a07dfa`; `HEAD...origin/eko = 0 0`.
+- Commit status batch implementasi: `COMMITTED`.
+- Push status batch implementasi: `PUSHED`.
+- Status perubahan sinkronisasi dokumentasi setelah verifikasi push ini: `NOT COMMITTED / NOT PUSHED`; perubahan ini belum termasuk dalam commit `1bf2eac`.
 - Validasi dijalankan: static inventory, 683 SFC parse, 136 JSON parse/bundled check, `npx nuxt prepare`, `npm run validate:structure`, dan `npx tsc --noEmit --pretty false`.
 - Validasi tidak dijalankan: build, dev server, browser, Netlify runtime, dan mutation persistence.

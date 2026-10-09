@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type { Variant, VariantFormData } from '~/types/variant'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import VariantModal from '~/components/variant/VariantModal.vue'
+import type { Variant, VariantFormData } from '#server/types/variant'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import VariantTable from '~/components/variant/VariantTable.vue'
-
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Variants - Varian Produk',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
+import VariantModal from '~/components/variant/VariantModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
 const { variants, pending, refresh, saveVariant, deleteVariant } = useVariants()
 
@@ -24,6 +17,11 @@ const isModalOpen = ref(false)
 const isEdit = ref(false)
 const editData = ref<Variant | null>(null)
 const toastMessage = ref('')
+const actionError = ref('')
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
 
 const showToast = (msg: string) => {
   toastMessage.value = msg
@@ -32,37 +30,20 @@ const showToast = (msg: string) => {
   }, 3000)
 }
 
-const filteredList = computed(() => {
-  return variants.value.filter((v) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      v.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      v.values?.some((val) => val.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    const matchesStatus = !filterStatus.value || v.status === filterStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
-
 const print = useTablePrint()
 const printColumns = [
   { key: 'name', label: 'Variant' },
-  { key: 'values', label: 'Variant Values' },
-  { key: 'itemUsed', label: 'Item Used', align: 'right' as const },
+  { key: 'values', label: 'Values' },
+  { key: 'itemUsed', label: 'Item Used' },
   { key: 'createdOn', label: 'Created On' },
-  { key: 'status', label: 'Status' }
+  { key: 'status', label: 'Status' },
 ]
 
-const handleAdd = () => {
+const openAddModal = () => {
   isEdit.value = false
   editData.value = null
   isModalOpen.value = true
 }
-
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-
-const isDeleteConfirmOpen = ref(false)
-const deleteTargetId = ref<string | null>(null)
-const isDeleting = ref(false)
 
 const handleEdit = (v: Variant) => {
   isEdit.value = true
@@ -85,7 +66,7 @@ const confirmDelete = async () => {
     deleteTargetId.value = null
   } catch (err: any) {
     console.error('Failed to delete variant:', err)
-    showToast(err?.message || 'Failed to delete variant')
+    actionError.value = err?.message || 'Failed to delete variant'
   } finally {
     isDeleting.value = false
   }
@@ -104,80 +85,63 @@ const handleSubmit = async (formData: VariantFormData) => {
 
 const printTable = () => {
   print.openPrintModal({
-    title: 'Product Variant',
-    subtitle: 'Daftar varian produk dan nilai pilihannya',
+    title: 'Product Variants',
+    subtitle: 'Daftar varian dan atribut produk percetakan',
     columns: printColumns,
-    rows: filteredList.value,
-    action: 'print'
+    rows: variants.value,
+    action: 'print',
   })
 }
 
 const exportPdf = () => {
   print.openPrintModal({
-    title: 'Product Variant',
-    subtitle: 'Daftar varian produk dan nilai pilihannya',
+    title: 'Product Variants',
+    subtitle: 'Daftar varian dan atribut produk percetakan',
     columns: printColumns,
-    rows: filteredList.value,
-    action: 'pdf'
+    rows: variants.value,
+    action: 'pdf',
   })
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
+  <div class="space-y-4">
+    <!-- Standard Header -->
+    <SalesListHeader
+      title="Variants"
+      subtitle="Kelola varian dan atribut produk percetakan"
+      add-label="Add Variant"
+      :refreshing="pending"
+      @add="openAddModal"
+      @refresh="refresh"
+      @print="printTable"
+      @pdf="exportPdf"
+    />
 
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Variant Attributes / Varian</h4>
-          <h6 class="text-muted mb-0">Kelola atribut opsi warna, ukuran, dan gramatur produk</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Variant</span>
-          </button>
-        </div>
-      </div>
+    <!-- Feedback / Skeleton -->
+    <SalesFeedback
+      :pending="pending"
+      skeleton="table"
+      :skeleton-cols="6"
+      :skeleton-rows="6"
+      :message="toastMessage"
+      :error="actionError"
+      @dismiss="toastMessage = ''; actionError = ''"
+    />
 
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+    <!-- Data Table -->
+    <VariantTable
+      v-if="!pending"
+      :variants="variants"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @edit-variant="handleEdit"
+      @delete-variant="handleDelete"
+    />
 
-      <VariantTable
-        v-else
-        :variants="filteredList"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-variant="handleAdd"
-        @edit-variant="handleEdit"
-        @delete-variant="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
-
+    <!-- Add/Edit Modal -->
     <VariantModal
       :is-open="isModalOpen"
       :is-edit="isEdit"
@@ -189,13 +153,14 @@ const exportPdf = () => {
     <!-- Confirm Delete Modal -->
     <SalesConfirmDelete
       :open="isDeleteConfirmOpen"
-      title="Hapus Varian"
-      message="Apakah Anda yakin ingin menghapus data varian ini? Tindakan ini tidak dapat dibatalkan."
+      title="Delete Variant"
+      message="Are you sure you want to delete this variant? This action cannot be undone."
       :busy="isDeleting"
-      @cancel="isDeleteConfirmOpen = false"
+      @close="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
 
+    <!-- Document Print/PDF Modal -->
     <DocumentPrintModal
       :open="print.isPrintModalOpen.value"
       :title="print.printTitle.value"

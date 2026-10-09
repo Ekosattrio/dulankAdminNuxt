@@ -90,14 +90,13 @@ const columns = [
     <template #cell(actions)="{ item }">
       <div class="flex items-center justify-center gap-1.5">
         <SalesActionButton
-          icon="edit"
-          tooltip="Edit Store"
+          action="edit"
+          label="Edit Store"
           @click="emit('edit', item)"
         />
         <SalesActionButton
-          icon="trash-2"
-          tooltip="Delete Store"
-          danger
+          action="delete"
+          label="Delete Store"
           @click="emit('delete', item)"
         />
       </div>

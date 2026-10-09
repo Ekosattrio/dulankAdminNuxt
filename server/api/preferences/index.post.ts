@@ -1,10 +1,8 @@
-import { defineEventHandler, readBody } from 'h3'
-import { writeJSON } from '~~/server/utils/data'
-import type { PreferenceItem } from '~~/server/types/preference-setting'
+import type { PreferenceItem } from '#server/types/preference-setting'
+import { savePreferences } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<PreferenceItem[]>(event)
-  await writeJSON('preference-settings.json', body)
-  return { success: true, data: body }
+  const saved = savePreferences(body || [])
+  return { success: true, data: saved }
 })
-

@@ -3,6 +3,7 @@ import SupplierDueReportWorkspace from '~/components/pages/reports/SupplierDueRe
 
 definePageMeta({
   layout: 'default',
+  alias: ['/supplier-due-report.html'],
 })
 
 useLegacyPage({

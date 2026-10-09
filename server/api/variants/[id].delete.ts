@@ -1,27 +1,8 @@
-import type { Variant } from '~/types/variant'
+import { deleteVariant } from '~~/server/utils/productTaxonomyData'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
+  const result = await deleteVariant(id || '')
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Variant ID is required'
-    })
-  }
-
-  const allVariants = await readJSON<Variant[]>('variants.json', [])
-  const newVariants = allVariants.filter(v => v.id !== id)
-
-  if (allVariants.length === newVariants.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Variant not found'
-    })
-  }
-
-  await writeJSON('variants.json', newVariants)
-
-  return createResponse({ id }, 'Variant deleted successfully')
+  return createResponse(result, 'Variant deleted successfully')
 })
-

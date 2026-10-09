@@ -1,26 +1,8 @@
-import type { BlogComment } from '~/server/types/blog'
+import { deleteBlogComment } from '~~/server/utils/blogDomainData'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
+  const result = await deleteBlogComment(id || '')
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Comment ID is required',
-    })
-  }
-
-  const allComments = readJSON<BlogComment[]>('blog-comments.json', [])
-  const newComments = allComments.filter(c => String(c.id) !== String(id))
-
-  if (allComments.length === newComments.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Comment not found',
-    })
-  }
-
-  writeJSON('blog-comments.json', newComments)
-
-  return createResponse({ id }, 'Comment deleted successfully')
+  return createResponse(result, 'Comment deleted successfully')
 })

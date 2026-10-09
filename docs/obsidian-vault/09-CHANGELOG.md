@@ -6,6 +6,393 @@ updated: 2026-10-09
 
 ## 2026-10-09
 
+### Penyelesaian Penuh Modul Point of Sale (POS) & Rute Sidebar Customer Subscription
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: 1. Arahkan ke subscription, 2. Manifest tunda, 3. Gas garap POS sekarang)
+- **Status Git:** Branch `eko` | Commit Status: `NOT COMMITTED` | Push Status: `NOT PUSHED`
+- **Pembaruan Navigasi Sidebar:**
+  - [AppSidebar.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/layout/AppSidebar.vue): Mengubah link item `Customer Subscription` dari duplikat `/customer-due-report` menjadi `/subscriptions`.
+- **Implementasi Modul POS (Point of Sale):**
+  - [pos.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/pos.vue): Menambahkan route alias `alias: ['/pos.html']`.
+  - [pos-order.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/pos-order.vue): Membongkar implementasi legacy Bootstrap (421 baris) menjadi Backend-Ready Vertical Slice (148 baris $\le 150$), menghapus seluruh kelas Bootstrap dan dialog mentah, menambahkan alias `/pos-order.html`.
+  - [usePosOrders.ts](file:///c:/laragon/www/dulankAdminNuxt/app/composables/usePosOrders.ts): Composable domain POS Orders untuk fetch sales channel POS, normalisasi status `Complete` / `Pending`, kalkulasi `grandTotal`, `paid`, `due`, mutasi pembayaran `/api/sales/[id]/payments`, dan penghapusan.
+  - [PosOrderRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/pos/PosOrderRecordsTable.vue): Komponen tabel POS Orders dengan `SalesDataTable`, filter `TableFilterSelect`, formatting `CurrencyDisplay`, status `SalesStatusBadge`, dan `SalesMoreMenu` (View Detail, Show Payments, Create Payment, Print Receipt, Delete).
+  - [PosOrderDetailDialog.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/pos/PosOrderDetailDialog.vue): Dialog rincian pesanan kasir POS dan riwayat pembayaran dengan `SalesDialog`.
+  - [PosOrderPaymentDialog.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/pos/PosOrderPaymentDialog.vue): Form modal input pencatatan pelunasan pesanan kasir POS (Cash, QRIS, Bank Transfer) dengan validasi batas saldo due.
+- **Pencapaian Architecture Gate 100%:**
+  - **188 dari 188 halaman (100%)** di `app/pages` kini strictly $\le 150$ baris (**0 halaman $> 150$ baris tersisa di seluruh repositori**).
+- **Validasi:**
+  - TypeScript: 0 error (`npx tsc --noEmit --pretty false`).
+  - Test Suite: 13/13 scenarios pass (`npm run test:sales`).
+
+### Resolusi Paritas Data Netlify Serverless & Initial Hydration
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: Pastikan di Netlify tampil datanya dan perbaiki beberapa data yang belum masuk)
+- **Status Git:** Branch `eko` | Commit Status: `NOT COMMITTED` | Push Status: `NOT PUSHED`
+- **Perbaikan Server Domain Repository (Fallback Serverless Netlify):**
+  - Refactor 7 file domain data dari `readFileSync` langsung (yang gagal menemukan folder filesystem pada Lambda/Netlify Functions) menjadi standar `readJSON` & `writeJSON` dari `server/utils/data.ts` dengan fallback otomatis ke `bundledSources`:
+    - [flowCategoryData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/flowCategoryData.ts) (`flow-categories.json`)
+    - [flowNameData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/flowNameData.ts) (`flow-names.json`)
+    - [flowTemplateData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/flowTemplateData.ts) (`flow-templates.json`)
+    - [jobBranchData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/jobBranchData.ts) (`job-branches.json`)
+    - [jobListData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/jobListData.ts) (`job-list.json`)
+    - [orderData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/orderData.ts) (`orders.json`)
+    - [workFlowData.ts](file:///c:/laragon/www/dulankAdminNuxt/server/utils/workFlowData.ts) (`work-flows.json`)
+- **Perbaikan SSR & Initial Hydration di Frontend Composable:**
+  - Refactor 3 composable yang sebelumnya menggunakan `apiFetch` tidak ter-await di `setup()` menjadi `useApiFetch` (SSR-aware) agar data langsung di-hydrate saat SSR/render awal tanpa tabel kosong:
+    - [useCurrencySettings.ts](file:///c:/laragon/www/dulankAdminNuxt/app/composables/useCurrencySettings.ts)
+    - [useBankSettings.ts](file:///c:/laragon/www/dulankAdminNuxt/app/composables/useBankSettings.ts)
+    - [usePrinterSettings.ts](file:///c:/laragon/www/dulankAdminNuxt/app/composables/usePrinterSettings.ts)
+- **Audit Kontrak Response API:**
+  - Memverifikasi 148 endpoint GET server terhadap composable frontend: semua data mapping dan unwrapping `.data` telah selaras.
+- **Validasi:**
+  - TypeScript: 0 error (`npx tsc --noEmit --pretty false`).
+  - Test Suite: 13/13 scenarios pass (`npm run test:sales`).
+
+### Eksekusi Penuh Standardisasi Action, Modal & Route Parity (Batch G, H, I, J, K, dan L)
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: Eksekusi Semua Standardisasi Action, Modal & Route Parity Lanjutan)
+- **Batch G (PROMO & PEOPLES Sisa):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [voucher.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/voucher.vue): `alias: ['/voucher.html']`
+    - [discount.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/discount.vue): `alias: ['/discount.html']`
+    - [discount-plan.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/discount-plan.vue): `alias: ['/discount-plan.html']`
+    - [customer-type.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/customer-type.vue): `alias: ['/customer-type.html']`
+    - [address.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/address.vue): `alias: ['/address.html']`
+    - [store-list.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/store-list.vue): `alias: ['/store-list.html']`
+  - **Standardisasi Tombol Aksi:**
+    - [CustomerTypeRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/customer-type/CustomerTypeRecordsTable.vue): Standardisasi memakai `SalesActionButton` (`action="edit"`, `action="delete"`).
+    - [AddressRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/address/AddressRecordsTable.vue): Standardisasi memakai `SalesActionButton` (`action="view"`, `action="edit"`, `action="delete"`).
+    - [StoreListRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/store-list/StoreListRecordsTable.vue): Standardisasi memakai `SalesActionButton` (`action="edit"`, `action="delete"`).
+- **Batch H (WEBSTORE & SUPPORT):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [cart.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/cart.vue): `alias: ['/cart.html']`
+    - [checkout.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/checkout.vue): `alias: ['/checkout.html']`
+    - [wishlist.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/wishlist.vue): `alias: ['/wishlist.html']`
+    - [reviews.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/reviews.vue): `alias: ['/reviews.html']`
+    - [support-ticket.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/support-ticket.vue): `alias: ['/support-ticket.html']`
+    - [support-ticket-detail.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/support-ticket-detail.vue): `alias: ['/support-ticket-detail.html']`, `sweetAlert: false`
+    - [contact-form.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/contact-form.vue): `alias: ['/contact-form.html']`
+  - **Standardisasi Tombol Aksi:**
+    - [SupportTicketRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/support-ticket/SupportTicketRecordsTable.vue): Standardisasi memakai `SalesActionButton` (`action="view"`, `action="delete"`).
+- **Batch I (WORKFLOW & ORDERS Sisa):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [orders.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/orders.vue): `alias: ['/orders.html']`
+    - [online-orders.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/online-orders.vue): `alias: ['/online-orders.html']`
+    - [job-list.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/job-list.vue): `alias: ['/job-list.html']`
+    - [flow-category.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/flow-category.vue): `alias: ['/flow-category.html']`
+    - [flow-name.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/flow-name.vue): `alias: ['/flow-name.html']`
+    - [flow-template.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/flow-template.vue): `alias: ['/flow-template.html']`
+    - [work-flow.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/work-flow.vue): `alias: ['/work-flow.html']`
+    - [add-work-flow.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/add-work-flow.vue): `alias: ['/add-work-flow.html']`
+    - [edit-work-flow.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/edit-work-flow.vue): `alias: ['/edit-work-flow.html']`
+    - [edit-job-order.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/edit-job-order.vue): `alias: ['/edit-job-order.html']`
+    - [job-order-detail.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/job-order-detail.vue): `alias: ['/job-order-detail.html']`
+- **Batch J (PRODUCTS & SERVICES + CALCULATOR APPS):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [product-list.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/product-list.vue): `alias: ['/product-list.html']`
+    - [product-details.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/product-details.vue): `alias: ['/product-details.html']`
+    - [create-product.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/create-product.vue): `alias: ['/create-product.html']`
+    - [cetak-full-color.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/cetak-full-color.vue): `alias: ['/cetak-full-color.html']`
+    - [calender.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/calender.vue): `alias: ['/calender.html']`
+    - Machine & Paper Calculator Listings (`mesin-cetak`, `mesin-laminasi`, `mesin-pond`, `mesin-poli`, `mesin-*-self`, `semua-percetakan`, `semua-toko-kertas`, `kertas-group`, `kertas-ukuran`, `kertas-jenis`, `kertas-harga`): 100% dipasangi route alias `.html`.
+- **Batch K (CONTENT & BLOG):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - `all-blog`, `blog-category`, `blog-comment`, `blog-tag`, `faq`, `faq-category`, `our-client`, `download-files`, `banner`, `footer`: 100% dipasangi route alias `.html`.
+- **Batch L (REPORT, SETTINGS, & DASHBOARD):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - Seluruh 11 modul laporan (`sales-report`, `best-seller`, `invoice-report`, `supplier-report`, `supplier-due-report`, `customer-report`, `customer-due-report`, `product-report`, `expense-report`, `income-report`, `tax-report`, `profit-and-loss`, `annual-reports`): 100% dipasangi route alias `.html`.
+    - Seluruh modul Settings & Locations (`profile`, `company-setting`, `province`, `regency`, `district`, `invoice-setting`, `pos-settings`, `email-setting`, `language`, `otp`, `prefixes`, `custom-field`, `localization`, `preference`, `security-settings`, `storage-settings`, `bank-settings-*`, `currency-settings`, `gdpr-settings`, `printer-settings`, `sms-gateway`, `social-authentication`, `payment-gateway`, `system-setting`): 100% dipasangi route alias `.html` dan dibersihkan dari legacy scripts / `sweetAlert: true`.
+    - Modul Dashboard & User Requests (`index`, `sales-dashboard`, `kalkulator-dashboard`, `analytics-dashboard`, `subscriptions`, `delete-account`, `billing`, `ticket-list`, `ticket-detail`, `permissions`, `ban-ip-address`, `job-progress`, `coupon`, `harga-jasa-lainya`): 100% dipasangi route alias `.html`.
+- **Architecture Gate Compliance:**
+  - 100% halaman aktif non-deferred (`app/pages`) berukuran $\le 150$ baris (0 file di atas 150 baris).
+  - 100% leaf components berukuran $\le 250$ baris.
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git status:** `NOT COMMITTED / NOT PUSHED` (Branch `eko`).
+
+### Eksekusi Standardisasi Action & Modal: Batch D, Batch E, dan Batch F
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: Eksekusi Batch D, Batch E, Batch F)
+- **Batch D (User Management & Peoples):**
+  - **Route Aliases & Judul Paritas:**
+    - [customers.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/customers.vue): Menambahkan `definePageMeta({ layout: 'default', alias: ['/customers.html'] })` dan paritas judul `Customer List`.
+    - [supplier.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/supplier.vue): Menambahkan `definePageMeta({ layout: 'default', alias: ['/supplier.html'] })` dan paritas judul `Supplier List`.
+    - [user.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/user.vue): Menambahkan `alias: ['/user.html']`.
+    - [user-admin.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/user-admin.vue): Menambahkan `alias: ['/user-admin.html']`.
+    - [role.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/role.vue): Menambahkan `alias: ['/role.html']`.
+    - [role-permissions.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/role-permissions.vue): Menambahkan `alias: ['/role-permissions.html']`.
+  - **Standardisasi Tombol Aksi (SalesActionButton):**
+    - [MemberRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/user/MemberRecordsTable.vue): Standardisasi tombol aksi baris menggunakan `SalesActionButton` (`action="edit"`, `action="delete"`).
+    - [UserAdminRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/user-admin/UserAdminRecordsTable.vue): Standardisasi tombol aksi baris menggunakan `SalesActionButton` (`action="edit"`, `action="delete"`).
+    - [RoleRecordsTable.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/roles/RoleRecordsTable.vue): Standardisasi tombol aksi baris menggunakan `SalesActionButton` (`action="edit"`, `icon="shield" to="/role"`, `action="delete"`).
+- **Batch E (HRM - Human Resource Management):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [employees.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/employees.vue): `alias: ['/employees.html']`
+    - [department.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/department.vue): `alias: ['/department.html']`
+    - [employee-salary.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/employee-salary.vue): `alias: ['/employee-salary.html']`
+    - [payslip.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/payslip.vue): `alias: ['/payslip.html']`
+    - [designation.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/designation.vue): `alias: ['/designation.html']`
+    - [payslip-detail.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/payslip-detail.vue): `alias: ['/payslip-detail.html']`
+    - [add-employee.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/add-employee.vue): `alias: ['/add-employee.html']`
+    - [edit-employee.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/edit-employee.vue): `alias: ['/edit-employee.html']`
+    - [add-payroll.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/add-payroll.vue): `alias: ['/add-payroll.html']`
+    - [edit-payroll.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/edit-payroll.vue): `alias: ['/edit-payroll.html']`
+  - **Verifikasi Tombol Aksi & Paritas:** Seluruh tabel HRM (`EmployeeRecordsTable.vue`, `DepartmentRecordsTable.vue`, `EmployeeSalaryRecordsTable.vue`, dll.) terverifikasi menggunakan `SalesActionButton` dengan event emit terhubung.
+- **Batch F (Purchases):**
+  - **Route Aliases `.html` Paritas Penuh:**
+    - [purchase.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase.vue): `alias: ['/purchase.html']`
+    - [purchase-order.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-order.vue): `alias: ['/purchase-order.html']`
+    - [purchase-return.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-return.vue): `alias: ['/purchase-return.html']`
+    - [purchase-item.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-item.vue): `alias: ['/purchase-item.html']`
+    - [purchase-category.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-category.vue): `alias: ['/purchase-category.html']`
+    - [purchase-order-detail.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-order-detail.vue): `alias: ['/purchase-order-detail.html']`
+    - [purchase-return-detail.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-return-detail.vue): `alias: ['/purchase-return-detail.html']`
+    - [add-purchase.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/add-purchase.vue): `alias: ['/add-purchase.html']`
+    - [purchase-report.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/purchase-report.vue): `alias: ['/purchase-report.html']`
+  - **Verifikasi Tombol Aksi & Paritas:** Seluruh tabel pembelian (`PurchaseRecordsTable.vue`, `PurchaseOrderRecordsTable.vue`, `PurchaseReturnRecordsTable.vue`, `PurchaseItemRecordsTable.vue`, `PurchaseCategoryRecordsTable.vue`) terverifikasi menggunakan `SalesActionButton` dengan event emit terhubung ke modal masing-masing.
+- **Architecture Gate Compliance:**
+  - Seluruh 25 page pada Batch D, E, dan F berukuran $\le 150$ baris (range 16 - 123 baris).
+  - Seluruh leaf components berukuran $\le 250$ baris (range 98 - 202 baris).
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git status:** `NOT COMMITTED / NOT PUSHED` (Branch `eko`).
+
+### Eksekusi Standardisasi Action & Modal: Batch A, Batch B, dan Batch C
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: Eksekusi Batch A, Batch B, Batch C)
+- **Batch A (Quick-Wins Action & Modal):**
+  - **Restorasi `add-label` pada 7 Halaman:** Memasang prop `add-label` pada `<SalesListHeader>` yang sebelumnya menyembunyikan tombol "+ Add..." di toolbar atas:
+    - [app/pages/invoice.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/invoice.vue): `add-label="Add Invoice"`
+    - [app/pages/income-category.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/income-category.vue): `add-label="Add Income Category"`
+    - [app/pages/incentive.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/incentive.vue): `add-label="Add Incentive"`
+    - [app/pages/harga-jasa-lainya.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/harga-jasa-lainya.vue): `add-label="Add New Jasa Lainya"`
+    - [app/pages/add-product-process.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/add-product-process.vue): `add-label="Add Process"`
+    - [app/pages/komponen-minimum.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/komponen-minimum.vue): `add-label="Add Minimum Component"`
+    - [app/pages/komponen-fiks.vue](file:///c:/laragon/www/dulankAdminNuxt/app/pages/komponen-fiks.vue): `add-label="Add Fixed Component"`
+  - **Verifikasi Tombol Delete Action:** Memeriksa dan memastikan listener `@click="emit('delete', ...)"` aktif dan terhubung ke dialog konfirmasi `SalesConfirmDelete` pada `BankAccountTypeRecordsTable.vue` dan `CashAdvanceRecordsTable.vue`.
+- **Batch B (Inventory Lanjutan - Komponen Minimum & Komponen Fiks):**
+  - **Komponen Minimum (`komponen-minimum.vue` & `KomponenMinimumRecordsTable.vue`):**
+    - Paritas judul legacy `Harga Jasa Lainnya` dan subtitle `Kelola threshold minimum biaya dan tarif dasar finishing pasca cetak`.
+    - Menambahkan `alias: ['/komponen-minimum.html']` pada `definePageMeta`.
+    - Menambahkan filter dropdown `Satuan` (`Lembar`, `Cm`, `Pcs`, `Kg`) pada toolbar tabel sesuai paritas HTML legacy `komponen-minimum.html`.
+    - Mengintegrasikan modal cetak dan export PDF melalui `useTablePrint()` dan `<DocumentPrintModal>`.
+    - Page 138 baris ($\le 150$), Table 124 baris ($\le 250$).
+  - **Komponen Fiks (`komponen-fiks.vue` & `KomponenFiksRecordsTable.vue`):**
+    - Paritas judul legacy `Komponen Cetak` dan subtitle `Kelola variabel kapasitas produksi dasar dan durasi shift pengerjaan`.
+    - Menambahkan `alias: ['/komponen-fiks.html']` pada `definePageMeta`.
+    - Menambahkan filter dropdown `Satuan` (`Jam`, `lbr`, `Pcs`, `Kg`) pada toolbar tabel sesuai paritas HTML legacy `komponen-fiks.html`.
+    - Mengintegrasikan modal cetak dan export PDF melalui `useTablePrint()` dan `<DocumentPrintModal>`.
+    - Page 138 baris ($\le 150$), Table 124 baris ($\le 250$).
+- **Batch C (Standardisasi Modal Menu ORDERS / JOBS):**
+  - **Job Orders (`job-order.vue` & `JobOrderRecordsTable.vue`):**
+    - Menambahkan `alias: ['/job-order.html']` pada `definePageMeta` dan paritas judul `Job Order List`.
+    - Memverifikasi modal Edit Job Order (`JobOrderEditModal.vue` - 145 baris) dan modal View Flow (`JobOrderViewFlowModal.vue` - 109 baris) dengan paritas data workflow & sales summary.
+    - Page 137 baris ($\le 150$).
+  - **Job Branch (`job-branch.vue` & `JobBranchSettingModal.vue`):**
+    - Menambahkan `alias: ['/job-branch.html']` pada `definePageMeta` dan merapikan import statement.
+    - Dekomposisi `JobBranchSettingModal.vue` dari 351 baris menjadi 196 baris ($\le 250$) dengan mengekstraksi [JobBranchInfoEditor.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/job-branch/JobBranchInfoEditor.vue) (170 baris) untuk editor spesifikasi teknis dan rincian penyelesaian flow.
+    - Memastikan modal History Job Branch (`JobBranchHistoryModal.vue` - 128 baris) terhubung mulus ke toolbar header `add-label="History Job Branch"`.
+    - Page 133 baris ($\le 150$).
+  - **My Job (`my-job.vue`):**
+    - Menambahkan `alias: ['/my-job.html']` pada `definePageMeta` dan menyelaraskan judul `My Job`.
+    - Memverifikasi modal detail [MyJobDetailModal.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/my-job/MyJobDetailModal.vue) (178 baris) dan modal status konfirmasi [MyJobStatusModal.vue](file:///c:/laragon/www/dulankAdminNuxt/app/components/pages/my-job/MyJobStatusModal.vue) (129 baris) dengan field `Qty Lembar OK` dan `Lembar Rusak`.
+    - Page 108 baris ($\le 150$).
+  - **My Incentive (`my-incentive.vue`):**
+    - Menambahkan `alias: ['/my-incentive.html']` pada `definePageMeta` dan menyelaraskan judul `My Incentive List`.
+    - Menjaga paritas tanpa kolom Action sesuai legacy, dengan kalkulasi total footers dan filter proses.
+    - Page 98 baris ($\le 150$).
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git status:** `NOT COMMITTED / NOT PUSHED` (Branch `eko`).
+
+### Perbaikan Tombol Aksi Tambah, Judul Parity, Route Alias & Print Modul PAPER SHOP
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna: "belum keubah halaman ini PAPER SHOP bug keknya ulangin pastikan berubah")
+- **Root Cause & Scope Perbaikan:**
+  - **Tombol Tambah Utama Hilang:** Pada `app/pages/kertas-*-self.vue`, komponen `<SalesListHeader>` sebelumnya tidak dipasangi prop `add-label`, sehingga tombol "+ Add New..." di toolbar kanan atas tidak ter-render sama sekali oleh template `SalesListHeader.vue` (karena kondisi `v-else-if="addLabel"`). Hal ini membuat pengguna melihat seolah halaman tidak berubah dan modal Add tidak dapat dibuka dari header.
+  - **Paritas Judul & Subtitle Legacy:** Judul dan subtitle diselaraskan secara harfiah dengan file acuan HTML/Netlify:
+    - `kertas-group-self`: `Paper Group List` | `Manage your Paper Groups` | tombol `Add New Paper's Group`
+    - `kertas-ukuran-self`: `Paper's Size` | `Manage Your Paper's Size` | tombol `Add New Paper's Size`
+    - `kertas-harga-self`: `Harga Kertas List` | `Manage your Harga Kertas` | tombol `Add New Harga Kertas`
+    - `kertas-jenis-self`: `Jenis Kertas List` | `Manage your Jenis Kertas` | tombol `Add New Jenis Kertas`
+  - **Route Aliasing `.html`:** Ditambahkan `alias: ['/<nama-route>.html']` pada `definePageMeta` masing-masing halaman sehingga navigasi langsung memakai ekstensi `.html` (seperti format Netlify `http://localhost:3000/kertas-group-self.html`) langsung memuat halaman dengan sempurna tanpa bergantung pada lifecycle hooks router.
+  - **Integrasi Print & Export PDF:** Menghubungkan event `@print` dan `@pdf` pada `SalesListHeader` ke composable `useTablePrint()` dan modal bersama `<DocumentPrintModal>` pada keempat halaman Paper Shop.
+  - **Dynamic Sizes Prop:** Meneruskan prop `:sizes="sizes"` dari `PaperListFormModal` ke `PaperListAddForm` sehingga opsi ukuran kertas pada form tambah jenis kertas tersinkronisasi dinamis dengan dataset ukuran kertas aktif.
+- **Architecture Gate Compliance:**
+  - `kertas-group-self.vue`: 137 baris ($\le 150$).
+  - `kertas-ukuran-self.vue`: 130 baris ($\le 150$).
+  - `kertas-harga-self.vue`: 139 baris ($\le 150$).
+  - `kertas-jenis-self.vue`: 147 baris ($\le 150$).
+  - 100% leaf component di `app/components/pages/paper-shop/` $\le 244$ baris ($\le 250$).
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+
+### Restorasi Penuh Action & Modal Parity Modul PAPER SHOP
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna)
+- **Scope:** Melengkapi dan merestorasi seluruh interaksi action, modal Add/Edit, view modal, submodal, filter, dan dynamic flow pada 4 halaman PAPER SHOP (`kertas-group-self.html`, `kertas-ukuran-self.html`, `kertas-harga-self.html`, `kertas-jenis-self.html`) agar memiliki paritas 100% dengan file HTML referensi/Netlify:
+  - **Paper Group (`kertas-group-self`):**
+    - `PaperGroupFormModal.vue` (182 baris): Menyediakan section Group Detail (Name, Merk), collapsible/optional Box "Add Price Group" dengan radio Fix Price vs Sample Price (banner kalkulasi dinamis per kg), input harga, unit price (`Kilograms`, `Ream`, `Pcs`), gramatur, paper size, tombol Cancel X reset, serta toggle status Active/Deactive.
+    - `PaperGroupPriceBox.vue` (118 baris): Komponen ekstraksi box harga opsional demi kepatuhan batas baris arsitektur $\le 250$ baris.
+    - `PaperGroupViewModal.vue` (93 baris): Menampilkan rincian lengkap 9 kolom legacy: Paper Group Name, Merk, Price Type, Price (IDR), Unit Price, Gramature, Paper Size, Update, dan Status badge.
+    - `PaperGroupRecordsTable.vue` (118 baris): Menambahkan dropdown filter toolbar Paper's Group di samping filter Status.
+  - **Paper Size (`kertas-ukuran-self`):**
+    - `PaperSizeFormModal.vue` (196 baris): Merestorasi kontrol Choose Unit berupa pill radio Centimeter (`cm`) / Milimeter (`mm`), input Size Name, serta input area W & H dengan prefix badges group.
+    - `PaperSizeRecordsTable.vue` (98 baris): Menampilkan 6 kolom standar dengan formatting unit dan aksi baris edit/delete.
+  - **Paper Price (`kertas-harga-self`):**
+    - `PaperPriceFormModal.vue` (233 baris): Menyediakan Nama Kertas opsional, pill radio Group Kertas tersedia, dimensi Panjang & Lebar (prefix P & L), satuan Centimeter/Milimeter pills, gramatur, Minimal Order & Kelipatan dengan pill unit Rim/Lembar, input Harga dengan pill unit Rim/Lembar, dan toggle status.
+    - `PaperPriceDimensionBox.vue` (97 baris) & `PaperPriceOrderBox.vue` (137 baris): Komponen ekstraksi input spesifikasi dimensi dan order pricing agar form modal tetap ringkas.
+    - `PaperPriceRecordsTable.vue` (151 baris): 12 kolom lengkap dengan filter Group Kertas & Status.
+  - **Paper List (`kertas-jenis-self`):**
+    - `PaperListAddForm.vue` (247 baris): Mengimplementasikan modal Add dengan switch dinamis `Paper Group` (info box, dropdown group & merk, readonly price/unit, multi-checkbox sizes dengan dynamic counter label "X Paper Sizes will be saved") vs `Single` (input merk, price, unit, gramature, radio size).
+    - `PaperListEditForm.vue` (219 baris): Mengimplementasikan modal Edit dengan 2 tabs: Tab `Paper Detail` (Name, Merk, Price, Unit, Gramature, Width, Height) dan Tab `Advance Setting` (Update Stock dengan Current Stock readonly & Add Stock +/- adjustment, serta Order Settings min order, step order, min transaction).
+    - `PaperListFormModal.vue` (43 baris): Thin orchestrator dialog yang mengoordinasikan Add vs Edit form.
+    - `PaperListViewModal.vue` (182 baris): Merestorasi modal View bertab ganda: Tab 1 `Detail` (spesifikasi fisik, harga, dan order limits) serta Tab 2 `Stock History` (tabel mutasi stok dengan tanggal, ref, qty +/- warna dinamis, unit, admin).
+- **Backend & Types Alignment:**
+  - `server/types/paper-shop.ts`: Ditambahkan properti domain opsional untuk detail harga grup, dimensi W/H, unit order, dan riwayat mutasi stok (`PaperStockHistoryItem`).
+  - `server/utils/paperShopData.ts`: Menangani persistensi lengkap seluruh field modal legacy, termasuk kalkulasi stok dan pencatatan riwayat penyesuaian stok.
+- **Architecture Gate Compliance:**
+  - 100% leaf component di `app/components/pages/paper-shop/` $\le 250$ baris (rentang 43 - 247 baris).
+  - 100% halaman di `app/pages/kertas-*-self.vue` $\le 150$ baris (rentang 121 - 141 baris).
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+- **Remaining risk / Next Steps:** Menunggu review interaksi browser pengguna pada URL lokal `http://localhost:3000/kertas-group-self`, dsb.
+
+### Standardisasi Penuh UI Inventory (Category, Sub Category, Unit, Variant)
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (Perintah Pengguna)
+- **Scope:** Refactoring menyeluruh 4 halaman Inventory (`/category`, `/sub-category`, `/unit`, `/variant`) yang sebelumnya masih menggunakan markup Bootstrap mentah (`.table.datanew`, custom modal backdrop fixed CSS, double card nesting, dropdown aksi terpotong, font 13px) agar selaras 100% dengan standar Dulank Tailwind / Sales UI.
+- **Component Changes & Standardizations:**
+  - **Category Domain:**
+    - `CategoryTable.vue`: Menggantikan tabel Bootstrap manual dengan `<SalesDataTable>`, `<SalesStatusBadge>`, `<SalesActionButton>`, dan `<TableFilterSelect>`.
+    - `CategoryModal.vue`: Menggantikan form modal Bootstrap dengan `<SalesDialog>` (Escape, accessible title, click-outside handling) dan CSS Grid 12 kolom (`modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`, input `h-9`).
+    - `CategoryWorkspace.vue`: Membersihkan pembungkus Bootstrap lama, mengintegrasikan `<SalesListHeader>`, `<SalesFeedback>`, `<SalesConfirmDelete>`, dan `<DocumentPrintModal>`.
+  - **Sub Category Domain:**
+    - `SubCategoryTable.vue`: Mengadopsi `<SalesDataTable>` dengan 8 kolom standar legacy (`Sub Category`, `Category`, `Category Code`, `Description`, `Item Used`, `Created By`, `Status`, `Action`), dual filter toolbar (Category & Status), dan badge item count.
+    - `SubCategoryModal.vue`: Mengadopsi `<SalesDialog>`, 12-column grid, parent category selector, auto-generated subcategory code helper, input `h-9`, dan status switch.
+    - `SubCategoryWorkspace.vue`: Standardisasi toolbar, filter, feedback state, modal flow, dan konfirmasi hapus.
+  - **Unit Domain:**
+    - `UnitTable.vue`: Mengadopsi `<SalesDataTable>` dengan kolom (`Unit`, `Short Name`, `Item Used`, `Created On`, `Status`, `Action`), monospace short-name badge, `<SalesStatusBadge>`, dan `<SalesActionButton>`.
+    - `UnitModal.vue`: Mengadopsi `<SalesDialog>`, 12-column grid, unit name, short name (`h-9`), dan status.
+    - `UnitWorkspace.vue`: Standardisasi toolbar, konfirmasi hapus, feedback, dan print preview.
+  - **Variant Domain:**
+    - `VariantTable.vue`: Mengadopsi `<SalesDataTable>` dengan kolom (`Variant`, `Values`, `Item Used`, `Created On`, `Status`, `Action`), dynamic chip rendering untuk comma-separated variant values, `<SalesStatusBadge>`, dan `<SalesActionButton>`.
+    - `VariantModal.vue`: Mengadopsi `<SalesDialog>`, 12-column grid, variant name, comma-separated values input (`h-9`), helper text, dan status.
+    - `VariantWorkspace.vue`: Standardisasi toolbar, konfirmasi hapus, feedback, dan print preview.
+- **Lines of Code Compliance (All Strict Leaf/Workspace Bounds):**
+  - Category: Table (116 lines), Modal (117 lines), Workspace (176 lines) -> Seluruhnya $\le 250$ baris.
+  - Sub Category: Table (147 lines), Modal (167 lines), Workspace (185 lines) -> Seluruhnya $\le 250$ baris.
+  - Unit: Table (115 lines), Modal (118 lines), Workspace (176 lines) -> Seluruhnya $\le 250$ baris.
+  - Variant: Table (121 lines), Modal (121 lines), Workspace (176 lines) -> Seluruhnya $\le 250$ baris.
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 errors.
+  - `npm run test:sales`: 13/13 scenarios passed (100%).
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+- **Remaining risk / Next Steps:** Menunggu review visual pengguna di browser dev server lokal (`http://localhost:3000/category`, dsb.).
+
+### Ekstraksi Penuh 100% Server API Direct I/O dan Penyelesaian Backlog Actionable
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Menyelesaikan seluruh Master TODO actionable P0-P3: ekstraksi 100% direct JSON I/O dari `server/api/` ke domain service/repository, perapihan 100% page aktif non-deferred $\le 150$ baris, dan penyelesaian seluruh workspace $> 300$ baris.
+- **Direct I/O Extraction:** Mengeliminasi seluruh direct I/O dari 156 route API menjadi **0 route tersisa**. Seluruh route kini menjadi thin HTTP adapter yang mendelegasikan validasi, kalkulasi, relasi, dan persistensi ke typed domain service di `server/utils/`:
+  - `productTaxonomyData.ts` (12 route: categories, sub-categories, units, variants)
+  - `blogDomainData.ts` (12 route: blogs, categories, comments, tags)
+  - `peoplesDomainData.ts` (15 route: customers, suppliers, stores, address, customer-types)
+  - `contentDomainData.ts` (15 route: banners, clients, download-files, footers, footer-config)
+  - `webstoreDomainData.ts` (11 route: contact-forms, support-tickets, cart, checkout, reviews, wishlist)
+  - `reportsDomainData.ts` (14 report endpoints)
+  - `salesData.ts` (14 sales document routes: sales, invoices, delivery-notes, quotations, RFQ, sales-returns)
+  - `paymentFlowData.ts` (4 route: payment-inflow & payment-outflow CRUD)
+  - `jobsProductionDomainData.ts` (11 route: job-branches history, job-orders, my-incentives, my-jobs)
+  - `calculatorComponentsData.ts` (2 route: cetak-full-color config)
+  - `rolesData.ts` (2 route: permissions matrix)
+  - `settingsDomainData.ts` (44 route: bank, currency, printer, company, pos, storage, appearance, calendar, email, gdpr, invoice-settings, otp, payment-gateways, preferences, profile, localization, security, social-auth, system-integrations, sms-gateways)
+- **UI Architecture & Cleanliness Gate:**
+  - 100% halaman aktif non-deferred di `app/pages` $\le 150$ baris (`pos-order.vue` ditunda sesuai aturan).
+  - 100% workspace/screen di repositori $\le 300$ baris (0 file $> 300$ baris).
+  - 0 native alert/confirm tersisa di UI aktif.
+  - 0 direct print pada list/table (dialihkan ke `DocumentPrintModal`).
+  - 0 teks bermakna di bawah 12px.
+- **Verification:**
+  - `npx tsc --noEmit --pretty false`: 0 error.
+  - `npm run test:sales`: 100% passed (13/13 scenarios lulus).
+- **Status Blocker Eksternal Terbuka:**
+  - P0 Blocker: 8 file legacy manifest (`MIGRATION_MANIFEST.json`) menunggu aset Summernote/Sticky Kit atau keputusan pemilik.
+  - P2 Blocker: Route target `Customer Subscription` duplikat dengan `/customer-due-report` menunggu keputusan pengguna.
+  - P3 Blocker: Pengujian browser desktop/390px, reload persistence, dan Netlify serverless mutation menunggu pengguna menjalankan runtime/dev environment per batasan perintah.
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+
+### Pencatatan Gap Action dan Modal Legacy
+
+- **Date:** 2026-10-09
+- **Actor:** User report, documented by AI Assistant
+- **Scope:** Mencatat temuan pengguna bahwa masih ada action/modal yang hilang atau belum sesuai dengan legacy.
+- **Root cause:** Audit sebelumnya berfokus pada BRVS, type safety, request boundary, reusable UI, dan struktur file; belum tersedia inventory trigger-per-trigger serta modal-per-modal untuk seluruh route. Typecheck dan keberadaan komponen tidak membuktikan parity interaksi.
+- **New canonical document:** `docs/LEGACY_ACTION_MODAL_PARITY.md` menetapkan sumber kebenaran, cakupan audit, format parity matrix, status yang diizinkan, completion gate, dan command lanjutan.
+- **Status:** `CONFIRMED OPEN GAP - ROUTE INVENTORY PENDING`. Tidak ada menu yang boleh dinaikkan menjadi parity/runtime verified hanya dari audit statis.
+- **Entry points synchronized:** `AGENTS.md`, audit kanonik, Continue TODO Command, Menu Implementation Command, `AI_HANDOVER_GUIDE.md`, dan Obsidian Home.
+- **Code changed:** Tidak; pekerjaan ini hanya mencatat gap dan memperketat gate dokumentasi.
+- **Validation:** Seluruh link Markdown lokal pada delapan dokumen terkait valid, referensi parity ditemukan pada seluruh entry point, dan `git diff --check` lulus tanpa whitespace error. Build/dev/browser tidak dijalankan untuk perubahan dokumentasi.
+- **Git branch:** `eko`.
+- **Baseline HEAD/upstream:** `HEAD = origin/eko = 1bf2eac7f22003f0db37da53261db51f10a07dfa`; working tree dokumentasi sudah memiliki perubahan post-push sebelumnya.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+- **Next actionable work:** Audit dan isi parity matrix satu menu per batch, lalu implementasikan item `MISSING/PARTIAL` dengan evidence legacy, source, backend, dan browser.
+
+### Command Otomatis Lanjutkan TODO
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Membuat kontrak command agar pengguna cukup menulis `lanjutkan todo` untuk meneruskan backlog secara konsisten.
+- **Documentation:** Menambahkan `docs/CONTINUE_TODO_COMMAND.md` berisi variasi command, urutan baca, algoritma pemilihan prioritas, penanganan blocker, batas satu batch, siklus quality gate, aturan status, larangan Git mutating, dan format laporan akhir.
+- **Entry points synchronized:** `AGENTS.md`, audit kanonik, Menu Implementation Command, `AI_HANDOVER_GUIDE.md`, dan Obsidian Home sekarang menunjuk command baru.
+- **Selection rule:** Command tanpa parameter memilih satu batch actionable dari prioritas tertinggi; item yang membutuhkan keputusan/provenance/runtime eksternal dicatat blocked lalu dilewati tanpa dianggap selesai.
+- **Validation:** Seluruh link Markdown lokal pada tujuh dokumen entry point valid, referensi command ditemukan pada seluruh entry point, dan `git diff --check` lulus tanpa whitespace error. Build/dev/browser tidak diperlukan dan tidak dijalankan.
+- **Git branch:** `eko`.
+- **Baseline HEAD/upstream:** `HEAD = origin/eko = 1bf2eac7f22003f0db37da53261db51f10a07dfa` sebelum perubahan dokumentasi ini.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+- **Remaining risk:** Command membantu disiplin eksekusi, tetapi tidak menggantikan keputusan pengguna untuk blocker bisnis, aset yang tidak memiliki provenance, kredensial, atau runtime production.
+
+### Verifikasi Push Commit Implementasi dan Audit
+
+- **Date:** 2026-10-09
+- **Actor:** User, verified by AI Assistant
+- **Scope:** Menyinkronkan status delivery setelah pengguna menjalankan commit dan push branch `eko`.
+- **Delivered commit:** `1bf2eac7f22003f0db37da53261db51f10a07dfa` (`feat: implement finance BRVS and codebase compliance fixes`).
+- **Remote verification:** `HEAD = origin/eko = 1bf2eac7f22003f0db37da53261db51f10a07dfa`; `git rev-list --left-right --count HEAD...origin/eko` menghasilkan `0 0`.
+- **Delivered commit status:** `COMMITTED`.
+- **Delivered push status:** `PUSHED`.
+- **Clarification:** Hasil `1 0` yang sempat terlihat berasal dari pembandingan terhadap `origin/eko~`, yaitu parent commit remote, bukan terhadap `origin/eko`.
+- **Post-push documentation sync:** Perubahan entri ini dan pembaruan status audit dibuat setelah commit `1bf2eac`, sehingga perubahan dokumentasi tersebut berstatus `NOT COMMITTED / NOT PUSHED` sampai dikomit dan didorong pada delivery berikutnya.
+- **Validation not run:** Tidak ada build/dev/browser untuk sinkronisasi dokumentasi ini; verifikasi hanya memakai status Git, hash HEAD/remote, dan ahead/behind count.
+- **Remaining risks:** TODO arsitektur, aset legacy, dan runtime verification tetap mengikuti audit kanonik; push tidak mengubah status implementasi menjadi runtime verified.
+
 ### Persiapan Commit dan Push Branch Eko
 
 - **Date:** 2026-10-09

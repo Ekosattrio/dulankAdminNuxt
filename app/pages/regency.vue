@@ -2,7 +2,8 @@
 import RegencyWorkspace from '~/components/pages/location/RegencyWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/regency.html'],
 })
 
 useLegacyPage({

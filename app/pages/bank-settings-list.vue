@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import BankSettingsListWorkspace from '~/components/pages/setting/BankSettingsListWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/bank-settings-list.html'],
+})
+
 useLegacyPage({
   title: 'Bank Settings List',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

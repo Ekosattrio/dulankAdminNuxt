@@ -3,6 +3,7 @@ import UserAdminWorkspace from '~/components/pages/user-admin/UserAdminWorkspace
 
 definePageMeta({
   layout: 'default',
+  alias: ['/user-admin.html']
 })
 
 useLegacyPage({

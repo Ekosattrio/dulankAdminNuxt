@@ -9,6 +9,11 @@ import OrderStatusModal from '~/components/pages/orders/OrderStatusModal.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/orders.html'],
+})
+
 useLegacyPage({ title: 'Orders List', sweetAlert: false })
 
 const searchQuery = ref('')

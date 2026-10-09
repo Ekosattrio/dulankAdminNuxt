@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import DepartmentWorkspace from '~/components/pages/department/DepartmentWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/department.html']
+})
+
 useLegacyPage({ title: 'Departments - Departemen Karyawan', sweetAlert: false })
 </script>
 

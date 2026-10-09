@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import CustomersWorkspace from '~/components/pages/customers/CustomersWorkspace.vue'
 
-useLegacyPage({ title: 'Customers', sweetAlert: false })
+definePageMeta({
+  layout: 'default',
+  alias: ['/customers.html']
+})
+
+useLegacyPage({
+  title: 'Customer List',
+  sweetAlert: false
+})
 </script>
 
 <template>

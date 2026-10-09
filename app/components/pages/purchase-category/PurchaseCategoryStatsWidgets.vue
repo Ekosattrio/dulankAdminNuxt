@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-defineProps<{
-  stats: {
+const props = defineProps<{
+  stats?: {
     totalCategories: number
     activeCategories: number
     deactiveCategories: number
     totalItems: number
   }
+  categories?: any[]
+  totalItems?: number
 }>()
+
+const computedStats = computed(() => {
+  if (props.stats) return props.stats
+  const all = props.categories || []
+  return {
+    totalCategories: all.length,
+    activeCategories: all.filter((c: any) => c.status === 'Active').length,
+    deactiveCategories: all.filter((c: any) => c.status === 'Deactive').length,
+    totalItems: props.totalItems ?? 0,
+  }
+})
 </script>
 
 <template>
@@ -21,7 +34,7 @@ defineProps<{
             Total Categories
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.totalCategories }}
+            {{ computedStats.totalCategories }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-400">
@@ -38,7 +51,7 @@ defineProps<{
             Active
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.activeCategories }}
+            {{ computedStats.activeCategories }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -55,7 +68,7 @@ defineProps<{
             Deactive
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.deactiveCategories }}
+            {{ computedStats.deactiveCategories }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400">
@@ -72,7 +85,7 @@ defineProps<{
             Catalog Items
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.totalItems }}
+            {{ computedStats.totalItems }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">

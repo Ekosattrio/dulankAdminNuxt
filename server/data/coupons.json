@@ -1,0 +1,51 @@
+[
+  {
+    "id": "CPN001",
+    "name": "Coupons 21",
+    "code": "CHRISTMAS",
+    "type": "Fixed",
+    "discount": 20000,
+    "limit": 40,
+    "used": 12,
+    "valid": "2026-01-04",
+    "status": "Active",
+    "createdAt": "2025-12-01T08:00:00.000Z"
+  },
+  {
+    "id": "CPN002",
+    "name": "First Offer",
+    "code": "WELCOME10",
+    "type": "Percentage",
+    "discount": 10,
+    "limit": 100,
+    "used": 45,
+    "valid": "2026-02-15",
+    "status": "Active",
+    "createdAt": "2026-01-01T08:00:00.000Z"
+  },
+  {
+    "id": "CPN003",
+    "name": "Offer 40",
+    "code": "BULK40",
+    "type": "Fixed",
+    "discount": 40000,
+    "limit": 25,
+    "used": 20,
+    "valid": "2026-04-08",
+    "status": "Active",
+    "createdAt": "2026-02-10T08:00:00.000Z"
+  },
+  {
+    "id": "CPN004",
+    "name": "Subscription Discount",
+    "code": "PROSUB",
+    "type": "Percentage",
+    "discount": 15,
+    "limit": 50,
+    "used": 10,
+    "valid": "2026-12-31",
+    "status": "Active",
+    "createdAt": "2026-03-01T08:00:00.000Z"
+  }
+]
+

@@ -3,6 +3,7 @@ import BlogCategoryWorkspace from '~/components/blog/BlogCategoryWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/blog-category.html'],
 })
 
 useLegacyPage({

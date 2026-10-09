@@ -8,7 +8,10 @@ import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/product-list.html'],
+})
 useLegacyPage({ title: 'Product List', sweetAlert: false })
 
 const { products, pending, error, refresh, deleteProduct, importProducts } = useProducts()

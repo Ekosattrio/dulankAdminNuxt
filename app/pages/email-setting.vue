@@ -2,7 +2,8 @@
 import EmailSettingWorkspace from '~/components/pages/setting/EmailSettingWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/email-setting.html'],
 })
 
 useLegacyPage({

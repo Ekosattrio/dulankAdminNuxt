@@ -3,6 +3,7 @@ import CustomerReportWorkspace from '~/components/pages/reports/CustomerReportWo
 
 definePageMeta({
   layout: 'default',
+  alias: ['/customer-report.html'],
 })
 
 useLegacyPage({

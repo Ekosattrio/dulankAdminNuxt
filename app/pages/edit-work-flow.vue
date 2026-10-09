@@ -4,6 +4,11 @@ import WorkFlowDocumentForm from "~/components/pages/work-flow/WorkFlowDocumentF
 import SalesFeedback from "~/components/sales/SalesFeedback.vue";
 import SalesListHeader from "~/components/sales/SalesListHeader.vue";
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/edit-work-flow.html'],
+})
+
 useLegacyPage({ title: "Edit Work Flow", sweetAlert: false });
 
 const route = useRoute();

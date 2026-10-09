@@ -3,6 +3,7 @@ import MemberWorkspace from '~/components/pages/user/MemberWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/user.html']
 })
 
 useLegacyPage({

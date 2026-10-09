@@ -2,7 +2,8 @@
 import OtpSettingWorkspace from '~/components/pages/setting/OtpSettingWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/otp.html'],
 })
 
 useLegacyPage({

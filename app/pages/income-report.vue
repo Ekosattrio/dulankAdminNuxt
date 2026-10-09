@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import IncomeReportWorkspace from '~/components/pages/reports/IncomeReportWorkspace.vue'
 
-useHead({
-  title: 'Income Report - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/income-report.html'],
+})
+
+useLegacyPage({
+  title: 'Income Report - Kacetak System',
+  sweetAlert: false,
 })
 </script>
 

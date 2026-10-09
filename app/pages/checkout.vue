@@ -11,7 +11,8 @@ import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/checkout.html'],
 })
 
 useLegacyPage({

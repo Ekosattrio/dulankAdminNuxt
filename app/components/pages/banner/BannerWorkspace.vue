@@ -5,10 +5,10 @@ import { useBanners } from '~/composables/useBanners'
 import { useTablePrint } from '~/composables/useTablePrint'
 import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import BannerFormModal from '~/components/pages/banner/BannerFormModal.vue'
+import BannerColumnCard from '~/components/pages/banner/BannerColumnCard.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
 const { banners, pending, error, refresh, saveBanner, deleteBanner } = useBanners()
 
@@ -37,13 +37,6 @@ function isVisibleNow(b: BannerItem): boolean {
     if (!isNaN(e.getTime()) && now > e) return false
   }
   return true
-}
-
-function formatScheduleDate(dateStr?: string): string {
-  if (!dateStr) return '—'
-  const d = new Date(dateStr)
-  if (isNaN(d.getTime())) return '—'
-  return d.toLocaleString()
 }
 
 // Modal management
@@ -169,7 +162,6 @@ async function handleConfirmDelete() {
             <div class="h-3.5 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
             <div class="h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
             <div class="h-2.5 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
-            <div class="h-2.5 w-2/3 rounded bg-gray-200 dark:bg-gray-800" />
           </div>
         </div>
       </div>
@@ -192,175 +184,23 @@ async function handleConfirmDelete() {
 
     <!-- Main Content: 2-Column Banner Cards Grid (Main Banner & Product Banner side by side) -->
     <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-      <!-- 1. Main Banner Column -->
-      <div class="rounded-xl border border-gray-200 bg-white shadow-xs dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
-        <div class="flex items-center justify-between border-b border-gray-100 p-4 dark:border-gray-800">
-          <h5 class="text-base font-bold text-gray-900 dark:text-white">Main Banner</h5>
-          <button
-            id="addMainBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 rounded-md bg-[#f97316] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#ea580c] transition-colors"
-            @click="handleAddMain"
-          >
-            <FeatherIcon name="plus" :size="13" />
-            <span>Add Main Banner</span>
-          </button>
-        </div>
-        <div class="p-4">
-          <div v-if="mainBanners.length === 0" class="py-12 text-center text-xs text-gray-400">
-            No banners yet.
-          </div>
-          <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div
-              v-for="b in mainBanners"
-              :key="b.id"
-              class="rounded-lg border border-gray-100 bg-gray-50/50 p-2.5 transition hover:shadow-sm dark:border-gray-800 dark:bg-gray-800/40"
-            >
-              <!-- Thumbnail Container with Badges & Actions -->
-              <div class="relative mb-2.5 overflow-hidden rounded-md bg-gray-100 dark:bg-gray-800">
-                <!-- Status Badge -->
-                <span
-                  :class="[
-                    'absolute top-2 left-2 z-10 rounded px-2 py-0.5 text-[11px] font-semibold text-white shadow-xs',
-                    isVisibleNow(b) ? 'bg-[#28c76f]' : 'bg-[#6c757d]'
-                  ]"
-                >
-                  {{ isVisibleNow(b) ? 'Active' : 'Inactive' }}
-                </span>
+      <BannerColumnCard
+        title="Main Banner"
+        add-label="Add Main Banner"
+        :banners="mainBanners"
+        @add="handleAddMain"
+        @edit="handleEdit"
+        @delete="bannerToDelete = $event"
+      />
 
-                <!-- Action Buttons -->
-                <div class="absolute top-2 right-2 z-10 flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-primary transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                    title="Edit"
-                    @click="handleEdit(b)"
-                  >
-                    <FeatherIcon name="edit" :size="13" />
-                  </button>
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded bg-[#ef4444] text-white shadow-sm hover:bg-red-600 transition-colors"
-                    title="Delete"
-                    @click="bannerToDelete = b"
-                  >
-                    <FeatherIcon name="trash-2" :size="13" />
-                  </button>
-                </div>
-
-                <!-- Banner Image -->
-                <a :href="b.src || b.imageUrl" target="_blank" rel="noopener noreferrer" class="block">
-                  <img
-                    :src="b.src || b.imageUrl"
-                    :alt="b.title"
-                    class="h-[120px] w-full object-cover transition-transform duration-300 hover:scale-105"
-                    @error="($event.target as HTMLImageElement).src = 'https://percetakan-dulank.netlify.app/images/brosur.jpg'"
-                  />
-                </a>
-              </div>
-
-              <!-- Information Details -->
-              <div class="space-y-0.5 pt-0.5">
-                <strong class="block text-xs font-bold text-gray-900 truncate dark:text-white">
-                  {{ b.title }}
-                </strong>
-                <p class="text-[11px] text-gray-500 truncate dark:text-gray-400 mb-1">
-                  {{ b.desc || b.description || '—' }}
-                </p>
-                <div class="text-[11px] text-gray-500 dark:text-gray-400 space-y-0.5">
-                  <div>Start: {{ formatScheduleDate(b.start || b.startDate) }}</div>
-                  <div>End: {{ formatScheduleDate(b.end || b.endDate) }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Product Banner Column -->
-      <div class="rounded-xl border border-gray-200 bg-white shadow-xs dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
-        <div class="flex items-center justify-between border-b border-gray-100 p-4 dark:border-gray-800">
-          <h5 class="text-base font-bold text-gray-900 dark:text-white">Product Banner</h5>
-          <button
-            id="addProductBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 rounded-md bg-[#f97316] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#ea580c] transition-colors"
-            @click="handleAddProduct"
-          >
-            <FeatherIcon name="plus" :size="13" />
-            <span>Add Product Banner</span>
-          </button>
-        </div>
-        <div class="p-4">
-          <div v-if="productBanners.length === 0" class="py-12 text-center text-xs text-gray-400">
-            No banners yet.
-          </div>
-          <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div
-              v-for="b in productBanners"
-              :key="b.id"
-              class="rounded-lg border border-gray-100 bg-gray-50/50 p-2.5 transition hover:shadow-sm dark:border-gray-800 dark:bg-gray-800/40"
-            >
-              <!-- Thumbnail Container with Badges & Actions -->
-              <div class="relative mb-2.5 overflow-hidden rounded-md bg-gray-100 dark:bg-gray-800">
-                <!-- Status Badge -->
-                <span
-                  :class="[
-                    'absolute top-2 left-2 z-10 rounded px-2 py-0.5 text-[11px] font-semibold text-white shadow-xs',
-                    isVisibleNow(b) ? 'bg-[#28c76f]' : 'bg-[#6c757d]'
-                  ]"
-                >
-                  {{ isVisibleNow(b) ? 'Active' : 'Inactive' }}
-                </span>
-
-                <!-- Action Buttons -->
-                <div class="absolute top-2 right-2 z-10 flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-primary transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                    title="Edit"
-                    @click="handleEdit(b)"
-                  >
-                    <FeatherIcon name="edit" :size="13" />
-                  </button>
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded bg-[#ef4444] text-white shadow-sm hover:bg-red-600 transition-colors"
-                    title="Delete"
-                    @click="bannerToDelete = b"
-                  >
-                    <FeatherIcon name="trash-2" :size="13" />
-                  </button>
-                </div>
-
-                <!-- Banner Image -->
-                <a :href="b.src || b.imageUrl" target="_blank" rel="noopener noreferrer" class="block">
-                  <img
-                    :src="b.src || b.imageUrl"
-                    :alt="b.title"
-                    class="h-[120px] w-full object-cover transition-transform duration-300 hover:scale-105"
-                    @error="($event.target as HTMLImageElement).src = 'https://percetakan-dulank.netlify.app/images/brosur.jpg'"
-                  />
-                </a>
-              </div>
-
-              <!-- Information Details -->
-              <div class="space-y-0.5 pt-0.5">
-                <strong class="block text-xs font-bold text-gray-900 truncate dark:text-white">
-                  {{ b.title }}
-                </strong>
-                <p class="text-[11px] text-gray-500 truncate dark:text-gray-400 mb-1">
-                  {{ b.desc || b.description || '—' }}
-                </p>
-                <div class="text-[11px] text-gray-500 dark:text-gray-400 space-y-0.5">
-                  <div>Start: {{ formatScheduleDate(b.start || b.startDate) }}</div>
-                  <div>End: {{ formatScheduleDate(b.end || b.endDate) }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BannerColumnCard
+        title="Product Banner"
+        add-label="Add Product Banner"
+        :banners="productBanners"
+        @add="handleAddProduct"
+        @edit="handleEdit"
+        @delete="bannerToDelete = $event"
+      />
     </div>
 
     <!-- Add / Edit Modal -->
@@ -396,4 +236,3 @@ async function handleConfirmDelete() {
     />
   </div>
 </template>
-

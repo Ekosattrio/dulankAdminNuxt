@@ -134,6 +134,13 @@ import smsGatewaysData from '../data/sms-gateways.json'
 import paymentGatewaysData from '../data/payment-gateways.json'
 import appearanceSettingsData from '../data/appearance-settings.json'
 import preferenceSettingsData from '../data/preference-settings.json'
+import couponsData from '../data/coupons.json'
+import vouchersData from '../data/vouchers.json'
+import discountPlansData from '../data/discount-plans.json'
+import discountsData from '../data/discounts.json'
+import onlineOrdersData from '../data/online-orders.json'
+import billingsData from '../data/billings.json'
+import subscriptionsData from '../data/subscriptions.json'
 
 export const bundledSources: Record<string, unknown> = {
   'address.json': addressData,
@@ -273,4 +280,11 @@ export const bundledSources: Record<string, unknown> = {
   'payment-gateways.json': paymentGatewaysData,
   'appearance-settings.json': appearanceSettingsData,
   'preference-settings.json': preferenceSettingsData,
+  'coupons.json': couponsData,
+  'vouchers.json': vouchersData,
+  'discount-plans.json': discountPlansData,
+  'discounts.json': discountsData,
+  'online-orders.json': onlineOrdersData,
+  'billings.json': billingsData,
+  'subscriptions.json': subscriptionsData,
 }

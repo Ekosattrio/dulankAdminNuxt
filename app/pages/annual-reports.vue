@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import AnnualReportsWorkspace from '~/components/pages/reports/AnnualReportsWorkspace.vue'
 
-useHead({
-  title: 'Annual Report (Laporan Rekapitulasi Tahunan) - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/annual-reports.html'],
+})
+
+useLegacyPage({
+  title: 'Annual Report (Laporan Rekapitulasi Tahunan) - Kacetak System',
+  sweetAlert: false,
 })
 </script>
 

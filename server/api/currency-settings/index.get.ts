@@ -1,20 +1,11 @@
-import { defineEventHandler } from 'h3'
-import { readJSON } from '~~/server/utils/data'
-import type { CurrencySetting } from '~~/server/types/currency-setting'
+import { getCurrencySettings } from '~~/server/utils/settingsDomainData'
 
-export default defineEventHandler(async () => {
-  try {
-    const items = await readJSON<CurrencySetting[]>('currency-settings.json', [])
-    return {
-      success: true,
-      data: items
-    }
-  } catch (err: any) {
-    return {
-      success: false,
-      message: err.message || 'Failed to load currency settings',
-      data: []
-    }
-  }
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const items = await getCurrencySettings({
+    search: query.search as string,
+    status: query.status as string,
+  })
+
+  return { success: true, data: items }
 })
-

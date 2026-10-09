@@ -2,7 +2,8 @@
 import PosSettingsWorkspace from '~/components/pages/setting/PosSettingsWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/pos-settings.html'],
 })
 
 useLegacyPage({

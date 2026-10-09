@@ -7,6 +7,11 @@ import SalesConfirmDelete from "~/components/sales/SalesConfirmDelete.vue";
 import SalesFeedback from "~/components/sales/SalesFeedback.vue";
 import SalesListHeader from "~/components/sales/SalesListHeader.vue";
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/work-flow.html'],
+})
+
 useLegacyPage({ title: "Work Flow List", sweetAlert: false });
 
 const router = useRouter();

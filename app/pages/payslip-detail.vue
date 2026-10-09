@@ -2,7 +2,8 @@
 import PayslipDetailWorkspace from '~/components/pages/payslip/PayslipDetailWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/payslip-detail.html']
 })
 
 useLegacyPage({

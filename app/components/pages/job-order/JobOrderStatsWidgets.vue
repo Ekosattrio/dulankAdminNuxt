@@ -31,7 +31,7 @@ const totalOutsource = computed(() => {
         <FeatherIcon name="clipboard" :size="18" />
       </div>
       <div>
-        <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total Job Order</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Job Order</p>
         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ totalJobOrder }}</h4>
       </div>
     </div>
@@ -42,7 +42,7 @@ const totalOutsource = computed(() => {
         <FeatherIcon name="clock" :size="18" />
       </div>
       <div>
-        <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total Waiting</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Waiting</p>
         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ totalWaiting }}</h4>
       </div>
     </div>
@@ -53,7 +53,7 @@ const totalOutsource = computed(() => {
         <FeatherIcon name="loader" :size="18" />
       </div>
       <div>
-        <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total On Process</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total On Process</p>
         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ totalOnProcess }}</h4>
       </div>
     </div>
@@ -64,7 +64,7 @@ const totalOutsource = computed(() => {
         <FeatherIcon name="home" :size="18" />
       </div>
       <div>
-        <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total In-House</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total In-House</p>
         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ totalInHouse }}</h4>
       </div>
     </div>
@@ -75,7 +75,7 @@ const totalOutsource = computed(() => {
         <FeatherIcon name="truck" :size="18" />
       </div>
       <div>
-        <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total Outsource</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Outsource</p>
         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ totalOutsource }}</h4>
       </div>
     </div>

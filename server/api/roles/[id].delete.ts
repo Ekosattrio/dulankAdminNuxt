@@ -1,22 +1,15 @@
-import { initialRoles } from '~~/server/utils/userManagementStore'
-import type { SystemRole } from '~~/server/types/user-management'
-import { readJSON, writeJSON } from '~~/server/utils/data'
+import { deleteRole } from '~~/server/utils/rolesData'
 
 export default defineEventHandler((event) => {
   const id = getRouterParam(event, 'id')
-  const roles = readJSON<SystemRole[]>('roles.json', initialRoles)
-  const idx = roles.findIndex((r) => r.id === id)
-
-  if (idx === -1) {
+  if (!id) {
     throw createError({
-      statusCode: 404,
-      statusMessage: 'Role not found',
+      statusCode: 400,
+      statusMessage: 'Role ID is required',
     })
   }
 
-  const removed = roles[idx]
-  const remaining = roles.filter((r) => r.id !== id)
-  writeJSON('roles.json', remaining)
+  const removed = deleteRole(id)
 
   return {
     success: true,

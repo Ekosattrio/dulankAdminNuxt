@@ -3,6 +3,7 @@ import FooterWorkspace from '~/components/pages/footer/FooterWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/footer.html'],
 })
 
 useLegacyPage({

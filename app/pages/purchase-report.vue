@@ -3,6 +3,7 @@ import PurchaseReportWorkspace from '~/components/pages/reports/PurchaseReportWo
 
 definePageMeta({
   layout: 'default',
+  alias: ['/purchase-report.html'],
 })
 
 useLegacyPage({

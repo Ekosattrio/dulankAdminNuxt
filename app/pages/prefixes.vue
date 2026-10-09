@@ -2,7 +2,8 @@
 import PrefixesSettingWorkspace from '~/components/pages/setting/PrefixesSettingWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/prefixes.html'],
 })
 
 useLegacyPage({

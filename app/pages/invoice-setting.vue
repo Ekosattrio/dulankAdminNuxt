@@ -2,7 +2,8 @@
 import InvoiceSettingWorkspace from '~/components/pages/setting/InvoiceSettingWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/invoice-setting.html'],
 })
 
 useLegacyPage({

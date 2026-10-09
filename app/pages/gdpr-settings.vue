@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import GdprSettingsWorkspace from '~/components/pages/setting/GdprSettingsWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/gdpr-settings.html'],
+})
+
 useLegacyPage({
   title: 'GDPR Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

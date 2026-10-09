@@ -1,5 +1,8 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'pos' })
+definePageMeta({
+  layout: 'pos',
+  alias: ['/pos.html'],
+})
 useLegacyPage({ title: 'POS', sweetAlert: false })
 const pos = reactive(usePos())
 </script>

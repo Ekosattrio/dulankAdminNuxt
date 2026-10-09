@@ -2,7 +2,8 @@
 import EmployeePageForm from '~/components/pages/employees/EmployeePageForm.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/edit-employee.html']
 })
 
 useLegacyPage({

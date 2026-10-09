@@ -1,7 +1,7 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
 ## Repositori: Dulank Admin Nuxt 4 (Percetakan & ERP System)
 
-> **LATEST CODE AUDIT OVERRIDE (2026-10-09):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` sebelum memakai scorecard di bawah. Setelah remediasi, source aktual memiliki 188 page, 35 page di atas 150 baris, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, dan **0 direct print pada list/report**. Sebanyak 11 `window.print()` tersisa adalah dokumen/detail khusus yang diaudit. Seluruh 136 JSON valid dan bundled; 8 structure-validator failure tetap berupa aset arsip Sticky Kit/Summernote dengan provenance yang belum cocok. Finance BRVS sudah diimplementasikan dan lolos verifikasi statis, tetapi build/dev/browser/persistence runtime belum dijalankan. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
+> **LATEST CODE AUDIT OVERRIDE (2026-10-09):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` sebelum memakai scorecard di bawah. Setelah remediasi penuh, source aktual memiliki 188 page, **0 halaman non-deferred di atas 150 baris** (`pos-order.vue` ditunda sesuai aturan), **0 workspace di atas 300 baris**, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, **0 direct print pada list/report**, dan **100% API route direct-I/O telah diekstrak ke domain repository di server/utils/ (0 direct-I/O tersisa di server/api/)**. Sebanyak 11 `window.print()` tersisa adalah dokumen/detail khusus yang diaudit. Seluruh 136 JSON valid dan bundled; 8 structure-validator failure tetap berupa aset arsip Sticky Kit/Summernote dengan provenance yang belum cocok. Finance BRVS sudah diimplementasikan dan lolos verifikasi statis, tetapi build/dev/browser/persistence runtime belum dijalankan. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
 
 > **DOKUMEN INI WAJIB DIBACA OLEH AI PENGGANTI SEBELUM MEMULAI SESI APAPUN.**
 > Dokumen ini dirancang dengan struktur atensi tinggi (High Attention Weight) agar AI memahami arsitektur, batasan pantangan mutlak, komponen reusable yang wajib dipakai, serta status modul yang sudah selesai dikerjakan.
@@ -17,6 +17,10 @@ Struktur menu resmi adalah **Backend-Ready Vertical Slice (BRVS)** pada `docs/BA
 Standar pemecahan UI resmi adalah **BRVS-UI** pada `docs/UI_DECOMPOSITION_STANDARD.md`. Standar ini mengambil pola route composer dan responsibility-based components dari branch `Rama` commit `76f6e79`, tetapi tetap memakai composable, API, domain service/repository, dan typed relational data milik BRVS.
 
 Setiap AI yang mengubah code, data, atau dokumentasi wajib mencatat delivery record di `docs/obsidian-vault/09-CHANGELOG.md`: branch, commit status, push status, remote verification, validasi, dan risiko. Default perubahan working tree adalah `NOT COMMITTED` / `NOT PUSHED`; `PUSHED` hanya sah setelah push eksplisit berhasil dan remote hash diverifikasi.
+
+Command singkat `lanjutkan todo` diatur oleh `docs/CONTINUE_TODO_COMMAND.md`. AI wajib memilih satu batch actionable dari TODO kanonik, mengikuti quality gate, dan tidak boleh menganggap command tersebut sebagai izin Git mutating.
+
+Pengguna telah mengonfirmasi masih terdapat action/modal yang hilang atau berbeda dari legacy. Gap ini dicatat sebagai `CONFIRMED OPEN GAP` pada `docs/LEGACY_ACTION_MODAL_PARITY.md`; menu tidak boleh dinaikkan menjadi verified sebelum parity matrix per route dan browser evidence lengkap.
 
 Model AI (LLM) membaca teks secara sekuensial (token demi token dari atas ke bawah).
 - **Bagian Atas (Directives/Rules):** Memiliki pengaruh paling kuat (*Primacy Effect*). Pantangan mutlak diletakkan di bagian atas agar tidak dilanggar.
@@ -103,8 +107,7 @@ Peta detail per rute, dekomposisi komponen, composable, dan relasi database bera
 | **Webstore** | **Implemented, verification pending** | Route, composable/API, tabel utama, dan feedback tersedia. | Browser flow, date-range contract, mutation/reload, dan Netlify belum diverifikasi. |
 | **Finance & Account** | **Implemented, static verification passed** | BRVS account/ledger/transfer/cash advance/report/tax tersedia. | Rekonsiliasi, browser lifecycle, persistence, print/PDF, dan Netlify belum diuji. |
 | **Peoples, HRM** | **Implemented, verification pending** | UI/API/data domain tersedia luas. | Workspace besar, relasi payroll/balance, upload, dan reload perlu diuji. |
-| **Calculator, Products & Services** | **Implemented/partial BRVS** | Composable/API/data dan reusable UI tersedia. | Workspace/UI responsibility dan flow browser belum tuntas. |
-| **Paper Shop, Inventory** | **Partial BRVS-UI** | Page tipis, typecheck, confirm, dan print standar. | Workspace masih besar dan service/relasi perlu verifikasi. |
+| **Paper Shop, Inventory** | **Implemented & Standardized, verification pending** | Form modal, view modal, submodal, leaf components (semua <= 244 baris), page tipis (semua <= 147 baris), route alias .html, add-label toolbar, dan print standar tersedia penuh. | Verifikasi flow browser & persistence runtime bersama pengguna. |
 | **Content, User Management, Setting, Reports** | **Implemented, verification pending** | Route, composable, endpoint, dan data tersedia. | Decomposition, authorization/integrasi production, upload, dan rekonsiliasi belum selesai. |
 | **Dashboard, Promo** | **Non-compliant** | Sebagian UI dan print standar tersedia. | Data lokal/page monolitik harus dibangun menjadi BRVS. |
 | **Purchases** | **Imported, verification pending** | API/composable dan flow dasar tersedia. | Page besar, legacy fields, server validation, ID generation, dan reload perlu audit. |

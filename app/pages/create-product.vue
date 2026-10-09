@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import ProductDocumentForm from '~/components/pages/create-product/ProductDocumentForm.vue'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/create-product.html'],
+})
 useLegacyPage({ title: 'New Product - Create new product', sweetAlert: false })
 </script>
 

@@ -1,8 +1,7 @@
-import type { FaqItem } from '#server/types/faq'
+import { deleteFaq } from '~~/server/utils/faqData'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-
   if (!id) {
     throw createError({
       statusCode: 400,
@@ -10,17 +9,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const allFaqs = await readJSON<FaqItem[]>('faqs.json', [])
-  const newFaqs = allFaqs.filter(item => item.id !== id)
+  const removed = await deleteFaq(id)
 
-  if (allFaqs.length === newFaqs.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'FAQ not found'
-    })
+  return {
+    success: true,
+    message: 'FAQ deleted successfully',
+    data: removed,
   }
-
-  await writeJSON('faqs.json', newFaqs)
-
-  return createResponse({ id }, 'FAQ deleted successfully')
 })

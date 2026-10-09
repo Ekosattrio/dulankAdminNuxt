@@ -3,6 +3,7 @@ import CustomerDueReportWorkspace from '~/components/pages/reports/CustomerDueRe
 
 definePageMeta({
   layout: 'default',
+  alias: ['/customer-due-report.html'],
 })
 
 useLegacyPage({

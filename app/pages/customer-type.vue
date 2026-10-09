@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import CustomerTypeWorkspace from '~/components/pages/customer-type/CustomerTypeWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/customer-type.html'],
+})
+
 useLegacyPage({ title: 'Customer Type', sweetAlert: false })
 </script>
 

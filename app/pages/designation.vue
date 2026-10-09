@@ -2,7 +2,8 @@
 import DesignationWorkspace from '~/components/designation/DesignationWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/designation.html']
 })
 
 useLegacyPage({

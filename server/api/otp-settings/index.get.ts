@@ -1,15 +1,7 @@
-import { readJSON } from '~/server/utils/data'
-import type { OtpConfig } from '~/types/system-settings'
+import { getOtpConfig } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async () => {
-  const config = readJSON<OtpConfig>('otp-settings.json', {
-    isEnabled: true,
-    provider: 'whatsapp',
-    otpType: 'numeric',
-    digitLimit: 6,
-    expireMinutes: 5,
-    resendDelaySeconds: 60,
-  })
+  const config = getOtpConfig()
 
   return {
     success: true,

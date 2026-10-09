@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import InvoiceReportWorkspace from '~/components/pages/reports/InvoiceReportWorkspace.vue'
 
-useHead({
-  title: 'Invoice Report - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/invoice-report.html'],
+})
+
+useLegacyPage({
+  title: 'Invoice Report - Kacetak System',
+  sweetAlert: false,
 })
 </script>
 

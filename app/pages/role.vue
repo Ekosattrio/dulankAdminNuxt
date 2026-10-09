@@ -3,6 +3,7 @@ import PermissionMatrixWorkspace from '~/components/pages/roles/PermissionMatrix
 
 definePageMeta({
   layout: 'default',
+  alias: ['/role.html']
 })
 
 useLegacyPage({

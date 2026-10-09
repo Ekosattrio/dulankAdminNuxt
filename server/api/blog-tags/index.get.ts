@@ -1,20 +1,10 @@
-import type { BlogTag } from '~/server/types/blog'
+import { getBlogTags } from '~~/server/utils/blogDomainData'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const search = (query.search as string || '').toLowerCase().trim()
+  const tags = await getBlogTags({
+    search: query.search as string,
+  })
 
-  const allTags = readJSON<BlogTag[]>('blog-tags.json', [])
-
-  let filtered = allTags
-
-  if (search) {
-    filtered = filtered.filter(item =>
-      item.name.toLowerCase().includes(search) ||
-      item.slug.toLowerCase().includes(search) ||
-      (item.description && item.description.toLowerCase().includes(search))
-    )
-  }
-
-  return createResponse(filtered, 'Blog tags fetched successfully')
+  return createResponse(tags, 'Blog tags fetched successfully')
 })

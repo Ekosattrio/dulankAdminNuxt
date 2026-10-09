@@ -3,6 +3,7 @@ import TaxReportWorkspace from '~/components/pages/reports/TaxReportWorkspace.vu
 
 definePageMeta({
   layout: 'default',
+  alias: ['/tax-report.html'],
 })
 
 useLegacyPage({

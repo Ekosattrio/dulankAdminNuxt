@@ -16,7 +16,16 @@ const emit = defineEmits<{
 }>()
 
 const searchQuery = ref('')
+const filterGroup = ref('')
 const filterStatus = ref('')
+
+const groupOptions = computed(() => {
+  const uniqueNames = Array.from(new Set(props.groups.map((g) => g.name)))
+  return [
+    { label: "All Paper's Group", value: '' },
+    ...uniqueNames.map((name) => ({ label: name, value: name }))
+  ]
+})
 
 const columns = [
   { key: 'name', label: "Paper's Group", sortable: true },
@@ -30,11 +39,12 @@ const columns = [
 const filteredItems = computed(() => {
   return props.groups.filter((g) => {
     const matchStatus = !filterStatus.value || g.status === filterStatus.value
+    const matchGroup = !filterGroup.value || g.name === filterGroup.value
     const matchSearch =
       !searchQuery.value ||
       g.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       g.merk.toLowerCase().includes(searchQuery.value.toLowerCase())
-    return matchStatus && matchSearch
+    return matchStatus && matchGroup && matchSearch
   })
 })
 </script>
@@ -47,6 +57,11 @@ const filteredItems = computed(() => {
     search-placeholder="Search paper group or merk..."
   >
     <template #filters>
+      <TableFilterSelect
+        v-model="filterGroup"
+        :options="groupOptions"
+        placeholder="Paper's Group"
+      />
       <TableFilterSelect
         v-model="filterStatus"
         :options="[
@@ -101,4 +116,3 @@ const filteredItems = computed(() => {
     </template>
   </SalesDataTable>
 </template>
-

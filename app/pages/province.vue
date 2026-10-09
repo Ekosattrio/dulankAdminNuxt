@@ -2,7 +2,8 @@
 import ProvinceWorkspace from '~/components/pages/location/ProvinceWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/province.html'],
 })
 
 useLegacyPage({

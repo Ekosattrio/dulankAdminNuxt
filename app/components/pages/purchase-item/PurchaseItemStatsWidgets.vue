@@ -2,14 +2,30 @@
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import { formatNumber } from '~/composables/useFormatters'
 
-defineProps<{
-  stats: {
+const props = defineProps<{
+  stats?: {
     totalItems: number
     totalCategories: number
     avgPrice: number
     highestPrice: number
   }
+  items?: any[]
 }>()
+
+const computedStats = computed(() => {
+  if (props.stats) return props.stats
+  const all = props.items || []
+  const totalItems = all.length
+  const uniqueCategories = new Set(all.map((i: any) => i.category)).size
+  const avgPrice = totalItems > 0 ? Math.round(all.reduce((acc: number, i: any) => acc + (Number(i.price) || 0), 0) / totalItems) : 0
+  const highestPrice = all.reduce((max: number, i: any) => Math.max(max, Number(i.price) || 0), 0)
+  return {
+    totalItems,
+    totalCategories: uniqueCategories,
+    avgPrice,
+    highestPrice,
+  }
+})
 </script>
 
 <template>
@@ -22,7 +38,7 @@ defineProps<{
             Total Items
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.totalItems }}
+            {{ computedStats.totalItems }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-400">
@@ -39,7 +55,7 @@ defineProps<{
             Categories
           </p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ stats.totalCategories }}
+            {{ computedStats.totalCategories }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
@@ -56,7 +72,7 @@ defineProps<{
             Avg Price
           </p>
           <h3 class="mt-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Rp {{ formatNumber(stats.avgPrice) }}
+            Rp {{ formatNumber(computedStats.avgPrice) }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -73,7 +89,7 @@ defineProps<{
             Highest Price
           </p>
           <h3 class="mt-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Rp {{ formatNumber(stats.highestPrice) }}
+            Rp {{ formatNumber(computedStats.highestPrice) }}
           </h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">

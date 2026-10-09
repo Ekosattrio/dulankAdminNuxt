@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import BestSellerWorkspace from '~/components/pages/reports/BestSellerWorkspace.vue'
 
-useHead({
-  title: 'Bestseller Products Report - Kacetak System'
+definePageMeta({
+  layout: 'default',
+  alias: ['/best-seller.html'],
+})
+
+useLegacyPage({
+  title: 'Bestseller Products Report',
+  sweetAlert: false,
 })
 </script>
 

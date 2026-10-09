@@ -3,6 +3,7 @@ import RolePermissionsWorkspace from '~/components/pages/roles/RolePermissionsWo
 
 definePageMeta({
   layout: 'default',
+  alias: ['/role-permissions.html']
 })
 
 useLegacyPage({

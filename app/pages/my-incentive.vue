@@ -11,11 +11,12 @@ import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/my-incentive.html']
 })
 
 useLegacyPage({
-  title: 'My Incentive List - Dulank Admin',
+  title: 'My Incentive List',
   sweetAlert: false
 })
 

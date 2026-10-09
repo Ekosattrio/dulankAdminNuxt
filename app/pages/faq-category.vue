@@ -3,6 +3,7 @@ import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/faq-category.html'],
 })
 
 useLegacyPage({

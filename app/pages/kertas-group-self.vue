@@ -7,15 +7,29 @@ import PaperGroupViewModal from '~/components/pages/paper-shop/PaperGroupViewMod
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({
+  layout: 'default',
+  alias: ['/kertas-group-self.html']
+})
 
 useLegacyPage({
-  title: 'Internal Paper Groups - Master Grup Kertas',
+  title: 'Paper Group List',
   sweetAlert: false
 })
 
 const { groups, stats, pending, error, refresh, saveGroup, deleteGroup } = usePaperGroupsSelf()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+
+const printColumns = [
+  { key: 'name', label: "Paper's Group" },
+  { key: 'merk', label: 'Merk' },
+  { key: 'priceType', label: 'Price Type', align: 'center' as const },
+  { key: 'update', label: 'Update' },
+  { key: 'status', label: 'Status', align: 'center' as const }
+]
 
 const isFormModalOpen = ref(false)
 const isViewModalOpen = ref(false)
@@ -26,25 +40,10 @@ const deleteTargetId = ref<string | null>(null)
 const isDeleting = ref(false)
 const isSaving = ref(false)
 
-function openAddModal() {
-  selectedGroup.value = null
-  isFormModalOpen.value = true
-}
-
-function handleView(item: PaperGroup) {
-  selectedGroup.value = item
-  isViewModalOpen.value = true
-}
-
-function handleEdit(item: PaperGroup) {
-  selectedGroup.value = item
-  isFormModalOpen.value = true
-}
-
-function handleDelete(id: string) {
-  deleteTargetId.value = id
-  isDeleteModalOpen.value = true
-}
+function openAddModal() { selectedGroup.value = null; isFormModalOpen.value = true }
+function handleView(item: PaperGroup) { selectedGroup.value = item; isViewModalOpen.value = true }
+function handleEdit(item: PaperGroup) { selectedGroup.value = item; isFormModalOpen.value = true }
+function handleDelete(id: string) { deleteTargetId.value = id; isDeleteModalOpen.value = true }
 
 async function confirmDelete() {
   if (!deleteTargetId.value) return
@@ -77,26 +76,22 @@ async function handleSave(payload: PaperGroupFormData) {
 <template>
   <div class="dulank-page dulank-page-kertas-group-self space-y-6">
     <SalesListHeader
-      title="Internal Paper Groups"
-      subtitle="Master data grup dan merk kertas untuk kalkulator & produksi"
+      title="Paper Group List"
+      subtitle="Manage your Paper Groups"
+      add-label="Add New Paper's Group"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
     />
 
     <!-- Stats Widgets -->
     <PaperGroupStatsWidgets :stats="stats" />
 
     <!-- Feedback State -->
-    <SalesFeedback
-      v-if="pending && !groups.length"
-      loading
-    />
-    <SalesFeedback
-      v-else-if="error"
-      :error="error.message || 'Gagal memuat data paper group'"
-      @retry="refresh"
-    />
+    <SalesFeedback v-if="pending && !groups.length" loading />
+    <SalesFeedback v-else-if="error" :error="error.message || 'Gagal memuat data paper group'" @retry="refresh" />
 
     <!-- Records Table -->
     <PaperGroupRecordsTable
@@ -117,10 +112,16 @@ async function handleSave(payload: PaperGroupFormData) {
     />
 
     <!-- View Detail Modal -->
-    <PaperGroupViewModal
-      :open="isViewModalOpen"
-      :group="selectedGroup"
-      @close="isViewModalOpen = false"
+    <PaperGroupViewModal :open="isViewModalOpen" :group="selectedGroup" @close="isViewModalOpen = false" />
+
+    <!-- Print Modal -->
+    <DocumentPrintModal
+      :open="isPrintModalOpen"
+      title="Paper Group List"
+      :columns="printColumns"
+      :data="groups"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
 
     <!-- Confirm Delete Modal -->

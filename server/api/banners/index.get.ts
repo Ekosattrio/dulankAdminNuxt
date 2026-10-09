@@ -1,6 +1,12 @@
-import type { BannerItem } from '#server/types/banner'
+import { getBanners } from '~~/server/utils/contentDomainData'
 
-export default defineEventHandler(async () => {
-  const allBanners = await readJSON<BannerItem[]>('banners.json', [])
-  return createResponse(allBanners, 'Banners fetched successfully')
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const banners = await getBanners({
+    search: query.search as string,
+    type: query.type as string,
+    status: query.status as string,
+  })
+
+  return createResponse(banners, 'Banners fetched successfully')
 })

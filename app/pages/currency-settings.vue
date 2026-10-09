@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import CurrencySettingsWorkspace from '~/components/pages/setting/CurrencySettingsWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/currency-settings.html'],
+})
+
 useLegacyPage({
   title: 'Currency Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

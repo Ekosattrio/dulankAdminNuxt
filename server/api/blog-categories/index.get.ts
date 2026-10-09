@@ -1,25 +1,11 @@
-import type { BlogCategory } from '~/server/types/blog'
+import { getBlogCategories } from '~~/server/utils/blogDomainData'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const search = (query.search as string || '').toLowerCase().trim()
-  const status = query.status as string || ''
+  const categories = await getBlogCategories({
+    search: query.search as string,
+    status: query.status as string,
+  })
 
-  const allCategories = readJSON<BlogCategory[]>('blog-categories.json', [])
-
-  let filtered = allCategories
-
-  if (search) {
-    filtered = filtered.filter(item =>
-      item.name.toLowerCase().includes(search) ||
-      item.slug.toLowerCase().includes(search) ||
-      (item.description && item.description.toLowerCase().includes(search))
-    )
-  }
-
-  if (status && status !== 'All') {
-    filtered = filtered.filter(item => item.status.toLowerCase() === status.toLowerCase())
-  }
-
-  return createResponse(filtered, 'Blog categories fetched successfully')
+  return createResponse(categories, 'Blog categories fetched successfully')
 })

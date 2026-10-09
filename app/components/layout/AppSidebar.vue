@@ -315,7 +315,7 @@ const menuGroups: MenuGroup[] = [
         submenus: [
           { title: "Customer Report", to: "/customer-report" },
           { title: "Customer Due Report", to: "/customer-due-report" },
-          { title: "Customer Subscription", to: "/customer-due-report" },
+          { title: "Customer Subscription", to: "/subscriptions" },
         ],
       },
       { title: "Product Report", icon: "package", to: "/product-report" },

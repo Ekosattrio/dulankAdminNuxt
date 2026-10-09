@@ -5,6 +5,7 @@ import DateRangePicker from '~/components/common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import SalesDataTable from '~/components/sales/SalesDataTable.vue'
+import SalesActionButton from '~/components/sales/SalesActionButton.vue'
 
 defineProps<{
   members: MemberUser[]
@@ -135,22 +136,16 @@ const columns = [
     <!-- Cell: Actions -->
     <template #cell(actions)="{ item }">
       <div class="flex items-center justify-end gap-1.5">
-        <button
-          type="button"
-          class="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-[#FE9F43] dark:text-gray-400 dark:hover:bg-gray-800"
-          title="Edit Member"
+        <SalesActionButton
+          action="edit"
+          label="Edit Member"
           @click="emit('edit', item)"
-        >
-          <FeatherIcon name="edit" size="14" />
-        </button>
-        <button
-          type="button"
-          class="rounded p-1 text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
-          title="Delete Member"
+        />
+        <SalesActionButton
+          action="delete"
+          label="Delete Member"
           @click="emit('delete', item)"
-        >
-          <FeatherIcon name="trash-2" size="14" />
-        </button>
+        />
       </div>
     </template>
   </SalesDataTable>

@@ -1,8 +1,21 @@
+export interface PaperGroupPriceDetail {
+  priceType?: 'Fix Price' | 'Sample Price'
+  price?: number
+  unitPrice?: string
+  gramature?: number
+  paperSize?: string
+}
+
 export interface PaperGroup {
   id: string
   name: string
   merk: string
   priceType: 'Yes' | 'No'
+  priceDetail?: PaperGroupPriceDetail
+  price?: number
+  unitPrice?: string
+  gramature?: number
+  paperSize?: string
   update: string
   status: 'Active' | 'Deactive'
 }
@@ -17,6 +30,11 @@ export interface PaperGroupFormData {
   name: string
   merk: string
   priceType: 'Yes' | 'No'
+  priceDetail?: PaperGroupPriceDetail
+  price?: number
+  unitPrice?: string
+  gramature?: number
+  paperSize?: string
   status: 'Active' | 'Deactive'
 }
 
@@ -46,6 +64,14 @@ export interface PaperSizeFormData {
   status: 'Active' | 'Deactive'
 }
 
+export interface PaperStockHistoryItem {
+  date: string
+  reff: string
+  qty: number
+  unit: string
+  created: string
+}
+
 export interface PaperItem {
   id: string
   groupId: string
@@ -57,8 +83,14 @@ export interface PaperItem {
   unitPrice: string
   gsm: number
   paperSize: string
+  paperWidth?: number
+  paperHeight?: number
   stock: number
   unitStock: string
+  minOrder?: string
+  stepOrder?: string
+  minTransaction?: number
+  stockHistory?: PaperStockHistoryItem[]
   update: string
   status: 'Active' | 'Deactive'
 }
@@ -80,8 +112,14 @@ export interface PaperItemFormData {
   unitPrice: string
   gsm: number
   paperSize: string
+  paperWidth?: number
+  paperHeight?: number
   stock: number
   unitStock: string
+  minOrder?: string
+  stepOrder?: string
+  minTransaction?: number
+  addStock?: number
   status: 'Active' | 'Deactive'
 }
 
@@ -92,6 +130,8 @@ export interface PaperPrice {
   nama: string
   group: string
   merk: string
+  panjang?: number
+  lebar?: number
   ukuran: string
   satuan: string
   gramatur: number
@@ -115,12 +155,17 @@ export interface PaperPriceFormData {
   nama: string
   group: string
   merk: string
+  panjang?: number
+  lebar?: number
   ukuran: string
   satuan: string
   gramatur: number
   minOrder: string
+  minOrderUnit?: 'Rim' | 'Lembar'
   kelipatan: string
+  kelipatanUnit?: 'Rim' | 'Lembar'
   harga: number
+  hargaUnit?: 'Rim' | 'Lembar'
   status: 'Active' | 'Deactive'
 }
 

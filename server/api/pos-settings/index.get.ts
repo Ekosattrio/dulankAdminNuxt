@@ -1,25 +1,6 @@
-import type { PosSetting } from '#server/types/pos-setting'
+import { getPosSetting } from '~~/server/utils/settingsDomainData'
 
 export default defineEventHandler(async () => {
-  const defaultSettings: PosSetting = {
-    id: 'pos-setting-1',
-    defaultCustomerId: 'ID000002',
-    defaultCustomerName: 'Siti Aminah (General / Walk-in)',
-    defaultWarehouseId: '1',
-    defaultWarehouseName: 'Kacetak Pusat Karawang Barat',
-    printerType: 'Thermal 80mm',
-    autoPrintReceipt: true,
-    enableSoundEffect: true,
-    barcodeScannerMode: 'instant_add',
-    allowedPaymentMethods: ['Cash', 'QRIS', 'Card / EDC', 'Bank Transfer'],
-    receiptHeaderNotes: 'SELAMAT DATANG DI KACETAK POS',
-    receiptFooterNotes: 'Barang yang sudah dibeli tidak dapat ditukar atau dikembalikan kecuali cacat produksi. Terima kasih atas kunjungan Anda!',
-    showTaxOnReceipt: true,
-    showCashierName: true,
-    showCustomerDetails: true,
-    updatedAt: new Date().toISOString()
-  }
-
-  const settings = await readJSON<PosSetting>('pos-settings.json', defaultSettings)
+  const settings = await getPosSetting()
   return createResponse(settings, 'POS settings retrieved successfully')
 })

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import PrinterSettingsWorkspace from '~/components/pages/setting/PrinterSettingsWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/printer-settings.html'],
+})
+
 useLegacyPage({
   title: 'Printer Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

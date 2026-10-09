@@ -1,27 +1,8 @@
-import type { Category } from '~/types/category'
+import { deleteCategory } from '~~/server/utils/productTaxonomyData'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
+  const result = await deleteCategory(id || '')
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Category ID is required'
-    })
-  }
-
-  const allCategories = await readJSON<Category[]>('categories.json', [])
-  const newCategories = allCategories.filter(c => c.id !== id)
-
-  if (allCategories.length === newCategories.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Category not found'
-    })
-  }
-
-  await writeJSON('categories.json', newCategories)
-
-  return createResponse({ id }, 'Category deleted successfully')
+  return createResponse(result, 'Category deleted successfully')
 })
-

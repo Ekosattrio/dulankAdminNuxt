@@ -71,6 +71,7 @@ async function handleSave(payload: IncomeCategoryFormData) {
     <SalesListHeader
       title="Income Category"
       subtitle="Kelola dan atur kategori pos pemasukan keuangan"
+      add-label="Add Income Category"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"

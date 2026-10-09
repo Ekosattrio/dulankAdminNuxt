@@ -3,6 +3,7 @@ import OurClientWorkspace from '~/components/pages/our-client/OurClientWorkspace
 
 definePageMeta({
   layout: 'default',
+  alias: ['/our-client.html'],
 })
 
 useLegacyPage({

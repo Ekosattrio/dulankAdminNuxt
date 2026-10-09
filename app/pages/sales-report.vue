@@ -3,6 +3,7 @@ import SalesReportWorkspace from '~/components/pages/reports/SalesReportWorkspac
 
 definePageMeta({
   layout: 'default',
+  alias: ['/sales-report.html'],
 })
 
 useLegacyPage({

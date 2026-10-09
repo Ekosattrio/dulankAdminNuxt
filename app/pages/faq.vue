@@ -3,6 +3,7 @@ import FaqWorkspace from '~/components/pages/faq/FaqWorkspace.vue'
 
 definePageMeta({
   layout: 'default',
+  alias: ['/faq.html'],
 })
 
 useLegacyPage({

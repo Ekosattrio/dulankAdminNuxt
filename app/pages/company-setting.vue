@@ -2,7 +2,8 @@
 import CompanySettingWorkspace from '~/components/pages/setting/CompanySettingWorkspace.vue'
 
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  alias: ['/company-setting.html'],
 })
 
 useLegacyPage({

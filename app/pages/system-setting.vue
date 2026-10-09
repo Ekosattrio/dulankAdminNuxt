@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import SystemSettingWorkspace from '~/components/pages/setting/SystemSettingWorkspace.vue'
 
+definePageMeta({
+  layout: 'default',
+  alias: ['/system-setting.html'],
+})
+
 useLegacyPage({
   title: 'System Settings',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false,
 })
 </script>
 

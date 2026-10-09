@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import type { Category, CategoryFormData } from '~/types/category'
+import type { Category, CategoryFormData } from '#server/types/category'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
+import {
+  formControlClass,
+  modalFormRowClass,
+  modalFormLabelClass,
+  modalFormInputColClass,
+  salesPrimaryButton,
+  salesSecondaryButton,
+} from '~/utils/salesUi'
 
 const props = defineProps<{
   isOpen: boolean
@@ -16,110 +25,92 @@ const form = reactive<CategoryFormData>({
   id: '',
   name: '',
   code: '',
-  status: 'Active'
+  status: 'Active',
 })
 
 watch(
-  () => props.editData,
-  (val) => {
-    if (val && props.isEdit) {
-      form.id = val.id
-      form.name = val.name
-      form.code = val.code
-      form.status = val.status || 'Active'
-    } else {
-      form.id = ''
-      form.name = ''
-      form.code = ''
-      form.status = 'Active'
+  () => props.isOpen,
+  (open) => {
+    if (open) {
+      if (props.isEdit && props.editData) {
+        form.id = props.editData.id
+        form.name = props.editData.name
+        form.code = props.editData.code
+        form.status = props.editData.status
+      } else {
+        form.id = ''
+        form.name = ''
+        form.code = ''
+        form.status = 'Active'
+      }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const handleSubmit = () => {
+  if (!form.name.trim()) return
   emit('submit', { ...form })
 }
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop-custom">
-    <div class="modal-dialog-centered custom-modal-two" style="max-width: 500px; width: 100%; margin: auto;">
-      <div class="modal-content bg-white rounded-3 shadow border-0 overflow-hidden">
-        <div class="p-4">
-          <!-- Header -->
-          <div class="modal-header border-0 p-0 pb-3 mb-3 d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold mb-0 text-dark">
-              {{ isEdit ? 'Edit Category' : 'Add Category' }}
-            </h4>
-            <button type="button" class="btn-close" @click="emit('close')"></button>
-          </div>
-
-          <!-- Body -->
-          <form @submit.prevent="handleSubmit">
-            <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Category Name <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.name"
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g. Digital Printing A3+"
-                  required
-                />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Category Code</label>
-                <input
-                  v-model="form.code"
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g. CAT-DP01 (Leave empty to auto-generate)"
-                />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-xs fw-semibold text-muted">Status</label>
-                <select v-model="form.status" class="form-select">
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="modal-footer justify-content-end p-0 pt-4 mt-3 border-top d-flex gap-2">
-              <button type="button" class="btn btn-secondary" @click="emit('close')">
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary px-4 fw-semibold"
-              >
-                {{ isEdit ? 'Save Changes' : 'Create Category' }}
-              </button>
-            </div>
-          </form>
+  <SalesDialog
+    :open="isOpen"
+    :title="isEdit ? 'Edit Category' : 'Create Category'"
+    size="md"
+    @close="emit('close')"
+  >
+    <form id="category-form" class="space-y-4" @submit.prevent="handleSubmit">
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Category Name <span class="text-red-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.name"
+            type="text"
+            :class="formControlClass"
+            placeholder="e.g. Digital Printing A3+"
+            required
+          />
         </div>
       </div>
-    </div>
-  </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Category Slug
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.code"
+            type="text"
+            :class="formControlClass"
+            placeholder="e.g. digital-printing (leave empty to auto-slug)"
+          />
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Status
+        </label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <template #footer>
+      <button type="button" :class="salesSecondaryButton" @click="emit('close')">
+        Cancel
+      </button>
+      <button type="submit" form="category-form" :class="salesPrimaryButton">
+        {{ isEdit ? 'Save Changes' : 'Submit' }}
+      </button>
+    </template>
+  </SalesDialog>
 </template>
-
-<style scoped>
-.modal-backdrop-custom {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-  padding: 15px;
-}
-</style>
-

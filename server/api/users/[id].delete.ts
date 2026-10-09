@@ -1,21 +1,17 @@
 import { defineEventHandler, getRouterParam, createError } from 'h3'
-import type { MemberUser } from '~~/server/types/user-management'
-import { readJSON, writeJSON } from '~~/server/utils/data'
+import { deleteUser } from '~~/server/utils/usersData'
 
 export default defineEventHandler((event) => {
   const id = getRouterParam(event, 'id')
-  const members = readJSON<MemberUser[]>('users.json', [])
-  const idx = members.findIndex((m) => m.id === id)
-
-  if (idx === -1) {
+  if (!id) {
     throw createError({
-      statusCode: 404,
-      statusMessage: 'Member not found',
+      statusCode: 400,
+      statusMessage: 'Member ID is required',
     })
   }
 
-  const removed = members.splice(idx, 1)[0]
-  writeJSON('users.json', members)
+  const removed = deleteUser(id)
+
   return {
     success: true,
     message: 'Member deleted successfully',

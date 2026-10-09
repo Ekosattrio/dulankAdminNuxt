@@ -3,6 +3,7 @@ import ProfitAndLossWorkspace from '~/components/pages/reports/ProfitAndLossWork
 
 definePageMeta({
   layout: 'default',
+  alias: ['/profit-and-loss.html'],
 })
 
 useLegacyPage({
