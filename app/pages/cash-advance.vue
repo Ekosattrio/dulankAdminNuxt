@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">import { formatRupiah } from '~/composables/useFormatters'
 
 const { data: cashAdvanceData } = await useFetch<CashAdvanceItem[]>('/api/cash-advance')
@@ -381,3 +382,10 @@ const deleteItem = (id: string) => {
   </div>
 </template>
 
+=======
+<script setup lang="ts">
+import CashAdvanceWorkspace from '~/components/pages/cash-advance/CashAdvanceWorkspace.vue'
+useLegacyPage({ title: 'Cash Advance', sweetAlert: false })
+</script>
+<template><div class="dulank-page dulank-page-cash-advance"><CashAdvanceWorkspace /></div></template>
+>>>>>>> origin/eko

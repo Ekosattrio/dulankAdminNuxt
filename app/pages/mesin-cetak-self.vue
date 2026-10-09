@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -327,3 +328,14 @@ function refresh() {
   filterStatus.value = ''
 }</script>
 
+=======
+<script setup lang="ts">
+import WorkshopServicePage from '~/components/pages/products-services/WorkshopServicePage.vue'
+
+definePageMeta({ layout: 'default' })
+</script>
+
+<template>
+  <WorkshopServicePage category="printing" />
+</template>
+>>>>>>> origin/eko

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="content">
     <div class="page-header">
@@ -196,3 +197,18 @@ const toggleHeader = () => {
 </script>
 
 useMockSync('invoice-report', rows);
+=======
+<script setup lang="ts">
+import InvoiceReportWorkspace from '~/components/pages/reports/InvoiceReportWorkspace.vue'
+
+useHead({
+  title: 'Invoice Report - Kacetak System'
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-invoice-report">
+    <InvoiceReportWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

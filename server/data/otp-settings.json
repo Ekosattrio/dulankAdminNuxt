@@ -1,0 +1,9 @@
+{
+  "isEnabled": true,
+  "provider": "whatsapp",
+  "otpType": "numeric",
+  "digitLimit": 6,
+  "expireMinutes": 5,
+  "resendDelaySeconds": 60,
+  "updatedAt": "2026-10-08T08:00:00.000Z"
+}

@@ -1,0 +1,4949 @@
+{
+  "Dashboard Admin": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Subscriptions": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Sales Dashboard": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Kalkulator Dashboard": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Analytics Dashboard": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Sales": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Invoice": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Delivery Note": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Sales Return": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Quotation": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Request For Quotation": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "POS": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Payment-IN": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Payment-OUT": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Flow Category": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Flow Name": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Flow Template": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Work Flow": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Orders": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Job Orders": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Job List": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Job Branch": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "My Job": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "My Incentive": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase Order": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase Return": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase Item": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase Category": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Voucher": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Discount plan": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Discount": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Expense": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Expense category": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Income": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Income category": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Payments": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Balance Account": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Bank Account": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Money Transfer": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Balance Sheet": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Cash Flow": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Account Statement": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Cash Advance": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Incentive": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Tax": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Customers": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Customer Types": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Address": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Supplier": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Branch Store": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Employees": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Department": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Employee salary": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Payslip": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Sales Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Best Seller": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Purchase Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Invoice Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Supplier Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Supplier Due Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Customer Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Customer Due Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Customer Subscription": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Product Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Expense Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Income Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Tax Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Profit & Loss": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Annual Report": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "All Blog": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Blog Tag": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Blog Category": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Blog Comment": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "FAQ": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Our Client": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Download Files": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Footer": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Banner": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "All Members": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "User Admin": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Role": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Permissions": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Delete Account Request": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "General Settings": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Security Settings": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Notification": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Connected Apps": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "System Settings": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Company Settings": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Localization": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Prefixes": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Preference": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Appearance": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Language": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "Authentication": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  },
+  "AI Settings": {
+    "Admin": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Customer": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Shop Owner": {
+      "create": true,
+      "edit": true,
+      "delete": true,
+      "view": true,
+      "allowAll": true
+    },
+    "Manager": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Supervisor": {
+      "create": true,
+      "edit": true,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "Staff": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    },
+    "admin dafa": {
+      "create": false,
+      "edit": false,
+      "delete": false,
+      "view": true,
+      "allowAll": false
+    }
+  }
+}

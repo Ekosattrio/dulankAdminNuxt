@@ -1,0 +1,8 @@
+[
+  { "id": "1", "name": "Kapasitas Cetak Shift Pagi", "value": 15000, "unit": "lembar/shift", "used": 950, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "2", "name": "Waktu Setup Mesin Pond", "value": 45, "unit": "menit", "used": 620, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "3", "name": "Kecepatan Laminasi Panas", "value": 30, "unit": "meter/menit", "used": 1200, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "4", "name": "Toleransi Inschiet Cetak", "value": 100, "unit": "lembar inschiet", "used": 1800, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "5", "name": "Tarif Listrik Daya Operasional", "value": 1444, "unit": "Rp/kWh", "used": 540, "update": "08/10/2025 14:15", "status": "Active" }
+]
+

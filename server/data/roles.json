@@ -1,0 +1,8 @@
+[
+  { "id": "role-1", "name": "Admin", "createdOn": "25 May 2023", "description": "Full system privileges" },
+  { "id": "role-2", "name": "Customer", "createdOn": "30 May 2023", "description": "Public webstore customer account" },
+  { "id": "role-3", "name": "Shop Owner", "createdOn": "15 Jun 2023", "description": "Store branch owner & reports access" },
+  { "id": "role-4", "name": "Manager", "createdOn": "20 Jul 2023", "description": "Branch operation & order management" },
+  { "id": "role-5", "name": "Supervisor", "createdOn": "12 Aug 2023", "description": "Production & job management" },
+  { "id": "role-6", "name": "Staff", "createdOn": "05 Sep 2023", "description": "Cashier & data entry" }
+]

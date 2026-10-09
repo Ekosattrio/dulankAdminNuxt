@@ -1,0 +1,7 @@
+[
+  {"id":"output-tax-001","saleId":"1","etaxDate":"2025-06-26","etaxNumber":"001.25.0001","txCode":"04 - Other Tax Base","status":"Issued","createdAt":"2025-06-26T00:00:00.000Z","updatedAt":"2025-06-26T00:00:00.000Z"},
+  {"id":"output-tax-002","saleId":"2","etaxDate":"2025-01-02","etaxNumber":"001.25.0002","txCode":"04 - Other Tax Base","status":"Issued","createdAt":"2025-01-02T00:00:00.000Z","updatedAt":"2025-01-02T00:00:00.000Z"},
+  {"id":"output-tax-003","saleId":"3","etaxDate":"2025-01-03","etaxNumber":"001.25.0003","txCode":"04 - Other Tax Base","status":"Issued","createdAt":"2025-01-03T00:00:00.000Z","updatedAt":"2025-01-03T00:00:00.000Z"},
+  {"id":"output-tax-004","saleId":"4","etaxDate":"2025-01-04","etaxNumber":"001.25.0004","txCode":"04 - Other Tax Base","status":"Issued","createdAt":"2025-01-04T00:00:00.000Z","updatedAt":"2025-01-04T00:00:00.000Z"},
+  {"id":"output-tax-005","saleId":"5","etaxDate":"2025-01-05","etaxNumber":"001.25.0005","txCode":"04 - Other Tax Base","status":"Draft","createdAt":"2025-01-05T00:00:00.000Z","updatedAt":"2025-01-05T00:00:00.000Z"}
+]

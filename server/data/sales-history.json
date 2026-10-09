@@ -1,0 +1,142 @@
+[
+  {
+    "id": "deleted-2509000009",
+    "saleId": "2509000009",
+    "saleNo": "2509000009",
+    "customer": "Yayasan Lentera",
+    "date": "10/09/2025",
+    "total": 5217000,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2509000010",
+    "saleId": "2509000010",
+    "saleNo": "2509000010",
+    "customer": "Cafe Senja",
+    "date": "05/09/2025",
+    "total": 860250,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2508000011",
+    "saleId": "2508000011",
+    "saleNo": "2508000011",
+    "customer": "PT Dirgantara",
+    "date": "28/08/2025",
+    "total": 3174700,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2508000012",
+    "saleId": "2508000012",
+    "saleNo": "2508000012",
+    "customer": "Bapak Joko",
+    "date": "25/08/2025",
+    "total": 666000,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2508000013",
+    "saleId": "2508000013",
+    "saleNo": "2508000013",
+    "customer": "Toko Perlengkapan",
+    "date": "20/08/2025",
+    "total": 5416800,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2507000014",
+    "saleId": "2507000014",
+    "saleNo": "2507000014",
+    "customer": "PT Angkasa Raya",
+    "date": "15/07/2025",
+    "total": 1998000,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2507000015",
+    "saleId": "2507000015",
+    "saleNo": "2507000015",
+    "customer": "Ibu Laras",
+    "date": "10/07/2025",
+    "total": 677100,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2506000016",
+    "saleId": "2506000016",
+    "saleNo": "2506000016",
+    "customer": "Universitas Bintang",
+    "date": "05/06/2025",
+    "total": 4107000,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2506000017",
+    "saleId": "2506000017",
+    "saleNo": "2506000017",
+    "customer": "Sdr. Bayu",
+    "date": "01/06/2025",
+    "total": 821400,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "deleted-2505000018",
+    "saleId": "2505000018",
+    "saleNo": "2505000018",
+    "customer": "Toko Elektronik Maju",
+    "date": "20/05/2025",
+    "total": 2775000,
+    "created": "Amin",
+    "kind": "deleted"
+  },
+  {
+    "id": "cancelled-2508000011",
+    "saleId": "2508000011",
+    "saleNo": "2508000011",
+    "customer": "PT Dirgantara",
+    "date": "28/08/2025",
+    "total": 3174700,
+    "created": "Amin",
+    "kind": "cancelled"
+  },
+  {
+    "id": "cancelled-2508000012",
+    "saleId": "2508000012",
+    "saleNo": "2508000012",
+    "customer": "Bapak Joko",
+    "date": "25/08/2025",
+    "total": 666000,
+    "created": "Amin",
+    "kind": "cancelled"
+  },
+  {
+    "id": "cancelled-2508000013",
+    "saleId": "2508000013",
+    "saleNo": "2508000013",
+    "customer": "Toko Perlengkapan",
+    "date": "20/08/2025",
+    "total": 5416800,
+    "created": "Amin",
+    "kind": "cancelled"
+  },
+  {
+    "id": "cancelled-2507000014",
+    "saleId": "2507000014",
+    "saleNo": "2507000014",
+    "customer": "PT Angkasa Raya",
+    "date": "15/07/2025",
+    "total": 1998000,
+    "created": "Amin",
+    "kind": "cancelled"
+  }
+]

@@ -1,0 +1,6 @@
+[
+  {"id":"input-tax-001","purchaseId":"PR-2512000001","invoiceDate":"2025-10-01","fakturNo":"FK-PUR-2512000001","credited":"Yes","createdAt":"2025-10-01T00:00:00.000Z","updatedAt":"2025-10-01T00:00:00.000Z"},
+  {"id":"input-tax-002","purchaseId":"PR-2512000002","invoiceDate":"2025-10-03","fakturNo":"FK-PUR-2512000002","credited":"Yes","createdAt":"2025-10-03T00:00:00.000Z","updatedAt":"2025-10-03T00:00:00.000Z"},
+  {"id":"input-tax-003","purchaseId":"PR-2512000003","invoiceDate":"2025-10-05","fakturNo":"FK-PUR-2512000003","credited":"No","createdAt":"2025-10-05T00:00:00.000Z","updatedAt":"2025-10-05T00:00:00.000Z"},
+  {"id":"input-tax-004","purchaseId":"PR-2512000004","invoiceDate":"2025-10-08","fakturNo":"FK-PUR-2512000004","credited":"Yes","createdAt":"2025-10-08T00:00:00.000Z","updatedAt":"2025-10-08T00:00:00.000Z"}
+]

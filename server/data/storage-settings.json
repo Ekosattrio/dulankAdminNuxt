@@ -1,0 +1,14 @@
+{
+  "local": {
+    "enabled": true
+  },
+  "aws": {
+    "enabled": true,
+    "accessKey": "AKIAIOSFODNN7EXAMPLE",
+    "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    "bucketName": "kacetak-storage",
+    "region": "ap-southeast-1",
+    "baseUrl": "https://s3.ap-southeast-1.amazonaws.com/kacetak-storage"
+  }
+}
+

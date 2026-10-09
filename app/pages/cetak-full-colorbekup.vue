@@ -5,8 +5,11 @@ definePageMeta({
   layout: "default",
 });
 
-useHead({
-  title: "Cetak Full Color (Backup) - Kacetak System",
+useLegacyPage({
+  title: 'Cetak Full Color (Backup)',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 </script>
 

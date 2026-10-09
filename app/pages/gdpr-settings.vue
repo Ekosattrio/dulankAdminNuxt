@@ -1,3 +1,32 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref } from 'vue'
+import { useGdprSettings } from '~/composables/useGdprSettings'
+
+const { form, pending, error, refresh, saveSettings } = useGdprSettings()
+const isSaving = ref(false)
+const toastMessage = ref('')
+
+const handleSave = async () => {
+  isSaving.value = true
+  try {
+    await saveSettings(form.value)
+    toastMessage.value = 'GDPR Cookie settings saved successfully!'
+    setTimeout(() => {
+      toastMessage.value = ''
+    }, 3000)
+  } catch (err) {
+    console.error('Failed to save GDPR settings:', err)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+const resetForm = () => {
+  refresh()
+}
+</script>
+
 <template>
   <div class="page-wrapper mt-3">
     <div class="content settings-content">
@@ -12,17 +41,19 @@
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
           </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
         </ul>
+      </div>
+
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="row">
         <div class="col-xl-12">
           <div class="settings-wrapper d-flex">
             <div class="settings-page-wrap w-100">
-              <form @submit.prevent="saveGdprSettings">
+              <form @submit.prevent="handleSave">
                 <div class="setting-title mb-4">
                   <h4 class="fs-18 fw-bold">GDPR Cookies</h4>
                 </div>
@@ -121,7 +152,9 @@
 
                 <div class="modal-footer-btn mt-4 pt-3 border-top d-flex justify-content-end">
                   <button type="button" class="btn btn-secondary me-2" @click="resetForm">Cancel</button>
-                  <button type="submit" class="btn btn-warning text-white">Save Changes</button>
+                  <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">
+                    {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                  </button>
                 </div>
               </form>
             </div>
@@ -130,41 +163,20 @@
       </div>
 
     </div>
-  </div>
-</template>
+=======
+import GdprSettingsWorkspace from '~/components/pages/setting/GdprSettingsWorkspace.vue'
 
-<script setup lang="ts">
-import { ref } from 'vue'
-
-useHead({
-  title: 'GDPR Settings - Kacetak System'
+useLegacyPage({
+  title: 'GDPR Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
-
-const defaultSettings = {
-  consentText: 'We use cookies to improve your user experience and analyze website traffic. By clicking Accept, you consent to our website cookie usage.',
-  position: 'Right',
-  agreeText: 'Agree',
-  declineText: 'Decline',
-  showDecline: true,
-  policyLink: 'https://kacetak.com/privacy-policy'
-}
-
-const form = ref({ ...defaultSettings })
-
-const saveGdprSettings = () => {
-  alert('GDPR Cookie settings saved successfully!')
-}
-
-const resetForm = () => {
-  form.value = { ...defaultSettings }
-}
-
-const refresh = () => {
-  // refresh
-}
-
-const toggleCollapse = () => {
-  // collapse
-}
 </script>
 
+<template>
+  <div class="dulank-page dulank-page-gdpr-settings">
+    <GdprSettingsWorkspace />
+>>>>>>> origin/eko
+  </div>
+</template>

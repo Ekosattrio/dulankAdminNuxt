@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "name": "Features",
+    "slug": "features",
+    "description": "Product updates, feature highlights, and software release notes.",
+    "postCount": 14,
+    "status": "Active",
+    "createdDate": "2024-01-12"
+  },
+  {
+    "id": "2",
+    "name": "Printing Guide",
+    "slug": "printing-guide",
+    "description": "Technical instructions, press machine operation, and maintenance best practices.",
+    "postCount": 26,
+    "status": "Active",
+    "createdDate": "2024-02-05"
+  },
+  {
+    "id": "3",
+    "name": "Printing & Packaging",
+    "slug": "printing-and-packaging",
+    "description": "Corrugated cartons, folding boxes, labels, and rigid packaging engineering.",
+    "postCount": 19,
+    "status": "Active",
+    "createdDate": "2024-02-18"
+  },
+  {
+    "id": "4",
+    "name": "Security & Tech",
+    "slug": "security-and-tech",
+    "description": "Cybersecurity, print confidentiality, ERP cloud architecture, and data governance.",
+    "postCount": 8,
+    "status": "Active",
+    "createdDate": "2024-03-01"
+  },
+  {
+    "id": "5",
+    "name": "Business Workflow",
+    "slug": "business-workflow",
+    "description": "Optimizing procurement, order scheduling, accounting automation, and employee efficiency.",
+    "postCount": 15,
+    "status": "Active",
+    "createdDate": "2024-03-15"
+  },
+  {
+    "id": "6",
+    "name": "Case Studies",
+    "slug": "case-studies",
+    "description": "Real-world customer stories, turnaround improvements, and ROI breakdowns.",
+    "postCount": 5,
+    "status": "Inactive",
+    "createdDate": "2024-04-10"
+  }
+]

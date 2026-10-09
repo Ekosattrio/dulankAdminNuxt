@@ -2,8 +2,11 @@
 const route = useRoute();
 const dnNo = computed(() => (route.query.no as string) || "DN0001");
 
-useHead({
-  title: computed(() => `Delivery Note ${dnNo.value} - Kacetak System`),
+useLegacyPage({
+  title: 'Delivery Note Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 });
 
 const status = ref<"Pending" | "Complete" | "Failed">("Pending");

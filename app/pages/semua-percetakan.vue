@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -418,3 +419,14 @@ function refresh() {
   searchQuery.value = "";
   filterSubscription.value = "";
 }</script>
+=======
+<script setup lang="ts">
+import CalculatorPartnersPage from '~/components/pages/calculator/CalculatorPartnersPage.vue'
+
+definePageMeta({ layout: 'default' })
+</script>
+
+<template>
+  <CalculatorPartnersPage kind="printing_shop" />
+</template>
+>>>>>>> origin/eko

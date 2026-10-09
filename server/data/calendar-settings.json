@@ -1,0 +1,120 @@
+{
+  "calendarProducts": [
+    {
+      "id": "cal-product-001",
+      "name": "Kalender Meja Dudukan Linen",
+      "defaultSize": "210 x 150 mm (Landscape)",
+      "sheets": "13 Lembar (1 Cover + 12 Bulan)",
+      "paper": "Art Carton 230gr",
+      "binding": "Spiral Kawat Hitam",
+      "active": true,
+      "image": "/assets/img/products/pos-product-10.png",
+      "images": [
+        "/assets/img/products/pos-product-10.png",
+        "/assets/img/products/product10.jpg",
+        "/assets/img/products/product11.jpg"
+      ]
+    },
+    {
+      "id": "cal-product-002",
+      "name": "Kalender Dinding Spiral",
+      "defaultSize": "380 x 530 mm",
+      "sheets": "7 Lembar (1 Cover + 6 Dwi-Wulan)",
+      "paper": "Art Paper 150gr",
+      "binding": "Spiral Kawat + Hanger",
+      "active": true,
+      "image": "/assets/img/products/pos-product-01.png",
+      "images": [
+        "/assets/img/products/pos-product-01.png",
+        "/assets/img/products/product1.jpg",
+        "/assets/img/products/product2.jpg"
+      ]
+    },
+    {
+      "id": "cal-product-003",
+      "name": "Kalender Dinding Klemseng",
+      "defaultSize": "380 x 530 mm",
+      "sheets": "4 Lembar (Triwulan)",
+      "paper": "HVS 80gr",
+      "binding": "Jepit Kaleng (Klemseng)",
+      "active": true,
+      "image": "/assets/img/products/pos-product-03.png",
+      "images": [
+        "/assets/img/products/pos-product-03.png",
+        "/assets/img/products/product3.jpg",
+        "/assets/img/products/product4.jpg"
+      ]
+    },
+    {
+      "id": "cal-product-004",
+      "name": "Kalender Poster 1 Lembar",
+      "defaultSize": "460 x 640 mm",
+      "sheets": "1 Lembar Plano",
+      "paper": "Art Carton 260gr",
+      "binding": "Mata Ikan / Bolong Atas",
+      "active": true,
+      "image": "/assets/img/products/brosur.png",
+      "images": [
+        "/assets/img/products/brosur.png",
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+        "/assets/img/products/pos-product-04.png"
+      ]
+    }
+  ],
+  "sheetOptions": [
+    {"id":"sheet-001","name":"Bulanan","sheets":13,"description":"1 cover dan 12 halaman bulan","active":true},
+    {"id":"sheet-002","name":"Dwi-Wulan","sheets":7,"description":"1 cover dan 6 halaman dua bulanan","active":true},
+    {"id":"sheet-003","name":"Triwulan","sheets":4,"description":"4 halaman periode tiga bulanan","active":true},
+    {"id":"sheet-004","name":"Poster","sheets":1,"description":"Seluruh bulan dalam satu lembar","active":true}
+  ],
+  "calendarSizes": [
+    {"id":"cal-size-001","name":"Desk Landscape 21x15","widthMm":210,"heightMm":150,"type":"Meja"},
+    {"id":"cal-size-002","name":"Desk Portrait 15x21","widthMm":150,"heightMm":210,"type":"Meja"},
+    {"id":"cal-size-003","name":"Wall Standard 38x53","widthMm":380,"heightMm":530,"type":"Dinding"},
+    {"id":"cal-size-004","name":"Wall Jumbo 46x64","widthMm":460,"heightMm":640,"type":"Dinding"},
+    {"id":"cal-size-005","name":"Wall Super Jumbo 50x70","widthMm":500,"heightMm":700,"type":"Dinding"}
+  ],
+  "papers": [
+    {"id":"cal-paper-001","name":"Art Paper","grammage":150,"plano":"65 x 100 cm","price":2800},
+    {"id":"cal-paper-002","name":"Art Carton","grammage":230,"plano":"65 x 100 cm","price":3900},
+    {"id":"cal-paper-003","name":"Art Carton","grammage":260,"plano":"65 x 100 cm","price":4500},
+    {"id":"cal-paper-004","name":"HVS","grammage":80,"plano":"65 x 100 cm","price":1850}
+  ],
+  "machines": [
+    {"id":"cal-machine-001","name":"Heidelberg SM52","maxArea":"36 x 52 cm","minimumPrice":240000,"druckPrice":85},
+    {"id":"cal-machine-002","name":"Heidelberg SM74","maxArea":"52 x 74 cm","minimumPrice":380000,"druckPrice":110},
+    {"id":"cal-machine-003","name":"Konica Minolta C1085","maxArea":"32 x 48 cm","minimumPrice":2500,"druckPrice":2500}
+  ],
+  "printTypes": [
+    {"id":"cal-print-001","name":"Cetak 1 Sisi (4/0)","sides":1,"plateMultiplier":1,"runMultiplier":1},
+    {"id":"cal-print-002","name":"Bolak-Balik Work & Turn (4/4)","sides":2,"plateMultiplier":1,"runMultiplier":2},
+    {"id":"cal-print-003","name":"Bolak-Balik Sheetwise (4/4)","sides":2,"plateMultiplier":2,"runMultiplier":2}
+  ],
+  "laminates": [
+    {"id":"cal-laminate-001","name":"Tanpa Laminasi","price":0},
+    {"id":"cal-laminate-002","name":"Laminasi Doff Cover","price":1500},
+    {"id":"cal-laminate-003","name":"Laminasi Glossy Cover","price":1200}
+  ],
+  "hangers": [
+    {"id":"cal-hanger-001","name":"Spiral Kawat + Hanger","size":"38 cm","price":2500},
+    {"id":"cal-hanger-002","name":"Klemseng","size":"38 cm","price":1200},
+    {"id":"cal-hanger-003","name":"Klemseng","size":"46 cm","price":1600},
+    {"id":"cal-hanger-004","name":"Mata Ikan + Tali","size":"Universal","price":500}
+  ],
+  "components": [
+    {"id":"cal-component-001","name":"Hardboard No. 30 Tebal","type":"Dudukan","price":3500},
+    {"id":"cal-component-002","name":"Hardboard No. 40 Standar","type":"Dudukan","price":2800},
+    {"id":"cal-component-003","name":"Linen Wrapping Sheet","type":"Cover Dudukan","price":1500},
+    {"id":"cal-component-004","name":"Kawat Hanger 38cm","type":"Hanger","price":800}
+  ],
+  "profitTiers": [
+    {"id":"cal-profit-001","minQty":1,"maxQty":500,"profitPosPercent":35,"profitWebstorePercent":30},
+    {"id":"cal-profit-002","minQty":501,"maxQty":1000,"profitPosPercent":30,"profitWebstorePercent":25},
+    {"id":"cal-profit-003","minQty":1001,"maxQty":5000,"profitPosPercent":25,"profitWebstorePercent":20}
+  ],
+  "calendarLogs": [
+    {"id":"cal-log-001","date":"04/12/2025","customerId":null,"client":"Bank Mandiri Karawang","desc":"Kalender Meja 13 Lbr 210x150","qty":1000,"productionCost":12500000,"sellingPrice":18500000,"status":"Completed"},
+    {"id":"cal-log-002","date":"02/12/2025","customerId":null,"client":"RSUD Karawang","desc":"Kalender Dinding Spiral 38x53 7 Lbr","qty":2000,"productionCost":23500000,"sellingPrice":32000000,"status":"In Production"},
+    {"id":"cal-log-003","date":"28/11/2025","customerId":null,"client":"PT Toyota Motor","desc":"Kalender Meja Hardcover Exclusive","qty":500,"productionCost":8600000,"sellingPrice":12500000,"status":"Quoted"}
+  ]
+}

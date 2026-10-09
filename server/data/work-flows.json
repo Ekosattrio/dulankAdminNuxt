@@ -1,0 +1,162 @@
+[
+  {
+    "id": "1",
+    "no": "JAP-0001",
+    "date": "01/02/2026",
+    "category": "Offset",
+    "product": "Brosur A5",
+    "workflowSteps": "Artwork, Plat CTP, Cetak SM52, Potong, Lipat, Sortir, Packing"
+  },
+  {
+    "id": "2",
+    "no": "JAP-0002",
+    "date": "02/02/2026",
+    "category": "Large Format",
+    "product": "Spanduk Banner",
+    "workflowSteps": "Design, Output Film, Cetak Outdoor, Potong, Selongsong, Packing"
+  },
+  {
+    "id": "3",
+    "no": "JAP-0003",
+    "date": "03/02/2026",
+    "category": "Digital A3+",
+    "product": "Kartu Nama",
+    "workflowSteps": "Design, Cetak Xerox, Potong, Laminasi, Sortir, Packing"
+  },
+  {
+    "id": "4",
+    "no": "JAP-0004",
+    "date": "04/02/2026",
+    "category": "Sablon",
+    "product": "Kaos Distro",
+    "workflowSteps": "Artwork, Klise, Sortir, Lipat, Packing"
+  },
+  {
+    "id": "5",
+    "no": "JAP-0005",
+    "date": "05/02/2026",
+    "category": "Offset",
+    "product": "Buku Yasin",
+    "workflowSteps": "Design, Plat CTP, Cetak Oliver52, Susun Komplit, Lem, Potong, Packing"
+  },
+  {
+    "id": "6",
+    "no": "JAP-0006",
+    "date": "06/02/2026",
+    "category": "Large Format",
+    "product": "Poster Display",
+    "workflowSteps": "Artwork, Output Film, Cetak Indoor, Potong, Laminasi, Roll"
+  },
+  {
+    "id": "7",
+    "no": "JAP-0007",
+    "date": "07/02/2026",
+    "category": "Digital A3+",
+    "product": "Undangan Pernikahan",
+    "workflowSteps": "Design, Cetak Xerox, Potong, Lipat, Lem, Packing"
+  },
+  {
+    "id": "8",
+    "no": "JAP-0008",
+    "date": "08/02/2026",
+    "category": "Offset",
+    "product": "Kwitansi NCR 3 Ply",
+    "workflowSteps": "Artwork, Klise, Cetak Multilith, Numerasi, Susun Komplit, Potong, Packing"
+  },
+  {
+    "id": "9",
+    "no": "JAP-0009",
+    "date": "09/02/2026",
+    "category": "Sablon",
+    "product": "Goodie Bag",
+    "workflowSteps": "Design, Klise, Sortir, Lipat, Packing"
+  },
+  {
+    "id": "10",
+    "no": "JAP-0010",
+    "date": "10/02/2026",
+    "category": "Large Format",
+    "product": "Stiker Vinyl",
+    "workflowSteps": "Artwork, Output Film, Cetak Outdoor, Potong, Laminasi"
+  },
+  {
+    "id": "11",
+    "no": "JAP-0011",
+    "date": "11/02/2026",
+    "category": "Offset",
+    "product": "Kop Surat",
+    "workflowSteps": "Design, Plat CTP, Cetak Multilith, Potong, Sortir, Packing"
+  },
+  {
+    "id": "12",
+    "no": "JAP-0012",
+    "date": "12/02/2026",
+    "category": "Digital A3+",
+    "product": "Sertifikat A4",
+    "workflowSteps": "Design, Cetak Xerox, Potong, Sortir, Packing"
+  },
+  {
+    "id": "13",
+    "no": "JAP-0013",
+    "date": "13/02/2026",
+    "category": "Large Format",
+    "product": "X-Banner",
+    "workflowSteps": "Artwork, Output Film, Cetak Indoor, Potong, Pasang Stand, Packing"
+  },
+  {
+    "id": "14",
+    "no": "JAP-0014",
+    "date": "14/02/2026",
+    "category": "Offset",
+    "product": "Kalender Dinding",
+    "workflowSteps": "Design, Plat CTP, Cetak Oliver52, Potong, Susun Komplit, Klem Kawat, Packing"
+  },
+  {
+    "id": "15",
+    "no": "JAP-0015",
+    "date": "15/02/2026",
+    "category": "Sablon",
+    "product": "Topi",
+    "workflowSteps": "Artwork, Klise, Sortir, Packing"
+  },
+  {
+    "id": "16",
+    "no": "JAP-0016",
+    "date": "16/02/2026",
+    "category": "Digital A3+",
+    "product": "Menu Cafe",
+    "workflowSteps": "Design, Cetak Xerox, Laminasi, Potong, Binding"
+  },
+  {
+    "id": "17",
+    "no": "JAP-0017",
+    "date": "17/02/2026",
+    "category": "Offset",
+    "product": "Buku Katalog",
+    "workflowSteps": "Artwork, Plat CTP, Cetak SM52, Potong, Susun Komplit, Jahit Benang, Packing"
+  },
+  {
+    "id": "18",
+    "no": "JAP-0018",
+    "date": "18/02/2026",
+    "category": "Large Format",
+    "product": "Wallpaper Custom",
+    "workflowSteps": "Design, Output Film, Cetak Indoor, Potong, Roll, Packing"
+  },
+  {
+    "id": "19",
+    "no": "JAP-0019",
+    "date": "19/02/2026",
+    "category": "Offset",
+    "product": "Amplop Kabinet",
+    "workflowSteps": "Artwork, Klise, Cetak Multilith, Potong, Lem, Sortir, Packing"
+  },
+  {
+    "id": "20",
+    "no": "JAP-0020",
+    "date": "20/02/2026",
+    "category": "Digital A3+",
+    "product": "Stiker Kromo",
+    "workflowSteps": "Design, Cetak Xerox, Potong (Kiss Cut), Packing"
+  }
+]

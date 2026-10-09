@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper">
     <div class="content container-fluid">
@@ -322,3 +323,16 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapse
 };</script>
+=======
+<script setup lang="ts">
+import AddressWorkspace from '~/components/pages/address/AddressWorkspace.vue'
+
+useLegacyPage({ title: 'Address List', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-address">
+    <AddressWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

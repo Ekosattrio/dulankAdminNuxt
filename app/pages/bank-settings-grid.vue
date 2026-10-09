@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
@@ -189,3 +190,21 @@ const deleteAccount = (idx: number) => {
     accounts.value.splice(idx, 1)
   }
 }</script>
+=======
+<script setup lang="ts">
+import BankSettingsGridWorkspace from '~/components/pages/setting/BankSettingsGridWorkspace.vue'
+
+useLegacyPage({
+  title: 'Bank Settings Grid',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-bank-settings-grid">
+    <BankSettingsGridWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

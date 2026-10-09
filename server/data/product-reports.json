@@ -1,0 +1,122 @@
+[
+  {
+    "id": "PRD-REP-001",
+    "product": "Banner Outdoor 280gr",
+    "sku": "BOC-280",
+    "category": "Large Format",
+    "totalOrder": 1250,
+    "unit": "Meter",
+    "unitPrice": 25000,
+    "amount": 31250000,
+    "percentage": 25.15,
+    "date": "2025-05-10"
+  },
+  {
+    "id": "PRD-REP-002",
+    "product": "Buku Kenangan Hardcover",
+    "sku": "BKH-OFF",
+    "category": "Offset",
+    "totalOrder": 250,
+    "unit": "Pcs",
+    "unitPrice": 120000,
+    "amount": 30000000,
+    "percentage": 24.14,
+    "date": "2025-05-12"
+  },
+  {
+    "id": "PRD-REP-003",
+    "product": "Brosur A4 HVS 80gr",
+    "sku": "BRS-HVS80",
+    "category": "Digital Print",
+    "totalOrder": 45,
+    "unit": "Rim",
+    "unitPrice": 350000,
+    "amount": 15750000,
+    "percentage": 12.68,
+    "date": "2025-05-14"
+  },
+  {
+    "id": "PRD-REP-004",
+    "product": "Stiker Vinyl Ritrama",
+    "sku": "STK-RITRAMA",
+    "category": "Digital Print",
+    "totalOrder": 120,
+    "unit": "Lembar",
+    "unitPrice": 120000,
+    "amount": 14400000,
+    "percentage": 11.59,
+    "date": "2025-05-15"
+  },
+  {
+    "id": "PRD-REP-005",
+    "product": "Kartu Nama Laminating",
+    "sku": "KN-LAM",
+    "category": "Digital Print",
+    "totalOrder": 400,
+    "unit": "Box",
+    "unitPrice": 35000,
+    "amount": 14000000,
+    "percentage": 11.27,
+    "date": "2025-05-16"
+  },
+  {
+    "id": "PRD-REP-006",
+    "product": "Kaos DTF Custom",
+    "sku": "APP-DTF01",
+    "category": "Apparel",
+    "totalOrder": 120,
+    "unit": "Pcs",
+    "unitPrice": 85000,
+    "amount": 10200000,
+    "percentage": 8.21,
+    "date": "2025-05-18"
+  },
+  {
+    "id": "PRD-REP-007",
+    "product": "Banner Indoor Albatros",
+    "sku": "BIN-ALB",
+    "category": "Large Format",
+    "totalOrder": 65,
+    "unit": "Meter",
+    "unitPrice": 65000,
+    "amount": 4225000,
+    "percentage": 3.4,
+    "date": "2025-05-20"
+  },
+  {
+    "id": "PRD-REP-008",
+    "product": "Poster A3+ Art Carton",
+    "sku": "PST-AC260",
+    "category": "Digital Print",
+    "totalOrder": 350,
+    "unit": "Lembar",
+    "unitPrice": 7500,
+    "amount": 2625000,
+    "percentage": 2.11,
+    "date": "2025-05-22"
+  },
+  {
+    "id": "PRD-REP-009",
+    "product": "Pin Peniti 58mm",
+    "sku": "MRC-PIN58",
+    "category": "Merchandise",
+    "totalOrder": 250,
+    "unit": "Pcs",
+    "unitPrice": 5000,
+    "amount": 1250000,
+    "percentage": 1.01,
+    "date": "2025-05-24"
+  },
+  {
+    "id": "PRD-REP-010",
+    "product": "ID Card PVC",
+    "sku": "ID-PVC01",
+    "category": "Digital Print",
+    "totalOrder": 55,
+    "unit": "Pcs",
+    "unitPrice": 10000,
+    "amount": 550000,
+    "percentage": 0.44,
+    "date": "2025-05-25"
+  }
+]

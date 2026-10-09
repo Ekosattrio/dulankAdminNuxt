@@ -1,0 +1,102 @@
+[
+  {
+    "id": "pr-1",
+    "noPR": "PRT-0011",
+    "date": "17/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000003",
+    "supplier": "Global Inkindo",
+    "amount": 850000,
+    "paid": 0,
+    "due": 850000,
+    "status": "Pending",
+    "statusBy": "Admin",
+    "notes": "Barang cacat kemasan bocor saat pengiriman",
+    "items": [
+      {
+        "name": "Tinta Offset Cyan 1kg",
+        "qty": 2,
+        "returnQty": 2,
+        "unit": "Pcs",
+        "price": 425000,
+        "amount": 850000,
+        "reason": "Kaleng penyok dan bocor"
+      }
+    ]
+  },
+  {
+    "id": "pr-2",
+    "noPR": "PRT-0012",
+    "date": "21/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000005",
+    "supplier": "Indo Material",
+    "amount": 1950000,
+    "paid": 1950000,
+    "due": 0,
+    "status": "Refunded",
+    "statusBy": "Admin",
+    "notes": "Pengembalian dana retur plat CTP telah selesai via transfer",
+    "items": [
+      {
+        "name": "Plat CTP Thermal 650x550",
+        "qty": 15,
+        "returnQty": 15,
+        "unit": "Pcs",
+        "price": 130000,
+        "amount": 1950000,
+        "reason": "Ukuran plat tidak presisi"
+      }
+    ]
+  },
+  {
+    "id": "pr-3",
+    "noPR": "PRT-0013",
+    "date": "25/10/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000008",
+    "supplier": "PT Kertas Jaya",
+    "amount": 600000,
+    "paid": 600000,
+    "due": 0,
+    "status": "Refunded",
+    "statusBy": "Admin",
+    "notes": "Kertas basah terkena air hujan saat muat",
+    "items": [
+      {
+        "name": "Kertas HVS 80gsm A4",
+        "qty": 20,
+        "returnQty": 10,
+        "unit": "Ream",
+        "price": 60000,
+        "amount": 600000,
+        "reason": "Basah dan bergelombang"
+      }
+    ]
+  },
+  {
+    "id": "pr-4",
+    "noPR": "PRT-0014",
+    "date": "01/11/2025",
+    "created": "Sales Staff",
+    "noPurchase": "PR-000009",
+    "supplier": "UD Sukses Makmur",
+    "amount": 1100000,
+    "paid": 0,
+    "due": 1100000,
+    "status": "Cancel",
+    "statusBy": "Admin",
+    "notes": "Retur dibatalkan karena diganti unit baru langsung di tempat",
+    "items": [
+      {
+        "name": "Lem Panas Binding Eva Hotmelt",
+        "qty": 1,
+        "returnQty": 1,
+        "unit": "Sak",
+        "price": 1100000,
+        "amount": 1100000,
+        "reason": "Salah spesifikasi leleh"
+      }
+    ]
+  }
+]

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper">
     <div class="content">
@@ -270,3 +271,23 @@ function resetDefaults() {
   }
 }</script>
 
+=======
+<script setup lang="ts">
+import FooterWorkspace from '~/components/pages/footer/FooterWorkspace.vue'
+
+definePageMeta({
+  layout: 'default',
+})
+
+useLegacyPage({
+  title: 'Footer - Pengaturan Tautan & Konten Footer',
+  sweetAlert: false,
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-footer p-4 md:p-6">
+    <FooterWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

@@ -1,0 +1,308 @@
+[
+  {
+    "id": "prov-12",
+    "name": "Sumatera Barat",
+    "code": "28529",
+    "added": "2026-10-08",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-1",
+    "name": "DKI Jakarta",
+    "code": "JKT",
+    "added": "2025-08-28",
+    "createdBy": "Arroon",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-2",
+    "name": "Jawa Barat",
+    "code": "JB",
+    "added": "2025-08-27",
+    "createdBy": "Kenneth",
+    "avatar": "/assets/img/users/user-13.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-3",
+    "name": "Jawa Tengah",
+    "code": "JT",
+    "added": "2025-08-26",
+    "createdBy": "Gooch",
+    "avatar": "/assets/img/users/user-11.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-4",
+    "name": "DI Yogyakarta",
+    "code": "DIY",
+    "added": "2025-08-25",
+    "createdBy": "Nathan",
+    "avatar": "/assets/img/users/user-03.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-5",
+    "name": "Bali",
+    "code": "BALI",
+    "added": "2025-08-24",
+    "createdBy": "Alice",
+    "avatar": "/assets/img/users/user-02.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-6",
+    "name": "Sumatera Utara",
+    "code": "SU",
+    "added": "2025-08-23",
+    "createdBy": "Robb",
+    "avatar": "/assets/img/users/user-05.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-7",
+    "name": "Kalimantan Timur",
+    "code": "KT",
+    "added": "2025-08-22",
+    "createdBy": "Steven",
+    "avatar": "/assets/img/users/user-08.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-8",
+    "name": "Sulawesi Selatan",
+    "code": "SS",
+    "added": "2025-08-21",
+    "createdBy": "Gravely",
+    "avatar": "/assets/img/users/user-04.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-9",
+    "name": "Papua",
+    "code": "PAP",
+    "added": "2025-08-20",
+    "createdBy": "Kevin",
+    "avatar": "/assets/img/users/user-01.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-10",
+    "name": "Banten",
+    "code": "BTN",
+    "added": "2025-08-19",
+    "createdBy": "Grillo",
+    "avatar": "/assets/img/users/user-10.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-11",
+    "name": "Jawa Timur",
+    "code": "JTM",
+    "added": "2025-08-18",
+    "createdBy": "Arroon",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-100",
+    "name": "Aceh",
+    "code": "11",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-101",
+    "name": "Riau",
+    "code": "14",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-102",
+    "name": "Jambi",
+    "code": "15",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-103",
+    "name": "Sumatera Selatan",
+    "code": "16",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-104",
+    "name": "Bengkulu",
+    "code": "17",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-105",
+    "name": "Lampung",
+    "code": "18",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-106",
+    "name": "Kepulauan Bangka Belitung",
+    "code": "19",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-107",
+    "name": "Kepulauan Riau",
+    "code": "21",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-108",
+    "name": "Nusa Tenggara Barat",
+    "code": "52",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-109",
+    "name": "Nusa Tenggara Timur",
+    "code": "53",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-110",
+    "name": "Kalimantan Barat",
+    "code": "61",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-111",
+    "name": "Kalimantan Tengah",
+    "code": "62",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-112",
+    "name": "Kalimantan Selatan",
+    "code": "63",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-113",
+    "name": "Kalimantan Utara",
+    "code": "65",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-114",
+    "name": "Sulawesi Utara",
+    "code": "71",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-115",
+    "name": "Sulawesi Tengah",
+    "code": "72",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-116",
+    "name": "Sulawesi Tenggara",
+    "code": "74",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-117",
+    "name": "Gorontalo",
+    "code": "75",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-118",
+    "name": "Sulawesi Barat",
+    "code": "76",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-119",
+    "name": "Maluku",
+    "code": "81",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-120",
+    "name": "Maluku Utara",
+    "code": "82",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  },
+  {
+    "id": "prov-121",
+    "name": "Papua Barat",
+    "code": "92",
+    "added": "2025-08-20",
+    "createdBy": "Admin",
+    "avatar": "/assets/img/users/user-30.jpg",
+    "status": "Active"
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "1",
+    "productId": "1",
+    "code": "PROPC-01",
+    "product": "Flexy 280gr",
+    "image": "/assets/img/products/stock-img-01.png",
+    "processName": "Printing",
+    "createDate": "2025-09-01",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "productId": "2",
+    "code": "PROPC-02",
+    "product": "Kartu Nama Matte",
+    "image": "/assets/img/products/stock-img-06.png",
+    "processName": "Cutting",
+    "createDate": "2025-09-02",
+    "status": "Active"
+  },
+  {
+    "id": "3",
+    "productId": "3",
+    "code": "PROPC-03",
+    "product": "Banner Roll Up 60x160",
+    "image": "/assets/img/products/stock-img-02.png",
+    "processName": "Laminating",
+    "createDate": "2025-09-03",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "productId": "4",
+    "code": "PROPC-04",
+    "product": "Brosur A4 Art Paper 150gr",
+    "image": "/assets/img/products/stock-img-03.png",
+    "processName": "Die-Cut",
+    "createDate": "2025-09-04",
+    "status": "Active"
+  },
+  {
+    "id": "5",
+    "productId": "5",
+    "code": "PROPC-05",
+    "product": "Kalender Dinding 2025",
+    "image": "/assets/img/products/stock-img-04.png",
+    "processName": "Packaging",
+    "createDate": "2025-09-05",
+    "status": "Active"
+  }
+]
+

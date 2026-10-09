@@ -1,0 +1,51 @@
+{
+  "midtrans": {
+    "name": "Midtrans SNAP",
+    "desc": "Leading Indonesian payment gateway with QRIS, Virtual Accounts, Gopay, ShopeePay, and Credit Cards.",
+    "enabled": true,
+    "clientKey": "SB-Mid-client-XXXXX",
+    "secretKey": "••••••••••••",
+    "mode": "sandbox"
+  },
+  "xendit": {
+    "name": "Xendit Payment",
+    "desc": "Accept Direct Debit, eWallets, Paylater, Retail Outlets (Indomaret/Alfamart), and XenPlatform payouts.",
+    "enabled": true,
+    "clientKey": "xnd_public_development_1234",
+    "secretKey": "••••••••••••",
+    "mode": "sandbox"
+  },
+  "paypal": {
+    "name": "PayPal",
+    "desc": "Worldwide payment gateway to receive payments via international credit cards and PayPal balances.",
+    "enabled": true,
+    "clientKey": "client_id_live_paypal_123",
+    "secretKey": "••••••••••••",
+    "mode": "production"
+  },
+  "stripe": {
+    "name": "Stripe",
+    "desc": "APIs to accept international credit cards, manage recurring subscriptions, and direct debits.",
+    "enabled": false,
+    "clientKey": "",
+    "secretKey": "",
+    "mode": "sandbox"
+  },
+  "braintree": {
+    "name": "Braintree",
+    "desc": "PayPal-backed gateway with fraud protection and high security enterprise card processing.",
+    "enabled": false,
+    "clientKey": "",
+    "secretKey": "",
+    "mode": "sandbox"
+  },
+  "wise": {
+    "name": "Wise",
+    "desc": "Send international money transfers and multi-currency business payouts with ultra-low fees.",
+    "enabled": false,
+    "clientKey": "",
+    "secretKey": "",
+    "mode": "sandbox"
+  }
+}
+

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "faq-1",
+    "question": "Apakah sistem mendukung berbagai metode pembayaran?",
+    "category": "Fitur",
+    "answer": "Ya, mendukung uang tunai (cash), transfer bank, QRIS statis/dinamis, deposit saldo pelanggan, serta kartu kredit/debit.",
+    "status": "Active",
+    "order": 1,
+    "createdDate": "2026-02-01"
+  },
+  {
+    "id": "faq-2",
+    "question": "Bagaimana cara kerja kalkulator otomatis plano dan potong?",
+    "category": "Percetakan",
+    "answer": "Kalkulator menghitung efisiensi potong berdasarkan ukuran lembar plano master dengan orientasi serat (grain direction) potong tegak maupun tidur untuk meminimalkan sisa limbah (waste scrap).",
+    "status": "Active",
+    "order": 2,
+    "createdDate": "2026-02-02"
+  },
+  {
+    "id": "faq-3",
+    "question": "Apakah printer kasir dan printer barcode didukung secara langsung?",
+    "category": "Hardware",
+    "answer": "Sistem mendukung protokol standar ESC/POS untuk thermal receipt printer 58mm/80mm serta printer label barcode via koneksi USB atau LAN/Network.",
+    "status": "Active",
+    "order": 3,
+    "createdDate": "2026-02-05"
+  },
+  {
+    "id": "faq-4",
+    "question": "Siapa saja pengguna yang cocok menggunakan software ini?",
+    "category": "Umum",
+    "answer": "Sangat ideal untuk percetakan offset komersial, digital printing indoor/outdoor, copy center, produsen box/kemasan, dan konveksi sablon.",
+    "status": "Active",
+    "order": 4,
+    "createdDate": "2026-02-10"
+  },
+  {
+    "id": "faq-5",
+    "question": "Bagaimana cara melacak alur pengerjaan SPK (Surat Perintah Kerja)?",
+    "category": "Fitur",
+    "answer": "Setiap order memiliki nomor SPK dan barcode unik yang dapat discan di tiap pos divisi (Desain/CTP -> Cetak -> Finishing/Pond -> Quality Control -> Pengambilan).",
+    "status": "Active",
+    "order": 5,
+    "createdDate": "2026-02-12"
+  },
+  {
+    "id": "faq-6",
+    "question": "Apakah format file desain apa saja yang disarankan untuk dicetak?",
+    "category": "Percetakan",
+    "answer": "Disarankan file dalam format PDF/X-1a, TIFF, atau CDR/AI dengan color mode CMYK dan resolusi minimal 300 DPI untuk hasil tajam.",
+    "status": "Active",
+    "order": 6,
+    "createdDate": "2026-02-15"
+  }
+]

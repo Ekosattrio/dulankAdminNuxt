@@ -1,3 +1,71 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref, watch } from 'vue'
+import { useAppearance } from '~/composables/useAppearance'
+
+const { settings, pending, error, refresh, saveSettings } = useAppearance()
+
+const selectedTheme = ref('Light')
+const selectedAccent = ref('orange')
+const expandSidebar = ref(true)
+const sidebarSize = ref('Large - 250px')
+const fontFamily = ref('Nunito')
+
+const toastMessage = ref('')
+const isSaving = ref(false)
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 3000)
+}
+
+watch(
+  settings,
+  (val) => {
+    if (val) {
+      selectedTheme.value = val.theme || 'Light'
+      selectedAccent.value = val.accent || 'orange'
+      expandSidebar.value = val.expandSidebar ?? true
+      sidebarSize.value = val.sidebarSize || 'Large - 250px'
+      fontFamily.value = val.fontFamily || 'Nunito'
+    }
+  },
+  { immediate: true }
+)
+
+const accentColors = [
+  { name: 'orange', hex: '#ff9f43' },
+  { name: 'violet', hex: '#7367f0' },
+  { name: 'blue', hex: '#00cfe8' },
+  { name: 'green', hex: '#28c76f' },
+  { name: 'brown', hex: '#a86544' },
+]
+
+const handleSaveAppearance = async () => {
+  isSaving.value = true
+  try {
+    await saveSettings({
+      theme: selectedTheme.value,
+      accent: selectedAccent.value,
+      expandSidebar: expandSidebar.value,
+      sidebarSize: sidebarSize.value,
+      fontFamily: fontFamily.value
+    })
+    showToast('Appearance settings saved successfully!')
+  } catch (err) {
+    console.error('Failed to save appearance:', err)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+const resetForm = () => {
+  refresh()
+}
+</script>
+
 <template>
   <div class="page-wrapper">
     <div class="content settings-content">
@@ -12,17 +80,19 @@
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
           </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
         </ul>
+      </div>
+
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="row">
         <div class="col-xl-12">
           <div class="settings-wrapper d-flex">
             <div class="settings-page-wrap w-100">
-              <form @submit.prevent="saveAppearance">
+              <form @submit.prevent="handleSaveAppearance">
                 <div class="setting-title mb-4">
                   <h4 class="fs-18 fw-bold">Appearance</h4>
                 </div>
@@ -123,7 +193,9 @@
 
                   <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                     <button type="button" class="btn btn-light" @click="resetForm">Cancel</button>
-                    <button type="submit" class="btn btn-warning text-white">Save Changes</button>
+                    <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">
+                      {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                    </button>
                   </div>
                 </div>
               </form>
@@ -132,47 +204,20 @@
         </div>
       </div>
     </div>
+=======
+import AppearanceWorkspace from '~/components/pages/setting/AppearanceWorkspace.vue'
+
+useLegacyPage({
+  title: 'Appearance Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-appearance">
+    <AppearanceWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-
-useHead({
-  title: "Appearance Settings - Kacetak System",
-});
-
-const selectedTheme = ref("Light");
-const selectedAccent = ref("orange");
-const expandSidebar = ref(true);
-const sidebarSize = ref("Large - 250px");
-const fontFamily = ref("Nunito");
-
-const accentColors = [
-  { name: "orange", hex: "#ff9f43" },
-  { name: "violet", hex: "#7367f0" },
-  { name: "blue", hex: "#00cfe8" },
-  { name: "green", hex: "#28c76f" },
-  { name: "brown", hex: "#a86544" },
-];
-
-const saveAppearance = () => {
-  alert("Appearance settings saved!");
-};
-
-const resetForm = () => {
-  selectedTheme.value = "Light";
-  selectedAccent.value = "orange";
-  expandSidebar.value = true;
-  sidebarSize.value = "Large - 250px";
-  fontFamily.value = "Nunito";
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};
-</script>

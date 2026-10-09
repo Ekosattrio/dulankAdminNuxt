@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">definePageMeta({
   layout: "default",
 });
@@ -694,5 +695,25 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]));
       confirm-variant="danger"
       @confirm="confirmDelete"
     />
+=======
+<script setup lang="ts">
+import KalkulatorDashboardWorkspace from '~/components/pages/calculator/KalkulatorDashboardWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Kalkulator Dashboard',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-kalkulator-dashboard">
+    <KalkulatorDashboardWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

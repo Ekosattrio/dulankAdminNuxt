@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content settings-content">
@@ -342,3 +343,21 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapse
 };</script>
+=======
+<script setup lang="ts">
+import SystemSettingWorkspace from '~/components/pages/setting/SystemSettingWorkspace.vue'
+
+useLegacyPage({
+  title: 'System Settings',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-system-setting">
+    <SystemSettingWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

@@ -1,0 +1,202 @@
+[
+  {
+    "id": "ID0001",
+    "supplierId": "ID0001",
+    "name": "PT Kertas Jaya Makmur",
+    "email": "info@kertasjaya.co.id",
+    "contact": "+6221-8091234",
+    "picName": "Budi Santoso",
+    "status": "Active",
+    "date": "05/12/2025 9:15"
+  },
+  {
+    "id": "ID0002",
+    "supplierId": "ID0002",
+    "name": "CV Kimia Prima Terang",
+    "email": "sales@kimiaprima.com",
+    "contact": "+6281233445566",
+    "picName": "Siti Nurhaliza",
+    "status": "Active",
+    "date": "08/12/2025 10:30"
+  },
+  {
+    "id": "ID0003",
+    "supplierId": "ID0003",
+    "name": "UD Sukses Makmur Kertas",
+    "email": "ud.sukses@gmail.com",
+    "contact": "031-5566778",
+    "picName": "Ahmad Wijaya",
+    "status": "Active",
+    "date": "11/12/2025 14:45"
+  },
+  {
+    "id": "ID0004",
+    "supplierId": "ID0004",
+    "name": "Global Inkindo Pratama",
+    "email": "admin@globalinkindo.id",
+    "contact": "+6281122334455",
+    "picName": "Dewi Handayani",
+    "status": "Active",
+    "date": "14/12/2025 11:20"
+  },
+  {
+    "id": "ID0005",
+    "supplierId": "ID0005",
+    "name": "PT Indo Material Printing",
+    "email": "helpdesk@indomaterial.com",
+    "contact": "022-2509876",
+    "picName": "Rudi Hermawan",
+    "status": "Active",
+    "date": "17/12/2025 16:05"
+  },
+  {
+    "id": "ID0006",
+    "supplierId": "ID0006",
+    "name": "CV Warna Abadi Tinta",
+    "email": "warna.abadi@yahoo.com",
+    "contact": "+6285711223344",
+    "picName": "Nurul Cahya",
+    "status": "Active",
+    "date": "20/12/2025 08:50"
+  },
+  {
+    "id": "ID0007",
+    "supplierId": "ID0007",
+    "name": "PT Digital Solusi Mesin",
+    "email": "support@digitalsolusi.co.id",
+    "contact": "+6221-7788990",
+    "picName": "Hendra Kusuma",
+    "status": "Disable",
+    "date": "23/12/2025 13:35"
+  },
+  {
+    "id": "ID0008",
+    "supplierId": "ID0008",
+    "name": "UD Berkah Kertasindo",
+    "email": "berkah.kertas@gmail.com",
+    "contact": "024-8441234",
+    "picName": "Rina Putri",
+    "status": "Active",
+    "date": "26/12/2025 15:10"
+  },
+  {
+    "id": "ID0009",
+    "supplierId": "ID0009",
+    "name": "PT Tinta Emas Nusantara",
+    "email": "sales@tintaemas.id",
+    "contact": "+6281399887766",
+    "picName": "Andi Pratama",
+    "status": "Active",
+    "date": "29/12/2025 10:00"
+  },
+  {
+    "id": "ID0010",
+    "supplierId": "ID0010",
+    "name": "CV Jaya Teknik Grafika",
+    "email": "teknik.grafika@outlook.com",
+    "contact": "0341-456123",
+    "picName": "Toni Suryanto",
+    "status": "Active",
+    "date": "02/01/2026 12:25"
+  },
+  {
+    "id": "ID0011",
+    "supplierId": "ID0011",
+    "name": "PT Sinar Offset Mandiri",
+    "email": "info@sinaroffset.com",
+    "contact": "+6221-5544332",
+    "picName": "Maya Kusuma",
+    "status": "Active",
+    "date": "05/01/2026 9:40"
+  },
+  {
+    "id": "ID0012",
+    "supplierId": "ID0012",
+    "name": "UD Maju Jaya Sablon",
+    "email": "majujaya@sablon.id",
+    "contact": "+6281900112233",
+    "picName": "Bambang Irawan",
+    "status": "Active",
+    "date": "08/01/2026 14:55"
+  },
+  {
+    "id": "ID0013",
+    "supplierId": "ID0013",
+    "name": "PT Cahaya Vinyl Indonesia",
+    "email": "sales@cahayavinyl.co.id",
+    "contact": "021-8891122",
+    "picName": "Citra Dewi",
+    "status": "Disable",
+    "date": "11/01/2026 11:15"
+  },
+  {
+    "id": "ID0014",
+    "supplierId": "ID0014",
+    "name": "CV Kreasi Pack Utama",
+    "email": "kreasi.pack@gmail.com",
+    "contact": "+6285266778899",
+    "picName": "Fajar Hidayat",
+    "status": "Active",
+    "date": "14/01/2026 16:30"
+  },
+  {
+    "id": "ID0015",
+    "supplierId": "ID0015",
+    "name": "PT Master Sparepart Mesin",
+    "email": "master@sparepart.co.id",
+    "contact": "021-4512345",
+    "picName": "Abdurrahman",
+    "status": "Active",
+    "date": "17/01/2026 10:20"
+  },
+  {
+    "id": "ID0016",
+    "supplierId": "ID0016",
+    "name": "UD Kertasindo Baru",
+    "email": "kertasindo.baru@yahoo.com",
+    "contact": "+6281277665544",
+    "picName": "Rina Putri",
+    "status": "Active",
+    "date": "20/01/2026 08:10"
+  },
+  {
+    "id": "ID0017",
+    "supplierId": "ID0017",
+    "name": "PT Galeri Tinta Utama",
+    "email": "info@galeritinta.com",
+    "contact": "+6281311223344",
+    "picName": "Andi Pratama",
+    "status": "Active",
+    "date": "23/01/2026 13:45"
+  },
+  {
+    "id": "ID0018",
+    "supplierId": "ID0018",
+    "name": "CV Mitra Grafika Jaya",
+    "email": "mitra.grafika@biz.id",
+    "contact": "022-7201234",
+    "picName": "Yudi Prasetyo",
+    "status": "Active",
+    "date": "26/01/2026 15:55"
+  },
+  {
+    "id": "ID0019",
+    "supplierId": "ID0019",
+    "name": "PT Global Paper Solution",
+    "email": "contact@globalpaper.id",
+    "contact": "+6281155443322",
+    "picName": "Indra Kurniawan",
+    "status": "Active",
+    "date": "29/01/2026 09:05"
+  },
+  {
+    "id": "ID0020",
+    "supplierId": "ID0020",
+    "name": "UD Sentosa Alat Cetak",
+    "email": "sentosa.alat@gmail.com",
+    "contact": "061-4156789",
+    "picName": "Rina Putri",
+    "status": "Disable",
+    "date": "02/02/2026 14:20"
+  }
+]

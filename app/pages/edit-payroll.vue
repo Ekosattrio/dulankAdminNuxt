@@ -1,10 +1,30 @@
+<<<<<<< HEAD
+<<<<<<<< HEAD:app/pages/edit-payroll.vue
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
+========
+<script setup lang="ts">
+import { formatRupiah } from '~/composables/useFormatters'
+import { useEmployeeSalaries } from '~/composables/useEmployeeSalaries'
+import PageHeader from '~/components/common/PageHeader.vue'
+import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-const router = useRouter();
+const props = withDefaults(
+  defineProps<{
+    mode?: 'add' | 'edit'
+  }>(),
+  {
+    mode: 'add'
+  }
+)
+
+const router = useRouter()
+const isEdit = computed(() => props.mode === 'edit')
+>>>>>>>> origin/eko:app/components/pages/employee-salary/PayrollPageForm.vue
+
 
 const form = reactive({
-  employeeId: "ST001",
-  employeeName: "Budi Setiadi",
+  employeeId: isEdit.value ? "ST001" : "",
+  employeeName: isEdit.value ? "Budi Setiadi" : "",
   salary: 150000,
   system: "Daily",
   period: "01/12/2025 - 07/12/2025",
@@ -107,15 +127,57 @@ const removeDeduction = (index: number) => {
   form.deductionItems.splice(index, 1);
 };
 
+<<<<<<<< HEAD:app/pages/edit-payroll.vue
 const savePayroll = () => {
   alert("Payroll updated successfully!");
   router.push("/payslip");
 };</script>
+========
+const resetForm = () => {
+  form.employeeId = ''
+  form.employeeName = ''
+  form.workedDays = 0
+  form.absentDays = 0
+  form.regularOvertimeHours = 0
+  form.specialOvertimeHours = 0
+  form.presentIncentive = 0
+  form.allowanceItems = []
+  form.cashAdvance = 0
+  form.deductionItems = []
+}
+
+const { saveSalary } = useEmployeeSalaries()
+const isSaving = ref(false)
+
+const savePayroll = async () => {
+  isSaving.value = true
+  try {
+    await saveSalary({
+      employeeId: form.employeeId || 'ST001',
+      employeeName: form.employeeName,
+      month: form.payrollMonth,
+      year: new Date().getFullYear(),
+      basicSalary: form.dailyRate * (form.workedDays || 26),
+      allowances: totalAllowance.value,
+      deductions: totalDeductions.value,
+      netSalary: totalNetSalary.value,
+      status: 'Paid',
+      paymentMethod: 'Bank Transfer'
+    })
+    router.push("/payslip");
+  } catch (err) {
+    console.error("Failed to save payroll:", err)
+  } finally {
+    isSaving.value = false
+  }
+};
+</script>
+>>>>>>>> origin/eko:app/components/pages/employee-salary/PayrollPageForm.vue
 
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
-    <CommonPageHeader title="Edit Payroll" subtitle="Update employee payroll entry">
+    <PageHeader :title="isEdit ? 'Edit Payroll' : 'Add Payroll'" :subtitle="isEdit ? 'Update employee payroll entry' : 'Add employee payroll entry'">
       <template #actions>
         <NuxtLink
           to="/payslip"
@@ -125,7 +187,7 @@ const savePayroll = () => {
           <span>Back to Payslip List</span>
         </NuxtLink>
       </template>
-    </CommonPageHeader>
+    </PageHeader>
 
     <form @submit.prevent="savePayroll">
       <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 space-y-8">
@@ -444,5 +506,25 @@ const savePayroll = () => {
         </div>
       </div>
     </form>
+=======
+<script setup lang="ts">
+import PayrollPageForm from '~/components/pages/employee-salary/PayrollPageForm.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Edit Payroll',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-edit-payroll">
+    <PayrollPageForm mode="edit" />
+>>>>>>> origin/eko
   </div>
 </template>

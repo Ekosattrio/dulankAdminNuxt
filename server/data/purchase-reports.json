@@ -1,0 +1,163 @@
+[
+  {
+    "id": "PR-001",
+    "category": "Kertas & Bahan Baku Cetak",
+    "purchaseQty": 50,
+    "unit": "Rim",
+    "totalPurchase": 12500000,
+    "totalDue": 2500000,
+    "totalAmount": 10000000,
+    "percentage": 18.35,
+    "date": "2025-01-12",
+    "supplier": "PT Indah Kiat Pulp & Paper",
+    "details": [
+      { "item": "Art Paper 150gsm (65x100cm)", "purchaseQty": 20, "unit": "Rim", "totalCost": 5000000, "percentage": 40.0 },
+      { "item": "Art Carton 260gsm (65x100cm)", "purchaseQty": 15, "unit": "Rim", "totalCost": 4500000, "percentage": 36.0 },
+      { "item": "HVS 70gsm PaperOne Plano", "purchaseQty": 15, "unit": "Rim", "totalCost": 3000000, "percentage": 24.0 }
+    ]
+  },
+  {
+    "id": "PR-002",
+    "category": "Tinta & Toner (Ink/Toner)",
+    "purchaseQty": 20,
+    "unit": "Set",
+    "totalPurchase": 8000000,
+    "totalDue": 0,
+    "totalAmount": 8000000,
+    "percentage": 14.68,
+    "date": "2025-01-14",
+    "supplier": "CV Tinta Mandiri Utama",
+    "details": [
+      { "item": "Tinta Solvent Konica 512i (CMYK)", "purchaseQty": 10, "unit": "Set", "totalCost": 5000000, "percentage": 62.5 },
+      { "item": "Toner Fuji Xerox DocuCentre", "purchaseQty": 10, "unit": "Set", "totalCost": 3000000, "percentage": 37.5 }
+    ]
+  },
+  {
+    "id": "PR-003",
+    "category": "Bahan Sticker & Vinyl",
+    "purchaseQty": 15,
+    "unit": "Roll",
+    "totalPurchase": 10500000,
+    "totalDue": 3000000,
+    "totalAmount": 7500000,
+    "percentage": 13.76,
+    "date": "2025-01-16",
+    "supplier": "PT Surya Graha Vinyl",
+    "details": [
+      { "item": "Sticker Vinyl Ritrama Glossy 1.27m", "purchaseQty": 8, "unit": "Roll", "totalCost": 6000000, "percentage": 57.14 },
+      { "item": "Sticker Chromo Plano 70x108cm", "purchaseQty": 7, "unit": "Roll", "totalCost": 4500000, "percentage": 42.86 }
+    ]
+  },
+  {
+    "id": "PR-004",
+    "category": "Bahan Display (Banner/X-Banner)",
+    "purchaseQty": 100,
+    "unit": "Pcs",
+    "totalPurchase": 4500000,
+    "totalDue": 500000,
+    "totalAmount": 4000000,
+    "percentage": 7.34,
+    "date": "2025-01-18",
+    "supplier": "CV Jaya Display Indonesia",
+    "details": [
+      { "item": "Kaki Roll Up Banner Aluminium 60x160", "purchaseQty": 50, "unit": "Pcs", "totalCost": 2750000, "percentage": 61.11 },
+      { "item": "X-Banner Fiber Black 60x160", "purchaseQty": 50, "unit": "Pcs", "totalCost": 1750000, "percentage": 38.89 }
+    ]
+  },
+  {
+    "id": "PR-005",
+    "category": "Material Finishing (Laminasi/Lem)",
+    "purchaseQty": 10,
+    "unit": "Roll",
+    "totalPurchase": 3200000,
+    "totalDue": 0,
+    "totalAmount": 3200000,
+    "percentage": 5.87,
+    "date": "2025-01-20",
+    "supplier": "PT Mitra Laminasi Sentosa",
+    "details": [
+      { "item": "Plastik Thermal Doff 32mic 330mm", "purchaseQty": 5, "unit": "Roll", "totalCost": 1600000, "percentage": 50.0 },
+      { "item": "Plastik Thermal Glossy 32mic 330mm", "purchaseQty": 5, "unit": "Roll", "totalCost": 1600000, "percentage": 50.0 }
+    ]
+  },
+  {
+    "id": "PR-006",
+    "category": "Suku Cadang Mesin (Spareparts)",
+    "purchaseQty": 25,
+    "unit": "Kg",
+    "totalPurchase": 1875000,
+    "totalDue": 0,
+    "totalAmount": 1875000,
+    "percentage": 3.44,
+    "date": "2025-01-22",
+    "supplier": "Teknik Grafindo Cipta",
+    "details": [
+      { "item": "Damper & Wiper UV Mimaki", "purchaseQty": 15, "unit": "Set", "totalCost": 1125000, "percentage": 60.0 },
+      { "item": "Capping Station & Cleaning Blade", "purchaseQty": 10, "unit": "Set", "totalCost": 750000, "percentage": 40.0 }
+    ]
+  },
+  {
+    "id": "PR-007",
+    "category": "Alat Tulis Kantor (ATK)",
+    "purchaseQty": 100,
+    "unit": "Rim",
+    "totalPurchase": 5500000,
+    "totalDue": 1000000,
+    "totalAmount": 4500000,
+    "percentage": 8.26,
+    "date": "2025-01-24",
+    "supplier": "Toko Stationery Subur",
+    "details": [
+      { "item": "Kertas NCR 3 Ply Top Middle Bottom", "purchaseQty": 60, "unit": "Rim", "totalCost": 3300000, "percentage": 60.0 },
+      { "item": "Karton Brief Card (BC) 160gsm", "purchaseQty": 40, "unit": "Rim", "totalCost": 2200000, "percentage": 40.0 }
+    ]
+  },
+  {
+    "id": "PR-008",
+    "category": "Kemasan & Packaging",
+    "purchaseQty": 2,
+    "unit": "Unit",
+    "totalPurchase": 6000000,
+    "totalDue": 1500000,
+    "totalAmount": 4500000,
+    "percentage": 8.26,
+    "date": "2025-01-26",
+    "supplier": "PT Box Karton Megah",
+    "details": [
+      { "item": "Corrugated Box Standar Ukuran L", "purchaseQty": 1000, "unit": "Pcs", "totalCost": 3500000, "percentage": 58.33 },
+      { "item": "Lakban Coklat Bening Daimaru", "purchaseQty": 200, "unit": "Roll", "totalCost": 2500000, "percentage": 41.67 }
+    ]
+  },
+  {
+    "id": "PR-009",
+    "category": "Bahan Stempel & Merchandise",
+    "purchaseQty": 12,
+    "unit": "Liter",
+    "totalPurchase": 7200000,
+    "totalDue": 1200000,
+    "totalAmount": 6000000,
+    "percentage": 11.01,
+    "date": "2025-01-28",
+    "supplier": "CV Anugerah Flash Stamp",
+    "details": [
+      { "item": "Karet Spons Flash 7mm & Gagang", "purchaseQty": 6, "unit": "Pak", "totalCost": 4200000, "percentage": 58.33 },
+      { "item": "Tinta Stempel Flash Minyak 500ml", "purchaseQty": 6, "unit": "Liter", "totalCost": 3000000, "percentage": 41.67 }
+    ]
+  },
+  {
+    "id": "PR-010",
+    "category": "Cairan Pembersih & Perawatan",
+    "purchaseQty": 40,
+    "unit": "Pak",
+    "totalPurchase": 5500000,
+    "totalDue": 575000,
+    "totalAmount": 4925000,
+    "percentage": 9.03,
+    "date": "2025-01-30",
+    "supplier": "PT Chemindo Clean Graha",
+    "details": [
+      { "item": "Cleaning Solution Flush Solvent", "purchaseQty": 20, "unit": "Galon", "totalCost": 3000000, "percentage": 54.55 },
+      { "item": "Isopropyl Alcohol (IPA) 99%", "purchaseQty": 20, "unit": "Jerigen", "totalCost": 2500000, "percentage": 45.45 }
+    ]
+  }
+]

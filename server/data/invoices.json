@@ -1,0 +1,83 @@
+[
+  {
+    "id": "1",
+    "invoiceNo": "INV00001",
+    "customer": "PT Makmur Abadi",
+    "dueDate": "01/12/2025",
+    "amount": 1332000,
+    "paid": 1332000,
+    "amountDue": 0,
+    "status": "Paid"
+  },
+  {
+    "id": "2",
+    "invoiceNo": "INV00002",
+    "customer": "Toko Buku Cerdas",
+    "dueDate": "02/12/2025",
+    "amount": 3552000,
+    "paid": 1500000,
+    "amountDue": 2052000,
+    "status": "Partial"
+  },
+  {
+    "id": "3",
+    "invoiceNo": "INV00003",
+    "customer": "Bpk. Rahmat",
+    "dueDate": "03/12/2025",
+    "amount": 610500,
+    "paid": 610500,
+    "amountDue": 0,
+    "status": "Paid"
+  },
+  {
+    "id": "4",
+    "invoiceNo": "INV00004",
+    "customer": "CV Jaya Sentosa",
+    "dueDate": "04/12/2025",
+    "amount": 3241200,
+    "paid": 3241200,
+    "amountDue": 0,
+    "status": "Paid"
+  },
+  {
+    "id": "5",
+    "invoiceNo": "INV00005",
+    "customer": "Ibu Dian",
+    "dueDate": "27/11/2025",
+    "amount": 6493500,
+    "paid": 3000000,
+    "amountDue": 3493500,
+    "status": "Partial"
+  },
+  {
+    "id": "6",
+    "invoiceNo": "INV00006",
+    "customer": "PT Global Solusi",
+    "dueDate": "25/11/2025",
+    "amount": 4484400,
+    "paid": 4484400,
+    "amountDue": 0,
+    "status": "Paid"
+  },
+  {
+    "id": "7",
+    "invoiceNo": "INV00007",
+    "customer": "Bapak Hendra",
+    "dueDate": "20/11/2025",
+    "amount": 888000,
+    "paid": 888000,
+    "amountDue": 0,
+    "status": "Paid"
+  },
+  {
+    "id": "8",
+    "invoiceNo": "INV00008",
+    "customer": "Percetakan Berkah",
+    "dueDate": "18/11/2025",
+    "amount": 5217000,
+    "paid": 2000000,
+    "amountDue": 3217000,
+    "status": "Partial"
+  }
+]
+

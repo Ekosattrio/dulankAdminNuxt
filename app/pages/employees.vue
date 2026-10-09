@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">const { data: employeesData } = await useFetch<EmployeeItem[]>('/api/employees')
 const employees = ref<EmployeeItem[]>(employeesData.value ?? [])
 useMockSync('employees', employees);
@@ -317,5 +318,16 @@ const deleteEmployee = (id: string) => {
         </div>
       </template>
     </CommonBaseModal>
+=======
+<script setup lang="ts">
+import EmployeesWorkspace from '~/components/pages/employees/EmployeesWorkspace.vue'
+
+useLegacyPage({ title: 'Employees - Daftar Karyawan', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-employees">
+    <EmployeesWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

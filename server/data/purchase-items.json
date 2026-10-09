@@ -1,0 +1,52 @@
+[
+  {
+    "id": "ITEM-001",
+    "category": "Kertas & Bahan Baku Cetak",
+    "product": "Art Paper 150gr",
+    "description": "Kertas brosur glossy A3+",
+    "merk": "Paperline",
+    "price": 1250,
+    "unit": "Lembar",
+    "created": "Admin, 02/01/2026, 09:15"
+  },
+  {
+    "id": "ITEM-002",
+    "category": "Tinta & Toner",
+    "product": "Tinta Cyan Eco-Solvent",
+    "description": "Tinta printer outdoor 1L",
+    "merk": "Roland",
+    "price": 450000,
+    "unit": "Botol",
+    "created": "Admin, 02/01/2026, 10:00"
+  },
+  {
+    "id": "ITEM-003",
+    "category": "Tinta & Toner",
+    "product": "Tinta Magenta Eco-Solvent",
+    "description": "Tinta printer outdoor 1L",
+    "merk": "Roland",
+    "price": 450000,
+    "unit": "Botol",
+    "created": "Admin, 02/01/2026, 10:05"
+  },
+  {
+    "id": "ITEM-004",
+    "category": "Tinta & Toner",
+    "product": "Tinta Yellow Eco-Solvent",
+    "description": "Tinta printer outdoor 1L",
+    "merk": "Roland",
+    "price": 450000,
+    "unit": "Botol",
+    "created": "Admin, 02/01/2026, 10:10"
+  },
+  {
+    "id": "ITEM-005",
+    "category": "Bahan Finishing & Jilid",
+    "product": "Plastik Laminasi Glossy",
+    "description": "Ketebalan 32 micron roll 1000m",
+    "merk": "D&K",
+    "price": 380000,
+    "unit": "Roll",
+    "created": "Admin, 02/01/2026, 10:20"
+  }
+]

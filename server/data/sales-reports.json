@@ -1,0 +1,171 @@
+[
+  {
+    "id": "SR-010",
+    "category": "Cetak Dokumen",
+    "soldQty": 7,
+    "unit": "Lembar",
+    "totalSales": 3500000,
+    "totalDue": 0,
+    "totalAmount": 3500000,
+    "percentage": 2.33,
+    "date": "2025-01-30",
+    "channel": "POS",
+    "details": [
+      { "product": "Print Laser B/W HVS 75gsm", "soldQty": 5000, "unit": "Lembar", "totalRevenue": 2000000, "percentage": 57.14 },
+      { "product": "Print Laser Warna HVS 80gsm", "soldQty": 1500, "unit": "Lembar", "totalRevenue": 1500000, "percentage": 42.86 }
+    ]
+  },
+  {
+    "id": "SR-001",
+    "category": "Cetak Offset",
+    "soldQty": 10,
+    "unit": "Lembar",
+    "totalSales": 30000000,
+    "totalDue": 5000000,
+    "totalAmount": 25000000,
+    "percentage": 20.0,
+    "date": "2025-01-15",
+    "channel": "POS",
+    "details": [
+      { "product": "Brosur Full Color A4", "soldQty": 5000, "unit": "Lembar", "totalRevenue": 15000000, "percentage": 50.0 },
+      { "product": "Katalog Profil Perusahaan", "soldQty": 2000, "unit": "Buku", "totalRevenue": 10000000, "percentage": 33.33 },
+      { "product": "Flyer Promosi A5", "soldQty": 3000, "unit": "Lembar", "totalRevenue": 5000000, "percentage": 16.67 }
+    ]
+  },
+  {
+    "id": "SR-002",
+    "category": "Print Outdoor",
+    "soldQty": 1,
+    "unit": "Meter",
+    "totalSales": 25000000,
+    "totalDue": 2500000,
+    "totalAmount": 22500000,
+    "percentage": 16.67,
+    "date": "2025-01-16",
+    "channel": "Website",
+    "details": [
+      { "product": "Flexy Frontlit 280gsm", "soldQty": 450, "unit": "Meter", "totalRevenue": 9000000, "percentage": 36.0 },
+      { "product": "Flexy Korea 440gsm", "soldQty": 120, "unit": "Meter", "totalRevenue": 6000000, "percentage": 24.0 },
+      { "product": "Flexy Jerman 510gsm", "soldQty": 85, "unit": "Meter", "totalRevenue": 6800000, "percentage": 27.2 },
+      { "product": "Sticker Vinyl Outdoor", "soldQty": 200, "unit": "Meter", "totalRevenue": 14000000, "percentage": 56.0 },
+      { "product": "Sticker One Way Vision", "soldQty": 50, "unit": "Meter", "totalRevenue": 4500000, "percentage": 18.0 },
+      { "product": "Backlit Film Outdoor", "soldQty": 30, "unit": "Meter", "totalRevenue": 3600000, "percentage": 14.4 }
+    ]
+  },
+  {
+    "id": "SR-003",
+    "category": "Print Indoor",
+    "soldQty": 500,
+    "unit": "Meter",
+    "totalSales": 18000000,
+    "totalDue": 1000000,
+    "totalAmount": 17000000,
+    "percentage": 12.0,
+    "date": "2025-01-18",
+    "channel": "POS",
+    "details": [
+      { "product": "Luster Photo Paper", "soldQty": 200, "unit": "Meter", "totalRevenue": 8000000, "percentage": 44.44 },
+      { "product": "Albatros Matte 180gsm", "soldQty": 180, "unit": "Meter", "totalRevenue": 6000000, "percentage": 33.33 },
+      { "product": "Canvas Art Texture", "soldQty": 120, "unit": "Meter", "totalRevenue": 4000000, "percentage": 22.23 }
+    ]
+  },
+  {
+    "id": "SR-004",
+    "category": "Sablon Manual",
+    "soldQty": 400,
+    "unit": "Pcs",
+    "totalSales": 20000000,
+    "totalDue": 4000000,
+    "totalAmount": 16000000,
+    "percentage": 13.33,
+    "date": "2025-01-20",
+    "channel": "Quotation",
+    "details": [
+      { "product": "Kaos Combed 30s Rubber", "soldQty": 250, "unit": "Pcs", "totalRevenue": 12500000, "percentage": 62.5 },
+      { "product": "Tote Bag Kanvas Plastisol", "soldQty": 150, "unit": "Pcs", "totalRevenue": 7500000, "percentage": 37.5 }
+    ]
+  },
+  {
+    "id": "SR-005",
+    "category": "Digital Printing A3+",
+    "soldQty": 2,
+    "unit": "Lembar",
+    "totalSales": 12000000,
+    "totalDue": 500000,
+    "totalAmount": 11500000,
+    "percentage": 8.0,
+    "date": "2025-01-22",
+    "channel": "POS",
+    "details": [
+      { "product": "Art Carton 260gsm A3+", "soldQty": 1200, "unit": "Lembar", "totalRevenue": 6000000, "percentage": 50.0 },
+      { "product": "Sticker Chromo A3+", "soldQty": 800, "unit": "Lembar", "totalRevenue": 4000000, "percentage": 33.33 },
+      { "product": "Linen Texture 230gsm A3+", "soldQty": 400, "unit": "Lembar", "totalRevenue": 2000000, "percentage": 16.67 }
+    ]
+  },
+  {
+    "id": "SR-006",
+    "category": "Cutting Sticker",
+    "soldQty": 300,
+    "unit": "Meter",
+    "totalSales": 9000000,
+    "totalDue": 1500000,
+    "totalAmount": 7500000,
+    "percentage": 6.0,
+    "date": "2025-01-24",
+    "channel": "Website",
+    "details": [
+      { "product": "Oracal 651 Glossy/Matte", "soldQty": 200, "unit": "Meter", "totalRevenue": 6000000, "percentage": 66.67 },
+      { "product": "Scotchlite Reflective", "soldQty": 100, "unit": "Meter", "totalRevenue": 3000000, "percentage": 33.33 }
+    ]
+  },
+  {
+    "id": "SR-007",
+    "category": "Sablon DTF",
+    "soldQty": 250,
+    "unit": "Pcs",
+    "totalSales": 15000000,
+    "totalDue": 3000000,
+    "totalAmount": 12000000,
+    "percentage": 10.0,
+    "date": "2025-01-25",
+    "channel": "POS",
+    "details": [
+      { "product": "DTF Meteran 58cm High-Res", "soldQty": 150, "unit": "Meter", "totalRevenue": 9000000, "percentage": 60.0 },
+      { "product": "Kaos Cotton Combed 24s DTF", "soldQty": 100, "unit": "Pcs", "totalRevenue": 6000000, "percentage": 40.0 }
+    ]
+  },
+  {
+    "id": "SR-008",
+    "category": "Finishing",
+    "soldQty": 300,
+    "unit": "Buku",
+    "totalSales": 7500000,
+    "totalDue": 1000000,
+    "totalAmount": 6500000,
+    "percentage": 5.0,
+    "date": "2025-01-26",
+    "channel": "POS",
+    "details": [
+      { "product": "Jilid Hardcover Skripsi/Laporan", "soldQty": 100, "unit": "Buku", "totalRevenue": 3500000, "percentage": 46.67 },
+      { "product": "Jilid Spiral Kawat A4", "soldQty": 120, "unit": "Buku", "totalRevenue": 2400000, "percentage": 32.0 },
+      { "product": "Laminasi Panas Doff/Glossy", "soldQty": 80, "unit": "Rim", "totalRevenue": 1600000, "percentage": 21.33 }
+    ]
+  },
+  {
+    "id": "SR-009",
+    "category": "Merchandise & Souvenir",
+    "soldQty": 500,
+    "unit": "Pcs",
+    "totalSales": 10000000,
+    "totalDue": 2000000,
+    "totalAmount": 8000000,
+    "percentage": 6.67,
+    "date": "2025-01-28",
+    "channel": "Sales Staff",
+    "details": [
+      { "product": "Mug Keramik Custom Sablon", "soldQty": 250, "unit": "Pcs", "totalRevenue": 5000000, "percentage": 50.0 },
+      { "product": "Tumbler Stainless Laser UV", "soldQty": 150, "unit": "Pcs", "totalRevenue": 3500000, "percentage": 35.0 },
+      { "product": "Pin & Gantungan Kunci 58mm", "soldQty": 100, "unit": "Pcs", "totalRevenue": 1500000, "percentage": 15.0 }
+    ]
+  }
+]

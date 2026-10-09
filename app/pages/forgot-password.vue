@@ -32,6 +32,9 @@
                   Send Reset Link
                 </button>
               </div>
+              <p v-if="submitted" role="status" class="mb-3 rounded border border-success p-2 text-sm text-success">
+                If an account exists for {{ email }}, a password reset link has been sent.
+              </p>
               <div class="signinform text-center mb-3">
                 <h4 class="text-sm">
                   Return to
@@ -79,15 +82,18 @@ definePageMeta({
   layout: 'auth'
 })
 
-useHead({
-  title: 'Forgot Password - Kacetak System'
+useLegacyPage({
+  title: 'Forgot Password',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const email = ref('')
+const submitted = ref(false)
 
 const handleSubmit = () => {
-  alert('If an account exists for ' + email.value + ', a password reset link has been sent.')
-  navigateTo('/signin')
+  submitted.value = true
 }
 </script>
 

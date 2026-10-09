@@ -1,3 +1,29 @@
+<script setup lang="ts">
+<<<<<<< HEAD
+import { ref } from 'vue'
+import type { PreferenceItem } from '#server/types/preference-setting'
+import { usePreferences } from '~/composables/usePreferences'
+
+const { preferences, pending, error, refresh, savePreferences } = usePreferences()
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 2500)
+}
+
+const onToggle = async (pref: PreferenceItem) => {
+  try {
+    await savePreferences(preferences.value)
+    showToast(`${pref.label} updated.`)
+  } catch (err) {
+    console.error('Failed to update preference:', err)
+  }
+}
+</script>
+
 <template>
   <div class="page-wrapper mt-3">
     <div class="content settings-content">
@@ -12,10 +38,12 @@
           <li>
             <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
           </li>
-          <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
-          </li>
         </ul>
+      </div>
+
+      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ toastMessage }}
+        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
       </div>
 
       <div class="row">
@@ -57,6 +85,7 @@
     </div>
   </div>
 </template>
+<<<<<<<< HEAD:app/pages/preference.vue
 
 <script setup lang="ts">import { ref } from "vue";
 
@@ -79,3 +108,22 @@ const refresh = () => {
 const toggleCollapse = () => {
   // collapse
 };</script>
+========
+>>>>>>>> origin/eko:app/components/pages/setting/PreferenceWorkspace.vue
+=======
+import PreferenceWorkspace from '~/components/pages/setting/PreferenceWorkspace.vue'
+
+useLegacyPage({
+  title: 'Preferences',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-preference">
+    <PreferenceWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

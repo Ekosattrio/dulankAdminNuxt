@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper">
     <div class="content settings-content">
@@ -181,3 +182,23 @@ const toggleCollapse = () => {
   // Toggle collapse
 };
 </script>
+=======
+<script setup lang="ts">
+import ProfileWorkspace from '~/components/pages/setting/ProfileWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Profile Settings - Kacetak System',
+  sweetAlert: false
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-profile">
+    <ProfileWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko

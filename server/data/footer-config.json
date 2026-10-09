@@ -1,0 +1,26 @@
+{
+  "judul": "PT. Dulank Semesta Cida",
+  "desc": "Solusi percetakan offset dan digital printing profesional terpercaya dengan hasil cetak presisi, cepat, dan berkualitas tinggi untuk kebutuhan bisnis Anda.",
+  "copyright": "© 2026 PT. Dulank Semesta Cida — Semua hak dilindungi",
+  "infoKami": [
+    { "text": "Kebijakan Privasi", "href": "/privacy" },
+    { "text": "Blog Edukasi Cetak", "href": "/all-blog" },
+    { "text": "Syarat dan Ketentuan", "href": "/terms" },
+    { "text": "Tentang Kami", "href": "/about-us" }
+  ],
+  "panduan": [
+    { "text": "Cara Pembelian", "href": "/faq" },
+    { "text": "Panduan Penyiapan File CTP", "href": "/download-files" },
+    { "text": "Kalkulator Kertas Plano", "href": "/kalkulator-dashboard" }
+  ],
+  "alamat": "Jl. Percetakan Negara No. 88, Cempaka Putih, Jakarta Pusat 10570",
+  "telepon": "+62 21 4256 7890",
+  "email": "halo@dulanksemesta.co.id",
+  "socials": {
+    "facebook": "https://facebook.com/dulankprinting",
+    "instagram": "https://instagram.com/dulankprinting",
+    "twitter": "https://twitter.com/dulankprinting",
+    "linkedin": "https://linkedin.com/company/dulank-semesta",
+    "youtube": "https://youtube.com/@dulankprinting"
+  }
+}

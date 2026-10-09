@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup lang="ts">import { formatRupiah } from "~/composables/useFormatters";
 
 const { data: employeeSalaryData } = await useFetch<SalaryRecord[]>('/api/employee-salary')
@@ -444,5 +445,16 @@ const deleteRecord = (id: string) => {
         </div>
       </template>
     </CommonBaseModal>
+=======
+<script setup lang="ts">
+import EmployeeSalaryWorkspace from '~/components/pages/employee-salary/EmployeeSalaryWorkspace.vue'
+
+useLegacyPage({ title: 'Employee Salary - Penggajian Karyawan', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-employee-salary">
+    <EmployeeSalaryWorkspace />
+>>>>>>> origin/eko
   </div>
 </template>

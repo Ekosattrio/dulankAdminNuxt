@@ -104,6 +104,15 @@
         </div>
       </div>
     </div>
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      title="Job Progress List"
+      :columns="printColumns"
+      :items="filteredList"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -111,8 +120,11 @@
   layout: 'default'
 })
 
-useHead({
-  title: 'Job Progress List - Kacetak System'
+useLegacyPage({
+  title: 'Job Progress List',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
 })
 
 const { data: jobProgressData } = await useFetch<JobProgressItem[]>('/api/job-progress')
@@ -121,6 +133,16 @@ useMockSync('job-progress', progressList)
 
 const searchQuery = ref('')
 const filterProcess = ref('')
+const print = useTablePrint()
+const printColumns = [
+  { key: 'progressCode', label: '# Progress' },
+  { key: 'product', label: 'Product' },
+  { key: 'description', label: 'Product Description' },
+  { key: 'process', label: 'Job Process' },
+  { key: 'completedBy', label: 'Completed By' },
+  { key: 'time', label: 'Time Completed' },
+  { key: 'note', label: 'Note' },
+]
 
 const filteredList = computed(() => {
   return progressList.value.filter(p => {
@@ -145,11 +167,11 @@ function toggleComplete(item: JobProgressItem) {
 }
 
 function exportPdf() {
-  alert('Exporting Job Progress PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

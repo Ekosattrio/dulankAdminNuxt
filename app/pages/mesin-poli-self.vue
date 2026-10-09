@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="page-wrapper mt-3">
     <div class="content">
@@ -299,3 +300,14 @@ function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
 }</script>
+=======
+<script setup lang="ts">
+import WorkshopServicePage from '~/components/pages/products-services/WorkshopServicePage.vue'
+
+definePageMeta({ layout: 'default' })
+</script>
+
+<template>
+  <WorkshopServicePage category="hot_print" />
+</template>
+>>>>>>> origin/eko

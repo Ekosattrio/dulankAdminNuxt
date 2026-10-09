@@ -1,4 +1,5 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 const router = useRouter()
 const route = useRoute()
 
@@ -249,3 +250,16 @@ const units = ['Meter', 'Box', 'Rim', 'Pcs', 'Buku', 'Lembar', 'Kg']
   </div>
 </template>
 
+=======
+import ProductDocumentForm from '~/components/pages/create-product/ProductDocumentForm.vue'
+
+definePageMeta({ layout: 'default' })
+useLegacyPage({ title: 'New Product - Create new product', sweetAlert: false })
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-create-product">
+    <ProductDocumentForm />
+  </div>
+</template>
+>>>>>>> origin/eko

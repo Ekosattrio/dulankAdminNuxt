@@ -1,0 +1,13 @@
+{
+  "aws": {
+    "region": "r",
+    "accessKey": "key",
+    "secretKey": "sec",
+    "baseUrl": "u",
+    "bucketName": "b",
+    "enabled": false
+  },
+  "local": {
+    "enabled": true
+  }
+}

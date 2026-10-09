@@ -1,4 +1,5 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { formatRupiah } from "~/composables/useFormatters";
 
 const printPayslip = () => {
@@ -253,3 +254,24 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
   }
 }
 </style>
+=======
+import PayslipDetailWorkspace from '~/components/pages/payslip/PayslipDetailWorkspace.vue'
+
+definePageMeta({
+  layout: 'default'
+})
+
+useLegacyPage({
+  title: 'Payslip Detail',
+  styles: ['/assets/css/style.css'],
+  scripts: ['/assets/js/theme-script.js'],
+  sweetAlert: true
+})
+</script>
+
+<template>
+  <div class="dulank-page dulank-page-payslip-detail">
+    <PayslipDetailWorkspace />
+  </div>
+</template>
+>>>>>>> origin/eko
