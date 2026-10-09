@@ -84,28 +84,3 @@ const onToggle = async (pref: PreferenceItem) => {
     </div>
   </div>
 </template>
-<<<<<<<< HEAD:app/pages/preference.vue
-
-<script setup lang="ts">import { ref } from "vue";
-
-useHead({
-  title: "Preferences - Kacetak System",
-});
-
-const { data: preferenceData } = await useFetch<PreferenceItem[]>('/api/preference')
-const preferences = ref<PreferenceItem[]>(preferenceData.value ?? [])
-useMockSync('preference', preferences);
-
-const onToggle = (pref: PreferenceItem) => {
-  // toggle notification
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};</script>
-========
->>>>>>>> origin/eko:app/components/pages/setting/PreferenceWorkspace.vue

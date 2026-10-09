@@ -1046,7 +1046,7 @@ export function useMockCollections(slug: string): Record<string, unknown[]> {
 /** Koleksi utama (pertama) — dipakai batch PUT / POST / DELETE. */
 export function useMockCollection(slug: string): unknown[] {
   const cols = useMockCollections(slug)
-  return cols[seeds[slug]!.names[0]!]
+  return cols[seeds[slug]!.names[0]!]!
 }
 
 export function resetMockCollection(slug: string): void {

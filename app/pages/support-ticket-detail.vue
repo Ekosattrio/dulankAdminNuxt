@@ -135,10 +135,38 @@ useLegacyPage({
 
 const ticketStatus = ref("Pending");
 
-const { data: supportTicketDetailData } = await useFetch<Record<string, any[]>>('/api/support-ticket-detail')
-const activityList = ref(supportTicketDetailData.value?.activityList ?? []);
+const activityList = ref([
+  {
+    time: "Just Now",
+    title: "Ticket Resolved",
+    detail: "Agent closed the ticket after applying a patch for the file upload freeze issue.",
+    author: "Liam Brooks",
+  },
+  {
+    time: "Today, 10:40 AM",
+    title: 'Status Changed to "In Progress"',
+    detail: "Ticket was picked up by the assigned agent for investigation.",
+    author: "Liam Brooks",
+  },
+  {
+    time: "Yesterday, 4:15 PM",
+    title: "User Comment Added",
+    detail: "User emphasized urgency due to impact on production file uploads.",
+    author: "Ava Sullivan",
+  },
+  {
+    time: "02 Aug, 2025 - 3:00 PM",
+    title: "Ticket Created",
+    detail: "Ticket submitted regarding the app freezing on file upload.",
+    author: "Ava Sullivan",
+  },
+]);
 
-const messages = ref(supportTicketDetailData.value?.messages ?? []);
+const messages = ref([
+  { text: "Thanks for your time earlier!", time: "09:45 am", isMe: false },
+  { text: "Of course! It was a productive discussion.", time: "09:46 am", isMe: true },
+  { text: "I'll send over the updated files by noon.", time: "09:50 am", isMe: false },
+]);
 
 const newMessage = ref("");
 
@@ -162,7 +190,3 @@ const toggleTicketClose = () => {
   ticketStatus.value = ticketStatus.value === "Closed" ? "In Progress" : "Closed";
 };
 </script>
-
-useMockSync('support-ticket-detail', activityList);
-
-useMockSync('support-ticket-detail', messages);

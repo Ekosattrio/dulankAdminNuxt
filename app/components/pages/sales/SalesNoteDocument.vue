@@ -21,16 +21,11 @@ const printReceipt = printDoc
       class="no-print mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4 dark:border-gray-800"
     >
       <div class="flex items-center gap-2">
-<<<<<<<< HEAD:app/pages/sales-note.vue
-        <NuxtLink to="/sales" class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white">
-          <CommonFeatherIcon name="arrow-left" size="14" />
-========
         <NuxtLink
           to="/sales"
           class="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white"
         >
           <FeatherIcon name="arrow-left" size="14" />
->>>>>>>> origin/eko:app/components/pages/sales/SalesNoteDocument.vue
           <span>Back to Sales List</span>
         </NuxtLink>
         <span class="text-gray-300">/</span>
@@ -42,7 +37,7 @@ const printReceipt = printDoc
         class="allow-print flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary-hover transition-colors"
         @click="printDoc"
       >
-        <CommonFeatherIcon name="printer" size="14" />
+        <FeatherIcon name="printer" size="14" />
         <span>Print Note</span>
       </button>
     </div>

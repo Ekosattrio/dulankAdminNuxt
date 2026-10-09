@@ -31,7 +31,7 @@ const handlePrint = () => {
             to="/job-order"
             class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
           >
-            <CommonFeatherIcon name="arrow-left" size="14" />
+            <FeatherIcon name="arrow-left" size="14" />
             <span>Back to Job Order List</span>
           </NuxtLink>
 
@@ -49,7 +49,7 @@ const handlePrint = () => {
             title="Print SPK Sheet"
             @click="handlePrint"
           >
-            <CommonFeatherIcon name="printer" size="14" />
+            <FeatherIcon name="printer" size="14" />
             <span>Print SPK Traveler</span>
           </button>
         </div>

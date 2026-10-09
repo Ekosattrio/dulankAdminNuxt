@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useThemeStore } from "~/stores/theme";
+import AppHeader from "~/components/layout/AppHeader.vue";
+import AppSidebar from "~/components/layout/AppSidebar.vue";
 
 const themeStore = useThemeStore();
 
@@ -11,19 +13,11 @@ onMounted(() => {
 <template>
   <div class="min-h-screen bg-[#f7f7f8] dark:bg-gray-950 text-[#212529] dark:text-gray-100 flex flex-col">
     <!-- Header -->
-<<<<<<< HEAD
-    <AppLayoutHeader />
-=======
     <AppHeader class="print:hidden" />
->>>>>>> origin/eko
 
     <div class="flex flex-1 print:block">
       <!-- Sidebar -->
-<<<<<<< HEAD
-      <AppLayoutSidebar />
-=======
       <AppSidebar class="print:hidden" />
->>>>>>> origin/eko
 
       <!-- Main Page Content -->
       <main

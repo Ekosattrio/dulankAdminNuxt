@@ -199,13 +199,9 @@
   </div>
 </template>
 
-<<<<<<< HEAD
-<script setup lang="ts">import { ref, computed } from 'vue'
-=======
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { formatIDR } from '~/utils/currency'
->>>>>>> origin/eko
 
 useLegacyPage({
   title: 'Billing',
@@ -214,9 +210,29 @@ useLegacyPage({
   sweetAlert: true
 })
 
-const { data: billingData } = await useFetch<BillingItem[]>('/api/billing')
-const billings = ref<BillingItem[]>(billingData.value ?? [])
-useMockSync('billing', billings)
+interface BillingItem {
+  id: number
+  billingId: string
+  txId: string
+  userEmail: string
+  date: string
+  subtotal: number
+  discount: number
+  tax: number
+  shipping: number
+  total: number
+  status: 'Berhasil' | 'Gagal'
+  method: string
+}
+
+const billings = ref<BillingItem[]>([
+  { id: 1, billingId: 'B-001', txId: 'T-101', userEmail: 'john.doe@email.com', date: '2025-08-28', subtotal: 530000, discount: 53000, tax: 20000, shipping: 20000, total: 517000, status: 'Berhasil', method: 'Kartu Kredit' },
+  { id: 2, billingId: 'B-002', txId: 'T-102', userEmail: 'jane.smith@email.com', date: '2025-08-28', subtotal: 155000, discount: 0, tax: 15500, shipping: 15000, total: 185500, status: 'Berhasil', method: 'Transfer Bank' },
+  { id: 3, billingId: 'B-003', txId: 'T-103', userEmail: 'david.williams@email.com', date: '2025-08-27', subtotal: 230000, discount: 0, tax: 23000, shipping: 18000, total: 271000, status: 'Berhasil', method: 'E-Wallet' },
+  { id: 4, billingId: 'B-004', txId: 'T-104', userEmail: 'sarah.jones@email.com', date: '2025-08-26', subtotal: 1200000, discount: 240000, tax: 120000, shipping: 0, total: 1080000, status: 'Gagal', method: 'Kartu Kredit' },
+  { id: 5, billingId: 'B-005', txId: 'T-105', userEmail: 'michael.brown@email.com', date: '2025-08-25', subtotal: 275000, discount: 0, tax: 27500, shipping: 25000, total: 327500, status: 'Berhasil', method: 'Virtual Account' },
+  { id: 6, billingId: 'B-006', txId: 'T-106', userEmail: 'emma.white@email.com', date: '2025-08-24', subtotal: 850000, discount: 85000, tax: 85000, shipping: 30000, total: 880000, status: 'Berhasil', method: 'Kartu Kredit' }
+])
 
 const searchQuery = ref('')
 const filterMethod = ref('')
@@ -298,5 +314,6 @@ const refresh = () => {
 
 const toggleCollapse = () => {
   // collapsible header
-}</script>
+}
+</script>
 

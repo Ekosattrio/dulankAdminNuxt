@@ -120,7 +120,7 @@ watch(totalPages, (value) => {
           class="w-full rounded-lg border border-gray-200 bg-gray-50 py-1.5 ps-9 pe-3 text-xs transition-colors focus:border-primary focus:bg-white focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
         />
         <span class="absolute inset-y-0 start-0 flex items-center ps-2.5 text-gray-400">
-          <CommonFeatherIcon name="search" size="14" />
+          <FeatherIcon name="search" size="14" />
         </span>
       </div>
 
@@ -132,7 +132,7 @@ watch(totalPages, (value) => {
           title="Print Table"
           @click="emit('print')"
         >
-          <CommonFeatherIcon name="printer" size="14" />
+          <FeatherIcon name="printer" size="14" />
         </button>
 
         <!-- Page Size Selector -->
@@ -169,12 +169,12 @@ watch(totalPages, (value) => {
               <div class="inline-flex items-center gap-1.5">
                 <span>{{ col.label }}</span>
                 <span v-if="col.sortable" class="text-gray-400">
-                  <CommonFeatherIcon
+                  <FeatherIcon
                     v-if="sortKey === col.key"
                     :name="sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'"
                     size="12"
                   />
-                  <CommonFeatherIcon v-else name="chevrons-up" size="12" class="opacity-40" />
+                  <FeatherIcon v-else name="chevrons-up" size="12" class="opacity-40" />
                 </span>
               </div>
             </th>
@@ -230,7 +230,7 @@ watch(totalPages, (value) => {
           class="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-600 disabled:opacity-40 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
           @click="currentPage--"
         >
-          <CommonFeatherIcon name="chevron-left" size="14" />
+          <FeatherIcon name="chevron-left" size="14" />
         </button>
 
         <span class="px-2 font-medium">Page {{ currentPage }} of {{ totalPages }}</span>
@@ -241,7 +241,7 @@ watch(totalPages, (value) => {
           class="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-600 disabled:opacity-40 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
           @click="currentPage++"
         >
-          <CommonFeatherIcon name="chevron-right" size="14" />
+          <FeatherIcon name="chevron-right" size="14" />
         </button>
       </div>
     </div>

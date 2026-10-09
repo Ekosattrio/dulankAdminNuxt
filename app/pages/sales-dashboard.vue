@@ -1,4 +1,8 @@
-<script setup lang="ts">definePageMeta({
+<script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
+import BaseModal from "~/components/modal/BaseModal.vue";
+
+definePageMeta({
   layout: "default",
 });
 
@@ -55,13 +59,134 @@ function refreshCard(type: string) {
 }
 
 // --- Best Seller Products ---
+interface BestSellerItem {
+  id: number;
+  name: string;
+  price: number;
+  sales: number;
+  image: string;
+  category: string;
+  stock: number;
+}
 
-const { data: salesDashboardData } = await useFetch<{ bestSellers: SalesBestSellerItem[]; recentTransactions: TransactionItem[]; countryMarkers: CountryData[] }>('/api/sales-dashboard')
-const bestSellers = ref<SalesBestSellerItem[]>(salesDashboardData.value?.bestSellers ?? []);
+const bestSellers = ref<BestSellerItem[]>([
+  {
+    id: 1,
+    name: "Lenovo 3rd Generation",
+    price: 4420,
+    sales: 6547,
+    image: "/assets/img/products/stock-img-01.png",
+    category: "Laptops & Computers",
+    stock: 120,
+  },
+  {
+    id: 2,
+    name: "Bold V3.2",
+    price: 1474,
+    sales: 3474,
+    image: "/assets/img/products/stock-img-06.png",
+    category: "Accessories",
+    stock: 450,
+  },
+  {
+    id: 3,
+    name: "Nike Jordan",
+    price: 8784,
+    sales: 1478,
+    image: "/assets/img/products/stock-img-02.png",
+    category: "Footwear & Fashion",
+    stock: 85,
+  },
+  {
+    id: 4,
+    name: "Apple Series 5 Watch",
+    price: 3240,
+    sales: 987,
+    image: "/assets/img/products/stock-img-03.png",
+    category: "Smartwatches",
+    stock: 64,
+  },
+  {
+    id: 5,
+    name: "Amazon Echo Dot",
+    price: 597,
+    sales: 784,
+    image: "/assets/img/products/stock-img-04.png",
+    category: "Smart Home",
+    stock: 210,
+  },
+]);
 
 // --- Recent Transactions ---
+interface TransactionItem {
+  id: number;
+  name: string;
+  time: string;
+  paymentMethod: string;
+  reference: string;
+  status: "Success" | "Canceled" | "Pending";
+  amount: number;
+  image: string;
+  date: string;
+}
 
-const recentTransactions = ref<TransactionItem[]>(salesDashboardData.value?.recentTransactions ?? []);
+const recentTransactions = ref<TransactionItem[]>([
+  {
+    id: 1,
+    name: "Lobar Handy",
+    time: "15 Mins",
+    paymentMethod: "Paypal",
+    reference: "#416645453773",
+    status: "Success",
+    amount: 1099.0,
+    image: "/assets/img/products/stock-img-05.png",
+    date: "07 Sep 2026, 14:45",
+  },
+  {
+    id: 2,
+    name: "Red Premium Handy",
+    time: "10 Mins",
+    paymentMethod: "Apple Pay",
+    reference: "#147784454554",
+    status: "Canceled",
+    amount: 600.55,
+    image: "/assets/img/products/expire-product-01.png",
+    date: "07 Sep 2026, 14:50",
+  },
+  {
+    id: 3,
+    name: "Iphone 14 Pro",
+    time: "10 Mins",
+    paymentMethod: "Stripe",
+    reference: "#147784454554",
+    status: "Pending",
+    amount: 1099.0,
+    image: "/assets/img/products/expire-product-02.png",
+    date: "07 Sep 2026, 14:50",
+  },
+  {
+    id: 4,
+    name: "Black Slim 200",
+    time: "10 Mins",
+    paymentMethod: "PayU",
+    reference: "#147784454554",
+    status: "Success",
+    amount: 1569.0,
+    image: "/assets/img/products/expire-product-03.png",
+    date: "07 Sep 2026, 14:50",
+  },
+  {
+    id: 5,
+    name: "Woodcraft Sandal",
+    time: "15 Mins",
+    paymentMethod: "Paytm",
+    reference: "#147784454554",
+    status: "Success",
+    amount: 1478.0,
+    image: "/assets/img/products/expire-product-04.png",
+    date: "07 Sep 2026, 14:45",
+  },
+]);
 
 // Modal State
 const isTxModalOpen = ref(false);
@@ -73,9 +198,9 @@ function viewTransaction(tx: TransactionItem) {
 }
 
 const isProductModalOpen = ref(false);
-const activeProduct = ref<SalesBestSellerItem | null>(null);
+const activeProduct = ref<BestSellerItem | null>(null);
 
-function viewProduct(p: SalesBestSellerItem) {
+function viewProduct(p: BestSellerItem) {
   activeProduct.value = p;
   isProductModalOpen.value = true;
 }
@@ -128,9 +253,28 @@ const currentChartPoints = computed(() => {
 const selectedCountryPeriod = ref("This Week");
 const showCountryDropdown = ref(false);
 
-const countryMarkers = ref<CountryData[]>(salesDashboardData.value?.countryMarkers ?? []);
+interface CountryData {
+  id: string;
+  name: string;
+  sales: string;
+  percentage: number;
+  x: number; // SVG coordinates percent
+  y: number;
+}
 
-const hoveredCountry = ref<CountryData | null>(null);</script>
+const countryMarkers = ref<CountryData[]>([
+  { id: "US", name: "United States", sales: "1,000,000 Sales", percentage: 55, x: 25, y: 38 },
+  { id: "UK", name: "United Kingdom", sales: "5,467 Sales", percentage: 8, x: 47, y: 28 },
+  { id: "RU", name: "Russia", sales: "5,488 Sales", percentage: 6, x: 68, y: 24 },
+  { id: "CN", name: "China", sales: "7,777 Sales", percentage: 10, x: 74, y: 44 },
+  { id: "IN", name: "India", sales: "98,765 Sales", percentage: 18, x: 67, y: 49 },
+  { id: "UAE", name: "UAE", sales: "98,654 Sales", percentage: 14, x: 59, y: 47 },
+  { id: "SA", name: "Saudi Arabia", sales: "54,678 Sales", percentage: 12, x: 57, y: 49 },
+  { id: "AFR", name: "Africa", sales: "3,455 Sales", percentage: 5, x: 51, y: 62 },
+]);
+
+const hoveredCountry = ref<CountryData | null>(null);
+</script>
 
 <template>
   <div class="page-wrapper min-h-screen pb-10">
@@ -148,7 +292,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
           v-if="toastMessage"
           class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-[#092C4C] px-4 py-3 text-xs font-semibold text-white shadow-lg"
         >
-          <CommonFeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
+          <FeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
           <span>{{ toastMessage }}</span>
         </div>
       </Transition>
@@ -182,10 +326,10 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
                 @click="showDatepicker = !showDatepicker"
               >
                 <div class="flex items-center gap-2">
-                  <CommonFeatherIcon name="calendar" size="14" class="text-gray-400" />
+                  <FeatherIcon name="calendar" size="14" class="text-gray-400" />
                   <span>{{ dateRangeLabel }}</span>
                 </div>
-                <CommonFeatherIcon name="chevron-down" size="14" class="text-gray-400" />
+                <FeatherIcon name="chevron-down" size="14" class="text-gray-400" />
               </button>
 
               <!-- Quick Range Preset Menu -->
@@ -207,7 +351,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
                   @click="selectDateRange(preset)"
                 >
                   <span>{{ preset.label }}</span>
-                  <CommonFeatherIcon v-if="selectedDateRange === preset.id" name="check" size="12" />
+                  <FeatherIcon v-if="selectedDateRange === preset.id" name="check" size="12" />
                 </button>
               </div>
             </div>
@@ -219,7 +363,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               title="Refresh"
               @click="refreshAllData"
             >
-              <CommonFeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
+              <FeatherIcon name="rotate-ccw" size="16" :class="{ 'animate-spin': isRefreshing }" />
             </button>
 
             <!-- Collapse Header Button -->
@@ -229,7 +373,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               title="Collapse"
               @click="isHeaderCollapsed = !isHeaderCollapsed"
             >
-              <CommonFeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
+              <FeatherIcon :name="isHeaderCollapsed ? 'chevron-down' : 'chevron-up'" size="16" />
             </button>
           </div>
         </div>
@@ -246,7 +390,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
             <h3 class="mb-2 text-2xl sm:text-3xl font-bold text-secondary dark:text-white">$95,000.45</h3>
             <p class="sales-range flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               <span class="inline-flex items-center font-semibold text-success">
-                <CommonFeatherIcon name="chevron-up" size="16" class="me-0.5" />
+                <FeatherIcon name="chevron-up" size="16" class="me-0.5" />
                 48%&nbsp;
               </span>
               increase compare to last week
@@ -271,7 +415,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               title="Refresh"
               @click="refreshCard('total sales')"
             >
-              <CommonFeatherIcon name="rotate-ccw" size="16" />
+              <FeatherIcon name="rotate-ccw" size="16" />
             </button>
           </div>
           <div>
@@ -292,7 +436,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               title="Refresh"
               @click="refreshCard('purchased earnings')"
             >
-              <CommonFeatherIcon name="rotate-ccw" size="16" />
+              <FeatherIcon name="rotate-ccw" size="16" />
             </button>
           </div>
           <div>
@@ -315,7 +459,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               class="view-all flex items-center text-xs font-semibold text-primary transition hover:text-primary-hover"
             >
               View All
-              <span class="ps-1.5 flex items-center"><CommonFeatherIcon name="arrow-right" size="14" /></span>
+              <span class="ps-1.5 flex items-center"><FeatherIcon name="arrow-right" size="14" /></span>
             </NuxtLink>
           </div>
           <div class="p-4 flex-1">
@@ -364,7 +508,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
               class="view-all flex items-center text-xs font-semibold text-primary transition hover:text-primary-hover"
             >
               View All
-              <span class="ps-1.5 flex items-center"><CommonFeatherIcon name="arrow-right" size="14" /></span>
+              <span class="ps-1.5 flex items-center"><FeatherIcon name="arrow-right" size="14" /></span>
             </NuxtLink>
           </div>
 
@@ -399,7 +543,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
                       <div class="min-w-0">
                         <p class="font-bold text-secondary dark:text-gray-100 truncate hover:text-primary">{{ tx.name }}</p>
                         <span class="flex items-center text-[11px] text-gray-400 gap-1 mt-0.5">
-                          <CommonFeatherIcon name="clock" size="12" />
+                          <FeatherIcon name="clock" size="12" />
                           {{ tx.time }}
                         </span>
                       </div>
@@ -454,9 +598,9 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
                 class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                 @click="showYearDropdown = !showYearDropdown"
               >
-                <CommonFeatherIcon name="calendar" size="14" class="text-gray-400" />
+                <FeatherIcon name="calendar" size="14" class="text-gray-400" />
                 <span>{{ selectedYear }}</span>
-                <CommonFeatherIcon name="chevron-down" size="12" class="text-gray-400" />
+                <FeatherIcon name="chevron-down" size="12" class="text-gray-400" />
               </button>
               <div
                 v-if="showYearDropdown"
@@ -618,7 +762,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
                 @click="showCountryDropdown = !showCountryDropdown"
               >
                 <span>{{ selectedCountryPeriod }}</span>
-                <CommonFeatherIcon name="chevron-down" size="12" class="text-gray-400" />
+                <FeatherIcon name="chevron-down" size="12" class="text-gray-400" />
               </button>
               <div
                 v-if="showCountryDropdown"
@@ -708,7 +852,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
           <!-- Bottom Increase Trend Text -->
           <p class="sales-range mt-4 flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             <span class="inline-flex items-center font-semibold text-success">
-              <CommonFeatherIcon name="chevron-up" size="16" class="me-0.5" />
+              <FeatherIcon name="chevron-up" size="16" class="me-0.5" />
               48%&nbsp;
             </span>
             increase compare to last week
@@ -718,7 +862,7 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
     </div>
 
     <!-- Modal: Transaction Details -->
-    <CommonBaseModal v-model="isTxModalOpen" title="Transaction Details" max-width="md">
+    <BaseModal v-model="isTxModalOpen" title="Transaction Details" max-width="md">
       <div v-if="activeTransaction" class="space-y-4 text-xs sm:text-sm">
         <div class="flex items-center gap-3 border-b border-gray-100 pb-3 dark:border-gray-800">
           <img
@@ -772,10 +916,10 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
           Close
         </button>
       </template>
-    </CommonBaseModal>
+    </BaseModal>
 
     <!-- Modal: Product Details -->
-    <CommonBaseModal v-model="isProductModalOpen" title="Product Details" max-width="md">
+    <BaseModal v-model="isProductModalOpen" title="Product Details" max-width="md">
       <div v-if="activeProduct" class="space-y-4 text-xs sm:text-sm">
         <div class="flex items-center gap-4 border-b border-gray-100 pb-3 dark:border-gray-800">
           <img
@@ -814,6 +958,6 @@ const hoveredCountry = ref<CountryData | null>(null);</script>
           Close
         </button>
       </template>
-    </CommonBaseModal>
+    </BaseModal>
   </div>
 </template>

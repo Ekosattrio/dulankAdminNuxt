@@ -374,7 +374,8 @@
   </div>
 </template>
 
-<script setup lang="ts">definePageMeta({
+<script setup lang="ts">
+definePageMeta({
   layout: "default",
 });
 
@@ -385,7 +386,15 @@ useLegacyPage({
   sweetAlert: true
 });
 
-const mockCustomers: SalesCustomer[] = [
+interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+const mockCustomers: Customer[] = [
   {
     id: 1,
     name: "PT Makmur Abadi",
@@ -410,8 +419,8 @@ const mockCustomers: SalesCustomer[] = [
 ];
 
 const customerSearch = ref("");
-const selectedCustomer = ref<SalesCustomer | null>(mockCustomers[0]);
-const filteredCustomers = ref<SalesCustomer[]>([]);
+const selectedCustomer = ref<Customer | null>(mockCustomers[0]);
+const filteredCustomers = ref<Customer[]>([]);
 
 function searchCustomer() {
   const q = customerSearch.value.toLowerCase();
@@ -422,7 +431,7 @@ function searchCustomer() {
   filteredCustomers.value = mockCustomers.filter((c) => c.name.toLowerCase().includes(q) || c.phone.includes(q));
 }
 
-function selectCustomer(c: SalesCustomer) {
+function selectCustomer(c: Customer) {
   selectedCustomer.value = c;
   customerSearch.value = c.name;
   filteredCustomers.value = [];
@@ -445,10 +454,25 @@ function changePickupStore() {
 }
 
 // Items
+interface OrderItem {
+  id: number;
+  name: string;
+  description: string;
+  qty: number;
+  unit: string;
+  price: number;
+}
 
-const { data: addSalesData } = await useFetch<OrderItem[]>('/api/add-sales')
-const items = ref<OrderItem[]>(addSalesData.value ?? [])
-useMockSync('add-sales', items);
+const items = ref<OrderItem[]>([
+  {
+    id: 1,
+    name: "Brosur PPDB SMAN 1 Bandung",
+    description: "Brosur Full Color A4 (210x297 mm), Art paper 150gr, Tanpa Laminasi, 1 Lipatan",
+    qty: 2,
+    unit: "Ream",
+    price: 450000,
+  },
+]);
 
 function updateQty(item: OrderItem, delta: number) {
   if (item.qty + delta >= 1) {
@@ -518,7 +542,7 @@ function saveSales() {
   navigateTo("/sales");
 }
 
-// SalesCustomer Modal
+// Customer Modal
 const customerModalVisible = ref(false);
 const newCustomer = reactive({
   name: "",
@@ -536,11 +560,12 @@ function openCustomerModal() {
 }
 
 function saveCustomer() {
-  const created: SalesCustomer = {
+  const created: Customer = {
     id: Date.now(),
     ...newCustomer,
   };
   selectedCustomer.value = created;
   customerSearch.value = created.name;
   customerModalVisible.value = false;
-}</script>
+}
+</script>

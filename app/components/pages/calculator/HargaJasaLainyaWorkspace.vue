@@ -199,7 +199,8 @@
   </div>
 </template>
 
-<script setup lang="ts">definePageMeta({
+<script setup lang="ts">
+definePageMeta({
   layout: 'default'
 })
 
@@ -210,9 +211,24 @@ useLegacyPage({
   sweetAlert: true
 })
 
-const { data: hargaJasaLainyaData } = await useFetch<JasaLain[]>('/api/harga-jasa-lainya')
-const items = ref<JasaLain[]>(hargaJasaLainyaData.value ?? [])
-useMockSync('harga-jasa-lainya', items)
+interface JasaLain {
+  id: number
+  name: string
+  harga: number
+  minimHarga: number
+  satuan: string
+}
+
+const items = ref<JasaLain[]>([
+  { id: 1, name: 'Potong', harga: 2000, minimHarga: 30000, satuan: 'Kg' },
+  { id: 2, name: 'Mobilisasi', harga: 2500, minimHarga: 150000, satuan: 'Kg' },
+  { id: 3, name: 'Susun Komplit Kalender', harga: 40, minimHarga: 100000, satuan: 'Lembar' },
+  { id: 4, name: '1 Lipatan', harga: 10, minimHarga: 200000, satuan: 'Lembar' },
+  { id: 5, name: '2 Lipatan', harga: 15, minimHarga: 350000, satuan: 'Lembar' },
+  { id: 6, name: 'Spiral', harga: 150, minimHarga: 350000, satuan: 'Cm' },
+  { id: 7, name: 'Jepit Kaleng', harga: 30, minimHarga: 300000, satuan: 'Cm' },
+  { id: 8, name: 'Mata Ayam', harga: 20, minimHarga: 200000, satuan: 'Pcs' }
+])
 
 const searchQuery = ref('')
 const filterUnit = ref('')
@@ -318,5 +334,6 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterUnit.value = ''
-}</script>
+}
+</script>
 

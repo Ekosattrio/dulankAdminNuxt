@@ -251,14 +251,10 @@
   </div>
 </template>
 
-<<<<<<< HEAD
-<script setup lang="ts">definePageMeta({
-=======
 <script setup lang="ts">
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue';
 
 definePageMeta({
->>>>>>> origin/eko
   layout: "default",
 });
 
@@ -269,9 +265,61 @@ useLegacyPage({
   sweetAlert: true
 });
 
-const { data: posOrderData } = await useFetch<PosOrder[]>('/api/pos-order')
-const orders = ref<PosOrder[]>(posOrderData.value ?? [])
-useMockSync('pos-order', orders);
+interface PosOrder {
+  id: number;
+  customer: string;
+  avatar: string;
+  reference: string;
+  date: string;
+  status: "Complete" | "Pending";
+  grandTotal: number;
+  paid: number;
+  due: number;
+  paymentStatus: "Paid" | "Unpaid";
+  biller: string;
+}
+
+const orders = ref<PosOrder[]>([
+  {
+    id: 1,
+    customer: "Joko",
+    avatar: "/assets/img/customer/customer1.jpg",
+    reference: "PT001",
+    date: "24 Dec 2024",
+    status: "Complete",
+    grandTotal: 100000,
+    paid: 100000,
+    due: 0,
+    paymentStatus: "Paid",
+    biller: "Admin",
+  },
+  {
+    id: 2,
+    customer: "Carl Evans",
+    avatar: "/assets/img/customer/customer2.jpg",
+    reference: "PT002",
+    date: "23 Dec 2024",
+    status: "Pending",
+    grandTotal: 350000,
+    paid: 150000,
+    due: 200000,
+    paymentStatus: "Unpaid",
+    biller: "Kasir 1",
+  },
+  {
+    id: 3,
+    customer: "Minerva",
+    avatar: "/assets/img/customer/customer3.jpg",
+    reference: "PT003",
+    date: "22 Dec 2024",
+    status: "Complete",
+    grandTotal: 750000,
+    paid: 750000,
+    due: 0,
+    paymentStatus: "Paid",
+    biller: "Admin",
+  },
+]);
 
 const searchQuery = ref("");
 const filterStatus = ref("");
@@ -368,4 +416,5 @@ function refresh() {
   searchQuery.value = "";
   filterStatus.value = "";
   filterPayment.value = "";
-}</script>
+}
+</script>

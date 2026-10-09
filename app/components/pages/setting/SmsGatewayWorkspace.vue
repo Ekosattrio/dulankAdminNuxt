@@ -100,7 +100,7 @@ const handleToggleSwitch = async () => {
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                      <button class="btn btn-sm btn-outline-primary" @click="openConfigModal(key as SmsGatewayKey)">
+                      <button class="btn btn-sm btn-outline-primary" @click="openConfigModal(key as GatewayKey)">
                         <i class="ti ti-settings me-1"></i> Configure
                       </button>
                       <div class="form-check form-switch mb-0">
@@ -153,73 +153,3 @@ const handleToggleSwitch = async () => {
     </div>
   </div>
 </template>
-<<<<<<<< HEAD:app/pages/sms-gateway.vue
-
-<script setup lang="ts">import { ref } from "vue";
-
-useHead({
-  title: "SMS Gateways - Kacetak System",
-});
-
-const gateways = ref<Record<SmsGatewayKey, GatewayConfig>>({
-  nexmo: {
-    name: "Nexmo (Vonage)",
-    desc: "Global SMS & OTP API provider",
-    enabled: true,
-    apiKey: "nx_live_89823472",
-    apiSecret: "••••••••••••",
-    senderId: "KACETAK",
-  },
-  twoFactor: {
-    name: "2Factor SMS",
-    desc: "High speed transactional SMS service",
-    enabled: false,
-    apiKey: "",
-    apiSecret: "",
-    senderId: "KACETAK",
-  },
-  twilio: {
-    name: "Twilio SMS",
-    desc: "Enterprise communications platform",
-    enabled: false,
-    apiKey: "",
-    apiSecret: "",
-    senderId: "+1234567890",
-  },
-  zenziva: {
-    name: "Zenziva SMS / WhatsApp",
-    desc: "Indonesian local SMS & WA Gateway",
-    enabled: true,
-    apiKey: "zen_live_091823",
-    apiSecret: "••••••••••••",
-    senderId: "KACETAK",
-  },
-});
-
-const showModal = ref(false);
-const activeKey = ref<SmsGatewayKey>("nexmo");
-const selectedGw = ref<GatewayConfig | null>(null);
-
-const openConfigModal = (key: SmsGatewayKey) => {
-  activeKey.value = key;
-  selectedGw.value = { ...gateways.value[key] };
-  showModal.value = true;
-};
-
-const saveGateway = () => {
-  if (selectedGw.value) {
-    gateways.value[activeKey.value] = { ...selectedGw.value };
-  }
-  showModal.value = false;
-  alert("SMS Gateway configuration updated successfully!");
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};</script>
-========
->>>>>>>> origin/eko:app/components/pages/setting/SmsGatewayWorkspace.vue

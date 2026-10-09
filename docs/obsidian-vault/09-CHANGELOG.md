@@ -6,6 +6,20 @@ updated: 2026-10-09
 
 ## 2026-10-09
 
+### Resolusi Konflik Merge Working Tree (`refactor/nuxt4` ⇄ `eko`)
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Membersihkan penanda konflik yang ter-commit tanpa resolusi pada `5d60eaf` ("merge to eko") dan `db08aca` ("Merge branch 'refactor/nuxt4'"): 258 blok penanda 7/8 karakter pada 184 file (170 page, layout default, main.css, 8 komponen shared, `nuxt.config.ts`, `package.json`, `package-lock.json`, `AGENTS.md`).
+- **Kebijakan resolusi:** Baseline kanonik adalah branch `eko` (audit 2026-10-09, `1bf2eac`). Seluruh app code bersama dikembalikan ke versi `eko`: 188 page, `app/layouts/default.vue`, `app/assets/css/main.css`, dan 22 komponen shared yang sempat diubah oleh refactor. Penambahan khusus refactor/nuxt4 tetap dipertahankan di tree tanpa dihapus: mock server (`server/data/*.ts`, `server/utils/mockStore.ts`, `server/api/[...mock].ts`, route statis read-only), 25 komponen `App/Common/Dashboard/Forms/Tables`, `useMockSync`/`useModal`/`usePrint`, dan 1.725 aset `app/assets`.
+- **Komponen duplikat:** `nuxt.config.ts` menambahkan ignore `App/**`, `Common/**`, `Dashboard/**`, `Forms/**`, `Tables/**` agar set komponen refactor yang tersuperseded tidak bertabrakan nama dengan komponen kanonik pada `pathPrefix: false`; `.nuxt/components.d.ts` mengonfirmasi hanya komponen kanonik (`FeatherIcon`, `NumberInput`, `DataTable`, `BaseModal`, `PageHeader`) yang terdaftar.
+- **package.json / package-lock.json:** Script digabung (`typecheck` dari refactor + `postinstall`/`validate:structure`/`test:sales` dari eko), dependency memakai jalur eko (`@tailwindcss/vite` + `tailwindcss`; `@nuxtjs/tailwindcss` dihapus karena tidak dipakai `nuxt.config.ts` hasil resolusi), devDependencies tetap menyertakan `vue-tsc`, pin Tailwind 4.3.3 dipertahankan (direct spec + overrides). Lock diregenerasi dengan `npm install` (632 paket).
+- **Perbaikan typecheck kecil pada file refactor (tanpa perubahan perilaku):** `server/utils/mockStore.ts` (non-null assertion pada koleksi utama), `app/composables/useMockSync.ts` (`$fetch` → `apiFetch` boundary milik eko), `app/assets/plugins/morris/raphael-min.js` (`// @ts-nocheck` pada vendor file).
+- **Validasi dijalankan:** `npm install` (exit 0); `npx tsc --noEmit --pretty false` (**0 error**); `npm run build` (exit 0, Nitro node-server); runtime `.output/server/index.mjs` + curl 30 rute halaman (semua HTTP 200), `/api/address` dan `/api/job-list` mengembalikan kontrak eko (handler eko menang atas route statis refactor yang bentrok path), `/api/health` OK; `npm run test:sales` (13 grup check lulus); `npm run validate:structure` (8 failure lama aset legacy Sticky Kit/Summernote, tidak ada failure baru).
+- **Validasi tidak dijalankan:** browser interaktif desktop/390px, mutasi/reload manual, dan deployment Netlify; `npm run typecheck` (vue-tsc) membutuhkan heap besar dan masih melaporkan error template lama di luar cakupan.
+- **Risiko tersisa:** (1) `app/components/pages/employee-salary/PayrollPageForm.vue` masih memakai `<FormsNumberInput>` yang tidak dapat di-resolve — bug bawaan eko `e406f23`, bukan akibat merge; komponen yang tersedia adalah `forms/NumberInput.vue` (`<NumberInput>`). (2) Direktori yang hanya berbeda kapitalisasi (`common`/`Common`, `forms`/`Forms`, `table`/`Tables`) menyulitkan checkout pada filesystem case-insensitive (macOS/Windows); semuanya refactor-only dan tidak dipakai app. (3) Perbedaan terhadap `1bf2eac` = 1.923 file penambahan refactor + 3 file hasil resolusi (`nuxt.config.ts`, `package.json`, `package-lock.json`).
+- **Git:** branch `main` (`db08aca`); seluruh perubahan resolusi di-commit atas instruksi pengguna (2026-10-09) — hash lengkap tercatat pada laporan sesi; push status `NOT PUSHED` (belum ada instruksi push).
+
 ### Persiapan Commit dan Push Branch Eko
 
 - **Date:** 2026-10-09

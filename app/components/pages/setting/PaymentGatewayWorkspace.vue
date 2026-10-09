@@ -99,11 +99,7 @@ const handleToggleSwitch = async () => {
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
                       <button class="btn btn-sm btn-outline-primary" @click="openConfig(key as PaymentGatewayKey)">
-<<<<<<<< HEAD:app/pages/payment-gateway.vue
-                        <i class="ti ti-settings me-1"></i> {{ gw.enabled ? "View Integration" : "Connect Now" }}
-========
                         <i class="ti ti-settings me-1"></i> {{ gw.enabled ? 'View Integration' : 'Connect Now' }}
->>>>>>>> origin/eko:app/components/pages/setting/PaymentGatewayWorkspace.vue
                       </button>
                       <div class="form-check form-switch mb-0">
                         <input v-model="gw.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleSwitch" />
@@ -158,90 +154,3 @@ const handleToggleSwitch = async () => {
     </div>
   </div>
 </template>
-<<<<<<<< HEAD:app/pages/payment-gateway.vue
-
-<script setup lang="ts">import { ref } from "vue";
-
-useHead({
-  title: "Payment Gateway - Kacetak System",
-});
-
-const gateways = ref<Record<PaymentGatewayKey, PaymentGatewayItem>>({
-  midtrans: {
-    name: "Midtrans (Snap & Core)",
-    desc: "Indonesian all-in-one payment gateway for QRIS, VA Bank Transfer, GoPay, OVO, ShopeePay.",
-    enabled: true,
-    clientKey: "SB-Mid-client-893472",
-    secretKey: "••••••••••••",
-    mode: "sandbox",
-  },
-  xendit: {
-    name: "Xendit",
-    desc: "Accept payments across Southeast Asia via credit cards, virtual accounts, e-wallets, and retail outlets.",
-    enabled: true,
-    clientKey: "xnd_public_development_xxx",
-    secretKey: "••••••••••••",
-    mode: "sandbox",
-  },
-  paypal: {
-    name: "PayPal",
-    desc: "Worldwide payment gateway to receive payments via international credit cards and PayPal balances.",
-    enabled: true,
-    clientKey: "client_id_live_paypal_123",
-    secretKey: "••••••••••••",
-    mode: "production",
-  },
-  stripe: {
-    name: "Stripe",
-    desc: "APIs to accept international credit cards, manage recurring subscriptions, and direct debits.",
-    enabled: false,
-    clientKey: "",
-    secretKey: "",
-    mode: "sandbox",
-  },
-  braintree: {
-    name: "Braintree",
-    desc: "PayPal-backed gateway with fraud protection and high security enterprise card processing.",
-    enabled: false,
-    clientKey: "",
-    secretKey: "",
-    mode: "sandbox",
-  },
-  wise: {
-    name: "Wise",
-    desc: "Send international money transfers and multi-currency business payouts with ultra-low fees.",
-    enabled: false,
-    clientKey: "",
-    secretKey: "",
-    mode: "sandbox",
-  },
-});
-
-const showModal = ref(false);
-const activeKey = ref<PaymentGatewayKey>("midtrans");
-const selectedGw = ref<PaymentGatewayItem | null>(null);
-
-const openConfig = (key: PaymentGatewayKey) => {
-  activeKey.value = key;
-  selectedGw.value = { ...gateways.value[key] };
-  showModal.value = true;
-};
-
-const saveGateway = () => {
-  if (selectedGw.value) {
-    selectedGw.value.enabled = true;
-    gateways.value[activeKey.value] = { ...selectedGw.value };
-  }
-  showModal.value = false;
-  alert("Payment gateway settings updated successfully!");
-};
-
-const refresh = () => {
-  // refresh
-};
-
-const toggleCollapse = () => {
-  // collapse
-};</script>
-========
->>>>>>>> origin/eko:app/components/pages/setting/PaymentGatewayWorkspace.vue

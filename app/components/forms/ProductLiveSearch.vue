@@ -1,4 +1,11 @@
-<script setup lang="ts">const props = withDefaults(
+<script setup lang="ts">
+export interface ProductItem {
+  name: string
+  code: string
+  category: string
+}
+
+const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
@@ -66,7 +73,8 @@ onMounted(() => {
       isOpen.value = false
     }
   })
-})</script>
+})
+</script>
 
 <template>
   <div ref="root" class="relative w-full">
@@ -80,7 +88,7 @@ onMounted(() => {
         @focus="onFocus"
       />
       <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-        <CommonFeatherIcon name="search" size="14" />
+        <FeatherIcon name="search" size="14" />
       </span>
     </div>
 

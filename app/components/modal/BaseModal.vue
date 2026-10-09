@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -66,7 +67,7 @@ const maxWidthClass = computed(() => {
             class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
             @click="close"
           >
-            <CommonFeatherIcon name="x" size="18" />
+            <FeatherIcon name="x" size="18" />
           </button>
         </div>
 

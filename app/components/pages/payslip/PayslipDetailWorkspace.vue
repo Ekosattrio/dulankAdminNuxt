@@ -53,7 +53,7 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
           to="/payslip"
           class="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
         >
-          <CommonFeatherIcon name="arrow-left" size="16" />
+          <FeatherIcon name="arrow-left" size="16" />
           <span>Back to Payslip List</span>
         </NuxtLink>
         <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">Payslip {{ payslip.slipNo }}</h4>
@@ -65,7 +65,7 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
           class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-gray-700"
           @click="printPayslip"
         >
-          <CommonFeatherIcon name="download" size="16" />
+          <FeatherIcon name="download" size="16" />
           <span>Download</span>
         </button>
         <button
@@ -73,7 +73,7 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
           class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow hover:bg-primary-600"
           @click="printPayslip"
         >
-          <CommonFeatherIcon name="printer" size="16" />
+          <FeatherIcon name="printer" size="16" />
           <span>Print</span>
         </button>
       </div>

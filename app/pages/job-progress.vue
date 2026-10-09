@@ -116,7 +116,8 @@
   </div>
 </template>
 
-<script setup lang="ts">definePageMeta({
+<script setup lang="ts">
+definePageMeta({
   layout: 'default'
 })
 
@@ -127,9 +128,75 @@ useLegacyPage({
   sweetAlert: true
 })
 
-const { data: jobProgressData } = await useFetch<JobProgressItem[]>('/api/job-progress')
-const progressList = ref<JobProgressItem[]>(jobProgressData.value ?? [])
-useMockSync('job-progress', progressList)
+interface JobProgressItem {
+  id: number
+  progressCode: string
+  product: string
+  description: string
+  process: string
+  completedBy: string
+  time: string
+  note: string
+  isCompleted: boolean
+}
+
+const progressList = ref<JobProgressItem[]>([
+  {
+    id: 1,
+    progressCode: 'PROG-001',
+    product: 'Kartu Nama',
+    description: 'Kartu Nama 90x55mm, Art Carton 310gr, Laminasi Glossy 2 Sisi',
+    process: 'Printing',
+    completedBy: 'Eko Satrio',
+    time: '2025-10-01 09:30',
+    note: 'Selesai cetak, kualitas baik.',
+    isCompleted: true
+  },
+  {
+    id: 2,
+    progressCode: 'PROG-002',
+    product: 'Kartu Nama',
+    description: 'Kartu Nama 90x55mm, Art Carton 310gr, Laminasi Glossy 2 Sisi',
+    process: 'Cutting',
+    completedBy: 'Desman Dwi',
+    time: '2025-10-01 11:45',
+    note: 'Sudah di potong, siap laminasi.',
+    isCompleted: true
+  },
+  {
+    id: 3,
+    progressCode: 'PROG-003',
+    product: 'Flyer',
+    description: 'Flyer A5, Art Carton 260gr, Laminasi Doff 1 Sisi',
+    process: 'Printing',
+    completedBy: '',
+    time: '',
+    note: '',
+    isCompleted: false
+  },
+  {
+    id: 4,
+    progressCode: 'PROG-004',
+    product: 'Flyer',
+    description: 'Flyer A5, Art Carton 260gr, Laminasi Doff 1 Sisi',
+    process: 'Cutting',
+    completedBy: 'Adi Nugroho',
+    time: '',
+    note: 'Sedang proses potong, antrian panjang.',
+    isCompleted: false
+  },
+  {
+    id: 5,
+    progressCode: 'PROG-005',
+    product: 'Banner',
+    description: 'Spanduk Flexi 280gr, Ukuran 3x1 Meter, Mata Ayam di Setiap Sudut',
+    process: 'Printing',
+    completedBy: 'Eko Satrio',
+    time: '2025-09-30 18:00',
+    note: 'Hasil cetak oke, warna sesuai.',
+    isCompleted: true
+  }
+])
 
 const searchQuery = ref('')
 const filterProcess = ref('')
@@ -177,5 +244,6 @@ function printTable() {
 function refresh() {
   searchQuery.value = ''
   filterProcess.value = ''
-}</script>
+}
+</script>
 

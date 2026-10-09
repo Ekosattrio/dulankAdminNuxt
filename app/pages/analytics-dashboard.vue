@@ -1,4 +1,8 @@
-<script setup lang="ts">definePageMeta({
+<script setup lang="ts">
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
+import BaseModal from "~/components/modal/BaseModal.vue";
+
+definePageMeta({
   layout: "default",
 });
 
@@ -140,6 +144,12 @@ const svgPerfMetrics = computed(() => {
 });
 
 // --- Session by Browser ---
+interface BrowserStat {
+  name: string;
+  percent: number;
+  count: string;
+  color: string;
+}
 
 const browserStats: BrowserStat[] = [
   { name: "Chrome", percent: 62.5, count: "5.06k", color: "bg-[#28C76F]" },
@@ -161,6 +171,13 @@ const sessionsByCountry = [
 ];
 
 // --- Top Pages Table ---
+interface TopPage {
+  path: string;
+  views: number;
+  avgTime: string;
+  exitRate: string;
+  badgeColor: string;
+}
 
 const topPages: TopPage[] = [
   { path: "rasket/dashboard.html", views: 4265, avgTime: "09m:45s", exitRate: "20.4%", badgeColor: "bg-[#EA5455]" },
@@ -184,7 +201,8 @@ function openModal(title: string, desc: string) {
   modalTitle.value = title;
   modalContent.value = desc;
   isDetailModalOpen.value = true;
-}</script>
+}
+</script>
 
 <template>
   <div class="page-wrapper min-h-screen pb-10">
@@ -202,7 +220,7 @@ function openModal(title: string, desc: string) {
           v-if="toastMessage"
           class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-[#092C4C] px-4 py-3 text-xs font-semibold text-white shadow-lg"
         >
-          <CommonFeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
+          <FeatherIcon name="check-circle" size="16" class="text-[#28C76F]" />
           <span>{{ toastMessage }}</span>
         </div>
       </Transition>
@@ -216,7 +234,7 @@ function openModal(title: string, desc: string) {
         >
           <!-- Icon Square -->
           <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl" :class="card.bgColor">
-            <CommonFeatherIcon :name="card.icon" size="26" :class="card.iconColor" />
+            <FeatherIcon :name="card.icon" size="26" :class="card.iconColor" />
           </div>
 
           <!-- Content -->
@@ -229,7 +247,7 @@ function openModal(title: string, desc: string) {
             </h6>
             <div class="flex items-center gap-1 text-[11px] font-semibold">
               <span :class="['inline-flex items-center', card.changeType === 'up' ? 'text-success' : 'text-danger']">
-                <CommonFeatherIcon :name="card.changeType === 'up' ? 'arrow-up' : 'arrow-down'" size="12" class="me-0.5" />
+                <FeatherIcon :name="card.changeType === 'up' ? 'arrow-up' : 'arrow-down'" size="12" class="me-0.5" />
                 {{ card.change }}
               </span>
               <span class="text-gray-400 font-normal">{{ card.period }}</span>
@@ -344,7 +362,7 @@ function openModal(title: string, desc: string) {
             <div
               class="mb-3 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200"
             >
-              <CommonFeatherIcon name="alert-triangle" size="14" class="text-amber-600 flex-shrink-0" />
+              <FeatherIcon name="alert-triangle" size="14" class="text-amber-600 flex-shrink-0" />
               <span>We regret to inform you that our server is currently experiencing technical issues.</span>
             </div>
 
@@ -609,7 +627,7 @@ function openModal(title: string, desc: string) {
     </div>
 
     <!-- Reusable BaseModal for Details -->
-    <CommonBaseModal v-model="isDetailModalOpen" :title="modalTitle" max-width="md">
+    <BaseModal v-model="isDetailModalOpen" :title="modalTitle" max-width="md">
       <div class="space-y-3 text-xs sm:text-sm whitespace-pre-line text-gray-600 dark:text-gray-300">
         {{ modalContent }}
       </div>
@@ -622,6 +640,6 @@ function openModal(title: string, desc: string) {
           Close
         </button>
       </template>
-    </CommonBaseModal>
+    </BaseModal>
   </div>
 </template>

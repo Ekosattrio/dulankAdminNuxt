@@ -1,9 +1,28 @@
-<script setup lang="ts">import { useThemeStore } from "~/stores/theme";
+<script setup lang="ts">
+import { useThemeStore } from "~/stores/theme";
+import FeatherIcon from "~/components/common/FeatherIcon.vue";
 
 defineOptions({ inheritAttrs: false });
 
 const route = useRoute();
 const themeStore = useThemeStore();
+
+interface SubmenuItem {
+  title: string;
+  to: string;
+}
+
+interface MenuItem {
+  title: string;
+  icon?: string;
+  to?: string;
+  submenus?: SubmenuItem[];
+}
+
+interface MenuGroup {
+  header: string;
+  items: MenuItem[];
+}
 
 const openMenus = ref<Record<string, boolean>>({});
 
@@ -402,7 +421,8 @@ watch(
   () => {
     syncActiveSubmenus();
   },
-);</script>
+);
+</script>
 
 <template>
   <aside
@@ -425,7 +445,7 @@ watch(
         title="Close Sidebar"
         @click="themeStore.closeMobileSidebar"
       >
-        <CommonFeatherIcon name="x" size="18" />
+        <FeatherIcon name="x" size="18" />
         <svg class="h-4 w-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
@@ -464,7 +484,7 @@ watch(
               :title="themeStore.isSidebarCollapsed ? item.title : undefined"
               @click="themeStore.closeMobileSidebar"
             >
-              <CommonFeatherIcon
+              <FeatherIcon
                 v-if="item.icon"
                 :name="item.icon"
                 size="16"
@@ -491,7 +511,7 @@ watch(
                 @click="toggleSubmenu(item.title)"
               >
                 <div class="flex items-center gap-3 truncate">
-                  <CommonFeatherIcon
+                  <FeatherIcon
                     v-if="item.icon"
                     :name="item.icon"
                     size="16"

@@ -20,7 +20,8 @@ export const useMockSync = <T extends unknown[]>(resource: string, items: Ref<T>
     timer = setTimeout(() => {
       // JSON round-trip: pastikan payload murni serializable
       const payload = JSON.parse(JSON.stringify(items.value)) as unknown[]
-      $fetch(`/api/${resource}`, { method: 'PUT', body: payload }).catch(() => {
+      // API boundary typed bersama (menghindari union route Nitro yang terlalu dalam).
+      apiFetch(`/api/${resource}`, { method: 'PUT', body: payload }).catch(() => {
         // mock server: abaikan error sinkronisasi (state lokal tetap jalan)
       })
     }, 400)

@@ -14,8 +14,6 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt'
   ],
-<<<<<<< HEAD
-=======
   alias: {
     '#server': fileURLToPath(new URL('./server', import.meta.url)),
     '~/server': fileURLToPath(new URL('./server', import.meta.url)),
@@ -39,11 +37,17 @@ export default defineNuxtConfig({
         'my-incentive/**',
         'my-job/**',
         'payslip/PayslipModal.vue',
-        'payslip/PayslipTable.vue'
+        'payslip/PayslipTable.vue',
+        // Superseded refactor/nuxt4 component set kept in-tree; not registered under pathPrefix: false
+        // to avoid duplicate-name collisions with the canonical components above.
+        'App/**',
+        'Common/**',
+        'Dashboard/**',
+        'Forms/**',
+        'Tables/**'
       ]
     }
   ],
->>>>>>> origin/eko
   app: {
     head: {
       title: 'Kacetak System',
