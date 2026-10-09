@@ -1,139 +1,124 @@
 <script setup lang="ts">
-import type { PaperPrice, PaperPriceFormData } from '~/types/paper-price'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { PaperPrice, PaperPriceFormData } from '#server/types/paper-shop'
+import PaperPriceStatsWidgets from '~/components/pages/paper-shop/PaperPriceStatsWidgets.vue'
+import PaperPriceRecordsTable from '~/components/pages/paper-shop/PaperPriceRecordsTable.vue'
+import PaperPriceFormModal from '~/components/pages/paper-shop/PaperPriceFormModal.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+definePageMeta({ layout: 'default' })
 
 useLegacyPage({
   title: 'Paper Prices - Master Harga Kertas',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false
 })
 
-const { paperPrices, pending, refresh, savePaperPrice, deletePaperPrice } = usePaperPrices()
+const { prices, stats, pending, error, refresh, savePrice, deletePrice } = usePaperPricesSelf()
+const { groups } = usePaperGroupsSelf()
 
-const searchQuery = ref('')
-const filterType = ref('')
+const isFormModalOpen = ref(false)
+const selectedPrice = ref<PaperPrice | null>(null)
 
-const isModalOpen = ref(false)
-const editData = ref<PaperPrice | null>(null)
+const isDeleteModalOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+const isSaving = ref(false)
 
-const paperTypes = computed(() => {
-  const set = new Set<string>()
-  paperPrices.value.forEach((p) => {
-    if (p.paperType) set.add(p.paperType)
-  })
-  return Array.from(set)
-})
-
-const filteredList = computed(() => {
-  return paperPrices.value.filter((p) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      p.paperType?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.supplier?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesType = !filterType.value || p.paperType === filterType.value
-    return matchesSearch && matchesType
-  })
-})
-
-const handleAdd = () => {
-  editData.value = null
-  isModalOpen.value = true
+function openAddModal() {
+  selectedPrice.value = null
+  isFormModalOpen.value = true
 }
 
-const handleEdit = (p: PaperPrice) => {
-  editData.value = p
-  isModalOpen.value = true
+function handleEdit(item: PaperPrice) {
+  selectedPrice.value = item
+  isFormModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data harga kertas ini?')) {
-    try {
-      await deletePaperPrice(id)
-    } catch (err) {
-      console.error('Failed to delete paper price:', err)
-    }
+function handleDelete(id: string) {
+  deleteTargetId.value = id
+  isDeleteModalOpen.value = true
+}
+
+async function confirmDelete() {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deletePrice(deleteTargetId.value)
+    isDeleteModalOpen.value = false
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete paper price:', err)
+  } finally {
+    isDeleting.value = false
   }
 }
 
-const handleSave = async (formData: PaperPriceFormData) => {
+async function handleSave(payload: PaperPriceFormData) {
+  isSaving.value = true
   try {
-    await savePaperPrice(formData)
-    isModalOpen.value = false
+    await savePrice(payload)
+    isFormModalOpen.value = false
+    selectedPrice.value = null
   } catch (err) {
     console.error('Failed to save paper price:', err)
+  } finally {
+    isSaving.value = false
   }
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Paper Prices / Harga Kertas</h4>
-          <h6 class="text-muted mb-0">Master daftar harga beli kertas plano dan supplier per rim / kg</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-            <FeatherIcon name="rotate-cw" size="16" />
-          </button>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Paper Price</span>
-          </button>
-        </div>
-      </div>
+  <div class="dulank-page dulank-page-kertas-harga-self space-y-6">
+    <SalesListHeader
+      title="Paper Prices"
+      subtitle="Master daftar harga kertas berdasarkan grup, merk, ukuran dan satuan"
+      :refreshing="pending"
+      @refresh="refresh"
+      @add="openAddModal"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3 mb-4">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari jenis kertas atau supplier..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end">
-              <select v-model="filterType" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Jenis Kertas</option>
-                <option v-for="t in paperTypes" :key="t" :value="t">{{ t }}</option>
-              </select>
-            </div>
-          </div>
+    <!-- Stats Widgets -->
+    <PaperPriceStatsWidgets :stats="stats" />
 
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+    <!-- Feedback State -->
+    <SalesFeedback
+      v-if="pending && !prices.length"
+      loading
+    />
+    <SalesFeedback
+      v-else-if="error"
+      :error="error.message || 'Gagal memuat data harga kertas'"
+      @retry="refresh"
+    />
 
-          <PagesPaperPriceTable
-            v-else
-            :prices="filteredList"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
-      </div>
-    </div>
+    <!-- Records Table -->
+    <PaperPriceRecordsTable
+      v-else
+      :prices="prices"
+      :groups="groups"
+      @edit="handleEdit"
+      @delete="handleDelete"
+    />
 
-    <PagesPaperPriceModal
-      :is-open="isModalOpen"
-      :edit-data="editData"
-      @close="isModalOpen = false"
-      @save="handleSave"
+    <!-- Add / Edit Modal -->
+    <PaperPriceFormModal
+      :open="isFormModalOpen"
+      :price="selectedPrice"
+      :groups="groups"
+      :busy="isSaving"
+      @close="isFormModalOpen = false"
+      @submit="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteModalOpen"
+      title="Hapus Harga Kertas"
+      message="Apakah Anda yakin ingin menghapus data harga kertas ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @confirm="confirmDelete"
+      @close="isDeleteModalOpen = false"
     />
   </div>
 </template>

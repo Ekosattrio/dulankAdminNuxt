@@ -105,13 +105,16 @@ function handleDeleteConfirm(item: PurchaseReturn) {
   isDeleteModalOpen.value = true
 }
 
+const actionError = ref('')
+
 async function handleSaveReturn(form: PurchaseReturnFormData) {
   formBusy.value = true
+  actionError.value = ''
   try {
     await savePurchaseReturn(form)
     isFormModalOpen.value = false
   } catch (err: any) {
-    alert(err?.message || 'Gagal menyimpan purchase return')
+    actionError.value = err?.message || 'Gagal menyimpan purchase return'
   } finally {
     formBusy.value = false
   }
@@ -120,12 +123,13 @@ async function handleSaveReturn(form: PurchaseReturnFormData) {
 async function handleDeleteExecute() {
   if (!deletingReturn.value) return
   deleteBusy.value = true
+  actionError.value = ''
   try {
     await deletePurchaseReturn(deletingReturn.value.id)
     isDeleteModalOpen.value = false
     deletingReturn.value = null
   } catch (err: any) {
-    alert(err?.message || 'Gagal menghapus purchase return')
+    actionError.value = err?.message || 'Gagal menghapus purchase return'
   } finally {
     deleteBusy.value = false
   }

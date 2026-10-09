@@ -1,9 +1,17 @@
 import { defineEventHandler, getQuery } from 'h3'
-import type { Customer, CustomerFilterParams } from '~/types/customer'
+import type { Customer, CustomerAccountEntry, CustomerFilterParams, CustomerRecord } from '~/types/customer'
 
 export default defineEventHandler((event) => {
   const query = getQuery(event) as CustomerFilterParams
-  let customers = readJSON<Customer[]>('customers.json', [])
+  const records = readJSON<CustomerRecord[]>('customers.json', [])
+  const accountEntries = readJSON<CustomerAccountEntry[]>('customer-account-entries.json', [])
+  const balanceByCustomer = accountEntries.reduce((totals, entry) => {
+    totals.set(entry.customerId, (totals.get(entry.customerId) || 0) + entry.amount)
+    return totals
+  }, new Map<string, number>())
+  let customers: Customer[] = records
+    .filter(customer => customer.status !== 'Archived')
+    .map(customer => ({ ...customer, balance: balanceByCustomer.get(customer.customerId) || 0 }))
 
   if (query.search) {
     const q = query.search.toLowerCase()

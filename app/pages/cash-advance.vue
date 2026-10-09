@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatRupiah } from '~/composables/useFormatters'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 
 interface CashAdvanceItem {
   id: string
@@ -119,11 +120,14 @@ const addForm = reactive({
   description: ''
 })
 
+const addError = ref('')
+
 const submitAdd = () => {
   if (!addForm.name || !addForm.amount) {
-    alert('Please fill employee name and amount')
+    addError.value = 'Please fill employee name and amount'
     return
   }
+  addError.value = ''
   cashAdvances.value.push({
     id: `CA00${cashAdvances.value.length + 1}`,
     employee: addForm.name,
@@ -148,6 +152,9 @@ const submitAdd = () => {
     payments: []
   })
   isAddModalOpen.value = false
+  addForm.name = ''
+  addForm.amount = 0
+  addForm.description = ''
 }
 
 // Modal View
@@ -186,9 +193,19 @@ const submitEdit = () => {
   isEditModalOpen.value = false
 }
 
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+
 const deleteItem = (id: string) => {
-  if (confirm('Are you sure you want to delete this cash advance?')) {
-    cashAdvances.value = cashAdvances.value.filter((ca) => ca.id !== id)
+  deleteTargetId.value = id
+  isDeleteConfirmOpen.value = true
+}
+
+const confirmDelete = () => {
+  if (deleteTargetId.value) {
+    cashAdvances.value = cashAdvances.value.filter((ca) => ca.id !== deleteTargetId.value)
+    isDeleteConfirmOpen.value = false
+    deleteTargetId.value = null
   }
 }
 </script>
@@ -536,6 +553,15 @@ const deleteItem = (id: string) => {
         </div>
       </form>
     </ModalBaseModal>
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Delete Cash Advance"
+      message="Are you sure you want to delete this cash advance? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 

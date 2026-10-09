@@ -1,17 +1,5 @@
 [
   {
-    "id": "mem-1791341817372",
-    "customerId": "ID000007",
-    "name": "dafa",
-    "email": "dafa@gmail.com",
-    "phone": "0812345678",
-    "verifiedEmail": true,
-    "subscription": true,
-    "status": "Suspended",
-    "avatar": "/assets/img/users/user-01.jpg",
-    "createdAt": "2026-10-07"
-  },
-  {
     "id": "mem-1",
     "customerId": "ID000001",
     "name": "Budi Santoso",

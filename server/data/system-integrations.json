@@ -1,0 +1,20 @@
+{
+  "captcha": {
+    "enabled": true,
+    "siteKey": "6LceW14mAAAAAFx_98321049381204",
+    "secretKey": "••••••••••••••••••••••••"
+  },
+  "analytics": {
+    "enabled": true,
+    "trackingId": "G-7489320194"
+  },
+  "adsense": {
+    "enabled": false,
+    "code": "ca-pub-9840293810293849"
+  },
+  "map": {
+    "enabled": true,
+    "mapId": "AIzaSyA89489210_map_kacetak"
+  }
+}
+

@@ -46,7 +46,7 @@ const cellWidths = ['w-16', 'w-24', 'w-32', 'w-20', 'w-28', 'w-14', 'w-36']
 
     <!-- Table Body Skeleton -->
     <div class="overflow-x-auto">
-      <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+      <table class="w-full text-start text-sm text-gray-700 dark:text-gray-300">
         <!-- Table Header -->
         <thead
           v-if="showHeader"

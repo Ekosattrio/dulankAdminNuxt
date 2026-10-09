@@ -1,0 +1,29 @@
+[
+  {
+    "id": "PRN001",
+    "printerName": "HP LaserJet Pro M404dn",
+    "connectionType": "Network",
+    "ipAddress": "192.168.1.150",
+    "port": 9100,
+    "status": "active",
+    "createdOn": "01 Jan 2024"
+  },
+  {
+    "id": "PRN002",
+    "printerName": "Epson TM-T82X Thermal POS",
+    "connectionType": "USB",
+    "port": 9100,
+    "status": "active",
+    "createdOn": "15 Jan 2024"
+  },
+  {
+    "id": "PRN003",
+    "printerName": "Canon imageRUNNER 2630i",
+    "connectionType": "Network",
+    "ipAddress": "192.168.1.155",
+    "port": 9100,
+    "status": "active",
+    "createdOn": "02 Feb 2024"
+  }
+]
+

@@ -7,7 +7,13 @@
       "paperTypes": "Art Paper 150gr, Art Paper 120gr",
       "machine": "SM 52 4 Warna",
       "active": true,
-      "image": "/assets/img/products/brosur.png"
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+      "images": [
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+        "/assets/img/products/brosur.png",
+        "https://upload.wikimedia.org/wikipedia/commons/c/c9/Tri_Fold_Brochure_Mockup_01.jpg",
+        "/assets/img/products/pos-product-01.png"
+      ]
     },
     {
       "id": "2",
@@ -16,7 +22,13 @@
       "paperTypes": "Art Carton 260gr",
       "machine": "Digital Press Fuji Xerox",
       "active": true,
-      "image": "/assets/img/products/pos-product-01.png"
+      "image": "/assets/img/products/pos-product-01.png",
+      "images": [
+        "/assets/img/products/pos-product-01.png",
+        "/assets/img/products/product1.jpg",
+        "/assets/img/products/product2.jpg",
+        "/assets/img/products/product3.jpg"
+      ]
     },
     {
       "id": "3",
@@ -25,7 +37,13 @@
       "paperTypes": "Art Paper 120gr, HVS 80gr",
       "machine": "SM 52 4 Warna",
       "active": true,
-      "image": "/assets/img/products/pos-product-04.png"
+      "image": "/assets/img/products/pos-product-04.png",
+      "images": [
+        "/assets/img/products/pos-product-04.png",
+        "/assets/img/products/product4.jpg",
+        "/assets/img/products/product5.jpg",
+        "/assets/img/products/pos-product-02.png"
+      ]
     },
     {
       "id": "4",
@@ -33,8 +51,14 @@
       "defaultSize": "210x150mm Horizontal",
       "paperTypes": "Art Carton 230gr, Board No. 30",
       "machine": "Komori Lithrone 4 Warna",
-      "active": false,
-      "image": "/assets/img/products/pos-product-10.png"
+      "active": true,
+      "image": "/assets/img/products/pos-product-10.png",
+      "images": [
+        "/assets/img/products/pos-product-10.png",
+        "/assets/img/products/product10.jpg",
+        "/assets/img/products/product11.jpg",
+        "/assets/img/products/pos-product-03.png"
+      ]
     }
   ],
   "sizes": [
@@ -102,9 +126,9 @@
     { "id": "5", "minQty": 10001, "maxQty": 50000, "profitPosPercent": 15, "profitWebstorePercent": 10 }
   ],
   "logTransactions": [
-    { "id": "1", "date": "01/12/2025 14:22", "customer": "PT Makmur Abadi", "product": "Brosur A4 150gr", "qty": 2500, "totalCost": 850000, "sellingPrice": 1332000, "status": "Quoted" },
-    { "id": "2", "date": "02/12/2025 10:05", "customer": "Toko Buku Cerdas", "product": "Flyer A5 120gr", "qty": 5000, "totalCost": 2250000, "sellingPrice": 3552000, "status": "In Production" },
-    { "id": "3", "date": "03/12/2025 16:40", "customer": "Bpk. Rahmat", "product": "Kartu Nama 260gr", "qty": 500, "totalCost": 380000, "sellingPrice": 610500, "status": "Completed" }
+    { "id": "1", "customerId": null, "date": "01/12/2025 14:22", "customer": "PT Makmur Abadi", "product": "Brosur A4 150gr", "qty": 2500, "totalCost": 850000, "sellingPrice": 1332000, "status": "Quoted" },
+    { "id": "2", "customerId": null, "date": "02/12/2025 10:05", "customer": "Toko Buku Cerdas", "product": "Flyer A5 120gr", "qty": 5000, "totalCost": 2250000, "sellingPrice": 3552000, "status": "In Production" },
+    { "id": "3", "customerId": null, "date": "03/12/2025 16:40", "customer": "Bpk. Rahmat", "product": "Kartu Nama 260gr", "qty": 500, "totalCost": 380000, "sellingPrice": 610500, "status": "Completed" }
   ]
 }
 

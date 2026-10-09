@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ExpenseCategory, ExpenseCategoryFormData } from '~/types/expense-category'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import PagesExpenseCategoryModal from '~/components/expense-category/ExpenseCategoryModal.vue'
+import PagesExpenseCategoryTable from '~/components/expense-category/ExpenseCategoryTable.vue'
 
 definePageMeta({
   layout: 'default'
@@ -41,6 +43,12 @@ const filteredList = computed(() => {
   })
 })
 
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+
 const handleAdd = () => {
   isEdit.value = false
   editData.value = null
@@ -53,15 +61,24 @@ const handleEdit = (cat: ExpenseCategory) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus kategori pengeluaran ini?')) {
-    try {
-      await deleteExpenseCategory(id)
-      showToast('Expense category deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete expense category:', err)
-      alert('Failed to delete expense category')
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+  isDeleteConfirmOpen.value = true
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deleteExpenseCategory(deleteTargetId.value)
+    showToast('Expense category deleted successfully')
+    isDeleteConfirmOpen.value = false
+    deleteTargetId.value = null
+  } catch (err: any) {
+    console.error('Failed to delete expense category:', err)
+    showToast(err?.message || 'Failed to delete expense category')
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -70,9 +87,9 @@ const handleSubmit = async (formData: ExpenseCategoryFormData) => {
     const res = await saveExpenseCategory(formData)
     showToast(res?.message || 'Expense category saved successfully')
     isModalOpen.value = false
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to save expense category:', err)
-    alert('Failed to save expense category')
+    showToast(err?.message || 'Failed to save expense category')
   }
 }
 
@@ -146,6 +163,16 @@ const exportPdf = () => {
       :edit-data="editData"
       @close="isModalOpen = false"
       @submit="handleSubmit"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Hapus Kategori Pengeluaran"
+      message="Apakah Anda yakin ingin menghapus kategori pengeluaran ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

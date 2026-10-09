@@ -1,0 +1,21 @@
+[
+  {"id":"cust-ledger-001","customerId":"ID000001","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":15000000,"occurredAt":"2025-12-01T02:15:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-002","customerId":"ID000002","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":750000,"occurredAt":"2025-12-03T03:30:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-003","customerId":"ID000003","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":5400000,"occurredAt":"2025-12-05T07:45:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-004","customerId":"ID000004","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":2150000,"occurredAt":"2025-12-08T04:20:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-005","customerId":"ID000005","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":27300000,"occurredAt":"2025-12-12T09:05:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-006","customerId":"ID000006","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":120000,"occurredAt":"2025-12-15T01:50:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-007","customerId":"ID000007","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":8900000,"occurredAt":"2025-12-18T06:35:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-008","customerId":"ID000008","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":4250000,"occurredAt":"2025-12-21T08:10:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-010","customerId":"ID000010","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":50000000,"occurredAt":"2025-12-27T05:25:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-011","customerId":"ID000011","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":12350000,"occurredAt":"2025-12-30T02:40:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-012","customerId":"ID000012","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":3800000,"occurredAt":"2026-01-02T07:55:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-013","customerId":"ID000013","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":450000,"occurredAt":"2026-01-05T04:15:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-014","customerId":"ID000014","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":18500000,"occurredAt":"2026-01-08T09:30:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-015","customerId":"ID000015","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":9100000,"occurredAt":"2026-01-11T03:20:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-016","customerId":"ID000016","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":600000,"occurredAt":"2026-01-14T01:10:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-017","customerId":"ID000017","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":1450000,"occurredAt":"2026-01-17T06:45:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-018","customerId":"ID000018","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":42100000,"occurredAt":"2026-01-20T08:55:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-019","customerId":"ID000019","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":850000,"occurredAt":"2026-01-23T02:05:00.000Z","note":"Saldo awal hasil migrasi data legacy"},
+  {"id":"cust-ledger-020","customerId":"ID000020","sourceType":"opening_balance","sourceId":"legacy-import-2025","amount":6700000,"occurredAt":"2026-01-26T07:20:00.000Z","note":"Saldo awal hasil migrasi data legacy"}
+]

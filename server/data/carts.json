@@ -1,7 +1,7 @@
 [
   {
     "id": "CRT-1001",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "productId": "4",
     "productName": "Brosur A4 Art Paper 150gr",
     "productImage": "/assets/img/products/stock-img-01.png",
@@ -15,7 +15,7 @@
   },
   {
     "id": "CRT-1002",
-    "customerId": "CUST-002",
+    "customerId": "ID000002",
     "productId": "2",
     "productName": "Kartu Nama Matte Premium Box",
     "productImage": "/assets/img/products/stock-img-06.png",
@@ -29,7 +29,7 @@
   },
   {
     "id": "CRT-1003",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "productId": "1",
     "productName": "Flexy 280gr Spanduk Outdoor",
     "productImage": "/assets/img/products/stock-img-02.png",
@@ -43,7 +43,7 @@
   },
   {
     "id": "CRT-1004",
-    "customerId": "CUST-004",
+    "customerId": "ID000004",
     "productId": "5",
     "productName": "Sticker Vinyl Glossy Die Cut",
     "productImage": "/assets/img/products/stock-img-03.png",
@@ -57,7 +57,7 @@
   },
   {
     "id": "CRT-1005",
-    "customerId": "CUST-005",
+    "customerId": "ID000005",
     "productId": "3",
     "productName": "Spanduk Korea 440gr High Res",
     "productImage": "/assets/img/products/stock-img-04.png",
@@ -71,7 +71,7 @@
   },
   {
     "id": "CRT-1006",
-    "customerId": "CUST-006",
+    "customerId": "ID000006",
     "productId": "4",
     "productName": "Flyer Promosi A5 HVS",
     "productImage": "/assets/img/products/stock-img-05.png",
@@ -85,7 +85,7 @@
   },
   {
     "id": "CRT-1007",
-    "customerId": "CUST-007",
+    "customerId": "ID000007",
     "productId": "1",
     "productName": "Roll Up Banner 60x160 Alumunium",
     "productImage": "/assets/img/products/stock-img-01.png",
@@ -99,7 +99,7 @@
   },
   {
     "id": "CRT-1008",
-    "customerId": "CUST-008",
+    "customerId": "ID000008",
     "productId": "2",
     "productName": "Brosur Lipat 3 Art Paper 120gr",
     "productImage": "/assets/img/products/stock-img-06.png",
@@ -113,7 +113,7 @@
   },
   {
     "id": "CRT-1009",
-    "customerId": "CUST-009",
+    "customerId": "ID000009",
     "productId": "5",
     "productName": "Sticker Label Kemasan Katering",
     "productImage": "/assets/img/products/stock-img-02.png",
@@ -127,7 +127,7 @@
   },
   {
     "id": "CRT-1010",
-    "customerId": "CUST-010",
+    "customerId": "ID000010",
     "productId": "4",
     "productName": "Kop Surat & Amplop Kantor",
     "productImage": "/assets/img/products/stock-img-03.png",

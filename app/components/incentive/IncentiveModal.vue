@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { IncentiveItem, IncentiveFormData } from '~/types/incentive'
+import type { IncentiveItem, IncentiveFormData } from '#server/types/incentive'
+import SalesDialog from '~/components/sales/SalesDialog.vue'
+import CurrencyInput from '~/components/common/CurrencyInput.vue'
+import { formControlClass, modalFormRowClass, modalFormLabelClass, modalFormInputColClass } from '~/utils/salesUi'
 
 const props = defineProps<{
   isOpen: boolean
@@ -47,7 +50,6 @@ watch(
 
 const handleSubmit = () => {
   if (!form.value.employee) {
-    alert('Nama karyawan harus diisi')
     return
   }
   emit('save', { ...form.value })
@@ -55,78 +57,87 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop-custom">
-    <div class="modal-dialog-custom modal-md">
-      <div class="modal-content border-0 shadow-lg rounded-3">
-        <div class="modal-header border-bottom px-4 py-3 bg-light">
-          <h5 class="modal-title fs-5 fw-bold text-dark">
-            {{ editData ? 'Edit Data Insentif' : 'Tambah Rekap Insentif Karyawan' }}
-          </h5>
-          <button type="button" class="btn-close" @click="emit('close')"></button>
+  <SalesDialog
+    :open="isOpen"
+    :title="editData ? 'Edit Data Insentif' : 'Tambah Rekap Insentif Karyawan'"
+    size="md"
+    @close="emit('close')"
+  >
+    <form @submit.prevent="handleSubmit" class="space-y-4">
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Nama Karyawan <span class="text-rose-500">*</span></label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.employee"
+            type="text"
+            :class="formControlClass"
+            required
+            placeholder="e.g. Budi Santoso"
+          />
         </div>
-
-        <form @submit.prevent="handleSubmit">
-          <div class="modal-body p-4">
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Nama Karyawan <span class="text-danger">*</span></label>
-              <input v-model="form.employee" type="text" class="form-control" required placeholder="e.g. Budi Santoso" />
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-semibold">Periode (YYYY-MM)</label>
-                <input v-model="form.period" type="text" class="form-control" placeholder="2025-08" required />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-semibold">Qty Selesai (Job Count)</label>
-                <input v-model.number="form.qtyComplete" type="number" min="1" class="form-control" required />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-semibold">Total Insentif (Rp) <span class="text-danger">*</span></label>
-                <input v-model.number="form.totalAmount" type="number" min="0" class="form-control" required />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-semibold">Status Pembayaran</label>
-                <select v-model="form.status" class="form-select">
-                  <option value="Pending">Pending</option>
-                  <option value="Paid">Paid</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-footer border-top px-4 py-3 bg-light">
-            <button type="button" class="btn btn-secondary px-4" @click="emit('close')">Batal</button>
-            <button type="submit" class="btn btn-primary px-4">
-              {{ editData ? 'Update Insentif' : 'Simpan Insentif' }}
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
-  </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Periode (YYYY-MM)</label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.period"
+            type="text"
+            :class="formControlClass"
+            placeholder="2025-08"
+            required
+          />
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Qty Selesai (Job Count)</label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model.number="form.qtyComplete"
+            type="number"
+            min="1"
+            :class="formControlClass"
+            required
+          />
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Total Insentif (Rp) <span class="text-rose-500">*</span></label>
+        <div :class="modalFormInputColClass">
+          <CurrencyInput
+            v-model="form.totalAmount"
+            placeholder="50.000"
+          />
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Status Pembayaran</label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+        <button
+          type="button"
+          class="h-9 px-4 rounded-md border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+          @click="emit('close')"
+        >
+          Batal
+        </button>
+        <button
+          type="submit"
+          class="h-9 px-4 rounded-md bg-primary text-sm font-semibold text-white shadow hover:bg-primary/90"
+        >
+          {{ editData ? 'Update Insentif' : 'Simpan Insentif' }}
+        </button>
+      </div>
+    </form>
+  </SalesDialog>
 </template>
-
-<style scoped>
-.modal-backdrop-custom {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
-}
-.modal-dialog-custom {
-  width: 100%;
-  max-width: 500px;
-  margin: 1rem;
-}
-</style>
-

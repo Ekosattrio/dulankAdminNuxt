@@ -9,9 +9,18 @@
     "overtimeRate": 15000,
     "status": "Active",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 300000 },
-      { "id": "2", "name": "Pengiriman", "amount": 200000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 300000
+      },
+      {
+        "id": "2",
+        "name": "Pengiriman",
+        "amount": 200000
+      }
+    ],
+    "employee": "Budi Setiadi"
   },
   {
     "id": "2",
@@ -23,8 +32,13 @@
     "overtimeRate": 15000,
     "status": "Active",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 300000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 300000
+      }
+    ],
+    "employee": "Siti Nurhaliza"
   },
   {
     "id": "3",
@@ -36,9 +50,18 @@
     "overtimeRate": 15000,
     "status": "Active",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 250000 },
-      { "id": "2", "name": "Transport", "amount": 150000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 250000
+      },
+      {
+        "id": "2",
+        "name": "Transport",
+        "amount": 150000
+      }
+    ],
+    "employee": "Agus Rahardjo"
   },
   {
     "id": "4",
@@ -50,9 +73,18 @@
     "overtimeRate": 15000,
     "status": "Active",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 300000 },
-      { "id": "2", "name": "Bonus Sales", "amount": 400000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 300000
+      },
+      {
+        "id": "2",
+        "name": "Bonus Sales",
+        "amount": 400000
+      }
+    ],
+    "employee": "Rina Permata"
   },
   {
     "id": "5",
@@ -64,13 +96,22 @@
     "overtimeRate": 15000,
     "status": "Active",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 200000 },
-      { "id": "2", "name": "Uang Makan", "amount": 150000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 200000
+      },
+      {
+        "id": "2",
+        "name": "Uang Makan",
+        "amount": 150000
+      }
+    ],
+    "employee": "Dedi Kurniawan"
   },
   {
     "id": "6",
-    "employeeId": "ST011",
+    "employeeId": "ST001",
     "name": "Fajar Ramadhan",
     "salary": 140000,
     "system": "Daily",
@@ -78,7 +119,12 @@
     "overtimeRate": 15000,
     "status": "Disabled",
     "allowances": [
-      { "id": "1", "name": "Present Allowance", "amount": 120000 }
-    ]
+      {
+        "id": "1",
+        "name": "Present Allowance",
+        "amount": 120000
+      }
+    ],
+    "employee": "Budi Setiadi"
   }
 ]

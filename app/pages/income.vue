@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { IncomeRecord, IncomeFormData } from '~/types/income'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import PagesIncomeModal from '~/components/income/IncomeModal.vue'
+import PagesIncomeTable from '~/components/income/IncomeTable.vue'
 
 definePageMeta({
   layout: 'default'
@@ -46,6 +48,12 @@ const filteredIncomes = computed(() => {
   })
 })
 
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+
 const openAddModal = () => {
   editData.value = null
   isViewOnly.value = false
@@ -64,13 +72,22 @@ const handleEdit = (item: IncomeRecord) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus catatan pemasukan ini?')) {
-    try {
-      await deleteIncome(id)
-    } catch (error) {
-      console.error('Failed to delete income:', error)
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+  isDeleteConfirmOpen.value = true
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deleteIncome(deleteTargetId.value)
+    isDeleteConfirmOpen.value = false
+    deleteTargetId.value = null
+  } catch (error) {
+    console.error('Failed to delete income:', error)
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -164,6 +181,16 @@ const printTable = () => {
       :categories="categoriesList"
       @close="isModalOpen = false"
       @save="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Hapus Catatan Pemasukan"
+      message="Apakah Anda yakin ingin menghapus catatan pemasukan ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

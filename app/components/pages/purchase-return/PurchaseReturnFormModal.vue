@@ -254,7 +254,7 @@ function handleSubmit() {
                 <td class="px-3 py-2">
                   <CurrencyInput
                     v-model="item.price"
-                    thousand-separator=","
+                    thousand-separator="."
                     required
                     :disabled="busy"
                     @update:model-value="updateItemAmount(item)"
@@ -340,7 +340,7 @@ function handleSubmit() {
             <div class="w-40">
               <CurrencyInput
                 v-model="form.paid"
-                thousand-separator=","
+                thousand-separator="."
                 :disabled="busy"
               />
             </div>

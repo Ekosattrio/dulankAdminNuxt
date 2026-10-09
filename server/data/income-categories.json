@@ -1,0 +1,43 @@
+[
+  {
+    "id": "1",
+    "no": "INC001",
+    "name": "Penjualan Jasa Cetak",
+    "description": "Pemasukan dari layanan cetak utama (Offset, Digital, Large Format).",
+    "status": "Active",
+    "created": "25/11/2025 15:45, Admin"
+  },
+  {
+    "id": "2",
+    "no": "INC002",
+    "name": "Penjualan Limbah Kertas",
+    "description": "Pendapatan dari penjualan sisa potongan atau limbah kertas produksi ke pengepul.",
+    "status": "Active",
+    "created": "25/11/2025 15:50, Admin"
+  },
+  {
+    "id": "3",
+    "no": "INC003",
+    "name": "Jasa Desain",
+    "description": "Pemasukan dari layanan desain grafis terpisah atau layout dokumen.",
+    "status": "Active",
+    "created": "26/11/2025 09:10, Budi"
+  },
+  {
+    "id": "4",
+    "no": "INC004",
+    "name": "Biaya Pengiriman",
+    "description": "Pemasukan ongkos kirim ekspedisi dan armada operasional.",
+    "status": "Active",
+    "created": "26/11/2025 10:15, Admin"
+  },
+  {
+    "id": "5",
+    "no": "INC005",
+    "name": "Pendapatan Lain-lain",
+    "description": "Pemasukan insidental atau pendapatan operasional lain-lain.",
+    "status": "Active",
+    "created": "26/11/2025 10:30, Admin"
+  }
+]
+

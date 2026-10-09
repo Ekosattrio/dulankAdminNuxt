@@ -175,7 +175,7 @@ const handleSubmit = () => {
           <CurrencyInput
             id="incRate"
             v-model="form.incentive"
-            thousand-separator=","
+            thousand-separator="."
             placeholder="1,000"
             :disabled="busy"
           />

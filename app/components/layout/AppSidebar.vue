@@ -2,6 +2,8 @@
 import { useThemeStore } from "~/stores/theme";
 import FeatherIcon from "~/components/common/FeatherIcon.vue";
 
+defineOptions({ inheritAttrs: false });
+
 const route = useRoute();
 const themeStore = useThemeStore();
 
@@ -424,6 +426,7 @@ watch(
 
 <template>
   <aside
+    v-bind="$attrs"
     :class="[
       'fixed inset-y-0 start-0 z-30 flex flex-col border-e border-gray-200 bg-white transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 lg:top-16',
       themeStore.isSidebarCollapsed ? 'w-20' : 'w-[260px]',
@@ -451,7 +454,7 @@ watch(
     </div>
 
     <!-- Scrollable Nav Menu Container -->
-    <div class="flex-1 overflow-y-auto px-4 py-5 text-xs">
+    <div class="flex-1 overflow-y-auto px-4 py-5 text-sm">
       <div
         v-for="(group, gIdx) in menuGroups"
         :key="gIdx"
@@ -460,7 +463,7 @@ watch(
         <!-- Menu Group Header (.submenu-hdr) -->
         <h6
           v-if="!themeStore.isSidebarCollapsed"
-          class="mb-3 px-3.5 text-[12.5px] font-semibold uppercase tracking-normal text-[#1B2950] dark:text-gray-300"
+          class="mb-3 px-3.5 text-xs font-semibold uppercase tracking-normal text-[#1B2950] dark:text-gray-300"
         >
           {{ group.header }}
         </h6>
@@ -546,7 +549,7 @@ watch(
                   :key="sIdx"
                   :to="sub.to"
                   :class="[
-                    'group relative flex items-center rounded-md py-2 pe-3 ps-8 text-[13.5px] font-medium transition-colors duration-150',
+                    'group relative flex items-center rounded-md py-2 pe-3 ps-8 text-[14px] font-medium transition-colors duration-150',
                     isChildActive(sub)
                       ? 'text-[#FE9F43] font-semibold bg-[#FE9F43]/[0.06] dark:bg-[#FE9F43]/15'
                       : 'text-[#67748E] hover:text-[#FE9F43] hover:bg-[#FE9F43]/[0.04] dark:text-gray-400 dark:hover:text-[#FE9F43]',

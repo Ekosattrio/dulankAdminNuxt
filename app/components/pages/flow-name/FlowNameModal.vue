@@ -191,7 +191,7 @@ function submit() {
               <div :class="modalFormInputColClass">
                 <CurrencyInput
                   v-model="form.incentiveAmount"
-                  thousand-separator=","
+                  thousand-separator="."
                   placeholder="0"
                   :disabled="busy"
                 />

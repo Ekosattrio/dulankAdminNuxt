@@ -11,9 +11,13 @@ export interface Product {
   id: string
   code: string
   name: string
+  categoryId: string
   category: string
+  subCategoryId: string
   subCategory: string
+  unitId: string
   unit: string
+  storeId: string
   price: number
   priceType: string
   created: string
@@ -33,6 +37,9 @@ export interface Product {
   minWidth?: number
   images?: string[]
   variants?: ProductVariant[]
+  createdAt?: string
+  updatedAt?: string
+  archivedAt?: string | null
 }
 
 export interface ProductFilterParams {
@@ -45,9 +52,13 @@ export interface ProductFormData {
   id?: string
   code?: string
   name: string
+  categoryId?: string
   category: string
+  subCategoryId?: string
   subCategory: string
+  unitId?: string
   unit: string
+  storeId?: string
   price: number
   priceType: string
   status?: 'Active' | 'Inactive'
@@ -66,4 +77,14 @@ export interface ProductFormData {
   minWidth?: number
   images?: string[]
   variants?: ProductVariant[]
+}
+
+export interface ProductImportRow {
+  code?: string
+  name: string
+  category: string
+  subCategory: string
+  unit: string
+  price: number
+  priceType: string
 }

@@ -107,13 +107,16 @@ function handleDeleteConfirm(order: PurchaseOrder) {
   isDeleteModalOpen.value = true
 }
 
+const actionError = ref('')
+
 async function handleSaveOrder(form: PurchaseOrderFormData) {
   formBusy.value = true
+  actionError.value = ''
   try {
     await savePurchaseOrder(form)
     isFormModalOpen.value = false
   } catch (err: any) {
-    alert(err?.message || 'Gagal menyimpan purchase order')
+    actionError.value = err?.message || 'Gagal menyimpan purchase order'
   } finally {
     formBusy.value = false
   }
@@ -122,12 +125,13 @@ async function handleSaveOrder(form: PurchaseOrderFormData) {
 async function handleDeleteExecute() {
   if (!deletingOrder.value) return
   deleteBusy.value = true
+  actionError.value = ''
   try {
     await deletePurchaseOrder(deletingOrder.value.id)
     isDeleteModalOpen.value = false
     deletingOrder.value = null
   } catch (err: any) {
-    alert(err?.message || 'Gagal menghapus purchase order')
+    actionError.value = err?.message || 'Gagal menghapus purchase order'
   } finally {
     deleteBusy.value = false
   }

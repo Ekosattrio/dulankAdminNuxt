@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { formatMoney, parseMoney } from '~/utils/currency'
 
+defineOptions({ inheritAttrs: false })
+
 interface Props {
   /** Nilai numerik asli (v-model) */
   modelValue?: number | string | null
@@ -37,7 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   max: undefined,
   size: 'md',
   inputClass: '',
-  thousandSeparator: ','
+  thousandSeparator: '.'
 })
 
 const emit = defineEmits<{
@@ -133,6 +135,7 @@ function onFocus(evt: FocusEvent) {
 
     <!-- Input text dengan separator ribuan & justifikasi kiri/kanan -->
     <input
+      v-bind="$attrs"
       ref="inputRef"
       type="text"
       inputmode="numeric"
@@ -142,7 +145,7 @@ function onFocus(evt: FocusEvent) {
       :readonly="readonly"
       :class="[
         // Base styling standar light-modern h-9
-        size === 'sm' ? 'h-7 text-[11px]' : 'h-9 text-xs',
+        size === 'sm' ? 'h-7 text-xs' : 'h-9 text-sm',
         'w-full rounded-md border border-gray-200 bg-white font-mono tabular-nums shadow-sm outline-none transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100',
         'focus:border-primary focus:ring-2 focus:ring-primary/10',
         'disabled:cursor-not-allowed disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:text-gray-400',

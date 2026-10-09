@@ -14,10 +14,11 @@ export default defineEventHandler(async (event) => {
 
   const currentConfig = readJSON<EmailConfig>('email-settings.json')
 
-  // Mock test email delivery simulation
+  // No SMTP transport is configured yet; keep this result explicit for the UI.
   const result: TestEmailResult = {
     success: true,
-    message: `Test email berhasil dikirim ke ${targetEmail} via ${currentConfig?.mailHost || 'SMTP Server'} (Port ${currentConfig?.mailPort || 587}).`,
+    simulated: true,
+    message: `Simulasi konfigurasi email berhasil untuk ${targetEmail} via ${currentConfig?.mailHost || 'SMTP Server'} (Port ${currentConfig?.mailPort || 587}). Belum ada email yang dikirim.`,
     sentTo: targetEmail,
     timestamp: new Date().toISOString(),
   }

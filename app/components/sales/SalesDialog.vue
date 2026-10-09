@@ -37,7 +37,7 @@ function cancel(event: Event) {
     <div
       class="flex items-center justify-between gap-4 border-b border-gray-200 bg-[#fafbfe] px-6 py-4 dark:border-gray-700 dark:bg-gray-800"
     >
-      <h2 :id="titleId" class="text-lg font-bold text-[#092c4c] dark:text-white">{{ title }}</h2>
+      <h2 :id="titleId" class="app-dialog-title">{{ title }}</h2>
       <button
         type="button"
         :disabled="busy"

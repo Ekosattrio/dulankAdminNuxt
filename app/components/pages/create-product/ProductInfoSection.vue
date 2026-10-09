@@ -60,7 +60,7 @@ const sellingTypes = ['Single Price', 'Size Calculation', 'Quantity Tier', 'Leno
           <input
             :value="itemCode"
             type="text"
-            required
+            placeholder="Generated automatically when empty"
             :disabled="disabled"
             :class="formControlClass"
             class="font-mono"

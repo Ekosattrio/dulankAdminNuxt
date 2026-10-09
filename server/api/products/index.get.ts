@@ -1,31 +1,15 @@
-import type { Product } from '~/types/product'
+import { defineEventHandler, getQuery } from 'h3'
+import { createResponse } from '../../utils/data'
+import { listProducts } from '../../utils/products'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const query = getQuery(event)
-  const search = (query.search as string || '').toLowerCase().trim()
-  const category = (query.category as string || '').trim()
-  const status = query.status as string || ''
-
-  const allProducts = await readJSON<Product[]>('products.json', [])
-
-  let filtered = allProducts
-
-  if (search) {
-    filtered = filtered.filter(item =>
-      item.name.toLowerCase().includes(search) ||
-      item.code.toLowerCase().includes(search) ||
-      item.subCategory.toLowerCase().includes(search)
-    )
-  }
-
-  if (category) {
-    filtered = filtered.filter(item => item.category === category)
-  }
-
-  if (status) {
-    filtered = filtered.filter(item => item.status === status)
-  }
-
-  return createResponse(filtered, 'Products fetched successfully')
+  const search = String(query.search || '').toLowerCase().trim()
+  const category = String(query.category || '')
+  const status = String(query.status || '')
+  let records = listProducts()
+  if (search) records = records.filter(item => [item.name, item.code, item.subCategory].some(value => value.toLowerCase().includes(search)))
+  if (category) records = records.filter(item => item.categoryId === category || item.category === category)
+  if (status) records = records.filter(item => item.status === status)
+  return createResponse(records, { total: records.length })
 })
-

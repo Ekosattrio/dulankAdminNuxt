@@ -7,6 +7,11 @@ const root = fileURLToPath(new URL('../', import.meta.url))
 const checkHashes = process.argv.includes('--check-hashes')
 const manifest = JSON.parse(await readFile(path.join(root, 'MIGRATION_MANIFEST.json'), 'utf8'))
 const failures = []
+const pagesWithoutLegacyReference = new Set([
+  // Explicit empty-state routes added because the legacy navigation has no page file.
+  'faq-category.vue',
+  'invoice-template.vue',
+])
 
 function workspacePath(relative) {
   const resolved = path.resolve(root, relative)
@@ -40,6 +45,7 @@ await Promise.all(Array.from({ length: 8 }, async () => {
 
 const pages = (await readdir(path.join(root, 'app/pages'))).filter(name => name.endsWith('.vue'))
 for (const page of pages) {
+  if (pagesWithoutLegacyReference.has(page)) continue
   const reference = `legacy/static-source/${page.slice(0, -4)}.html`
   try {
     if (!(await stat(workspacePath(reference))).isFile()) throw new Error('Not a file')

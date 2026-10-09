@@ -12,7 +12,7 @@ export interface FormatMoneyOptions {
   decimalPlaces?: number
   /** Nilai pengganti jika null / undefined / NaN (default: '0') */
   fallback?: string
-  /** Pemisah ribuan: koma (,) atau titik (.) (default: ',') */
+  /** Pemisah ribuan: koma (,) atau titik (.) (default: '.') */
   thousandSeparator?: ',' | '.'
 }
 
@@ -28,7 +28,7 @@ export function formatMoney(
     suffix = '',
     decimalPlaces = 0,
     fallback = '0',
-    thousandSeparator = ','
+    thousandSeparator = '.'
   } = options
 
   if (value === null || value === undefined || value === '') {
@@ -45,9 +45,9 @@ export function formatMoney(
   const isNegative = num < 0
   const absNum = Math.abs(num)
 
-  // Format integer part dengan separator yang dipilih (default koma ',')
+  // Format integer part dengan separator yang dipilih (default titik '.')
   const parts = absNum.toFixed(decimalPlaces).split('.')
-  const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator)
+  const integerPart = (parts[0] ?? '0').replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator)
   const decimalPart = parts[1] ? (thousandSeparator === '.' ? `,${parts[1]}` : `.${parts[1]}`) : ''
 
   const formatted = `${isNegative ? '-' : ''}${integerPart}${decimalPart}`

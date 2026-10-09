@@ -1,8 +1,8 @@
 [
   {
     "id": "SDR-001",
-    "supplierId": "SUP-002",
-    "supplierName": "CV. Tinta Pelangi",
+    "supplierId": "ID0002",
+    "supplierName": "CV Kimia Prima Terang",
     "date": "08/03/2026",
     "category": "Tinta & Kimia",
     "purchaseItem": "Cairan Isopropyl Alcohol (IPA)",
@@ -32,8 +32,8 @@
   },
   {
     "id": "SDR-002",
-    "supplierId": "SUP-001",
-    "supplierName": "Berkah Packaging",
+    "supplierId": "ID0001",
+    "supplierName": "PT Kertas Jaya Makmur",
     "date": "10/03/2026",
     "category": "Bahan Rigid",
     "purchaseItem": "Board No. 40 (77x110)",
@@ -56,8 +56,8 @@
   },
   {
     "id": "SDR-003",
-    "supplierId": "SUP-005",
-    "supplierName": "PT. Surya Paperindo",
+    "supplierId": "ID0005",
+    "supplierName": "PT Indo Material Printing",
     "date": "05/03/2026",
     "category": "Kertas Digital",
     "purchaseItem": "Art Carton 260gr A3+",
@@ -80,8 +80,8 @@
   },
   {
     "id": "SDR-004",
-    "supplierId": "SUP-006",
-    "supplierName": "PT. Heidelberg Parts Indonesia",
+    "supplierId": "ID0006",
+    "supplierName": "CV Warna Abadi Tinta",
     "date": "06/03/2026",
     "category": "Sparepart & Maintenance",
     "purchaseItem": "Roller Karet Mesin SM52",
@@ -104,8 +104,8 @@
   },
   {
     "id": "SDR-005",
-    "supplierId": "SUP-004",
-    "supplierName": "CV. Mitra Finishing",
+    "supplierId": "ID0004",
+    "supplierName": "Global Inkindo Pratama",
     "date": "04/03/2026",
     "category": "Finishing & Jilid",
     "purchaseItem": "Kawat Spiral (Spool) 1/4\"",
@@ -128,8 +128,8 @@
   },
   {
     "id": "SDR-006",
-    "supplierId": "SUP-003",
-    "supplierName": "PT. Grafika Media Utama",
+    "supplierId": "ID0003",
+    "supplierName": "UD Sukses Makmur Kertas",
     "date": "04/03/2026",
     "category": "Bahan Large Format",
     "purchaseItem": "Vinyl Ritrama Glossy 1.26m",
@@ -152,8 +152,8 @@
   },
   {
     "id": "SDR-007",
-    "supplierId": "SUP-007",
-    "supplierName": "CV. Prepress Indo",
+    "supplierId": "ID0007",
+    "supplierName": "PT Digital Solusi Mesin",
     "date": "07/03/2026",
     "category": "Bahan Penunjang",
     "purchaseItem": "Plat CTP (Thermal)",
@@ -176,8 +176,8 @@
   },
   {
     "id": "SDR-008",
-    "supplierId": "SUP-008",
-    "supplierName": "Toko Kertas Sinar Mas",
+    "supplierId": "ID0008",
+    "supplierName": "UD Berkah Kertasindo",
     "date": "11/03/2026",
     "category": "Kertas Plano",
     "purchaseItem": "HVS 80gr Plano",
@@ -200,8 +200,8 @@
   },
   {
     "id": "SDR-009",
-    "supplierId": "SUP-009",
-    "supplierName": "UD. Baut & Mesin Perkasa",
+    "supplierId": "ID0009",
+    "supplierName": "PT Tinta Emas Nusantara",
     "date": "12/03/2026",
     "category": "Sparepart & Maintenance",
     "purchaseItem": "Pisau Pond Cutter",

@@ -245,7 +245,7 @@ function handleSubmit() {
                 <td class="px-3 py-2">
                   <CurrencyInput
                     v-model="item.price"
-                    thousand-separator=","
+                    thousand-separator="."
                     required
                     :disabled="busy"
                   />

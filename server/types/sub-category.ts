@@ -1,6 +1,7 @@
 export interface SubCategory {
   id: string
   name: string
+  categoryId: string
   category: string
   categoryCode: string
   description: string
@@ -18,6 +19,7 @@ export interface SubCategoryFilterParams {
 export interface SubCategoryFormData {
   id?: string
   name: string
+  categoryId?: string
   category: string
   categoryCode?: string
   description?: string

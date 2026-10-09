@@ -1,163 +1,99 @@
 <script setup lang="ts">
-import type { Product, ProductFormData } from '~/types/product'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import type { Product, ProductImportRow } from '#server/types/product'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import ProductImportModal from '~/components/pages/products-services/ProductImportModal.vue'
+import ProductRecordsTable from '~/components/pages/products-services/ProductRecordsTable.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({
-  layout: 'default'
-})
+definePageMeta({ layout: 'default' })
+useLegacyPage({ title: 'Product List', sweetAlert: false })
 
-useLegacyPage({
-  title: 'Products - Daftar Produk Cetak',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
-
-const { products, pending, refresh, saveProduct, deleteProduct } = useProducts()
+const { products, pending, error, refresh, deleteProduct, importProducts } = useProducts()
 const { categories } = useCategories()
-const { units } = useUnits()
+const categoryFilter = ref('')
+const statusFilter = ref('')
+const deleteTarget = ref<Product | null>(null)
+const importOpen = ref(false)
+const busy = ref(false)
+const actionError = ref('')
+const message = ref('')
+const currentPageItems = ref<Product[]>([])
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-const searchQuery = ref('')
-const selectedCategory = ref('')
-const filterStatus = ref('')
+const categoryOptions = computed(() => categories.value.map(item => ({ label: item.name, value: item.id })))
+const filteredProducts = computed(() => products.value.filter((product) => {
+  if (categoryFilter.value && product.categoryId !== categoryFilter.value) return false
+  if (statusFilter.value && product.status !== statusFilter.value) return false
+  return true
+}))
+const printColumns = [
+  { key: 'code', label: 'Item Code' }, { key: 'name', label: 'Product' }, { key: 'category', label: 'Category' },
+  { key: 'subCategory', label: 'Sub Category' }, { key: 'unit', label: 'Unit' },
+  { key: 'price', label: 'Price (IDR)', align: 'right' as const }, { key: 'priceType', label: 'Price Type' }, { key: 'created', label: 'Created' },
+]
 
-const isModalOpen = ref(false)
-const isEdit = ref(false)
-const editData = ref<Product | null>(null)
-const toastMessage = ref('')
-
-const showToast = (msg: string) => {
-  toastMessage.value = msg
-  setTimeout(() => {
-    toastMessage.value = ''
-  }, 3000)
+function notify(value: string) {
+  message.value = value
+  window.setTimeout(() => { if (message.value === value) message.value = '' }, 3500)
 }
-
-const categoryNames = computed(() => categories.value.map((c) => c.name))
-const unitNames = computed(() => units.value.map((u) => u.name))
-
-const filteredProducts = computed(() => {
-  return products.value.filter((p) => {
-    const matchesSearch =
-      !searchQuery.value ||
-      p.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.code?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesCat = !selectedCategory.value || p.category === selectedCategory.value
-    const matchesStatus = !filterStatus.value || p.status === filterStatus.value
-    return matchesSearch && matchesCat && matchesStatus
-  })
-})
-
-const router = useRouter()
-
-const handleAdd = () => {
-  router.push('/create-product')
-}
-
-const handleEdit = (p: Product) => {
-  isEdit.value = true
-  editData.value = p
-  isModalOpen.value = true
-}
-
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-    try {
-      await deleteProduct(id)
-      showToast('Product deleted successfully')
-    } catch (err) {
-      console.error('Failed to delete product:', err)
-      alert('Failed to delete product')
-    }
-  }
-}
-
-const handleSubmit = async (formData: ProductFormData) => {
+async function confirmDelete() {
+  if (!deleteTarget.value) return
+  busy.value = true
+  actionError.value = ''
   try {
-    const res = await saveProduct(formData)
-    showToast(res?.message || 'Product saved successfully')
-    isModalOpen.value = false
-  } catch (err) {
-    console.error('Failed to save product:', err)
-    alert('Failed to save product')
-  }
+    const response = await deleteProduct(deleteTarget.value.id)
+    notify(response.message || 'Product deleted successfully')
+    deleteTarget.value = null
+  } catch (cause: any) { actionError.value = cause?.data?.statusMessage || cause?.message || 'Product gagal dihapus' }
+  finally { busy.value = false }
 }
-
-const printTable = () => {
-  window.print()
-}
-
-const exportPdf = () => {
-  showToast('Exporting Products to PDF...')
+async function submitImport(rows: ProductImportRow[]) {
+  busy.value = true
+  actionError.value = ''
+  try {
+    const response = await importProducts(rows)
+    notify(response.message || 'Products imported successfully')
+    importOpen.value = false
+  } catch (cause: any) { actionError.value = cause?.data?.statusMessage || cause?.message || 'Import product gagal' }
+  finally { busy.value = false }
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
-
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Product List / Daftar Produk</h4>
-          <h6 class="text-muted mb-0">Kelola katalog master barang, item cetak dan stok</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <NuxtLink to="/create-product" class="btn btn-primary d-flex align-items-center gap-2">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add New Product</span>
-          </NuxtLink>
-        </div>
-      </div>
-
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <PagesProductTable
-        v-else
-        :products="filteredProducts"
-        :categories="categoryNames"
-        :search-query="searchQuery"
-        :selected-category="selectedCategory"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:selected-category="selectedCategory = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-product="handleAdd"
-        @edit-product="handleEdit"
-        @delete-product="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
-
-    <PagesProductModal
-      :is-open="isModalOpen"
-      :is-edit="isEdit"
-      :edit-data="editData"
-      :categories="categoryNames"
-      :units="unitNames"
-      @close="isModalOpen = false"
-      @submit="handleSubmit"
+  <div class="dulank-page dulank-page-product-list space-y-6">
+    <SalesListHeader
+      title="Product List"
+      subtitle="Manage your products"
+      add-label="Add New Product"
+      add-to="/create-product"
+      :refreshing="pending"
+      @refresh="refresh()"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
+    >
+      <template #actions>
+        <button type="button" class="inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white hover:bg-gray-700" @click="importOpen = true">
+          <FeatherIcon name="download" :size="15" />Import Product
+        </button>
+      </template>
+    </SalesListHeader>
+    <SalesFeedback :pending="pending" skeleton="table" :error="error ? 'Unable to load products.' : ''" :message="message" @retry="refresh()" @dismiss="message = ''" />
+    <ProductRecordsTable
+      v-if="!pending && !error"
+      :products="filteredProducts"
+      :categories="categoryOptions"
+      :category-filter="categoryFilter"
+      :status-filter="statusFilter"
+      @update:category-filter="categoryFilter = $event"
+      @update:status-filter="statusFilter = $event"
+      @update:current-page-items="currentPageItems = $event"
+      @delete="deleteTarget = $event"
     />
+    <ProductImportModal :open="importOpen" :busy="busy" :error="actionError" @close="importOpen = false" @submit="submitImport" />
+    <SalesConfirmDelete :open="!!deleteTarget" :busy="busy" :error="actionError" @close="deleteTarget = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="isPrintModalOpen" title="Product List Report" subtitle="Master products and service catalog" :columns="printColumns" :items="filteredProducts" :current-page-items="currentPageItems" date-field="createdAt" :default-action="defaultPrintAction" @close="closePrintModal" />
   </div>
 </template>

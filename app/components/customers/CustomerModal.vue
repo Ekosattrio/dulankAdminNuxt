@@ -18,9 +18,7 @@ const form = reactive<CustomerFormData>({
   name: '',
   email: '',
   type: 'General',
-  phone: '',
-  balance: 0,
-  channel: 'Website'
+  phone: ''
 })
 
 watch(
@@ -33,8 +31,6 @@ watch(
       form.email = val.email
       form.type = val.type
       form.phone = val.phone
-      form.balance = val.balance
-      form.channel = val.channel
     } else {
       form.id = ''
       form.customerId = ''
@@ -42,8 +38,6 @@ watch(
       form.email = ''
       form.type = 'General'
       form.phone = ''
-      form.balance = 0
-      form.channel = 'Website'
     }
   },
   { immediate: true }
@@ -118,23 +112,6 @@ const handleSubmit = () => {
                 />
               </div>
 
-              <div class="col-md-6">
-                <label class="form-label text-xs fw-semibold text-muted">Initial Balance (Rp)</label>
-                <input
-                  v-model.number="form.balance"
-                  type="number"
-                  class="form-control"
-                  placeholder="0"
-                />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label text-xs fw-semibold text-muted">Join Channel</label>
-                <select v-model="form.channel" class="form-select">
-                  <option value="Website">Website</option>
-                  <option value="Offline">Offline</option>
-                </select>
-              </div>
             </div>
 
             <!-- Footer -->

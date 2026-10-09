@@ -1,7 +1,7 @@
 [
   {
     "id": "CR-001",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "customerName": "CV. Maju Jaya",
     "totalOrder": 45,
     "amount": 67500000,
@@ -29,11 +29,12 @@
         "amount": 12000000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Aditya Pratama"
   },
   {
     "id": "CR-002",
-    "customerId": "CUST-002",
+    "customerId": "ID000002",
     "customerName": "Toko Berkah",
     "totalOrder": 38,
     "amount": 12400000,
@@ -53,11 +54,12 @@
         "amount": 1850000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Siti Aminah"
   },
   {
     "id": "CR-003",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "customerName": "Bpk. Heru",
     "totalOrder": 12,
     "amount": 4500000,
@@ -77,11 +79,12 @@
         "amount": 350000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Budi Santoso"
   },
   {
     "id": "CR-004",
-    "customerId": "CUST-004",
+    "customerId": "ID000004",
     "customerName": "PT. Sinar Abadi",
     "totalOrder": 30,
     "amount": 85000000,
@@ -101,11 +104,12 @@
         "amount": 25000000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Dewi Lestari"
   },
   {
     "id": "CR-005",
-    "customerId": "CUST-005",
+    "customerId": "ID000005",
     "customerName": "Universitas Terbuka",
     "totalOrder": 15,
     "amount": 42000000,
@@ -125,11 +129,12 @@
         "amount": 16500000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Eko Wahyudi"
   },
   {
     "id": "CR-006",
-    "customerId": "CUST-006",
+    "customerId": "ID000006",
     "customerName": "Yayasan Pendidikan Islam",
     "totalOrder": 22,
     "amount": 18750000,
@@ -149,11 +154,12 @@
         "amount": 7875000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Fitri Handayani"
   },
   {
     "id": "CR-007",
-    "customerId": "CUST-007",
+    "customerId": "ID000007",
     "customerName": "Resto Sedap Malam",
     "totalOrder": 55,
     "amount": 9350000,
@@ -173,11 +179,12 @@
         "amount": 1850000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Guntur Saputra"
   },
   {
     "id": "CR-008",
-    "customerId": "CUST-008",
+    "customerId": "ID000008",
     "customerName": "Ibu Sarah (Wedding)",
     "totalOrder": 2,
     "amount": 15000000,
@@ -197,11 +204,12 @@
         "amount": 15000000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Hana Pertiwi"
   },
   {
     "id": "CR-009",
-    "customerId": "CUST-009",
+    "customerId": "ID000009",
     "customerName": "PT. Logistik Cepat",
     "totalOrder": 18,
     "amount": 24600000,
@@ -221,11 +229,12 @@
         "amount": 7500000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Indra Kusuma"
   },
   {
     "id": "CR-010",
-    "customerId": "CUST-010",
+    "customerId": "ID000010",
     "customerName": "Sekolah Harapan",
     "totalOrder": 25,
     "amount": 31000000,
@@ -245,11 +254,12 @@
         "amount": 18000000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Joko Widodo"
   },
   {
     "id": "CR-011",
-    "customerId": "CUST-011",
+    "customerId": "ID000011",
     "customerName": "Toko Buku Pintar",
     "totalOrder": 42,
     "amount": 21000000,
@@ -269,11 +279,12 @@
         "amount": 3200000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Kartika Sari"
   },
   {
     "id": "CR-012",
-    "customerId": "CUST-012",
+    "customerId": "ID000012",
     "customerName": "Salon Cantik",
     "totalOrder": 10,
     "amount": 1500000,
@@ -293,11 +304,12 @@
         "amount": 450000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Lukman Hakim"
   },
   {
     "id": "CR-013",
-    "customerId": "CUST-013",
+    "customerId": "ID000013",
     "customerName": "Bengkel Jaya Motor",
     "totalOrder": 14,
     "amount": 2800000,
@@ -317,11 +329,12 @@
         "amount": 650000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Maya Indah"
   },
   {
     "id": "CR-014",
-    "customerId": "CUST-014",
+    "customerId": "ID000014",
     "customerName": "Cafe Kopi Senja",
     "totalOrder": 50,
     "amount": 7500000,
@@ -341,11 +354,12 @@
         "amount": 1200000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Nanang Kosim"
   },
   {
     "id": "CR-015",
-    "customerId": "CUST-015",
+    "customerId": "ID000015",
     "customerName": "PT. Delta Property",
     "totalOrder": 5,
     "amount": 45000000,
@@ -365,11 +379,12 @@
         "amount": 28000000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Olivia Putri"
   },
   {
     "id": "CR-016",
-    "customerId": "CUST-016",
+    "customerId": "ID000016",
     "customerName": "Apotek Medika",
     "totalOrder": 12,
     "amount": 4200000,
@@ -389,11 +404,12 @@
         "amount": 950000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Panji Asmoro"
   },
   {
     "id": "CR-017",
-    "customerId": "CUST-017",
+    "customerId": "ID000017",
     "customerName": "Kantor Desa Karawang",
     "totalOrder": 7,
     "amount": 8900000,
@@ -413,11 +429,12 @@
         "amount": 1850000,
         "status": "Unpaid"
       }
-    ]
+    ],
+    "customer": "Ratna Juwita"
   },
   {
     "id": "CR-018",
-    "customerId": "CUST-018",
+    "customerId": "ID000018",
     "customerName": "Bpk. Ahmad",
     "totalOrder": 3,
     "amount": 600000,
@@ -437,6 +454,7 @@
         "amount": 600000,
         "status": "Paid"
       }
-    ]
+    ],
+    "customer": "Surya Kencana"
   }
 ]

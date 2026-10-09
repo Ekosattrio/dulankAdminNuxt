@@ -1,0 +1,18 @@
+{
+  "language": "Indonesian",
+  "languageSwitcher": true,
+  "timezone": "Asia/Jakarta",
+  "dateFormat": "DD MMM YYYY",
+  "timeFormat": "24 Hours",
+  "financialYear": "2026",
+  "startingMonth": "January",
+  "currency": "IDR",
+  "currencySymbol": "Rp",
+  "currencyPosition": "before",
+  "decimalSeparator": ",",
+  "thousandSeparator": ".",
+  "countriesRestriction": "Allow All Countries",
+  "allowedFiles": "JPG, GIF, PNG, PDF, ZIP, SVG",
+  "maxFileSize": 5000
+}
+

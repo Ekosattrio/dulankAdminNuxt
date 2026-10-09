@@ -113,7 +113,7 @@ onBeforeUnmount(() => {
       :aria-label="ariaLabel"
       :aria-controls="panelId"
       :aria-expanded="open"
-      :class="[tableFilterControlClass, 'flex h-9 items-center justify-between gap-2 text-left text-xs', inputClass || 'w-48']"
+      :class="[tableFilterControlClass, 'flex h-9 items-center justify-between gap-2 text-left text-sm', inputClass || 'w-48']"
       @click="open = !open"
     >
       <span class="truncate" :class="normalizedValue ? '' : 'text-gray-400'">{{ displayValue }}</span>
@@ -151,15 +151,15 @@ onBeforeUnmount(() => {
           </label>
         </div>
         <div class="mt-3 flex flex-wrap justify-end gap-2">
-          <button type="button" :class="salesSecondaryButton" class="!px-3 !py-1.5 text-xs" @click="clearValue">Clear</button>
-          <button type="button" :class="salesPrimaryButton" class="!px-3 !py-1.5 text-xs" @click="applyCustom">
+          <button type="button" :class="salesSecondaryButton" class="!px-3 !py-1.5 text-sm" @click="clearValue">Clear</button>
+          <button type="button" :class="salesPrimaryButton" class="!px-3 !py-1.5 text-sm" @click="applyCustom">
             Apply
           </button>
         </div>
       </div>
 
       <div v-else-if="normalizedValue" class="mt-3 border-t border-gray-100 pt-3 text-right dark:border-gray-800">
-        <button type="button" :class="salesSecondaryButton" class="!px-3 !py-1.5 text-xs" @click="clearValue">Clear</button>
+        <button type="button" :class="salesSecondaryButton" class="!px-3 !py-1.5 text-sm" @click="clearValue">Clear</button>
       </div>
     </div>
   </div>

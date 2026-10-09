@@ -199,13 +199,13 @@ watch(() => [props.searchQuery, props.filterStatus], () => {
 
 <style scoped>
 .table.datanew th {
-  font-size: 13px;
+  font-size: 14px;
   color: #495057;
   padding: 12px 10px;
 }
 
 .table.datanew td {
-  font-size: 13px;
+  font-size: 14px;
   padding: 12px 10px;
 }
 </style>

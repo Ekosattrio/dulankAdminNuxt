@@ -1,26 +1,14 @@
-import { readData } from '~/server/utils/data'
-import type { PaperSize } from '~/types/paper-size'
+import { defineEventHandler, getQuery } from 'h3'
+import { getPaperSizes } from '~/server/utils/paperShopData'
+import type { PaperSizeFilterParams } from '#server/types/paper-shop'
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-  const items = readData<PaperSize>('paper-sizes.json')
-
-  let filtered = [...items]
-
-  if (query.search) {
-    const s = String(query.search).toLowerCase()
-    filtered = filtered.filter(
-      (item) => item.name.toLowerCase().includes(s) || item.dimension.toLowerCase().includes(s)
-    )
-  }
-
-  if (query.status) {
-    filtered = filtered.filter((item) => item.status.toLowerCase() === String(query.status).toLowerCase())
-  }
+export default defineEventHandler((event) => {
+  const query = getQuery(event) as PaperSizeFilterParams
+  const result = getPaperSizes(query)
 
   return {
     success: true,
-    data: filtered
+    data: result.sizes,
+    stats: result.stats
   }
 })
-

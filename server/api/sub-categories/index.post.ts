@@ -14,31 +14,38 @@ export default defineEventHandler(async (event) => {
   const allSub = await readJSON<SubCategory[]>('sub-categories.json', [])
   const allCategories = await readJSON<Category[]>('categories.json', [])
 
-  const matchedCat = allCategories.find(c => c.name === body.category)
+  const matchedCat = allCategories.find(c => c.id === body.categoryId) || allCategories.find(c => c.name === body.category)
+  if (!matchedCat) {
+    throw createError({ statusCode: 400, statusMessage: 'Category relation not found' })
+  }
   const catCode = body.categoryCode || matchedCat?.code || 'CAT-GEN'
 
   if (body.id) {
     // Update
     const idx = allSub.findIndex(s => s.id === body.id)
     if (idx !== -1) {
-      allSub[idx] = {
-        ...allSub[idx],
+      const current = allSub[idx]!
+      const updated: SubCategory = {
+        ...current,
         name: body.name,
-        category: body.category,
+        categoryId: matchedCat.id,
+        category: matchedCat.name,
         categoryCode: catCode,
-        description: body.description || allSub[idx].description,
+        description: body.description || current.description,
         status: body.status || 'Active'
       }
+      allSub[idx] = updated
       await writeJSON('sub-categories.json', allSub)
-      return createResponse(allSub[idx], 'Sub category updated successfully')
+      return createResponse(updated, 'Sub category updated successfully')
     }
   }
 
   // Create
   const newSub: SubCategory = {
-    id: String(Date.now()),
+    id: String(allSub.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1),
+    categoryId: matchedCat.id,
     name: body.name,
-    category: body.category,
+    category: matchedCat.name,
     categoryCode: catCode,
     description: body.description || '',
     itemUsed: 0,

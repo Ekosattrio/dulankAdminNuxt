@@ -253,6 +253,14 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Delete Money Transfer"
+      message="Are you sure you want to delete this money transfer? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
@@ -428,9 +436,21 @@ const updateTransfer = () => {
   closeModal();
 };
 
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue';
+
+const isDeleteConfirmOpen = ref(false);
+const deleteTargetId = ref<number | null>(null);
+
 const deleteItem = (id: number) => {
-  if (confirm("Are you sure you want to delete this money transfer?")) {
-    transfers.value = transfers.value.filter((t) => t.id !== id);
+  deleteTargetId.value = id;
+  isDeleteConfirmOpen.value = true;
+};
+
+const confirmDelete = () => {
+  if (deleteTargetId.value !== null) {
+    transfers.value = transfers.value.filter((t) => t.id !== deleteTargetId.value);
+    isDeleteConfirmOpen.value = false;
+    deleteTargetId.value = null;
   }
 };
 

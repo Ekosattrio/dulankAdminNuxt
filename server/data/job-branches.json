@@ -4,7 +4,7 @@
     "no": "JOB-2510000001",
     "jobOrderId": "JO-0001",
     "orderNo": "ORD-2510000001",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "branchId": "BR-01",
     "branch": "Dulank Karawang",
     "customer": "PT Makmur Abadi",
@@ -18,15 +18,37 @@
     "date": "25/12/2026",
     "dateFinish": "27/12/2026",
     "infoList": [
-      { "id": "1", "label": "Jumlah Plat", "value": "2" },
-      { "id": "2", "label": "Warna Cetak", "value": "Hitam" },
-      { "id": "3", "label": "Sisi Cetak", "value": "1 Sisi" },
-      { "id": "4", "label": "Sample Warna", "value": "Tidak Ada" }
+      {
+        "id": "1",
+        "label": "Jumlah Plat",
+        "value": "2"
+      },
+      {
+        "id": "2",
+        "label": "Warna Cetak",
+        "value": "Hitam"
+      },
+      {
+        "id": "3",
+        "label": "Sisi Cetak",
+        "value": "1 Sisi"
+      },
+      {
+        "id": "4",
+        "label": "Sample Warna",
+        "value": "Tidak Ada"
+      }
     ],
     "afterInfoList": [
-      { "id": "1", "label": "Berapa Jumlah Cetak Ok" }
+      {
+        "id": "1",
+        "label": "Berapa Jumlah Cetak Ok"
+      }
     ],
-    "assignees": ["Abdul", "Nurdin"],
+    "assignees": [
+      "Abdul",
+      "Nurdin"
+    ],
     "incentiveAmount": 1500,
     "incentiveUnit": "Job"
   },
@@ -35,7 +57,7 @@
     "no": "JOB-2510000002",
     "jobOrderId": "JO-0002",
     "orderNo": "ORD-2510000002",
-    "customerId": "CUST-002",
+    "customerId": "ID000002",
     "branchId": "BR-02",
     "branch": "Dulank Jakarta",
     "customer": "PT Makmur Abadi",
@@ -49,14 +71,32 @@
     "date": "26/12/2026",
     "dateFinish": "28/12/2026",
     "infoList": [
-      { "id": "1", "label": "Finishing", "value": "Mata Ayam 4 Sudut" },
-      { "id": "2", "label": "Resolusi Cetak", "value": "High Resolution 720 DPI" },
-      { "id": "3", "label": "Bahan", "value": "Frontlite Korchin 280gr" }
+      {
+        "id": "1",
+        "label": "Finishing",
+        "value": "Mata Ayam 4 Sudut"
+      },
+      {
+        "id": "2",
+        "label": "Resolusi Cetak",
+        "value": "High Resolution 720 DPI"
+      },
+      {
+        "id": "3",
+        "label": "Bahan",
+        "value": "Frontlite Korchin 280gr"
+      }
     ],
     "afterInfoList": [
-      { "id": "1", "label": "Meter Cetak OK" }
+      {
+        "id": "1",
+        "label": "Meter Cetak OK"
+      }
     ],
-    "assignees": ["Ahmad", "Joko"],
+    "assignees": [
+      "Ahmad",
+      "Joko"
+    ],
     "incentiveAmount": 2000,
     "incentiveUnit": "Job"
   },
@@ -65,7 +105,7 @@
     "no": "JOB-2510000003",
     "jobOrderId": "JO-0003",
     "orderNo": "ORD-2510000003",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "branchId": "BR-03",
     "branch": "Dulank Cirebon",
     "customer": "PT Makmur Abadi",
@@ -79,14 +119,31 @@
     "date": "27/12/2026",
     "dateFinish": "29/12/2026",
     "infoList": [
-      { "id": "1", "label": "Jumlah Lembar A3", "value": "25 Lembar" },
-      { "id": "2", "label": "Laminasi", "value": "Doff 2 Sisi" },
-      { "id": "3", "label": "Box", "value": "Mika Tebal 10 Pcs" }
+      {
+        "id": "1",
+        "label": "Jumlah Lembar A3",
+        "value": "25 Lembar"
+      },
+      {
+        "id": "2",
+        "label": "Laminasi",
+        "value": "Doff 2 Sisi"
+      },
+      {
+        "id": "3",
+        "label": "Box",
+        "value": "Mika Tebal 10 Pcs"
+      }
     ],
     "afterInfoList": [
-      { "id": "1", "label": "Box Jadi Sempurna" }
+      {
+        "id": "1",
+        "label": "Box Jadi Sempurna"
+      }
     ],
-    "assignees": ["Rian"],
+    "assignees": [
+      "Rian"
+    ],
     "incentiveAmount": 1000,
     "incentiveUnit": "Qty"
   },
@@ -95,7 +152,7 @@
     "no": "JOB-2510000004",
     "jobOrderId": "JO-0004",
     "orderNo": "ORD-2510000004",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "branchId": "BR-01",
     "branch": "Dulank Karawang",
     "customer": "CV Cahaya Baru",
@@ -109,14 +166,31 @@
     "date": "28/12/2026",
     "dateFinish": "30/12/2026",
     "infoList": [
-      { "id": "1", "label": "Jumlah Plat", "value": "1" },
-      { "id": "2", "label": "Warna Tinta", "value": "Biru Reflex" },
-      { "id": "3", "label": "Nomorator", "value": "0001 - 1000" }
+      {
+        "id": "1",
+        "label": "Jumlah Plat",
+        "value": "1"
+      },
+      {
+        "id": "2",
+        "label": "Warna Tinta",
+        "value": "Biru Reflex"
+      },
+      {
+        "id": "3",
+        "label": "Nomorator",
+        "value": "0001 - 1000"
+      }
     ],
     "afterInfoList": [
-      { "id": "1", "label": "Buku Jadi OK" }
+      {
+        "id": "1",
+        "label": "Buku Jadi OK"
+      }
     ],
-    "assignees": ["Abdul"],
+    "assignees": [
+      "Abdul"
+    ],
     "incentiveAmount": 1500,
     "incentiveUnit": "Rim"
   },
@@ -125,7 +199,7 @@
     "no": "JOB-2510000005",
     "jobOrderId": "JO-0005",
     "orderNo": "ORD-2510000005",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "branchId": "BR-01",
     "branch": "Dulank Karawang",
     "customer": "CV Cahaya Baru",
@@ -139,13 +213,26 @@
     "date": "29/12/2026",
     "dateFinish": "31/12/2026",
     "infoList": [
-      { "id": "1", "label": "Ukuran Kertas", "value": "A3+ (32 x 48 cm)" },
-      { "id": "2", "label": "Bahan", "value": "Art Carton 210gr" }
+      {
+        "id": "1",
+        "label": "Ukuran Kertas",
+        "value": "A3+ (32 x 48 cm)"
+      },
+      {
+        "id": "2",
+        "label": "Bahan",
+        "value": "Art Carton 210gr"
+      }
     ],
     "afterInfoList": [
-      { "id": "1", "label": "Lembar Cetak OK" }
+      {
+        "id": "1",
+        "label": "Lembar Cetak OK"
+      }
     ],
-    "assignees": ["Nurdin"],
+    "assignees": [
+      "Nurdin"
+    ],
     "incentiveAmount": 1200,
     "incentiveUnit": "Qty"
   }

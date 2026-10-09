@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "module": "Expense",
+    "label": "Nama Pengeluaran Spesifik",
+    "type": "Text",
+    "defaultValue": "Kebutuhan Operasional",
+    "required": true,
+    "disabled": false,
+    "status": "Active"
+  },
+  {
+    "id": 2,
+    "module": "Transaction",
+    "label": "Catatan Finishing Khusus",
+    "type": "Textarea",
+    "defaultValue": "Masukkan instruksi operator cetak",
+    "required": false,
+    "disabled": false,
+    "status": "Active"
+  },
+  {
+    "id": 3,
+    "module": "Customer",
+    "label": "NPWP Perusahaan",
+    "type": "Text",
+    "defaultValue": "-",
+    "required": false,
+    "disabled": false,
+    "status": "Active"
+  },
+  {
+    "id": 4,
+    "module": "Product",
+    "label": "Kode Mesin Preferensi",
+    "type": "Select",
+    "defaultValue": "SM-52",
+    "required": true,
+    "disabled": false,
+    "status": "Active"
+  }
+]
+

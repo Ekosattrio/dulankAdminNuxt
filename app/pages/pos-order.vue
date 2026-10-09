@@ -230,10 +230,20 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Remove POS Order"
+      message="Are you sure you want to remove this POS order? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue';
+
 definePageMeta({
   layout: "default",
 });
@@ -355,9 +365,19 @@ function submitPayment() {
   createPaymentVisible.value = false;
 }
 
+const isDeleteConfirmOpen = ref(false);
+const deleteTargetId = ref<number | null>(null);
+
 function deleteOrder(id: number) {
-  if (confirm("Are you sure you want to remove this POS order?")) {
-    orders.value = orders.value.filter((o) => o.id !== id);
+  deleteTargetId.value = id;
+  isDeleteConfirmOpen.value = true;
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value !== null) {
+    orders.value = orders.value.filter((o) => o.id !== deleteTargetId.value);
+    isDeleteConfirmOpen.value = false;
+    deleteTargetId.value = null;
   }
 }
 

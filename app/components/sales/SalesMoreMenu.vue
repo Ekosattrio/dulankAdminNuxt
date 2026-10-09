@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
+import { actionIconSizes, resolveActionIcon, type AppActionIcon } from '~/utils/actionIcons'
+
+type MoreMenuAction = {
+  label: string
+  key: string
+  icon?: string
+  action?: AppActionIcon
+  to?: RouteLocationRaw
+}
+
 defineProps<{
   label: string
-  actions: { label: string; icon: string; key: string; to?: RouteLocationRaw }[]
+  actions: MoreMenuAction[]
 }>()
 const emit = defineEmits<{ select: [key: string] }>()
 const menu = ref<HTMLElement | null>(null)
@@ -22,12 +32,12 @@ function select(key: string) {
 }
 </script>
 <template>
-  <SalesActionButton icon="more-horizontal" :label="label" @click="open" />
+  <SalesActionButton action="more" :label="label" @click="open" />
   <div
     ref="menu"
     popover="auto"
     :style="position"
-    class="fixed m-0 w-56 rounded-lg border border-gray-200 bg-white p-1.5 text-xs text-gray-700 shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+    class="fixed m-0 w-56 rounded-lg border border-gray-200 bg-white p-1.5 text-sm text-gray-700 shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
   >
     <template v-for="action in actions" :key="action.key">
       <NuxtLink
@@ -35,7 +45,10 @@ function select(key: string) {
         :to="action.to"
         class="flex w-full items-center gap-3 rounded px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800"
         @click="menu?.hidePopover()"
-        ><FeatherIcon :name="action.icon" :size="14" />{{ action.label }}</NuxtLink
+        ><FeatherIcon
+          :name="resolveActionIcon(action.action, action.icon)"
+          :size="actionIconSizes.row"
+        />{{ action.label }}</NuxtLink
       >
       <button
         v-else
@@ -43,7 +56,10 @@ function select(key: string) {
         class="flex w-full items-center gap-3 rounded px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800"
         @click="select(action.key)"
       >
-        <FeatherIcon :name="action.icon" :size="14" />{{ action.label }}
+        <FeatherIcon
+          :name="resolveActionIcon(action.action, action.icon)"
+          :size="actionIconSizes.row"
+        />{{ action.label }}
       </button>
     </template>
   </div>

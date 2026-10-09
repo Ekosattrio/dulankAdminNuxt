@@ -1,6 +1,7 @@
 [
   {
     "id": "1",
+    "categoryId": "2",
     "name": "Print Outdoor",
     "category": "Print Outdoor (Spanduk/Baliho)",
     "categoryCode": "CAT-OD02",
@@ -11,6 +12,7 @@
   },
   {
     "id": "2",
+    "categoryId": "5",
     "name": "Cetak A3+",
     "category": "Digital Printing A3+",
     "categoryCode": "CAT-DP05",
@@ -21,6 +23,7 @@
   },
   {
     "id": "3",
+    "categoryId": "1",
     "name": "Brosur & Flyer",
     "category": "Jasa Cetak Offset",
     "categoryCode": "CAT-OF01",
@@ -31,6 +34,7 @@
   },
   {
     "id": "4",
+    "categoryId": "6",
     "name": "Sticker & Label",
     "category": "Cutting Sticker",
     "categoryCode": "CAT-CS06",
@@ -41,6 +45,7 @@
   },
   {
     "id": "5",
+    "categoryId": "8",
     "name": "Kalender",
     "category": "Finishing (Laminating/Jilid)",
     "categoryCode": "CAT-FN08",
@@ -51,6 +56,7 @@
   },
   {
     "id": "6",
+    "categoryId": "7",
     "name": "Kaos & T-Shirt",
     "category": "Sablon DTF (Digital Transfer Film)",
     "categoryCode": "CAT-DT07",
@@ -61,12 +67,24 @@
   },
   {
     "id": "7",
+    "categoryId": "9",
     "name": "Mug & Tumbler",
     "category": "Merchandise & Souvenir (UV Print)",
     "categoryCode": "CAT-MC09",
     "description": "Cetak UV di permukaan silinder dan datar",
     "itemUsed": 9,
     "createdBy": "Admin",
+    "status": "Active"
+  },
+  {
+    "id": "8",
+    "categoryId": "3",
+    "name": "Print Indoor",
+    "category": "Print Indoor (Poster/X-Banner)",
+    "categoryCode": "CAT-IN03",
+    "description": "Poster, X-banner, roll-up banner, dan display indoor",
+    "itemUsed": 1,
+    "createdBy": "System Migration",
     "status": "Active"
   }
 ]

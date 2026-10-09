@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Expense, ExpenseFormData } from '~/types/expense'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import PagesExpenseModal from '~/components/expenses/ExpenseModal.vue'
+import PagesExpenseTable from '~/components/expenses/ExpenseTable.vue'
 
 definePageMeta({
   layout: 'default'
@@ -45,6 +47,12 @@ const openAddModal = () => {
   isModalOpen.value = true
 }
 
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
+
 const handleView = (e: Expense) => {
   editData.value = e
   isViewOnly.value = true
@@ -57,13 +65,22 @@ const handleEdit = (e: Expense) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data pengeluaran ini?')) {
-    try {
-      await deleteExpense(id)
-    } catch (error) {
-      console.error('Failed to delete expense:', error)
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+  isDeleteConfirmOpen.value = true
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deleteExpense(deleteTargetId.value)
+    isDeleteConfirmOpen.value = false
+    deleteTargetId.value = null
+  } catch (error) {
+    console.error('Failed to delete expense:', error)
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -165,6 +182,16 @@ const printList = () => {
       :categories="categoriesList"
       @close="isModalOpen = false"
       @save="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Hapus Data Pengeluaran"
+      message="Apakah Anda yakin ingin menghapus catatan pengeluaran ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="isDeleting"
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

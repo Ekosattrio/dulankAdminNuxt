@@ -66,7 +66,9 @@ watch(
         <label :class="salesLabel"
           >Paying Amount *<CurrencyInput
             v-model="form.amount"
-            thousand-separator=","
+            thousand-separator="."
+            :min="record?.total"
+            :max="record?.total"
             required
         /></label>
         <div class="flex justify-between text-xs">

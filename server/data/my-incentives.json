@@ -13,8 +13,9 @@
     "status": "Paid",
     "employee": "Ahmad",
     "jobOrderId": "JO-0001",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   },
   {
     "id": "2",
@@ -30,8 +31,9 @@
     "status": "Paid",
     "employee": "Ahmad",
     "jobOrderId": "JO-0002",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   },
   {
     "id": "3",
@@ -47,8 +49,9 @@
     "status": "Paid",
     "employee": "Ahmad",
     "jobOrderId": "JO-0003",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   },
   {
     "id": "4",
@@ -64,8 +67,9 @@
     "status": "Paid",
     "employee": "Ahmad",
     "jobOrderId": "JO-0004",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   },
   {
     "id": "5",
@@ -81,8 +85,9 @@
     "status": "Pending",
     "employee": "Ahmad",
     "jobOrderId": "JO-0001",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   },
   {
     "id": "6",
@@ -98,7 +103,8 @@
     "status": "Pending",
     "employee": "Ahmad",
     "jobOrderId": "JO-0002",
-    "employeeId": "EMP-001",
-    "branchId": "BR-01"
+    "employeeId": "ST001",
+    "branchId": "BR-01",
+    "employeeName": "Budi Setiadi"
   }
 ]

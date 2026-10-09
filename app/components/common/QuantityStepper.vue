@@ -77,7 +77,7 @@ function onInput(event: Event) {
       :max="max"
       :step="step"
       :disabled="disabled"
-      class="w-12 bg-transparent text-center text-xs font-semibold text-gray-800 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-gray-200"
+      class="w-12 bg-transparent text-center text-sm font-semibold text-gray-800 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-gray-200"
       @input="onInput"
     />
 

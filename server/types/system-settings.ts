@@ -18,6 +18,7 @@ export interface TestEmailPayload {
 
 export interface TestEmailResult {
   success: boolean
+  simulated: boolean
   message: string
   sentTo: string
   timestamp: string
@@ -50,6 +51,13 @@ export interface LanguageFormData {
   isDefault?: boolean
 }
 
+export interface LanguageTranslationDocument {
+  languageId: string
+  code: string
+  translations: Record<string, unknown>
+  updatedAt: string
+}
+
 export interface OtpConfig {
   isEnabled: boolean
   provider: 'whatsapp' | 'sms' | 'email' | 'all'
@@ -79,4 +87,22 @@ export interface PrefixFormData {
   format?: string
   sample?: string
   description?: string
+}
+
+export interface LocalizationConfig {
+  language: string
+  languageSwitcher: boolean
+  timezone: string
+  dateFormat: string
+  timeFormat: string
+  financialYear: string
+  startingMonth: string
+  currency: string
+  currencySymbol: string
+  currencyPosition: 'before' | 'after'
+  decimalSeparator: string
+  thousandSeparator: string
+  countriesRestriction: string
+  allowedFiles: string
+  maxFileSize: number
 }

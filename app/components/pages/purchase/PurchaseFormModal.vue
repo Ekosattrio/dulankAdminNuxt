@@ -290,7 +290,7 @@ function handleSubmit() {
                 <td class="p-2 w-48">
                   <CurrencyInput
                     v-model="item.price"
-                    thousand-separator=","
+                    thousand-separator="."
                     align="right"
                     size="sm"
                     input-class="py-1 text-xs text-right font-medium min-w-[140px]"
@@ -342,7 +342,7 @@ function handleSubmit() {
             <div class="w-36">
               <CurrencyInput
                 v-model="form.shippingCost"
-                thousand-separator=","
+                thousand-separator="."
                 align="right"
                 size="sm"
                 input-class="py-1 text-right text-xs"
@@ -359,7 +359,7 @@ function handleSubmit() {
             <div class="w-36">
               <CurrencyInput
                 v-model="form.paid"
-                thousand-separator=","
+                thousand-separator="."
                 align="right"
                 size="sm"
                 input-class="py-1 text-right text-xs font-bold text-emerald-600"

@@ -8,6 +8,7 @@ export interface ProductCustom {
   machine: string
   active: boolean
   image: string
+  images?: string[]
 }
 
 export interface SizePreset {
@@ -66,6 +67,7 @@ export interface WorkflowStepPreset {
 
 export interface CalculationLogTransaction {
   id: string
+  customerId?: string | null
   date: string
   customer: string
   product: string

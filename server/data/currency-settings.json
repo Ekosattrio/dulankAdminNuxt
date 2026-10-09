@@ -1,0 +1,43 @@
+[
+  {
+    "id": "CURR001",
+    "name": "Indonesian Rupiah",
+    "code": "IDR",
+    "symbol": "Rp",
+    "exchangeRate": 1,
+    "isDefault": true,
+    "status": "active",
+    "createdOn": "01 Jan 2024"
+  },
+  {
+    "id": "CURR002",
+    "name": "US Dollar",
+    "code": "USD",
+    "symbol": "$",
+    "exchangeRate": 15600,
+    "isDefault": false,
+    "status": "active",
+    "createdOn": "10 Jan 2024"
+  },
+  {
+    "id": "CURR003",
+    "name": "Euro",
+    "code": "EUR",
+    "symbol": "€",
+    "exchangeRate": 16900,
+    "isDefault": false,
+    "status": "active",
+    "createdOn": "12 Jul 2024"
+  },
+  {
+    "id": "CURR004",
+    "name": "Singapore Dollar",
+    "code": "SGD",
+    "symbol": "S$",
+    "exchangeRate": 11700,
+    "isDefault": false,
+    "status": "active",
+    "createdOn": "14 Jul 2024"
+  }
+]
+

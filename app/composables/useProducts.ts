@@ -1,4 +1,4 @@
-import type { Product, ProductFormData, ProductFilterParams } from '#server/types/product'
+import type { Product, ProductFormData, ProductFilterParams, ProductImportRow } from '#server/types/product'
 
 interface ResponseData {
   success: boolean
@@ -33,12 +33,22 @@ export function useProducts(filterParams?: Ref<ProductFilterParams> | ProductFil
     return res
   }
 
+  const importProducts = async (rows: ProductImportRow[]) => {
+    const res = await $fetch<{ success: boolean; data: Product[]; message?: string }>('/api/products/import', {
+      method: 'POST',
+      body: { rows }
+    })
+    await refresh()
+    return res
+  }
+
   return {
     products,
     pending,
     error,
     refresh,
     saveProduct,
-    deleteProduct
+    deleteProduct,
+    importProducts
   }
 }

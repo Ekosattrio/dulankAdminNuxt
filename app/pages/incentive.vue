@@ -1,25 +1,32 @@
 <script setup lang="ts">
-import type { IncentiveItem, IncentiveFormData } from '~/types/incentive'
+import type { IncentiveItem, IncentiveFormData } from '#server/types/incentive'
+import PagesIncentiveModal from '~/components/incentive/IncentiveModal.vue'
+import PagesIncentiveTable from '~/components/incentive/IncentiveTable.vue'
+import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import { tableFilterControlClass } from '~/utils/salesUi'
 
-definePageMeta({
-  layout: 'default'
-})
+definePageMeta({ layout: 'default' })
 
 useLegacyPage({
   title: 'Incentive Management - Insentif Karyawan',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false
 })
 
-const { incentives, pending, refresh, saveIncentive, deleteIncentive } = useIncentives()
+const { incentives, pending, error, refresh, saveIncentive, deleteIncentive } = useIncentives()
 
 const searchQuery = ref('')
 const selectedStatus = ref('')
 
 const isModalOpen = ref(false)
 const editData = ref<IncentiveItem | null>(null)
+
+const deleteModalOpen = ref(false)
+const deleteTargetId = ref<string | null>(null)
+const deleteBusy = ref(false)
 
 const filteredIncentives = computed(() => {
   return incentives.value.filter((item) => {
@@ -42,13 +49,22 @@ const handleEdit = (item: IncentiveItem) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data insentif ini?')) {
-    try {
-      await deleteIncentive(id)
-    } catch (error) {
-      console.error('Failed to delete incentive:', error)
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+  deleteModalOpen.value = true
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  deleteBusy.value = true
+  try {
+    await deleteIncentive(deleteTargetId.value)
+    deleteModalOpen.value = false
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete incentive:', err)
+  } finally {
+    deleteBusy.value = false
   }
 }
 
@@ -56,81 +72,81 @@ const handleSave = async (formData: IncentiveFormData) => {
   try {
     await saveIncentive(formData)
     isModalOpen.value = false
-  } catch (error) {
-    console.error('Failed to save incentive:', error)
+  } catch (err) {
+    console.error('Failed to save incentive:', err)
   }
 }
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Incentive Management</h4>
-          <h6 class="text-muted mb-0">Kelola perhitungan insentif performa produksi dan staf</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Incentive</span>
-          </button>
-        </div>
+  <div class="dulank-page dulank-page-incentive space-y-6">
+    <SalesListHeader
+      title="Incentive Management"
+      subtitle="Kelola perhitungan insentif performa produksi dan staf"
+      :refreshing="pending"
+      @refresh="refresh"
+      @add="openAddModal"
+    />
+
+    <!-- Filter and Search Toolbar -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+      <div class="relative flex-1 max-w-sm">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+          <FeatherIcon name="search" :size="16" />
+        </span>
+        <input
+          v-model="searchQuery"
+          type="text"
+          :class="[tableFilterControlClass, 'pl-9 w-full']"
+          placeholder="Cari karyawan atau kode insentif..."
+        />
       </div>
 
-      <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari karyawan atau kode insentif..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end gap-2">
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Paid">Paid</option>
-                <option value="Pending">Pending</option>
-              </select>
-            </div>
-          </div>
-
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-
-          <PagesIncentiveTable
-            v-else
-            :incentives="filteredIncentives"
-            @edit="handleEdit"
-            @delete="handleDelete"
-          />
-        </div>
+      <div class="flex items-center gap-3">
+        <TableFilterSelect
+          v-model="selectedStatus"
+          :options="[
+            { label: 'Semua Status', value: '' },
+            { label: 'Paid', value: 'Paid' },
+            { label: 'Pending', value: 'Pending' }
+          ]"
+          placeholder="Status"
+        />
       </div>
     </div>
 
+    <!-- Feedback State -->
+    <SalesFeedback
+      v-if="pending || error"
+      :loading="pending"
+      :error="error ? (error.message || 'Gagal memuat data insentif') : undefined"
+      @retry="refresh"
+    />
+
+    <!-- Table -->
+    <PagesIncentiveTable
+      v-else
+      :incentives="filteredIncentives"
+      @edit="handleEdit"
+      @delete="handleDelete"
+    />
+
+    <!-- Modal Form -->
     <PagesIncentiveModal
       :is-open="isModalOpen"
       :edit-data="editData"
       @close="isModalOpen = false"
       @save="handleSave"
+    />
+
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="deleteModalOpen"
+      title="Hapus Insentif"
+      message="Apakah Anda yakin ingin menghapus data insentif ini? Tindakan ini tidak dapat dibatalkan."
+      :busy="deleteBusy"
+      @confirm="confirmDelete"
+      @close="deleteModalOpen = false"
     />
   </div>
 </template>

@@ -27,7 +27,18 @@ export default defineNuxtConfig({
   components: [
     {
       path: '~/components',
-      pathPrefix: false
+      pathPrefix: false,
+      // Compatibility files remain importable by path but must not collide with newer page components.
+      ignore: [
+        'address/AddressViewModal.vue',
+        'customers/CustomerViewModal.vue',
+        'department/DepartmentModal.vue',
+        'department/DepartmentTable.vue',
+        'my-incentive/**',
+        'my-job/**',
+        'payslip/PayslipModal.vue',
+        'payslip/PayslipTable.vue'
+      ]
     }
   ],
   app: {

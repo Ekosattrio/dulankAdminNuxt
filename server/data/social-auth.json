@@ -1,0 +1,27 @@
+{
+  "facebook": {
+    "enabled": true,
+    "clientId": "5391823901923",
+    "clientSecret": "••••••••••••••••••••••••",
+    "redirectUrl": "https://kacetak.com/auth/facebook/callback"
+  },
+  "twitter": {
+    "enabled": false,
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": "https://kacetak.com/auth/twitter/callback"
+  },
+  "google": {
+    "enabled": false,
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": "https://kacetak.com/auth/google/callback"
+  },
+  "linkedin": {
+    "enabled": true,
+    "clientId": "78akdjq912k3",
+    "clientSecret": "••••••••••••••••••••••••",
+    "redirectUrl": "https://kacetak.com/auth/linkedin/callback"
+  }
+}
+

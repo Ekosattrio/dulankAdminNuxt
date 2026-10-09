@@ -2,13 +2,13 @@
   {
     "id": "1",
     "no": "ORD-2510000001",
-    "customer": "PT Makmur Abadi",
+    "customer": "Aditya Pratama",
     "orderDate": "10/9/2025",
     "status": "Complete",
     "statusBy": "Admin",
     "salesChannel": "Quotation",
     "shipping": "Courier",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "branchId": "BR-01",
     "items": [
       {
@@ -24,13 +24,13 @@
   {
     "id": "2",
     "no": "ORD-2510000002",
-    "customer": "Toko Digital Jaya",
+    "customer": "Siti Aminah",
     "orderDate": "10/9/2025",
     "status": "Processing",
     "statusBy": "System",
     "salesChannel": "Website",
     "shipping": "Express",
-    "customerId": "CUST-002",
+    "customerId": "ID000002",
     "branchId": "BR-01",
     "items": [
       {
@@ -46,13 +46,13 @@
   {
     "id": "3",
     "no": "ORD-2510000003",
-    "customer": "Bapak Heru Santoso",
+    "customer": "Budi Santoso",
     "orderDate": "10/8/2025",
     "status": "Cancel",
     "statusBy": "Admin",
     "salesChannel": "POS",
     "shipping": "Pickup",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "branchId": "BR-01",
     "items": [
       {
@@ -68,13 +68,13 @@
   {
     "id": "4",
     "no": "ORD-2510000004",
-    "customer": "CV Cahaya Baru",
+    "customer": "Dewi Lestari",
     "orderDate": "10/8/2025",
     "status": "Waiting",
     "statusBy": "System",
     "salesChannel": "Website",
     "shipping": "Courier",
-    "customerId": "CUST-004",
+    "customerId": "ID000004",
     "branchId": "BR-01",
     "items": [
       {
@@ -90,13 +90,13 @@
   {
     "id": "5",
     "no": "ORD-2510000005",
-    "customer": "PT Global Solusi",
+    "customer": "Eko Wahyudi",
     "orderDate": "10/7/2025",
     "status": "Complete",
     "statusBy": "Admin",
     "salesChannel": "Quotation",
     "shipping": "Pickup",
-    "customerId": "CUST-005",
+    "customerId": "ID000005",
     "branchId": "BR-01",
     "items": [
       {
@@ -112,13 +112,13 @@
   {
     "id": "6",
     "no": "ORD-2510000006",
-    "customer": "Ibu Rina Kusuma",
+    "customer": "Fitri Handayani",
     "orderDate": "10/7/2025",
     "status": "Processing",
     "statusBy": "System",
     "salesChannel": "POS",
     "shipping": "Express",
-    "customerId": "CUST-006",
+    "customerId": "ID000006",
     "branchId": "BR-01",
     "items": [
       {
@@ -134,13 +134,13 @@
   {
     "id": "7",
     "no": "ORD-2510000007",
-    "customer": "UD Mandiri Cetak",
+    "customer": "Guntur Saputra",
     "orderDate": "10/6/2025",
     "status": "Complete",
     "statusBy": "System",
     "salesChannel": "Website",
     "shipping": "Courier",
-    "customerId": "CUST-007",
+    "customerId": "ID000007",
     "branchId": "BR-01",
     "items": [
       {
@@ -156,13 +156,13 @@
   {
     "id": "8",
     "no": "ORD-2510000008",
-    "customer": "PT Sinergi Karya",
+    "customer": "Hana Pertiwi",
     "orderDate": "10/6/2025",
     "status": "Cancel",
     "statusBy": "Admin",
     "salesChannel": "Quotation",
     "shipping": "Express",
-    "customerId": "CUST-008",
+    "customerId": "ID000008",
     "branchId": "BR-01",
     "items": [
       {
@@ -178,13 +178,13 @@
   {
     "id": "9",
     "no": "ORD-2510000009",
-    "customer": "Bapak Doni Wiguna",
+    "customer": "Indra Kusuma",
     "orderDate": "10/5/2025",
     "status": "Waiting",
     "statusBy": "System",
     "salesChannel": "POS",
     "shipping": "Pickup",
-    "customerId": "CUST-009",
+    "customerId": "ID000009",
     "branchId": "BR-01",
     "items": [
       {
@@ -200,13 +200,13 @@
   {
     "id": "10",
     "no": "ORD-2510000010",
-    "customer": "Toko Buku Harapan",
+    "customer": "Joko Widodo",
     "orderDate": "10/5/2025",
     "status": "Processing",
     "statusBy": "Admin",
     "salesChannel": "Website",
     "shipping": "Courier",
-    "customerId": "CUST-010",
+    "customerId": "ID000010",
     "branchId": "BR-01",
     "items": [
       {

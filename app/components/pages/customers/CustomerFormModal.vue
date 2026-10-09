@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Customer, CustomerFormData } from '#server/types/customer'
 import SalesDialog from '~/components/sales/SalesDialog.vue'
-import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import {
   formControlClass,
   modalFormInputColClass,
@@ -25,14 +24,7 @@ const typeOptions = [
   'Reguler',
   'Standard',
   'Premium',
-  'Corporate',
-  'VIP',
-  'Reseller',
-  'Free Shipping',
-  'Membership'
 ]
-
-const channelOptions = ['Website', 'Offline', 'Mobile App', 'Direct Call']
 
 const form = ref<CustomerFormData>({
   id: '',
@@ -41,8 +33,6 @@ const form = ref<CustomerFormData>({
   email: '',
   type: 'General',
   phone: '',
-  balance: 0,
-  channel: 'Website',
 })
 
 const errorMessage = ref('')
@@ -58,8 +48,6 @@ watch(
         email: val.email,
         type: val.type || 'Standard',
         phone: val.phone || '',
-        balance: val.balance || 0,
-        channel: val.channel || 'Website',
       }
     } else {
       form.value = {
@@ -69,8 +57,6 @@ watch(
         email: '',
         type: 'Standard',
         phone: '',
-        balance: 0,
-        channel: 'Website',
       }
     }
     errorMessage.value = ''
@@ -168,30 +154,6 @@ function handleSubmit() {
             placeholder="e.g. +6281234567890"
             :class="formControlClass"
           />
-        </div>
-      </div>
-
-      <!-- Initial / Current Balance -->
-      <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Balance</label>
-        <div :class="modalFormInputColClass">
-          <CurrencyInput
-            v-model="form.balance"
-            prefix="Rp"
-            align="right"
-          />
-        </div>
-      </div>
-
-      <!-- Join Channel -->
-      <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Join Channel</label>
-        <div :class="modalFormInputColClass">
-          <select v-model="form.channel" :class="formControlClass">
-            <option v-for="ch in channelOptions" :key="ch" :value="ch">
-              {{ ch }}
-            </option>
-          </select>
         </div>
       </div>
 

@@ -49,6 +49,22 @@
   --font-primary: 'Nunito', sans-serif;
   --font-secondary: 'Poppins', sans-serif;
 
+  /* Typography is calibrated against the project's 14px root without changing spacing rems. */
+  --text-xs: 0.857143rem;
+  --text-xs--line-height: 1.142857rem;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.428571rem;
+  --text-base: 1.142857rem;
+  --text-base--line-height: 1.714286rem;
+  --text-lg: 1.285714rem;
+  --text-lg--line-height: 1.857143rem;
+  --text-xl: 1.428571rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 1.714286rem;
+  --text-2xl--line-height: 2.285714rem;
+  --text-3xl: 2.142857rem;
+  --text-3xl--line-height: 2.571429rem;
+
   /* Retain the scales used by existing pages during the v3 to v4 migration. */
   --radius-sm: 0.125rem;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -86,6 +102,51 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
   }
+}
+
+@layer components {
+  .app-page-title {
+    @apply text-xl font-bold text-gray-900 dark:text-white;
+  }
+
+  .app-page-subtitle {
+    @apply mt-1 text-sm font-normal text-gray-500 dark:text-gray-400;
+  }
+
+  .app-dialog-title {
+    @apply text-lg font-bold text-secondary dark:text-white;
+  }
+
+  .app-section-title {
+    @apply text-base font-bold text-gray-900 dark:text-white;
+  }
+
+  .app-body-text {
+    @apply text-sm font-normal;
+  }
+
+  .app-supporting-text {
+    @apply text-xs font-normal text-gray-500 dark:text-gray-400;
+  }
+
+  .app-control-text {
+    @apply text-sm font-medium;
+  }
+}
+
+/* Meaningful UI text must never drop below the 12px caption scale. */
+:where(.text-\[11px\], .text-\[10px\], .text-\[9px\]) {
+  font-size: var(--text-xs) !important;
+  line-height: var(--text-xs--line-height) !important;
+}
+
+/* Compatibility guard for older pages that still carry undersized local classes. */
+.dulank-page :where(input:not([type='checkbox']):not([type='radio']), select, textarea, button) {
+  font-size: var(--text-sm);
+}
+
+.dulank-page table :where(th, td) {
+  font-size: var(--text-sm);
 }
 
 /* Logical properties and RTL support */

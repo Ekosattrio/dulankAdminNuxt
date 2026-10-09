@@ -1,4 +1,5 @@
 import addressData from '../data/address.json'
+import banIpData from '../data/ban-ip.json'
 import bannersData from '../data/banners.json'
 import blogsData from '../data/blogs.json'
 import blogCategoriesData from '../data/blog-categories.json'
@@ -14,6 +15,16 @@ import companySettingData from '../data/company-setting.json'
 import contactFormsData from '../data/contact-forms.json'
 import customerTypesData from '../data/customer-types.json'
 import customersData from '../data/customers.json'
+import customerAccountEntriesData from '../data/customer-account-entries.json'
+import customFieldsData from '../data/custom-fields.json'
+import calculatorListingsData from '../data/calculator-listings.json'
+import calculatorModerationHistoryData from '../data/calculator-moderation-history.json'
+import calculatorPartnerMetricsData from '../data/calculator-partner-metrics.json'
+import calculatorPartnersData from '../data/calculator-partners.json'
+import calculatorDashboardData from '../data/calculator-dashboard.json'
+import calculatorJasaLainData from '../data/calculator-jasa-lain.json'
+import calculatorKomponenMinimumData from '../data/calculator-komponen-minimum.json'
+import calculatorKomponenFiksData from '../data/calculator-komponen-fiks.json'
 import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
@@ -33,6 +44,7 @@ import footersData from '../data/footers.json'
 import footerConfigData from '../data/footer-config.json'
 import incentivesData from '../data/incentives.json'
 import incomesData from '../data/incomes.json'
+import incomeCategoriesData from '../data/income-categories.json'
 import invoiceSettingsData from '../data/invoice-settings.json'
 import invoicesData from '../data/invoices.json'
 import jobBranchesHistoryData from '../data/job-branches-history.json'
@@ -40,16 +52,21 @@ import jobBranchesData from '../data/job-branches.json'
 import jobListData from '../data/job-list.json'
 import jobOrdersData from '../data/job-orders.json'
 import languagesData from '../data/languages.json'
+import languageTranslationsData from '../data/language-translations.json'
+import localizationSettingsData from '../data/localization-settings.json'
 import myIncentivesData from '../data/my-incentives.json'
 import myJobsData from '../data/my-jobs.json'
 import ordersData from '../data/orders.json'
 import otpSettingsData from '../data/otp-settings.json'
+import paperGroupsSelfData from '../data/paper-groups-self.json'
+import paperItemsSelfData from '../data/paper-items-self.json'
 import paperPricesData from '../data/paper-prices.json'
 import paperSizesData from '../data/paper-sizes.json'
 import paymentBalancesData from '../data/payment-balances.json'
 import paymentInflowsData from '../data/payment-inflows.json'
 import paymentOutflowsData from '../data/payment-outflows.json'
 import paymentsData from '../data/payments.json'
+import permissionsData from '../data/permissions.json'
 import payslipsData from '../data/payslips.json'
 import posProductsData from '../data/pos-products.json'
 import posSettingsData from '../data/pos-settings.json'
@@ -57,6 +74,7 @@ import prefixesData from '../data/prefixes.json'
 import printingMachinesData from '../data/printing-machines.json'
 import profileData from '../data/profile.json'
 import productsData from '../data/products.json'
+import productProcessesData from '../data/product-processes.json'
 import provincesData from '../data/provinces.json'
 import purchaseCategoriesData from '../data/purchase-categories.json'
 import purchaseItemsData from '../data/purchase-items.json'
@@ -71,15 +89,21 @@ import rolesData from '../data/roles.json'
 import salesHistoryData from '../data/sales-history.json'
 import salesReturnsData from '../data/sales-returns.json'
 import salesVouchersData from '../data/sales-vouchers.json'
+import securitySettingsData from '../data/security-settings.json'
+import socialAuthData from '../data/social-auth.json'
 import salesData from '../data/sales.json'
 import storesData from '../data/stores.json'
 import subCategoriesData from '../data/sub-categories.json'
 import suppliersData from '../data/suppliers.json'
 import supportTicketsData from '../data/support-tickets.json'
+import systemIntegrationsData from '../data/system-integrations.json'
+import taxRatesData from '../data/tax-rates.json'
 import unitsData from '../data/units.json'
+import usersData from '../data/users.json'
 import variantsData from '../data/variants.json'
 import wishlistsData from '../data/wishlists.json'
 import workFlowsData from '../data/work-flows.json'
+import workshopServicesData from '../data/workshop-services.json'
 import salesReportsData from '../data/sales-reports.json'
 import bestSellerReportsData from '../data/best-seller-reports.json'
 import purchaseReportsData from '../data/purchase-reports.json'
@@ -94,9 +118,19 @@ import supplierReportsData from '../data/supplier-reports.json'
 import supplierDueReportsData from '../data/supplier-due-reports.json'
 import customerReportsData from '../data/customer-reports.json'
 import customerDueReportsData from '../data/customer-due-reports.json'
+import bankSettingsData from '../data/bank-settings.json'
+import currencySettingsData from '../data/currency-settings.json'
+import printerSettingsData from '../data/printer-settings.json'
+import gdprSettingsData from '../data/gdpr-settings.json'
+import storageSettingsData from '../data/storage-settings.json'
+import smsGatewaysData from '../data/sms-gateways.json'
+import paymentGatewaysData from '../data/payment-gateways.json'
+import appearanceSettingsData from '../data/appearance-settings.json'
+import preferenceSettingsData from '../data/preference-settings.json'
 
 export const bundledSources: Record<string, unknown> = {
   'address.json': addressData,
+  'ban-ip.json': banIpData,
   'banners.json': bannersData,
   'blogs.json': blogsData,
   'blog-categories.json': blogCategoriesData,
@@ -112,6 +146,16 @@ export const bundledSources: Record<string, unknown> = {
   'contact-forms.json': contactFormsData,
   'customer-types.json': customerTypesData,
   'customers.json': customersData,
+  'customer-account-entries.json': customerAccountEntriesData,
+  'custom-fields.json': customFieldsData,
+  'calculator-listings.json': calculatorListingsData,
+  'calculator-moderation-history.json': calculatorModerationHistoryData,
+  'calculator-partner-metrics.json': calculatorPartnerMetricsData,
+  'calculator-partners.json': calculatorPartnersData,
+  'calculator-dashboard.json': calculatorDashboardData,
+  'calculator-jasa-lain.json': calculatorJasaLainData,
+  'calculator-komponen-minimum.json': calculatorKomponenMinimumData,
+  'calculator-komponen-fiks.json': calculatorKomponenFiksData,
   'delivery-notes.json': deliveryNotesData,
   'departments.json': departmentsData,
   'designations.json': designationsData,
@@ -132,6 +176,7 @@ export const bundledSources: Record<string, unknown> = {
   'footer-config.json': footerConfigData,
   'incentives.json': incentivesData,
   'incomes.json': incomesData,
+  'income-categories.json': incomeCategoriesData,
   'invoice-settings.json': invoiceSettingsData,
   'invoices.json': invoicesData,
   'job-branches-history.json': jobBranchesHistoryData,
@@ -139,16 +184,21 @@ export const bundledSources: Record<string, unknown> = {
   'job-list.json': jobListData,
   'job-orders.json': jobOrdersData,
   'languages.json': languagesData,
+  'language-translations.json': languageTranslationsData,
+  'localization-settings.json': localizationSettingsData,
   'my-incentives.json': myIncentivesData,
   'my-jobs.json': myJobsData,
   'orders.json': ordersData,
   'otp-settings.json': otpSettingsData,
+  'paper-groups-self.json': paperGroupsSelfData,
+  'paper-items-self.json': paperItemsSelfData,
   'paper-prices.json': paperPricesData,
   'paper-sizes.json': paperSizesData,
   'payment-balances.json': paymentBalancesData,
   'payment-inflows.json': paymentInflowsData,
   'payment-outflows.json': paymentOutflowsData,
   'payments.json': paymentsData,
+  'permissions.json': permissionsData,
   'payslips.json': payslipsData,
   'pos-products.json': posProductsData,
   'pos-settings.json': posSettingsData,
@@ -156,6 +206,7 @@ export const bundledSources: Record<string, unknown> = {
   'printing-machines.json': printingMachinesData,
   'profile.json': profileData,
   'products.json': productsData,
+  'product-processes.json': productProcessesData,
   'provinces.json': provincesData,
   'purchase-categories.json': purchaseCategoriesData,
   'purchase-items.json': purchaseItemsData,
@@ -170,15 +221,20 @@ export const bundledSources: Record<string, unknown> = {
   'sales-history.json': salesHistoryData,
   'sales-returns.json': salesReturnsData,
   'sales-vouchers.json': salesVouchersData,
+  'security-settings.json': securitySettingsData,
+  'social-auth.json': socialAuthData,
   'sales.json': salesData,
   'stores.json': storesData,
   'sub-categories.json': subCategoriesData,
   'suppliers.json': suppliersData,
   'support-tickets.json': supportTicketsData,
+  'system-integrations.json': systemIntegrationsData,
   'units.json': unitsData,
+  'users.json': usersData,
   'variants.json': variantsData,
   'wishlists.json': wishlistsData,
   'work-flows.json': workFlowsData,
+  'workshop-services.json': workshopServicesData,
   'sales-reports.json': salesReportsData,
   'best-seller-reports.json': bestSellerReportsData,
   'purchase-reports.json': purchaseReportsData,
@@ -186,6 +242,7 @@ export const bundledSources: Record<string, unknown> = {
   'product-reports.json': productReportsData,
   'expense-reports.json': expenseReportsData,
   'income-reports.json': incomeReportsData,
+  'tax-rates.json': taxRatesData,
   'tax-reports.json': taxReportsData,
   'profit-loss-reports.json': profitLossReportsData,
   'annual-reports.json': annualReportsData,
@@ -193,4 +250,13 @@ export const bundledSources: Record<string, unknown> = {
   'supplier-due-reports.json': supplierDueReportsData,
   'customer-reports.json': customerReportsData,
   'customer-due-reports.json': customerDueReportsData,
+  'bank-settings.json': bankSettingsData,
+  'currency-settings.json': currencySettingsData,
+  'printer-settings.json': printerSettingsData,
+  'gdpr-settings.json': gdprSettingsData,
+  'storage-settings.json': storageSettingsData,
+  'sms-gateways.json': smsGatewaysData,
+  'payment-gateways.json': paymentGatewaysData,
+  'appearance-settings.json': appearanceSettingsData,
+  'preference-settings.json': preferenceSettingsData,
 }

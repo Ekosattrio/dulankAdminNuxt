@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { SupportTicket, SupportTicketFilterQuery } from '#server/types/support-ticket'
-import type { DateRangeValue } from '~/composables/useDateRange'
-import { useSupportTickets } from '~/composables/useSupportTickets'
+import { useSupportTicketPage } from '~/composables/useSupportTicketPage'
 import SalesListHeader from '~/components/sales/SalesListHeader.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
@@ -9,28 +7,11 @@ import SupportTicketStatsWidgets from '~/components/pages/support-ticket/Support
 import SupportTicketRecordsTable from '~/components/pages/support-ticket/SupportTicketRecordsTable.vue'
 import SupportTicketAddModal from '~/components/pages/support-ticket/SupportTicketAddModal.vue'
 import SupportTicketDetailModal from '~/components/pages/support-ticket/SupportTicketDetailModal.vue'
+import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import { useTablePrint } from '~/composables/useTablePrint'
 
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Support Ticket List - Dulank Admin',
-  sweetAlert: false
-})
-
-const searchQuery = ref('')
-const filterPriority = ref('')
-const filterStatus = ref('')
-const filterDateRange = ref<DateRangeValue | null>(null)
-
-const filterParams = computed<SupportTicketFilterQuery>(() => ({
-  search: searchQuery.value || undefined,
-  priority: filterPriority.value || undefined,
-  status: filterStatus.value || undefined,
-  startDate: filterDateRange.value?.start || undefined,
-  endDate: filterDateRange.value?.end || undefined
-}))
+definePageMeta({ layout: 'default' })
+useLegacyPage({ title: 'Support Ticket List - Dulank Admin', sweetAlert: false })
 
 const {
   tickets,
@@ -38,85 +19,23 @@ const {
   pending,
   error,
   refresh,
-  createTicket,
-  updateTicket,
-  deleteTicket
-} = useSupportTickets(filterParams)
-
-const showAddModal = ref(false)
-const showDetailModal = ref(false)
-const showDeleteConfirm = ref(false)
-const selectedTicket = ref<SupportTicket | null>(null)
-const ticketToDelete = ref<SupportTicket | null>(null)
-const isBusy = ref(false)
-
-const openDetail = (ticket: SupportTicket) => {
-  selectedTicket.value = ticket
-  showDetailModal.value = true
-}
-
-const confirmDelete = (ticket: SupportTicket) => {
-  ticketToDelete.value = ticket
-  showDeleteConfirm.value = true
-}
-
-const handleDeleteTicket = async () => {
-  if (!ticketToDelete.value) return
-  isBusy.value = true
-  try {
-    await deleteTicket(ticketToDelete.value.id)
-    showDeleteConfirm.value = false
-    ticketToDelete.value = null
-  } catch (err) {
-    console.error('Failed to delete ticket', err)
-  } finally {
-    isBusy.value = false
-  }
-}
-
-const handleAddTicket = async (formData: {
-  customerName: string
-  email: string
-  phone: string
-  address: string
-  city: string
-  country: string
-  descriptions: string
-}) => {
-  isBusy.value = true
-  try {
-    await createTicket(formData)
-  } catch (err) {
-    console.error('Failed to create ticket', err)
-  } finally {
-    isBusy.value = false
-  }
-}
-
-const handleSendReply = async (ticketId: string, message: string) => {
-  try {
-    const res = await updateTicket(ticketId, { newMessage: message, senderName: 'Admin' })
-    if (res.data && selectedTicket.value && selectedTicket.value.id === ticketId) {
-      selectedTicket.value = res.data
-    }
-  } catch (err) {
-    console.error('Failed to send reply', err)
-  }
-}
-
-const handleUpdateStatus = async (ticketId: string, newStatus: 'Open' | 'Closed' | 'Pending') => {
-  try {
-    const res = await updateTicket(ticketId, { status: newStatus })
-    if (res.data && selectedTicket.value && selectedTicket.value.id === ticketId) {
-      selectedTicket.value = res.data
-    }
-  } catch (err) {
-    console.error('Failed to update ticket status', err)
-  }
-}
-
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
-import { useTablePrint } from '~/composables/useTablePrint'
+  searchQuery,
+  filterPriority,
+  filterStatus,
+  filterDateRange,
+  showAddModal,
+  showDetailModal,
+  showDeleteConfirm,
+  selectedTicket,
+  ticketToDelete,
+  isBusy,
+  openDetail,
+  confirmDelete,
+  handleDeleteTicket,
+  handleAddTicket,
+  handleSendReply,
+  handleUpdateStatus
+} = useSupportTicketPage()
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 

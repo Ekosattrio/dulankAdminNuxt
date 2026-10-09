@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody } from 'h3'
-import type { Customer, CustomerFormData } from '~/types/customer'
+import type { Customer, CustomerAccountEntry, CustomerFormData, CustomerRecord } from '~/types/customer'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<CustomerFormData>(event)
@@ -11,8 +11,8 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const customers = readJSON<Customer[]>('customers.json', [])
-  let resultItem: Customer
+  const customers = readJSON<CustomerRecord[]>('customers.json', [])
+  let resultItem: CustomerRecord
 
   if (body.id) {
     const idx = customers.findIndex(c => c.id === body.id)
@@ -23,15 +23,17 @@ export default defineEventHandler(async (event) => {
         name: body.name,
         email: body.email,
         type: body.type || existing.type,
-        phone: body.phone || existing.phone,
-        balance: body.balance !== undefined ? body.balance : existing.balance
+        phone: body.phone || existing.phone
       }
       customers[idx] = resultItem
     } else {
       return { success: false, message: 'Customer not found' }
     }
   } else {
-    const nextNum = customers.length + 1
+    const nextNum = customers.reduce((highest, customer) => {
+      const numericId = Number(customer.customerId.replace(/\D/g, ''))
+      return Number.isFinite(numericId) ? Math.max(highest, numericId) : highest
+    }, 0) + 1
     const newId = `ID${String(nextNum).padStart(6, '0')}`
     resultItem = {
       id: newId,
@@ -39,9 +41,8 @@ export default defineEventHandler(async (event) => {
       name: body.name,
       email: body.email,
       type: body.type || 'General',
-      balance: body.balance || 0,
       phone: body.phone || '-',
-      channel: body.channel || 'Website',
+      channel: 'Offline',
       dateJoin: new Date().toLocaleDateString('id-ID', {
         day: '2-digit',
         month: '2-digit',
@@ -56,6 +57,10 @@ export default defineEventHandler(async (event) => {
   }
 
   writeJSON('customers.json', customers)
-  return createResponse(resultItem, { message: body.id ? 'Customer updated' : 'Customer created' })
+  const balance = readJSON<CustomerAccountEntry[]>('customer-account-entries.json', [])
+    .filter(entry => entry.customerId === resultItem.customerId)
+    .reduce((total, entry) => total + entry.amount, 0)
+  const responseItem: Customer = { ...resultItem, balance }
+  return createResponse(responseItem, body.id ? 'Customer updated' : 'Customer created')
 })
 

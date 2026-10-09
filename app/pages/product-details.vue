@@ -1,164 +1,79 @@
 <script setup lang="ts">
-import { formatRupiah } from "~/composables/useFormatters";
+import type { Product } from '#server/types/product'
+import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
+import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import { printDocument } from '~/utils/documentPrinter'
 
-const product = reactive({
-  name: "Flexy 280gr Banner",
-  category: "Large Format",
-  subCategory: "Print Outdoor",
-  priceType: "Size Calculation",
-  unit: "Meter",
-  sku: "PT0001",
-  minQty: 1,
-  quantity: 500,
-  tax: 11,
-  discountType: "Percentage",
-  price: 15000,
-  status: "Active",
-  description:
-    "Bahan spanduk flexy standard 280gr dengan ketahanan outdoor tahan air dan panas cuaca hingga 6 bulan. Cocok untuk spanduk event, promosi, dan baliho.",
-  barcodeImg: "/assets/img/barcode/barcode1.png",
-  images: ["/assets/img/products/product69.jpg"],
-});
+definePageMeta({ layout: 'default' })
+useLegacyPage({ title: 'Product Details', sweetAlert: false })
+
+const route = useRoute()
+const id = computed(() => typeof route.query.id === 'string' ? route.query.id : '')
+const { data, pending, error, refresh } = useFetch<{ success: boolean; data: Product }>(() => `/api/products/${id.value}`, {
+  key: `product-detail-${id.value}`,
+  watch: [id],
+  immediate: Boolean(id.value),
+})
+const product = computed(() => data.value?.data)
+
+function printProduct() {
+  if (!product.value) return
+  printDocument({
+    title: 'Product Details',
+    subtitle: product.value.name,
+    columns: [
+      { key: 'code', label: 'Item Code' }, { key: 'name', label: 'Product' }, { key: 'category', label: 'Category' },
+      { key: 'subCategory', label: 'Sub Category' }, { key: 'unit', label: 'Unit' }, { key: 'price', label: 'Price', align: 'right' },
+      { key: 'priceType', label: 'Price Type' }, { key: 'status', label: 'Status' },
+    ],
+    rows: [product.value],
+    orientation: 'portrait',
+    includeLetterhead: true,
+    includeSignatures: false,
+    includeTimestamp: true,
+  })
+}
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Page Header -->
-    <CommonPageHeader title="Product Details" subtitle="Full details of a product">
-      <template #actions>
-        <div class="flex items-center gap-2">
-          <NuxtLink
-            to="/product-list"
-            class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
-          >
-            <FeatherIcon name="arrow-left" size="18" />
-            <span>Back to Product List</span>
-          </NuxtLink>
-          <NuxtLink
-            to="/create-product"
-            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600"
-          >
-            <FeatherIcon name="edit" size="18" />
-            <span>Edit Product</span>
-          </NuxtLink>
-        </div>
-      </template>
-    </CommonPageHeader>
-
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Main Details (Left 2 cols) -->
-      <div class="lg:col-span-2 space-y-6">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <!-- Barcode section -->
-          <div class="mb-6 flex items-center justify-between border-b border-gray-100 pb-4 dark:border-gray-800">
-            <div class="flex items-center gap-3">
-              <img :src="product.barcodeImg" alt="Barcode" class="h-10 object-contain" />
-              <span class="font-mono text-xs font-bold text-gray-700 dark:text-gray-300">{{ product.sku }}</span>
-            </div>
-            <button
-              type="button"
-              class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-              onclick="window.print()"
-            >
-              <FeatherIcon name="printer" size="14" />
-              <span>Print Barcode</span>
-            </button>
-          </div>
-
-          <!-- Product Specification List -->
-          <div class="divide-y divide-gray-100 text-xs dark:divide-gray-800">
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Product</span>
-              <span class="col-span-2 font-bold text-gray-900 dark:text-gray-100">{{ product.name }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Category</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.category }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Sub Category</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.subCategory }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Price Type</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.priceType }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Unit</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.unit }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">SKU</span>
-              <span class="col-span-2 font-mono text-gray-800 dark:text-gray-200">{{ product.sku }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Minimum Qty</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.minQty }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Quantity</span>
-              <span class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">{{ product.quantity }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Tax</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.tax }} %</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Discount Type</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200">{{ product.discountType }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Price</span>
-              <span class="col-span-2 font-mono font-bold text-base text-primary">{{ formatRupiah(product.price) }}</span>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Status</span>
-              <div class="col-span-2">
-                <span
-                  class="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
-                >
-                  {{ product.status }}
-                </span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-3 py-2.5">
-              <span class="font-semibold text-gray-500">Description</span>
-              <span class="col-span-2 text-gray-700 dark:text-gray-300 leading-relaxed">{{ product.description }}</span>
-            </div>
-          </div>
-        </div>
+  <div class="dulank-page dulank-page-product-details space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div><h1 class="text-xl font-bold text-gray-900 dark:text-white">Product Details</h1><p class="mt-1 text-sm text-gray-500">Full details of a product</p></div>
+      <div class="flex gap-2">
+        <button type="button" class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-sm font-semibold" :disabled="!product" @click="printProduct"><FeatherIcon name="printer" :size="15" />Print</button>
+        <NuxtLink to="/product-list" class="inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-3 text-sm font-semibold text-white"><FeatherIcon name="arrow-left" :size="15" />Back</NuxtLink>
+        <NuxtLink v-if="product" :to="{ path: '/create-product', query: { id: product.id } }" class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white"><FeatherIcon name="edit-2" :size="15" />Edit Product</NuxtLink>
       </div>
+    </div>
 
-      <!-- Media & Images (Right 1 col) -->
-      <div class="space-y-6">
-        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <h6 class="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">Product Image</h6>
-          <div
-            class="overflow-hidden rounded-xl border border-gray-100 bg-gray-50 p-4 text-center dark:border-gray-800 dark:bg-gray-800"
-          >
-            <img
-              :src="product.images[0]"
-              alt="Product photo"
-              class="mx-auto h-48 rounded-lg object-cover"
-              onerror="this.src = '/assets/img/product/product1.jpg'"
-            />
-            <p class="mt-3 text-xs font-semibold text-gray-800 dark:text-gray-200">{{ product.name }}.jpg</p>
-            <p class="text-[10px] text-gray-400">Main Product Image</p>
-          </div>
+    <SalesFeedback :pending="pending" skeleton="card" :error="error ? 'Unable to load product detail.' : ''" @retry="refresh()" />
+    <div v-if="product && !pending && !error" class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <section class="lg:col-span-2 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="mb-5 flex items-center justify-between border-b border-gray-100 pb-4 dark:border-gray-800">
+          <div><p class="font-mono text-base font-bold text-gray-900 dark:text-white">{{ product.code }}</p><p class="text-xs text-gray-500">Item Code</p></div>
+          <span :class="['rounded px-2 py-1 text-xs font-semibold', product.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600']">{{ product.status }}</span>
         </div>
-      </div>
+        <dl class="divide-y divide-gray-100 text-sm dark:divide-gray-800">
+          <div v-for="item in [
+            ['Product', product.name], ['Category', product.category], ['Sub Category', product.subCategory],
+            ['Price Type', product.priceType], ['Unit', product.unit], ['Store', product.store || '-'],
+            ['Minimum Qty', product.minOrderQty || 1], ['Quantity', product.quantity || 0],
+            ['Tax Type', product.taxType || '-'], ['Discount Type', product.discountType || '-'],
+          ]" :key="String(item[0])" class="grid grid-cols-3 gap-3 py-3">
+            <dt class="font-semibold text-gray-500">{{ item[0] }}</dt><dd class="col-span-2 text-gray-900 dark:text-white">{{ item[1] }}</dd>
+          </div>
+          <div class="grid grid-cols-3 gap-3 py-3"><dt class="font-semibold text-gray-500">Price</dt><dd class="col-span-2"><CurrencyDisplay :value="product.price" align="left" bold /></dd></div>
+          <div class="grid grid-cols-3 gap-3 py-3"><dt class="font-semibold text-gray-500">Description</dt><dd class="col-span-2 whitespace-pre-wrap text-gray-700 dark:text-gray-300">{{ product.description || '-' }}</dd></div>
+        </dl>
+      </section>
+      <aside class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="mb-4 text-sm font-bold text-gray-900 dark:text-white">Product Image</h2>
+        <div class="flex aspect-square items-center justify-center overflow-hidden rounded-md bg-gray-50 dark:bg-gray-800">
+          <img v-if="product.images?.[0]" :src="product.images[0]" :alt="product.name" class="h-full w-full object-contain" />
+          <FeatherIcon v-else name="image" :size="40" class="text-gray-300" />
+        </div>
+        <p class="mt-3 truncate text-center text-xs font-semibold">{{ product.name }}</p>
+      </aside>
     </div>
   </div>
 </template>

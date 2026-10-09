@@ -1,0 +1,42 @@
+[
+  {
+    "id": "BANK001",
+    "bankName": "Bank Central Asia (BCA)",
+    "accountName": "PT. DULANK SEMESTA CIDA",
+    "accountNumber": "8830192831",
+    "branch": "KCU Thamrin",
+    "ifscCode": "CENAIDJA",
+    "status": "active",
+    "createdOn": "01 Jan 2024"
+  },
+  {
+    "id": "BANK002",
+    "bankName": "Bank Mandiri",
+    "accountName": "PT. DULANK SEMESTA CIDA",
+    "accountNumber": "1220098765432",
+    "branch": "KCP Sudirman",
+    "ifscCode": "BMRIIDJA",
+    "status": "active",
+    "createdOn": "15 Jan 2024"
+  },
+  {
+    "id": "BANK003",
+    "bankName": "Bank Rakyat Indonesia (BRI)",
+    "accountName": "PT. DULANK SEMESTA CIDA",
+    "accountNumber": "034101000987302",
+    "branch": "KC Rawamangun",
+    "ifscCode": "BRINIDJA",
+    "status": "active",
+    "createdOn": "02 Feb 2024"
+  },
+  {
+    "id": "BANK004",
+    "bankName": "Bank Negara Indonesia (BNI)",
+    "accountName": "PT. DULANK SEMESTA CIDA",
+    "accountNumber": "0987654321",
+    "branch": "KCU Senayan",
+    "ifscCode": "BNINIDJA",
+    "status": "inactive",
+    "createdOn": "10 Mar 2024"
+  }
+]

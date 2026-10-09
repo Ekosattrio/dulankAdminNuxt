@@ -1,27 +1,8 @@
-import type { Product } from '~/types/product'
+import { createError, defineEventHandler, getRouterParam } from 'h3'
+import { createResponse } from '../../utils/data'
+import { archiveProduct } from '../../utils/products'
 
-export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id')
-
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Product ID is required'
-    })
-  }
-
-  const allProducts = await readJSON<Product[]>('products.json', [])
-  const newProducts = allProducts.filter(p => p.id !== id)
-
-  if (allProducts.length === newProducts.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Product not found'
-    })
-  }
-
-  await writeJSON('products.json', newProducts)
-
-  return createResponse({ id }, 'Product deleted successfully')
+export default defineEventHandler((event) => {
+  try { return createResponse(archiveProduct(getRouterParam(event, 'id') || ''), 'Product deleted successfully') }
+  catch (error) { throw createError({ statusCode: 404, statusMessage: error instanceof Error ? error.message : 'Product tidak ditemukan' }) }
 })
-

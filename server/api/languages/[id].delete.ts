@@ -1,5 +1,5 @@
 import { readData, writeData } from '~/server/utils/data'
-import type { LanguageItem } from '~/types/system-settings'
+import type { LanguageItem, LanguageTranslationDocument } from '~/types/system-settings'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
@@ -22,6 +22,12 @@ export default defineEventHandler(async (event) => {
 
   const updated = items.filter((l) => l.id !== target.id)
   writeData('languages.json', updated)
+
+  const translations = readData<LanguageTranslationDocument>('language-translations.json')
+  const remainingTranslations = translations.filter((item) => item.languageId !== target.id)
+  if (remainingTranslations.length !== translations.length) {
+    writeData('language-translations.json', remainingTranslations)
+  }
 
   return {
     success: true,

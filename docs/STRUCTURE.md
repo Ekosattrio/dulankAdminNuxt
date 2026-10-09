@@ -1,12 +1,12 @@
 # ARCHITECTURE & CODING PATTERNS: NUXT 4 + TAILWIND 4
 
-> **Panduan kerja AI:** Baca [AGENTS.md](../AGENTS.md) sebelum mengubah menu. Panduan tersebut menetapkan pola revisi SALES pada bagian 20.4 sebagai acuan, termasuk struktur komponen, standar tabel, kecocokan HTML dan flow, serta perlindungan file dan data.
+> **Panduan kerja AI:** Baca [AGENTS.md](../AGENTS.md) sebelum mengubah menu. Panduan tersebut menetapkan pola revisi SALES pada bagian 20.4 sebagai acuan, termasuk struktur komponen, standar tabel, kecocokan HTML dan flow, serta perlindungan file dan data. Struktur layer wajib dinamai **Backend-Ready Vertical Slice (BRVS)** dan dirinci di [BACKEND_READY_VERTICAL_SLICE.md](BACKEND_READY_VERTICAL_SLICE.md).
 
 Dokumen ini adalah **cetak biru (blueprint) teknis resmi** arsitektur, pemisahan tanggung jawab (separation of concerns), dan konvensi pengkodean yang digunakan dalam repositori ini.
 
 Dokumen ini dirancang khusus agar dapat dipahami dan dijalankan secara presisi oleh AI maupun developer manusia saat membangun atau memperluas project baru agar konsisten 100% dengan pola project ini.
 
-> **Struktur aktif:** Proyek memakai **Nuxt 4 + Tailwind CSS 4** dengan frontend di `app/`, mengikuti struktur [branch Rama](https://github.com/noosabaktee/dulank-nuxt/tree/Rama). Dokumentasi berada di `docs/`, referensi HTML beserta asetnya di `legacy/static-source/`, dan backend tetap di `server/`. Semua file dipindahkan dengan mempertahankan isinya; pemetaan lokasi dan hash dicatat dalam `MIGRATION_MANIFEST.json`. Bagian 1 dan 16 menjelaskan struktur aktif, bagian 17 memuat inventaris halaman, sedangkan contoh pada bagian 2–15 menjelaskan pola pengembangan yang dapat diterapkan sesuai kebutuhan.
+> **Struktur aktif:** Proyek memakai **Nuxt 4 + Tailwind CSS 4** dengan frontend di `app/`. Branch [Rama](https://github.com/noosabaktee/dulank-nuxt/tree/Rama) commit `76f6e79` hanya menjadi referensi route composer dan responsibility-based UI decomposition; arsitektur data/backend aktif tetap BRVS lokal. Dokumentasi berada di `docs/`, referensi HTML beserta asetnya di `legacy/static-source/`, dan backend tetap di `server/`. Riwayat pemindahan file dicatat dalam `MIGRATION_MANIFEST.json`.
 
 ---
 
@@ -63,12 +63,18 @@ Nuxt memakai direktori sumber default `app/`; tidak ada lagi override `srcDir: '
 
 Halaman (`app/pages/*.vue`) bertindak sebagai **Thin Composition Layer**. Halaman **BUKAN** tempat menaruh markup UI monolitik atau styling kompleks.
 
+Aturan lengkap decomposition berada di `docs/UI_DECOMPOSITION_STANDARD.md` (**BRVS-UI**). Page tipis tidak boleh dicapai dengan memindahkan seluruh markup dan flow ke satu `*Workspace.vue`.
+
 ### 2.1 Tanggung Jawab Halaman
 1. Mendaftarkan metadata halaman dan runtime script/style lewat `useLegacyPage()`.
-2. Mengambil data (data fetching) via **composable** (`useOrders()`, `useUserAddresses()`) atau `useFetch()`.
-3. Mengelola state reaktif lokal halaman (misalnya `searchQuery`, `activeTab`, `sortMode`, filter/computed).
+2. Memanggil **domain composable** (`useOrders()`, `useUserAddresses()`). `$fetch()` dan `useFetch()` data domain dilarang langsung di page.
+3. Mengelola state koordinasi ringan seperti selected ID, dialog open, atau active tab. Filter/query, editor state, kalkulasi, dan mutation flow berada di composable atau komponen domain.
 4. Menyusun (compose) komponen UI spesifik halaman dari `app/components/pages/<route>/` dan mengirim data ke komponen via **typed props**.
 5. Mendengarkan event dari komponen anak (misalnya `@created="refresh"`) untuk memicu pembaruan data.
+
+Target page maksimal 150 baris. Di atas 200 baris wajib decomposition audit atau justifikasi arsitektural; di atas 300 baris otomatis `structural review required`. Page tetap gagal meskipun pendek bila menyimpan data domain hardcoded, type domain lokal, business calculation, request langsung, markup tabel/form/modal panjang, atau feedback palsu dengan `alert()`/`confirm()`.
+
+Target Workspace/Screen orchestrator maksimal 150 baris. Workspace di atas 200 baris wajib decomposition audit dan di atas 300 baris structural review. Leaf/domain component ditargetkan maksimal 250 baris; komponen di atas 300 baris harus dipecah atau memiliki justifikasi satu tanggung jawab yang terdokumentasi.
 
 ### 2.2 Pola Penamaan File & Folder
 - File route menggunakan nama **kebab-case** yang mencerminkan URL target:
@@ -145,6 +151,8 @@ const { addresses } = useUserAddresses();
 ## 3. Layer `components/` (`app/components/`)
 
 Komponen dibagi ke dalam kategori yang jelas berdasarkan cakupan tanggung jawab (UI scope).
+
+Pemisahan komponen wajib mengikuti tanggung jawab nyata: Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor, Detail/History/Modal, dan Feedback. Nama `Workspace` atau `Screen` hanya untuk orchestrator, bukan wadah tunggal seluruh halaman.
 
 ### 3.1 Kategori Komponen
 1. **Route-Specific Components (`app/components/pages/<route>/`)**:
@@ -249,8 +257,10 @@ defineEmits<{
   - Emisi aksi user (`submit`, `change`, `select`).
 - **Logic di Composable**:
   - Pengambilan data asynchronous dari API (`useFetch`, `$fetch`).
-  - Business logic yang mempengaruhi lebih dari satu komponen (contoh: cart recalculation, authentication, address management).
+  - Seluruh flow domain frontend, termasuk filter/query state, payload mapping, editor orchestration, mutation, busy/error/refresh, dan preview calculation.
   - State global/shared yang perlu persist atau sinkron lintas navigasi route.
+
+Komponen tidak melakukan persistence. Perhitungan otoritatif yang menentukan nilai tersimpan tetap berada dan divalidasi ulang di server domain service/repository.
 
 ---
 
@@ -312,7 +322,7 @@ Revisi menu tidak boleh berhenti pada pemindahan markup. Setiap menu yang dinyat
 
 Menu **Sales** dan **Payment** adalah acuan paling aman saat ini untuk pola backend-ready. Gunakan keduanya sebagai contoh saat mengerjakan menu berikutnya, tanpa mengklaim seluruh halaman lain sudah memiliki kualitas backend yang sama.
 
-Standar visual terbaru untuk control kecil di toolbar tabel mengikuti revisi Sales: gaya light modern, tinggi `h-9`, background putih, border abu halus, radius sedang, shadow kecil, teks `text-xs`, focus ring primary, dan spacing rapat. Standar ini berlaku untuk search, filter select, date range picker trigger, dan page-size selector. Jika dipakai lintas menu, pindahkan ke helper/shared class agar tidak muncul variasi baru.
+Standar visual terbaru untuk control kecil di toolbar tabel mengikuti revisi Sales dan catatan client 2026-10-08: gaya light modern, tinggi `h-9`, background putih, border abu halus, radius sedang, shadow kecil, teks `text-sm` (14px), focus ring primary, dan spacing rapat. Standar ini berlaku untuk search, filter select, date range picker trigger, dan page-size selector. Jika dipakai lintas menu, pindahkan ke helper/shared class agar tidak muncul variasi baru.
 
 ---
 
@@ -825,6 +835,7 @@ Bagian ini adalah **instruksi imperatif yang WAJIB ditaati** oleh setiap model A
    - Dilarang menaruh template HTML ratusan baris di dalam `app/pages/*.vue`.
    - Pecah setiap section halaman menjadi komponen di `app/components/pages/<route>/`.
    - Halaman hanya bertugas menghubungkan composable data dengan komponen UI.
+   - Dilarang memindahkan monolit page ke satu `*Workspace.vue`; audit page, orchestrator, dan seluruh child component.
 3. **Konvensi 1 Folder Komponen per Route**:
    - Untuk route `app/pages/foo-bar.vue`, wajib membuat folder `app/components/pages/foo-bar/`.
    - Komponen di dalam folder ini harus menggunakan bahasa Inggris deskriptif (misal: `HeroSection.vue`, `FilterBar.vue`, `DataTable.vue`).
@@ -851,6 +862,10 @@ Bagian ini adalah **instruksi imperatif yang WAJIB ditaati** oleh setiap model A
 10. **Jangan Jalankan Git yang Mengubah Repo Tanpa Instruksi**:
    - Jangan menjalankan `git add`, `git commit`, `git push`, `git pull`, `git merge`, `git rebase`, `git checkout`, `git switch`, `git reset`, `git restore`, `git clean`, perubahan remote, atau operasi Git lain yang mengubah state repositori kecuali pengguna meminta secara eksplisit.
    - Perintah Git read-only seperti `git status`, `git diff`, `git log`, dan `git show` boleh dipakai untuk membaca kondisi repo tanpa mengubah file, branch, remote, index, atau history.
+11. **Catat Delivery State Setiap Perubahan**:
+   - Perbarui changelog untuk setiap perubahan code, data, atau dokumentasi.
+   - Catat branch, commit status, push status, remote verification, validasi, dan risiko.
+   - Jangan menulis `PUSHED` tanpa keberhasilan push dan bukti remote ref ke hash commit yang dimaksud.
 
 ---
 
@@ -902,14 +917,14 @@ Berikut adalah daftar praktik buruk yang **dilarang keras** dalam arsitektur ini
 
 | Anti-Pattern | Mengapa Dilarang? | Solusi Sesuai Standar |
 |---|---|---|
-| **Menaruh fetch langsung di banyak komponen kecil** | Menyebabkan data tidak sinkron, duplikasi request, dan sulit di-debug. | Ambil data di level `page` atau `composable`, lalu oper via `props`. |
+| **Menaruh fetch langsung di page atau komponen** | Menyebabkan data tidak sinkron, duplikasi request, dan sulit di-debug. | Semua request domain melalui `app/composables/use<Menu>.ts`, lalu data diteruskan via typed props. |
 | **Membuat komponen bernama `Content.vue` atau `Page.vue`** | Melanggar validasi arsitektur project dan mengaburkan tanggung jawab UI. | Berikan nama spesifik bahasa Inggris: `OrderRows.vue`, `ProfileDetailsForm.vue`. |
 | **Menulis ulang interface di setiap file `.vue`** | Merusak konsistensi tipe dan menyulitkan refactoring skema data. | Sentralisasi semua tipe di `server/types/*.ts` dan import via `#server/types/...`. |
 | **Membuat folder baru di root tanpa alasan** | Merusak struktur standar Nuxt 4 (`app/` dan `server/`). | Ikuti folder yang sudah ada (`app/components`, `app/pages`, `server/api`, dll). |
 | **Menginstall paket Bootstrap JS/CSS** | Memperbesar bundle size dan merusak layer kompatibilitas internal. | Gunakan Tailwind CSS 4 dan shim `legacy-ui.client.ts`. |
 | **Memanggil file system (`fs`) di komponen `app/`** | Kode di `app/` berjalan di client browser dan akan memicu runtime error fatal. | Operasi sistem dan I/O data hanya boleh dilakukan di `server/` (Nitro). |
 | **Hardcode link statis `.html`** | Mematikan Single Page Application (SPA) routing Nuxt. | Gunakan `<NuxtLink to="/orders">` tanpa akhiran `.html`. |
-| **Menaruh business calculation besar di template** | Template sulit dibaca dan tidak dapat diuji secara terisolasi. | Buat `computed` property di script setup halaman atau composable. |
+| **Menaruh business calculation di template/page** | UI sulit dibaca, tidak dapat diuji terisolasi, dan dapat berbeda dari nilai server. | Preview di editor composable; kalkulasi otoritatif dan validasi ulang di server domain service/repository. |
 
 ---
 
@@ -917,7 +932,7 @@ Berikut adalah daftar praktik buruk yang **dilarang keras** dalam arsitektur ini
 
 ### 16.1 Konfigurasi dan Struktur yang Aktif
 
-**Frontend berada di `app/`, mengikuti struktur branch Rama.** Semua halaman tetap mengikuti HTML dengan nama yang sama di `legacy/static-source/`. HTML tersebut sebelumnya berada di root proyek; pemindahan ini mempertahankan seluruh file aslinya.
+**Frontend berada di `app/`.** Penataan awal direktorinya pernah mengikuti branch Rama, tetapi aturan implementasi aktif sekarang adalah BRVS dan BRVS-UI. Semua halaman tetap mengikuti HTML dengan nama yang sama di `legacy/static-source/`. HTML tersebut sebelumnya berada di root proyek; pemindahan ini mempertahankan seluruh file aslinya.
 
 | Bagian | Lokasi / konfigurasi aktif |
 |---|---|
@@ -1220,7 +1235,9 @@ Validasi ini memeriksa upgrade framework dan pelestarian file. Pencocokan visual
 
 ---
 
-## 19. Hasil Penataan Struktur Sesuai Branch Rama
+## 19. Riwayat Penataan Awal Berdasarkan Branch Rama
+
+Bagian ini adalah catatan migrasi historis. Ia tidak mengalahkan aturan BRVS/BRVS-UI yang berlaku sekarang.
 
 Frontend dipindahkan ke `app/`, dokumentasi ke `docs/`, dan HTML/aset referensi ke `legacy/static-source/`. Backend tetap di `server/`, aset publik tetap di `public/`, dan lokasi data runtime tetap di `data/`.
 
@@ -1292,7 +1309,7 @@ Halaman detail/cetak/tambah lain di luar tahap ini masih menggunakan implementas
 
 Revisi ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan Request For Quotation. POS ditunda sesuai arahan pengguna. Referensi dibandingkan dengan HTML yang disimpan di `legacy/static-source/` dan halaman `https://dulank-admin.netlify.app/`.
 
-- Keenam daftar menggunakan `SalesDataTable`, `SalesActionButton`, dan `SalesStatusBadge`. Ukuran font tabel mengikuti `text-xs` dari tabel Sales Return; warna teks, ukuran ikon Feather, pencarian, sorting, pagination, dan area scroll konsisten. Label serta urutan kolom mengikuti masing-masing HTML, termasuk **Sales Channel** dan **Quotation Channel**.
+- Keenam daftar menggunakan `SalesDataTable`, `SalesActionButton`, dan `SalesStatusBadge`. Ukuran font tabel mengikuti `text-sm` (14px) agar konsisten dengan font menu sidebar sesuai catatan client; warna teks, ukuran ikon Feather, pencarian, sorting, pagination, dan area scroll konsisten. Label serta urutan kolom mengikuti masing-masing HTML, termasuk **Sales Channel** dan **Quotation Channel**.
 - Sales memiliki More pada kolom pertama, sebelum No Sales. Aksinya mencakup Sale Detail, Edit Sale, Show Payments, Sales Receipt, Sales Note, Create Invoice, Create Delivery Note, dan Delete Sale. Tombol Delete Sales History dan Cancel Transaction History membuka tabel riwayat dengan filter tanggal. Penghapusan melalui API juga mencatat riwayat.
 - Add/Edit Sales memakai customer, pengiriman/pickup, PO, baris produk, voucher, biaya kirim, pajak, dan notes. Rincian tersebut disimpan bersama transaksi. Voucher diperiksa berdasarkan kode, periode aktif, dan batas pemakaian; tidak menampilkan keberhasilan palsu untuk kode yang tidak valid.
 - Daftar Invoice mengikuti referensi dengan aksi lihat/hapus, tanpa tombol Edit atau Create Invoice pada header. Pembuatan invoice tetap tersedia dari menu More Sales dengan customer dan nilai transaksi terisi.
@@ -1354,7 +1371,7 @@ Jika halaman lain memiliki input `pemilihrentang`/Date Range dari HTML legacy, g
   - Tata letak form menggunakan susunan baris horizontal (label di kolom kiri `sm:w-1/3`, control input di kolom kanan `sm:w-2/3`).
   - Tombol aksi dialog mengikuti skema Netlify: Cancel berwarna gelap (`#212b36`) dan Submit berwarna aksen oranye/emas (`#ff9f43`).
 - Sanity check rentang data dan pembacaan JSON Payment terverifikasi.
-- Build aplikasi `npm run build` berhasil 100% tanpa error.
+- Pada revisi Payment saat itu, `npm run build` dilaporkan berhasil tanpa error. Status tersebut bersifat historis dan bukan pengganti validasi ulang setelah perubahan berikutnya.
 
 ---
 
@@ -1388,7 +1405,7 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 
 ### 22.2 Arsitektur UI & Komponen
 
-- Tabel pada keempat menu menggunakan standar bersama `SalesDataTable.vue` (`text-xs`), kontrol toolbar light modern `h-9`, `DateRangePicker.vue`, dan `SalesActionButton.vue`.
+- Tabel pada keempat menu menggunakan standar bersama `SalesDataTable.vue` (`text-sm`/14px), kontrol toolbar light modern `h-9`, `DateRangePicker.vue`, dan `SalesActionButton.vue`.
 - Modal Add/Edit (`FlowCategoryModal`, `FlowNameModal`, `FlowTemplateModal`, `WorkFlowProcessModal`) menggunakan standar modal Netlify: lebar medium, header `#fafbfe`, judul `#092c4c`, tombol Cancel `#212b36`, dan Submit `#ff9f43`.
 - **Flow Template Add/Edit Modal (`FlowTemplateModal.vue`) & Sub-modal (`FlowTemplateDataSelectModal.vue`):**
   - Mengimplementasikan alur lengkap HTML `flow-template.html`:
@@ -1421,7 +1438,7 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 ### 22.5 Standarisasi Dimensi & Komponen Reusable
 
 - **Tinggi Kontrol Toolbar & Form:** Seluruh kontrol input, select filter toolbar tabel, search bar, dan input form modal harus menggunakan tinggi standar `h-9` (36px). Untuk kontrol tag / multi-select (seperti `AssigneeSelect.vue`), gunakan tinggi dasar `min-h-9` (36px) agar sejajar dengan kontrol lainnya.
-- **Standar Filter Toolbar (`TableFilterSelect.vue`):** Dropdown filter standar toolbar tabel (`h-9`, `text-xs`, border abu halus, background putih, shadow-sm, focus ring primary) menggantikan tag `<select>` manual lokal.
+- **Standar Filter Toolbar (`TableFilterSelect.vue`):** Dropdown filter standar toolbar tabel (`h-9`, `text-sm`/14px, border abu halus, background putih, shadow-sm, focus ring primary) menggantikan tag `<select>` manual lokal.
 - **Standar Assignee Picker (`AssigneeSelect.vue`):** Pemilih penugasan standar modal (`min-h-9`, opsi radio Employees / Department, chips badge `#ff9f43`, search, dan floating dropdown selection).
 - **Standar Grid 12 Kolom Modal:** Pada form modal, susun baris dengan CSS Grid 12 kolom murni:
   - Baris: `grid grid-cols-12 items-center gap-3 sm:gap-4` (`items-start` untuk field multiline/tags) atau helper `modalFormRowClass`.
@@ -1498,7 +1515,7 @@ Bagian ini mendokumentasikan implementasi lengkap dan backend-ready untuk seluru
 1. **Orders (`/orders`):**
    - KPI Widgets: Total Orders, Pending Orders, In Process, Completed Orders.
    - Filter Toolbar: `DateRangePicker.vue` (kemarin, 7 hari, bulan ini, dsb), `TableFilterSelect.vue` untuk Shipping (All, Pickup, Courier, Delivery) dan Status (All, Pending, On Process, Completed, Cancelled).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Date, Order No, Customer, Shipping Type, Status, Sales Channel, Total (IDR), Action.
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: Date, Order No, Customer, Shipping Type, Status, Sales Channel, Total (IDR), Action.
    - Modal: `OrderStatusModal.vue` (Grid 12 kolom untuk memperbarui status pesanan).
 
 2. **Job Orders (`/job-order`):**
@@ -1514,7 +1531,7 @@ Bagian ini mendokumentasikan implementasi lengkap dan backend-ready untuk seluru
 
 4. **Job Branch (`/job-branch`):**
    - Filter Toolbar: `DateRangePicker.vue`, `TableFilterSelect.vue` untuk Branch (All, Dulank Karawang, Dulank Jakarta, Dulank Cirebon) dan Priority (All, Urgent, High, Normal).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Order No, Date, Customer, Product, Job Title, Branch, Priority, Status, Action.
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: Order No, Date, Customer, Product, Job Title, Branch, Priority, Status, Action.
    - Modals: `JobBranchSettingModal.vue` (`#setting-job-branch`) dengan Grid 12 kolom untuk mengatur cabang pelaksana, prioritas kerja, dan status pengerjaan cabang.
 
 5. **My Job (`/my-job`):**
@@ -1528,7 +1545,7 @@ Bagian ini mendokumentasikan implementasi lengkap dan backend-ready untuk seluru
    - KPI Widgets: Tampilan proporsional 2 widget ringkas (`Total Count Incentive` dengan icon `dash1.svg` dan `Amount Incentive` dengan icon `dash2.svg` dan format `Rp`).
    - Page Header: Title "My Incentive List", Subtitle "Manage My Incentive", action icons Pdf, Print, Refresh (tanpa tombol Add Incentive, sesuai HTML referensi Netlify).
    - Filter Toolbar: Pencarian, `DateRangePicker.vue` ("Date"), dan dropdown filter `Name Of Process` (`TableFilterSelect.vue`: Printing, Cutting).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), tepat 7 kolom literal: Date, Job Title, Flow Name, Incentive, Unit, Qty, Amount (tanpa kolom Action karena menu ini merupakan portal log riwayat insentif karyawan).
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), tepat 7 kolom literal: Date, Job Title, Flow Name, Incentive, Unit, Qty, Amount (tanpa kolom Action karena menu ini merupakan portal log riwayat insentif karyawan).
    - Footer Tabel: Baris total kalkulasi akumulatif persis seperti `<tfoot>` HTML legacy (`Total` pada kolom 1, `colspan="5"`, dan total Amount pada kolom 7).
 
 ### 24.3 Standarisasi UI & Backend Persistence
@@ -1577,30 +1594,30 @@ Grup modul **WEBSTORE** menghubungkan langsung sistem admin Dulank dengan storef
 1. **Cart (`/cart`):**
    - KPI Widgets: `Total Cart Amount` (`dash1.svg`, format `CurrencyDisplay`), `Total Cart Active` (`dash2.svg`), `Total Cart Checkout` (`dash3.svg`), `Total Cart Delete` (`dash4.svg`).
    - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Category: Brochure, Flyer, Banner, Stationery; Status: Active, Checkout, Delete).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Product (gambar thumbnail + nama produk), User (email), Category, Price (rata kanan), Qty, Total Price (rata kanan), Date, Status (badge).
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: Product (gambar thumbnail + nama produk), User (email), Category, Price (rata kanan), Qty, Total Price (rata kanan), Date, Status (badge).
    - Tanpa kolom aksi sesuai referensi HTML Netlify.
 
 2. **Checkout (`/checkout`):**
    - KPI Widgets: `Total Checkout` (`dash1.svg`), `Total Revenue` (`dash2.svg`, format `CurrencyDisplay`), `Total Success` (`dash3.svg`), `Total Failed` (`dash4.svg`).
    - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Metode: Kartu Kredit, Transfer Bank, E-Wallet, Virtual Account; Status: Berhasil, Gagal).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: User, Date Checkout, Payment (rata kanan), Metode, Status, Voucher, Delivery fee (rata kanan), Detail Product.
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: User, Date Checkout, Payment (rata kanan), Metode, Status, Voucher, Delivery fee (rata kanan), Detail Product.
    - Tanpa kolom aksi sesuai referensi HTML Netlify.
 
 3. **Wishlist (`/wishlist`):**
    - KPI Widgets: `Total Wishlist Amount` (`dash1.svg`, format `CurrencyDisplay`), `Total Wishlist Active` (`dash2.svg`), `Total Wishlist Checkout` (`dash3.svg`), `Total Wishlist Delete` (`dash4.svg`).
    - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Category & Status).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: Product, User, Category, Price, Qty, Total Price, Date, Status.
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: Product, User, Category, Price, Qty, Total Price, Date, Status.
 
 4. **Reviews (`/reviews`):**
    - KPI Widgets: Tepat 3 widget proporsional (`Total Review` `dash1.svg`, `Total Product` `dash2.svg`, `Total Publish` `dash3.svg`).
    - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Rating 1-5).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: User, ID Produk, Product, Date, Rating (1-5) dengan ikon bintang, Title, Review, Status (Publish / Unpublish).
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: User, ID Produk, Product, Date, Rating (1-5) dengan ikon bintang, Title, Review, Status (Publish / Unpublish).
 
 5. **Support Ticket (`/support-ticket`):**
    - KPI Widgets: `Total Tickets` (`dash1.svg`), `Total Pending Tickets` (`dash2.svg`), `Total Closed Tickets` (`dash3.svg`), `Total Delete Tickets` (`dash4.svg`).
    - Page Header: Title "Support Ticket List", Subtitle "Manage your Support Ticket", tombol "Add Ticket", icon PDF, Print, Refresh.
    - Toolbar: Search input, `DateRangePicker.vue`, `TableFilterSelect.vue` (Priority: Low, High, Medium; Status: Open, Closed, Pending).
-   - Tabel: `SalesDataTable.vue` (`text-xs`), kolom: ID, Requested By (avatar + nama), Subject, Assignee, Priority, Status, Created Date, Due Date, Action (View detail, Delete).
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), kolom: ID, Requested By (avatar + nama), Subject, Assignee, Priority, Status, Created Date, Due Date, Action (View detail, Delete).
    - Modals:
      - `SupportTicketAddModal.vue`: Form pembuatan tiket bantuan (Avatar, Customer Name, Email, Phone, Address, City, Country, Descriptions).
      - `SupportTicketDetailModal.vue`: Modal detail komprehensif dari `support-ticket-detail.html` (informasi tiket, requested by, assigned agent, deskripsi, tags, timeline activity, dan live interactive chat history).
@@ -1609,7 +1626,7 @@ Grup modul **WEBSTORE** menghubungkan langsung sistem admin Dulank dengan storef
 6. **Contact Form (`/contact-form`):**
    - KPI Widget: 1 widget ringkas `Total Contact` (`dash1.svg`).
    - Toolbar: Search input, `DateRangePicker.vue`.
-   - Tabel: `SalesDataTable.vue` (`text-xs`), tepat 5 kolom literal sesuai referensi HTML Netlify: Name, Email, Phone, Message, Date (tanpa kolom Action).
+   - Tabel: `SalesDataTable.vue` (`text-sm`/14px), tepat 5 kolom literal sesuai referensi HTML Netlify: Name, Email, Phone, Message, Date (tanpa kolom Action).
 
 ### 25.2 Arsitektur Data & Standar Mutlak
 - **Penyimpanan Numerik Murni:** Nilai `price`, `totalPrice`, `payment`, `deliveryFee` di seluruh mock data JSON disimpan sebagai `number` murni tanpa format string statis.
@@ -1694,7 +1711,7 @@ Modul **Customers** di bawah grup menu **PEOPLES** telah direfaktor penuh dari t
    - Mengintegrasikan toolbar header `SalesListHeader.vue` dengan aksi Refresh, Print, PDF, dan tombol "Add New Customer".
    - Menggunakan feedback loading modern `<SalesFeedback :pending="pending" skeleton="table" :skeleton-cols="10" />`.
 2. **Tabel Data Pelanggan (`app/components/pages/customers/CustomerRecordsTable.vue`):**
-   - Menggunakan `SalesDataTable.vue` (`text-xs font-medium`).
+   - Menggunakan `SalesDataTable.vue` (`text-sm font-medium`, 14px).
    - 10 kolom literal: Customer ID, Name, Email, Customer Type, Balance (rata kanan numerik via `<CurrencyDisplay>`), Contact No, Join Channel, Date Join, Last Seen, Action.
    - Filter toolbar: Pencarian realtime, `DateRangePicker.vue`, dan dropdown filter `TableFilterSelect.vue` Customer Type.
    - Aksi baris: Tombol `+ Address`, View detail, Edit, dan Delete.
@@ -1723,20 +1740,22 @@ Saat aplikasi dideploy ke Netlify (`https://dulankadminnuxt.netlify.app/`), back
 ### 29.2 Solusi Terpusat: `bundledData.ts` & `data.ts`
 Untuk menyelesaikan masalah ini secara menyeluruh di seluruh aplikasi tanpa mengubah puluhan endpoint API satu per satu:
 1. **Registry Terpusat (`server/utils/bundledData.ts`):**
-   - Mengimpor seluruh 54 berkas JSON di `server/data/` secara statis ke dalam objek map `bundledSources: Record<string, unknown>`.
+   - Mengimpor seluruh berkas JSON aktif di `server/data/` secara statis ke dalam objek map `bundledSources: Record<string, unknown>`. Setiap dataset baru wajib langsung ditambahkan ke registry; jangan bergantung pada angka jumlah berkas yang cepat kedaluwarsa.
    - Semua dataset secara otomatis ikut ter-bundle ke dalam build produksi Nitro (`.output/server/`).
 2. **Fallback Cerdas di `readJSON()` (`server/utils/data.ts`):**
    - **Tingkat 1:** Jika berkas fisik runtime di `data/` atau `server/data/` ditemukan (lingkungan lokal / dev / file yang dimutasi), sistem membaca dari disk.
    - **Tingkat 2:** Jika berkas fisik tidak ditemukan (lingkungan serverless Netlify), sistem otomatis fallback ke `bundledSources[filename]`, mengembalikan data via `structuredClone()`.
    - **Tingkat 3:** Jika tidak terdaftar, mengembalikan default value atau `[]`.
-3. **Proteksi Penulisan `writeJSON()`:**
-   - Penulisan ke disk pada sistem file read-only serverless diproteksi dengan `try / catch` sehingga tidak menyebabkan crash (500 Internal Server Error).
+3. **Integritas Pembacaan dan Penulisan:**
+   - JSON fisik yang ada tetapi rusak menghasilkan error jelas dan tidak diganti diam-diam oleh seed bundled.
+   - Kegagalan `writeJSON()` dilempar ke endpoint agar API tidak memberikan respons sukses palsu.
+   - Bundled JSON menyelesaikan pembacaan data awal di Netlify, tetapi bukan penyimpanan mutasi permanen. Produksi serverless wajib memakai database atau storage persisten seperti Netlify Blobs; filesystem function hanya bersifat sementara/read-only tergantung runtime.
 
 ---
 
 ## 30. Implementasi Lengkap Seluruh Sub-Menu Kelompok PEOPLES
 
-Kelompok menu **PEOPLES** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, CSS grid 12-kolom kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, serta dialog cetak resmi `DocumentPrintModal.vue`:
+Kelompok menu **PEOPLES** sudah diimplementasikan dengan arsitektur Nuxt 4, CSS grid 12-kolom, kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, dan dialog cetak `DocumentPrintModal.vue`. Statusnya **implemented, verification pending** sampai seluruh flow dibandingkan dengan HTML/Netlify dan persistensi produksi diuji:
 
 ### 30.1 Customer Types (`/customer-type`)
 - **Thin Page**: `app/pages/customer-type.vue`
@@ -1789,7 +1808,7 @@ Sub-menu pertama pada kelompok **HRM (Human Resource Management)** telah distand
 
 ## 32. Implementasi Lengkap Seluruh Sub-Menu Kelompok PURCHASES
 
-Kelompok menu **PURCHASES** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, CSS grid 12-kolom kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, live currency formatting `CurrencyInput.vue` (pemisah koma `,`), serta dialog cetak resmi `DocumentPrintModal.vue`:
+Kelompok menu **PURCHASES** ikut terbawa dari pekerjaan branch lain di luar enam kelompok cakupan awal. Implementasinya menggunakan arsitektur Nuxt 4, CSS grid 12-kolom, kontrol `h-9`, reusable skeleton loader `TableSkeleton.vue`, `CurrencyInput.vue` dengan pemisah ribuan titik (`.`), dan dialog cetak `DocumentPrintModal.vue`. Statusnya **imported, belum disetujui sebagai baseline** dan memerlukan keputusan pengguna serta audit flow/backend:
 
 ### 32.1 Purchase (`/purchase`)
 - **Thin Page**: `app/pages/purchase.vue`
@@ -1827,7 +1846,7 @@ Kelompok menu **PURCHASES** telah rampung 100% dan terstandarisasi penuh menggun
 
 ## 33. Implementasi Lengkap Seluruh Modul USER MANAGEMENT (5 Sub-Menu)
 
-Modul **USER MANAGEMENT** telah rampung 100% dan terstandarisasi penuh menggunakan arsitektur modern Nuxt 4, backend-ready, in-memory zero-flicker reactive search, persistensi JSON, dialog cetak resmi `DocumentPrintModal.vue`, dan hierarki granular permission:
+Modul **USER MANAGEMENT** sudah diimplementasikan dengan arsitektur Nuxt 4, pencarian reaktif in-memory, persistensi JSON lokal, dialog cetak `DocumentPrintModal.vue`, dan hierarki permission. Statusnya **implemented, verification pending**; permission GET tidak boleh menulis data dan persistensi produksi tetap membutuhkan storage durable:
 
 ### 33.1 All Members (`/user`)
 - **Thin Page**: `app/pages/user.vue`
@@ -2065,8 +2084,8 @@ Modul **SETTING** telah dirombak secara holistik dari kode Bootstrap statis lama
 - Backend: `server/types/invoice-setting.ts`, `server/types/pos-setting.ts`, `server/data/invoice-settings.json`, `server/data/pos-settings.json`, API `/api/invoice-settings`, `/api/pos-settings`.
 
 ### 43.4 System Setting & Prefixes (`/email-setting`, `/language`, `/otp`, `/prefixes`)
-- `/email-setting`: Konfigurasi SMTP (Host, Port 587/465 dengan preset, User, Password, TLS/SSL, From Email/Name), pilihan driver (SMTP, SendGrid, PHP Mailer), dan modal **Send Test Email** terhubung ke API `/api/email-settings/test`.
-- `/language`: Disediakan sebagai halaman kanvas kosong (*clean blank canvas/page*) sementara waktu sesuai instruksi pengguna.
+- `/email-setting`: Konfigurasi SMTP (Host, Port 587/465 dengan preset, User, Password, TLS/SSL, From Email/Name), pilihan driver (SMTP, SendGrid, PHP Mailer), dan modal **Send Test Email** terhubung ke API `/api/email-settings/test`. Endpoint saat ini hanya memvalidasi target dan menyimulasikan konfigurasi; respons wajib menyatakan bahwa belum ada email yang benar-benar dikirim sampai SMTP adapter tersedia.
+- `/language`: Daftar bahasa mengikuti referensi legacy (Language, Code, RTL, Total, Done, Progress, Status, Action), memakai `SalesDataTable`, modal Add/Settings, toggle RTL/status, import/export dokumen translation JSON, perhitungan progress server-side, dan `DocumentPrintModal`.
 - `/otp`: Konfigurasi 2FA OTP: toggle aktif di header, pilihan kanal (WhatsApp Wablas/Gateway, SMS, Email), panjang digit (4, 6, 8), masa aktif expire, jeda kirim ulang, dan simulator pratinjau pesan OTP.
 - `/prefixes`: Master prefix dokumen transaksi (15 field input terstruktur dalam grid 4 kolom: Product SKU, Supplier, Purchase, Purchase Return, Sales, Sales Return, Customer, Expense, Stock Transfer, Stock Adjustmentt, Sales Order, POS Invoice, Estimation, Transaction, Employee) dengan tombol Cancel & Save Changes terintegrasi API dan skeleton loader.
 - Backend: `server/types/system-settings.ts`, `server/data/email-settings.json`, `server/data/languages.json`, `server/data/otp-settings.json`, `server/data/prefixes.json`, API `/api/email-settings`, `/api/languages`, `/api/otp-settings`, `/api/prefixes`.
@@ -2105,8 +2124,239 @@ Seluruh 14 halaman laporan pada modul **REPORTS** telah dirombak secara komprehe
 
 ### 44.5 Optimasi Performa & Zero-Flicker Search Table
 - Seluruh 14 halaman tabel laporan telah dibersihkan dari query reaktif `search` pada `useFetch()`.
-- Data di-fetch 1 kali secara stabil saat inisiasi halaman/refresh. Pencarian kata kunci didelegasikan 100% ke filter in-memory client-side pada `SalesDataTable.vue` melalui helper `matchesSearch()` rekursif (mencakup pencarian teks, angka ribuan terformat, nested objects, dan tanggal).
-- Pengetikan di search bar kini 100% instan (0ms search latency) tanpa memicu skeleton loader (`pending = false`).
+- Data di-fetch satu kali saat inisiasi halaman/refresh. Pencarian kata kunci didelegasikan ke filter in-memory client-side pada `SalesDataTable.vue` melalui helper `matchesSearch()` rekursif (mencakup pencarian teks, angka ribuan terformat, nested objects, dan tanggal).
+- Pengetikan di search bar tidak memicu fetch ulang maupun skeleton loader; latensi aktual tetap bergantung pada ukuran data dan perangkat pengguna.
+
+---
+
+## 45. Rekonsiliasi Dokumentasi dan Audit Branch (2026-10-08)
+
+### 45.1 Sumber Kebenaran
+
+- `AGENTS.md` memuat aturan kerja dan larangan regresi.
+- `docs/STRUCTURE.md` memuat arsitektur serta riwayat keputusan teknis.
+- `docs/MENU_IMPLEMENTATION_COMMAND.md` memuat workflow pelaksanaan perintah menu.
+- `AI_HANDOVER_GUIDE.md` memuat status handover kanonis; `docs/AI_HANDOVER_GUIDE.md` hanya pointer kompatibilitas.
+- `docs/obsidian-vault/00-HOME.md` adalah indeks pengetahuan lintas dokumen. Vault tidak mengganti dokumen kanonis dan tidak boleh membuat status tandingan.
+
+### 45.2 Status yang Tidak Boleh Dicampur
+
+- **Approved baseline:** Sales, Payment, Orders/Workflow, Webstore, dan Print/PDF.
+- **Implemented, verification pending:** Setting, User Management, Content, Reports, HRM, Peoples, Calculator Apps, dan Products & Services.
+- **Imported di luar cakupan awal:** Purchases; belum menjadi baseline sampai diputuskan pengguna dan diaudit.
+- **Deferred:** POS sampai ada instruksi baru.
+
+Status `implemented` berarti kode tersedia, bukan bukti seluruh tampilan, flow, backend, dan deployment sudah lulus verifikasi.
+
+### 45.3 Perbaikan Data dan Netlify
+
+- Registry bundled mencakup dataset aktif termasuk `users.json` dan `permissions.json` agar initial read tidak kosong ketika file runtime tidak tersedia.
+- GET permission tidak lagi membuat atau menulis data.
+- Kerusakan JSON dan kegagalan tulis tidak boleh ditutupi dengan seed atau respons sukses palsu.
+- Persistensi mutasi pada Netlify belum durable selama masih menggunakan JSON filesystem. Migrasi ke database/storage persisten adalah syarat sebelum mengklaim CRUD production-ready.
+
+### 45.4 Revisi Client: Tipografi Tabel
+
+Catatan client: ukuran font sidebar berbeda dengan font isi tabel dan teks tombol/filter tabel yang lebih kecil. Standar baru lintas menu adalah:
+
+- sidebar utama: 14px;
+- isi/header/pagination tabel bersama: `text-sm` (14px);
+- search, filter select, date range trigger, dan page-size: `text-sm` (14px) dengan tinggi `h-9`;
+- label form modal tetap boleh `text-xs` sesuai kepadatan form dan bukan bagian revisi toolbar/tabel.
+
+Implementasi pusat berada di `SalesDataTable.vue`, `DateRangePicker.vue`, dan helper `tableFilterControlClass` pada `salesUi.ts` agar halaman tidak membuat variasi lokal.
+
+### 45.5 Kompatibilitas dan Halaman Tanpa Referensi
+
+- Komponen kompatibilitas lama tetap dipertahankan melalui file adapter/alias ketika implementasi baru memakai nama atau folder berbeda. Adapter dengan basename yang sama dikecualikan dari auto-import di `nuxt.config.ts`, tetapi tetap dapat diimpor eksplisit melalui path agar tidak terjadi collision saat `pathPrefix: false`.
+- `/invoice-template` dan `/faq-category` tidak memiliki file HTML legacy yang sepadan; validator mencatat keduanya sebagai pengecualian eksplisit, bukan menganggap halaman hilang tanpa penjelasan.
+- Halaman kosong, simulasi, atau placeholder wajib disebut apa adanya dalam status dan handover.
+
+---
+
+## 46. Ekspansi Print/PDF dan Pemulihan Language (2026-10-08)
+
+### 46.1 Shared Print/PDF
+
+- `SalesListHeader.vue` mempertahankan event `pdf` dan kompatibilitas listener lama `export-pdf`; tombol PDF tidak lagi diam pada halaman lama yang belum dimigrasikan.
+- `DocumentPrintModal.vue` menerima `showDateRange`. Nilai default tetap `true` untuk laporan/transaksi, sedangkan data konfigurasi tanpa dimensi tanggal dapat memakai `false` tanpa membuat dialog cetak baru.
+- Dialog cetak standar dipasang pada `/language`, `/download-files`, `/our-client`, `/banner`, dan `/role` (Permission Matrix). Data yang dicetak berasal dari state/API terfilter halaman, dengan kolom aksi ditiadakan oleh shared printer.
+- `/role` memakai scope Semua Data/Halaman Ini tanpa opsi tanggal. Empat halaman lain tetap menyediakan scope tanggal saat memiliki field tanggal yang relevan.
+
+### 46.2 Language
+
+- Empty state lama di `/language` dihapus karena `legacy/static-source/language.html`, endpoint, dan dataset bahasa memang tersedia.
+- UI aktif dipisah menjadi `LanguageRecordsTable.vue` dan `LanguageFormModal.vue`; page hanya mengoordinasikan filter, modal, import/export, feedback, dan print.
+- Isi translation disimpan terpisah di `language-translations.json` melalui `GET/POST /api/languages/:id/translations`, bukan dicampur ke metadata daftar bahasa.
+- Import menerima object JSON, menghitung leaf translation di server, lalu memperbarui Done/Total/Progress. Export mengunduh kembali object translation bahasa terpilih.
+- Validasi server menolak angka negatif, Done melebihi Total, dan duplikasi code pada create maupun update. Satu pilihan default baru menonaktifkan default lama.
+
+### 46.3 Batas Verifikasi
+
+- Implementasi ini berstatus **implemented, verification pending**. Build, dev server, dan browser flow tidak dijalankan karena instruksi pengguna pada sesi ini.
+- Flow yang masih harus diuji di browser: Add/Edit Language, toggle RTL/status, import lalu reload/export JSON, tombol Print/PDF di lima route, pilihan scope, kop surat, TTD, orientasi, dan layout 390px.
+
+---
+
+## 47. Calculator Apps Backend-Ready (2026-10-08)
+
+### 47.1 Cakupan Route
+
+- Partner percetakan dan toko kertas: `/semua-percetakan`, `/semua-toko-kertas`.
+- Listing mesin: `/mesin-cetak`, `/mesin-laminasi`, `/mesin-pond`, `/mesin-poli`.
+- Listing kertas: `/kertas-group`, `/kertas-ukuran`, `/kertas-jenis`, `/kertas-harga`.
+
+### 47.2 Struktur Reusable dan Data
+
+- Orkestrasi frontend berada di `app/components/pages/calculator/CalculatorPartnersPage.vue` dan `CalculatorListingsPage.vue`; sepuluh page route hanya meneruskan jenis domain.
+- Detail, moderasi, statistik, serta tabel memakai komponen reusable pada folder yang sama dan komponen Sales/Common yang sudah disetujui.
+- `useCalculatorMarketplace.ts` menjadi batas komunikasi frontend. Endpoint dan domain helper berada di `server/api/calculator/` dan `server/utils/calculatorMarketplace.ts`.
+- Data dipisah menjadi `calculator-partners.json`, `calculator-partner-metrics.json`, `calculator-listings.json`, dan `calculator-moderation-history.json`. Listing memakai `sourcePartnerId`; metrics memakai `partnerId`; harga selalu numerik.
+- Moderasi menyimpan tindakan, durasi pembekuan kondisional, status notifikasi, pesan, pelaku, dan timestamp. Delete merupakan soft-delete.
+
+Status: **implemented, verification pending**. Build, typecheck penuh, browser desktop/mobile, persistensi reload, moderasi, detail, delete, dan Print/PDF belum seluruhnya diverifikasi.
+
+---
+
+## 48. Products & Services Backend-Ready (2026-10-08)
+
+### 48.1 Peta Halaman
+
+- Create/Edit Product: `/create-product`; edit memakai query `id`.
+- Custom Category: `/cetak-full-color` dan `/calender`.
+- Services Category: `/mesin-cetak-self`, `/mesin-laminasi-self`, `/mesin-pond-self`, `/mesin-poli-self`.
+- Product List: `/product-list`; aksi View menuju `/product-details?id=<id>`.
+
+### 48.2 Product Master dan Import
+
+- Product List mempertahankan kolom legacy Item Code, Product, Category, Sub Category, Unit, Price (IDR), Price Type, Created, dan Action.
+- `useProducts.ts` berkomunikasi dengan endpoint `/api/products`; logika domain berada di `server/utils/products.ts`, bukan di page.
+- `Product` memiliki foreign key `categoryId`, `subCategoryId`, `unitId`, dan `storeId`. Server memvalidasi keberadaan relasi serta kecocokan Sub Category terhadap Category lalu menghidrasi label untuk output.
+- Item Code aktif harus unik. Input boleh dikosongkan agar server menghasilkan kode berikutnya dengan pola enam digit legacy; tombol Generate Code memberi preview berdasarkan data API dan server tetap menjadi validator akhir. Harga, quantity, diskon, minimum order, minimum price, druck price, panjang, dan lebar disimpan sebagai angka murni.
+- Import menerima CSV/JSON melalui `ProductImportModal.vue` dan `/api/products/import`. Seluruh baris diperiksa lebih dahulu untuk nama, relasi, angka, dan duplikasi kode sebelum proses penyimpanan.
+- Delete memakai `archivedAt`; data berelasi tidak dihapus fisik. Detail dan Edit selalu menggunakan record berdasarkan `id`.
+
+### 48.3 Custom Category
+
+- Cetak Full Color tetap memakai sebelas tab domain: Product Custom Default, Product Size, Paper Type, Machine Type, Laminate, Fold, Print Side, Components, Work Flow, Profit Setting, dan Log Transaction.
+- Calender memakai sebelas tab: Calender Type, Number of Sheet, Product Size, Paper Type, Machine Type, Print Type, Laminate, Hanger, Component, Profit Setting, dan Log Transaction.
+- Konfigurasi master, nilai biaya, toggle display, dan profit tier memakai `ConfigurationCollectionEditor.vue` serta `ConfigurationRecordModal.vue`; Add/Edit/Delete menunggu penyimpanan API. Log Transaction adalah output/read-only yang menyediakan View Detail dan tidak diubah sebagai master bebas.
+- Log menyimpan `customerId` nullable. Snapshot nama legacy yang tidak memiliki pasangan sah di master Customer tetap dipertahankan, tetapi tidak boleh ditautkan ke ID customer lain secara buatan.
+- Save menunggu hasil API; kegagalan mempertahankan draft agar pengguna dapat memperbaiki atau mengulang.
+
+### 48.4 Services Category
+
+- Keempat route memakai `WorkshopServicePage.vue`, `WorkshopServiceModal.vue`, `useWorkshopServices.ts`, `app/utils/workshopServices.ts`, endpoint `/api/workshop-services`, dan domain helper `server/utils/workshopServices.ts`.
+- Printing bercabang mengikuti field legacy Offset, Digital Print, dan Large Format. Laminate, Die Cutting, serta Hot Print mempertahankan field ukuran dan struktur harga masing-masing.
+- `workshop-services.json` menyimpan `storeId`, kategori domain, field spesifikasi teknis, uang numerik, status, `updatedAt`, dan `archivedAt`.
+- Tabel, filter, action button, dialog, konfirmasi hapus, currency, feedback, dan Print/PDF memakai komponen bersama. Kolom/label tiap route tetap mengikuti legacy masing-masing.
+
+### 48.5 Batas Verifikasi
+
+- Parse dan compile template 16 SFC Products & Services lulus. Seluruh 105 JSON server valid dan terdaftar di bundled registry.
+- `tsc --noEmit` dijalankan dan masih gagal pada error lama lintas Report, Content, Workflow, serta endpoint CRUD lain; setelah endpoint Sub Category diperbaiki, output tidak menunjuk file Products & Services.
+- Build, dev server, dan browser flow tidak dijalankan sesuai instruksi pengguna. Add/Edit/reload/import/detail/delete, seluruh tab konfigurasi, Print/PDF, desktop, dan 390px masih wajib diuji sebelum status dinaikkan.
+
+Status: **implemented, verification pending**.
+
+---
+
+## 49. Standar Tipografi Global (2026-10-08)
+
+### 49.1 Masalah yang Diperbaiki
+
+- Root HTML proyek adalah 14px. Utility Tailwind berbasis `rem`, sehingga `text-sm` default sebelumnya tampil sekitar 12.25px walaupun dokumentasi menganggapnya 14px.
+- Ukuran lokal 9px, 10px, 11px, 12.5px, dan 13.5px membuat sidebar, tabel, form, dropdown, serta modal tidak memiliki baseline yang konsisten.
+
+### 49.2 Keputusan Implementasi
+
+- Root 14px tidak diubah agar seluruh spacing/layout berbasis `rem` tidak ikut membesar.
+- Token font Tailwind dikalibrasi di `app/assets/css/main.css`: `text-xs` 12px, `text-sm` 14px, `text-base` 16px, `text-lg` 18px, `text-xl` 20px, `text-2xl` 24px, dan `text-3xl` 30px.
+- Semantic classes: `app-page-title`, `app-page-subtitle`, `app-dialog-title`, `app-section-title`, `app-body-text`, `app-supporting-text`, dan `app-control-text`.
+- Compatibility guard pada `.dulank-page` menetapkan control dan sel tabel lama ke 14px. Utility arbitrary 9-11px dinaikkan ke batas minimum 12px.
+- Shared component yang diperbarui menjadi sumber standar lintas menu: `AppSidebar`, `SalesListHeader`, `PageHeader`, `SalesDialog`, `SalesMoreMenu`, `TableSkeleton`, `CurrencyInput`, `QuantityStepper`, `AssigneeSelect`, `DocumentPrintModal`, dan `salesUi.ts`.
+
+### 49.3 Hirarki
+
+- Page title: 20px/700.
+- Dialog title: 18px/700.
+- Section/panel title: 16px/600-700.
+- Sidebar, body, paragraph, table, input/select, dropdown, dan button: 14px/400-600.
+- Form label, helper, caption, timestamp, metadata, dan badge: 12px/400-600.
+- KPI utama: 24px/700; 30px hanya untuk nilai dashboard dominan.
+
+Acuan lengkap dan checklist AI berada di `docs/TYPOGRAPHY_STANDARD.md`. Browser desktop/mobile belum dijalankan sesuai larangan dev/build pengguna.
+
+---
+
+## 50. Component Resolution dan Fragment Attributes (2026-10-08)
+
+- Konfigurasi `components.pathPrefix: false` membuat auto-import mengikuti basename file. `VariantTable.vue` tersedia sebagai `VariantTable`, bukan `PagesVariantTable`.
+- Nama dengan prefix `Pages...` hanya valid bila di-import eksplisit sebagai alias. Audit memperbaiki Variant dan sepuluh page lama lain yang masih mengandalkan prefix folder.
+- `AppSidebar.vue` merender fragment berupa `<aside>` dan backdrop mobile. Layout mengirim `class="print:hidden"`; karena Vue tidak dapat memilih root secara otomatis, komponen memakai `inheritAttrs: false` lalu meneruskan `$attrs` ke `<aside>`.
+- Wrapper tambahan tidak digunakan karena berisiko mengubah fixed positioning dan stacking backdrop.
+- Detail troubleshooting dan checklist berada di `docs/TROUBLESHOOTING_VUE_WARNINGS.md`.
+
+---
+
+## 51. Standar Ikon Aksi (2026-10-08)
+
+- `app/utils/actionIcons.ts` menjadi sumber tunggal mapping ikon Feather dan ukuran ikon aksi.
+- Mapping utama saat ini adalah Add `plus-circle`, View `eye`, Edit `edit`, Delete/Remove `trash-2`, More `more-horizontal`, Refresh `rotate-cw`, Print `printer`, dan PDF `file-text`.
+- `SalesActionButton.vue` menerima prop semantik `action`. Prop raw `icon` dipertahankan untuk kompatibilitas; nilai lama `edit-2` otomatis dinormalisasi ke `edit`.
+- `SalesListHeader.vue` dan `SalesMoreMenu.vue` memakai mapping serta ukuran dari utility yang sama. Ikon baris berukuran 14px; toolbar/tombol teks 16px.
+- Kode baru harus memakai aksi semantik untuk aksi yang sudah dikenal. Raw icon hanya untuk konsep domain yang belum ada dalam kamus dan tidak boleh membuat variasi CRUD baru.
+- Standar urutan, aksesibilitas, dan checklist lengkap berada di `docs/ICON_STANDARD.md`.
+
+---
+
+## 52. Framework Kerja dan Re-check AI (2026-10-08)
+
+- Quality gate kanonik berada di `docs/AI_WORK_QUALITY_FRAMEWORK.md` dan diringkas di `docs/obsidian-vault/10-AI-QUALITY-GATES.md`.
+- Siklus wajib adalah Context Check, Implementation Check, First Re-check, Adversarial Re-check, Validation and Evidence, lalu Progress Sync.
+- First Re-check membandingkan file akhir terhadap expected behavior dari legacy/Netlify dan aturan domain. Adversarial Re-check secara sengaja mencari dummy lokal, persistensi palsu, input/output keliru, relasi rusak, duplikasi reusable, warning, serta regresi shared component.
+- Status dibedakan menjadi `not audited`, `audited`, `in progress`, `implemented, verification pending`, `verified`, dan `approved baseline`. AI tidak boleh menetapkan `approved baseline` tanpa persetujuan pengguna.
+- Setiap klaim harus seukuran bukti: parse SFC, build, browser flow, persistence test, dan audit data membuktikan hal yang berbeda. Larangan build/dev dicatat sebagai batas verifikasi, bukan ditutupi.
+- Perubahan standar ikon dan quality framework tidak mengubah status modul bisnis yang sudah tercatat.
+
+---
+
+## 53. Backend-Ready Vertical Slice (BRVS) dan Audit Struktur (2026-10-08)
+
+### 53.1 Nama dan Rantai Resmi
+
+Struktur menu yang sebelumnya disebut “pola seperti Sales”, “backend-ready”, atau “page tipis” sekarang memiliki nama tunggal: **Backend-Ready Vertical Slice (BRVS)**.
+
+```text
+page -> domain components -> domain composable -> Nitro API
+     -> server domain service/repository -> typed relational data
+```
+
+Keberadaan sebagian file tidak cukup. Route aktif wajib memakai layer tersebut. File composable/API yang tersedia tetapi dilewati oleh data lokal page tetap dihitung sebagai gap.
+
+### 53.2 Batas Tanggung Jawab
+
+- Page hanya metadata, pemanggilan composable, selected/open/active state ringan, dan komposisi komponen.
+- Table/card list, filters domain kompleks, editor, form, modal, detail, history, stats, skeleton, dan export UI berada di `app/components/pages/<menu>/`.
+- Request, mutation flow, busy/error/refresh, payload mapping, dan editor orchestration berada di composable.
+- API adalah adapter HTTP tipis. Validasi, kalkulasi, penomoran, relasi, filter kompleks, dan persistence berada di server service/repository.
+- Add dan Edit harus memakai form/editor composable yang sama.
+- Target page maksimal 150 baris; 200+ wajib audit/justifikasi; 300+ selalu structural review. Hard rule tetap lebih penting daripada jumlah baris.
+
+### 53.3 Hasil Audit Statis
+
+Dari 188 page yang diaudit, 129 melebihi 150 baris, 109 melebihi 200 baris, 65 melebihi 300 baris, 29 melebihi 400 baris, dan 59 masih mengandung `alert()`/`confirm()`. Ini adalah indikator audit statis, bukan klaim bahwa setiap page tersebut rusak, tetapi membuktikan struktur repository belum seluruhnya seragam seperti Sales.
+
+Audit sampel aktif:
+
+- `/sales`: acuan BRVS, 139 baris.
+- `/download-files`: partial BRVS; layer data/composable/API/component tersedia, tetapi page 455 baris masih memegang terlalu banyak UI dan orchestration.
+- `/all-blog`: partial BRVS; page 487 baris masih memegang filter, card grid, export, state, dan action UI.
+- `/expense-report`: partial BRVS; page 319 baris belum memiliki domain component dan endpoint masih memegang kalkulasi/filter.
+- `/edit-payroll`: non-compliant; hardcoded form/calculation dan `alert()` tanpa persistence.
+- `/edit-job-order`: non-compliant; data/mutasi lokal serta tidak memakai composable/API Job Order yang sudah ada.
+
+Detail kontrak layer, hard fail, status struktur, dan Architecture Evidence Matrix berada di `docs/BACKEND_READY_VERTICAL_SLICE.md`. Audit dokumentasi ini tidak mengubah source code atau status fitur.
 
 
 

@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
   <div class="w-full space-y-2">
     <!-- Radio selection -->
     <div class="flex items-center gap-5 pt-0.5">
-      <label class="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+      <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
         <input
           v-model="assigneeType"
           type="radio"
@@ -209,7 +209,7 @@ onBeforeUnmount(() => {
         />
         <span>Employees</span>
       </label>
-      <label class="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+      <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
         <input
           v-model="assigneeType"
           type="radio"
@@ -240,14 +240,14 @@ onBeforeUnmount(() => {
     <!-- Employees chips & dropdown picker -->
     <div ref="assigneeBoxRef" class="relative w-full">
       <div
-        class="flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-gray-200 bg-white px-2.5 py-1 text-xs shadow-sm transition-colors hover:border-gray-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 dark:border-gray-700 dark:bg-gray-900"
+        class="flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-gray-200 bg-white px-2.5 py-1 text-sm shadow-sm transition-colors hover:border-gray-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 dark:border-gray-700 dark:bg-gray-900"
         :class="{ 'opacity-60 cursor-not-allowed': disabled }"
         @click="!disabled && searchInputRef?.focus()"
       >
         <span
           v-for="emp in selectedEmployees"
           :key="emp"
-          class="inline-flex items-center gap-1 rounded bg-[#ff9f43]/10 px-2 py-0.5 text-[11px] font-semibold text-[#c8701a] border border-[#ff9f43]/25 dark:bg-[#ff9f43]/20 dark:text-[#ffb766] dark:border-[#ff9f43]/30"
+          class="inline-flex items-center gap-1 rounded bg-[#ff9f43]/10 px-2 py-0.5 text-xs font-semibold text-[#c8701a] border border-[#ff9f43]/25 dark:bg-[#ff9f43]/20 dark:text-[#ffb766] dark:border-[#ff9f43]/30"
         >
           <span>{{ emp }}</span>
           <button
@@ -267,7 +267,7 @@ onBeforeUnmount(() => {
             type="text"
             :disabled="disabled"
             :placeholder="selectedEmployees.length === 0 ? placeholder : ''"
-            class="h-6 w-full bg-transparent text-xs text-gray-800 outline-none placeholder:text-gray-400 dark:text-gray-200 disabled:cursor-not-allowed"
+            class="h-6 w-full bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400 dark:text-gray-200 disabled:cursor-not-allowed"
             @focus="!disabled && (dropdownOpen = true)"
             @keydown.enter.prevent="addCurrentQuery"
             @keydown.backspace="onBackspace"
@@ -292,11 +292,11 @@ onBeforeUnmount(() => {
         <div
           v-for="emp in filteredOptions"
           :key="emp"
-          class="flex cursor-pointer items-center justify-between px-3 py-1.5 text-xs text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors dark:text-gray-300 dark:hover:bg-primary/20"
+          class="flex cursor-pointer items-center justify-between px-3 py-1.5 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors dark:text-gray-300 dark:hover:bg-primary/20"
           @click.stop="toggleEmployee(emp)"
         >
           <div class="flex items-center gap-2">
-            <span class="inline-flex size-5 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            <span class="inline-flex size-5 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 dark:bg-gray-700 dark:text-gray-300">
               {{ emp.charAt(0) }}
             </span>
             <span>{{ emp }}</span>
@@ -311,7 +311,7 @@ onBeforeUnmount(() => {
 
         <div
           v-if="searchQuery.trim() && !props.employeeOptions.some(opt => opt.toLowerCase() === searchQuery.trim().toLowerCase())"
-          class="flex cursor-pointer items-center gap-2 border-t border-gray-100 px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/10 transition-colors dark:border-gray-700"
+          class="flex cursor-pointer items-center gap-2 border-t border-gray-100 px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition-colors dark:border-gray-700"
           @click.stop="addCustomEmployee(searchQuery.trim())"
         >
           <FeatherIcon name="plus" :size="14" />
@@ -320,7 +320,7 @@ onBeforeUnmount(() => {
 
         <div
           v-if="filteredOptions.length === 0 && !searchQuery.trim()"
-          class="px-3 py-2 text-center text-xs text-gray-400 italic"
+          class="px-3 py-2 text-center text-sm text-gray-400 italic"
         >
           No employees found
         </div>

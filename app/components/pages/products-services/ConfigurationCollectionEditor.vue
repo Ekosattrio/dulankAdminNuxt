@@ -1,0 +1,63 @@
+<script setup lang="ts">
+import type { ConfigurationColumn, ConfigurationField } from '~/types/configuration'
+import { formatIDR } from '~/utils/currency'
+
+const props = withDefaults(defineProps<{
+  modelValue: Record<string, any>[]
+  title: string
+  columns: ConfigurationColumn[]
+  fields: ConfigurationField[]
+  addLabel?: string
+  readonly?: boolean
+  busy?: boolean
+  error?: string
+}>(), { addLabel: 'Add Record', readonly: false, busy: false, error: '' })
+const emit = defineEmits<{ 'update:modelValue': [rows: Record<string, any>[]]; change: [] }>()
+const editIndex = ref<number | null>(null)
+const deleteIndex = ref<number | null>(null)
+const detailRecord = ref<Record<string, any> | null>(null)
+const modalOpen = ref(false)
+
+const tableColumns = computed<ConfigurationColumn[]>(() => [...props.columns, { key: 'actions', label: 'Action', align: 'center' }])
+const fieldMap = computed(() => new Map(props.fields.map(field => [field.key, field])))
+const displayRows = computed(() => props.modelValue.map((row, index) => {
+  const formatted = { ...row, _index: index, _record: row }
+  for (const column of props.columns) {
+    const field = fieldMap.value.get(column.key)
+    if (field?.type === 'currency') formatted[column.key] = formatIDR(row[column.key] || 0)
+    if (field?.type === 'boolean') formatted[column.key] = row[column.key] ? 'Active' : 'Inactive'
+  }
+  return formatted
+}))
+const editingRecord = computed(() => editIndex.value === null ? null : props.modelValue[editIndex.value] || null)
+const details = computed(() => props.columns.map(column => ({ label: column.label, value: detailRecord.value?.[column.key] ?? '-' })))
+
+function openAdd() { editIndex.value = null; modalOpen.value = true }
+function openEdit(index: number) { editIndex.value = index; modalOpen.value = true }
+function saveRecord(record: Record<string, any>) {
+  const rows = props.modelValue.map(item => ({ ...item }))
+  if (editIndex.value === null) rows.unshift({ id: `${props.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now()}`, ...record })
+  else rows[editIndex.value] = { ...rows[editIndex.value], ...record }
+  emit('update:modelValue', rows)
+  modalOpen.value = false
+  nextTick(() => emit('change'))
+}
+function removeRecord() {
+  if (deleteIndex.value === null) return
+  emit('update:modelValue', props.modelValue.filter((_, index) => index !== deleteIndex.value))
+  deleteIndex.value = null
+  nextTick(() => emit('change'))
+}
+</script>
+
+<template>
+  <section class="min-w-0 space-y-3">
+    <div class="flex flex-wrap items-center justify-between gap-2"><div><h2 class="text-base font-bold text-gray-900 dark:text-white">{{ title }}</h2><p class="text-xs text-gray-500">{{ modelValue.length }} configured records</p></div><button v-if="!readonly" type="button" class="inline-flex h-9 items-center gap-2 rounded-md bg-amber-500 px-3 text-sm font-semibold text-white" :disabled="busy" @click="openAdd"><FeatherIcon name="plus" :size="14" />{{ addLabel }}</button></div>
+    <SalesDataTable :columns="tableColumns" :items="displayRows" :search-placeholder="`Search ${title.toLowerCase()}...`">
+      <template #cell(actions)="{ item }"><div class="flex justify-center gap-1"><SalesActionButton icon="eye" label="View detail" @click="detailRecord = item._record" /><template v-if="!readonly"><SalesActionButton icon="edit-2" label="Edit record" @click="openEdit(item._index)" /><SalesActionButton icon="trash-2" label="Delete record" @click="deleteIndex = item._index" /></template></div></template>
+    </SalesDataTable>
+    <ConfigurationRecordModal :open="modalOpen" :title="`${editingRecord ? 'Edit' : 'Add'} ${title}`" :fields="fields" :record="editingRecord" :busy="busy" :error="error" @close="modalOpen = false" @submit="saveRecord" />
+    <CalculatorDetailDialog :open="!!detailRecord" :title="`${title} Detail`" :details="details" @close="detailRecord = null" />
+    <SalesConfirmDelete :open="deleteIndex !== null" :busy="busy" :error="error" @close="deleteIndex = null" @confirm="removeRecord" />
+  </section>
+</template>

@@ -1,0 +1,36 @@
+{
+  "passwordLastChanged": "22 July 2023, 10:30 AM",
+  "twoFactor": true,
+  "googleAuth": true,
+  "phone": "+6281234567890",
+  "email": "admin@dulank.com",
+  "devices": [
+    {
+      "id": "DEV-01",
+      "name": "Chrome on Windows 11 (Current)",
+      "ip": "180.252.120.45 (Jakarta, ID)",
+      "lastActive": "Active now"
+    },
+    {
+      "id": "DEV-02",
+      "name": "Safari on iPhone 15 Pro",
+      "ip": "114.124.201.88 (Bandung, ID)",
+      "lastActive": "2 Hours ago"
+    }
+  ],
+  "activities": [
+    {
+      "id": "ACT-01",
+      "action": "Login via Password & OTP WhatsApp",
+      "device": "Chrome on Windows",
+      "date": "Today, 09:15 AM"
+    },
+    {
+      "id": "ACT-02",
+      "action": "Password changed successfully",
+      "device": "Chrome on Windows",
+      "date": "22 July 2023, 10:30 AM"
+    }
+  ]
+}
+

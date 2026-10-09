@@ -11,6 +11,7 @@ const emit = defineEmits<{
   download: [item: DownloadFileItem]
   delete: [item: DownloadFileItem]
   edit: [item: DownloadFileItem]
+  currentPageItems: [items: DownloadFileItem[]]
 }>()
 
 type ViewMode = 'list' | 'layout' | 'grid'
@@ -29,6 +30,19 @@ const paginatedFiles = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value
   return props.files.slice(start, start + pageSize.value)
 })
+
+watch(
+  paginatedFiles,
+  (items) => emit('currentPageItems', items),
+  { immediate: true },
+)
+
+watch(
+  () => props.files,
+  () => {
+    currentPage.value = Math.min(currentPage.value, totalPages.value)
+  },
+)
 
 const paginationDisplay = computed(() => {
   if (totalItems.value === 0) return '0 items'

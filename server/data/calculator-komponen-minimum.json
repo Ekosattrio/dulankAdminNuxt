@@ -1,0 +1,9 @@
+[
+  { "id": "1", "name": "Potong Kertas Plano", "rate": 25, "minim": 25000, "unit": "lembar", "used": 1420, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "2", "name": "Pond / Die-Cut Standard", "rate": 50, "minim": 75000, "unit": "lembar", "used": 890, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "3", "name": "Hot Print Foil Emas", "rate": 150, "minim": 150000, "unit": "cm2", "used": 612, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "4", "name": "Laminasi Doff Thermal", "rate": 35, "minim": 100000, "unit": "cm2", "used": 2150, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "5", "name": "Spiral Wire Binding", "rate": 2500, "minim": 50000, "unit": "buku", "used": 430, "update": "08/10/2025 14:15", "status": "Active" },
+  { "id": "6", "name": "UV Vernish Spot", "rate": 60, "minim": 120000, "unit": "lembar", "used": 340, "update": "08/10/2025 14:15", "status": "Active" }
+]
+

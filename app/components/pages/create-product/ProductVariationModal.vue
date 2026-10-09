@@ -85,7 +85,7 @@ function handleSubmit() {
         <div :class="modalFormInputColClass">
           <CurrencyInput
             v-model="form.price"
-            thousand-separator=","
+            thousand-separator="."
             required
             :disabled="busy"
           />

@@ -153,6 +153,14 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      :title="`Delete ${deleteTarget?.accountName} - ${deleteTarget?.bankName}?`"
+      message="Are you sure you want to delete this bank account? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
@@ -221,9 +229,21 @@ const saveAccount = () => {
   showModal.value = false
 }
 
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
+const isDeleteConfirmOpen = ref(false)
+const deleteTarget = ref<any>(null)
+
 const deleteAccount = (item: any) => {
-  if (confirm(`Are you sure you want to delete ${item.accountName} - ${item.bankName}?`)) {
-    accounts.value = accounts.value.filter(a => a.id !== item.id)
+  deleteTarget.value = item
+  isDeleteConfirmOpen.value = true
+}
+
+const confirmDelete = () => {
+  if (deleteTarget.value) {
+    accounts.value = accounts.value.filter(a => a.id !== deleteTarget.value.id)
+    isDeleteConfirmOpen.value = false
+    deleteTarget.value = null
   }
 }
 

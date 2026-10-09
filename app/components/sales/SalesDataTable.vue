@@ -25,6 +25,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: 'update:search', value: string): void
+  (e: 'update:current-page-items', value: T[]): void
   (e: 'print'): void
   (e: 'export-pdf'): void
   (e: 'export-excel'): void
@@ -112,6 +113,12 @@ const paginatedItems = computed(() => {
   return filteredItems.value.slice(start, start + pageSize.value)
 })
 
+watch(
+  paginatedItems,
+  (items) => emit('update:current-page-items', items),
+  { immediate: true },
+)
+
 const startIndex = computed(() => {
   if (filteredItems.value.length === 0) return 0
   return (currentPage.value - 1) * pageSize.value + 1
@@ -183,9 +190,9 @@ watch(totalPages, (value) => {
 
     <!-- Table Body -->
     <div class="overflow-x-auto">
-      <table class="w-full text-start text-xs text-gray-700 dark:text-gray-300">
+      <table class="w-full text-start text-sm text-gray-700 dark:text-gray-300 [&_tbody_td]:!text-sm [&_tbody_td_*]:!text-sm">
         <thead
-          class="bg-gray-50 text-xs font-semibold text-gray-600 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
+          class="bg-gray-50 text-sm font-semibold text-gray-600 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-400"
         >
           <tr>
             <th
@@ -264,7 +271,7 @@ watch(totalPages, (value) => {
 
     <!-- Pagination Controls -->
     <div
-      class="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between border-t border-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400"
+      class="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between border-t border-gray-100 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400"
     >
       <div>
         Showing <span class="font-semibold text-gray-800 dark:text-white">{{ startIndex }}</span> to

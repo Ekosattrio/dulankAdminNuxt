@@ -2,9 +2,21 @@
 import type { ExpenseCategory } from '~/types/expense-category'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 
-defineProps<{
-  categories: ExpenseCategory[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    categories?: ExpenseCategory[]
+    expenseCategories?: ExpenseCategory[]
+  }>(),
+  {
+    categories: () => [],
+    expenseCategories: () => []
+  }
+)
+
+const items = computed(() => {
+  if (props.expenseCategories && props.expenseCategories.length) return props.expenseCategories
+  return props.categories || []
+})
 
 const emit = defineEmits<{
   (e: 'edit', category: ExpenseCategory): void
@@ -25,7 +37,7 @@ const emit = defineEmits<{
         </tr>
       </thead>
       <tbody>
-        <tr v-for="cat in categories" :key="cat.id">
+        <tr v-for="cat in items" :key="cat.id">
           <td class="fw-bold text-dark">{{ cat.categoryName }}</td>
           <td class="text-muted" style="max-width: 300px">{{ cat.description }}</td>
           <td>{{ cat.date }}</td>
@@ -58,7 +70,7 @@ const emit = defineEmits<{
             </div>
           </td>
         </tr>
-        <tr v-if="categories.length === 0">
+        <tr v-if="items.length === 0">
           <td colspan="5" class="text-center py-4 text-muted">
             Tidak ada kategori pengeluaran yang ditemukan.
           </td>

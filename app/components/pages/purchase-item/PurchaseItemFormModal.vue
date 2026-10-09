@@ -186,7 +186,7 @@ function handleSubmit() {
           <CurrencyInput
             v-model="form.price"
             prefix="Rp"
-            thousand-separator=","
+            thousand-separator="."
             align="left"
             placeholder="0"
             :disabled="busy"

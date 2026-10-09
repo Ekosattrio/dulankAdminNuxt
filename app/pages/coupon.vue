@@ -165,10 +165,20 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Delete Coupon"
+      message="Are you sure you want to delete this coupon? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
 definePageMeta({
   layout: 'default'
 })
@@ -288,9 +298,19 @@ function saveCoupon() {
   modalVisible.value = false
 }
 
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetId = ref<number | null>(null)
+
 function deleteCoupon(id: number) {
-  if (confirm('Delete this coupon?')) {
-    coupons.value = coupons.value.filter(c => c.id !== id)
+  deleteTargetId.value = id
+  isDeleteConfirmOpen.value = true
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value !== null) {
+    coupons.value = coupons.value.filter(c => c.id !== deleteTargetId.value)
+    isDeleteConfirmOpen.value = false
+    deleteTargetId.value = null
   }
 }
 

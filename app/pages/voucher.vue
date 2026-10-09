@@ -361,11 +361,20 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Delete Voucher"
+      message="Are you sure you want to delete this coupon/voucher? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import SalesConfirmDelete from "~/components/sales/SalesConfirmDelete.vue";
 
 useLegacyPage({
   title: 'Voucher',
@@ -572,9 +581,19 @@ const updateCoupon = () => {
   closeModal();
 };
 
+const isDeleteConfirmOpen = ref(false);
+const deleteTargetId = ref<number | null>(null);
+
 const deleteItem = (id: number) => {
-  if (confirm("Are you sure you want to delete this coupon?")) {
-    coupons.value = coupons.value.filter((c) => c.id !== id);
+  deleteTargetId.value = id;
+  isDeleteConfirmOpen.value = true;
+};
+
+const confirmDelete = () => {
+  if (deleteTargetId.value !== null) {
+    coupons.value = coupons.value.filter((c) => c.id !== deleteTargetId.value);
+    isDeleteConfirmOpen.value = false;
+    deleteTargetId.value = null;
   }
 };
 

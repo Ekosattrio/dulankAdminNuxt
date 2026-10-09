@@ -1,6 +1,10 @@
 [
   {
     "id": "1",
+    "categoryId": "2",
+    "subCategoryId": "1",
+    "unitId": "4",
+    "storeId": "1",
     "code": "001001",
     "name": "Flexy 280gr",
     "category": "Print Outdoor (Spanduk/Baliho)",
@@ -9,10 +13,16 @@
     "price": 15000,
     "priceType": "Size Calculation",
     "created": "Admin : 25/12/2024 13:15",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2024-12-25T06:15:00.000Z",
+    "updatedAt": "2024-12-25T06:15:00.000Z"
   },
   {
     "id": "2",
+    "categoryId": "5",
+    "subCategoryId": "2",
+    "unitId": "6",
+    "storeId": "1",
     "code": "001002",
     "name": "Kartu Nama Matte",
     "category": "Digital Printing A3+",
@@ -21,10 +31,16 @@
     "price": 35000,
     "priceType": "Single Price",
     "created": "Budi : 26/12/2024 09:30",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2024-12-26T02:30:00.000Z",
+    "updatedAt": "2024-12-26T02:30:00.000Z"
   },
   {
     "id": "3",
+    "categoryId": "2",
+    "subCategoryId": "1",
+    "unitId": "4",
+    "storeId": "1",
     "code": "001003",
     "name": "Spanduk Korea 440gr",
     "category": "Print Outdoor (Spanduk/Baliho)",
@@ -33,10 +49,16 @@
     "price": 30000,
     "priceType": "Size Calculation",
     "created": "Admin : 28/12/2024 11:00",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2024-12-28T04:00:00.000Z",
+    "updatedAt": "2024-12-28T04:00:00.000Z"
   },
   {
     "id": "4",
+    "categoryId": "1",
+    "subCategoryId": "3",
+    "unitId": "7",
+    "storeId": "1",
     "code": "001004",
     "name": "Brosur A4 Art Paper",
     "category": "Jasa Cetak Offset",
@@ -45,10 +67,16 @@
     "price": 250000,
     "priceType": "Quantity Tier",
     "created": "Budi : 29/12/2024 15:45",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2024-12-29T08:45:00.000Z",
+    "updatedAt": "2024-12-29T08:45:00.000Z"
   },
   {
     "id": "5",
+    "categoryId": "6",
+    "subCategoryId": "4",
+    "unitId": "4",
+    "storeId": "1",
     "code": "001005",
     "name": "Sticker Vinyl Glossy",
     "category": "Cutting Sticker",
@@ -57,10 +85,16 @@
     "price": 25000,
     "priceType": "Size Calculation",
     "created": "Admin : 02/01/2025 10:20",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-02T03:20:00.000Z",
+    "updatedAt": "2025-01-02T03:20:00.000Z"
   },
   {
     "id": "6",
+    "categoryId": "8",
+    "subCategoryId": "5",
+    "unitId": "1",
+    "storeId": "1",
     "code": "001006",
     "name": "Kalender Meja 2025",
     "category": "Finishing (Laminating/Jilid)",
@@ -69,10 +103,16 @@
     "price": 45000,
     "priceType": "Tier Price",
     "created": "Admin : 05/01/2025 14:10",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-05T07:10:00.000Z",
+    "updatedAt": "2025-01-05T07:10:00.000Z"
   },
   {
     "id": "7",
+    "categoryId": "9",
+    "subCategoryId": "7",
+    "unitId": "1",
+    "storeId": "1",
     "code": "001007",
     "name": "Mug Keramik Custom",
     "category": "Merchandise & Souvenir (UV Print)",
@@ -81,22 +121,34 @@
     "price": 20000,
     "priceType": "Single Price",
     "created": "Budi : 07/01/2025 16:00",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-07T09:00:00.000Z",
+    "updatedAt": "2025-01-07T09:00:00.000Z"
   },
   {
     "id": "8",
+    "categoryId": "3",
+    "subCategoryId": "8",
+    "unitId": "1",
+    "storeId": "2",
     "code": "001008",
     "name": "Banner Roll Up 60x160",
     "category": "Print Indoor (Poster/X-Banner)",
-    "subCategory": "Print Outdoor",
+    "subCategory": "Print Indoor",
     "unit": "Piece",
     "price": 150000,
     "priceType": "Single Price",
     "created": "Admin : 10/01/2025 11:30",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-10T04:30:00.000Z",
+    "updatedAt": "2025-01-10T04:30:00.000Z"
   },
   {
     "id": "9",
+    "categoryId": "1",
+    "subCategoryId": "3",
+    "unitId": "8",
+    "storeId": "1",
     "code": "001009",
     "name": "Nota 2 Ply NCR",
     "category": "Jasa Cetak Offset",
@@ -105,10 +157,16 @@
     "price": 12000,
     "priceType": "Quantity Tier",
     "created": "Admin : 12/01/2025 13:00",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-12T06:00:00.000Z",
+    "updatedAt": "2025-01-12T06:00:00.000Z"
   },
   {
     "id": "10",
+    "categoryId": "7",
+    "subCategoryId": "6",
+    "unitId": "1",
+    "storeId": "2",
     "code": "001010",
     "name": "Kaos Sablon DTF Cotton 30s",
     "category": "Sablon DTF (Digital Transfer Film)",
@@ -117,7 +175,9 @@
     "price": 55000,
     "priceType": "Single Price",
     "created": "Budi : 15/01/2025 10:00",
-    "status": "Active"
+    "status": "Active",
+    "createdAt": "2025-01-15T03:00:00.000Z",
+    "updatedAt": "2025-01-15T03:00:00.000Z"
   }
 ]
 

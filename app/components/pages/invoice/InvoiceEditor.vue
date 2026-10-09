@@ -121,7 +121,8 @@ const handleSubmit = () => {
             <CurrencyInput
               :id="formId + '-field-2'"
               v-model="form.amount"
-              thousand-separator=","
+              thousand-separator="."
+              :min="0"
               placeholder="0"
               required
             />
@@ -136,7 +137,8 @@ const handleSubmit = () => {
             <CurrencyInput
               :id="formId + '-field-3'"
               v-model="form.paid"
-              thousand-separator=","
+              thousand-separator="."
+              :min="0"
               placeholder="0"
             />
           </div>

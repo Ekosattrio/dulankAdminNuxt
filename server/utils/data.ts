@@ -16,6 +16,7 @@ export function readJSON<T>(filename: string, defaultValue?: T): T {
       return JSON.parse(raw) as T
     } catch (err) {
       console.error(`Error reading JSON ${filename} from disk:`, err)
+      throw new Error(`Unable to read ${filename}; existing data was preserved`, { cause: err })
     }
   }
 
@@ -35,8 +36,7 @@ export function writeJSON<T>(filename: string, data: T): void {
     writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
   } catch (err) {
     console.error(`Error writing JSON ${filename}:`, err)
-    // In read-only serverless environments (like Netlify Functions), writing to disk will fail silently
-    // without crashing the app.
+    throw new Error(`Unable to persist ${filename}`, { cause: err })
   }
 }
 

@@ -183,10 +183,20 @@
         </div>
       </div>
     </div>
+    <!-- Confirm Delete Modal -->
+    <SalesConfirmDelete
+      :open="isDeleteConfirmOpen"
+      title="Remove Workflow Step"
+      message="Are you sure you want to remove this workflow step? This action cannot be undone."
+      @cancel="isDeleteConfirmOpen = false"
+      @confirm="confirmDeleteStep"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+
 definePageMeta({
   layout: 'default'
 })
@@ -262,9 +272,19 @@ function moveStep(idx: number, delta: number) {
   }
 }
 
+const isDeleteConfirmOpen = ref(false)
+const deleteTargetIdx = ref<number | null>(null)
+
 function removeStep(idx: number) {
-  if (currentProduct.value && confirm('Remove this workflow step?')) {
-    currentProduct.value.workflow.splice(idx, 1)
+  deleteTargetIdx.value = idx
+  isDeleteConfirmOpen.value = true
+}
+
+function confirmDeleteStep() {
+  if (deleteTargetIdx.value !== null && currentProduct.value) {
+    currentProduct.value.workflow.splice(deleteTargetIdx.value, 1)
+    isDeleteConfirmOpen.value = false
+    deleteTargetIdx.value = null
   }
 }
 
@@ -281,7 +301,7 @@ function addWorkflowStep() {
 }
 
 function saveJobOrder() {
-  alert('Job Order workflow updated successfully!')
+  navigateTo('/job-orders')
 }
 </script>
 

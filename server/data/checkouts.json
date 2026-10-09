@@ -1,7 +1,7 @@
 [
   {
     "id": "CHK-2001",
-    "customerId": "CUST-001",
+    "customerId": "ID000001",
     "orderId": "ORD-501",
     "userEmail": "john.doe@email.com",
     "dateCheckout": "2025-09-29",
@@ -14,7 +14,7 @@
   },
   {
     "id": "CHK-2002",
-    "customerId": "CUST-002",
+    "customerId": "ID000002",
     "orderId": "ORD-502",
     "userEmail": "jane.smith@email.com",
     "dateCheckout": "2025-09-29",
@@ -27,7 +27,7 @@
   },
   {
     "id": "CHK-2003",
-    "customerId": "CUST-003",
+    "customerId": "ID000003",
     "orderId": "ORD-503",
     "userEmail": "david.williams@email.com",
     "dateCheckout": "2025-09-28",
@@ -40,7 +40,7 @@
   },
   {
     "id": "CHK-2004",
-    "customerId": "CUST-004",
+    "customerId": "ID000004",
     "orderId": "ORD-504",
     "userEmail": "sarah.jones@email.com",
     "dateCheckout": "2025-09-27",
@@ -53,7 +53,7 @@
   },
   {
     "id": "CHK-2005",
-    "customerId": "CUST-005",
+    "customerId": "ID000005",
     "orderId": "ORD-505",
     "userEmail": "michael.brown@email.com",
     "dateCheckout": "2025-09-26",
@@ -66,7 +66,7 @@
   },
   {
     "id": "CHK-2006",
-    "customerId": "CUST-006",
+    "customerId": "ID000006",
     "orderId": "ORD-506",
     "userEmail": "emily.davis@email.com",
     "dateCheckout": "2025-09-25",
@@ -79,7 +79,7 @@
   },
   {
     "id": "CHK-2007",
-    "customerId": "CUST-007",
+    "customerId": "ID000007",
     "orderId": "ORD-507",
     "userEmail": "chris.wilson@email.com",
     "dateCheckout": "2025-09-24",
@@ -92,7 +92,7 @@
   },
   {
     "id": "CHK-2008",
-    "customerId": "CUST-008",
+    "customerId": "ID000008",
     "orderId": "ORD-508",
     "userEmail": "olivia.martin@email.com",
     "dateCheckout": "2025-09-23",
@@ -105,7 +105,7 @@
   },
   {
     "id": "CHK-2009",
-    "customerId": "CUST-009",
+    "customerId": "ID000009",
     "orderId": "ORD-509",
     "userEmail": "daniel.lee@email.com",
     "dateCheckout": "2025-09-22",
@@ -118,7 +118,7 @@
   },
   {
     "id": "CHK-2010",
-    "customerId": "CUST-010",
+    "customerId": "ID000010",
     "orderId": "ORD-510",
     "userEmail": "sophia.hall@email.com",
     "dateCheckout": "2025-09-21",

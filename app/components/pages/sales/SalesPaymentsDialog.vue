@@ -83,7 +83,8 @@ async function save() {
         ><label :class="salesLabel"
           >Paying Amount *<CurrencyInput
             v-model="amount"
-            thousand-separator=","
+            thousand-separator="."
+            :min="1"
             :max="due"
             required
         /></label>

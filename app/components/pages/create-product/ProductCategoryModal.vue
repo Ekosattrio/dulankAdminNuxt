@@ -10,6 +10,9 @@ import {
 const props = defineProps<{
   open: boolean
   busy?: boolean
+  title?: string
+  label?: string
+  placeholder?: string
 }>()
 
 const emit = defineEmits<{
@@ -37,19 +40,19 @@ function handleSubmit() {
 <template>
   <SalesDialog
     :open="open"
-    title="Add New Category"
+    :title="title || 'Add New Category'"
     :busy="busy"
     @close="$emit('close')"
   >
     <form class="space-y-4" @submit.prevent="handleSubmit">
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Category Name <span class="text-red-500">*</span></label>
+        <label :class="modalFormLabelClass">{{ label || 'Category Name' }} <span class="text-red-500">*</span></label>
         <div :class="modalFormInputColClass">
           <input
             v-model="categoryName"
             type="text"
             required
-            placeholder="e.g. Digital Printing"
+            :placeholder="placeholder || 'e.g. Digital Printing'"
             :class="formControlClass"
             :disabled="busy"
           />

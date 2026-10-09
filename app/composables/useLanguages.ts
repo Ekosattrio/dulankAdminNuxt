@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { LanguageItem, LanguageFormData } from '#server/types/system-settings'
+import type { LanguageItem, LanguageFormData, LanguageTranslationDocument } from '#server/types/system-settings'
 
 interface ResponseData {
   success: boolean
@@ -59,6 +59,21 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     })
   }
 
+  const getTranslations = async (item: LanguageItem) => {
+    return await $fetch<{ success: boolean; data: LanguageTranslationDocument }>(
+      `/api/languages/${item.id}/translations`,
+    )
+  }
+
+  const importTranslations = async (item: LanguageItem, translations: Record<string, unknown>) => {
+    const response = await $fetch<{ success: boolean; data: LanguageTranslationDocument; message?: string }>(
+      `/api/languages/${item.id}/translations`,
+      { method: 'POST', body: { translations } },
+    )
+    await refresh()
+    return response
+  }
+
   return {
     languages,
     pending,
@@ -68,5 +83,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     deleteLanguage,
     toggleLanguageStatus,
     toggleRtl,
+    getTranslations,
+    importTranslations,
   }
 }

@@ -109,7 +109,8 @@ const productId = useId()
             <label :class="salesLabel" class="lg:col-span-2"
               >Price (IDR)<CurrencyInput
                 v-model="item.price"
-                thousand-separator=","
+                thousand-separator="."
+                :min="0"
                 required
                 @update:model-value="legacyTax = null"
             /></label>
@@ -124,7 +125,7 @@ const productId = useId()
           </div>
         </div>
         <label v-if="!items.length && legacySubtotal" :class="salesLabel"
-          >Sub Total<CurrencyInput v-model="legacySubtotal" thousand-separator=","
+          >Sub Total<CurrencyInput v-model="legacySubtotal" thousand-separator="." :min="0"
         /></label>
         <button type="button" class="inline-flex items-center gap-2 text-xs text-primary" @click="addItem">
           <FeatherIcon name="plus-circle" :size="14" />add New blank
@@ -151,7 +152,8 @@ const productId = useId()
           <label :class="salesLabel"
             >Shipping Costs<CurrencyInput
               v-model="deliveryFee"
-              thousand-separator=","
+              thousand-separator="."
+              :min="0"
               @update:model-value="legacyTax = null"
           /></label>
           <label :class="salesLabel"
