@@ -194,6 +194,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Service Component" message="Are you sure you want to delete this service component?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Komponen Cetak & Jasa Lainnya" :columns="printColumns" :items="filteredList" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -231,6 +233,14 @@ const items = ref<JasaLain[]>([
 const searchQuery = ref('')
 const filterUnit = ref('')
 const showFilter = ref(false)
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Nama Jasa' },
+  { key: 'harga', label: 'Tarif Satuan', align: 'right' as const },
+  { key: 'minimHarga', label: 'Minimal Charge', align: 'right' as const },
+  { key: 'satuan', label: 'Satuan' },
+]
 
 const filteredList = computed(() => {
   return items.value.filter(item => {
@@ -304,17 +314,21 @@ function saveItem() {
 }
 
 function deleteItem(id: number) {
-  if (confirm('Are you sure you want to delete this service component?')) {
-    items.value = items.value.filter(i => i.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  items.value = items.value.filter(i => i.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

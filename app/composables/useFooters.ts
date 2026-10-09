@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useFooters() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/footers', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/footers', {
     key: 'footers-list'
   })
 
   const footers = computed<FooterLinkItem[]>(() => data.value?.data ?? [])
 
   const saveFooter = async (payload: FooterLinkFormData) => {
-    const res = await $fetch<{ success: boolean; data: FooterLinkItem; message?: string }>('/api/footers', {
+    const res = await apiFetch<{ success: boolean; data: FooterLinkItem; message?: string }>('/api/footers', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useFooters() {
   }
 
   const deleteFooter = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/footers/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/footers/${id}`, {
       method: 'DELETE'
     })
     await refresh()

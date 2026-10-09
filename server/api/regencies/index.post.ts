@@ -23,14 +23,17 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((r) => String(r.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Regency not found' })
+      const updated: Regency = {
+        ...current,
         ...body,
-        province: provinceName || items[index].province,
-        provinceId: provinceId || items[index].provinceId,
-      } as Regency
+        province: provinceName || current.province,
+        provinceId: provinceId || current.provinceId,
+      }
+      items[index] = updated
       writeData('regencies.json', items)
-      return { success: true, data: items[index], message: 'Regency updated successfully' }
+      return { success: true, data: updated, message: 'Regency updated successfully' }
     }
   }
 

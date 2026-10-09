@@ -14,7 +14,7 @@ interface ResponseData {
 export function usePaperItemsSelf(filterParams?: Ref<PaperItemFilterParams> | PaperItemFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/paper-items', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/paper-items', {
     key: 'paper-items-self-list',
     query: params
   })
@@ -23,7 +23,7 @@ export function usePaperItemsSelf(filterParams?: Ref<PaperItemFilterParams> | Pa
   const stats = computed(() => data.value?.stats ?? { total: 0, totalGroups: 0, active: 0, deactive: 0 })
 
   const saveItem = async (payload: PaperItemFormData) => {
-    const res = await $fetch<{ success: boolean; data: PaperItem; message?: string }>('/api/paper-items', {
+    const res = await apiFetch<{ success: boolean; data: PaperItem; message?: string }>('/api/paper-items', {
       method: 'POST',
       body: payload
     })
@@ -32,7 +32,7 @@ export function usePaperItemsSelf(filterParams?: Ref<PaperItemFilterParams> | Pa
   }
 
   const deleteItem = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/paper-items/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/paper-items/${id}`, {
       method: 'DELETE'
     })
     await refresh()

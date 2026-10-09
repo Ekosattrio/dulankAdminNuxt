@@ -9,12 +9,12 @@ interface ApiResponse<T> {
 export function useJobList(filterParams?: Ref<JobListFilterParams> | JobListFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh: refreshList } = useFetch<ApiResponse<JobListItem[]>>('/api/job-list', {
+  const { data, pending, error, refresh: refreshList } = useApiFetch<ApiResponse<JobListItem[]>>('/api/job-list', {
     key: 'job-list-data',
     query: params,
   })
 
-  const { data: flowsData, refresh: refreshFlows } = useFetch<ApiResponse<FlowSummary[]>>('/api/job-list/flows', {
+  const { data: flowsData, refresh: refreshFlows } = useApiFetch<ApiResponse<FlowSummary[]>>('/api/job-list/flows', {
     key: 'job-list-flows',
   })
 

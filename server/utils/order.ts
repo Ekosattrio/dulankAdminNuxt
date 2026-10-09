@@ -40,10 +40,10 @@ export function getOrderStats(): OrderStats {
   const customers = new Set(items.map((i) => i.customer.trim().toLowerCase()))
 
   return {
-    totalOrders: items.length ? 307144 : 0, // baseline or items.length
-    totalCustomers: customers.size || 4385,
-    totalComplete: items.filter((i) => i.status === 'Complete').length * 300 || 3000,
-    totalCancel: items.filter((i) => i.status === 'Cancel').length * 350 || 1385,
+    totalOrders: items.length,
+    totalCustomers: customers.size,
+    totalComplete: items.filter((i) => i.status === 'Complete').length,
+    totalCancel: items.filter((i) => i.status === 'Cancel').length,
   }
 }
 
@@ -60,6 +60,9 @@ export function updateOrderStatus(id: string, status: OrderStatus, statusBy: str
   }
 
   const current = items[index]
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: 'Order not found' })
+  }
   const updated: Order = {
     ...current,
     status,
@@ -100,6 +103,9 @@ export function deleteOrder(id: string): Order {
   }
 
   const [removed] = items.splice(index, 1)
+  if (!removed) {
+    throw createError({ statusCode: 404, statusMessage: 'Order not found' })
+  }
   writeOrderData(items)
   return removed
 }

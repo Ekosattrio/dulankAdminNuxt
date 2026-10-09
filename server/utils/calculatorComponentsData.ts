@@ -54,17 +54,20 @@ export function saveJasaLainItem(payload: JasaLainFormData): JasaLainItem {
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Service component not found' })
+      const updated: JasaLainItem = {
+        ...current,
         name: payload.name.trim(),
         harga: Number(payload.harga) || 0,
         minimHarga: Number(payload.minimHarga) || 0,
         satuan: payload.satuan.trim(),
-        status: payload.status || all[idx].status || 'Active',
+        status: payload.status || current.status || 'Active',
         updatedAt: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(JASA_LAIN_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -126,18 +129,21 @@ export function saveKomponenMinimumItem(payload: KomponenMinimumFormData): Kompo
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Minimum component not found' })
+      const updated: KomponenMinimumItem = {
+        ...current,
         name: payload.name.trim(),
         rate: Number(payload.rate) || 0,
         minim: Number(payload.minim) || 0,
         unit: payload.unit.trim(),
-        used: payload.used !== undefined ? payload.used : all[idx].used,
-        status: payload.status || all[idx].status || 'Active',
+        used: payload.used !== undefined ? payload.used : current.used,
+        status: payload.status || current.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(KOMPONEN_MINIMUM_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -200,17 +206,20 @@ export function saveKomponenFiksItem(payload: KomponenFiksFormData): KomponenFik
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Fixed component not found' })
+      const updated: KomponenFiksItem = {
+        ...current,
         name: payload.name.trim(),
         value: Number(payload.value) || 0,
         unit: payload.unit.trim(),
-        used: payload.used !== undefined ? payload.used : all[idx].used,
-        status: payload.status || all[idx].status || 'Active',
+        used: payload.used !== undefined ? payload.used : current.used,
+        status: payload.status || current.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(KOMPONEN_FIKS_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 

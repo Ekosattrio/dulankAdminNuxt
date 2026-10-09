@@ -16,14 +16,17 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allCategories.findIndex(c => c.id === body.id)
     if (idx !== -1) {
-      allCategories[idx] = {
-        ...allCategories[idx],
+      const current = allCategories[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+      const updated: Category = {
+        ...current,
         name: body.name,
-        code: body.code || allCategories[idx].code,
+        code: body.code || current.code,
         status: body.status || 'Active'
       }
+      allCategories[idx] = updated
       await writeJSON('categories.json', allCategories)
-      return createResponse(allCategories[idx], 'Category updated successfully')
+      return createResponse(updated, 'Category updated successfully')
     }
   }
 

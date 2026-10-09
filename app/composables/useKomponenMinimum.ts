@@ -13,7 +13,7 @@ interface ResponseData {
 export function useKomponenMinimum(filterParams?: Ref<{ search?: string; status?: string }> | { search?: string; status?: string }) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/calculator-components/komponen-minimum', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/calculator-components/komponen-minimum', {
     key: 'calculator-komponen-minimum-list',
     query: params
   })
@@ -22,7 +22,7 @@ export function useKomponenMinimum(filterParams?: Ref<{ search?: string; status?
   const stats = computed(() => data.value?.meta ?? { total: 0, active: 0, deactive: 0 })
 
   const saveItem = async (payload: KomponenMinimumFormData) => {
-    const res = await $fetch<{ success: boolean; data: KomponenMinimumItem; message?: string }>('/api/calculator-components/komponen-minimum', {
+    const res = await apiFetch<{ success: boolean; data: KomponenMinimumItem; message?: string }>('/api/calculator-components/komponen-minimum', {
       method: 'POST',
       body: payload
     })
@@ -31,7 +31,7 @@ export function useKomponenMinimum(filterParams?: Ref<{ search?: string; status?
   }
 
   const deleteItem = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/calculator-components/komponen-minimum/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/calculator-components/komponen-minimum/${id}`, {
       method: 'DELETE'
     })
     await refresh()

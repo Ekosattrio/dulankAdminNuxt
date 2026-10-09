@@ -16,7 +16,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     }
   })
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/languages', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/languages', {
     key: 'languages-data',
     query: queryParams,
   })
@@ -24,7 +24,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
   const languages = computed<LanguageItem[]>(() => data.value?.data ?? [])
 
   const saveLanguage = async (payload: LanguageFormData) => {
-    const res = await $fetch<{ success: boolean; data: LanguageItem; message?: string }>('/api/languages', {
+    const res = await apiFetch<{ success: boolean; data: LanguageItem; message?: string }>('/api/languages', {
       method: 'POST',
       body: payload,
     })
@@ -33,7 +33,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
   }
 
   const deleteLanguage = async (id: string) => {
-    const res = await $fetch<{ success: boolean; data: { id: string }; message?: string }>(`/api/languages/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: { id: string }; message?: string }>(`/api/languages/${id}`, {
       method: 'DELETE',
     })
     await refresh()
@@ -60,13 +60,13 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
   }
 
   const getTranslations = async (item: LanguageItem) => {
-    return await $fetch<{ success: boolean; data: LanguageTranslationDocument }>(
+    return await apiFetch<{ success: boolean; data: LanguageTranslationDocument }>(
       `/api/languages/${item.id}/translations`,
     )
   }
 
   const importTranslations = async (item: LanguageItem, translations: Record<string, unknown>) => {
-    const response = await $fetch<{ success: boolean; data: LanguageTranslationDocument; message?: string }>(
+    const response = await apiFetch<{ success: boolean; data: LanguageTranslationDocument; message?: string }>(
       `/api/languages/${item.id}/translations`,
       { method: 'POST', body: { translations } },
     )

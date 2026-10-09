@@ -16,16 +16,19 @@ export default defineEventHandler(async (event) => {
   const existingIdx = body.id ? roles.findIndex((r) => r.id === body.id) : -1
 
   if (existingIdx !== -1) {
-    roles[existingIdx] = {
-      ...roles[existingIdx],
+    const current = roles[existingIdx]
+    if (!current) throw createError({ statusCode: 404, statusMessage: 'Role not found' })
+    const updated: SystemRole = {
+      ...current,
       name: body.name,
-      description: body.description !== undefined ? body.description : (roles[existingIdx].description || ''),
+      description: body.description !== undefined ? body.description : (current.description || ''),
     }
+    roles[existingIdx] = updated
     writeJSON('roles.json', roles)
     return {
       success: true,
       message: 'Role updated successfully',
-      data: roles[existingIdx],
+      data: updated,
     }
   } else {
     const today = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date())

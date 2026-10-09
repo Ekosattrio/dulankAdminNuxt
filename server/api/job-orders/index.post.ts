@@ -16,19 +16,22 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allOrders.findIndex(j => j.id === body.id)
     if (idx !== -1) {
-      allOrders[idx] = {
-        ...allOrders[idx],
+      const current = allOrders[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Job order not found' })
+      const updated: JobOrder = {
+        ...current,
         customer: body.customer,
         product: body.product,
-        jobTitle: body.jobTitle || allOrders[idx].jobTitle,
-        dueDate: body.dueDate || allOrders[idx].dueDate,
-        priority: body.priority || allOrders[idx].priority,
-        status: body.status || allOrders[idx].status,
-        workflowCategory: body.workflowCategory || allOrders[idx].workflowCategory,
-        workflowType: body.workflowType || allOrders[idx].workflowType
+        jobTitle: body.jobTitle || current.jobTitle,
+        dueDate: body.dueDate || current.dueDate,
+        priority: body.priority || current.priority,
+        status: body.status || current.status,
+        workflowCategory: body.workflowCategory || current.workflowCategory,
+        workflowType: body.workflowType || current.workflowType
       }
+      allOrders[idx] = updated
       await writeJSON('job-orders.json', allOrders)
-      return createResponse(allOrders[idx], 'Job order updated successfully')
+      return createResponse(updated, 'Job order updated successfully')
     }
   }
 

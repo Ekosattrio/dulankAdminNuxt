@@ -26,10 +26,7 @@ const {
   payload,
 } = useSalesEditor(props)
 const { formatRupiah } = useFormatters()
-const { data: products } = useFetch<{ product: { name: string; code: string; category: string }[] }>(
-  '/assets/json/product.json',
-  { key: 'sales-products-source' },
-)
+const { products } = useProducts()
 const productId = useId()
 </script>
 <template>
@@ -52,7 +49,7 @@ const productId = useId()
           >PO<input v-model="doc.po" :class="salesField" placeholder="Invoice No"
         /></label>
         <datalist :id="productId">
-          <option v-for="product in products?.product || []" :key="product.code" :value="product.name" />
+          <option v-for="product in products" :key="product.id" :value="product.name" />
         </datalist>
         <div v-for="(item, index) in items" :key="item.id" class="space-y-3 rounded-md bg-primary/5 p-3">
           <div class="grid grid-cols-2 items-end gap-3 lg:grid-cols-12">

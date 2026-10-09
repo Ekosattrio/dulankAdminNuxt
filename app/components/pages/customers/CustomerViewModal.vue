@@ -14,26 +14,20 @@ defineEmits<{
 }>()
 
 const activeTab = ref<'details' | 'address'>('details')
-const customerAddresses = ref<any[]>([])
-const loadingAddresses = ref(false)
+const { customers: addresses, pending: loadingAddresses, refresh } = useAddress()
+const customerAddresses = computed(() => {
+  if (!props.customer) return []
+  return addresses.value.filter((address) =>
+    address.customerId === props.customer?.customerId || address.customerId === props.customer?.id,
+  )
+})
 
 watch(
   () => [props.open, props.customer],
-  async ([isOpen, cust]) => {
+  ([isOpen, cust]) => {
     if (isOpen && cust) {
       activeTab.value = 'details'
-      loadingAddresses.value = true
-      try {
-        const res = await $fetch<any>('/api/address')
-        const allCustAddresses = res?.data?.customers || []
-        customerAddresses.value = allCustAddresses.filter(
-          (a: any) => a.customerId === (cust as Customer).customerId || a.customerId === (cust as Customer).id
-        )
-      } catch (err) {
-        customerAddresses.value = []
-      } finally {
-        loadingAddresses.value = false
-      }
+      refresh()
     }
   },
   { immediate: true },

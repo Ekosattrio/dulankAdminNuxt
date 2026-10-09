@@ -23,6 +23,7 @@
           <NuxtLink to="/add-sales" class="btn btn-primary"> <i class="ti ti-circle-plus me-1"></i>Add Sales </NuxtLink>
         </div>
       </div>
+      <p v-if="feedbackMessage" role="status" class="alert alert-success py-2">{{ feedbackMessage }}</p>
 
       <!-- Table List Card -->
       <div class="card table-list-card">
@@ -234,6 +235,15 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      title="Online Orders"
+      :columns="printColumns"
+      :items="filteredOrders"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -310,6 +320,18 @@ const orders = ref<OnlineOrder[]>([
 const searchQuery = ref("");
 const filterStatus = ref("");
 const filterPayment = ref("");
+const feedbackMessage = ref("");
+const print = useTablePrint();
+const printColumns = [
+  { key: "reference", label: "Reference" },
+  { key: "customer", label: "Customer" },
+  { key: "date", label: "Date" },
+  { key: "status", label: "Status" },
+  { key: "grandTotal", label: "Grand Total", align: "right" as const },
+  { key: "paid", label: "Paid", align: "right" as const },
+  { key: "due", label: "Due", align: "right" as const },
+  { key: "paymentStatus", label: "Payment Status" },
+];
 
 const filteredOrders = computed(() => {
   return orders.value.filter((o) => {
@@ -339,7 +361,8 @@ function viewDetail(order: OnlineOrder) {
 }
 
 function openPayments(order: OnlineOrder) {
-  alert(`Payment records for ${order.reference}: Total Paid Rp ${formatNumber(order.paid)}`);
+  selectedOrder.value = order;
+  detailModalVisible.value = true;
 }
 
 function openCreatePayment(order: OnlineOrder) {
@@ -356,7 +379,7 @@ function submitPayment() {
       selectedOrder.value.paymentStatus = "Paid";
       selectedOrder.value.status = "Complete";
     }
-    alert(`Payment recorded successfully!`);
+    feedbackMessage.value = `Payment for ${selectedOrder.value.reference} recorded successfully.`;
   }
   createPaymentVisible.value = false;
 }
@@ -378,11 +401,11 @@ function confirmDelete() {
 }
 
 function exportPdf() {
-  alert("Exporting online orders as PDF...");
+  print.openPrintModal("pdf");
 }
 
 function printTable() {
-  window.print();
+  print.openPrintModal("print");
 }
 
 function refresh() {

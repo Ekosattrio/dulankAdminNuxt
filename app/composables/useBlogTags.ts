@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useBlogTags() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/blog-tags', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/blog-tags', {
     key: 'blog-tags-list'
   })
 
   const tags = computed<BlogTag[]>(() => data.value?.data ?? [])
 
   const saveTag = async (payload: BlogTagFormData) => {
-    const res = await $fetch<{ success: boolean; data: BlogTag; message?: string }>('/api/blog-tags', {
+    const res = await apiFetch<{ success: boolean; data: BlogTag; message?: string }>('/api/blog-tags', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useBlogTags() {
   }
 
   const deleteTag = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/blog-tags/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/blog-tags/${id}`, {
       method: 'DELETE'
     })
     await refresh()

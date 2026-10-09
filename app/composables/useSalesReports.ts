@@ -18,7 +18,7 @@ export function useSalesReport() {
   const channel = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<ReportApiResponse<SalesReportItem[]>>('/api/reports/sales', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<SalesReportItem[]>>('/api/reports/sales', {
     key: 'reports-sales-list',
   })
 
@@ -33,28 +33,13 @@ export function useSalesReport() {
       list = list.filter((i) => i.channel?.toLowerCase() === channel.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })
 
   const stats = computed(() => {
     const list = items.value
-    const isFiltered = !!(search.value || category.value || channel.value || dateRange.value)
-
-    if (!isFiltered) {
-      return {
-        totalSoldUnit: 307144,
-        totalSales: 4385,
-        totalDue: 385656,
-        totalAmount: 4000,
-        posSales: 215250500,
-        websiteSales: 52250500,
-        quotationSales: 75250500,
-        staffSales: 138250500,
-      }
-    }
-
     const totalSoldUnit = list.reduce((sum, item) => sum + (item.soldQty || 0), 0)
     const totalSales = list.reduce((sum, item) => sum + (item.totalSales || 0), 0)
     const totalDue = list.reduce((sum, item) => sum + (item.totalDue || 0), 0)
@@ -104,7 +89,7 @@ export function useBestSellerReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<ReportApiResponse<BestSellerItem[]>>('/api/reports/best-seller', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<BestSellerItem[]>>('/api/reports/best-seller', {
     key: 'reports-best-seller-list',
   })
 
@@ -116,7 +101,7 @@ export function useBestSellerReport() {
       list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })
@@ -153,7 +138,7 @@ export function usePurchaseReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<ReportApiResponse<PurchaseReportItem[]>>('/api/reports/purchases', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<PurchaseReportItem[]>>('/api/reports/purchases', {
     key: 'reports-purchase-list',
   })
 
@@ -165,7 +150,7 @@ export function usePurchaseReport() {
       list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })
@@ -203,7 +188,7 @@ export function useInvoiceReport() {
   const year = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<ReportApiResponse<InvoiceReportItem[]>>('/api/reports/invoices', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<InvoiceReportItem[]>>('/api/reports/invoices', {
     key: 'reports-invoice-list',
   })
 
@@ -218,7 +203,7 @@ export function useInvoiceReport() {
       list = list.filter((i) => String(i.year) === String(year.value))
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })

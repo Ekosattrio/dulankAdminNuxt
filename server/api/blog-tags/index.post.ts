@@ -24,15 +24,18 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allTags.findIndex(t => String(t.id) === String(body.id))
     if (idx !== -1) {
-      allTags[idx] = {
-        ...allTags[idx],
+      const current = allTags[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Tag not found' })
+      const updated: BlogTag = {
+        ...current,
         name: body.name,
         slug: body.slug || slugify(body.name),
-        description: body.description ?? allTags[idx].description,
-        taggedPosts: typeof body.taggedPosts === 'number' ? body.taggedPosts : allTags[idx].taggedPosts,
+        description: body.description ?? current.description,
+        taggedPosts: typeof body.taggedPosts === 'number' ? body.taggedPosts : current.taggedPosts,
       }
+      allTags[idx] = updated
       writeJSON('blog-tags.json', allTags)
-      return createResponse(allTags[idx], 'Tag updated successfully')
+      return createResponse(updated, 'Tag updated successfully')
     }
   }
 

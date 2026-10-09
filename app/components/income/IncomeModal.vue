@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IncomeRecord, IncomeFormData } from '~/types/income'
+import type { BankAccountView } from '#server/types/bank-account'
 import { formatNumber } from '~/composables/useFormatters'
 
 const props = defineProps<{
@@ -7,6 +8,7 @@ const props = defineProps<{
   editData: IncomeRecord | null
   viewOnly?: boolean
   categories: string[]
+  accounts: BankAccountView[]
 }>()
 
 const emit = defineEmits<{
@@ -21,7 +23,7 @@ const form = ref<IncomeFormData>({
   notes: '',
   amount: 0,
   paymentMethod: 'Transfer Bank',
-  bankAccount: 'BCA 8830129841',
+  bankAccountId: '',
   isCancelled: false
 })
 
@@ -38,7 +40,7 @@ watch(
         notes: val.notes,
         amount: val.amount,
         paymentMethod: val.paymentMethod || 'Transfer Bank',
-        bankAccount: val.bankAccount || 'BCA 8830129841',
+        bankAccountId: val.bankAccountId,
         isCancelled: Boolean(val.isCancelled)
       }
     } else {
@@ -49,7 +51,7 @@ watch(
         notes: '',
         amount: 0,
         paymentMethod: 'Transfer Bank',
-        bankAccount: 'BCA 8830129841',
+        bankAccountId: props.accounts[0]?.id || '',
         isCancelled: false
       }
     }
@@ -57,15 +59,22 @@ watch(
   { immediate: true }
 )
 
+const validationError = ref('')
+
 const handleSubmit = () => {
   if (props.viewOnly) {
     emit('close')
     return
   }
   if (!form.value.name || !form.value.amount) {
-    alert('Nama pembayar dan nominal pemasukan harus diisi')
+    validationError.value = 'Nama pembayar dan nominal pemasukan harus diisi.'
     return
   }
+  if (!form.value.bankAccountId) {
+    validationError.value = 'Rekening / Akun Tujuan wajib dipilih.'
+    return
+  }
+  validationError.value = ''
   emit('save', { ...form.value })
 }
 </script>
@@ -109,7 +118,7 @@ const handleSubmit = () => {
               </div>
               <div class="col-md-6">
                 <span class="text-muted d-block small">Metode Pembayaran</span>
-                <span>{{ editData.paymentMethod }} ({{ editData.bankAccount }})</span>
+                <span>{{ editData.paymentMethod }} ({{ editData.bankAccount || '-' }})</span>
               </div>
               <div class="col-12">
                 <span class="text-muted d-block small">Catatan</span>
@@ -153,7 +162,12 @@ const handleSubmit = () => {
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Rekening / Akun Tujuan</label>
-                <input v-model="form.bankAccount" type="text" class="form-control" placeholder="e.g. BCA 8830129841" />
+                <select v-model="form.bankAccountId" class="form-select" required>
+                  <option disabled value="">Pilih rekening</option>
+                  <option v-for="account in accounts" :key="account.id" :value="account.id">
+                    {{ account.bankName }} {{ account.accountNo }} - {{ account.accountName }}
+                  </option>
+                </select>
               </div>
 
               <div class="col-12">
@@ -163,6 +177,7 @@ const handleSubmit = () => {
             </div>
           </div>
 
+          <p v-if="validationError" role="alert" class="mx-4 mb-0 text-sm text-danger">{{ validationError }}</p>
           <div class="modal-footer border-top px-4 py-3 bg-light">
             <button type="button" class="btn btn-secondary px-4" @click="emit('close')">
               {{ viewOnly ? 'Tutup' : 'Batal' }}

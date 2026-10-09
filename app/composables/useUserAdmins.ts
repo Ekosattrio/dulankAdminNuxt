@@ -9,7 +9,7 @@ export function useUserAdmins(filterParams?: Ref<{ search?: string; role?: strin
       }))
     : undefined
 
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: UserAdmin[] }>('/api/user-admins', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: UserAdmin[] }>('/api/user-admins', {
     ...(query ? { query } : {}),
     key: 'user-admins-list',
   })
@@ -17,7 +17,7 @@ export function useUserAdmins(filterParams?: Ref<{ search?: string; role?: strin
   const userAdmins = computed<UserAdmin[]>(() => data.value?.data || [])
 
   const saveUserAdmin = async (payload: Partial<UserAdmin>) => {
-    return await $fetch<{ success: boolean; data: UserAdmin }>('/api/user-admins', {
+    return await apiFetch<{ success: boolean; data: UserAdmin }>('/api/user-admins', {
       method: 'POST',
       body: payload,
     }).then(async (res) => {
@@ -27,7 +27,7 @@ export function useUserAdmins(filterParams?: Ref<{ search?: string; role?: strin
   }
 
   const deleteUserAdmin = async (id: string) => {
-    return await $fetch<{ success: boolean; data: UserAdmin }>(`/api/user-admins/${id}`, {
+    return await apiFetch<{ success: boolean; data: UserAdmin }>(`/api/user-admins/${id}`, {
       method: 'DELETE',
     }).then(async (res) => {
       await refresh()

@@ -10,7 +10,7 @@ interface ResponseData {
 export function usePurchaseItems(filterParams?: Ref<PurchaseItemFilterParams> | PurchaseItemFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/purchase-items', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/purchase-items', {
     key: 'purchase-items-list',
     query: params
   })
@@ -18,7 +18,7 @@ export function usePurchaseItems(filterParams?: Ref<PurchaseItemFilterParams> | 
   const items = computed<PurchaseItem[]>(() => data.value?.data ?? [])
 
   const saveItem = async (payload: PurchaseItemFormData) => {
-    const res = await $fetch<{ success: boolean; data: PurchaseItem; message?: string }>('/api/purchase-items', {
+    const res = await apiFetch<{ success: boolean; data: PurchaseItem; message?: string }>('/api/purchase-items', {
       method: 'POST',
       body: payload
     })
@@ -27,7 +27,7 @@ export function usePurchaseItems(filterParams?: Ref<PurchaseItemFilterParams> | 
   }
 
   const deleteItem = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/purchase-items/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/purchase-items/${id}`, {
       method: 'DELETE'
     })
     await refresh()

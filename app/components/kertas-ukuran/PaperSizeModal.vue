@@ -20,6 +20,7 @@ const form = ref<PaperSizeFormData>({
 })
 
 const formActive = ref(true)
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -49,8 +50,9 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (!form.value.name) {
-    alert('Nama format / ukuran tidak boleh kosong')
+    validationError.value = 'Nama format / ukuran tidak boleh kosong.'
     return
   }
   form.value.status = formActive.value ? 'Active' : 'Inactive'
@@ -71,6 +73,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="row g-3">
               <div class="col-12">
                 <label class="form-label fw-semibold">Format / Ukuran Name <span class="text-danger">*</span></label>

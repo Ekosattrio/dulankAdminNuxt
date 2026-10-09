@@ -12,6 +12,8 @@
 > 5. **Proses Checking / QA Checklist Otomatis** untuk memverifikasi apakah suatu halaman sudah benar atau belum.
 
 > **Interpretation rule 2026-10-09:** jumlah baris page dan HTTP 200 hanya membuktikan page shell serta route availability. Status BRVS/UI yang sebenarnya wajib mengikuti `docs/BACKEND_READY_VERTICAL_SLICE.md`, `docs/UI_DECOMPOSITION_STANDARD.md`, dan `docs/AI_WORK_QUALITY_FRAMEWORK.md`. Baris lama yang masih menulis `Local Reactive Form`, `Static Persistence`, atau Workspace monolitik tidak otomatis `verified` dan harus diaudit ulang sebelum dipakai sebagai klaim selesai.
+>
+> **Latest audit override:** hasil source audit terbaru berada di [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md). Audit ulang sesudah remediasi mencatat 104 page <=20 baris, 49 page 21-150, 4 page 151-200, 16 page 201-300, dan 15 page >300. TypeScript, direct-request UI, native browser dialog, dan direct print list/report sudah 0; 11 direct print tersisa adalah pengecualian dokumen/detail khusus. Finance BRVS sudah implemented/static-verified; validator struktur masih gagal pada 8 aset arsip dan runtime browser belum diuji. Scorecard 120/121 route serta klaim 100% pada dokumen ini dipertahankan sebagai riwayat, bukan bukti status verified.
 
 ---
 
@@ -116,40 +118,26 @@ server/
 
 > **PERTANYAAN AUDIT UTAMA:** _Apakah repositori Dulank Admin sudah menggunakan standar pemecahan UI Rama 100%?_
 >
-> **JAWABAN ARSITEKTURAL:** **BELUM 100% (Secara Menyeluruh Baru ~42% Full BRVS-UI Decomposed).**
+> **JAWABAN ARSITEKTURAL:** **BELUM 100%.** Persentase lama dipensiunkan karena tidak lagi dapat dibuktikan dari source aktual.
 >
 > Mengacu pada `docs/UI_DECOMPOSITION_STANDARD.md` (Branch `Rama` commit `76f6e79`), terdapat 4 pilar evaluasi:
 >
-> 1. **Pilar 1 - Thin Composition Layer (Page Shell):** **100% Lolos** (121 dari 121 rute berada pada rentang 12–143 baris. `incentive.vue` telah distandarisasi penuh dengan `SalesListHeader`, `SalesConfirmDelete`, dan `SalesFeedback`).
-> 2. **Pilar 2 - UI Responsibility Decomposition (Pemisahan Header, Stats, Filters, Table, Form, Modal):** **~46% Lolos** (56 dari 121 rute). Modul yang sudah 100% memecah komponen ke leaf responsibilities adalah **Sales**, **Payment**, **Webstore**, **HRM (termasuk Incentive)**, **Paper Shop (Kertas Self)**, dan **Peoples**.
-> 3. **Pilar 3 - Anti-Monolithic Workspace (Batas Baris Orchestrator $\le 150$ baris, Leaf $\le 250$ baris):** **~54% Belum Sesuai Standard**. 66 rute masih memindahkan tabel/form ke satu file `*Workspace.vue` raksasa (contoh: `CompanySettingWorkspace.vue` 672 baris, `ProfitAndLossWorkspace.vue` 485 baris, `CalendarWorkspace.vue` 393 baris, `CetakFullColorWorkspace.vue` 386 baris). Rute `kertas-*-self` telah dibongkar 100% dari monolith workspace ke leaf components.
+> 1. **Pilar 1 - Thin Composition Layer:** dari 188 page, 153 berada pada batas maksimal 150 baris dan 35 melewati batas; 15 di antaranya di atas 300 baris.
+> 2. **Pilar 2 - UI Responsibility Decomposition:** belum lulus menyeluruh; 60 component di atas 250 baris dan 39 di atas 300 baris masih perlu audit tanggung jawab.
+> 3. **Pilar 3 - Anti-Monolithic Workspace:** dari 92 Workspace/Screen, 55 masih di atas 200 baris dan 15 di atas 300 baris.
+> 4. **Pilar 4 - BRVS Backend:** request UI sudah melalui composable, tetapi 99 API mutation route masih menulis JSON langsung dan memerlukan service/repository audit.
 
-### 3.1.1. Ringkasan Rapor per Grup Menu (Executive Scorecard)
+### 3.1.1. Ringkasan Status Aktif
 
-| Grup Menu | Jml Rute | Page Tipis ($\le 150$ baris) | Pecahan Komponen (Standar Rama) | Composable & API | Relasi Backend (DB-Ready) | Kesimpulan / Status Arsitektur |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Sales & Orders** | 7 | 🟢 100% (7/7) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **APPROVED BASELINE** (Rujukan Baku) |
-| **Payments** | 3 | 🟢 100% (3/3) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **APPROVED BASELINE** (Rujukan Baku) |
-| **Webstore** | 6 | 🟢 100% (6/6) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Peoples** | 5 | 🟢 100% (5/5) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **HRM** | 12 | 🟢 100% (12/12) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Paper Shop (Kertas Self)** | 4 | 🟢 100% (4/4) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Products & Services**| 10 | 🟢 100% (10/10) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **User Management** | 6 | 🟢 100% (6/6) | 🟢 **100% Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Content** | 10 | 🟢 100% (10/10) | 🟢 **100% Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Calculator Apps**| 18 | 🟢 100% (18/18) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Setting** | 22 | 🟢 100% (22/22) | 🟢 **100% Full Decomposed** | 🟢 Aktif (100% Nitro) | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Reports & Financial**| 17 | 🟢 100% (17/17) | 🟢 **100% Full Decomposed** | 🟢 Aktif (100% Nitro) | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **TOTAL KESELURUHAN** | **120** | **100% Lolos** | **100% Full Decomposed** | **100% Aktif** | **100% Relasional Penuh** | **100% BRVS-UI Compliant** |
+Ringkasan aktif tidak diduplikasi di sini. Gunakan tabel **Status Kanonik Singkat** dan audit per grup pada [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md). Status utamanya:
 
-#### Pengelompokan Kesiapan Menu Berdasarkan Hasil Rapor & Kode Aktual:
-1. **Kategori 1 - APPROVED BASELINE (Batas Baku Resmi):**
-   - **Sales & Orders** (7 rute), **Payments** (3 rute).
-   - Rantai BRVS lengkap, UI 100% decomposed, persistensi dan feedback baku disetujui.
-2. **Kategori 2 - VERIFIED BRVS-UI (Full Decomposed, Composable Aktif, Relasional DB-Ready):**
-   - **Webstore** (6 rute), **Peoples** (5 rute), **HRM** (12 rute, termasuk Incentive & Form shared tanpa alert/confirm), **Paper Shop** (4 rute, 14 leaf components terpisah), **Products & Services** (10 rute, Calendar & Cetak Full Color terdekomposisi <180 baris), **Calculator Apps** (18 rute, dashboard & leaf components terverifikasi), **Setting** (22 rute, seluruh 22 API Nitro aktif, dataset terdaftar di bundledSources, composable domain dan SalesConfirmDelete aktif), **Reports & Financial** (17 rute, seluruh laporan analitik dan keuangan terdekomposisi dengan stats widget & modal terpisah).
-3. **Kategori 3 - MODULAR CONTENT & USER MANAGEMENT (Fungsional Lengkap & Aktif):**
-   - **User Management** (6 rute) & **Content** (10 rute): Seluruh tabel, modal, composable, dan endpoint terhubung aktif; Permission Matrix dan Blog Grid bekerja penuh.
+- **Approved behavior baseline:** Sales, Payment, Orders/Workflow, Webstore, dan shared Print/PDF.
+- **Implemented, static verification passed:** Finance & Account.
+- **Implemented, verification pending:** Peoples, HRM, Content, User Management, Setting, Reports, Calculator, dan sebagian Products & Services.
+- **Partial/non-compliant:** Dashboard, Promo, Purchases, Paper/Inventory gap, page/workspace besar, dan repository backend yang belum dipisah.
+- **Deferred:** POS.
+
+Tabel detail route di bawah dipertahankan sebagai inventory implementasi historis. Kolom `VERIFIED`, persentase decomposition, dan jumlah baris di tabel lama **dipensiunkan sebagai status aktif** sampai baris tersebut diaudit ulang dan disinkronkan dengan audit kanonik.
 
 ---
 
@@ -374,7 +362,7 @@ server/
 | Grup Menu               | Daftar Halaman                                                                             |    Status Saat Ini    | Rencana Kerja                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------ | :-------------------: | ---------------------------------------------------------- |
 | **Inventory & Stock**   | `expired-products`, `low-stocks`, `category-list`, `sub-categories`, `brand-list`, `units` |      ⚪ PENDING       | Dekomposisi ke `components/pages/inventory/`               |
-| **Finance & Cash**      | `expense-category`, `income-category` (🟢 VERIFIED full BRVS), `expenses`, `income`, `bank-account`, `money-transfer`, `cash-advance`, `output-tax` (🟢 Zero `confirm()`, SalesConfirmDelete) | 🟢 85% BERES | Standarisasi ledger & export reporting |
+| **Finance & Cash**      | `bank-account`, `money-transfer`, `cash-advance`, `balance-account`, `account-statement`, `cash-flow`, `balance-sheet`, `input-tax`, `output-tax`, serta ledger `income`/`expenses` | Implemented, static verification passed | Browser CRUD/reload, rekonsiliasi, print/PDF, dan persistence verification |
 | **Purchases**           | `purchase`, `purchase-order`, `purchase-return`, `purchase-item`, `purchase-category`      | ⚪ PENDING (Imported) | Audit validasi server, ID generation, legacy fidelity      |
 | **Promo & Marketing**   | `discount`, `discount-plan`, `coupon`, `voucher`                                           |      ⚪ PENDING       | Pembuatan form promo & relasi diskon                       |
 | **POS (Point of Sale)** | `pos.vue`, `pos-order.vue`                                                                 |      ⚪ DITUNDA       | Sesuai instruksi pengguna, POS ditunda sampai diminta lagi |
@@ -405,7 +393,7 @@ Wajib ikuti alur kerja 6 langkah ini:
 ### Langkah 3: Buat Composable Frontend
 
 1. Buat `app/composables/use<NamaMenu>.ts`.
-2. Kelola request `useFetch()`, state `pending`, `error`, `refresh`, serta mutasi `save<Menu>()` dan `delete<Menu>()`.
+2. Kelola request melalui `useApiFetch()`/`apiFetch()` di composable, state `pending`, `error`, `refresh`, serta mutasi `save<Menu>()` dan `delete<Menu>()`. Page/component tetap tidak boleh memakai boundary request secara langsung.
 
 ### Langkah 4: Buat UI Responsibility Map dan Komponen Domain
 
@@ -492,22 +480,15 @@ runAudit();
 
 Berdasarkan hasil audit kode riil dan perbaikan build tanggal **2026-10-09**, berikut adalah urutan prioritas pengerjaan berikutnya:
 
-### Prioritas 1: Perombakan Grup Finance & Cash (Fokus Halaman Aktif)
-Target: Merombak halaman tebal ber-Bootstrap menjadi arsitektur BRVS penuh (Type, JSON di `bundledData.ts`, API Nitro, Composable, Leaf Components, dan Page $\le 20$ baris).
-1. **`bank-account.vue`** (Saat ini: 263 baris | Target: $\le 20$ baris)
-   - Acuan: `legacy/static-source/bank-account.html`
-   - Buat: `server/types/bank-account.ts`
-   - Buat: `server/data/bank-accounts.json` (daftarkan ke `server/utils/bundledData.ts`)
-   - Buat: `server/api/bank-accounts/index.get.ts`, `index.post.ts`, `[id].delete.ts`
-   - Buat: `app/composables/useBankAccounts.ts`
-   - Buat leaf components di `app/components/pages/bank-account/`: `BankAccountTable.vue`, `BankAccountModal.vue` (Single-source modal form)
-   - Pasang: `SalesDataTable`, `SalesConfirmDelete`, `SalesFeedback`, font 14px, filter `h-9`
-2. **`expenses.vue`** (Saat ini: 197 baris) & **`expense-category.vue`** (Saat ini: 178 baris)
+### Prioritas 1: Verifikasi dan Penyelesaian Finance & Cash
+Rantai Finance utama sudah diimplementasikan: type, relational JSON/bundled source, API tipis, domain service, composable, leaf component, dan page shell untuk Bank Account/Type, Money Transfer, Cash Advance, Balance Account, Account Statement, Cash Flow, Balance Sheet, Input Tax, dan Output Tax.
+1. **Runtime Finance:** uji Add/Edit/View/Delete, insufficient balance, paired transfer ledger, Cash Advance payment guard, source transaction Tax, reload persistence, empty state, print/PDF, desktop, dan 390px.
+2. **`expenses.vue`** (Saat ini: 200 baris) & **`expense-category.vue`** (Saat ini: 178 baris)
    - Acuan: `legacy/static-source/expenses.html`, `legacy/static-source/expense-category.html`
    - Dekomposisi tabel dan modal form ke leaf components terpisah di `app/components/pages/expenses/` dan `app/components/pages/expense-category/`
    - Hubungkan ke backend API `/api/expenses` dan `/api/expense-categories`
-3. **`income.vue`**, **`money-transfer.vue`**, **`cash-advance.vue`**
-   - Audit sisa halaman keuangan agar seragam dengan pola BRVS `Sales` & `Payment`.
+3. **`income.vue`** (199 baris)
+   - Ledger/account relation sudah aktif; ekstrak koordinasi page tersisa agar kembali di bawah 150 baris.
 
 ### Prioritas 2: Perbaikan Halaman Over-limit (Hard Fail > 300 Baris)
 1. **`edit-job-order.vue`** (Saat ini: 307 baris | Target: $\le 150$ baris)

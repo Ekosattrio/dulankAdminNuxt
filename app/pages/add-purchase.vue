@@ -222,6 +222,7 @@
         </div>
 
         <div class="modal-footer my-5 justify-content-end gap-2">
+          <p v-if="formError" role="alert" class="mb-0 me-auto text-sm text-danger">{{ formError }}</p>
           <NuxtLink to="/purchase" class="btn btn-secondary">Cancel</NuxtLink>
           <button type="button" class="btn btn-warning text-white fw-bold" @click="savePurchase">
             Save Changes
@@ -288,6 +289,7 @@ const purchaseDate = ref(new Date().toISOString().slice(0, 10))
 const creator = ref('Sales Staff')
 const notes = ref('Pembelian stok rutin')
 const paymentMethod = ref('cash')
+const formError = ref('')
 
 // Master Products for search
 const masterProducts = [
@@ -346,11 +348,11 @@ const taxAmount = computed(() => Math.round(subTotal.value * 0.11))
 const grandTotal = computed(() => subTotal.value + taxAmount.value)
 
 const savePurchase = () => {
+  formError.value = ''
   if (!selectedSupplier.value) {
-    alert('Please select a supplier.')
+    formError.value = 'Please select a supplier.'
     return
   }
-  alert(`Purchase ${noPurchase.value} created successfully!`)
   router.push('/purchase')
 }
 

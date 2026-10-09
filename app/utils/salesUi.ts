@@ -23,5 +23,4 @@ export const modalFormInputColClass = "col-span-7";
 
 // Export standard currency & thousands separator utilities
 export * from "./currency";
-export { salesErrorMessage } from "./salesDocuments";
 

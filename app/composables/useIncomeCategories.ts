@@ -17,7 +17,7 @@ interface ResponseData {
 export function useIncomeCategories(filterParams?: Ref<IncomeCategoryFilterParams> | IncomeCategoryFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/income-categories', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/income-categories', {
     key: 'income-categories-list',
     query: params
   })
@@ -26,7 +26,7 @@ export function useIncomeCategories(filterParams?: Ref<IncomeCategoryFilterParam
   const stats = computed(() => data.value?.stats ?? { total: 0, active: 0, inactive: 0 })
 
   const saveCategory = async (payload: IncomeCategoryFormData) => {
-    const res = await $fetch<{ success: boolean; data: IncomeCategoryItem; message?: string }>('/api/income-categories', {
+    const res = await apiFetch<{ success: boolean; data: IncomeCategoryItem; message?: string }>('/api/income-categories', {
       method: 'POST',
       body: payload
     })
@@ -35,7 +35,7 @@ export function useIncomeCategories(filterParams?: Ref<IncomeCategoryFilterParam
   }
 
   const deleteCategory = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/income-categories/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/income-categories/${id}`, {
       method: 'DELETE'
     })
     await refresh()

@@ -12,6 +12,9 @@
           <NuxtLink to="/sales" class="btn btn-secondary"> <i class="ti ti-arrow-left me-1"></i>Back to Sales List </NuxtLink>
         </div>
       </div>
+      <p v-if="formMessage" role="status" class="alert py-2" :class="formMessageKind === 'error' ? 'alert-danger' : 'alert-info'">
+        {{ formMessage }}
+      </p>
 
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-body p-4">
@@ -437,13 +440,17 @@ function selectCustomer(c: Customer) {
 // Shipping method
 const shippingMethod = ref("Shipping");
 const poNumber = ref("2507000021");
+const formMessage = ref("");
+const formMessageKind = ref<"info" | "error">("info");
 
 function changeShippingAddress() {
-  alert("Change address modal or picker");
+  formMessageKind.value = "info";
+  formMessage.value = "Use the Sales editor address picker to change the delivery address.";
 }
 
 function changePickupStore() {
-  alert("Change pickup outlet branch");
+  formMessageKind.value = "info";
+  formMessage.value = "Use the Sales editor pickup selector to change the outlet.";
 }
 
 // Items
@@ -503,7 +510,10 @@ function applyVoucher() {
     voucherApplied.value = true;
     voucherDiscount.value = 50000;
   } else {
-    alert("Invalid voucher code");
+    voucherApplied.value = false;
+    voucherDiscount.value = 0;
+    formMessageKind.value = "error";
+    formMessage.value = "Invalid voucher code.";
   }
 }
 
@@ -529,7 +539,6 @@ function formatNumber(val: number): string {
 }
 
 function saveSales() {
-  alert("Sales order successfully created!");
   navigateTo("/sales");
 }
 

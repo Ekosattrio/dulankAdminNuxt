@@ -9,7 +9,7 @@ interface ResponseData {
 export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | IncentiveFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/incentives', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/incentives', {
     key: 'incentives-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | Incent
   const incentives = computed<IncentiveItem[]>(() => data.value?.data ?? [])
 
   const saveIncentive = async (payload: IncentiveFormData) => {
-    const res = await $fetch<{ success: boolean; data: IncentiveItem; message?: string }>('/api/incentives', {
+    const res = await apiFetch<{ success: boolean; data: IncentiveItem; message?: string }>('/api/incentives', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | Incent
   }
 
   const deleteIncentive = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/incentives/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/incentives/${id}`, {
       method: 'DELETE'
     })
     await refresh()

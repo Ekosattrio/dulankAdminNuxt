@@ -18,7 +18,7 @@ interface ResponseData {
 export function usePaymentFlow(kind: PaymentFlowKind, filterParams?: Ref<PaymentFlowFilterParams> | PaymentFlowFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
   const baseUrl = kind === 'inflow' ? '/api/payment-inflow' : '/api/payment-outflow'
-  const { data, pending, error, refresh } = useFetch<ResponseData>(baseUrl, {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>(baseUrl, {
     key: `payment-${kind}-list`,
     query: params,
   })
@@ -26,7 +26,7 @@ export function usePaymentFlow(kind: PaymentFlowKind, filterParams?: Ref<Payment
   const balances = computed<PaymentBalanceEntry[]>(() => data.value?.meta?.balances ?? [])
 
   async function saveRecord(payload: PaymentFlowFormData) {
-    const res = await $fetch<{ success: boolean; data: PaymentFlowRecord; message?: string }>(baseUrl, {
+    const res = await apiFetch<{ success: boolean; data: PaymentFlowRecord; message?: string }>(baseUrl, {
       method: 'POST',
       body: payload,
     })
@@ -35,7 +35,7 @@ export function usePaymentFlow(kind: PaymentFlowKind, filterParams?: Ref<Payment
   }
 
   async function deleteRecord(id: string) {
-    const res = await $fetch<{ success: boolean; message?: string }>(`${baseUrl}/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`${baseUrl}/${id}`, {
       method: 'DELETE',
     })
     await refresh()

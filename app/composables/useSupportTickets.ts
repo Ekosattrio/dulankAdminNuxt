@@ -10,7 +10,7 @@ interface ResponseData {
 export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> | SupportTicketFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/support-tickets', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/support-tickets', {
     key: 'webstore-support-tickets-list',
     query: params
   })
@@ -24,7 +24,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   })
 
   const createTicket = async (payload: Partial<SupportTicket> & { customerName?: string; email?: string; phone?: string; descriptions?: string }) => {
-    const res = await $fetch<{ success: boolean; data: SupportTicket; message?: string }>('/api/webstore/support-tickets', {
+    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>('/api/webstore/support-tickets', {
       method: 'POST',
       body: payload
     })
@@ -33,7 +33,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   }
 
   const updateTicket = async (id: string, payload: Partial<SupportTicket> & { newMessage?: string; senderName?: string }) => {
-    const res = await $fetch<{ success: boolean; data: SupportTicket; message?: string }>(`/api/webstore/support-tickets/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>(`/api/webstore/support-tickets/${id}`, {
       method: 'PUT',
       body: payload
     })
@@ -42,7 +42,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   }
 
   const deleteTicket = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/webstore/support-tickets/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/webstore/support-tickets/${id}`, {
       method: 'DELETE'
     })
     await refresh()

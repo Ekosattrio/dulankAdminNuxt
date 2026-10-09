@@ -1,11 +1,11 @@
 import type { SalesReturn, SalesReturnFormData, ReturnPayment } from '#server/types/sales-return'
 
 export function useSalesReturns() {
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: SalesReturn[] }>(
-    '/api/sales-returns',
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: SalesReturn[] }>(
+    '/api/sales-returns' as string,
     { key: 'sales-returns-list' },
   )
-  const returns = computed(() => data.value?.data ?? [])
+  const returns = computed<SalesReturn[]>(() => data.value?.data ?? [])
   const searchQuery = ref('')
   const filterPaymentStatus = ref('')
   const filteredReturns = computed(() =>
@@ -52,7 +52,7 @@ export function useSalesReturns() {
   }
   function save(body: SalesReturnFormData) {
     return mutate(
-      () => $fetch<unknown>('/api/sales-returns', { method: 'POST', body }),
+      () => apiFetch<unknown>('/api/sales-returns', { method: 'POST', body }),
       () => {
         editorOpen.value = false
       },
@@ -62,7 +62,7 @@ export function useSalesReturns() {
     if (!paymentReturn.value) return
     return mutate(
       () =>
-        $fetch<unknown>(`/api/sales-returns/${paymentReturn.value!.id}/payment`, { method: 'POST', body }),
+        apiFetch<unknown>(`/api/sales-returns/${paymentReturn.value!.id}/payment`, { method: 'POST', body }),
       () => {
         paymentReturn.value = null
       },
@@ -71,7 +71,7 @@ export function useSalesReturns() {
   function remove() {
     if (!deleting.value) return
     return mutate(
-      () => $fetch<unknown>(`/api/sales-returns/${deleting.value!.id}`, { method: 'DELETE' }),
+      () => apiFetch<unknown>(`/api/sales-returns/${deleting.value!.id}`, { method: 'DELETE' }),
       () => {
         deleting.value = null
       },

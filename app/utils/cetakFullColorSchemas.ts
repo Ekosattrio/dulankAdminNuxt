@@ -1,5 +1,4 @@
-import type { ConfigurationColumn, ConfigurationField } from '~/types/configuration'
-import type { SidebarTabItem } from '~/components/pages/products-services/SettingSidebarNav.vue'
+import type { ConfigurationColumn, ConfigurationField, SidebarTabItem } from '../types/configuration'
 
 export const cetakFullColorTabs: SidebarTabItem[] = [
   { id: 'products', label: 'Product Custom Default', icon: 'box' },

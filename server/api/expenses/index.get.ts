@@ -1,34 +1,11 @@
-import { readData } from '~/server/utils/data'
-import type { Expense } from '~/types/expense'
+import { defineEventHandler, getQuery } from 'h3'
+import { getExpenseRecords } from '#server/utils/financeTransactionData'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const query = getQuery(event)
-  const items = readData<Expense>('expenses.json')
-
-  let filtered = [...items]
-
-  if (query.search) {
-    const s = String(query.search).toLowerCase()
-    filtered = filtered.filter(
-      (e) =>
-        e.noExpense.toLowerCase().includes(s) ||
-        e.name.toLowerCase().includes(s) ||
-        e.category.toLowerCase().includes(s) ||
-        e.description.toLowerCase().includes(s)
-    )
-  }
-
-  if (query.status) {
-    filtered = filtered.filter((e) => e.status.toLowerCase() === String(query.status).toLowerCase())
-  }
-
-  if (query.category) {
-    filtered = filtered.filter((e) => e.category.toLowerCase() === String(query.category).toLowerCase())
-  }
-
-  return {
-    success: true,
-    data: filtered
-  }
+  return { success: true, data: getExpenseRecords({
+    search: typeof query.search === 'string' ? query.search : undefined,
+    status: typeof query.status === 'string' ? query.status : undefined,
+    category: typeof query.category === 'string' ? query.category : undefined,
+  }) }
 })
-

@@ -9,7 +9,7 @@ interface ResponseData {
 export function useUnits(filterParams?: Ref<UnitFilterParams> | UnitFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/units', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/units', {
     key: 'units-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useUnits(filterParams?: Ref<UnitFilterParams> | UnitFilterParams
   const units = computed<Unit[]>(() => data.value?.data ?? [])
 
   const saveUnit = async (payload: UnitFormData) => {
-    const res = await $fetch<{ success: boolean; data: Unit; message?: string }>('/api/units', {
+    const res = await apiFetch<{ success: boolean; data: Unit; message?: string }>('/api/units', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useUnits(filterParams?: Ref<UnitFilterParams> | UnitFilterParams
   }
 
   const deleteUnit = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/units/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/units/${id}`, {
       method: 'DELETE'
     })
     await refresh()

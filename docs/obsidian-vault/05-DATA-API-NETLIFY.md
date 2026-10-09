@@ -17,7 +17,15 @@ updated: 2026-10-08
 
 `server/utils/bundledData.ts` harus memiliki entry untuk setiap basename JSON di `server/data/`. Alias kompatibilitas boleh ada, misalnya `employee-salaries.json` menunjuk source `employeeSalaries.json`.
 
-Audit 2026-10-08 memperbaiki entry yang hilang untuk `users.json` dan menambahkan source/bundle `permissions.json`.
+Audit ulang 2026-10-09 memverifikasi 136/136 JSON source valid dan tercakup registry. Dataset Finance baru yang wajib tetap bundled meliputi `bank-account-types.json`, `bank-accounts.json`, `bank-account-ledger.json`, `money-transfers.json`, `cash-advances.json`, `input-tax-documents.json`, dan `output-tax-documents.json`.
+
+## Data Finance Relasional
+
+- `bank-accounts.json` mereferensikan account type dan branch; current balance bukan field input transaksi, melainkan hasil ledger.
+- `bank-account-ledger.json` menyimpan debit/credit numerik dan source reference untuk opening balance, income, expense, transfer, serta cash advance.
+- `money-transfers.json` menyimpan account sumber/tujuan; pasangan ledger memakai `transferId` yang sama.
+- `cash-advances.json` menyimpan `employeeId`, `bankAccountId`, advance, tenor, dan payment history.
+- Dokumen pajak menyimpan metadata faktur serta FK `purchaseId` atau `saleId`; DPP/VAT/nama pihak dibaca sebagai output hasil join.
 
 ## Batas Netlify
 

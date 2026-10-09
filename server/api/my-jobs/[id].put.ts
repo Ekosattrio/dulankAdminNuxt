@@ -21,13 +21,18 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  allJobs[idx] = {
-    ...allJobs[idx],
-    ...body,
-    id: allJobs[idx].id
+  const current = allJobs[idx]
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: 'Job not found' })
   }
+  const updated: MyJob = {
+    ...current,
+    ...body,
+    id: current.id
+  }
+  allJobs[idx] = updated
 
   await writeJSON('my-jobs.json', allJobs)
 
-  return createResponse(allJobs[idx], 'Job updated successfully')
+  return createResponse(updated, 'Job updated successfully')
 })

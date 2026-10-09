@@ -16,14 +16,17 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allUnits.findIndex(u => u.id === body.id)
     if (idx !== -1) {
-      allUnits[idx] = {
-        ...allUnits[idx],
+      const current = allUnits[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Unit not found' })
+      const updated: Unit = {
+        ...current,
         name: body.name,
         shortName: body.shortName,
         status: body.status || 'Active'
       }
+      allUnits[idx] = updated
       await writeJSON('units.json', allUnits)
-      return createResponse(allUnits[idx], 'Unit updated successfully')
+      return createResponse(updated, 'Unit updated successfully')
     }
   }
 

@@ -7,7 +7,7 @@ interface CompanySettingApiResponse {
 }
 
 export function useCompanySetting() {
-  const { data, pending, error, refresh } = useFetch<CompanySettingApiResponse>('/api/company-setting', {
+  const { data, pending, error, refresh } = useApiFetch<CompanySettingApiResponse>('/api/company-setting', {
     key: 'company-setting-data'
   })
 
@@ -35,7 +35,7 @@ export function useCompanySetting() {
   })
 
   const saveCompanySetting = async (payload: CompanySettingUpdatePayload) => {
-    const res = await $fetch<{ success: boolean; data: CompanySetting; message?: string }>('/api/company-setting', {
+    const res = await apiFetch<{ success: boolean; data: CompanySetting; message?: string }>('/api/company-setting', {
       method: 'POST',
       body: payload
     })

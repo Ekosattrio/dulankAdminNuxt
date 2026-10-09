@@ -41,7 +41,7 @@ export function useProductReports(options: UseProductReportOptions = {}) {
   const categoryFilter = isRef(options.category) ? options.category : ref(options.category || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<ProductReportResponse>('/api/reports/products', {
+  const { data, pending, error, refresh } = useApiFetch<ProductReportResponse>('/api/reports/products', {
     key: 'reports-products',
     lazy: false
   })
@@ -54,7 +54,7 @@ export function useProductReports(options: UseProductReportOptions = {}) {
       list = list.filter((item) => item.category?.toLowerCase() === categoryFilter.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((item) => isDateInRange(item.date, dateRange.value))
+      list = list.filter((item) => isDateInRange(item.date || '', dateRange.value))
     }
     return list
   })
@@ -99,7 +99,7 @@ export function useExpenseReports(options: UseExpenseReportOptions = {}) {
   const paymentMethodFilter = isRef(options.paymentMethod) ? options.paymentMethod : ref(options.paymentMethod || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<ExpenseReportResponse>('/api/reports/expenses', {
+  const { data, pending, error, refresh } = useApiFetch<ExpenseReportResponse>('/api/reports/expenses', {
     key: 'reports-expenses',
     lazy: false
   })
@@ -115,7 +115,7 @@ export function useExpenseReports(options: UseExpenseReportOptions = {}) {
       list = list.filter((item) => item.paymentMethod?.toLowerCase() === paymentMethodFilter.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((item) => isDateInRange(item.date, dateRange.value))
+      list = list.filter((item) => isDateInRange(item.date || '', dateRange.value))
     }
     return list
   })
@@ -161,7 +161,7 @@ export function useIncomeReports(options: UseIncomeReportOptions = {}) {
   const paymentMethodFilter = isRef(options.paymentMethod) ? options.paymentMethod : ref(options.paymentMethod || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<IncomeReportResponse>('/api/reports/incomes', {
+  const { data, pending, error, refresh } = useApiFetch<IncomeReportResponse>('/api/reports/incomes', {
     key: 'reports-incomes',
     lazy: false
   })
@@ -177,7 +177,7 @@ export function useIncomeReports(options: UseIncomeReportOptions = {}) {
       list = list.filter((item) => item.paymentMethod?.toLowerCase() === paymentMethodFilter.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((item) => isDateInRange(item.date, dateRange.value))
+      list = list.filter((item) => isDateInRange(item.date || '', dateRange.value))
     }
     return list
   })

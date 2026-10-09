@@ -30,7 +30,7 @@ const defaultInvoiceSetting: InvoiceSetting = {
 }
 
 export function useInvoiceSettings() {
-  const { data, pending, error, refresh } = useFetch<InvoiceSettingsResponse>('/api/invoice-settings', {
+  const { data, pending, error, refresh } = useApiFetch<InvoiceSettingsResponse>('/api/invoice-settings', {
     key: 'invoice-settings-data'
   })
 
@@ -39,7 +39,7 @@ export function useInvoiceSettings() {
   })
 
   const saveSettings = async (payload: InvoiceSetting) => {
-    const res = await $fetch<InvoiceSettingsResponse>('/api/invoice-settings', {
+    const res = await apiFetch<InvoiceSettingsResponse>('/api/invoice-settings', {
       method: 'POST',
       body: payload
     })

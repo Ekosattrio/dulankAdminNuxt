@@ -17,7 +17,7 @@ export function usePaymentGateways() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: PaymentGatewaysRecord }>('/api/payment-gateways')
+      const res = await apiFetch<{ success: boolean; data: PaymentGatewaysRecord }>('/api/payment-gateways')
       if (res && res.data) {
         gateways.value = res.data
       }
@@ -31,7 +31,7 @@ export function usePaymentGateways() {
   async function saveGateways(payload: PaymentGatewaysRecord) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: PaymentGatewaysRecord }>('/api/payment-gateways', {
+      const res = await apiFetch<{ success: boolean; data: PaymentGatewaysRecord }>('/api/payment-gateways', {
         method: 'POST',
         body: payload
       })

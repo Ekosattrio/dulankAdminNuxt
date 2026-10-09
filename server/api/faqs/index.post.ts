@@ -15,16 +15,19 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const idx = allFaqs.findIndex(item => item.id === body.id)
     if (idx !== -1) {
-      allFaqs[idx] = {
-        ...allFaqs[idx],
+      const current = allFaqs[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'FAQ not found' })
+      const updated: FaqItem = {
+        ...current,
         question: body.question,
         category: body.category,
         answer: body.answer,
-        status: body.status || allFaqs[idx].status || 'Active',
-        order: body.order !== undefined ? Number(body.order) : allFaqs[idx].order
+        status: body.status || current.status || 'Active',
+        order: body.order !== undefined ? Number(body.order) : current.order
       }
+      allFaqs[idx] = updated
       await writeJSON('faqs.json', allFaqs)
-      return createResponse(allFaqs[idx], 'FAQ updated successfully')
+      return createResponse(updated, 'FAQ updated successfully')
     }
   }
 

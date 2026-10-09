@@ -15,6 +15,7 @@ const form = ref<DesignationFormData>({
   name: '',
   status: 'Active'
 })
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -39,8 +40,9 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (!form.value.name) {
-    alert('Nama jabatan / designation tidak boleh kosong')
+    validationError.value = 'Nama jabatan / designation tidak boleh kosong.'
     return
   }
   emit('save', { ...form.value })
@@ -60,6 +62,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="mb-3">
               <label class="form-label fw-semibold">Designation / Nama Posisi <span class="text-danger">*</span></label>
               <input

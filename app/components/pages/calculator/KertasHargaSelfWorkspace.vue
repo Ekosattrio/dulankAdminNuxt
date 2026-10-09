@@ -22,6 +22,8 @@ const filterType = ref('')
 
 const isModalOpen = ref(false)
 const editData = ref<PaperPrice | null>(null)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
 
 const paperTypes = computed(() => {
   const set = new Set<string>()
@@ -52,13 +54,20 @@ const handleEdit = (p: PaperPrice) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data harga kertas ini?')) {
-    try {
-      await deletePaperPrice(id)
-    } catch (err) {
-      console.error('Failed to delete paper price:', err)
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deletePaperPrice(deleteTargetId.value)
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete paper price:', err)
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -136,6 +145,14 @@ const handleSave = async (formData: PaperPriceFormData) => {
       :edit-data="editData"
       @close="isModalOpen = false"
       @save="handleSave"
+    />
+    <SalesConfirmDelete
+      :open="!!deleteTargetId"
+      title="Hapus Harga Kertas"
+      message="Apakah Anda yakin ingin menghapus data harga kertas ini?"
+      :busy="isDeleting"
+      @close="deleteTargetId = null"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

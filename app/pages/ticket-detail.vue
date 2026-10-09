@@ -183,7 +183,7 @@ const sendMessage = () => {
 };
 
 const editTicket = () => {
-  alert("Edit ticket dialog opened.");
+  navigateTo({ path: "/support-ticket", query: { action: "edit" } });
 };
 
 const toggleTicketClose = () => {

@@ -9,7 +9,7 @@ interface ResponseData {
 export function useCategories(filterParams?: Ref<CategoryFilterParams> | CategoryFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/categories', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/categories', {
     key: 'categories-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useCategories(filterParams?: Ref<CategoryFilterParams> | Categor
   const categories = computed<Category[]>(() => data.value?.data ?? [])
 
   const saveCategory = async (payload: CategoryFormData) => {
-    const res = await $fetch<{ success: boolean; data: Category; message?: string }>('/api/categories', {
+    const res = await apiFetch<{ success: boolean; data: Category; message?: string }>('/api/categories', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useCategories(filterParams?: Ref<CategoryFilterParams> | Categor
   }
 
   const deleteCategory = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/categories/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/categories/${id}`, {
       method: 'DELETE'
     })
     await refresh()

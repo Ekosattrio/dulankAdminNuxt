@@ -9,7 +9,7 @@ interface ResponseData {
 export function useSubCategories(filterParams?: Ref<SubCategoryFilterParams> | SubCategoryFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/sub-categories', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/sub-categories', {
     key: 'sub-categories-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useSubCategories(filterParams?: Ref<SubCategoryFilterParams> | S
   const subCategories = computed<SubCategory[]>(() => data.value?.data ?? [])
 
   const saveSubCategory = async (payload: SubCategoryFormData) => {
-    const res = await $fetch<{ success: boolean; data: SubCategory; message?: string }>('/api/sub-categories', {
+    const res = await apiFetch<{ success: boolean; data: SubCategory; message?: string }>('/api/sub-categories', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useSubCategories(filterParams?: Ref<SubCategoryFilterParams> | S
   }
 
   const deleteSubCategory = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/sub-categories/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/sub-categories/${id}`, {
       method: 'DELETE'
     })
     await refresh()

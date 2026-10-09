@@ -205,6 +205,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Paper Group" message="Are you sure you want to delete this paper group?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Internal Paper Groups" :columns="printColumns" :items="filteredGroups" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -231,6 +233,15 @@ const groups = ref<SelfPaperGroup[]>([
 const searchQuery = ref('')
 const filterStatus = ref('')
 const statusDropdownOpen = ref(false)
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Paper Group' },
+  { key: 'merk', label: 'Default Merk' },
+  { key: 'priceType', label: 'Price Type' },
+  { key: 'update', label: 'Updated' },
+  { key: 'status', label: 'Status' },
+]
 
 const activeCount = computed(() => groups.value.filter(g => g.status === 'Active').length)
 const inactiveCount = computed(() => groups.value.filter(g => g.status === 'Deactive').length)
@@ -319,17 +330,21 @@ function saveGroup() {
 }
 
 function deleteGroup(id: number) {
-  if (confirm('Are you sure you want to delete this paper group?')) {
-    groups.value = groups.value.filter(g => g.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  groups.value = groups.value.filter(g => g.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting paper groups as PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

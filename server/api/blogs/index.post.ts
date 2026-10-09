@@ -30,21 +30,24 @@ export default defineEventHandler(async (event) => {
     // Update existing
     const idx = allBlogs.findIndex(b => String(b.id) === String(body.id))
     if (idx !== -1) {
-      allBlogs[idx] = {
-        ...allBlogs[idx],
+      const current = allBlogs[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Blog not found' })
+      const updated: Blog = {
+        ...current,
         title: body.title,
         slug: body.slug || slugify(body.title),
-        category: body.category || allBlogs[idx].category,
-        tags: tags.length ? tags : allBlogs[idx].tags,
-        author: body.author || allBlogs[idx].author,
-        status: body.status || allBlogs[idx].status,
-        image: body.image || allBlogs[idx].image,
-        excerpt: body.excerpt ?? allBlogs[idx].excerpt,
-        content: body.content ?? allBlogs[idx].content,
-        publishedAt: body.publishedAt || allBlogs[idx].publishedAt,
+        category: body.category || current.category,
+        tags: tags.length ? tags : current.tags,
+        author: body.author || current.author,
+        status: body.status || current.status,
+        image: body.image || current.image,
+        excerpt: body.excerpt ?? current.excerpt,
+        content: body.content ?? current.content,
+        publishedAt: body.publishedAt || current.publishedAt,
       }
+      allBlogs[idx] = updated
       writeJSON('blogs.json', allBlogs)
-      return createResponse(allBlogs[idx], 'Blog updated successfully')
+      return createResponse(updated, 'Blog updated successfully')
     }
   }
 

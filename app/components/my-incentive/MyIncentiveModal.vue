@@ -18,6 +18,7 @@ const form = ref<MyIncentiveFormData>({
   amount: 0,
   status: 'Pending'
 })
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -46,8 +47,9 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (!form.value.process) {
-    alert('Pilih atau isi proses pekerjaan')
+    validationError.value = 'Pilih atau isi proses pekerjaan.'
     return
   }
   emit('save', { ...form.value })
@@ -67,6 +69,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="mb-3">
               <label class="form-label fw-semibold">Proses / Pekerjaan <span class="text-danger">*</span></label>
               <select v-model="form.process" class="form-select" required>

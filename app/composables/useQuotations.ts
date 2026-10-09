@@ -9,7 +9,7 @@ interface ResponseData {
 export function useQuotations(filterParams?: Ref<QuotationFilterParams> | QuotationFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/quotations', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/quotations', {
     key: 'quotations-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useQuotations(filterParams?: Ref<QuotationFilterParams> | Quotat
   const quotations = computed<Quotation[]>(() => data.value?.data ?? [])
 
   const saveQuotation = async (payload: QuotationFormData) => {
-    const res = await $fetch<{ success: boolean; data: Quotation; message?: string }>('/api/quotations', {
+    const res = await apiFetch<{ success: boolean; data: Quotation; message?: string }>('/api/quotations', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useQuotations(filterParams?: Ref<QuotationFilterParams> | Quotat
   }
 
   const deleteQuotation = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/quotations/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/quotations/${id}`, {
       method: 'DELETE'
     })
     await refresh()

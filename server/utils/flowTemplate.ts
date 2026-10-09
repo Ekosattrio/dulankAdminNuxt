@@ -75,6 +75,9 @@ export function updateFlowTemplate(id: string, payload: FlowTemplateFormData): F
   }
 
   const current = currentItems[index];
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: "Flow template not found" });
+  }
   const finalItems = templateItems || current.items || [];
   const information = payload.information?.trim() || finalItems.map((item) => item.label?.trim()).filter(Boolean).join(", ");
 
@@ -105,6 +108,9 @@ export function deleteFlowTemplate(id: string): FlowTemplate {
   }
 
   const [removed] = items.splice(index, 1);
+  if (!removed) {
+    throw createError({ statusCode: 404, statusMessage: "Flow template not found" });
+  }
   writeFlowTemplateData(items);
   return removed;
 }

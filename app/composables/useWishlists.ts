@@ -10,7 +10,7 @@ interface ResponseData {
 export function useWishlists(filterParams?: Ref<WishlistFilterQuery> | WishlistFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/wishlist', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/wishlist', {
     key: 'webstore-wishlists-list',
     query: params
   })

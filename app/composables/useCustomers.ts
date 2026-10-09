@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useCustomers() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/customers', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/customers', {
     key: 'customers-list'
   })
 
   const customers = computed<Customer[]>(() => data.value?.data ?? [])
 
   const saveCustomer = async (payload: CustomerFormData) => {
-    const res = await $fetch<{ success: boolean; data: Customer; message?: string }>('/api/customers', {
+    const res = await apiFetch<{ success: boolean; data: Customer; message?: string }>('/api/customers', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useCustomers() {
   }
 
   const deleteCustomer = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/customers/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/customers/${id}`, {
       method: 'DELETE'
     })
     await refresh()

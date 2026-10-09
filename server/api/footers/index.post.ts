@@ -15,17 +15,20 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const idx = allFooters.findIndex(item => item.id === body.id)
     if (idx !== -1) {
-      allFooters[idx] = {
-        ...allFooters[idx],
+      const current = allFooters[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Footer link not found' })
+      const updated: FooterLinkItem = {
+        ...current,
         sectionName: body.sectionName,
         linkTitle: body.linkTitle,
         url: body.url,
-        order: body.order !== undefined ? Number(body.order) : allFooters[idx].order,
-        status: body.status || allFooters[idx].status || 'Active',
-        target: body.target || allFooters[idx].target || '_self'
+        order: body.order !== undefined ? Number(body.order) : current.order,
+        status: body.status || current.status || 'Active',
+        target: body.target || current.target || '_self'
       }
+      allFooters[idx] = updated
       await writeJSON('footers.json', allFooters)
-      return createResponse(allFooters[idx], 'Footer link updated successfully')
+      return createResponse(updated, 'Footer link updated successfully')
     }
   }
 

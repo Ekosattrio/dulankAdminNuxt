@@ -10,7 +10,7 @@ interface ApiResponse<T> {
 export function useWorkFlows(filterParams?: Ref<WorkFlowFilterParams> | WorkFlowFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {});
 
-  const { data, pending, error, refresh } = useFetch<ApiResponse<WorkFlow[]>>("/api/work-flows", {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<WorkFlow[]>>("/api/work-flows", {
     key: "work-flows-list",
     query: params,
   });
@@ -18,19 +18,19 @@ export function useWorkFlows(filterParams?: Ref<WorkFlowFilterParams> | WorkFlow
   const workFlows = computed<WorkFlow[]>(() => data.value?.data ?? []);
 
   const getWorkFlow = async (id: string): Promise<WorkFlow> => {
-    const res = await $fetch<ApiResponse<WorkFlow>>(`/api/work-flows/${id}`);
+    const res = await apiFetch<ApiResponse<WorkFlow>>(`/api/work-flows/${id}`);
     return res.data;
   };
 
   const saveWorkFlow = async (payload: WorkFlowFormData) => {
     let res: ApiResponse<WorkFlow>;
     if (payload.id) {
-      res = await $fetch<ApiResponse<WorkFlow>>(`/api/work-flows/${payload.id}`, {
+      res = await apiFetch<ApiResponse<WorkFlow>>(`/api/work-flows/${payload.id}`, {
         method: "PUT",
         body: payload,
       });
     } else {
-      res = await $fetch<ApiResponse<WorkFlow>>("/api/work-flows", {
+      res = await apiFetch<ApiResponse<WorkFlow>>("/api/work-flows", {
         method: "POST",
         body: payload,
       });
@@ -40,7 +40,7 @@ export function useWorkFlows(filterParams?: Ref<WorkFlowFilterParams> | WorkFlow
   };
 
   const deleteWorkFlow = async (id: string) => {
-    const res = await $fetch<ApiResponse<WorkFlow>>(`/api/work-flows/${id}`, {
+    const res = await apiFetch<ApiResponse<WorkFlow>>(`/api/work-flows/${id}`, {
       method: "DELETE",
     });
     await refresh();

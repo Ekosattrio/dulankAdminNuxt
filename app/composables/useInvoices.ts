@@ -9,7 +9,7 @@ interface ResponseData {
 export function useInvoices(filterParams?: Ref<InvoiceFilterParams> | InvoiceFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/invoices', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/invoices', {
     key: 'invoices-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useInvoices(filterParams?: Ref<InvoiceFilterParams> | InvoiceFil
   const invoices = computed<Invoice[]>(() => data.value?.data ?? [])
 
   const saveInvoice = async (payload: InvoiceFormData) => {
-    const res = await $fetch<{ success: boolean; data: Invoice; message?: string }>('/api/invoices', {
+    const res = await apiFetch<{ success: boolean; data: Invoice; message?: string }>('/api/invoices', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useInvoices(filterParams?: Ref<InvoiceFilterParams> | InvoiceFil
   }
 
   const deleteInvoice = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/invoices/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/invoices/${id}`, {
       method: 'DELETE'
     })
     await refresh()

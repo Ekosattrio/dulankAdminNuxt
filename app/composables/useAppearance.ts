@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import type { AppearanceSetting } from '#server/types/appearance-setting'
+import { apiFetch } from '~/utils/apiFetch'
 
 export function useAppearance() {
   const settings = ref<AppearanceSetting>({
@@ -16,7 +17,7 @@ export function useAppearance() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance')
+      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance')
       if (res && res.data) {
         settings.value = res.data
       }
@@ -30,7 +31,7 @@ export function useAppearance() {
   async function saveSettings(payload: AppearanceSetting) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance', {
+      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance', {
         method: 'POST',
         body: payload
       })

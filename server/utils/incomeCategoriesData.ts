@@ -52,15 +52,18 @@ export function saveIncomeCategoryItem(payload: IncomeCategoryFormData): IncomeC
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Income category not found' })
+      const updated: IncomeCategoryItem = {
+        ...current,
         name: payload.name.trim(),
         description: payload.description.trim(),
-        status: payload.status || all[idx].status || 'Active',
+        status: payload.status || current.status || 'Active',
         updatedAt: new Date().toISOString()
       }
+      all[idx] = updated
       writeJSON(FILE_NAME, all)
-      return all[idx]
+      return updated
     }
   }
 

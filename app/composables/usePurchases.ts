@@ -10,7 +10,7 @@ interface ResponseData {
 export function usePurchases(filterParams?: Ref<PurchaseFilterParams> | PurchaseFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/purchases', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/purchases', {
     key: 'purchases-list',
     query: params
   })
@@ -18,7 +18,7 @@ export function usePurchases(filterParams?: Ref<PurchaseFilterParams> | Purchase
   const purchases = computed<Purchase[]>(() => data.value?.data ?? [])
 
   const savePurchase = async (payload: PurchaseFormData) => {
-    const res = await $fetch<{ success: boolean; data: Purchase; message?: string }>('/api/purchases', {
+    const res = await apiFetch<{ success: boolean; data: Purchase; message?: string }>('/api/purchases', {
       method: 'POST',
       body: payload
     })
@@ -27,7 +27,7 @@ export function usePurchases(filterParams?: Ref<PurchaseFilterParams> | Purchase
   }
 
   const deletePurchase = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/purchases/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/purchases/${id}`, {
       method: 'DELETE'
     })
     await refresh()

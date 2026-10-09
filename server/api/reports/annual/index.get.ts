@@ -53,8 +53,10 @@ export default defineEventHandler((event) => {
   let lowestMonth = '-'
   if (filtered.length > 0) {
     const sortedByProfit = [...filtered].sort((a, b) => b.netProfit - a.netProfit)
-    highestMonth = `${sortedByProfit[0].month} ${sortedByProfit[0].year}`
-    lowestMonth = `${sortedByProfit[sortedByProfit.length - 1].month} ${sortedByProfit[sortedByProfit.length - 1].year}`
+    const highest = sortedByProfit[0]
+    const lowest = sortedByProfit.at(-1)
+    if (highest) highestMonth = `${highest.month} ${highest.year}`
+    if (lowest) lowestMonth = `${lowest.month} ${lowest.year}`
   }
 
   const summary: AnnualReportSummary = {

@@ -6,7 +6,7 @@ export function usePurchaseOrders(filterParams?: Ref<PurchaseOrderFilterParams> 
     return unref(filterParams)
   })
 
-  const { data, pending, error, refresh } = useFetch<{
+  const { data, pending, error, refresh } = useApiFetch<{
     success: boolean
     data: PurchaseOrder[]
     meta: { total: number }
@@ -19,7 +19,7 @@ export function usePurchaseOrders(filterParams?: Ref<PurchaseOrderFilterParams> 
   const purchaseOrders = computed(() => data.value?.data || [])
 
   async function savePurchaseOrder(form: PurchaseOrderFormData) {
-    const res = await $fetch<{ success: boolean; data: PurchaseOrder; message: string }>('/api/purchase-orders', {
+    const res = await apiFetch<{ success: boolean; data: PurchaseOrder; message: string }>('/api/purchase-orders', {
       method: 'POST',
       body: form
     })
@@ -28,7 +28,7 @@ export function usePurchaseOrders(filterParams?: Ref<PurchaseOrderFilterParams> 
   }
 
   async function deletePurchaseOrder(id: string) {
-    const res = await $fetch<{ success: boolean; message: string }>(`/api/purchase-orders/${id}`, {
+    const res = await apiFetch<{ success: boolean; message: string }>(`/api/purchase-orders/${id}`, {
       method: 'DELETE'
     })
     await refresh()

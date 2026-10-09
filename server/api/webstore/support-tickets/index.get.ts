@@ -1,4 +1,5 @@
 import type { SupportTicket, SupportTicketStats } from '~/types/support-ticket'
+import { isDateWithinRange } from '#server/utils/dateRange'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -32,7 +33,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if (query.startDate && query.endDate) {
-    filtered = filtered.filter(item => isDateInRange(item.createdDate, String(query.startDate), String(query.endDate)))
+    filtered = filtered.filter(item => isDateWithinRange(item.createdDate, String(query.startDate), String(query.endDate)))
   }
 
   return {

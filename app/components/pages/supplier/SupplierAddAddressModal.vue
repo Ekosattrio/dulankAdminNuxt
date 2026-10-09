@@ -32,6 +32,7 @@ const form = ref({
 
 const errorMessage = ref('')
 const isSubmitting = ref(false)
+const { saveAddress } = useAddress()
 
 watch(
   () => [props.open, props.supplier],
@@ -80,15 +81,12 @@ async function handleSubmit() {
       status: form.value.status,
     }
 
-    const res = await $fetch<any>('/api/address', {
-      method: 'POST',
-      body: payload,
-    })
+    const res = await saveAddress(payload, 'supplier')
 
     emit('success', res?.message || 'Supplier address added successfully')
     emit('close')
-  } catch (err: any) {
-    errorMessage.value = err?.data?.message || err?.message || 'Failed to save address'
+  } catch (err: unknown) {
+    errorMessage.value = salesErrorMessage(err) || 'Failed to save address'
   } finally {
     isSubmitting.value = false
   }

@@ -11,7 +11,9 @@ interface Props {
   title: string
   subtitle?: string
   columns: PrintColumn[]
-  items: Record<string, any>[]
+  items?: Record<string, any>[]
+  /** Compatibility alias for workspaces created against the earlier print API. */
+  rows?: Record<string, any>[]
   currentPageItems?: Record<string, any>[]
   dateField?: string
   initialDateRange?: DateRangeValue | null
@@ -22,6 +24,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   subtitle: 'Laporan Data Sistem Administrasi Dulank',
   currentPageItems: () => [],
+  items: () => [],
+  rows: () => [],
   dateField: 'date',
   initialDateRange: null,
   defaultAction: 'print',
@@ -63,6 +67,8 @@ watch(
   },
 )
 
+const sourceItems = computed(() => props.items.length > 0 ? props.items : props.rows)
+
 // Computed filtered items to print
 const itemsToPrint = computed(() => {
   if (printScope.value === 'current' && props.currentPageItems && props.currentPageItems.length > 0) {
@@ -71,9 +77,9 @@ const itemsToPrint = computed(() => {
 
   if (printScope.value === 'date-range' && customDateRange.value) {
     const { start, end } = customDateRange.value
-    if (!start && !end) return props.items
+    if (!start && !end) return sourceItems.value
 
-    return props.items.filter((item) => {
+    return sourceItems.value.filter((item) => {
       const itemDateStr = item[props.dateField] || item.date || item.orderDate || item.createdDate || item.salesDate
       if (!itemDateStr) return false
 
@@ -103,7 +109,7 @@ const itemsToPrint = computed(() => {
     })
   }
 
-  return props.items
+  return sourceItems.value
 })
 
 const periodLabel = computed(() => {
@@ -189,7 +195,7 @@ function handleExecutePrint(action: 'print' | 'pdf' = 'print') {
               />
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400">
-              Total {{ items.length }} data terfilter saat ini.
+              Total {{ sourceItems.length }} data terfilter saat ini.
             </p>
           </label>
 
@@ -212,7 +218,7 @@ function handleExecutePrint(action: 'print' | 'pdf' = 'print') {
               />
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400">
-              {{ (currentPageItems && currentPageItems.length) || items.length }} data di tampilan halaman aktif.
+              {{ (currentPageItems && currentPageItems.length) || sourceItems.length }} data di tampilan halaman aktif.
             </p>
           </label>
 

@@ -14,7 +14,7 @@ interface ResponseData {
 export function usePaperPricesSelf(filterParams?: Ref<PaperPriceFilterParams> | PaperPriceFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/paper-prices', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/paper-prices', {
     key: 'paper-prices-self-list',
     query: params
   })
@@ -23,7 +23,7 @@ export function usePaperPricesSelf(filterParams?: Ref<PaperPriceFilterParams> | 
   const stats = computed(() => data.value?.stats ?? { total: 0, totalGroups: 0, active: 0, deactive: 0 })
 
   const savePrice = async (payload: PaperPriceFormData) => {
-    const res = await $fetch<{ success: boolean; data: PaperPrice; message?: string }>('/api/paper-prices', {
+    const res = await apiFetch<{ success: boolean; data: PaperPrice; message?: string }>('/api/paper-prices', {
       method: 'POST',
       body: payload
     })
@@ -32,7 +32,7 @@ export function usePaperPricesSelf(filterParams?: Ref<PaperPriceFilterParams> | 
   }
 
   const deletePrice = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/paper-prices/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/paper-prices/${id}`, {
       method: 'DELETE'
     })
     await refresh()

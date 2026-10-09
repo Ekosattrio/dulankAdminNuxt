@@ -21,15 +21,18 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = categories.findIndex((c) => String(c.id) === String(body.id))
     if (index !== -1) {
-      categories[index] = {
-        ...categories[index],
+      const current = categories[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Purchase category not found' })
+      const updated: PurchaseCategory = {
+        ...current,
         ...body,
-        status: body.status || categories[index].status || 'Active',
+        status: body.status || current.status || 'Active',
       }
+      categories[index] = updated
       writeData('purchase-categories.json', categories)
       return {
         success: true,
-        data: categories[index],
+        data: updated,
         message: 'Purchase category updated successfully'
       }
     }

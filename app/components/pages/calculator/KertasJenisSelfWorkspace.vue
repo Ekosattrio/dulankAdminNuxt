@@ -197,6 +197,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Paper Type" message="Are you sure you want to delete this paper type?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Internal Paper Types" :columns="printColumns" :items="filteredItems" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -228,6 +230,17 @@ const items = ref<SelfPaperType[]>([
 const searchQuery = ref('')
 const filterStatus = ref('')
 const statusDropdownOpen = ref(false)
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Paper Type' },
+  { key: 'merk', label: 'Merk' },
+  { key: 'price', label: 'Price', align: 'right' as const },
+  { key: 'gsm', label: 'GSM', align: 'right' as const },
+  { key: 'size', label: 'Plano Size' },
+  { key: 'stock', label: 'Stock', align: 'right' as const },
+  { key: 'status', label: 'Status' },
+]
 
 const filteredItems = computed(() => {
   return items.value.filter(i => {
@@ -312,17 +325,21 @@ function saveItem() {
 }
 
 function deleteItem(id: number) {
-  if (confirm('Are you sure you want to delete this paper type?')) {
-    items.value = items.value.filter(i => i.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  items.value = items.value.filter(i => i.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting paper types as PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

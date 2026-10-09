@@ -10,7 +10,7 @@ interface ResponseData {
 export function usePurchaseCategories(filterParams?: Ref<PurchaseCategoryFilterParams> | PurchaseCategoryFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/purchase-categories', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/purchase-categories', {
     key: 'purchase-categories-list',
     query: params
   })
@@ -18,7 +18,7 @@ export function usePurchaseCategories(filterParams?: Ref<PurchaseCategoryFilterP
   const categories = computed<PurchaseCategory[]>(() => data.value?.data ?? [])
 
   const saveCategory = async (payload: PurchaseCategoryFormData) => {
-    const res = await $fetch<{ success: boolean; data: PurchaseCategory; message?: string }>('/api/purchase-categories', {
+    const res = await apiFetch<{ success: boolean; data: PurchaseCategory; message?: string }>('/api/purchase-categories', {
       method: 'POST',
       body: payload
     })
@@ -27,7 +27,7 @@ export function usePurchaseCategories(filterParams?: Ref<PurchaseCategoryFilterP
   }
 
   const deleteCategory = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/purchase-categories/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/purchase-categories/${id}`, {
       method: 'DELETE'
     })
     await refresh()

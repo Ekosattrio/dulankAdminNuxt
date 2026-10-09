@@ -23,8 +23,10 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const idx = allBanners.findIndex(item => item.id === body.id)
     if (idx !== -1) {
-      allBanners[idx] = {
-        ...allBanners[idx],
+      const current = allBanners[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Banner not found' })
+      const updated: BannerItem = {
+        ...current,
         title,
         imageUrl: img,
         src: img,
@@ -36,12 +38,13 @@ export default defineEventHandler(async (event) => {
         end,
         startDate: start.slice(0, 10),
         endDate: end.slice(0, 10),
-        status: body.status || allBanners[idx].status || 'Inactive',
-        order: body.order !== undefined ? Number(body.order) : allBanners[idx].order,
-        redirectUrl: body.redirectUrl ?? allBanners[idx].redirectUrl ?? '#'
+        status: body.status || current.status || 'Inactive',
+        order: body.order !== undefined ? Number(body.order) : current.order,
+        redirectUrl: body.redirectUrl ?? current.redirectUrl ?? '#'
       }
+      allBanners[idx] = updated
       await writeJSON('banners.json', allBanners)
-      return createResponse(allBanners[idx], 'Banner updated successfully')
+      return createResponse(updated, 'Banner updated successfully')
     }
   }
 

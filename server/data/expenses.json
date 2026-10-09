@@ -9,7 +9,9 @@
     "amount": 1000000,
     "paid": 1000000,
     "due": 0,
-    "description": "Pembayaran gaji lembur staf produksi."
+    "description": "Pembayaran gaji lembur staf produksi.",
+    "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-001"
   },
   {
     "id": "2",
@@ -21,7 +23,8 @@
     "amount": 1150000,
     "paid": 0,
     "due": 1150000,
-    "description": "Pembelian tinta sablon UV."
+    "description": "Pembelian tinta sablon UV.",
+    "paymentMethod": "-"
   },
   {
     "id": "3",
@@ -33,7 +36,8 @@
     "amount": 550000,
     "paid": 0,
     "due": 550000,
-    "description": "Servis rutin mesin die-cut."
+    "description": "Servis rutin mesin die-cut.",
+    "paymentMethod": "-"
   },
   {
     "id": "4",
@@ -45,7 +49,9 @@
     "amount": 800000,
     "paid": 300000,
     "due": 500000,
-    "description": "Pembayaran tagihan listrik bulan September."
+    "description": "Pembayaran tagihan listrik bulan September.",
+    "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-001"
   },
   {
     "id": "5",
@@ -57,7 +63,9 @@
     "amount": 250000,
     "paid": 250000,
     "due": 0,
-    "description": "Ongkos kirim pesanan Jakarta."
+    "description": "Ongkos kirim pesanan Jakarta.",
+    "paymentMethod": "Tunai / Cash",
+    "bankAccountId": "bank-account-005"
   }
 ]
 

@@ -16,6 +16,7 @@ const form = ref<ExpenseCategoryFormData>({
   description: '',
   status: 'Active'
 })
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -40,8 +41,9 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (!form.value.categoryName) {
-    alert('Nama kategori tidak boleh kosong')
+    validationError.value = 'Nama kategori tidak boleh kosong.'
     return
   }
   emit('save', { ...form.value })
@@ -61,6 +63,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="mb-3">
               <label class="form-label fw-semibold">Category Name <span class="text-danger">*</span></label>
               <input

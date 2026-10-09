@@ -3,6 +3,7 @@ import type { Expense, ExpenseFormData } from '~/types/expense'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import PagesExpenseModal from '~/components/expenses/ExpenseModal.vue'
 import PagesExpenseTable from '~/components/expenses/ExpenseTable.vue'
+import { formatIDR } from '~/utils/currency'
 
 definePageMeta({
   layout: 'default'
@@ -16,6 +17,8 @@ useLegacyPage({
 })
 
 const { expenses, pending, refresh, saveExpense, deleteExpense } = useExpenses()
+const { accounts: bankAccounts } = useBankAccounts()
+const activeBankAccounts = computed(() => bankAccounts.value.filter((account) => account.status === 'Active'))
 const { expenseCategories } = useExpenseCategories()
 
 const searchQuery = ref('')
@@ -40,6 +43,18 @@ const filteredExpenses = computed(() => {
     return matchesSearch && matchesStatus && matchesCategory
   })
 })
+
+const print = useTablePrint()
+const printColumns = [
+  { key: 'noExpense', label: 'No Expense' },
+  { key: 'date', label: 'Date' },
+  { key: 'name', label: 'Expense' },
+  { key: 'category', label: 'Category' },
+  { key: 'amount', label: 'Amount (IDR)', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'paid', label: 'Paid (IDR)', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'due', label: 'Due (IDR)', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'status', label: 'Status' }
+]
 
 const openAddModal = () => {
   editData.value = null
@@ -94,7 +109,13 @@ const handleSave = async (formData: ExpenseFormData) => {
 }
 
 const printList = () => {
-  window.print()
+  print.openPrintModal({
+    title: 'Expense Report',
+    subtitle: 'Daftar pengeluaran operasional dan produksi',
+    columns: printColumns,
+    rows: filteredExpenses.value,
+    action: 'print'
+  })
 }
 </script>
 
@@ -180,6 +201,7 @@ const printList = () => {
       :edit-data="editData"
       :view-only="isViewOnly"
       :categories="categoriesList"
+      :accounts="activeBankAccounts"
       @close="isModalOpen = false"
       @save="handleSave"
     />
@@ -192,6 +214,17 @@ const printList = () => {
       :busy="isDeleting"
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="date"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

@@ -10,7 +10,7 @@ interface ResponseData {
 export function useCarts(filterParams?: Ref<CartFilterQuery> | CartFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/cart', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/cart', {
     key: 'webstore-carts-list',
     query: params
   })

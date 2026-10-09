@@ -33,9 +33,11 @@ export function updateTaxRate(id: number, input: Partial<TaxRateInput>): TaxRate
   const list = getTaxRates()
   const idx = list.findIndex(item => item.id === id)
   if (idx === -1) return null
+  const current = list[idx]
+  if (!current) return null
 
   const updated: TaxRateItem = {
-    ...list[idx],
+    ...current,
     ...input,
     id
   }

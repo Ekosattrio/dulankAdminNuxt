@@ -119,6 +119,13 @@ import supplierDueReportsData from '../data/supplier-due-reports.json'
 import customerReportsData from '../data/customer-reports.json'
 import customerDueReportsData from '../data/customer-due-reports.json'
 import bankSettingsData from '../data/bank-settings.json'
+import bankAccountsData from '../data/bank-accounts.json'
+import bankAccountTypesData from '../data/bank-account-types.json'
+import bankAccountLedgerData from '../data/bank-account-ledger.json'
+import moneyTransfersData from '../data/money-transfers.json'
+import cashAdvancesData from '../data/cash-advances.json'
+import inputTaxDocumentsData from '../data/input-tax-documents.json'
+import outputTaxDocumentsData from '../data/output-tax-documents.json'
 import currencySettingsData from '../data/currency-settings.json'
 import printerSettingsData from '../data/printer-settings.json'
 import gdprSettingsData from '../data/gdpr-settings.json'
@@ -251,6 +258,13 @@ export const bundledSources: Record<string, unknown> = {
   'customer-reports.json': customerReportsData,
   'customer-due-reports.json': customerDueReportsData,
   'bank-settings.json': bankSettingsData,
+  'bank-accounts.json': bankAccountsData,
+  'bank-account-types.json': bankAccountTypesData,
+  'bank-account-ledger.json': bankAccountLedgerData,
+  'money-transfers.json': moneyTransfersData,
+  'cash-advances.json': cashAdvancesData,
+  'input-tax-documents.json': inputTaxDocumentsData,
+  'output-tax-documents.json': outputTaxDocumentsData,
   'currency-settings.json': currencySettingsData,
   'printer-settings.json': printerSettingsData,
   'gdpr-settings.json': gdprSettingsData,

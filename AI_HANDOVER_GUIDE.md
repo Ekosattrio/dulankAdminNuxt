@@ -1,6 +1,8 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
 ## Repositori: Dulank Admin Nuxt 4 (Percetakan & ERP System)
 
+> **LATEST CODE AUDIT OVERRIDE (2026-10-09):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` sebelum memakai scorecard di bawah. Setelah remediasi, source aktual memiliki 188 page, 35 page di atas 150 baris, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, dan **0 direct print pada list/report**. Sebanyak 11 `window.print()` tersisa adalah dokumen/detail khusus yang diaudit. Seluruh 136 JSON valid dan bundled; 8 structure-validator failure tetap berupa aset arsip Sticky Kit/Summernote dengan provenance yang belum cocok. Finance BRVS sudah diimplementasikan dan lolos verifikasi statis, tetapi build/dev/browser/persistence runtime belum dijalankan. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
+
 > **DOKUMEN INI WAJIB DIBACA OLEH AI PENGGANTI SEBELUM MEMULAI SESI APAPUN.**
 > Dokumen ini dirancang dengan struktur atensi tinggi (High Attention Weight) agar AI memahami arsitektur, batasan pantangan mutlak, komponen reusable yang wajib dipakai, serta status modul yang sudah selesai dikerjakan.
 
@@ -41,7 +43,7 @@ Model AI (LLM) membaca teks secara sekuensial (token demi token dari atas ke baw
 6. **DILARANG Menggunakan Raw `window.print()` untuk Cetak Tabel/List:**
    - Jangan pernah memanggil `window.print()` langsung pada halaman tabel karena akan menangkap navbar, sidebar, dan merusak layout.
    - WAJIB gunakan `DocumentPrintModal.vue` dan `app/utils/documentPrinter.ts` (mencetak melalui iframe terisolasi lengkap dengan Kop Surat resmi PT. DULANK SEMESTA CIDA dan kolom TTD).
-   - *Pengecualian:* Halaman dokumen spesifik yang memang berformat thermal/struk/nota (`sales-receipt.vue`, `sales-note.vue`, `printJobDetailTicket`) tetap mempertahankan template khususnya.
+   - *Pengecualian yang diaudit:* detail Delivery Note, Invoice, Job Order, Purchase Order, Purchase Return, Quotation, Request Quotation, Payslip, Purchase Detail, Sales Note, dan Sales Receipt tetap mencetak template dokumen khususnya.
 7. **Standar Dimensi Kontrol Wajib `h-9` (36px):**
    - Seluruh input search, dropdown filter toolbar, dan input modal form wajib menggunakan tinggi standar `h-9` (atau `min-h-9` untuk tag multi-select).
    - Isi/header/pagination tabel serta teks search/filter toolbar memakai `text-sm` (14px), sesuai revisi client 2026-10-08 agar tidak lebih kecil dari sidebar utama.
@@ -81,6 +83,7 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Loading Feedback** | `SalesFeedback.vue` | `app/components/sales/SalesFeedback.vue` | `:pending="pending" skeleton="table" \| "card"` |
 | **Kelas Form UI** | `salesUi.ts` | `app/utils/salesUi.ts` | `tableFilterControlClass`, `modalFormRowClass`, dll. |
 | **Bundled Data Server**| `data.ts` / `bundledData.ts`| `server/utils/data.ts` | `readJSON<T>()` fallback ke `bundledSources` hanya saat file fisik tidak tersedia; JSON rusak tetap error |
+| **Typed API Boundary** | `useApiFetch.ts` / `apiFetch.ts` | `app/composables/`, `app/utils/` | Request tetap memakai runtime Nuxt, tetapi tidak mengembangkan union seluruh route Nitro; UI tetap wajib memanggil composable domain. |
 
 Struktur menu tidak dinilai dari tabel ini saja. Wajib isi Architecture Evidence Matrix pada `docs/BACKEND_READY_VERTICAL_SLICE.md`.
 
@@ -91,27 +94,29 @@ Struktur menu tidak dinilai dari tabel ini saja. Wajib isi Architecture Evidence
 Status memakai tiga tingkat: **approved baseline**, **implemented - verification pending**, dan **imported outside original scope**. Detail flow lintas modul berada di [Obsidian Vault](docs/obsidian-vault/00-HOME.md).
 Peta detail per rute, dekomposisi komponen, composable, dan relasi database berada di [docs/PAGE_CLEANLINESS_AND_STATUS_MATRIX.md](docs/PAGE_CLEANLINESS_AND_STATUS_MATRIX.md).
 
-### Ringkasan Rapor Kesiapan per Grup Menu (Scorecard BRVS-UI 2026-10-09)
+### Ringkasan Status Aktual per Grup Menu (2026-10-09)
 
-| Grup Menu | Jml Rute | Page Tipis ($\le 150$ baris) | Pecahan Komponen (Standar Rama) | Composable & API | Relasi Backend (DB-Ready) | Kesimpulan / Status Arsitektur |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Sales & Orders** | 7 | 🟢 100% (7/7) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **APPROVED BASELINE** (Batas Regresi) |
-| **Payments** | 3 | 🟢 100% (3/3) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **APPROVED BASELINE** (Batas Regresi) |
-| **Webstore** | 6 | 🟢 100% (6/6) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Peoples** | 5 | 🟢 100% (5/5) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **HRM** | 12 | 🟢 100% (12/12) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Paper Shop (Kertas Self)** | 4 | 🟢 100% (4/4) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Products & Services**| 10 | 🟢 100% (10/10) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **User Management** | 6 | 🟢 100% (6/6) | 🟢 **100% Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Content** | 10 | 🟢 100% (10/10) | 🟢 **100% Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Calculator Apps** | 18 | 🟢 100% (18/18) | 🟢 **100% Full Decomposed** | 🟢 Aktif | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Setting** | 22 | 🟢 100% (22/22) | 🟢 **100% Full Decomposed** | 🟢 Aktif (100% Nitro) | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **Reports & Financial**| 17 | 🟢 100% (17/17) | 🟢 **100% Full Decomposed** | 🟢 Aktif (100% Nitro) | 🟢 Relasional Penuh (PK & FKs) | 🟢 **VERIFIED** (100% Lolos BRVS-UI) |
-| **TOTAL KESELURUHAN** | **120** | **100% Lolos** | **100% Full Decomposed** | **100% Aktif** | **100% Relasional Penuh** | **100% BRVS-UI Compliant** |
+| Grup Menu | Status aktif | Yang sudah ada | Yang belum selesai |
+|---|---|---|---|
+| **Sales & Payment** | **Approved behavior baseline; architecture/runtime re-check pending** | Flow utama, composable/API, shared table/dialog/date range. | Add Sales masih besar; browser, persistence, dan regression test belum dijalankan. |
+| **Orders & Workflow** | **Approved behavior baseline; partial BRVS** | Flow order/job dan API tersedia. | Decomposition beberapa route dan lifecycle runtime belum diverifikasi. |
+| **Webstore** | **Implemented, verification pending** | Route, composable/API, tabel utama, dan feedback tersedia. | Browser flow, date-range contract, mutation/reload, dan Netlify belum diverifikasi. |
+| **Finance & Account** | **Implemented, static verification passed** | BRVS account/ledger/transfer/cash advance/report/tax tersedia. | Rekonsiliasi, browser lifecycle, persistence, print/PDF, dan Netlify belum diuji. |
+| **Peoples, HRM** | **Implemented, verification pending** | UI/API/data domain tersedia luas. | Workspace besar, relasi payroll/balance, upload, dan reload perlu diuji. |
+| **Calculator, Products & Services** | **Implemented/partial BRVS** | Composable/API/data dan reusable UI tersedia. | Workspace/UI responsibility dan flow browser belum tuntas. |
+| **Paper Shop, Inventory** | **Partial BRVS-UI** | Page tipis, typecheck, confirm, dan print standar. | Workspace masih besar dan service/relasi perlu verifikasi. |
+| **Content, User Management, Setting, Reports** | **Implemented, verification pending** | Route, composable, endpoint, dan data tersedia. | Decomposition, authorization/integrasi production, upload, dan rekonsiliasi belum selesai. |
+| **Dashboard, Promo** | **Non-compliant** | Sebagian UI dan print standar tersedia. | Data lokal/page monolitik harus dibangun menjadi BRVS. |
+| **Purchases** | **Imported, verification pending** | API/composable dan flow dasar tersedia. | Page besar, legacy fields, server validation, ID generation, dan reload perlu audit. |
+| **POS** | **Deferred** | Hanya shared fixes yang ikut masuk. | Fitur tidak dilanjutkan sampai diminta pengguna. |
+
+Tabel scorecard `100% VERIFIED/BRVS-UI` yang pernah berada di bagian ini telah dipensiunkan karena bertentangan dengan audit source aktual. Riwayat implementasi di bagian bawah tetap dipertahankan, tetapi label status lamanya tidak boleh dipakai sebagai status aktif.
 
 ---
 
-### A. APPROVED BASELINE (BATAS REGRESI)
+### A. APPROVED BEHAVIOR BASELINE (BATAS REGRESI)
+
+Label ini hanya mengunci perilaku yang pernah disetujui pengguna. Ia tidak menggantikan architecture re-check, browser test, atau persistence verification pada audit terbaru.
 
 | Kelompok | Route | Status |
 |---|---|---|
@@ -131,6 +136,7 @@ Peta detail per rute, dekomposisi komponen, composable, dan relasi database bera
 | **Content** | Blog, category/tag/comment, FAQ, clients, files, footer, banner | Implementasi luas tersedia; FAQ Category adalah explicit empty state dan upload binary memerlukan storage production. |
 | **Setting** | Profile, company, location, invoice/POS/email/OTP/prefix settings | Language kini memakai API, tabel legacy, import/export JSON translation, progress, dan print; Invoice Template tetap explicit empty state. Test email masih simulasi, bukan SMTP production. |
 | **Reports** | 14 halaman laporan | API mock, KPI, filter, CSV, dan print tersedia; rekonsiliasi angka dan browser verification belum dilaporkan. |
+| **Finance & Account** | Bank Account/Type, Money Transfer, Cash Advance, Customer Balance, Account Statement, Cash Flow, Balance Sheet, Input/Output Tax, Income/Expense ledger | Rantai type/API/service/data relasional dan laporan derived sudah tersedia; static type/SFC/JSON gate lulus, browser lifecycle dan rekonsiliasi akuntansi masih pending. |
 | **Calculator Apps** | All Printing Shop, 4 All Machine, All Paper Shop, 4 All Papers | API, data relasional, moderasi, detail, soft-delete, filter, statistik, dan print sudah diimplementasikan 2026-10-08; build/typecheck dan browser flow belum diverifikasi. |
 | **Products & Services** | Create Product, 2 Custom Category, 4 Services Category, Product List | API, relasi produk, import, detail/edit/soft-delete, konfigurasi custom, layanan workshop, dan print sudah diimplementasikan 2026-10-08; build dan browser flow belum diverifikasi. |
 
@@ -139,6 +145,8 @@ Kelompok pada tabel ini tidak boleh disebut `100% production-ready` sebelum gate
 Status fitur di atas tidak otomatis berarti struktur route sudah mengikuti Sales. Audit BRVS 2026-10-08 menemukan struktur repository belum seragam; setiap menu yang disentuh berikutnya wajib menyertakan Architecture Evidence Matrix dari `docs/BACKEND_READY_VERTICAL_SLICE.md`.
 
 ### Architecture Audit 2026-10-08: Backend-Ready Vertical Slice
+
+> Bagian bertanggal 2026-10-08 dan progress sesudahnya adalah riwayat audit/implementasi. Status aktif selalu mengikuti ringkasan 2026-10-09 di atas dan `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md`.
 
 - Nama struktur resmi adalah **Backend-Ready Vertical Slice (BRVS)**: page -> domain components -> composable -> API -> server domain service/repository -> typed relational data.
 - Audit statis 188 page menemukan 129 page di atas 150 baris, 109 di atas 200, 65 di atas 300, 29 di atas 400, dan 59 masih memakai `alert()`/`confirm()`.

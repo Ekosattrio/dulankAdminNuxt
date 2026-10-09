@@ -39,6 +39,7 @@ export function updateCalculatorDashboardUser(id: number, patch: Partial<Calcula
   if (idx === -1) return null
 
   const existing = current.users[idx]
+  if (!existing) return null
   const updated: CalculatorDashboardUser = {
     ...existing,
     ...patch,

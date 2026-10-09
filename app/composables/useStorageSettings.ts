@@ -20,7 +20,7 @@ export function useStorageSettings() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: StorageSetting }>('/api/storage-settings')
+      const res = await apiFetch<{ success: boolean; data: StorageSetting }>('/api/storage-settings')
       if (res && res.data) {
         storage.value = res.data
       }
@@ -34,7 +34,7 @@ export function useStorageSettings() {
   async function saveSettings(payload: StorageSetting) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: StorageSetting }>('/api/storage-settings', {
+      const res = await apiFetch<{ success: boolean; data: StorageSetting }>('/api/storage-settings', {
         method: 'POST',
         body: payload
       })

@@ -9,6 +9,9 @@ export interface Expense {
   paid: number
   due: number
   description: string
+  paymentMethod?: string
+  bankAccountId?: string
+  bankAccount?: string
 }
 
 export interface ExpenseFilterParams {
@@ -29,5 +32,7 @@ export interface ExpenseFormData {
   paid: number
   due?: number
   description: string
+  paymentMethod?: string
+  bankAccountId?: string
 }
 

@@ -23,6 +23,15 @@ updated: 2026-10-08
 - Server menghitung ulang subtotal, diskon, pajak, ongkir, paid, due, refund, dan total.
 - Nilai negatif, NaN, pembayaran melebihi tagihan, atau refund yang tidak cocok harus ditolak.
 
+## Finance dan Pajak
+
+- Current balance rekening dihitung dari opening balance dan ledger, bukan input manual setelah account dibuat.
+- Transfer antar rekening selalu membentuk debit dan credit berpasangan dengan `transferId` yang sama.
+- Income membutuhkan rekening tujuan. Expense yang memiliki nilai paid membutuhkan rekening sumber dan tidak boleh menulis due/total hasil hitung dari UI sebagai kebenaran server.
+- Cash Advance berelasi ke `employeeId` dan rekening kas. Outstanding, status, dan sisa tenor dihitung dari advance dan payment history.
+- Input Tax memilih Purchase; Output Tax memilih Sales. DPP, VAT, supplier/customer, dan nomor transaksi adalah output sumber, sedangkan metadata faktur pajak adalah input pengguna.
+- Balance Sheet tidak boleh mengarang valuasi inventory/fixed asset. Nilai yang belum memiliki sumber ledger dinyatakan nol dengan data-quality note.
+
 ## Dokumen Transaksi
 
 - Edit mempertahankan nomor dan identitas dokumen.
@@ -49,6 +58,7 @@ updated: 2026-10-08
 
 - Setiap perubahan melalui Check, Implement, First Re-check, Adversarial Re-check, Evidence, dan Progress Sync.
 - Setiap menu mengikuti [Backend-Ready Vertical Slice](../BACKEND_READY_VERTICAL_SLICE.md); page hanya composition, composable menjadi pintu frontend, API tipis, dan domain service/repository memegang validasi serta persistence.
+- `useApiFetch`/`apiFetch` hanya boundary type untuk menghindari instantiation-depth Nitro; komponen dan page tetap dilarang memanggilnya langsung. Hanya composable domain yang boleh menjadi pintu request UI.
 - Klaim progres harus dapat ditunjuk ke kode, flow, data, atau output validasi aktual.
 - `implemented, verification pending` tidak boleh ditulis sebagai `verified`; `approved baseline` memerlukan persetujuan pengguna.
 - Framework kanonik berada di [Framework Kerja dan Re-check AI](../AI_WORK_QUALITY_FRAMEWORK.md).

@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useBanners() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/banners', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/banners', {
     key: 'banners-list'
   })
 
   const banners = computed<BannerItem[]>(() => data.value?.data ?? [])
 
   const saveBanner = async (payload: BannerFormData) => {
-    const res = await $fetch<{ success: boolean; data: BannerItem; message?: string }>('/api/banners', {
+    const res = await apiFetch<{ success: boolean; data: BannerItem; message?: string }>('/api/banners', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useBanners() {
   }
 
   const deleteBanner = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/banners/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/banners/${id}`, {
       method: 'DELETE'
     })
     await refresh()

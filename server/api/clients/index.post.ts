@@ -15,17 +15,20 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const idx = allClients.findIndex(item => item.id === body.id)
     if (idx !== -1) {
-      allClients[idx] = {
-        ...allClients[idx],
+      const current = allClients[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Client not found' })
+      const updated: ClientItem = {
+        ...current,
         name: body.name,
         logoUrl: body.logoUrl,
-        website: body.website ?? allClients[idx].website,
-        category: body.category || allClients[idx].category || 'General',
-        status: body.status || allClients[idx].status || 'Active',
-        order: body.order !== undefined ? Number(body.order) : allClients[idx].order
+        website: body.website ?? current.website,
+        category: body.category || current.category || 'General',
+        status: body.status || current.status || 'Active',
+        order: body.order !== undefined ? Number(body.order) : current.order
       }
+      allClients[idx] = updated
       await writeJSON('clients.json', allClients)
-      return createResponse(allClients[idx], 'Client updated successfully')
+      return createResponse(updated, 'Client updated successfully')
     }
   }
 

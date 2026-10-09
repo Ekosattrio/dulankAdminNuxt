@@ -9,7 +9,7 @@ interface ResponseData {
 export function useVariants(filterParams?: Ref<VariantFilterParams> | VariantFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/variants', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/variants', {
     key: 'variants-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useVariants(filterParams?: Ref<VariantFilterParams> | VariantFil
   const variants = computed<Variant[]>(() => data.value?.data ?? [])
 
   const saveVariant = async (payload: VariantFormData) => {
-    const res = await $fetch<{ success: boolean; data: Variant; message?: string }>('/api/variants', {
+    const res = await apiFetch<{ success: boolean; data: Variant; message?: string }>('/api/variants', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useVariants(filterParams?: Ref<VariantFilterParams> | VariantFil
   }
 
   const deleteVariant = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/variants/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/variants/${id}`, {
       method: 'DELETE'
     })
     await refresh()

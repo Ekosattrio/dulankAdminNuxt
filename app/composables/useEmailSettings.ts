@@ -7,7 +7,7 @@ interface ResponseData {
 }
 
 export function useEmailSettings() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/email-settings', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/email-settings', {
     key: 'email-settings-data',
   })
 
@@ -24,7 +24,7 @@ export function useEmailSettings() {
   })
 
   const saveSettings = async (payload: Partial<EmailConfig>) => {
-    const res = await $fetch<{ success: boolean; data: EmailConfig; message?: string }>('/api/email-settings', {
+    const res = await apiFetch<{ success: boolean; data: EmailConfig; message?: string }>('/api/email-settings', {
       method: 'POST',
       body: payload,
     })
@@ -33,7 +33,7 @@ export function useEmailSettings() {
   }
 
   const sendTestEmail = async (toEmail: string) => {
-    const res = await $fetch<{ success: boolean; data: TestEmailResult; message: string }>('/api/email-settings/test', {
+    const res = await apiFetch<{ success: boolean; data: TestEmailResult; message: string }>('/api/email-settings/test', {
       method: 'POST',
       body: { toEmail } as TestEmailPayload,
     })

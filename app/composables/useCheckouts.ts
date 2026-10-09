@@ -10,7 +10,7 @@ interface ResponseData {
 export function useCheckouts(filterParams?: Ref<CheckoutFilterQuery> | CheckoutFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/checkout', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/checkout', {
     key: 'webstore-checkouts-list',
     query: params
   })

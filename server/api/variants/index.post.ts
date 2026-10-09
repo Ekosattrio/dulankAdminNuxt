@@ -16,14 +16,17 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allVariants.findIndex(v => v.id === body.id)
     if (idx !== -1) {
-      allVariants[idx] = {
-        ...allVariants[idx],
+      const current = allVariants[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Variant not found' })
+      const updated: Variant = {
+        ...current,
         name: body.name,
         values: body.values,
         status: body.status || 'Active'
       }
+      allVariants[idx] = updated
       await writeJSON('variants.json', allVariants)
-      return createResponse(allVariants[idx], 'Variant updated successfully')
+      return createResponse(updated, 'Variant updated successfully')
     }
   }
 

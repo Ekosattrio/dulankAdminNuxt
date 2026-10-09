@@ -15,21 +15,24 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const idx = allFiles.findIndex(item => item.id === body.id)
     if (idx !== -1) {
-      allFiles[idx] = {
-        ...allFiles[idx],
+      const current = allFiles[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'File not found' })
+      const updated: DownloadFileItem = {
+        ...current,
         name: body.name,
         category: body.category,
-        size: body.size || allFiles[idx].size,
-        fileType: body.fileType || allFiles[idx].fileType,
-        fileUrl: body.fileUrl ?? allFiles[idx].fileUrl,
-        uploadedBy: body.uploadedBy || allFiles[idx].uploadedBy,
-        ownedBy: body.ownedBy || allFiles[idx].ownedBy || allFiles[idx].uploadedBy,
-        membersCount: body.membersCount ?? allFiles[idx].membersCount,
-        isFavorite: body.isFavorite ?? allFiles[idx].isFavorite,
-        isPinned: body.isPinned ?? allFiles[idx].isPinned
+        size: body.size || current.size,
+        fileType: body.fileType || current.fileType,
+        fileUrl: body.fileUrl ?? current.fileUrl,
+        uploadedBy: body.uploadedBy || current.uploadedBy,
+        ownedBy: body.ownedBy || current.ownedBy || current.uploadedBy,
+        membersCount: body.membersCount ?? current.membersCount,
+        isFavorite: body.isFavorite ?? current.isFavorite,
+        isPinned: body.isPinned ?? current.isPinned
       }
+      allFiles[idx] = updated
       await writeJSON('download-files.json', allFiles)
-      return createResponse(allFiles[idx], 'File updated successfully')
+      return createResponse(updated, 'File updated successfully')
     }
   }
 

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "bank-account-type-001",
+    "name": "Savings Account",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-type-002",
+    "name": "Current Account",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "bank-account-type-003",
+    "name": "Cash Account",
+    "status": "Active",
+    "createdAt": "2023-07-12T00:00:00.000Z",
+    "updatedAt": "2023-07-12T00:00:00.000Z"
+  }
+]

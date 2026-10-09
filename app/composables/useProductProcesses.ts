@@ -18,7 +18,7 @@ interface ResponseData {
 export function useProductProcesses(filterParams?: Ref<ProductProcessFilterParams> | ProductProcessFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/product-processes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/product-processes', {
     key: 'product-processes-list',
     query: params
   })
@@ -27,7 +27,7 @@ export function useProductProcesses(filterParams?: Ref<ProductProcessFilterParam
   const stats = computed(() => data.value?.stats ?? { totalProduct: 0, totalProcess: 0, active: 0, deactive: 0 })
 
   const saveProcess = async (payload: ProductProcessFormData) => {
-    const res = await $fetch<{ success: boolean; data: ProductProcessItem; message?: string }>('/api/product-processes', {
+    const res = await apiFetch<{ success: boolean; data: ProductProcessItem; message?: string }>('/api/product-processes', {
       method: 'POST',
       body: payload
     })
@@ -36,7 +36,7 @@ export function useProductProcesses(filterParams?: Ref<ProductProcessFilterParam
   }
 
   const deleteProcess = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/product-processes/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/product-processes/${id}`, {
       method: 'DELETE'
     })
     await refresh()

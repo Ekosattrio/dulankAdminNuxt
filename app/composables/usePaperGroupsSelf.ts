@@ -13,7 +13,7 @@ interface ResponseData {
 export function usePaperGroupsSelf(filterParams?: Ref<PaperGroupFilterParams> | PaperGroupFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/paper-groups', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/paper-groups', {
     key: 'paper-groups-self-list',
     query: params
   })
@@ -22,7 +22,7 @@ export function usePaperGroupsSelf(filterParams?: Ref<PaperGroupFilterParams> | 
   const stats = computed(() => data.value?.stats ?? { total: 0, active: 0, deactive: 0 })
 
   const saveGroup = async (payload: PaperGroupFormData) => {
-    const res = await $fetch<{ success: boolean; data: PaperGroup; message?: string }>('/api/paper-groups', {
+    const res = await apiFetch<{ success: boolean; data: PaperGroup; message?: string }>('/api/paper-groups', {
       method: 'POST',
       body: payload
     })
@@ -31,7 +31,7 @@ export function usePaperGroupsSelf(filterParams?: Ref<PaperGroupFilterParams> | 
   }
 
   const deleteGroup = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/paper-groups/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/paper-groups/${id}`, {
       method: 'DELETE'
     })
     await refresh()

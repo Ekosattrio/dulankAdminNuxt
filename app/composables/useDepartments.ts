@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useDepartments() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/departments', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/departments', {
     key: 'departments-list'
   })
 
   const departments = computed<Department[]>(() => data.value?.data ?? [])
 
   const saveDepartment = async (payload: DepartmentFormData) => {
-    const res = await $fetch<{ success: boolean; data: Department; message?: string }>('/api/departments', {
+    const res = await apiFetch<{ success: boolean; data: Department; message?: string }>('/api/departments', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useDepartments() {
   }
 
   const deleteDepartment = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/departments/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/departments/${id}`, {
       method: 'DELETE'
     })
     await refresh()

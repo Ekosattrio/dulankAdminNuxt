@@ -29,9 +29,11 @@ export function updateCustomField(id: number, input: Partial<CustomFieldInput>):
   const list = getCustomFields()
   const idx = list.findIndex(item => item.id === id)
   if (idx === -1) return null
+  const current = list[idx]
+  if (!current) return null
 
   const updated: CustomField = {
-    ...list[idx],
+    ...current,
     ...input,
     id
   }

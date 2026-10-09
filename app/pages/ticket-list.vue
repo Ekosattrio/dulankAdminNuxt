@@ -318,6 +318,16 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="createdDate"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -419,6 +429,28 @@ const filteredTickets = computed(() => {
   });
 });
 
+const print = useTablePrint();
+const printColumns = [
+  { key: 'ticketId', label: 'Ticket ID' },
+  { key: 'requestedBy', label: 'Requested By' },
+  { key: 'subject', label: 'Subject' },
+  { key: 'assignee', label: 'Assignee' },
+  { key: 'priority', label: 'Priority' },
+  { key: 'status', label: 'Status' },
+  { key: 'createdDate', label: 'Created Date' },
+  { key: 'dueDate', label: 'Due Date' }
+];
+
+const openTicketPrint = (action: 'print' | 'pdf') => {
+  print.openPrintModal({
+    title: 'Support Ticket Report',
+    subtitle: 'Daftar tiket dukungan dan penugasannya',
+    columns: printColumns,
+    rows: filteredTickets.value,
+    action
+  });
+};
+
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const editingId = ref<number | null>(null);
@@ -512,11 +544,11 @@ const confirmDelete = () => {
 };
 
 const exportPdf = () => {
-  window.print();
+  openTicketPrint('pdf');
 };
 
 const printTable = () => {
-  window.print();
+  openTicketPrint('print');
 };
 
 const refresh = () => {

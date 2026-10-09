@@ -7,7 +7,7 @@ interface ProfileApiResponse {
 }
 
 export function useProfile() {
-  const { data, pending, error, refresh } = useFetch<ProfileApiResponse>('/api/profile', {
+  const { data, pending, error, refresh } = useApiFetch<ProfileApiResponse>('/api/profile', {
     key: 'user-profile-data'
   })
 
@@ -28,7 +28,7 @@ export function useProfile() {
   })
 
   const saveProfile = async (payload: Partial<UserProfile>) => {
-    const res = await $fetch<{ success: boolean; data: UserProfile; message?: string }>('/api/profile', {
+    const res = await apiFetch<{ success: boolean; data: UserProfile; message?: string }>('/api/profile', {
       method: 'POST',
       body: payload
     })
@@ -37,7 +37,7 @@ export function useProfile() {
   }
 
   const changePassword = async (passwordData: PasswordChangePayload) => {
-    const res = await $fetch<{ success: boolean; data: any; message?: string }>('/api/profile', {
+    const res = await apiFetch<{ success: boolean; data: any; message?: string }>('/api/profile', {
       method: 'POST',
       body: {
         action: 'change-password',

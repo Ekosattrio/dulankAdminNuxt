@@ -9,12 +9,12 @@ interface ApiResponse<T> {
 export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh: refreshOrders } = useFetch<ApiResponse<Order[]>>('/api/orders', {
+  const { data, pending, error, refresh: refreshOrders } = useApiFetch<ApiResponse<Order[]>>('/api/orders', {
     key: 'orders-list',
     query: params,
   })
 
-  const { data: statsData, refresh: refreshStats } = useFetch<ApiResponse<OrderStats>>('/api/orders/stats', {
+  const { data: statsData, refresh: refreshStats } = useApiFetch<ApiResponse<OrderStats>>('/api/orders/stats', {
     key: 'orders-stats',
   })
 
@@ -26,7 +26,7 @@ export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterPar
   }
 
   const updateStatus = async (id: string, status: OrderStatus) => {
-    const res = await $fetch<ApiResponse<Order>>(`/api/orders/${id}`, {
+    const res = await apiFetch<ApiResponse<Order>>(`/api/orders/${id}`, {
       method: 'PUT',
       body: { status },
     })
@@ -37,12 +37,12 @@ export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterPar
   const saveOrder = async (payload: OrderFormData) => {
     let res: ApiResponse<Order>
     if (payload.id) {
-      res = await $fetch<ApiResponse<Order>>(`/api/orders/${payload.id}`, {
+      res = await apiFetch<ApiResponse<Order>>(`/api/orders/${payload.id}`, {
         method: 'PUT',
         body: payload,
       })
     } else {
-      res = await $fetch<ApiResponse<Order>>('/api/orders', {
+      res = await apiFetch<ApiResponse<Order>>('/api/orders', {
         method: 'POST',
         body: payload,
       })
@@ -52,7 +52,7 @@ export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterPar
   }
 
   const deleteOrder = async (id: string) => {
-    const res = await $fetch<ApiResponse<Order>>(`/api/orders/${id}`, {
+    const res = await apiFetch<ApiResponse<Order>>(`/api/orders/${id}`, {
       method: 'DELETE',
     })
     await refresh()

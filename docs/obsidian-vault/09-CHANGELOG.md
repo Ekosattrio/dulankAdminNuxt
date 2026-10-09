@@ -6,6 +6,96 @@ updated: 2026-10-09
 
 ## 2026-10-09
 
+### Persiapan Commit dan Push Branch Eko
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Menyiapkan handoff command commit/push untuk seluruh progres codebase dan dokumentasi saat ini.
+- **Branch/upstream:** `eko` -> `origin/eko`.
+- **Baseline synchronization:** `HEAD...origin/eko = 0 0` sebelum commit baru dibuat.
+- **Staging scope warning:** `git add -A` akan memasukkan seluruh perubahan tracked dan seluruh file baru pada working tree; pengguna wajib memeriksa `git status --short` sebelum commit.
+- **Recommended commit message:** `feat: implement finance BRVS and codebase compliance fixes`.
+- **Command status:** Command commit/push telah diberikan kepada pengguna, tetapi belum dijalankan oleh AI.
+- **Commit status:** `NOT COMMITTED` sampai `git commit` berhasil dijalankan dan hash baru diverifikasi.
+- **Push status:** `NOT PUSHED` sampai `git push origin eko` berhasil dan `HEAD...origin/eko = 0 0` diverifikasi ulang.
+- **Validation baseline:** `npx nuxt prepare` dan `npx tsc --noEmit --pretty false` sebelumnya lulus; build/dev/browser tidak dijalankan sesuai instruksi pengguna. Structure validator masih diblokir 8 aset legacy yang provenance-nya belum tersedia.
+
+### Protokol Baca dan Eksekusi Master TODO
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Memastikan AI berikutnya membaca acuan yang benar sebelum mengambil TODO dan tidak menaikkan status tanpa evidence.
+- **Documentation:** Menambahkan urutan baca wajib, acuan minimum P0/P1/P2/P3, evidence yang diperlukan, aturan pencatatan TODO parsial, progress sync, dan delivery/Git record pada `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md`.
+- **Entry point:** `AGENTS.md` sekarang menunjuk langsung ke protokol tersebut dan menyelaraskan sumber status aktif dengan audit kanonik; `AI_HANDOVER_GUIDE.md` tetap menjadi ringkasan handover.
+- **Execution rule:** Checkbox tidak boleh ditutup dari keberadaan file atau typecheck saja. AI wajib membaca source aktif, dokumen arsitektur/quality, dokumen modul, legacy, dan Netlify sesuai scope, lalu mencatat Architecture Evidence Matrix atau UI Responsibility Map yang relevan.
+- **Validation not run:** Build/dev/browser tidak diperlukan untuk perubahan dokumentasi ini dan tetap tidak dijalankan sesuai instruksi pengguna.
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+
+### Sinkronisasi Status Sudah/Belum dan Penghapusan Mismatch Dokumentasi
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Mencocokkan ulang source aktual dengan audit, handover, page matrix, module status, dan changelog.
+- **Sudah secara statis:** TypeScript 0 error, direct request UI 0, native browser dialog 0, direct print list/report 0, 683 SFC valid, serta 136 JSON valid dan bundled.
+- **Implemented tetapi belum verified runtime:** Finance & Account, serta modul luas Peoples/HRM/Content/User Management/Setting/Reports/Calculator/Products & Services sesuai status per grup di audit kanonik.
+- **Belum selesai:** 8 aset legacy, 15 page di atas 300 baris, 16 page 201-300, 55 Workspace/Screen di atas 200, 99 API mutation route direct-write, 111 file terindikasi teks di bawah 12px, 33 page Bootstrap-like, Promo/Purchases dan gap BRVS lain, serta seluruh browser/persistence/Netlify verification.
+- **Mismatch ditutup:** scorecard `100% VERIFIED/BRVS-UI` lama dipensiunkan sebagai status aktif; daftar error TypeScript diberi label baseline resolved; status aktif sekarang hanya mengikuti `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md`.
+- **Validation not run:** build/dev/browser tetap tidak dijalankan sesuai instruksi pengguna.
+- **Git branch:** `eko`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+
+### Remediasi P0, Finance BRVS, Request Boundary, dan Audit Ulang
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Menjalankan TODO prioritas audit: memulihkan type safety, membangun vertical slice Finance, menghapus bypass request dari UI, memperbaiki reusable compatibility, mengganti native validation dialog, dan menyinkronkan bukti progres.
+- **Finance implemented:** Bank Account/Account Type, bank ledger, Money Transfer, Cash Advance, Customer Balance Account, Account Statement, Cash Flow, Balance Sheet, Input Tax, Output Tax, serta integrasi Income/Expense ke rekening dan ledger.
+- **Finance rules:** saldo dan laporan derived dari ledger; transfer menulis debit/credit berpasangan; Cash Advance memakai employee/account FK; pajak memilih Purchase/Sales sebagai sumber dan tidak mengizinkan DPP/VAT/customer/supplier turunan menjadi input bebas.
+- **Frontend request gate:** seluruh direct `$fetch()`/`useFetch()` pada `app/pages` dan `app/components` dipindahkan ke composable. `useApiFetch`/`apiFetch` membatasi instantiation type Nitro tanpa mengubah runtime Nuxt atau memberi izin request langsung dari UI.
+- **Reusable fixes:** `SalesDataTable` menerima alias `rows`/slot kompatibilitas, `DocumentPrintModal` menerima `rows`, `SalesConfirmDelete` menerima title/message/cancel, `SalesDialog` menerima size, `SalesStatusBadge` mengenali status umum, dan `useTablePrint` mendukung kontrak lama/baru.
+- **Validation UX:** seluruh native `alert()`/`confirm()` pada UI diganti validation state inline, feedback, atau confirm component. Native-dialog files turun dari 28 menjadi 0.
+- **Print standardization:** direct-print files turun dari 41 menjadi 11. Seluruh list/report, termasuk Inventory, Calculator compatibility, Finance list, Billing, Subscription, Support Ticket, dan Promo, memakai `DocumentPrintModal`; 11 sisanya diaudit sebagai dokumen/detail khusus.
+- **Audit terbaru:** 188 page terdiri dari 104 page <=20 baris, 49 page 21-150, 4 page 151-200, 16 page 201-300, dan 15 page >300. Direct-request UI = 0.
+- **Validation run:** `npx nuxt prepare` exit 0; `npx tsc --noEmit --pretty false` exit 0; 683 SFC lolos parser; 136/136 JSON valid dan terdaftar di `bundledData.ts`.
+- **Known blocker:** `node scripts/validate-structure.mjs` masih gagal untuk tepat 8 aset arsip yang tidak tersedia: 2 Sticky Kit dan 6 Summernote root files. Paket publik bernama sama telah dibandingkan, tetapi SHA-256 tidak cocok dengan manifest; arsip legacy dan manifest tidak dipalsukan.
+- **Validation not run:** build, dev server, browser desktop/390px, Netlify runtime, serta mutation/reload test tidak dijalankan sesuai instruksi pengguna.
+- **Remaining TODO:** BRVS Promo/Purchases; 15 page >300; 16 page 201-300; 55 Workspace/Screen >200; API direct-I/O/repository audit; legacy asset provenance; browser/persistence verification.
+- **Git branch:** `eko`.
+- **Baseline HEAD/upstream:** `e406f234b2703d7f5c612674d5e3e5637f21f64f`; `HEAD...origin/eko = 0 0`. Working tree belum termasuk dalam hash tersebut.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+
+### Audit Kepatuhan Seluruh Codebase dan Master TODO Per Menu
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant
+- **Scope:** Audit statis seluruh 188 page, 469 component, 128 composable, 328 API, 94 server type, dan 129 JSON terhadap aturan BRVS, BRVS-UI, reusable UI, tipografi, persistence, serta status dokumentasi.
+- **Changed files:**
+  - `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md`
+  - `docs/obsidian-vault/00-HOME.md`
+  - `docs/obsidian-vault/06-MODULE-STATUS.md`
+  - `docs/PAGE_CLEANLINESS_AND_STATUS_MATRIX.md`
+  - `AI_HANDOVER_GUIDE.md`
+  - `docs/obsidian-vault/09-CHANGELOG.md`
+- **Key findings:** 41 page di atas 150 baris; 59 component di atas 250; 204 TypeScript error pada 61 file; 61 structure-validator failure; 11 direct-request UI file; 28 native-dialog UI file; 41 direct-print UI file; dan 99 API route melakukan direct persistence I/O.
+- **Git status:**
+  - Branch: `eko`.
+  - Baseline HEAD sebelum edit: `e406f23`.
+  - Upstream check sebelum edit: `HEAD...origin/eko = 1 0` (commit lokal belum ada di remote).
+  - Commit status perubahan audit: `NOT COMMITTED`.
+  - Push status perubahan audit: `NOT PUSHED`.
+- **Validation run:**
+  - JSON parse: 129/129 valid.
+  - Bundled registry: 129/129 tercakup.
+  - Sidebar: 134 entry, 133 route unik, zero missing page; `/customer-due-report` terduplikasi.
+  - `npx tsc --noEmit --pretty false`: FAIL, 204 error pada 61 file.
+  - `npm run validate:structure`: FAIL, 61 aset manifest legacy tidak ditemukan.
+- **Not run:** build, dev server, browser flow, Netlify runtime, dan mutation persistence, mengikuti instruksi pengguna.
+- **Remaining risk:** scorecard lama yang menyebut 100% verified tidak mewakili source aktual; gunakan dokumen audit baru sampai seluruh TODO ditutup dan evidence baru dicatat.
+
 ### Perbaikan Build Nuxt, Pembersihan Warning Komponen & Auto-Import, serta Audit Lapangan Halaman Tebal
 
 - **Date:** 2026-10-09

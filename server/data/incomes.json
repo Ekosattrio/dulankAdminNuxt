@@ -8,6 +8,7 @@
     "notes": "Pembayaran lunas cetak brosur 1000 pcs.",
     "amount": 1000000,
     "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-001",
     "bankAccount": "Mandiri 1320009982282"
   },
   {
@@ -19,6 +20,7 @@
     "notes": "Pemasukan biaya kirim pesanan urgent.",
     "amount": 150000,
     "paymentMethod": "Tunai / Cash",
+    "bankAccountId": "bank-account-005",
     "bankAccount": "-"
   },
   {
@@ -30,6 +32,7 @@
     "notes": "Pembayaran desain kartu nama & logo.",
     "amount": 350000,
     "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-002",
     "bankAccount": "BCA 8830129841"
   },
   {
@@ -41,6 +44,7 @@
     "notes": "Penjualan kertas scrap bulan Oktober.",
     "amount": 600000,
     "paymentMethod": "Tunai / Cash",
+    "bankAccountId": "bank-account-005",
     "bankAccount": "-"
   },
   {
@@ -52,6 +56,7 @@
     "notes": "Pelunasan cetak banner outdoor.",
     "amount": 880000,
     "paymentMethod": "Transfer Bank",
+    "bankAccountId": "bank-account-002",
     "bankAccount": "BCA 8830129841"
   }
 ]

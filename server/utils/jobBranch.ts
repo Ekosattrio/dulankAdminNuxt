@@ -48,6 +48,9 @@ export function updateJobBranch(id: string, payload: JobBranchUpdatePayload): Jo
   }
 
   const current = items[index]
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: 'Job branch record not found' })
+  }
   const updated: JobBranchItem = {
     ...current,
     priority: payload.priority || current.priority,

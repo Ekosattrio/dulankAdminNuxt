@@ -65,16 +65,19 @@ export function savePaperGroup(payload: PaperGroupFormData): PaperGroup {
   if (payload.id) {
     const idx = all.findIndex((g) => String(g.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper group not found' })
+      const updated: PaperGroup = {
+        ...current,
         name: payload.name.trim(),
         merk: payload.merk.trim(),
         priceType: payload.priceType || 'Yes',
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(PAPER_GROUPS_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -140,8 +143,10 @@ export function savePaperSize(payload: PaperSizeFormData): PaperSize {
   if (payload.id) {
     const idx = all.findIndex((s) => String(s.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper size not found' })
+      const updated: PaperSize = {
+        ...current,
         name: payload.name.trim(),
         dimension: dimensionStr,
         length: Number(payload.length) || 0,
@@ -150,8 +155,9 @@ export function savePaperSize(payload: PaperSizeFormData): PaperSize {
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(PAPER_SIZES_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -229,8 +235,10 @@ export function savePaperItem(payload: PaperItemFormData): PaperItem {
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper item not found' })
+      const updated: PaperItem = {
+        ...current,
         groupId: String(payload.groupId || ''),
         sizeId: payload.sizeId ? String(payload.sizeId) : undefined,
         name: payload.name.trim(),
@@ -245,8 +253,9 @@ export function savePaperItem(payload: PaperItemFormData): PaperItem {
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(PAPER_ITEMS_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -330,10 +339,12 @@ export function savePaperPrice(payload: PaperPriceFormData): PaperPrice {
   if (payload.id) {
     const idx = all.findIndex((p) => String(p.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
-        paperId: payload.paperId ? String(payload.paperId) : all[idx].paperId,
-        groupId: payload.groupId ? String(payload.groupId) : all[idx].groupId,
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper price not found' })
+      const updated: PaperPrice = {
+        ...current,
+        paperId: payload.paperId ? String(payload.paperId) : current.paperId,
+        groupId: payload.groupId ? String(payload.groupId) : current.groupId,
         nama: payload.nama.trim(),
         group: payload.group.trim(),
         merk: payload.merk.trim(),
@@ -346,8 +357,9 @@ export function savePaperPrice(payload: PaperPriceFormData): PaperPrice {
         status: payload.status || 'Active',
         update: nowTimestamp()
       }
+      all[idx] = updated
       writeJSON(PAPER_PRICES_FILE, all)
-      return all[idx]
+      return updated
     }
   }
 

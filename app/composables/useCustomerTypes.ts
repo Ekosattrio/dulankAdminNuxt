@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useCustomerTypes() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/customer-types', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/customer-types', {
     key: 'customer-types-list'
   })
 
   const customerTypes = computed<CustomerType[]>(() => data.value?.data ?? [])
 
   const saveCustomerType = async (payload: CustomerTypeFormData) => {
-    const res = await $fetch<{ success: boolean; data: CustomerType; message?: string }>('/api/customer-types', {
+    const res = await apiFetch<{ success: boolean; data: CustomerType; message?: string }>('/api/customer-types', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useCustomerTypes() {
   }
 
   const deleteCustomerType = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/customer-types/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/customer-types/${id}`, {
       method: 'DELETE'
     })
     await refresh()

@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useSuppliers() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/suppliers', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/suppliers', {
     key: 'suppliers-list'
   })
 
   const suppliers = computed<Supplier[]>(() => data.value?.data ?? [])
 
   const saveSupplier = async (payload: SupplierFormData) => {
-    const res = await $fetch<{ success: boolean; data: Supplier; message?: string }>('/api/suppliers', {
+    const res = await apiFetch<{ success: boolean; data: Supplier; message?: string }>('/api/suppliers', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useSuppliers() {
   }
 
   const deleteSupplier = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/suppliers/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/suppliers/${id}`, {
       method: 'DELETE'
     })
     await refresh()

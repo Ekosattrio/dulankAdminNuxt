@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { JobBranchHistoryItem } from '#server/types/job-branch'
+import type { JobBranchFilterParams } from '#server/types/job-branch'
 import SalesDialog from '~/components/sales/SalesDialog.vue'
 import DateRangePicker from '~/components/common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
@@ -20,17 +20,13 @@ const filterDateRange = ref<DateRangeValue | null>(null)
 
 const branchOptions = ['Dulank Karawang', 'Dulank Jakarta', 'Dulank Cirebon']
 
-const { data, pending, refresh } = useFetch<{ success: boolean; data: JobBranchHistoryItem[] }>('/api/job-branches/history', {
-  key: 'job-branches-history',
-  query: computed(() => ({
+const filters = computed<JobBranchFilterParams>(() => ({
     search: searchQuery.value || undefined,
     branch: filterBranch.value || undefined,
     startDate: filterDateRange.value?.start || undefined,
     endDate: filterDateRange.value?.end || undefined,
-  }))
-})
-
-const historyItems = computed(() => data.value?.data ?? [])
+}))
+const { historyItems, pending, refresh } = useJobBranchHistory(filters)
 </script>
 
 <template>

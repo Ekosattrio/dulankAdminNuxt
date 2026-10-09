@@ -10,7 +10,7 @@ interface ResponseData {
 export function useContactForms(filterParams?: Ref<ContactFormFilterQuery> | ContactFormFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/contact-forms', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/contact-forms', {
     key: 'webstore-contact-forms-list',
     query: params
   })
@@ -21,7 +21,7 @@ export function useContactForms(filterParams?: Ref<ContactFormFilterQuery> | Con
   })
 
   const submitContact = async (payload: Partial<ContactFormItem>) => {
-    const res = await $fetch<{ success: boolean; data: ContactFormItem; message?: string }>('/api/webstore/contact-forms', {
+    const res = await apiFetch<{ success: boolean; data: ContactFormItem; message?: string }>('/api/webstore/contact-forms', {
       method: 'POST',
       body: payload
     })
@@ -30,7 +30,7 @@ export function useContactForms(filterParams?: Ref<ContactFormFilterQuery> | Con
   }
 
   const deleteContact = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/webstore/contact-forms/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/webstore/contact-forms/${id}`, {
       method: 'DELETE'
     })
     await refresh()

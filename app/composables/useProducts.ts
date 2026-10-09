@@ -9,7 +9,7 @@ interface ResponseData {
 export function useProducts(filterParams?: Ref<ProductFilterParams> | ProductFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/products', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/products', {
     key: 'products-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useProducts(filterParams?: Ref<ProductFilterParams> | ProductFil
   const products = computed<Product[]>(() => data.value?.data ?? [])
 
   const saveProduct = async (payload: ProductFormData) => {
-    const res = await $fetch<{ success: boolean; data: Product; message?: string }>('/api/products', {
+    const res = await apiFetch<{ success: boolean; data: Product; message?: string }>('/api/products', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useProducts(filterParams?: Ref<ProductFilterParams> | ProductFil
   }
 
   const deleteProduct = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/products/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/products/${id}`, {
       method: 'DELETE'
     })
     await refresh()
@@ -34,7 +34,7 @@ export function useProducts(filterParams?: Ref<ProductFilterParams> | ProductFil
   }
 
   const importProducts = async (rows: ProductImportRow[]) => {
-    const res = await $fetch<{ success: boolean; data: Product[]; message?: string }>('/api/products/import', {
+    const res = await apiFetch<{ success: boolean; data: Product[]; message?: string }>('/api/products/import', {
       method: 'POST',
       body: { rows }
     })

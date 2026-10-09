@@ -10,7 +10,7 @@ export function usePrinterSettings() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: PrinterSetting[] }>('/api/printer-settings')
+      const res = await apiFetch<{ success: boolean; data: PrinterSetting[] }>('/api/printer-settings')
       if (res && res.data) {
         items.value = res.data
       }
@@ -24,7 +24,7 @@ export function usePrinterSettings() {
   async function saveItem(payload: Partial<PrinterSetting>) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: PrinterSetting }>('/api/printer-settings', {
+      const res = await apiFetch<{ success: boolean; data: PrinterSetting }>('/api/printer-settings', {
         method: 'POST',
         body: payload
       })
@@ -41,7 +41,7 @@ export function usePrinterSettings() {
   async function deleteItem(id: string) {
     pending.value = true
     try {
-      await $fetch(`/api/printer-settings/${id}`, {
+      await apiFetch(`/api/printer-settings/${id}`, {
         method: 'DELETE'
       })
       await fetchItems()

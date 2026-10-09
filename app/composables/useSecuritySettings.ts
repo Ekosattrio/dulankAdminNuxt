@@ -1,7 +1,7 @@
 import type { SecuritySettings, SecuritySettingsResponse } from '#server/types/security-settings'
 
 export function useSecuritySettings() {
-  const { data: response, pending, error, refresh } = useFetch<SecuritySettingsResponse>('/api/settings/security', {
+  const { data: response, pending, error, refresh } = useApiFetch<SecuritySettingsResponse>('/api/settings/security', {
     key: 'security-settings-data',
     lazy: false
   })
@@ -17,7 +17,7 @@ export function useSecuritySettings() {
   })
 
   async function updateSecurity(payload: Partial<SecuritySettings>) {
-    const res = await $fetch<SecuritySettingsResponse>('/api/settings/security', {
+    const res = await apiFetch<SecuritySettingsResponse>('/api/settings/security', {
       method: 'PUT',
       body: payload
     })

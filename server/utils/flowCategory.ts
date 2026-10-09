@@ -35,7 +35,7 @@ export function listFlowCategories(filters: FlowCategoryFilterParams = {}): Flow
     if ((startDate || endDate) && item.createdDate) {
       // Date may be ISO or "YYYY-MM-DD HH:mm:ss"
       const datePart = item.createdDate.split(" ")[0];
-      if (!isDateWithinRange(datePart, startDate, endDate)) {
+      if (!datePart || !isDateWithinRange(datePart, startDate, endDate)) {
         return false;
       }
     }
@@ -86,6 +86,9 @@ export function updateFlowCategory(id: string, payload: FlowCategoryFormData): F
   }
 
   const current = items[index];
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: "Flow category not found" });
+  }
   const updated: FlowCategory = {
     ...current,
     name,
@@ -105,6 +108,9 @@ export function deleteFlowCategory(id: string): FlowCategory {
   }
 
   const [removed] = items.splice(index, 1);
+  if (!removed) {
+    throw createError({ statusCode: 404, statusMessage: "Flow category not found" });
+  }
   writeFlowCategoryData(items);
   return removed;
 }

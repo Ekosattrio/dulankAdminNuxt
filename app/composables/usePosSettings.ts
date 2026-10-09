@@ -24,7 +24,7 @@ const defaultPosSetting: PosSetting = {
 }
 
 export function usePosSettings() {
-  const { data, pending, error, refresh } = useFetch<PosSettingsResponse>('/api/pos-settings', {
+  const { data, pending, error, refresh } = useApiFetch<PosSettingsResponse>('/api/pos-settings', {
     key: 'pos-settings-data'
   })
 
@@ -33,7 +33,7 @@ export function usePosSettings() {
   })
 
   const saveSettings = async (payload: PosSetting) => {
-    const res = await $fetch<PosSettingsResponse>('/api/pos-settings', {
+    const res = await apiFetch<PosSettingsResponse>('/api/pos-settings', {
       method: 'POST',
       body: payload
     })

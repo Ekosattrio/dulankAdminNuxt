@@ -6,7 +6,7 @@ export interface PermissionMenuGroupItem {
 }
 
 export function usePermissions() {
-  const { data, pending, error, refresh } = useFetch<{
+  const { data, pending, error, refresh } = useApiFetch<{
     success: boolean
     data: {
       groups: { group: string; pages: string[] }[]
@@ -90,7 +90,7 @@ export function usePermissions() {
   }
 
   const savePermissions = async (matrixPayload: Record<string, Record<string, PermissionAction>>) => {
-    await $fetch('/api/permissions', {
+    await apiFetch('/api/permissions', {
       method: 'POST',
       body: { matrix: matrixPayload },
     })

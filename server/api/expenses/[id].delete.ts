@@ -1,24 +1,9 @@
-import { readData, writeData } from '~/server/utils/data'
-import type { Expense } from '~/types/expense'
+import { createError, defineEventHandler, getRouterParam } from 'h3'
+import { deleteExpenseRecord } from '#server/utils/financeTransactionData'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const id = getRouterParam(event, 'id')
-  const items = readData<Expense>('expenses.json')
-
-  const updated = items.filter((e) => String(e.id) !== String(id))
-
-  if (updated.length === items.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Expense not found'
-    })
-  }
-
-  writeData('expenses.json', updated)
-
-  return {
-    success: true,
-    data: { id }
-  }
+  if (!id) throw createError({ statusCode: 400, statusMessage: 'ID Expense wajib disertakan.' })
+  deleteExpenseRecord(id)
+  return { success: true, message: 'Expense berhasil dihapus.' }
 })
-

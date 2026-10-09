@@ -9,7 +9,7 @@ interface ResponseData {
 export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {});
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>("/api/my-jobs", {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>("/api/my-jobs", {
     key: "my-jobs-list",
     query: params,
   });
@@ -17,7 +17,7 @@ export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterPar
   const myJobs = computed<MyJob[]>(() => data.value?.data ?? []);
 
   const saveMyJob = async (payload: MyJobFormData) => {
-    const res = await $fetch<{ success: boolean; data: MyJob; message?: string }>("/api/my-jobs", {
+    const res = await apiFetch<{ success: boolean; data: MyJob; message?: string }>("/api/my-jobs", {
       method: "POST",
       body: payload,
     });
@@ -26,7 +26,7 @@ export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterPar
   };
 
   const deleteMyJob = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/my-jobs/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/my-jobs/${id}`, {
       method: "DELETE",
     });
     await refresh();

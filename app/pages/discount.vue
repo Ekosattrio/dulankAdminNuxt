@@ -326,6 +326,16 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="validTill"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -449,6 +459,28 @@ const filteredDiscounts = computed(() => {
   })
 })
 
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Name' },
+  { key: 'valueText', label: 'Value' },
+  { key: 'plan', label: 'Discount Plan' },
+  { key: 'validity', label: 'Validity' },
+  { key: 'days', label: 'Days', format: (value: string[]) => value.join(', ') },
+  { key: 'products', label: 'Products' },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'status', label: 'Status' }
+]
+
+const openDiscountPrint = (action: 'print' | 'pdf') => {
+  print.openPrintModal({
+    title: 'Discount Report',
+    subtitle: 'Daftar program diskon',
+    columns: printColumns,
+    rows: filteredDiscounts.value,
+    action
+  })
+}
+
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const editingId = ref<number | null>(null)
@@ -553,11 +585,11 @@ const confirmDelete = () => {
 }
 
 const exportPdf = () => {
-  window.print()
+  openDiscountPrint('pdf')
 }
 
 const printTable = () => {
-  window.print()
+  openDiscountPrint('print')
 }
 
 const refresh = () => {

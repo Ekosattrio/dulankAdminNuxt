@@ -9,7 +9,7 @@ interface ResponseData {
 export function useIncomes(filterParams?: Ref<IncomeFilterParams> | IncomeFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/incomes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/incomes', {
     key: 'incomes-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useIncomes(filterParams?: Ref<IncomeFilterParams> | IncomeFilter
   const incomes = computed<IncomeRecord[]>(() => data.value?.data ?? [])
 
   const saveIncome = async (payload: IncomeFormData) => {
-    const res = await $fetch<{ success: boolean; data: IncomeRecord; message?: string }>('/api/incomes', {
+    const res = await apiFetch<{ success: boolean; data: IncomeRecord; message?: string }>('/api/incomes', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useIncomes(filterParams?: Ref<IncomeFilterParams> | IncomeFilter
   }
 
   const deleteIncome = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/incomes/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/incomes/${id}`, {
       method: 'DELETE'
     })
     await refresh()

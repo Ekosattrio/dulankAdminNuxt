@@ -57,16 +57,19 @@ export function saveProductProcessItem(payload: ProductProcessFormData): Product
   if (payload.id) {
     const idx = all.findIndex((i) => String(i.id) === String(payload.id))
     if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
+      const current = all[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Product process not found' })
+      const updated: ProductProcessItem = {
+        ...current,
         productId: String(payload.productId),
         product: productName,
         processName: payload.processName.trim(),
-        status: payload.status || all[idx].status || 'Active',
+        status: payload.status || current.status || 'Active',
         updatedAt: new Date().toISOString()
       }
+      all[idx] = updated
       writeJSON(FILE_NAME, all)
-      return all[idx]
+      return updated
     }
   }
 
@@ -79,7 +82,7 @@ export function saveProductProcessItem(payload: ProductProcessFormData): Product
     product: productName,
     image: payload.image || '/assets/img/products/stock-img-01.png',
     processName: payload.processName.trim(),
-    createDate: new Date().toISOString().split('T')[0],
+    createDate: new Date().toISOString().slice(0, 10),
     status: payload.status || 'Active',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()

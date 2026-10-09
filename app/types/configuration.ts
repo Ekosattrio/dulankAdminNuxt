@@ -12,3 +12,9 @@ export interface ConfigurationColumn {
   align?: 'start' | 'center' | 'end'
   sortable?: boolean
 }
+
+export interface SidebarTabItem {
+  id: string
+  label: string
+  icon: string
+}

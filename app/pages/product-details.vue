@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Product } from '#server/types/product'
 import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
 import SalesFeedback from '~/components/sales/SalesFeedback.vue'
 import { printDocument } from '~/utils/documentPrinter'
@@ -9,12 +8,8 @@ useLegacyPage({ title: 'Product Details', sweetAlert: false })
 
 const route = useRoute()
 const id = computed(() => typeof route.query.id === 'string' ? route.query.id : '')
-const { data, pending, error, refresh } = useFetch<{ success: boolean; data: Product }>(() => `/api/products/${id.value}`, {
-  key: `product-detail-${id.value}`,
-  watch: [id],
-  immediate: Boolean(id.value),
-})
-const product = computed(() => data.value?.data)
+const { products, pending, error, refresh } = useProducts()
+const product = computed(() => products.value.find((item) => item.id === id.value))
 
 function printProduct() {
   if (!product.value) return

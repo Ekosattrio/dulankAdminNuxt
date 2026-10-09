@@ -1,7 +1,7 @@
 ---
 title: Module Status Model
 tags: [status, progress]
-updated: 2026-10-08
+updated: 2026-10-09
 ---
 
 # Module Status
@@ -12,7 +12,13 @@ Quality gate dan evidence minimum untuk perubahan status berada di [Framework Ke
 
 Status fitur di halaman ini tidak otomatis membuktikan kepatuhan struktur. Status BRVS dinilai terpisah menggunakan [Backend-Ready Vertical Slice](../BACKEND_READY_VERTICAL_SLICE.md) dan Architecture Evidence Matrix per menu.
 
-## Approved Baseline
+Audit source terbaru dan master TODO lintas seluruh 188 page berada di [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](../CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md). TypeScript, direct-request UI, native browser dialog, dan direct print list/report sudah ditutup; status tetap dibatasi oleh 8 aset legacy yang belum memiliki sumber hash cocok, BRVS/BRVS-UI tersisa, serta browser dan persistence verification.
+
+Tidak ada modul yang boleh dinaikkan menjadi `verified` hanya berdasarkan label lama di route matrix. Ringkasan status aktif ada pada bagian **Status Kanonik Singkat** di audit tersebut.
+
+## Approved Behavior Baseline
+
+Status ini berarti flow/perilaku pernah disetujui pengguna sebagai batas regresi. Status ini bukan klaim bahwa audit BRVS terbaru, browser flow, atau persistence runtime sudah lulus.
 
 - Sales group.
 - Payment group.
@@ -30,8 +36,9 @@ Status fitur di halaman ini tidak otomatis membuktikan kepatuhan struktur. Statu
 - Reports.
 - Calculator Apps.
 - Products & Services.
+- Finance & Account: Bank Account/Type, Money Transfer, Cash Advance, Income/Expense ledger, Customer Balance, Account Statement, Cash Flow, Balance Sheet, Input Tax, dan Output Tax.
 
-Kode dan data kelompok tersebut sudah luas, tetapi status belum menjadi approved baseline sampai validasi struktur, browser flow, Netlify read, mutation persistence target, dan referensi klien selesai diperiksa.
+Kode dan data kelompok tersebut sudah luas, tetapi status belum menjadi approved baseline sampai validasi struktur, browser flow, Netlify read, mutation persistence target, rekonsiliasi Finance, dan referensi klien selesai diperiksa.
 
 ## Imported Outside Original Scope
 

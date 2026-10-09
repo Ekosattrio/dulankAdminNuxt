@@ -9,7 +9,7 @@ interface ResponseData {
 export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrderFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/job-orders', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/job-orders', {
     key: 'job-orders-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
   const jobOrders = computed<JobOrder[]>(() => data.value?.data ?? [])
 
   const saveJobOrder = async (payload: JobOrderFormData) => {
-    const res = await $fetch<{ success: boolean; data: JobOrder; message?: string }>('/api/job-orders', {
+    const res = await apiFetch<{ success: boolean; data: JobOrder; message?: string }>('/api/job-orders', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
   }
 
   const deleteJobOrder = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/job-orders/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/job-orders/${id}`, {
       method: 'DELETE'
     })
     await refresh()

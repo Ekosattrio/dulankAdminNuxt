@@ -16,17 +16,20 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allComments.findIndex(c => String(c.id) === String(body.id))
     if (idx !== -1) {
-      allComments[idx] = {
-        ...allComments[idx],
-        blogTitle: body.blogTitle || allComments[idx].blogTitle,
+      const current = allComments[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Comment not found' })
+      const updated: BlogComment = {
+        ...current,
+        blogTitle: body.blogTitle || current.blogTitle,
         commenterName: body.commenterName,
-        email: body.email || allComments[idx].email,
+        email: body.email || current.email,
         commentBody: body.commentBody,
-        rating: typeof body.rating === 'number' ? body.rating : allComments[idx].rating,
-        status: body.status || allComments[idx].status,
+        rating: typeof body.rating === 'number' ? body.rating : current.rating,
+        status: body.status || current.status,
       }
+      allComments[idx] = updated
       writeJSON('blog-comments.json', allComments)
-      return createResponse(allComments[idx], 'Comment updated successfully')
+      return createResponse(updated, 'Comment updated successfully')
     }
   }
 

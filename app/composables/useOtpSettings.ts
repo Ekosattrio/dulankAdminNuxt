@@ -7,7 +7,7 @@ interface ResponseData {
 }
 
 export function useOtpSettings() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/otp-settings', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/otp-settings', {
     key: 'otp-settings-data',
   })
 
@@ -21,7 +21,7 @@ export function useOtpSettings() {
   })
 
   const saveSettings = async (payload: Partial<OtpConfig>) => {
-    const res = await $fetch<{ success: boolean; data: OtpConfig; message?: string }>('/api/otp-settings', {
+    const res = await apiFetch<{ success: boolean; data: OtpConfig; message?: string }>('/api/otp-settings', {
       method: 'POST',
       body: payload,
     })

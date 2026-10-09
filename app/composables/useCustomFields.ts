@@ -1,7 +1,7 @@
 import type { CustomField, CustomFieldInput, CustomFieldResponse } from '#server/types/custom-fields'
 
 export function useCustomFields() {
-  const { data: response, pending, error, refresh } = useFetch<CustomFieldResponse>('/api/custom-fields', {
+  const { data: response, pending, error, refresh } = useApiFetch<CustomFieldResponse>('/api/custom-fields', {
     key: 'custom-fields-data',
     lazy: false
   })
@@ -9,7 +9,7 @@ export function useCustomFields() {
   const fields = computed(() => response.value?.data || [])
 
   async function addField(payload: CustomFieldInput) {
-    const res = await $fetch<{ success: boolean; data: CustomField; message?: string }>('/api/custom-fields', {
+    const res = await apiFetch<{ success: boolean; data: CustomField; message?: string }>('/api/custom-fields', {
       method: 'POST',
       body: payload
     })
@@ -18,7 +18,7 @@ export function useCustomFields() {
   }
 
   async function updateField(id: number, payload: Partial<CustomFieldInput>) {
-    const res = await $fetch<{ success: boolean; data: CustomField; message?: string }>(`/api/custom-fields/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: CustomField; message?: string }>(`/api/custom-fields/${id}`, {
       method: 'PUT',
       body: payload
     })
@@ -27,7 +27,7 @@ export function useCustomFields() {
   }
 
   async function deleteField(id: number) {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/custom-fields/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/custom-fields/${id}`, {
       method: 'DELETE'
     })
     await refresh()

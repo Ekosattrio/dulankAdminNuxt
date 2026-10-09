@@ -1,12 +1,12 @@
 import type { SalesContact } from '#server/types/sales-document'
 export function useSalesContacts() {
-  const { data: people } = useFetch<{ customer: SalesContact[] }>('/assets/json/customer.json', {
+  const { data: people } = useApiFetch<{ customer: SalesContact[] }>('/assets/json/customer.json', {
     key: 'sales-contact-source',
   })
-  const { data: companies } = useFetch<{ company: SalesContact[] }>('/assets/json/company.json', {
+  const { data: companies } = useApiFetch<{ company: SalesContact[] }>('/assets/json/company.json', {
     key: 'sales-company-source',
   })
-  const { data: saved, refresh } = useFetch<{ data: SalesContact[] }>('/api/customers', {
+  const { data: saved, refresh } = useApiFetch<{ data: SalesContact[] }>('/api/customers', {
     key: 'sales-contact-saved',
   })
   const contacts = computed(() => [
@@ -18,5 +18,13 @@ export function useSalesContacts() {
       ].map((c) => [c.name, { ...c, address: c.address || '' }]),
     ).values(),
   ])
-  return { contacts, refresh }
+  async function createContact(contact: SalesContact) {
+    const result = await apiFetch<{ success: boolean; message?: string }>('/api/customers', {
+      method: 'POST',
+      body: { ...contact, type: 'General', channel: 'Website' },
+    })
+    await refresh()
+    return result
+  }
+  return { contacts, refresh, createContact }
 }

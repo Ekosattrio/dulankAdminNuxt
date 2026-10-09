@@ -25,6 +25,7 @@ const form = ref<PaperPriceFormData>({
 })
 
 const formActive = ref(true)
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -64,8 +65,9 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (!form.value.nama) {
-    alert('Nama kertas tidak boleh kosong')
+    validationError.value = 'Nama kertas tidak boleh kosong.'
     return
   }
   form.value.status = formActive.value ? 'Active' : 'Inactive'
@@ -86,6 +88,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Nama Kertas / Format <span class="text-danger">*</span></label>

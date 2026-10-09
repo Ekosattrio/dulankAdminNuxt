@@ -10,19 +10,22 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((item) => String(item.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
-        employeeId: body.employeeId || items[index].employeeId,
-        name: body.name || items[index].name,
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Employee salary not found' })
+      const updated: EmployeeSalaryItem = {
+        ...current,
+        employeeId: body.employeeId || current.employeeId,
+        name: body.name || current.name,
         salary: Number(body.salary) || 0,
-        system: body.system || items[index].system,
+        system: body.system || current.system,
         allowanceTotal: totalAllowance,
         overtimeRate: Number(body.overtimeRate) || 0,
-        status: body.status || items[index].status,
+        status: body.status || current.status,
         allowances: body.allowances || []
       }
+      items[index] = updated
       writeData('employeeSalaries.json', items)
-      return { success: true, data: items[index], message: 'Employee salary updated successfully' }
+      return { success: true, data: updated, message: 'Employee salary updated successfully' }
     }
   }
 

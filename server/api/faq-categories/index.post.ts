@@ -25,8 +25,12 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const current = categories[index]
+    if (!current) {
+      throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+    }
     const updatedCategory: FaqCategory = {
-      ...categories[index],
+      ...current,
       name: body.name.trim(),
       slug,
       description: body.description?.trim() || '',

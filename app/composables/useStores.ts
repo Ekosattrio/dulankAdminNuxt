@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useStores() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/stores', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/stores', {
     key: 'stores-list'
   })
 
   const stores = computed<Store[]>(() => data.value?.data ?? [])
 
   const saveStore = async (payload: StoreFormData) => {
-    const res = await $fetch<{ success: boolean; data: Store; message?: string }>('/api/stores', {
+    const res = await apiFetch<{ success: boolean; data: Store; message?: string }>('/api/stores', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useStores() {
   }
 
   const deleteStore = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/stores/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/stores/${id}`, {
       method: 'DELETE'
     })
     await refresh()

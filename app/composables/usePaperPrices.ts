@@ -9,7 +9,7 @@ interface ResponseData {
 export function usePaperPrices(filterParams?: Ref<PaperPriceFilterParams> | PaperPriceFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/paper-prices', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/paper-prices', {
     key: 'paper-prices-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function usePaperPrices(filterParams?: Ref<PaperPriceFilterParams> | Pape
   const paperPrices = computed<PaperPrice[]>(() => data.value?.data ?? [])
 
   const savePaperPrice = async (payload: PaperPriceFormData) => {
-    const res = await $fetch<{ success: boolean; data: PaperPrice; message?: string }>('/api/paper-prices', {
+    const res = await apiFetch<{ success: boolean; data: PaperPrice; message?: string }>('/api/paper-prices', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function usePaperPrices(filterParams?: Ref<PaperPriceFilterParams> | Pape
   }
 
   const deletePaperPrice = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/paper-prices/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/paper-prices/${id}`, {
       method: 'DELETE'
     })
     await refresh()

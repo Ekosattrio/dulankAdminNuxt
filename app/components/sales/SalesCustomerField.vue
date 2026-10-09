@@ -3,7 +3,7 @@ import type { SalesContact } from '#server/types/sales-document'
 const model = defineModel<SalesContact>({ required: true })
 withDefaults(defineProps<{ label?: string; allowNew?: boolean }>(), { label: 'Customer:', allowNew: true })
 const emit = defineEmits<{ select: [contact: SalesContact] }>()
-const { contacts, refresh } = useSalesContacts()
+const { contacts, createContact } = useSalesContacts()
 const fieldId = useId()
 const adding = ref(false)
 const saving = ref(false)
@@ -24,12 +24,8 @@ async function createCustomer() {
   saving.value = true
   error.value = ''
   try {
-    const result = await $fetch<{ success: boolean; message?: string }>('/api/customers', {
-      method: 'POST',
-      body: { ...model.value, type: 'General', channel: 'Website' },
-    })
+    const result = await createContact(model.value)
     if (!result.success) throw new Error(result.message || 'Unable to add customer')
-    await refresh()
     adding.value = false
     emit('select', model.value)
   } catch (e) {

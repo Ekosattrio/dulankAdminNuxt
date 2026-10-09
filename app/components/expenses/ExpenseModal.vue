@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { Expense, ExpenseFormData } from '~/types/expense'
+import type { BankAccountView } from '#server/types/bank-account'
 
 const props = defineProps<{
   isOpen: boolean
   editData: Expense | null
   viewOnly?: boolean
   categories: string[]
+  accounts: BankAccountView[]
 }>()
 
 const emit = defineEmits<{
@@ -21,7 +23,8 @@ const form = ref<ExpenseFormData>({
   amount: 0,
   paid: 0,
   due: 0,
-  description: ''
+  description: '',
+  paymentMethod: '-'
 })
 
 const recalcDue = () => {
@@ -49,7 +52,9 @@ watch(
         amount: val.amount,
         paid: val.paid,
         due: val.due,
-        description: val.description
+        description: val.description,
+        paymentMethod: val.paymentMethod || (val.paid > 0 ? 'Transfer Bank' : '-'),
+        bankAccountId: val.bankAccountId
       }
     } else {
       form.value = {
@@ -60,12 +65,16 @@ watch(
         amount: 0,
         paid: 0,
         due: 0,
-        description: ''
+        description: '',
+        paymentMethod: '-',
+        bankAccountId: undefined
       }
     }
   },
   { immediate: true }
 )
+
+const validationError = ref('')
 
 const handleSubmit = () => {
   if (props.viewOnly) {
@@ -73,10 +82,15 @@ const handleSubmit = () => {
     return
   }
   if (!form.value.name || !form.value.amount) {
-    alert('Nama penerima / vendor dan amount harus diisi')
+    validationError.value = 'Nama penerima / vendor dan amount harus diisi.'
     return
   }
   recalcDue()
+  if (form.value.paid > 0 && !form.value.bankAccountId) {
+    validationError.value = 'Rekening pembayaran wajib dipilih saat ada jumlah dibayar.'
+    return
+  }
+  validationError.value = ''
   emit('save', { ...form.value })
 }
 </script>
@@ -152,6 +166,26 @@ const handleSubmit = () => {
                 />
               </div>
 
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Metode Pembayaran</label>
+                <select v-model="form.paymentMethod" class="form-select" :disabled="viewOnly || form.paid <= 0">
+                  <option value="-">Belum Dibayar</option>
+                  <option value="Transfer Bank">Transfer Bank</option>
+                  <option value="Tunai / Cash">Tunai / Cash</option>
+                  <option value="QRIS">QRIS</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Rekening Pembayaran</label>
+                <select v-model="form.bankAccountId" class="form-select" :disabled="viewOnly || form.paid <= 0" :required="form.paid > 0">
+                  <option :value="undefined">Pilih rekening</option>
+                  <option v-for="account in accounts" :key="account.id" :value="account.id">
+                    {{ account.bankName }} {{ account.accountNo }} - {{ account.accountName }}
+                  </option>
+                </select>
+              </div>
+
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Jumlah Dibayar (Paid Rp)</label>
                 <input
@@ -187,6 +221,7 @@ const handleSubmit = () => {
             </div>
           </div>
 
+          <p v-if="validationError" role="alert" class="mx-4 mb-0 text-sm text-danger">{{ validationError }}</p>
           <div class="modal-footer border-top px-4 py-3 bg-light">
             <button type="button" class="btn btn-secondary px-4" @click="emit('close')">
               {{ viewOnly ? 'Tutup' : 'Batal' }}

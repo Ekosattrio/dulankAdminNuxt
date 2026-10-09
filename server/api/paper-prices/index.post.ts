@@ -16,15 +16,18 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((p) => String(p.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Paper price not found' })
+      const updated: PaperPrice = {
+        ...current,
         ...body,
-        gramatur: Number(body.gramatur ?? items[index].gramatur),
-        harga: Number(body.harga ?? items[index].harga),
+        gramatur: Number(body.gramatur ?? current.gramatur),
+        harga: Number(body.harga ?? current.harga),
         update: nowFormatted
-      } as PaperPrice
+      }
+      items[index] = updated
       writeData('paper-prices.json', items)
-      return { success: true, data: items[index], message: 'Paper price updated successfully' }
+      return { success: true, data: updated, message: 'Paper price updated successfully' }
     }
   }
 

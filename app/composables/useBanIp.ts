@@ -1,7 +1,7 @@
 import type { BanIpItem, BanIpInput, BanIpResponse } from '#server/types/ban-ip'
 
 export function useBanIp() {
-  const { data: response, pending, error, refresh } = useFetch<BanIpResponse>('/api/settings/ban-ip', {
+  const { data: response, pending, error, refresh } = useApiFetch<BanIpResponse>('/api/settings/ban-ip', {
     key: 'ban-ip-data',
     lazy: false
   })
@@ -9,7 +9,7 @@ export function useBanIp() {
   const banList = computed(() => response.value?.data || [])
 
   async function addIp(payload: BanIpInput) {
-    const res = await $fetch<{ success: boolean; data: BanIpItem; message?: string }>('/api/settings/ban-ip', {
+    const res = await apiFetch<{ success: boolean; data: BanIpItem; message?: string }>('/api/settings/ban-ip', {
       method: 'POST',
       body: payload
     })
@@ -18,7 +18,7 @@ export function useBanIp() {
   }
 
   async function updateIp(id: number, payload: Partial<BanIpInput>) {
-    const res = await $fetch<{ success: boolean; data: BanIpItem; message?: string }>(`/api/settings/ban-ip/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: BanIpItem; message?: string }>(`/api/settings/ban-ip/${id}`, {
       method: 'PUT',
       body: payload
     })
@@ -27,7 +27,7 @@ export function useBanIp() {
   }
 
   async function deleteIp(id: number) {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/settings/ban-ip/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/settings/ban-ip/${id}`, {
       method: 'DELETE'
     })
     await refresh()

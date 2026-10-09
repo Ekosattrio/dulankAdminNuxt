@@ -9,7 +9,7 @@ interface ResponseData {
 export function useDesignations(filterParams?: Ref<DesignationFilterParams> | DesignationFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/designations', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/designations', {
     key: 'designations-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useDesignations(filterParams?: Ref<DesignationFilterParams> | De
   const designations = computed<Designation[]>(() => data.value?.data ?? [])
 
   const saveDesignation = async (payload: DesignationFormData) => {
-    const res = await $fetch<{ success: boolean; data: Designation; message?: string }>('/api/designations', {
+    const res = await apiFetch<{ success: boolean; data: Designation; message?: string }>('/api/designations', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useDesignations(filterParams?: Ref<DesignationFilterParams> | De
   }
 
   const deleteDesignation = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/designations/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/designations/${id}`, {
       method: 'DELETE'
     })
     await refresh()

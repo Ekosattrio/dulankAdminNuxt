@@ -14,17 +14,20 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((m) => String(m.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Printing machine not found' })
+      const updated: PrintingMachine = {
+        ...current,
         ...body,
-        colors: Number(body.colors ?? items[index].colors),
-        plateCost: Number(body.plateCost ?? items[index].plateCost),
-        minim: Number(body.minim ?? items[index].minim),
-        druck: Number(body.druck ?? items[index].druck),
+        colors: Number(body.colors ?? current.colors),
+        plateCost: Number(body.plateCost ?? current.plateCost),
+        minim: Number(body.minim ?? current.minim),
+        druck: Number(body.druck ?? current.druck),
         update: nowFormatted
-      } as PrintingMachine
+      }
+      items[index] = updated
       writeData('printing-machines.json', items)
-      return { success: true, data: items[index], message: 'Printing machine updated successfully' }
+      return { success: true, data: updated, message: 'Printing machine updated successfully' }
     }
   }
 

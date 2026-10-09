@@ -53,11 +53,7 @@ export function getFlowSummaries(): FlowSummary[] {
   const counts: Record<string, number> = { ...baselineFlows }
 
   items.forEach((item) => {
-    if (counts[item.flow] !== undefined) {
-      counts[item.flow] += 1
-    } else {
-      counts[item.flow] = 1
-    }
+    counts[item.flow] = (counts[item.flow] ?? 0) + 1
   })
 
   return Object.entries(counts).map(([name, count]) => ({

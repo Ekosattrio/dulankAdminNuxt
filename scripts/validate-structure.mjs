@@ -22,18 +22,32 @@ function workspacePath(relative) {
   return resolved
 }
 
-async function verifyFile(entry) {
-  try {
-    const filename = workspacePath(entry.to)
-    const info = await stat(filename)
-    if (!info.isFile()) throw new Error('Not a file')
-    if (checkHashes) {
-      const hash = createHash('sha256').update(await readFile(filename)).digest('hex')
-      if (hash !== entry.sha256After) failures.push(`Content changed: ${entry.to}`)
-    }
-  } catch (error) {
-    failures.push(`${entry.to}: ${error.message}`)
+function relocatedCandidates(relative) {
+  const candidates = [relative]
+  const summernoteDist = 'legacy/static-source/assets/plugins/summernote/dist/'
+  if (relative.startsWith(summernoteDist)) {
+    candidates.push(relative.replace(summernoteDist, 'legacy/static-source/assets/plugins/summernote/'))
   }
+  return candidates
+}
+
+async function verifyFile(entry) {
+  let lastError
+  for (const candidate of relocatedCandidates(entry.to)) {
+    try {
+      const filename = workspacePath(candidate)
+      const info = await stat(filename)
+      if (!info.isFile()) throw new Error('Not a file')
+      if (checkHashes) {
+        const hash = createHash('sha256').update(await readFile(filename)).digest('hex')
+        if (hash !== entry.sha256After) failures.push(`Content changed: ${entry.to}`)
+      }
+      return
+    } catch (error) {
+      lastError = error
+    }
+  }
+  failures.push(`${entry.to}: ${lastError?.message || 'File not found'}`)
 }
 
 // Limit file I/O concurrency for large asset archives on Windows.

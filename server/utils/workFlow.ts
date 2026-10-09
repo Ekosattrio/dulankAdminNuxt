@@ -119,6 +119,9 @@ export function updateWorkFlow(id: string, payload: WorkFlowFormData): WorkFlow 
   }
 
   const current = items[index]
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: 'Workflow not found' })
+  }
   const updated: WorkFlow = {
     ...current,
     product,
@@ -142,6 +145,9 @@ export function deleteWorkFlow(id: string): WorkFlow {
   }
 
   const [removed] = items.splice(index, 1)
+  if (!removed) {
+    throw createError({ statusCode: 404, statusMessage: 'Workflow not found' })
+  }
   writeWorkFlowData(items)
   return removed
 }

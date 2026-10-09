@@ -43,16 +43,19 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((d) => String(d.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'District not found' })
+      const updated: District = {
+        ...current,
         ...body,
-        province: provinceName || items[index].province,
-        provinceId: provinceId || items[index].provinceId,
-        regency: regencyName || items[index].regency,
-        regencyId: regencyId || items[index].regencyId,
-      } as District
+        province: provinceName || current.province,
+        provinceId: provinceId || current.provinceId,
+        regency: regencyName || current.regency,
+        regencyId: regencyId || current.regencyId,
+      }
+      items[index] = updated
       writeData('districts.json', items)
-      return { success: true, data: items[index], message: 'District updated successfully' }
+      return { success: true, data: updated, message: 'District updated successfully' }
     }
   }
 

@@ -24,16 +24,19 @@ export default defineEventHandler(async (event) => {
     // Update
     const idx = allCategories.findIndex(c => String(c.id) === String(body.id))
     if (idx !== -1) {
-      allCategories[idx] = {
-        ...allCategories[idx],
+      const current = allCategories[idx]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+      const updated: BlogCategory = {
+        ...current,
         name: body.name,
         slug: body.slug || slugify(body.name),
-        description: body.description ?? allCategories[idx].description,
-        postCount: typeof body.postCount === 'number' ? body.postCount : allCategories[idx].postCount,
-        status: body.status || allCategories[idx].status,
+        description: body.description ?? current.description,
+        postCount: typeof body.postCount === 'number' ? body.postCount : current.postCount,
+        status: body.status || current.status,
       }
+      allCategories[idx] = updated
       writeJSON('blog-categories.json', allCategories)
-      return createResponse(allCategories[idx], 'Category updated successfully')
+      return createResponse(updated, 'Category updated successfully')
     }
   }
 

@@ -10,7 +10,7 @@ export function useBankSettings() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: BankSetting[] }>('/api/bank-settings')
+      const res = await apiFetch<{ success: boolean; data: BankSetting[] }>('/api/bank-settings')
       if (res && res.data) {
         items.value = res.data
       }
@@ -24,7 +24,7 @@ export function useBankSettings() {
   async function saveItem(payload: Partial<BankSetting>) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: BankSetting }>('/api/bank-settings', {
+      const res = await apiFetch<{ success: boolean; data: BankSetting }>('/api/bank-settings', {
         method: 'POST',
         body: payload
       })
@@ -41,7 +41,7 @@ export function useBankSettings() {
   async function deleteItem(id: string) {
     pending.value = true
     try {
-      await $fetch(`/api/bank-settings/${id}`, {
+      await apiFetch(`/api/bank-settings/${id}`, {
         method: 'DELETE'
       })
       await fetchItems()

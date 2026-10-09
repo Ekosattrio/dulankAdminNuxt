@@ -173,6 +173,15 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      title="Coupons"
+      :columns="printColumns"
+      :items="filteredCoupons"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -212,6 +221,17 @@ const coupons = ref<CouponItem[]>([
 const searchQuery = ref('')
 const filterType = ref('')
 const filterStatus = ref('')
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Name' },
+  { key: 'code', label: 'Code' },
+  { key: 'type', label: 'Type' },
+  { key: 'discount', label: 'Discount', align: 'right' as const },
+  { key: 'limit', label: 'Usage Limit', align: 'right' as const },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'valid', label: 'Valid Until' },
+  { key: 'status', label: 'Status' },
+]
 
 const filteredCoupons = computed(() => {
   return coupons.value.filter(c => {
@@ -315,11 +335,11 @@ function confirmDelete() {
 }
 
 function exportPdf() {
-  alert('Exporting Coupons PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

@@ -43,6 +43,14 @@ const filteredList = computed(() => {
   })
 })
 
+const print = useTablePrint()
+const printColumns = [
+  { key: 'categoryName', label: 'Category Name' },
+  { key: 'description', label: 'Description' },
+  { key: 'date', label: 'Date' },
+  { key: 'status', label: 'Status' }
+]
+
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 
 const isDeleteConfirmOpen = ref(false)
@@ -94,11 +102,23 @@ const handleSubmit = async (formData: ExpenseCategoryFormData) => {
 }
 
 const printTable = () => {
-  window.print()
+  print.openPrintModal({
+    title: 'Expense Categories',
+    subtitle: 'Daftar kategori biaya operasional dan produksi',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'print'
+  })
 }
 
 const exportPdf = () => {
-  showToast('Exporting Expense Categories to PDF...')
+  print.openPrintModal({
+    title: 'Expense Categories',
+    subtitle: 'Daftar kategori biaya operasional dan produksi',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'pdf'
+  })
 }
 </script>
 
@@ -173,6 +193,17 @@ const exportPdf = () => {
       :busy="isDeleting"
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="date"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

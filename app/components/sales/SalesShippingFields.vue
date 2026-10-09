@@ -3,10 +3,8 @@ import type { SalesShipping } from '#server/types/sales-document'
 const shipping = defineModel<SalesShipping>({ required: true })
 const id = useId()
 const editing = ref(false)
-const { data: stores } = useFetch<{
-  data: { name?: string; storeName?: string; address?: string; phone?: string }[]
-}>('/api/stores', { key: 'sales-pickup-stores' })
-const pickups = computed(() => stores.value?.data ?? [])
+const { stores } = useStores()
+const pickups = computed(() => stores.value.filter((store) => store.status === 'Active'))
 function switchMethod(method: SalesShipping['method']) {
   const value = shipping.value
   if (method === value.method) return
@@ -23,7 +21,7 @@ function switchMethod(method: SalesShipping['method']) {
 }
 function choosePickup(event: Event) {
   const name = (event.target as HTMLSelectElement).value
-  const store = pickups.value.find((s) => (s.name || s.storeName) === name)
+  const store = pickups.value.find((item) => item.storeName === name)
   shipping.value.pickup = name
   if (store) {
     shipping.value.address = store.address || ''
@@ -81,8 +79,8 @@ function choosePickup(event: Event) {
             @change="choosePickup"
           >
             <option value="">Pilih Alamat Pickup</option>
-            <option v-for="store in pickups" :key="store.name || store.storeName">
-              {{ store.name || store.storeName }}
+            <option v-for="store in pickups" :key="store.id" :value="store.storeName">
+              {{ store.storeName }}
             </option></select
           ><label :class="salesLabel"
             >Pickup location<input v-model="shipping.pickup" :class="salesField" /></label

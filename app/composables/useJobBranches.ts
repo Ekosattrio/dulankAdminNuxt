@@ -1,4 +1,9 @@
-import type { JobBranchFilterParams, JobBranchItem, JobBranchUpdatePayload } from '#server/types/job-branch'
+import type {
+  JobBranchFilterParams,
+  JobBranchHistoryItem,
+  JobBranchItem,
+  JobBranchUpdatePayload,
+} from '#server/types/job-branch'
 
 interface ApiResponse<T> {
   success: boolean
@@ -9,7 +14,7 @@ interface ApiResponse<T> {
 export function useJobBranches(filterParams?: Ref<JobBranchFilterParams> | JobBranchFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ApiResponse<JobBranchItem[]>>('/api/job-branches', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<JobBranchItem[]>>('/api/job-branches', {
     key: 'job-branches-list',
     query: params,
   })
@@ -17,7 +22,7 @@ export function useJobBranches(filterParams?: Ref<JobBranchFilterParams> | JobBr
   const jobBranches = computed<JobBranchItem[]>(() => data.value?.data ?? [])
 
   const updateRecord = async (id: string, payload: JobBranchUpdatePayload) => {
-    const res = await $fetch<ApiResponse<JobBranchItem>>(`/api/job-branches/${id}`, {
+    const res = await apiFetch<ApiResponse<JobBranchItem>>(`/api/job-branches/${id}`, {
       method: 'PUT',
       body: payload,
     })
@@ -31,5 +36,19 @@ export function useJobBranches(filterParams?: Ref<JobBranchFilterParams> | JobBr
     error,
     refresh,
     updateRecord,
+  }
+}
+
+export function useJobBranchHistory(filterParams: Ref<JobBranchFilterParams>) {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<JobBranchHistoryItem[]>>(
+    '/api/job-branches/history',
+    { key: 'job-branches-history', query: filterParams },
+  )
+
+  return {
+    historyItems: computed<JobBranchHistoryItem[]>(() => data.value?.data ?? []),
+    pending,
+    error,
+    refresh,
   }
 }

@@ -23,6 +23,7 @@ const form = ref<MyJobFormData>({
   assignedTo: '',
   dueDate: ''
 })
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -56,12 +57,13 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (props.viewOnly) {
     emit('close')
     return
   }
   if (!form.value.title || !form.value.flowName) {
-    alert('Please fill in Job Title and Flow Station')
+    validationError.value = 'Please fill in Job Title and Flow Station.'
     return
   }
   emit('save', { ...form.value })
@@ -83,6 +85,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <div class="mb-3">
               <label class="form-label fw-semibold">Flow Station / Operation <span class="text-danger">*</span></label>
               <input

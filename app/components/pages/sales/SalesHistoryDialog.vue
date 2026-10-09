@@ -2,9 +2,7 @@
 import type { SalesHistoryEntry } from '#server/types/sales-document'
 const props = defineProps<{ kind: 'deleted' | 'cancelled' | null }>()
 defineEmits<{ close: [] }>()
-const { data, pending, error, refresh } = useFetch<{ data: SalesHistoryEntry[] }>('/api/sales/history', {
-  key: 'sales-history',
-})
+const { history, pending, error, refresh } = useSalesHistory()
 watch(
   () => props.kind,
   (value) => {
@@ -14,7 +12,7 @@ watch(
 const from = ref('')
 const to = ref('')
 const items = computed(() =>
-  (data.value?.data || []).filter((item) => {
+  history.value.filter((item) => {
     const date = item.date.split('/').reverse().join('-')
     return item.kind === props.kind && (!from.value || date >= from.value) && (!to.value || date <= to.value)
   }),

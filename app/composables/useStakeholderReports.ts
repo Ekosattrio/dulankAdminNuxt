@@ -18,7 +18,7 @@ export function useSupplierReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<StakeholderApiResponse<SupplierReportItem[]>>('/api/reports/suppliers', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SupplierReportItem[]>>('/api/reports/suppliers', {
     key: 'reports-suppliers-list',
   })
 
@@ -75,7 +75,7 @@ export function useSupplierDueReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<StakeholderApiResponse<SupplierDueReportItem[]>>('/api/reports/supplier-dues', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SupplierDueReportItem[]>>('/api/reports/supplier-dues', {
     key: 'reports-supplier-dues-list',
   })
 
@@ -133,7 +133,7 @@ export function useCustomerReport() {
   const paymentMethod = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<StakeholderApiResponse<CustomerReportItem[]>>('/api/reports/customers', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomerReportItem[]>>('/api/reports/customers', {
     key: 'reports-customers-list',
   })
 
@@ -148,7 +148,7 @@ export function useCustomerReport() {
       list = list.filter((i) => i.paymentMethod?.toLowerCase() === paymentMethod.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.lastOrderDate, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })
@@ -189,7 +189,7 @@ export function useCustomerDueReport() {
   const paymentMethod = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useFetch<StakeholderApiResponse<CustomerDueReportItem[]>>('/api/reports/customer-dues', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomerDueReportItem[]>>('/api/reports/customer-dues', {
     key: 'reports-customer-dues-list',
   })
 
@@ -204,7 +204,7 @@ export function useCustomerDueReport() {
       list = list.filter((i) => i.paymentMethod?.toLowerCase() === paymentMethod.value.toLowerCase())
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.lastOrderDate, dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
     }
     return list
   })

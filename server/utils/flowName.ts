@@ -122,6 +122,9 @@ export function updateFlowName(id: string, payload: FlowNameFormData): FlowName 
   }
 
   const current = items[index]
+  if (!current) {
+    throw createError({ statusCode: 404, statusMessage: 'Flow name not found' })
+  }
   const updated: FlowName = {
     ...current,
     category,
@@ -145,6 +148,9 @@ export function deleteFlowName(id: string): FlowName {
   }
 
   const [removed] = items.splice(index, 1)
+  if (!removed) {
+    throw createError({ statusCode: 404, statusMessage: 'Flow name not found' })
+  }
   writeFlowNameData(items)
   return removed
 }

@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useClients() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/clients', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/clients', {
     key: 'clients-list'
   })
 
   const clients = computed<ClientItem[]>(() => data.value?.data ?? [])
 
   const saveClient = async (payload: ClientFormData) => {
-    const res = await $fetch<{ success: boolean; data: ClientItem; message?: string }>('/api/clients', {
+    const res = await apiFetch<{ success: boolean; data: ClientItem; message?: string }>('/api/clients', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useClients() {
   }
 
   const deleteClient = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/clients/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/clients/${id}`, {
       method: 'DELETE'
     })
     await refresh()
@@ -31,7 +31,7 @@ export function useClients() {
   }
 
   const reorderClients = async (orderedIds: string[]) => {
-    const res = await $fetch<{ success: boolean; data: ClientItem[]; message?: string }>('/api/clients/reorder', {
+    const res = await apiFetch<{ success: boolean; data: ClientItem[]; message?: string }>('/api/clients/reorder', {
       method: 'POST',
       body: { order: orderedIds }
     })

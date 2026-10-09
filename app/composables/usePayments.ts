@@ -9,7 +9,7 @@ interface ResponseData {
 export function usePayments(filterParams?: Ref<PaymentFilterParams> | PaymentFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/payments', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/payments', {
     key: 'payments-list',
     query: params,
   })

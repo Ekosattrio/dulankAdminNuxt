@@ -25,6 +25,7 @@ const form = ref<PayslipFormData>({
   status: 'Unpaid',
   paidDate: '-'
 })
+const validationError = ref('')
 
 const calculatedTotal = computed(() => {
   const rate = Number(form.value.salaryRate || 0)
@@ -73,12 +74,13 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (props.viewOnly) {
     emit('close')
     return
   }
   if (!form.value.name) {
-    alert('Nama karyawan harus diisi')
+    validationError.value = 'Nama karyawan harus diisi.'
     return
   }
   form.value.total = calculatedTotal.value
@@ -101,6 +103,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <!-- View Only Mode -->
             <div v-if="viewOnly && editData" class="row g-3">
               <div class="col-md-6">

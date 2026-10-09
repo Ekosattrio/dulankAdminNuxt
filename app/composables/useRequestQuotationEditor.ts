@@ -3,12 +3,12 @@ import type { RFQDocument, RFQItem } from '#server/types/request-quotation'
 export function useRequestQuotationEditor(editing = false) {
   const route = useRoute()
   const router = useRouter()
-  const { data, pending, error } = useFetch<{ success: boolean; data: RFQItem[] }>(
-    '/api/request-quotations',
+  const { data, pending, error } = useApiFetch<{ success: boolean; data: RFQItem[] }>(
+    '/api/request-quotations' as string,
     { key: 'request-quotation-editor' },
   )
   const record = computed(() =>
-    data.value?.data.find((item) => item.noRequest === route.query.no || item.id === route.query.id),
+    data.value?.data.find((item: RFQItem) => item.noRequest === route.query.no || item.id === route.query.id),
   )
   const form = ref<RFQDocument>({
     to: '',
@@ -61,7 +61,7 @@ export function useRequestQuotationEditor(editing = false) {
     isSubmitting.value = true
     actionError.value = ''
     try {
-      await $fetch<unknown>('/api/request-quotations', {
+      await apiFetch<unknown>('/api/request-quotations', {
         method: 'POST',
         body: {
           ...(editing ? record.value : {}),

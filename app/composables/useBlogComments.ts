@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useBlogComments() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/blog-comments', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/blog-comments', {
     key: 'blog-comments-list'
   })
 
   const comments = computed<BlogComment[]>(() => data.value?.data ?? [])
 
   const saveComment = async (payload: BlogCommentFormData) => {
-    const res = await $fetch<{ success: boolean; data: BlogComment; message?: string }>('/api/blog-comments', {
+    const res = await apiFetch<{ success: boolean; data: BlogComment; message?: string }>('/api/blog-comments', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useBlogComments() {
   }
 
   const deleteComment = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/blog-comments/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/blog-comments/${id}`, {
       method: 'DELETE'
     })
     await refresh()

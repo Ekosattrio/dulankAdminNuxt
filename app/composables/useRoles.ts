@@ -8,7 +8,7 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
       }))
     : undefined
 
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: SystemRole[] }>('/api/roles', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: SystemRole[] }>('/api/roles' as string, {
     ...(query ? { query } : {}),
     key: 'system-roles-list',
   })
@@ -16,12 +16,12 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
   const roles = computed<SystemRole[]>(() => data.value?.data || [])
 
   const saveRole = async (payload: Partial<SystemRole>) => {
-    const res = await $fetch<{ success: boolean; data: SystemRole }>('/api/roles', {
+    const res = await apiFetch<{ success: boolean; data: SystemRole }>('/api/roles', {
       method: 'POST',
       body: payload,
     })
     if (res?.data && data.value?.data) {
-      const idx = data.value.data.findIndex((r) => r.id === res.data.id)
+      const idx = data.value.data.findIndex((r: SystemRole) => r.id === res.data.id)
       if (idx !== -1) {
         data.value.data[idx] = res.data
       } else {
@@ -33,11 +33,11 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
   }
 
   const deleteRole = async (id: string) => {
-    const res = await $fetch<{ success: boolean; data: SystemRole }>(`/api/roles/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: SystemRole }>(`/api/roles/${id}`, {
       method: 'DELETE',
     })
     if (data.value?.data) {
-      data.value.data = data.value.data.filter((r) => r.id !== id)
+      data.value.data = data.value.data.filter((r: SystemRole) => r.id !== id)
     }
     await refresh()
     return res

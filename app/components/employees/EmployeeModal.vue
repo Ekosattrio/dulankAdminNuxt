@@ -25,6 +25,7 @@ const form = ref<EmployeeFormData>({
   joinChannel: 'Offline',
   email: ''
 })
+const validationError = ref('')
 
 watch(
   () => props.editData,
@@ -63,12 +64,13 @@ watch(
 )
 
 const handleSubmit = () => {
+  validationError.value = ''
   if (props.viewOnly) {
     emit('close')
     return
   }
   if (!form.value.name || !form.value.phone) {
-    alert('Nama karyawan dan nomor telepon harus diisi')
+    validationError.value = 'Nama karyawan dan nomor telepon harus diisi.'
     return
   }
   emit('save', { ...form.value })
@@ -90,6 +92,7 @@ const handleSubmit = () => {
 
         <form @submit.prevent="handleSubmit">
           <div class="modal-body p-4">
+            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
             <!-- View Only Mode -->
             <div v-if="viewOnly && editData" class="row g-3">
               <div class="col-md-6">

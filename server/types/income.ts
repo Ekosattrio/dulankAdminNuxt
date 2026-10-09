@@ -7,6 +7,7 @@ export interface IncomeRecord {
   notes: string
   amount: number
   paymentMethod?: string
+  bankAccountId: string
   bankAccount?: string
   isCancelled?: boolean
 }
@@ -25,6 +26,7 @@ export interface IncomeFormData {
   notes: string
   amount: number
   paymentMethod?: string
+  bankAccountId: string
   bankAccount?: string
   isCancelled?: boolean
 }

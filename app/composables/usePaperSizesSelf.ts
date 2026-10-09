@@ -13,7 +13,7 @@ interface ResponseData {
 export function usePaperSizesSelf(filterParams?: Ref<PaperSizeFilterParams> | PaperSizeFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/paper-sizes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/paper-sizes', {
     key: 'paper-sizes-self-list',
     query: params
   })
@@ -22,7 +22,7 @@ export function usePaperSizesSelf(filterParams?: Ref<PaperSizeFilterParams> | Pa
   const stats = computed(() => data.value?.stats ?? { total: 0, active: 0, deactive: 0 })
 
   const saveSize = async (payload: PaperSizeFormData) => {
-    const res = await $fetch<{ success: boolean; data: PaperSize; message?: string }>('/api/paper-sizes', {
+    const res = await apiFetch<{ success: boolean; data: PaperSize; message?: string }>('/api/paper-sizes', {
       method: 'POST',
       body: payload
     })
@@ -31,7 +31,7 @@ export function usePaperSizesSelf(filterParams?: Ref<PaperSizeFilterParams> | Pa
   }
 
   const deleteSize = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/paper-sizes/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/paper-sizes/${id}`, {
       method: 'DELETE'
     })
     await refresh()

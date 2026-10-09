@@ -369,6 +369,16 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="endDate"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -484,6 +494,28 @@ const filteredCoupons = computed(() => {
     return matchSearch && matchType && matchStatus;
   });
 });
+
+const print = useTablePrint();
+const printColumns = [
+  { key: 'name', label: 'Name' },
+  { key: 'code', label: 'Code' },
+  { key: 'type', label: 'Type' },
+  { key: 'discountDisplay', label: 'Discount' },
+  { key: 'limit', label: 'Limit', align: 'right' as const },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'validDate', label: 'Valid Date' },
+  { key: 'status', label: 'Status' }
+];
+
+const openVoucherPrint = (action: 'print' | 'pdf') => {
+  print.openPrintModal({
+    title: 'Voucher and Coupon Report',
+    subtitle: 'Daftar voucher, kupon, dan masa berlakunya',
+    columns: printColumns,
+    rows: filteredCoupons.value,
+    action
+  });
+};
 
 const showAddModal = ref(false);
 const showEditModal = ref(false);
@@ -605,11 +637,11 @@ const resetFilters = () => {
 };
 
 const exportPdf = () => {
-  window.print();
+  openVoucherPrint('pdf');
 };
 
 const printTable = () => {
-  window.print();
+  openVoucherPrint('print');
 };
 
 const refresh = () => {

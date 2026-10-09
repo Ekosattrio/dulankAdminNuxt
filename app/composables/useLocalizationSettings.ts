@@ -1,7 +1,7 @@
 import type { LocalizationConfig } from '#server/types/system-settings'
 
 export function useLocalizationSettings() {
-  const { data: response, pending, error, refresh } = useFetch<{ success: boolean; data: LocalizationConfig }>('/api/settings/localization', {
+  const { data: response, pending, error, refresh } = useApiFetch<{ success: boolean; data: LocalizationConfig }>('/api/settings/localization', {
     key: 'localization-settings',
     lazy: false
   })
@@ -25,7 +25,7 @@ export function useLocalizationSettings() {
   })
 
   async function saveConfig(payload: LocalizationConfig) {
-    const res = await $fetch<{ success: boolean; data: LocalizationConfig; message: string }>('/api/settings/localization', {
+    const res = await apiFetch<{ success: boolean; data: LocalizationConfig; message: string }>('/api/settings/localization', {
       method: 'PUT',
       body: payload
     })

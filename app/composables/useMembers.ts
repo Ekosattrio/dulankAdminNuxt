@@ -17,7 +17,7 @@ export function useMembers(filterParams?: Ref<MemberFilterParams>) {
       }))
     : undefined
 
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: MemberUser[] }>('/api/users', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: MemberUser[] }>('/api/users', {
     ...(query ? { query } : {}),
     key: 'user-members-list',
   })
@@ -25,7 +25,7 @@ export function useMembers(filterParams?: Ref<MemberFilterParams>) {
   const members = computed<MemberUser[]>(() => data.value?.data || [])
 
   const saveMember = async (payload: Partial<MemberUser>) => {
-    return await $fetch<{ success: boolean; data: MemberUser; message: string }>('/api/users', {
+    return await apiFetch<{ success: boolean; data: MemberUser; message: string }>('/api/users', {
       method: 'POST',
       body: payload,
     }).then(async (res) => {
@@ -35,7 +35,7 @@ export function useMembers(filterParams?: Ref<MemberFilterParams>) {
   }
 
   const deleteMember = async (id: string) => {
-    return await $fetch<{ success: boolean; data: MemberUser; message: string }>(`/api/users/${id}`, {
+    return await apiFetch<{ success: boolean; data: MemberUser; message: string }>(`/api/users/${id}`, {
       method: 'DELETE',
     }).then(async (res) => {
       await refresh()

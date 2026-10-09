@@ -8,7 +8,7 @@ export function useDeleteAccounts(filterParams?: Ref<{ search?: string; sort?: s
       }))
     : undefined
 
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: DeleteAccountRequest[] }>(
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: DeleteAccountRequest[] }>(
     '/api/delete-accounts',
     {
       ...(query ? { query } : {}),
@@ -19,7 +19,7 @@ export function useDeleteAccounts(filterParams?: Ref<{ search?: string; sort?: s
   const requests = computed<DeleteAccountRequest[]>(() => data.value?.data || [])
 
   const deleteRequest = async (id: string) => {
-    return await $fetch<{ success: boolean; data: DeleteAccountRequest }>(`/api/delete-accounts/${id}`, {
+    return await apiFetch<{ success: boolean; data: DeleteAccountRequest }>(`/api/delete-accounts/${id}`, {
       method: 'DELETE',
     }).then(async (res) => {
       await refresh()

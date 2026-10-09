@@ -134,6 +134,8 @@
         </div>
       </div>
     </div>
+    <SalesConfirmDelete :open="deleteTargetId !== null" title="Delete Fixed Component" message="Are you sure you want to delete this fixed component variable?" @close="deleteTargetId = null" @confirm="confirmDelete" />
+    <DocumentPrintModal :open="print.isPrintModalOpen.value" title="Fixed Components & Work Shift Capacities" :columns="printColumns" :items="filteredComponents" :default-action="print.defaultPrintAction.value" :show-date-range="false" @close="print.closePrintModal" />
   </div>
 </template>
 
@@ -160,6 +162,15 @@ const components = ref<FixedComponent[]>([
 ])
 
 const searchQuery = ref('')
+const deleteTargetId = ref<number | null>(null)
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Component' },
+  { key: 'value', label: 'Capacity', align: 'right' as const },
+  { key: 'unit', label: 'Unit' },
+  { key: 'used', label: 'Used', align: 'right' as const },
+  { key: 'update', label: 'Updated' },
+]
 
 const filteredComponents = computed(() => {
   return components.value.filter(c => {
@@ -237,17 +248,21 @@ function saveComponent() {
 }
 
 function deleteComponent(id: number) {
-  if (confirm('Are you sure you want to delete this fixed component variable?')) {
-    components.value = components.value.filter(c => c.id !== id)
-  }
+  deleteTargetId.value = id
+}
+
+function confirmDelete() {
+  if (deleteTargetId.value === null) return
+  components.value = components.value.filter(c => c.id !== deleteTargetId.value)
+  deleteTargetId.value = null
 }
 
 function exportPdf() {
-  alert('Exporting fixed components as PDF...')
+  print.openPrintModal('pdf')
 }
 
 function printTable() {
-  window.print()
+  print.openPrintModal('print')
 }
 
 function refresh() {

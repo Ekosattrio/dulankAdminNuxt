@@ -7,7 +7,7 @@ interface ResponseData {
 }
 
 export function useFooterConfig() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/footer-config', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/footer-config', {
     key: 'footer-config-data'
   })
 
@@ -30,7 +30,7 @@ export function useFooterConfig() {
   })
 
   const saveConfig = async (payload: FooterConfig) => {
-    const res = await $fetch<{ success: boolean; data: FooterConfig; message?: string }>('/api/footer-config', {
+    const res = await apiFetch<{ success: boolean; data: FooterConfig; message?: string }>('/api/footer-config', {
       method: 'POST',
       body: payload
     })

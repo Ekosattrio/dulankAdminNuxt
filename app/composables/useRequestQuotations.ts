@@ -2,21 +2,21 @@ import type { RFQItem } from '#server/types/request-quotation'
 import type { SalesContact } from '#server/types/sales-document'
 
 export function useRequestQuotations() {
-  const { data, pending, error, refresh } = useFetch<{ success: boolean; data: RFQItem[] }>(
-    '/api/request-quotations',
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: RFQItem[] }>(
+    '/api/request-quotations' as string,
     { key: 'request-quotations-list' },
   )
-  const rfqs = computed(() => data.value?.data ?? [])
+  const rfqs = computed<RFQItem[]>(() => data.value?.data ?? [])
   const statusFilter = ref('All')
   const filteredRFQs = computed(() =>
     rfqs.value.filter((item) => statusFilter.value === 'All' || item.status === statusFilter.value),
   )
   const save = async (body: Partial<RFQItem>) => {
-    await $fetch('/api/request-quotations', { method: 'POST', body })
+    await apiFetch('/api/request-quotations', { method: 'POST', body })
     await refresh()
   }
   const remove = async (id: string) => {
-    await $fetch(`/api/request-quotations/${id}`, { method: 'DELETE' })
+    await apiFetch(`/api/request-quotations/${id}`, { method: 'DELETE' })
     await refresh()
   }
   const actions = useSalesListActions<RFQItem, Partial<RFQItem>>(save, remove)

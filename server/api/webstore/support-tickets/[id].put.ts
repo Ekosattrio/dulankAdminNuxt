@@ -11,6 +11,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const ticket = items[index]
+  if (!ticket) {
+    throw createError({ statusCode: 404, statusMessage: 'Ticket not found' })
+  }
 
   if (body.status) ticket.status = body.status
   if (body.priority) ticket.priority = body.priority

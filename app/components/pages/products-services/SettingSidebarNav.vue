@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
-
-export interface SidebarTabItem {
-  id: string
-  label: string
-  icon: string
-}
+import type { SidebarTabItem } from '../../../types/configuration'
 
 defineProps<{
   tabs: SidebarTabItem[]

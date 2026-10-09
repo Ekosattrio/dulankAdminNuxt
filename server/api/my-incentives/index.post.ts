@@ -7,20 +7,23 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((i) => String(i.id) === String(body.id))
     if (index !== -1) {
-      const incentiveRate = Number(body.incentive ?? items[index].incentive ?? 0)
-      const qty = Number(body.qty ?? items[index].qty ?? 1)
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Incentive not found' })
+      const incentiveRate = Number(body.incentive ?? current.incentive ?? 0)
+      const qty = Number(body.qty ?? current.qty ?? 1)
       const amount = body.amount != null ? Number(body.amount) : (incentiveRate * qty)
 
-      items[index] = {
-        ...items[index],
+      const updated: MyIncentive = {
+        ...current,
         ...body,
         incentive: incentiveRate,
         qty,
         amount,
-        status: body.status || items[index].status
-      } as MyIncentive
+        status: body.status || current.status
+      }
+      items[index] = updated
       await writeJSON('my-incentives.json', items)
-      return { success: true, data: items[index], message: 'Incentive updated successfully' }
+      return { success: true, data: updated, message: 'Incentive updated successfully' }
     }
   }
 

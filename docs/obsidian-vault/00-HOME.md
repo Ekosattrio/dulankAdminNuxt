@@ -8,6 +8,8 @@ updated: 2026-10-09
 
 Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokumen aturan. Mulai audit atau implementasi dari halaman ini.
 
+> **Status terbaru 2026-10-09:** P0 TypeScript, direct-request UI, native browser dialog, dan direct print list/report sudah ditutup; Finance BRVS sudah implemented dan lolos verifikasi statis. Sebelas direct print tersisa telah diaudit sebagai dokumen/detail khusus. Status belum `verified` karena 8 aset legacy belum memiliki sumber dengan hash yang cocok, backlog BRVS-UI lintas menu, serta build/browser/persistence runtime belum diuji. Gunakan audit pada item 12 sebagai TODO kanonik.
+
 ## Jalur Baca
 
 1. [[01-SOURCE-OF-TRUTH]]
@@ -21,6 +23,7 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 9. [[09-CHANGELOG]]
 10. [[10-AI-QUALITY-GATES]]
 11. [[11-PAGE-CLEANLINESS-BRVS]]
+12. [Audit kepatuhan codebase dan master TODO 2026-10-09](../CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md)
 
 ## Modul Audit 2026-10-08
 
@@ -46,6 +49,7 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 - [BRVS UI Decomposition Standard](../UI_DECOMPOSITION_STANDARD.md)
 - [Troubleshooting warning Vue](../TROUBLESHOOTING_VUE_WARNINGS.md)
 - [Matrix status dan kebersihan page](../PAGE_CLEANLINESS_AND_STATUS_MATRIX.md)
+- [Audit kepatuhan codebase dan master TODO 2026-10-09](../CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md)
 - [Dokumentasi proyek/skripsi](../DOKUMENTASI_SKRIPSI_KACETAK.md)
 - [README](../../README.md)
 - [Panduan ringkas Claude](../../CLAUDE.md)

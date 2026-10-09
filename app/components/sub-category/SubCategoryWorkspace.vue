@@ -48,6 +48,16 @@ const filteredList = computed(() => {
   })
 })
 
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Sub Category' },
+  { key: 'category', label: 'Category' },
+  { key: 'categoryCode', label: 'Category Code' },
+  { key: 'description', label: 'Description' },
+  { key: 'itemUsed', label: 'Item Used', align: 'right' as const },
+  { key: 'status', label: 'Status' }
+]
+
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 
 const isDeleteConfirmOpen = ref(false)
@@ -99,11 +109,23 @@ const handleSubmit = async (formData: SubCategoryFormData) => {
 }
 
 const printTable = () => {
-  window.print()
+  print.openPrintModal({
+    title: 'Product Sub Category',
+    subtitle: 'Daftar subkategori produk percetakan',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'print'
+  })
 }
 
 const exportPdf = () => {
-  showToast('Exporting Sub Categories to PDF...')
+  print.openPrintModal({
+    title: 'Product Sub Category',
+    subtitle: 'Daftar subkategori produk percetakan',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'pdf'
+  })
 }
 </script>
 
@@ -182,6 +204,17 @@ const exportPdf = () => {
       :busy="isDeleting"
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

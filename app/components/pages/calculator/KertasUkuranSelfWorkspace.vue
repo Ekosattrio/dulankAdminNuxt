@@ -21,6 +21,8 @@ const searchQuery = ref('')
 
 const isModalOpen = ref(false)
 const editData = ref<PaperSize | null>(null)
+const deleteTargetId = ref<string | null>(null)
+const isDeleting = ref(false)
 
 const filteredList = computed(() => {
   return paperSizes.value.filter((s) => {
@@ -42,13 +44,20 @@ const handleEdit = (s: PaperSize) => {
   isModalOpen.value = true
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Apakah Anda yakin ingin menghapus data ukuran kertas ini?')) {
-    try {
-      await deletePaperSize(id)
-    } catch (err) {
-      console.error('Failed to delete paper size:', err)
-    }
+const handleDelete = (id: string) => {
+  deleteTargetId.value = id
+}
+
+const confirmDelete = async () => {
+  if (!deleteTargetId.value) return
+  isDeleting.value = true
+  try {
+    await deletePaperSize(deleteTargetId.value)
+    deleteTargetId.value = null
+  } catch (err) {
+    console.error('Failed to delete paper size:', err)
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -120,6 +129,14 @@ const handleSave = async (formData: PaperSizeFormData) => {
       :edit-data="editData"
       @close="isModalOpen = false"
       @save="handleSave"
+    />
+    <SalesConfirmDelete
+      :open="!!deleteTargetId"
+      title="Hapus Ukuran Kertas"
+      message="Apakah Anda yakin ingin menghapus data ukuran kertas ini?"
+      :busy="isDeleting"
+      @close="deleteTargetId = null"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

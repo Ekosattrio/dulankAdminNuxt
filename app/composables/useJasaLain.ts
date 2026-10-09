@@ -13,7 +13,7 @@ interface ResponseData {
 export function useJasaLain(filterParams?: Ref<{ search?: string; status?: string; unit?: string }> | { search?: string; status?: string; unit?: string }) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/calculator-components/jasa-lain', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/calculator-components/jasa-lain', {
     key: 'calculator-jasa-lain-list',
     query: params
   })
@@ -22,7 +22,7 @@ export function useJasaLain(filterParams?: Ref<{ search?: string; status?: strin
   const stats = computed(() => data.value?.meta ?? { total: 0, active: 0, deactive: 0 })
 
   const saveItem = async (payload: JasaLainFormData) => {
-    const res = await $fetch<{ success: boolean; data: JasaLainItem; message?: string }>('/api/calculator-components/jasa-lain', {
+    const res = await apiFetch<{ success: boolean; data: JasaLainItem; message?: string }>('/api/calculator-components/jasa-lain', {
       method: 'POST',
       body: payload
     })
@@ -31,7 +31,7 @@ export function useJasaLain(filterParams?: Ref<{ search?: string; status?: strin
   }
 
   const deleteItem = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/calculator-components/jasa-lain/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/calculator-components/jasa-lain/${id}`, {
       method: 'DELETE'
     })
     await refresh()

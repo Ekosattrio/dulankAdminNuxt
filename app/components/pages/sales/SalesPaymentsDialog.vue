@@ -10,6 +10,7 @@ const error = ref('')
 const method = ref('Cash')
 const amount = ref(0)
 const notes = ref('')
+const { addPayment } = useSalesPayments()
 const due = computed(() =>
   props.record?.status === 'Paid'
     ? 0
@@ -36,10 +37,7 @@ async function save() {
   busy.value = true
   error.value = ''
   try {
-    await $fetch(`/api/sales/${props.record.id}/payments`, {
-      method: 'POST',
-      body: { amount: amount.value, method: method.value, notes: notes.value },
-    })
+    await addPayment(props.record.id, { amount: amount.value, method: method.value, notes: notes.value })
     emit('saved')
     emit('close')
   } catch (e) {

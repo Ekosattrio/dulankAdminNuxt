@@ -9,7 +9,7 @@ interface ResponseData {
 export function useSales(filterParams?: Ref<SaleFilterParams> | SaleFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/sales', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/sales', {
     key: 'sales-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useSales(filterParams?: Ref<SaleFilterParams> | SaleFilterParams
   const sales = computed<Sale[]>(() => data.value?.data ?? [])
 
   const saveSale = async (payload: SaleFormData) => {
-    const res = await $fetch<{ success: boolean; data: Sale; message?: string }>('/api/sales', {
+    const res = await apiFetch<{ success: boolean; data: Sale; message?: string }>('/api/sales', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useSales(filterParams?: Ref<SaleFilterParams> | SaleFilterParams
   }
 
   const deleteSale = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/sales/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/sales/${id}`, {
       method: 'DELETE'
     })
     await refresh()

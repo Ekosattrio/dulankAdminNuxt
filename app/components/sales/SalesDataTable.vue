@@ -10,6 +10,8 @@ const props = withDefaults(
       align?: 'start' | 'center' | 'end'
     }>
     items?: T[]
+    /** Compatibility alias used by older domain tables. Prefer `items` in new code. */
+    rows?: T[]
     searchable?: boolean
     searchPlaceholder?: string
     defaultPageSize?: number
@@ -17,6 +19,7 @@ const props = withDefaults(
   }>(),
   {
     items: () => [],
+    rows: () => [],
     searchable: true,
     searchPlaceholder: 'Search...',
     defaultPageSize: 10,
@@ -76,8 +79,10 @@ function matchesSearch(val: unknown, q: string): boolean {
   return false
 }
 
+const sourceItems = computed(() => props.items.length > 0 ? props.items : props.rows)
+
 const filteredItems = computed(() => {
-  let result = Array.isArray(props.items) ? [...props.items] : []
+  let result = [...sourceItems.value]
 
   if (searchQuery.value && searchQuery.value.trim()) {
     const q = searchQuery.value.trim().toLowerCase()
@@ -136,7 +141,7 @@ watch(pageSize, () => {
   currentPage.value = 1
 })
 watch(
-  () => props.items,
+  sourceItems,
   () => {
     currentPage.value = 1
   },
@@ -252,8 +257,8 @@ watch(totalPages, (value) => {
                 col.class || '',
               ]"
             >
-              <slot :name="`cell(${col.key})`" :item="item" :index="(currentPage - 1) * pageSize + idx">
-                <slot :name="col.key" :item="item" :index="(currentPage - 1) * pageSize + idx">
+              <slot :name="`cell(${col.key})`" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
+                <slot :name="col.key" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
                   {{ item[col.key] }}
                 </slot>
               </slot>

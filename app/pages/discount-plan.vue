@@ -242,6 +242,16 @@
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
     />
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
+    />
   </div>
 </template>
 
@@ -293,6 +303,23 @@ const filteredPlans = computed(() => {
     return matchSearch && matchCustomer && matchStatus
   })
 })
+
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Discount Plan' },
+  { key: 'customers', label: 'Customers' },
+  { key: 'status', label: 'Status' }
+]
+
+const openPlanPrint = (action: 'print' | 'pdf') => {
+  print.openPrintModal({
+    title: 'Discount Plan Report',
+    subtitle: 'Daftar kelompok dan cakupan program diskon',
+    columns: printColumns,
+    rows: filteredPlans.value,
+    action
+  })
+}
 
 const showAddModal = ref(false)
 const showEditModal = ref(false)
@@ -382,11 +409,11 @@ const confirmDelete = () => {
 }
 
 const exportPdf = () => {
-  window.print()
+  openPlanPrint('pdf')
 }
 
 const printTable = () => {
-  window.print()
+  openPlanPrint('print')
 }
 
 const refresh = () => {

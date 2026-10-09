@@ -3,6 +3,7 @@ import type { IncomeRecord, IncomeFormData } from '~/types/income'
 import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import PagesIncomeModal from '~/components/income/IncomeModal.vue'
 import PagesIncomeTable from '~/components/income/IncomeTable.vue'
+import { formatIDR } from '~/utils/currency'
 
 definePageMeta({
   layout: 'default'
@@ -16,6 +17,8 @@ useLegacyPage({
 })
 
 const { incomes, pending, refresh, saveIncome, deleteIncome } = useIncomes()
+const { accounts: bankAccounts } = useBankAccounts()
+const activeBankAccounts = computed(() => bankAccounts.value.filter((account) => account.status === 'Active'))
 
 const searchQuery = ref('')
 const categoryFilter = ref('')
@@ -47,6 +50,17 @@ const filteredIncomes = computed(() => {
     return matchesSearch && matchesCategory
   })
 })
+
+const print = useTablePrint()
+const printColumns = [
+  { key: 'no', label: 'No Income' },
+  { key: 'date', label: 'Date' },
+  { key: 'name', label: 'Income' },
+  { key: 'category', label: 'Category' },
+  { key: 'bankAccount', label: 'Bank Account' },
+  { key: 'amount', label: 'Amount (IDR)', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'notes', label: 'Notes' }
+]
 
 import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
 
@@ -101,7 +115,13 @@ const handleSave = async (formData: IncomeFormData) => {
 }
 
 const printTable = () => {
-  window.print()
+  print.openPrintModal({
+    title: 'Income Report',
+    subtitle: 'Daftar arus kas masuk dan pendapatan',
+    columns: printColumns,
+    rows: filteredIncomes.value,
+    action: 'print'
+  })
 }
 </script>
 
@@ -179,6 +199,7 @@ const printTable = () => {
       :edit-data="editData"
       :view-only="isViewOnly"
       :categories="categoriesList"
+      :accounts="activeBankAccounts"
       @close="isModalOpen = false"
       @save="handleSave"
     />
@@ -191,6 +212,17 @@ const printTable = () => {
       :busy="isDeleting"
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      date-field="date"
+      @close="print.closePrintModal"
     />
   </div>
 </template>

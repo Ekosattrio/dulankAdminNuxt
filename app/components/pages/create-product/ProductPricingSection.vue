@@ -4,13 +4,7 @@ import FeatherIcon from '~/components/common/FeatherIcon.vue'
 import QuantityStepper from '~/components/common/QuantityStepper.vue'
 import CurrencyInput from '~/components/common/CurrencyInput.vue'
 import { formControlClass } from '~/utils/salesUi'
-
-export type PriceTypeTab =
-  | 'Single Product'
-  | 'Variable Product'
-  | 'Size Calculation'
-  | 'Large Format'
-  | 'Offset Service Price'
+import type { PriceTypeTab } from '../../../types/product-editor'
 
 const props = defineProps<{
   priceType: PriceTypeTab

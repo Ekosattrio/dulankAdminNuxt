@@ -10,7 +10,7 @@ interface ResponseData {
 export function useReviews(filterParams?: Ref<ReviewFilterQuery> | ReviewFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/webstore/reviews', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/reviews', {
     key: 'webstore-reviews-list',
     query: params
   })

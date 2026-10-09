@@ -10,7 +10,7 @@ export function useCurrencySettings() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: CurrencySetting[] }>('/api/currency-settings')
+      const res = await apiFetch<{ success: boolean; data: CurrencySetting[] }>('/api/currency-settings')
       if (res && res.data) {
         items.value = res.data
       }
@@ -24,7 +24,7 @@ export function useCurrencySettings() {
   async function saveItem(payload: Partial<CurrencySetting>) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: CurrencySetting }>('/api/currency-settings', {
+      const res = await apiFetch<{ success: boolean; data: CurrencySetting }>('/api/currency-settings', {
         method: 'POST',
         body: payload
       })
@@ -41,7 +41,7 @@ export function useCurrencySettings() {
   async function deleteItem(id: string) {
     pending.value = true
     try {
-      await $fetch(`/api/currency-settings/${id}`, {
+      await apiFetch(`/api/currency-settings/${id}`, {
         method: 'DELETE'
       })
       await fetchItems()

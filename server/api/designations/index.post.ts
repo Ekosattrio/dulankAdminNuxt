@@ -14,15 +14,18 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((d) => String(d.id) === String(body.id))
     if (index !== -1) {
-      const members = body.members || items[index].members || []
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Designation not found' })
+      const members = body.members || current.members || []
+      const updated: Designation = {
+        ...current,
         ...body,
         members,
         totalMembers: members.length
-      } as Designation
+      }
+      items[index] = updated
       writeData('designations.json', items)
-      return { success: true, data: items[index], message: 'Designation updated successfully' }
+      return { success: true, data: updated, message: 'Designation updated successfully' }
     }
   }
 

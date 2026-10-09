@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function usePayslips() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/payslips', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/payslips', {
     key: 'payslips-list'
   })
 
   const payslips = computed<PayslipItem[]>(() => data.value?.data ?? [])
 
   const savePayslip = async (payload: PayslipFormData) => {
-    const res = await $fetch<{ success: boolean; data: PayslipItem; message?: string }>('/api/payslips', {
+    const res = await apiFetch<{ success: boolean; data: PayslipItem; message?: string }>('/api/payslips', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function usePayslips() {
   }
 
   const deletePayslip = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/payslips/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/payslips/${id}`, {
       method: 'DELETE'
     })
     await refresh()

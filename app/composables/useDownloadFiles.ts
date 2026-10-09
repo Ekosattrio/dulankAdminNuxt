@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useDownloadFiles() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/download-files', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/download-files', {
     key: 'download-files-list'
   })
 
   const files = computed<DownloadFileItem[]>(() => data.value?.data ?? [])
 
   const saveFile = async (payload: DownloadFileFormData & { isFavorite?: boolean; isPinned?: boolean }) => {
-    const res = await $fetch<{ success: boolean; data: DownloadFileItem; message?: string }>('/api/download-files', {
+    const res = await apiFetch<{ success: boolean; data: DownloadFileItem; message?: string }>('/api/download-files', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useDownloadFiles() {
   }
 
   const deleteFile = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/download-files/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/download-files/${id}`, {
       method: 'DELETE'
     })
     await refresh()

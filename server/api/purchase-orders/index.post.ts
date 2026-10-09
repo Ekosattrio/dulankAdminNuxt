@@ -22,18 +22,21 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = orders.findIndex((p) => String(p.id) === String(body.id) || String(p.noPO) === String(body.noPO))
     if (index !== -1) {
-      orders[index] = {
-        ...orders[index],
+      const current = orders[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Purchase order not found' })
+      const updated: PurchaseOrder = {
+        ...current,
         ...body,
         items,
         amount: totalAmount,
-        poStatus: body.poStatus || orders[index].poStatus || 'Sent',
-        goodsStatus: body.goodsStatus || orders[index].goodsStatus || 'Pending',
-      } as PurchaseOrder
+        poStatus: body.poStatus || current.poStatus || 'Sent',
+        goodsStatus: body.goodsStatus || current.goodsStatus || 'Pending',
+      }
+      orders[index] = updated
       writeData('purchase-orders.json', orders)
       return {
         success: true,
-        data: orders[index],
+        data: updated,
         message: 'Purchase Order updated successfully'
       }
     }

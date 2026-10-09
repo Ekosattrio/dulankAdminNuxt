@@ -13,7 +13,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
     return { search: searchQuery.value }
   })
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/prefixes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/prefixes', {
     key: 'prefixes-data',
     query: queryParams,
   })
@@ -29,7 +29,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
   })
 
   const savePrefixes = async (payload: PrefixItem[] | Record<string, string>) => {
-    const res = await $fetch<{ success: boolean; data: PrefixItem[]; message?: string }>('/api/prefixes', {
+    const res = await apiFetch<{ success: boolean; data: PrefixItem[]; message?: string }>('/api/prefixes', {
       method: 'POST',
       body: payload,
     })
@@ -38,7 +38,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
   }
 
   const savePrefixItem = async (payload: PrefixFormData) => {
-    const res = await $fetch<{ success: boolean; data: PrefixItem; message?: string }>('/api/prefixes', {
+    const res = await apiFetch<{ success: boolean; data: PrefixItem; message?: string }>('/api/prefixes', {
       method: 'POST',
       body: payload,
     })

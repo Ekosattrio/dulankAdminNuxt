@@ -1,0 +1,58 @@
+[
+  {
+    "id": "money-transfer-001",
+    "no": "TF00001",
+    "branchId": "1",
+    "fromAccountId": "bank-account-005",
+    "toAccountId": "bank-account-003",
+    "amount": 269061,
+    "description": "Gaji Bulanan Cecep Sudirman",
+    "occurredAt": "2025-11-19T10:49:00.000Z",
+    "createdById": "system-admin",
+    "createdBy": "Admin",
+    "createdAt": "2025-11-19T10:49:00.000Z",
+    "updatedAt": "2025-11-19T10:49:00.000Z"
+  },
+  {
+    "id": "money-transfer-002",
+    "no": "TF00002",
+    "branchId": "1",
+    "fromAccountId": "bank-account-002",
+    "toAccountId": "bank-account-005",
+    "amount": 1772418,
+    "description": "Pembayaran Invoice Supplier PT Kertas Jaya",
+    "occurredAt": "2025-11-27T12:50:00.000Z",
+    "createdById": "system-admin",
+    "createdBy": "Admin",
+    "createdAt": "2025-11-27T12:50:00.000Z",
+    "updatedAt": "2025-11-27T12:50:00.000Z"
+  },
+  {
+    "id": "money-transfer-003",
+    "no": "TF00003",
+    "branchId": "1",
+    "fromAccountId": "bank-account-001",
+    "toAccountId": "bank-account-005",
+    "amount": 3084398,
+    "description": "Biaya Kurir dan Pengiriman",
+    "occurredAt": "2025-12-05T13:19:00.000Z",
+    "createdById": "system-staff",
+    "createdBy": "Staff",
+    "createdAt": "2025-12-05T13:19:00.000Z",
+    "updatedAt": "2025-12-05T13:19:00.000Z"
+  },
+  {
+    "id": "money-transfer-004",
+    "no": "TF00004",
+    "branchId": "1",
+    "fromAccountId": "bank-account-004",
+    "toAccountId": "bank-account-005",
+    "amount": 2192170,
+    "description": "Pengembalian Dana Konsumen (Refund)",
+    "occurredAt": "2025-12-29T16:47:00.000Z",
+    "createdById": "system-admin",
+    "createdBy": "Admin",
+    "createdAt": "2025-12-29T16:47:00.000Z",
+    "updatedAt": "2025-12-29T16:47:00.000Z"
+  }
+]

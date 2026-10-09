@@ -178,11 +178,22 @@
             </div>
             <div class="modal-footer modal-action-footer justify-content-end">
               <button type="button" class="btn btn-dark modal-action-cancel" @click="closeModal">Close</button>
-              <button type="button" class="btn btn-primary" @click="printTable">Print</button>
+              <button type="button" class="btn btn-primary" @click="printActiveBilling">Print</button>
             </div>
           </div>
         </div>
       </div>
+
+      <DocumentPrintModal
+        :open="print.isPrintModalOpen.value"
+        :title="print.printTitle.value"
+        :subtitle="print.printSubtitle.value"
+        :columns="print.printColumns.value"
+        :rows="print.printRows.value"
+        :default-action="print.defaultPrintAction.value"
+        date-field="date"
+        @close="print.closePrintModal"
+      />
 
     </div>
   </div>
@@ -190,6 +201,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { formatIDR } from '~/utils/currency'
 
 useLegacyPage({
   title: 'Billing',
@@ -240,6 +252,31 @@ const filteredBillings = computed(() => {
   })
 })
 
+const print = useTablePrint()
+const printColumns = [
+  { key: 'billingId', label: 'ID Billing' },
+  { key: 'txId', label: 'ID Transaksi' },
+  { key: 'userEmail', label: 'ID Pengguna' },
+  { key: 'date', label: 'Tanggal Billing' },
+  { key: 'subtotal', label: 'Jumlah Tagihan', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'discount', label: 'Diskon', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'tax', label: 'Pajak', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'shipping', label: 'Biaya Kirim', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'total', label: 'Total Pembayaran', align: 'right' as const, format: (value: number) => formatIDR(value) },
+  { key: 'status', label: 'Status' },
+  { key: 'method', label: 'Metode' }
+]
+
+const openBillingPrint = (action: 'print' | 'pdf', rows: BillingItem[]) => {
+  print.openPrintModal({
+    title: 'Billing Report',
+    subtitle: 'Daftar transaksi billing dan invoice',
+    columns: printColumns,
+    rows,
+    action
+  })
+}
+
 const formatNumber = (val: number) => {
   return new Intl.NumberFormat('id-ID').format(val || 0)
 }
@@ -258,11 +295,15 @@ const closeModal = () => {
 }
 
 const exportPdf = () => {
-  window.print()
+  openBillingPrint('pdf', filteredBillings.value)
 }
 
 const printTable = () => {
-  window.print()
+  openBillingPrint('print', filteredBillings.value)
+}
+
+const printActiveBilling = () => {
+  if (activeItem.value) openBillingPrint('print', [activeItem.value])
 }
 
 const refresh = () => {

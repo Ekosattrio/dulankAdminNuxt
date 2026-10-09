@@ -1,4 +1,5 @@
 import type { ReviewItem, ReviewStats } from '~/types/review'
+import { isDateWithinRange } from '#server/utils/dateRange'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if (query.startDate && query.endDate) {
-    filtered = filtered.filter(item => isDateInRange(item.date, String(query.startDate), String(query.endDate)))
+    filtered = filtered.filter(item => isDateWithinRange(item.date, String(query.startDate), String(query.endDate)))
   }
 
   return {

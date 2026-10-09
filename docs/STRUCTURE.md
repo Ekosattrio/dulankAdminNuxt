@@ -1,5 +1,7 @@
 # ARCHITECTURE & CODING PATTERNS: NUXT 4 + TAILWIND 4
 
+> **STATUS OVERRIDE 2026-10-09:** Dokumen ini adalah blueprint dan riwayat implementasi, bukan sumber status aktif. Untuk jawaban "sudah/belum", gunakan bagian **Status Kanonik Singkat** pada [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md). Klaim lama `verified`, `100%`, jumlah baris, atau jumlah route di bagian riwayat tidak boleh dipakai tanpa audit ulang source.
+
 > **Panduan kerja AI:** Baca [AGENTS.md](../AGENTS.md) sebelum mengubah menu. Panduan tersebut menetapkan pola revisi SALES pada bagian 20.4 sebagai acuan, termasuk struktur komponen, standar tabel, kecocokan HTML dan flow, serta perlindungan file dan data. Struktur layer wajib dinamai **Backend-Ready Vertical Slice (BRVS)** dan dirinci di [BACKEND_READY_VERTICAL_SLICE.md](BACKEND_READY_VERTICAL_SLICE.md).
 
 Dokumen ini adalah **cetak biru (blueprint) teknis resmi** arsitektur, pemisahan tanggung jawab (separation of concerns), dan konvensi pengkodean yang digunakan dalam repositori ini.
@@ -26,7 +28,7 @@ Frontend mengikuti direktori standar Nuxt 4. Backend, aset publik, dan konfigura
 │   ├── composables/               # State, data fetching, dan helper frontend
 │   ├── layouts/                   # default, auth, pos, print
 │   ├── locales/                   # JSON terjemahan yang sudah ada
-│   ├── pages/                     # Seluruh 186 halaman Nuxt
+│   ├── pages/                     # Seluruh 188 halaman Nuxt pada audit 2026-10-09
 │   ├── plugins/                   # Plugin frontend
 │   └── stores/                    # Pinia stores
 ├── docs/

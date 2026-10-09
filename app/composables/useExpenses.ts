@@ -9,7 +9,7 @@ interface ResponseData {
 export function useExpenses(filterParams?: Ref<ExpenseFilterParams> | ExpenseFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/expenses', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/expenses', {
     key: 'expenses-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useExpenses(filterParams?: Ref<ExpenseFilterParams> | ExpenseFil
   const expenses = computed<Expense[]>(() => data.value?.data ?? [])
 
   const saveExpense = async (payload: ExpenseFormData) => {
-    const res = await $fetch<{ success: boolean; data: Expense; message?: string }>('/api/expenses', {
+    const res = await apiFetch<{ success: boolean; data: Expense; message?: string }>('/api/expenses', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useExpenses(filterParams?: Ref<ExpenseFilterParams> | ExpenseFil
   }
 
   const deleteExpense = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/expenses/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/expenses/${id}`, {
       method: 'DELETE'
     })
     await refresh()

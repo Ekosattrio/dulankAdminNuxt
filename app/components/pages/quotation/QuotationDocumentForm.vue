@@ -5,10 +5,7 @@ const form = defineModel<QuotationDocument>({ required: true })
 defineProps<{ number: string; busy: boolean; total: number; tax: number }>()
 defineEmits<{ submit: [] }>()
 const { formatRupiah } = useFormatters()
-const { data: products } = useFetch<{ product: { name: string; code: string; category: string }[] }>(
-  '/assets/json/product.json',
-  { key: 'sales-products-source' },
-)
+const { products } = useProducts()
 const searchProduct = ref('')
 const productList = useId()
 function addItem(name = '') {
@@ -87,7 +84,7 @@ function selectCustomer(c: SalesContact) {
           </button>
         </div>
         <datalist :id="productList">
-          <option v-for="product in products?.product || []" :key="product.code" :value="product.name" />
+          <option v-for="product in products" :key="product.id" :value="product.name" />
         </datalist>
         <div class="overflow-x-auto">
           <table :class="salesDocumentTable" class="min-w-[850px]">

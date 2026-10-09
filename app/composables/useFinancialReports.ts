@@ -43,7 +43,7 @@ export function useTaxReports(options: UseTaxReportOptions = {}) {
   const statusFilter = isRef(options.status) ? options.status : ref(options.status || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<TaxReportResponse>('/api/reports/taxes', {
+  const { data, pending, error, refresh } = useApiFetch<TaxReportResponse>('/api/reports/taxes', {
     key: 'reports-taxes',
     lazy: false
   })
@@ -53,7 +53,7 @@ export function useTaxReports(options: UseTaxReportOptions = {}) {
   const items = computed<TaxReportItem[]>(() => {
     let list = rawItems.value
     if (yearFilter.value && yearFilter.value !== 'All' && yearFilter.value !== 'All Years') {
-      list = list.filter((i) => String(i.period || '').includes(String(yearFilter.value)) || String(i.date || '').includes(String(yearFilter.value)))
+      list = list.filter((i) => String(i.year).includes(String(yearFilter.value)) || String(i.date).includes(String(yearFilter.value)))
     }
     if (statusFilter.value && statusFilter.value !== 'All' && statusFilter.value !== 'All Status') {
       list = list.filter((i) => i.status?.toLowerCase() === String(statusFilter.value).toLowerCase())
@@ -110,7 +110,7 @@ export function useProfitLossReports(options: UseProfitLossReportOptions = {}) {
   const periodFilter = isRef(options.period) ? options.period : ref(options.period || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<ProfitLossResponse>('/api/reports/profit-loss', {
+  const { data, pending, error, refresh } = useApiFetch<ProfitLossResponse>('/api/reports/profit-loss', {
     key: 'reports-profit-loss',
     lazy: false
   })
@@ -126,7 +126,7 @@ export function useProfitLossReports(options: UseProfitLossReportOptions = {}) {
       list = list.filter((i) => !i.period || i.period === periodFilter.value)
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
+      list = list.filter((i) => isDateInRange(`${i.year}-01-01`, dateRange.value))
     }
     return list
   })
@@ -194,7 +194,7 @@ export function useAnnualReports(options: UseAnnualReportOptions = {}) {
   const yearFilter = isRef(options.year) ? options.year : ref(options.year || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useFetch<AnnualReportResponse>('/api/reports/annual', {
+  const { data, pending, error, refresh } = useApiFetch<AnnualReportResponse>('/api/reports/annual', {
     key: 'reports-annual',
     lazy: false
   })

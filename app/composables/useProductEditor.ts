@@ -1,4 +1,4 @@
-import type { PriceTypeTab } from '~/components/pages/create-product/ProductPricingSection.vue'
+import type { PriceTypeTab } from '../types/product-editor'
 import type { Product, ProductFormData, ProductVariant } from '#server/types/product'
 import { useProducts } from '~/composables/useProducts'
 import { useCategories } from '~/composables/useCategories'
@@ -162,7 +162,7 @@ export function useProductEditor() {
 
   async function handleCategoryCreate(name: string) {
     try {
-      await saveCategory({ name, code: name.slice(0, 3).toUpperCase() })
+      await saveCategory({ name, code: name.slice(0, 3).toUpperCase(), status: 'Active' })
       form.category = name
       isCategoryModalOpen.value = false
     } catch (err) {
@@ -232,8 +232,10 @@ export function useProductEditor() {
     if (editingVariant.value) {
       const idx = form.variants.findIndex((v) => v.id === editingVariant.value?.id)
       if (idx !== -1) {
+        const current = form.variants[idx]
+        if (!current) return
         form.variants[idx] = {
-          ...form.variants[idx],
+          ...current,
           quantity: data.quantity,
           price: data.price,
         }

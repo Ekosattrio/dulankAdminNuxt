@@ -10,7 +10,7 @@ interface ApiResponse<T> {
 export function useFlowCategories(filterParams?: Ref<FlowCategoryFilterParams> | FlowCategoryFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ApiResponse<FlowCategory[]>>('/api/flow-categories', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<FlowCategory[]>>('/api/flow-categories', {
     key: 'flow-categories-list',
     query: params,
   })
@@ -20,12 +20,12 @@ export function useFlowCategories(filterParams?: Ref<FlowCategoryFilterParams> |
   const saveFlowCategory = async (payload: FlowCategoryFormData) => {
     let res: ApiResponse<FlowCategory>
     if (payload.id) {
-      res = await $fetch<ApiResponse<FlowCategory>>(`/api/flow-categories/${payload.id}`, {
+      res = await apiFetch<ApiResponse<FlowCategory>>(`/api/flow-categories/${payload.id}`, {
         method: 'PUT',
         body: payload,
       })
     } else {
-      res = await $fetch<ApiResponse<FlowCategory>>('/api/flow-categories', {
+      res = await apiFetch<ApiResponse<FlowCategory>>('/api/flow-categories', {
         method: 'POST',
         body: payload,
       })
@@ -35,7 +35,7 @@ export function useFlowCategories(filterParams?: Ref<FlowCategoryFilterParams> |
   }
 
   const deleteFlowCategory = async (id: string) => {
-    const res = await $fetch<ApiResponse<FlowCategory>>(`/api/flow-categories/${id}`, {
+    const res = await apiFetch<ApiResponse<FlowCategory>>(`/api/flow-categories/${id}`, {
       method: 'DELETE',
     })
     await refresh()

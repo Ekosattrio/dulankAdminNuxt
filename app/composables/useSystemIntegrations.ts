@@ -1,7 +1,7 @@
 import type { SystemIntegrations, SystemIntegrationsResponse } from '#server/types/system-integrations'
 
 export function useSystemIntegrations() {
-  const { data: response, pending, error, refresh } = useFetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
+  const { data: response, pending, error, refresh } = useApiFetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
     key: 'system-integrations-data',
     lazy: false
   })
@@ -14,7 +14,7 @@ export function useSystemIntegrations() {
   })
 
   async function updateIntegrations(payload: Partial<SystemIntegrations>) {
-    const res = await $fetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
+    const res = await apiFetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
       method: 'PUT',
       body: payload
     })

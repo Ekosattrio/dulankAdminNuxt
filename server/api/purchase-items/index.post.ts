@@ -21,15 +21,18 @@ export default defineEventHandler(async (event) => {
   if (body.id) {
     const index = items.findIndex((i) => String(i.id) === String(body.id))
     if (index !== -1) {
-      items[index] = {
-        ...items[index],
+      const current = items[index]
+      if (!current) throw createError({ statusCode: 404, statusMessage: 'Purchase item not found' })
+      const updated: PurchaseItem = {
+        ...current,
         ...body,
-        price: Number(body.price ?? items[index].price),
+        price: Number(body.price ?? current.price),
       }
+      items[index] = updated
       writeData('purchase-items.json', items)
       return {
         success: true,
-        data: items[index],
+        data: updated,
         message: 'Purchase item updated successfully'
       }
     }

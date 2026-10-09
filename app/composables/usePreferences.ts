@@ -10,7 +10,7 @@ export function usePreferences() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences')
+      const res = await apiFetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences')
       if (res && res.data) {
         preferences.value = res.data
       }
@@ -24,7 +24,7 @@ export function usePreferences() {
   async function savePreferences(payload: PreferenceItem[]) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences', {
+      const res = await apiFetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences', {
         method: 'POST',
         body: payload
       })

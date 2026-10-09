@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useEmployeeSalaries() {
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/employee-salaries', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/employee-salaries', {
     key: 'employee-salaries-list'
   })
 
   const salaries = computed<EmployeeSalaryItem[]>(() => data.value?.data ?? [])
 
   const saveSalary = async (payload: EmployeeSalaryFormData) => {
-    const res = await $fetch<{ success: boolean; data: EmployeeSalaryItem; message?: string }>('/api/employee-salaries', {
+    const res = await apiFetch<{ success: boolean; data: EmployeeSalaryItem; message?: string }>('/api/employee-salaries', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useEmployeeSalaries() {
   }
 
   const deleteSalary = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/employee-salaries/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/employee-salaries/${id}`, {
       method: 'DELETE'
     })
     await refresh()

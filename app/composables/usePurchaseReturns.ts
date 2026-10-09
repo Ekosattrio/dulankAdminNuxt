@@ -6,7 +6,7 @@ export function usePurchaseReturns(filterParams?: Ref<PurchaseReturnFilterParams
     return unref(filterParams)
   })
 
-  const { data, pending, error, refresh } = useFetch<{
+  const { data, pending, error, refresh } = useApiFetch<{
     success: boolean
     data: PurchaseReturn[]
     meta: { total: number }
@@ -19,7 +19,7 @@ export function usePurchaseReturns(filterParams?: Ref<PurchaseReturnFilterParams
   const purchaseReturns = computed(() => data.value?.data || [])
 
   async function savePurchaseReturn(form: PurchaseReturnFormData) {
-    const res = await $fetch<{ success: boolean; data: PurchaseReturn; message: string }>('/api/purchase-returns', {
+    const res = await apiFetch<{ success: boolean; data: PurchaseReturn; message: string }>('/api/purchase-returns', {
       method: 'POST',
       body: form
     })
@@ -28,7 +28,7 @@ export function usePurchaseReturns(filterParams?: Ref<PurchaseReturnFilterParams
   }
 
   async function deletePurchaseReturn(id: string) {
-    const res = await $fetch<{ success: boolean; message: string }>(`/api/purchase-returns/${id}`, {
+    const res = await apiFetch<{ success: boolean; message: string }>(`/api/purchase-returns/${id}`, {
       method: 'DELETE'
     })
     await refresh()

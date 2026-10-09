@@ -15,7 +15,7 @@ export function useSmsGateway() {
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ success: boolean; data: SmsGatewaysRecord }>('/api/sms-gateways')
+      const res = await apiFetch<{ success: boolean; data: SmsGatewaysRecord }>('/api/sms-gateways')
       if (res && res.data) {
         gateways.value = res.data
       }
@@ -29,7 +29,7 @@ export function useSmsGateway() {
   async function saveGateways(payload: SmsGatewaysRecord) {
     pending.value = true
     try {
-      const res = await $fetch<{ success: boolean; data: SmsGatewaysRecord }>('/api/sms-gateways', {
+      const res = await apiFetch<{ success: boolean; data: SmsGatewaysRecord }>('/api/sms-gateways', {
         method: 'POST',
         body: payload
       })

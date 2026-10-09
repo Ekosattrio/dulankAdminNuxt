@@ -9,7 +9,7 @@ interface ResponseData {
 export function useDeliveryNotes(filterParams?: Ref<DeliveryNoteFilterParams> | DeliveryNoteFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useFetch<ResponseData>('/api/delivery-notes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/delivery-notes', {
     key: 'delivery-notes-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useDeliveryNotes(filterParams?: Ref<DeliveryNoteFilterParams> | 
   const deliveryNotes = computed<DeliveryNote[]>(() => data.value?.data ?? [])
 
   const saveDeliveryNote = async (payload: DeliveryNoteFormData) => {
-    const res = await $fetch<{ success: boolean; data: DeliveryNote; message?: string }>('/api/delivery-notes', {
+    const res = await apiFetch<{ success: boolean; data: DeliveryNote; message?: string }>('/api/delivery-notes', {
       method: 'POST',
       body: payload
     })
@@ -26,7 +26,7 @@ export function useDeliveryNotes(filterParams?: Ref<DeliveryNoteFilterParams> | 
   }
 
   const deleteDeliveryNote = async (id: string) => {
-    const res = await $fetch<{ success: boolean; message?: string }>(`/api/delivery-notes/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/delivery-notes/${id}`, {
       method: 'DELETE'
     })
     await refresh()

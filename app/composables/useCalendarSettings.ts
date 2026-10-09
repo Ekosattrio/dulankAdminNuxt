@@ -6,14 +6,14 @@ interface CalendarResponse {
 }
 
 export function useCalendarSettings() {
-  const { data, pending, error, refresh } = useFetch<CalendarResponse>('/api/calendar-settings', {
+  const { data, pending, error, refresh } = useApiFetch<CalendarResponse>('/api/calendar-settings', {
     key: 'calendar-settings'
   })
 
   const config = computed<CalendarConfig | undefined>(() => data.value?.data)
 
   const saveCalendarConfig = async (payload: CalendarConfig) => {
-    const res = await $fetch<{ success: boolean; data: CalendarConfig; message?: string }>('/api/calendar-settings', {
+    const res = await apiFetch<{ success: boolean; data: CalendarConfig; message?: string }>('/api/calendar-settings', {
       method: 'POST',
       body: payload
     })

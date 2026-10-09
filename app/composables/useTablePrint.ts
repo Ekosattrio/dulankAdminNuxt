@@ -15,9 +15,35 @@ export interface TablePrintOptions {
 export function useTablePrint(options?: TablePrintOptions) {
   const isPrintModalOpen = ref(false)
   const defaultPrintAction = ref<'print' | 'pdf'>('print')
+  const printTitle = ref(options?.title ?? '')
+  const printSubtitle = ref(options?.subtitle ?? '')
+  const printColumns = ref<PrintColumn[]>(options?.columns ?? [])
+  const printRows = ref<Record<string, any>[]>(options?.getItems?.() ?? [])
 
-  function openPrintModal(action: 'print' | 'pdf' = 'print') {
-    defaultPrintAction.value = action
+  function openPrintModal(
+    actionOrConfig: 'print' | 'pdf' | {
+      title: string
+      subtitle?: string
+      columns: PrintColumn[]
+      rows: Record<string, any>[]
+      action?: 'print' | 'pdf'
+    } = 'print',
+  ) {
+    if (typeof actionOrConfig === 'string') {
+      defaultPrintAction.value = actionOrConfig
+      if (options) {
+        printTitle.value = options.title
+        printSubtitle.value = options.subtitle ?? ''
+        printColumns.value = options.columns
+        printRows.value = options.getItems()
+      }
+    } else {
+      defaultPrintAction.value = actionOrConfig.action ?? 'print'
+      printTitle.value = actionOrConfig.title
+      printSubtitle.value = actionOrConfig.subtitle ?? ''
+      printColumns.value = actionOrConfig.columns
+      printRows.value = actionOrConfig.rows
+    }
     isPrintModalOpen.value = true
   }
 
@@ -32,6 +58,12 @@ export function useTablePrint(options?: TablePrintOptions) {
   return {
     isPrintModalOpen,
     defaultPrintAction,
+    /** Compatibility alias retained for report workspaces. */
+    printMode: defaultPrintAction,
+    printTitle,
+    printSubtitle,
+    printColumns,
+    printRows,
     openPrintModal,
     closePrintModal,
     directPrint

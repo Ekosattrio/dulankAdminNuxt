@@ -43,6 +43,15 @@ const filteredList = computed(() => {
   })
 })
 
+const print = useTablePrint()
+const printColumns = [
+  { key: 'name', label: 'Variant' },
+  { key: 'values', label: 'Variant Values' },
+  { key: 'itemUsed', label: 'Item Used', align: 'right' as const },
+  { key: 'createdOn', label: 'Created On' },
+  { key: 'status', label: 'Status' }
+]
+
 const handleAdd = () => {
   isEdit.value = false
   editData.value = null
@@ -94,11 +103,23 @@ const handleSubmit = async (formData: VariantFormData) => {
 }
 
 const printTable = () => {
-  window.print()
+  print.openPrintModal({
+    title: 'Product Variant',
+    subtitle: 'Daftar varian produk dan nilai pilihannya',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'print'
+  })
 }
 
 const exportPdf = () => {
-  showToast('Exporting Variants to PDF...')
+  print.openPrintModal({
+    title: 'Product Variant',
+    subtitle: 'Daftar varian produk dan nilai pilihannya',
+    columns: printColumns,
+    rows: filteredList.value,
+    action: 'pdf'
+  })
 }
 </script>
 
@@ -173,6 +194,17 @@ const exportPdf = () => {
       :busy="isDeleting"
       @cancel="isDeleteConfirmOpen = false"
       @confirm="confirmDelete"
+    />
+
+    <DocumentPrintModal
+      :open="print.isPrintModalOpen.value"
+      :title="print.printTitle.value"
+      :subtitle="print.printSubtitle.value"
+      :columns="print.printColumns.value"
+      :rows="print.printRows.value"
+      :default-action="print.defaultPrintAction.value"
+      :show-date-range="false"
+      @close="print.closePrintModal"
     />
   </div>
 </template>
