@@ -17,7 +17,7 @@ updated: 2026-10-09
 - **Perbaikan kode tanpa ubah perilaku:** `SalesActionButton` menerima alias kompatibilitas `tooltip`/`danger` + `label` opsional; `FeatherIcon` memakai `useAttrs().class` (dukungan class array/objek + TS1261 selesai); guard optional/`noUncheckedIndexedAccess` pada ~35 file; `useMyJobs.updateJobStatus` dan `useBlogs.saveBlog(payload, id?)` (PUT) ditambahkan; `PayrollPageForm` disambungkan ke `usePayslips().savePayslip` (semantik payroll yang sesuai); `EmployeePageForm` memakai kunci `EmployeeFormData` (`name`, `contact1Name`, …); stats Customer/Supplier Due Report kini menghitung `avgDaysDue` dan memakai `totalPurchasesDue` sesuai widget; `LocaleAssign`/`documentPrinter` menerima `align` `start|end`.
 - **Validasi dijalankan:** `npm run typecheck` → **0 error**; `npm run build` → exit 0; `npm run test:sales` → exit 0 (13 grup check). `npm run validate:structure` tetap 8 failure lama (aset legacy Sticky Kit/Summernote, tidak berubah).
 - **Validasi tidak dijalankan:** browser interaktif, mutasi/reload manual, deployment Netlify.
-- **Git:** branch `main`; seluruh perubahan **NOT COMMITTED / NOT PUSHED** (menunggu instruksi pengguna). 746 path berubah (mayoritas rename folder + tulisan ulang impor).
+- **Git:** branch `main`; commit `4c3af89` ("refactor(components): normalisasi PascalCase folder & typecheck 216 -> 0") **PUSHED** ke `origin/main` pada 2026-10-10 — diverifikasi `git ls-remote origin refs/heads/main` = `4c3af898f46244e0072e5c20bd9ff854a1e0554b`. 746 path berubah (mayoritas rename folder + tulisan ulang impor).
 
 ### Resolusi Konflik Merge Working Tree (`refactor/nuxt4` ⇄ `eko`)
 
