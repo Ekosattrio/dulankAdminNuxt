@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CategoryWorkspace from '~/components/category/CategoryWorkspace.vue'
+import CategoryWorkspace from '~/components/Category/CategoryWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

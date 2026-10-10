@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageHeader from "~/components/common/PageHeader.vue";
+import PageHeader from "~/components/Common/PageHeader.vue";
 
 useLegacyPage({
   title: 'Dashboard Admin',

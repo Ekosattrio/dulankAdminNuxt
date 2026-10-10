@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BestSellerWorkspace from '~/components/pages/reports/BestSellerWorkspace.vue'
+import BestSellerWorkspace from '~/components/Pages/Reports/BestSellerWorkspace.vue'
 
 useHead({
   title: 'Bestseller Products Report - Kacetak System'

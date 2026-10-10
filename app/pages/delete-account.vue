@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DeleteAccountWorkspace from '~/components/pages/delete-account/DeleteAccountWorkspace.vue'
+import DeleteAccountWorkspace from '~/components/Pages/DeleteAccount/DeleteAccountWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

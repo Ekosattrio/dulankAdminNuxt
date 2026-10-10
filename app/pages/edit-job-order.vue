@@ -195,7 +195,7 @@
 </template>
 
 <script setup lang="ts">
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 
 definePageMeta({
   layout: 'default'
@@ -265,10 +265,11 @@ function moveStep(idx: number, delta: number) {
   if (!currentProduct.value) return
   const list = currentProduct.value.workflow
   const targetIdx = idx + delta
-  if (targetIdx >= 0 && targetIdx < list.length) {
-    const temp = list[idx]
-    list[idx] = list[targetIdx]
-    list[targetIdx] = temp
+  const current = list[idx]
+  const target = list[targetIdx]
+  if (targetIdx >= 0 && targetIdx < list.length && current && target) {
+    list[idx] = target
+    list[targetIdx] = current
   }
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PayrollPageForm from '~/components/pages/employee-salary/PayrollPageForm.vue'
+import PayrollPageForm from '~/components/Pages/EmployeeSalary/PayrollPageForm.vue'
 
 definePageMeta({
   layout: 'default'

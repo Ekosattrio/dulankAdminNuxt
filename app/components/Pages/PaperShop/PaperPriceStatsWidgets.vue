@@ -1,0 +1,61 @@
+<script setup lang="ts">
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+
+defineProps<{
+  stats: {
+    total: number
+    totalGroups: number
+    active: number
+    deactive: number
+  }
+}>()
+</script>
+
+<template>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Total Kertas -->
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <FeatherIcon name="dollar-sign" :size="24" />
+      </div>
+      <div>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Kertas</p>
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ stats.total }}</h4>
+      </div>
+    </div>
+
+    <!-- Total Group Kertas -->
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+        <FeatherIcon name="layers" :size="24" />
+      </div>
+      <div>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Group Kertas</p>
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ stats.totalGroups }}</h4>
+      </div>
+    </div>
+
+    <!-- Total Active -->
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <FeatherIcon name="check-circle" :size="24" />
+      </div>
+      <div>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Active</p>
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ stats.active }}</h4>
+      </div>
+    </div>
+
+    <!-- Total Deactive -->
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+        <FeatherIcon name="x-circle" :size="24" />
+      </div>
+      <div>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Total Deactive</p>
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ stats.deactive }}</h4>
+      </div>
+    </div>
+  </div>
+</template>
+

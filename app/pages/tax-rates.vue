@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TaxRatesWorkspace from '~/components/pages/setting/TaxRatesWorkspace.vue'
+import TaxRatesWorkspace from '~/components/Pages/Setting/TaxRatesWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

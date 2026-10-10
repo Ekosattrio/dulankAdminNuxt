@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EmailSettingWorkspace from '~/components/pages/setting/EmailSettingWorkspace.vue'
+import EmailSettingWorkspace from '~/components/Pages/Setting/EmailSettingWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

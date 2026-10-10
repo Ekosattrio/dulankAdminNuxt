@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BalanceSheetWorkspace from '~/components/pages/reports/BalanceSheetWorkspace.vue'
+import BalanceSheetWorkspace from '~/components/Pages/Reports/BalanceSheetWorkspace.vue'
 
 useLegacyPage({
   title: 'Balance Sheet',

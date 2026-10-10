@@ -9,6 +9,7 @@ export interface CalculatorDashboardUser {
   role: string
   lastActive: string
   departmentId?: string
+  employeeId?: string
 }
 
 export interface CalculatorDashboardTelemetry {

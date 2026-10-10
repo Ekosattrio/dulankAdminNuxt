@@ -16,7 +16,7 @@
             <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
           </li>
           <li>
             <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
@@ -341,7 +341,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 
 useLegacyPage({
   title: 'Discount',
@@ -551,7 +551,7 @@ const updateDiscount = () => {
   const idx = discounts.value.findIndex(d => d.id === editingId.value)
   if (idx !== -1) {
     discounts.value[idx] = {
-      ...discounts.value[idx],
+      ...discounts.value[idx]!,
       name: formData.value.name,
       value: formData.value.value,
       type: formData.value.type,

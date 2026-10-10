@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProvinceWorkspace from '~/components/pages/location/ProvinceWorkspace.vue'
+import ProvinceWorkspace from '~/components/Pages/Location/ProvinceWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

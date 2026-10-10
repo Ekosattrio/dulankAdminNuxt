@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Product, ProductImportRow } from '#server/types/product'
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
-import ProductImportModal from '~/components/pages/products-services/ProductImportModal.vue'
-import ProductRecordsTable from '~/components/pages/products-services/ProductRecordsTable.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
+import ProductImportModal from '~/components/Pages/ProductsServices/ProductImportModal.vue'
+import ProductRecordsTable from '~/components/Pages/ProductsServices/ProductRecordsTable.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({ layout: 'default' })

@@ -3,10 +3,10 @@ import type { JobBranchItem, JobBranchUpdatePayload } from '#server/types/job-br
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useJobBranches } from '~/composables/useJobBranches'
 import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
-import JobBranchRecordsTable from '~/components/pages/job-branch/JobBranchRecordsTable.vue'
-import JobBranchSettingModal from '~/components/pages/job-branch/JobBranchSettingModal.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import JobBranchRecordsTable from '~/components/Pages/JobBranch/JobBranchRecordsTable.vue'
+import JobBranchSettingModal from '~/components/Pages/JobBranch/JobBranchSettingModal.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Job Branch', sweetAlert: false })
 
@@ -50,9 +50,9 @@ async function handleSettingSubmit(payload: JobBranchUpdatePayload) {
   }
 }
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
-import JobBranchHistoryModal from '~/components/pages/job-branch/JobBranchHistoryModal.vue'
+import JobBranchHistoryModal from '~/components/Pages/JobBranch/JobBranchHistoryModal.vue'
 
 const isHistoryModalOpen = ref(false)
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

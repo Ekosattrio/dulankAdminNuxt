@@ -17,6 +17,9 @@ export interface CustomerAddress {
   otherDetail: string
   status: string
   date: string
+  /** Supplier-shaped fields kept optional for shared address tables. */
+  fullAddress?: string
+  dateAdded?: string
 }
 
 export interface SupplierAddress {

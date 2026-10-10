@@ -25,7 +25,7 @@ Customer, Supplier, Address, dan Store membutuhkan ID stabil. Tampilan nama tida
 
 ## Compatibility
 
-Komponen baru berada di `app/components/pages/`; path view modal lama dipulihkan untuk kompatibilitas.
+Komponen baru berada di `app/components/Pages/`; path view modal lama dipulihkan untuk kompatibilitas.
 
 ## Verification Gate
 

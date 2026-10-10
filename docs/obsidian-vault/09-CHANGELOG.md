@@ -6,6 +6,19 @@ updated: 2026-10-09
 
 ## 2026-10-09
 
+### Standardisasi PascalCase Folder Komponen & Pembersihan Typecheck (216 → 0)
+
+- **Date:** 2026-10-09
+- **Actor:** AI Assistant (OpenCode)
+- **Scope:** Instruksi pengguna: seluruh folder & file di `app/components` memakai PascalCase. Serta penyelesaian seluruh error `npm run typecheck` (216 → 0) yang tersisa dari resolusi merge.
+- **Rename folder:** 134 direktori di bawah `app/components` dikonversi ke PascalCase rekursif (`common` → `Common`, `sales` → `Sales`, `layout` → `Layout`, `modal` → `Modal`, `pages/*` → `Pages/*`, dll.), termasuk subfolder nested. `MIGRATION_MANIFEST.json`, docs (`AGENTS.md`, `CLAUDE.md`, `AI_HANDOVER_GUIDE.md`), dan seluruh referensi impor diperbarui (568 file).
+- **Konsolidasi duplikat:** set yang tersuperseded dimerger ke folder kanonik (isi kanonik menang saat nama file sama): `common/` → `Common/`, `forms/` → `Forms/`, `dashboard/` → `Dashboard/`, `table/` → `Table/`. Duplikat murni yang tidak direferensikan dihapus: `Tables/DataTable.vue` (set superseded), `Common/BaseModal.vue` & `Common/ConfirmModal.vue` (kanonik di `Modal/`). `nuxt.config.ts` tidak lagi meng-ignore `Common/Dashboard/Forms/Tables`; `App/**` tetap di-ignore (dipakai lewat impor eksplisit).
+- **Impor relatif:** 47 impor `./<kebab-dir>/…` di dalam `Pages/*` diperbaiki ke pasangan PascalCase (mis. `./ban-ip/BanIpTable.vue` → `./BanIp/BanIpTable.vue`) agar Vite/tree typecheck konsisten.
+- **Perbaikan kode tanpa ubah perilaku:** `SalesActionButton` menerima alias kompatibilitas `tooltip`/`danger` + `label` opsional; `FeatherIcon` memakai `useAttrs().class` (dukungan class array/objek + TS1261 selesai); guard optional/`noUncheckedIndexedAccess` pada ~35 file; `useMyJobs.updateJobStatus` dan `useBlogs.saveBlog(payload, id?)` (PUT) ditambahkan; `PayrollPageForm` disambungkan ke `usePayslips().savePayslip` (semantik payroll yang sesuai); `EmployeePageForm` memakai kunci `EmployeeFormData` (`name`, `contact1Name`, …); stats Customer/Supplier Due Report kini menghitung `avgDaysDue` dan memakai `totalPurchasesDue` sesuai widget; `LocaleAssign`/`documentPrinter` menerima `align` `start|end`.
+- **Validasi dijalankan:** `npm run typecheck` → **0 error**; `npm run build` → exit 0; `npm run test:sales` → exit 0 (13 grup check). `npm run validate:structure` tetap 8 failure lama (aset legacy Sticky Kit/Summernote, tidak berubah).
+- **Validasi tidak dijalankan:** browser interaktif, mutasi/reload manual, deployment Netlify.
+- **Git:** branch `main`; seluruh perubahan **NOT COMMITTED / NOT PUSHED** (menunggu instruksi pengguna). 746 path berubah (mayoritas rename folder + tulisan ulang impor).
+
 ### Resolusi Konflik Merge Working Tree (`refactor/nuxt4` ⇄ `eko`)
 
 - **Date:** 2026-10-09
@@ -17,7 +30,7 @@ updated: 2026-10-09
 - **Perbaikan typecheck kecil pada file refactor (tanpa perubahan perilaku):** `server/utils/mockStore.ts` (non-null assertion pada koleksi utama), `app/composables/useMockSync.ts` (`$fetch` → `apiFetch` boundary milik eko), `app/assets/plugins/morris/raphael-min.js` (`// @ts-nocheck` pada vendor file).
 - **Validasi dijalankan:** `npm install` (exit 0); `npx tsc --noEmit --pretty false` (**0 error**); `npm run build` (exit 0, Nitro node-server); runtime `.output/server/index.mjs` + curl 30 rute halaman (semua HTTP 200), `/api/address` dan `/api/job-list` mengembalikan kontrak eko (handler eko menang atas route statis refactor yang bentrok path), `/api/health` OK; `npm run test:sales` (13 grup check lulus); `npm run validate:structure` (8 failure lama aset legacy Sticky Kit/Summernote, tidak ada failure baru).
 - **Validasi tidak dijalankan:** browser interaktif desktop/390px, mutasi/reload manual, dan deployment Netlify; `npm run typecheck` (vue-tsc) membutuhkan heap besar dan masih melaporkan error template lama di luar cakupan.
-- **Risiko tersisa:** (1) `app/components/pages/employee-salary/PayrollPageForm.vue` masih memakai `<FormsNumberInput>` yang tidak dapat di-resolve — bug bawaan eko `e406f23`, bukan akibat merge; komponen yang tersedia adalah `forms/NumberInput.vue` (`<NumberInput>`). (2) Direktori yang hanya berbeda kapitalisasi (`common`/`Common`, `forms`/`Forms`, `table`/`Tables`) menyulitkan checkout pada filesystem case-insensitive (macOS/Windows); semuanya refactor-only dan tidak dipakai app. (3) Perbedaan terhadap `1bf2eac` = 1.923 file penambahan refactor + 3 file hasil resolusi (`nuxt.config.ts`, `package.json`, `package-lock.json`).
+- **Risiko tersisa:** (1) `app/components/Pages/EmployeeSalary/PayrollPageForm.vue` masih memakai `<FormsNumberInput>` yang tidak dapat di-resolve — bug bawaan eko `e406f23`, bukan akibat merge; komponen yang tersedia adalah `forms/NumberInput.vue` (`<NumberInput>`). (2) Direktori yang hanya berbeda kapitalisasi (`common`/`Common`, `forms`/`Forms`, `table`/`Tables`) menyulitkan checkout pada filesystem case-insensitive (macOS/Windows); semuanya refactor-only dan tidak dipakai app. (3) Perbedaan terhadap `1bf2eac` = 1.923 file penambahan refactor + 3 file hasil resolusi (`nuxt.config.ts`, `package.json`, `package-lock.json`).
 - **Git:** branch `main`; commit resolusi `358e7e8` ("fix: selesaikan konflik merge refactor/nuxt4 ⇄ eko") dibuat dan di-push atas instruksi pengguna (2026-10-09); push status `PUSHED` — `origin/main` diverifikasi = `358e7e89df68468d8f31b52f40b03f55c63053b0` via `git ls-remote`; catatan status ini di-commit terpisah setelah push.
 
 ### Persiapan Commit dan Push Branch Eko
@@ -117,14 +130,14 @@ updated: 2026-10-09
 - **Scope:** Verifikasi build produksi Nuxt secara nyata (`nuxt prepare` & `nuxt build`), eliminasi syntax error compiler SFC, eliminasi 100% warning resolusi duplikat komponen & auto-import skema, serta audit baris kode riil pada halaman-halaman yang sedang dibuka pengguna (`bank-account.vue`, `expenses.vue`, `edit-job-order.vue`).
 - **Changed files:**
   - `nuxt.config.ts` (ignore `my-incentive/**`, `my-job/**` agar tidak bentrok dengan `pages/my-incentive` & `pages/my-job`)
-  - `app/components/pages/setting/pos/PosSettingsReceiptPreview.vue` (rename dari `PosReceiptPreview.vue` mencegah collision dengan POS utama)
-  - `app/components/pages/setting/PosSettingsWorkspace.vue` (update import dan tag komponen)
+  - `app/components/Pages/Setting/Pos/PosSettingsReceiptPreview.vue` (rename dari `PosReceiptPreview.vue` mencegah collision dengan POS utama)
+  - `app/components/Pages/Setting/PosSettingsWorkspace.vue` (update import dan tag komponen)
   - `app/utils/calendarSchemas.ts` (prefix `calendar*` pada seluruh export kolom dan field)
-  - `app/components/pages/products-services/CalendarWorkspace.vue` (update binding schema `calendar*`)
+  - `app/components/Pages/ProductsServices/CalendarWorkspace.vue` (update binding schema `calendar*`)
   - `app/utils/cetakFullColorSchemas.ts` (prefix `cetakFullColor*` pada seluruh export kolom dan field)
-  - `app/components/pages/products-services/CetakFullColorWorkspace.vue` (update binding schema `cetakFullColor*`)
-  - `app/components/pages/employee-salary/PayrollPageForm.vue` (perbaikan syntax error: penutupan kurung `resetForm` dan import `useEmployeeSalaries` ke level atas)
-  - `app/components/pages/employees/EmployeePageForm.vue` (penataan import di top level script)
+  - `app/components/Pages/ProductsServices/CetakFullColorWorkspace.vue` (update binding schema `cetakFullColor*`)
+  - `app/components/Pages/EmployeeSalary/PayrollPageForm.vue` (perbaikan syntax error: penutupan kurung `resetForm` dan import `useEmployeeSalaries` ke level atas)
+  - `app/components/Pages/Employees/EmployeePageForm.vue` (penataan import di top level script)
   - `app/composables/useProductEditor.ts` (perbaikan import `salesErrorMessage` dari `~/utils/salesDocuments`)
   - `app/utils/salesUi.ts` (re-export `salesErrorMessage` dari `./salesDocuments`)
   - `docs/PAGE_CLEANLINESS_AND_STATUS_MATRIX.md` (penambahan Section 5: Daftar Prioritas To-Do Next)
@@ -186,20 +199,20 @@ updated: 2026-10-09
   - `app/composables/usePaymentGateways.ts`
   - `app/composables/useAppearance.ts`
   - `app/composables/usePreferences.ts`
-  - `app/components/pages/setting/BankSettingsGridWorkspace.vue`
-  - `app/components/pages/setting/BankSettingsListWorkspace.vue`
-  - `app/components/pages/setting/CurrencySettingsWorkspace.vue`
-  - `app/components/pages/setting/PrinterSettingsWorkspace.vue`
-  - `app/components/pages/setting/GdprSettingsWorkspace.vue`
-  - `app/components/pages/setting/StorageSettingsWorkspace.vue`
-  - `app/components/pages/setting/SmsGatewayWorkspace.vue`
-  - `app/components/pages/setting/PaymentGatewayWorkspace.vue`
-  - `app/components/pages/setting/AppearanceWorkspace.vue`
-  - `app/components/pages/setting/PreferenceWorkspace.vue`
-  - `app/components/pages/employees/EmployeePageForm.vue`
-  - `app/components/pages/employee-salary/PayrollPageForm.vue`
-  - `app/components/pages/roles/PermissionsWorkspace.vue`
-  - `app/components/designation/DesignationWorkspace.vue`
+  - `app/components/Pages/Setting/BankSettingsGridWorkspace.vue`
+  - `app/components/Pages/Setting/BankSettingsListWorkspace.vue`
+  - `app/components/Pages/Setting/CurrencySettingsWorkspace.vue`
+  - `app/components/Pages/Setting/PrinterSettingsWorkspace.vue`
+  - `app/components/Pages/Setting/GdprSettingsWorkspace.vue`
+  - `app/components/Pages/Setting/StorageSettingsWorkspace.vue`
+  - `app/components/Pages/Setting/SmsGatewayWorkspace.vue`
+  - `app/components/Pages/Setting/PaymentGatewayWorkspace.vue`
+  - `app/components/Pages/Setting/AppearanceWorkspace.vue`
+  - `app/components/Pages/Setting/PreferenceWorkspace.vue`
+  - `app/components/Pages/Employees/EmployeePageForm.vue`
+  - `app/components/Pages/EmployeeSalary/PayrollPageForm.vue`
+  - `app/components/Pages/Roles/PermissionsWorkspace.vue`
+  - `app/components/Designation/DesignationWorkspace.vue`
   - `docs/PAGE_CLEANLINESS_AND_STATUS_MATRIX.md`
   - `AI_HANDOVER_GUIDE.md`
   - `docs/obsidian-vault/09-CHANGELOG.md`
@@ -208,7 +221,7 @@ updated: 2026-10-09
   - **BRVS Penuh untuk 9 Modul Setting:** Menghadirkan kontrak TypeScript (`server/types/`), mock data JSON relasional & numerik murni terdaftar di `server/utils/bundledData.ts`, endpoint Nitro tipis (`GET`, `POST`, `DELETE`), composable domain, dan refaktorisasi workspace menjadi reaktif asinkron tanpa mutasi lokal.
   - **Pembersihan Inkonsistensi Dokumen:** Menghilangkan blok teks duplikat dan saling bertentangan pada Section 3.1.1 `PAGE_CLEANLINESS_AND_STATUS_MATRIX.md`, menyinkronkan data baris dan status pada Tabel F Setting Group ke data kode nyata.
 - **Validation run:**
-  - Audit pencarian `alert()` dan `confirm()` pada `app/components/pages/`: 0 penggunaan aktif tersisa (hanya 7 file workspace kalkulator usang yang sudah tidak lagi diimpor).
+  - Audit pencarian `alert()` dan `confirm()` pada `app/components/Pages/`: 0 penggunaan aktif tersisa (hanya 7 file workspace kalkulator usang yang sudah tidak lagi diimpor).
   - Pengecekan pendaftaran `bundledSources` di `server/utils/bundledData.ts`: 9 file JSON baru terdaftar lengkap.
   - Live API Verification: seluruh 9 endpoint baru (`/api/bank-settings`, `/api/currency-settings`, `/api/printer-settings`, `/api/gdpr-settings`, `/api/storage-settings`, `/api/sms-gateways`, `/api/payment-gateways`, `/api/appearance`, `/api/preferences`) mengembalikan HTTP 200 OK.
   - Live SSR Verification: seluruh 14 rute halaman terkait (`/bank-settings-grid`, `/bank-settings-list`, `/currency-settings`, `/printer-settings`, `/gdpr-settings`, `/storage-settings`, `/sms-gateway`, `/payment-gateway`, `/appearance`, `/preference`, `/employees`, `/employee-salary`, `/payslip`, `/designation`) merespons HTTP 200 OK.
@@ -280,26 +293,26 @@ updated: 2026-10-09
   - Paper List: `/kertas-jenis-self` (`app/pages/kertas-jenis-self.vue`)
 - **Changed files:**
   - `app/pages/incentive.vue`
-  - `app/components/incentive/IncentiveTable.vue`
-  - `app/components/incentive/IncentiveModal.vue`
+  - `app/components/Incentive/IncentiveTable.vue`
+  - `app/components/Incentive/IncentiveModal.vue`
   - `app/pages/kertas-group-self.vue`
   - `app/pages/kertas-ukuran-self.vue`
   - `app/pages/kertas-harga-self.vue`
   - `app/pages/kertas-jenis-self.vue`
-  - `app/components/pages/paper-shop/PaperGroupStatsWidgets.vue`
-  - `app/components/pages/paper-shop/PaperGroupRecordsTable.vue`
-  - `app/components/pages/paper-shop/PaperGroupFormModal.vue`
-  - `app/components/pages/paper-shop/PaperGroupViewModal.vue`
-  - `app/components/pages/paper-shop/PaperSizeStatsWidgets.vue`
-  - `app/components/pages/paper-shop/PaperSizeRecordsTable.vue`
-  - `app/components/pages/paper-shop/PaperSizeFormModal.vue`
-  - `app/components/pages/paper-shop/PaperListStatsWidgets.vue`
-  - `app/components/pages/paper-shop/PaperListRecordsTable.vue`
-  - `app/components/pages/paper-shop/PaperListFormModal.vue`
-  - `app/components/pages/paper-shop/PaperListViewModal.vue`
-  - `app/components/pages/paper-shop/PaperPriceStatsWidgets.vue`
-  - `app/components/pages/paper-shop/PaperPriceRecordsTable.vue`
-  - `app/components/pages/paper-shop/PaperPriceFormModal.vue`
+  - `app/components/Pages/PaperShop/PaperGroupStatsWidgets.vue`
+  - `app/components/Pages/PaperShop/PaperGroupRecordsTable.vue`
+  - `app/components/Pages/PaperShop/PaperGroupFormModal.vue`
+  - `app/components/Pages/PaperShop/PaperGroupViewModal.vue`
+  - `app/components/Pages/PaperShop/PaperSizeStatsWidgets.vue`
+  - `app/components/Pages/PaperShop/PaperSizeRecordsTable.vue`
+  - `app/components/Pages/PaperShop/PaperSizeFormModal.vue`
+  - `app/components/Pages/PaperShop/PaperListStatsWidgets.vue`
+  - `app/components/Pages/PaperShop/PaperListRecordsTable.vue`
+  - `app/components/Pages/PaperShop/PaperListFormModal.vue`
+  - `app/components/Pages/PaperShop/PaperListViewModal.vue`
+  - `app/components/Pages/PaperShop/PaperPriceStatsWidgets.vue`
+  - `app/components/Pages/PaperShop/PaperPriceRecordsTable.vue`
+  - `app/components/Pages/PaperShop/PaperPriceFormModal.vue`
   - `app/composables/usePaperGroupsSelf.ts`
   - `app/composables/usePaperSizesSelf.ts`
   - `app/composables/usePaperItemsSelf.ts`
@@ -317,7 +330,7 @@ updated: 2026-10-09
   - `docs/obsidian-vault/09-CHANGELOG.md`
 - **Behavior/architecture changed:**
   - **HRM Incentive Gap Resolved:** Menghilangkan browser dialog `confirm()` pada `incentive.vue` dengan menggantinya memakai `<SalesConfirmDelete>`, menambahkan `<SalesListHeader>`, toolbar `<TableFilterSelect>`, dan feedback status `<SalesFeedback>`. Memperbarui `IncentiveTable` dengan Tailwind, `SalesActionButton`, `CurrencyDisplay`, dan `IncentiveModal` dengan CSS grid 12-kolom dan `CurrencyInput`. Menuntaskan rapor HRM menjadi 100% (12/12 rute) Full Decomposed Verified.
-  - **Pemberantasan Monolithic Workspace pada Paper Shop:** Membongkar ketergantungan pada monolithic workspace `KertasGroupSelfWorkspace.vue` (341 baris) dan `KertasJenisSelfWorkspace.vue` (334 baris) menjadi 14 leaf components terdedikasi ($\le 250$ baris) di `app/components/pages/paper-shop/`.
+  - **Pemberantasan Monolithic Workspace pada Paper Shop:** Membongkar ketergantungan pada monolithic workspace `KertasGroupSelfWorkspace.vue` (341 baris) dan `KertasJenisSelfWorkspace.vue` (334 baris) menjadi 14 leaf components terdedikasi ($\le 250$ baris) di `app/components/Pages/PaperShop/`.
   - **Arsitektur BRVS Lengkap:** Menerapkan rantai `Page (<130 baris) -> Domain Leaf Components -> Composable -> Nitro API -> Server Domain Utility -> Typed Relational Data (PK id, FK groupId/sizeId/paperId, numeric money/stock)`.
   - **Netlify Serverless Ready:** Mendaftarkan dataset baru `paper-groups-self.json` dan `paper-items-self.json` ke `bundledSources` di `server/utils/bundledData.ts`.
 - **Validation run:**
@@ -347,7 +360,7 @@ updated: 2026-10-09
   - Mengidentifikasi 70 rute yang masih berupa *Anti-Pattern Monolithic Workspace* (>200 s.d 672 baris) di grup Setting (22 rute), Reports (17 rute), Cetak Full Color & Calendar (2 rute), serta Calculator Self (4 rute >300 baris).
   - Mengidentifikasi gap dialog native `confirm()` dan filter markup langsung pada `app/pages/incentive.vue`.
 - **Validation run:**
-  - Audit kode statis terhadap 121 rute dan folder komponen di `app/components/pages/`.
+  - Audit kode statis terhadap 121 rute dan folder komponen di `app/components/Pages/`.
   - Pemeriksaan kelengkapan kolom dan format tabel Markdown.
 - **Validation not run:** Mutasi kode/file Vue dan Git commit tidak dijalankan sesuai pantangan mutlak.
 - **Feature/BRVS status:** Audit & Matrix Documentation Updated; Sales & Payments tetap Approved Baseline, Webstore/Peoples/HRM-Employees 100% Decomposed Verified, Setting & Reports diklasifikasikan Partial BRVS karena Monolithic Workspace & non-relational backend.
@@ -375,12 +388,12 @@ updated: 2026-10-09
 - **Remaining risks:** matrix lama masih memuat banyak row historis berlabel `VERIFIED`; setiap row wajib diaudit ulang memakai BRVS-UI sebelum dijadikan klaim aktual.
 
 - **Pembersihan Skala Penuh & Standardisasi Arsitektur Halaman (BRVS Page Gate Compliance)** pada seluruh 9 grup menu yang diinstruksikan pengguna (Total 100 rute aktif terverifikasi 100% **HTTP 200 OK** dan strictly $\le 130$ baris, rata-rata 12–19 baris):
-  1. **SETTING (22 rute)**: Seluruh 22 halaman setting (`company-setting`, `email-setting`, `invoice-setting`, `prefixes`, `tax-rates`, `pos-settings`, `system-setting`, `custom-field`, `currency-settings`, `printer-settings`, `gdpr-settings`, `security-settings`, `storage-settings`, `bank-settings-grid`, `bank-settings-list`, `ban-ip-address`, `sms-gateway`, `payment-gateway`, `social-authentication`, `appearance`, `localization`, `preference`) didekomposisi ke domain workspace di `app/components/pages/setting/` dan page wrapper bersih 14–19 baris.
+  1. **SETTING (22 rute)**: Seluruh 22 halaman setting (`company-setting`, `email-setting`, `invoice-setting`, `prefixes`, `tax-rates`, `pos-settings`, `system-setting`, `custom-field`, `currency-settings`, `printer-settings`, `gdpr-settings`, `security-settings`, `storage-settings`, `bank-settings-grid`, `bank-settings-list`, `ban-ip-address`, `sms-gateway`, `payment-gateway`, `social-authentication`, `appearance`, `localization`, `preference`) didekomposisi ke domain workspace di `app/components/Pages/Setting/` dan page wrapper bersih 14–19 baris.
   2. **CALCULATOR APPS (13 rute)**: `kalkulator-dashboard` (817 baris $\rightarrow$ 19 baris), `harga-jasa-lainya` (326 baris $\rightarrow$ 19 baris), `kertas-group-self` (341 baris $\rightarrow$ 19 baris), `kertas-jenis-self` (334 baris $\rightarrow$ 19 baris), `komponen-fiks` (258 baris $\rightarrow$ 19 baris), `komponen-minimum` (271 baris $\rightarrow$ 19 baris), `kertas-harga-self` (19 baris), `kertas-ukuran-self` (19 baris), beserta 5 rute partner/listing publik (10-11 baris).
   3. **PRODUCTS & SERVICES (10 rute)**: `add-product-process` (280 baris $\rightarrow$ 19 baris via `AddProductProcessWorkspace.vue`), `category`, `sub-category`, `unit`, `variant` (154-163 baris $\rightarrow$ 14 baris), serta `create-product` (13 baris), `cetak-full-color` (81 baris), `calender` (77 baris), `product-list` (100 baris), `product-details` (80 baris).
   4. **USER MANAGEMENT (6 rute)**: `permissions` (212 baris $\rightarrow$ 19 baris via `PermissionsWorkspace.vue`), `user`, `user-admin`, `role`, `role-permissions`, `delete-account` (19 baris).
   5. **CONTENT (10 rute)**: `all-blog`, `blog-category`, `blog-comment`, `blog-tag`, `faq`, `banner`, `download-files`, `our-client`, `footer`, `language` (12-19 baris).
-  6. **REPORT & FINANCIAL (17 rute)**: Seluruh 14 rute laporan analitik plus `balance-sheet` (191 baris $\rightarrow$ 19 baris), `account-statement` (216 baris $\rightarrow$ 19 baris), dan `balance-account` (200 baris $\rightarrow$ 19 baris) didekomposisi ke `app/components/pages/reports/`.
+  6. **REPORT & FINANCIAL (17 rute)**: Seluruh 14 rute laporan analitik plus `balance-sheet` (191 baris $\rightarrow$ 19 baris), `account-statement` (216 baris $\rightarrow$ 19 baris), dan `balance-account` (200 baris $\rightarrow$ 19 baris) didekomposisi ke `app/components/Pages/Reports/`.
   7. **HRM (10 rute)**: Implementasi shared form reusable `EmployeePageForm.vue` menyatukan `add-employee` (304 baris $\rightarrow$ 14 baris) dan `edit-employee` (306 baris $\rightarrow$ 14 baris); shared `PayrollPageForm.vue` menyatukan `add-payroll` (460 baris $\rightarrow$ 14 baris) dan `edit-payroll` (460 baris $\rightarrow$ 14 baris); `payslip-detail` (256 baris $\rightarrow$ 14 baris); `designation` (138 baris $\rightarrow$ 14 baris); serta `employees`, `employee-salary`, `payslip`, `department` (12 baris).
   8. **PEOPLES (5 rute)**: `supplier`, `customers`, `address`, `store-list`, `customer-type` (12 baris).
   9. **WEBSTORE (6 rute)**: `cart`, `checkout`, `wishlist`, `reviews`, `contact-form`, `orders` (komposisi modul domain $\le 130$ baris).

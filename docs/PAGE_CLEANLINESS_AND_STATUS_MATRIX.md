@@ -47,10 +47,10 @@ Arsitektur resmi repositori ini adalah **Backend-Ready Vertical Slice (BRVS)**. 
 
 ```vue
 <script setup lang="ts">
-import ExampleFilters from "~/components/pages/example/ExampleFilters.vue";
-import ExampleFormModal from "~/components/pages/example/ExampleFormModal.vue";
-import ExampleHeader from "~/components/pages/example/ExampleHeader.vue";
-import ExampleRecordsTable from "~/components/pages/example/ExampleRecordsTable.vue";
+import ExampleFilters from "~/components/Pages/example/ExampleFilters.vue";
+import ExampleFormModal from "~/components/Pages/example/ExampleFormModal.vue";
+import ExampleHeader from "~/components/Pages/example/ExampleHeader.vue";
+import ExampleRecordsTable from "~/components/Pages/example/ExampleRecordsTable.vue";
 
 definePageMeta({ layout: "default" });
 useLegacyPage({ title: "Nama Halaman", sweetAlert: false });
@@ -361,7 +361,7 @@ Tabel detail route di bawah dipertahankan sebagai inventory implementasi histori
 
 | Grup Menu               | Daftar Halaman                                                                             |    Status Saat Ini    | Rencana Kerja                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------ | :-------------------: | ---------------------------------------------------------- |
-| **Inventory & Stock**   | `expired-products`, `low-stocks`, `category-list`, `sub-categories`, `brand-list`, `units` |      ⚪ PENDING       | Dekomposisi ke `components/pages/inventory/`               |
+| **Inventory & Stock**   | `expired-products`, `low-stocks`, `category-list`, `sub-categories`, `brand-list`, `units` |      ⚪ PENDING       | Dekomposisi ke `components/Pages/inventory/`               |
 | **Finance & Cash**      | `bank-account`, `money-transfer`, `cash-advance`, `balance-account`, `account-statement`, `cash-flow`, `balance-sheet`, `input-tax`, `output-tax`, serta ledger `income`/`expenses` | Implemented, static verification passed | Browser CRUD/reload, rekonsiliasi, print/PDF, dan persistence verification |
 | **Purchases**           | `purchase`, `purchase-order`, `purchase-return`, `purchase-item`, `purchase-category`      | ⚪ PENDING (Imported) | Audit validasi server, ID generation, legacy fidelity      |
 | **Promo & Marketing**   | `discount`, `discount-plan`, `coupon`, `voucher`                                           |      ⚪ PENDING       | Pembuatan form promo & relasi diskon                       |
@@ -397,7 +397,7 @@ Wajib ikuti alur kerja 6 langkah ini:
 
 ### Langkah 4: Buat UI Responsibility Map dan Komponen Domain
 
-1. Buat folder `app/components/pages/<nama-menu>/`.
+1. Buat folder `app/components/Pages/<nama-menu>/`.
 2. Petakan Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor, Detail/History/Modal, dan Feedback sebagai tanggung jawab terpisah.
 3. Buat komponen tabel: gunakan `<SalesDataTable>` (teks 14px `text-sm`, tinggi kontrol `h-9`).
 4. Buat komponen form modal: form Add dan Edit **wajib disatukan** dalam satu file komponen (`mode="add" | "edit"`).
@@ -485,7 +485,7 @@ Rantai Finance utama sudah diimplementasikan: type, relational JSON/bundled sour
 1. **Runtime Finance:** uji Add/Edit/View/Delete, insufficient balance, paired transfer ledger, Cash Advance payment guard, source transaction Tax, reload persistence, empty state, print/PDF, desktop, dan 390px.
 2. **`expenses.vue`** (Saat ini: 200 baris) & **`expense-category.vue`** (Saat ini: 178 baris)
    - Acuan: `legacy/static-source/expenses.html`, `legacy/static-source/expense-category.html`
-   - Dekomposisi tabel dan modal form ke leaf components terpisah di `app/components/pages/expenses/` dan `app/components/pages/expense-category/`
+   - Dekomposisi tabel dan modal form ke leaf components terpisah di `app/components/Pages/expenses/` dan `app/components/Pages/expense-category/`
    - Hubungkan ke backend API `/api/expenses` dan `/api/expense-categories`
 3. **`income.vue`** (199 baris)
    - Ledger/account relation sudah aktif; ekstrak koordinasi page tersisa agar kembali di bawah 150 baris.
@@ -498,8 +498,8 @@ Rantai Finance utama sudah diimplementasikan: type, relational JSON/bundled sour
 
 ### Prioritas 3: Calculator Apps (Penyelesaian Komponen Leaf Tersisa)
 1. **`harga-jasa-lainya.vue`**, **`komponen-minimum.vue`**, **`komponen-fiks.vue`**
-   - Memastikan integrasi penuh menggunakan leaf components di `app/components/pages/calculator/components/` dan composable API terkait.
-   - Evaluasi penghapusan aman untuk 7 workspace monolitik usang di `app/components/pages/calculator/`.
+   - Memastikan integrasi penuh menggunakan leaf components di `app/components/Pages/Calculator/Components/` dan composable API terkait.
+   - Evaluasi penghapusan aman untuk 7 workspace monolitik usang di `app/components/Pages/Calculator/`.
 
 ### Prioritas 4: Inventory & Products Sisa
 1. **`category-list.vue`**, **`sub-categories.vue`**, **`brand-list.vue`**, **`units.vue`**, **`variant.vue`**

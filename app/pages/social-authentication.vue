@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SocialAuthenticationWorkspace from '~/components/pages/setting/SocialAuthenticationWorkspace.vue'
+import SocialAuthenticationWorkspace from '~/components/Pages/Setting/SocialAuthenticationWorkspace.vue'
 
 useLegacyPage({
   title: 'Social Authentication',

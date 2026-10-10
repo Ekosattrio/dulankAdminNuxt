@@ -2,12 +2,12 @@
 import type { CheckoutFilterQuery } from '#server/types/checkout'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useCheckouts } from '~/composables/useCheckouts'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import CheckoutStatsWidgets from '~/components/pages/checkout/CheckoutStatsWidgets.vue'
-import CheckoutRecordsTable from '~/components/pages/checkout/CheckoutRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import CheckoutStatsWidgets from '~/components/Pages/Checkout/CheckoutStatsWidgets.vue'
+import CheckoutRecordsTable from '~/components/Pages/Checkout/CheckoutRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

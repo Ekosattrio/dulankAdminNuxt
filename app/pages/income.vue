@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { IncomeRecord, IncomeFormData } from '~/types/income'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import PagesIncomeModal from '~/components/income/IncomeModal.vue'
-import PagesIncomeTable from '~/components/income/IncomeTable.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import PagesIncomeModal from '~/components/Income/IncomeModal.vue'
+import PagesIncomeTable from '~/components/Income/IncomeTable.vue'
 import { formatIDR } from '~/utils/currency'
 
 definePageMeta({
@@ -62,7 +62,7 @@ const printColumns = [
   { key: 'notes', label: 'Notes' }
 ]
 
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 
 const isDeleteConfirmOpen = ref(false)
 const deleteTargetId = ref<string | null>(null)
@@ -141,7 +141,7 @@ const printTable = () => {
               </button>
             </li>
             <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
+              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
                 <FeatherIcon name="rotate-cw" size="16" />
               </button>
             </li>

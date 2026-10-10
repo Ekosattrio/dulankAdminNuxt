@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BlogTagWorkspace from '~/components/blog/BlogTagWorkspace.vue'
+import BlogTagWorkspace from '~/components/Blog/BlogTagWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

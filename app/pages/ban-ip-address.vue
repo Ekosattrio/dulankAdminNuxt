@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BanIpAddressWorkspace from '~/components/pages/setting/BanIpAddressWorkspace.vue'
+import BanIpAddressWorkspace from '~/components/Pages/Setting/BanIpAddressWorkspace.vue'
 
 useLegacyPage({
   title: 'Ban IP Address',

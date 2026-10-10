@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrefixesSettingWorkspace from '~/components/pages/setting/PrefixesSettingWorkspace.vue'
+import PrefixesSettingWorkspace from '~/components/Pages/Setting/PrefixesSettingWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

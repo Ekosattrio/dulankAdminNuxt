@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SmsGatewayWorkspace from '~/components/pages/setting/SmsGatewayWorkspace.vue'
+import SmsGatewayWorkspace from '~/components/Pages/Setting/SmsGatewayWorkspace.vue'
 
 useLegacyPage({
   title: 'SMS Gateways',

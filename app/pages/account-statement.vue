@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AccountStatementWorkspace from '~/components/pages/reports/AccountStatementWorkspace.vue'
+import AccountStatementWorkspace from '~/components/Pages/Reports/AccountStatementWorkspace.vue'
 
 useLegacyPage({
   title: 'Account Statement',

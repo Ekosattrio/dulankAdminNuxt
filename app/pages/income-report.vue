@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IncomeReportWorkspace from '~/components/pages/reports/IncomeReportWorkspace.vue'
+import IncomeReportWorkspace from '~/components/Pages/Reports/IncomeReportWorkspace.vue'
 
 useHead({
   title: 'Income Report - Kacetak System'

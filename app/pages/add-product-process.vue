@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { ProductProcessItem, ProductProcessFormData } from '#server/types/product-process'
-import ProductProcessStatsWidgets from '~/components/pages/products-services/ProductProcessStatsWidgets.vue'
-import ProductProcessRecordsTable from '~/components/pages/products-services/ProductProcessRecordsTable.vue'
-import ProductProcessFormModal from '~/components/pages/products-services/ProductProcessFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import ProductProcessStatsWidgets from '~/components/Pages/ProductsServices/ProductProcessStatsWidgets.vue'
+import ProductProcessRecordsTable from '~/components/Pages/ProductsServices/ProductProcessRecordsTable.vue'
+import ProductProcessFormModal from '~/components/Pages/ProductsServices/ProductProcessFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserAdminWorkspace from '~/components/pages/user-admin/UserAdminWorkspace.vue'
+import UserAdminWorkspace from '~/components/Pages/UserAdmin/UserAdminWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { CetakFullColorConfig } from '~/types/cetak-full-color'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import CetakFullColorWorkspace from '~/components/pages/products-services/CetakFullColorWorkspace.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import CetakFullColorWorkspace from '~/components/Pages/ProductsServices/CetakFullColorWorkspace.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 definePageMeta({ layout: 'default' })
 useLegacyPage({ title: 'Cetak Full Color', sweetAlert: false })
 
-const { config, pending, error, refresh, saveConfig } = useCetakFullColor()
+const { config, pending, error, refresh, saveCetakFullColorConfig } = useCetakFullColor()
 const draft = ref<CetakFullColorConfig | null>(null)
 const busy = ref(false)
 const message = ref('')
@@ -24,7 +24,7 @@ async function handleSave() {
   saveError.value = ''
   message.value = ''
   try {
-    const res = await saveConfig(draft.value)
+    const res = await saveCetakFullColorConfig(draft.value)
     if (res?.success) {
       message.value = 'Configuration saved successfully.'
     } else {

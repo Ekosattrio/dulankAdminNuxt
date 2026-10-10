@@ -97,7 +97,7 @@ Untuk menu `<menu>`, gunakan pola berikut.
 
 ```text
 app/pages/<menu>.vue
-app/components/pages/<menu>/
+app/components/Pages/<menu>/
 app/composables/use<Menu>.ts
 server/types/<menu>.ts
 server/api/<menu>/
@@ -165,17 +165,17 @@ Contoh fitur reusable:
 
 Reusable yang sudah ada harus dipakai dulu:
 
-- `app/components/sales/SalesDataTable.vue`
-- `app/components/sales/SalesActionButton.vue`
-- `app/components/sales/SalesListHeader.vue`
-- `app/components/sales/SalesStatusBadge.vue`
-- `app/components/sales/SalesMoreMenu.vue`
-- `app/components/sales/SalesDialog.vue`
-- `app/components/sales/SalesFeedback.vue`
-- `app/components/sales/SalesConfirmDelete.vue`
-- `app/components/common/DateRangePicker.vue`
-- `app/components/common/TableFilterSelect.vue`
-- `app/components/common/AssigneeSelect.vue`
+- `app/components/Sales/SalesDataTable.vue`
+- `app/components/Sales/SalesActionButton.vue`
+- `app/components/Sales/SalesListHeader.vue`
+- `app/components/Sales/SalesStatusBadge.vue`
+- `app/components/Sales/SalesMoreMenu.vue`
+- `app/components/Sales/SalesDialog.vue`
+- `app/components/Sales/SalesFeedback.vue`
+- `app/components/Sales/SalesConfirmDelete.vue`
+- `app/components/Common/DateRangePicker.vue`
+- `app/components/Common/TableFilterSelect.vue`
+- `app/components/Common/AssigneeSelect.vue`
 - `app/composables/useDateRange.ts`
 - `server/utils/dateRange.ts`
 - `app/utils/salesUi.ts`
@@ -233,7 +233,7 @@ Gunakan urutan ini saat mengeksekusi menu:
    Fetch data dan mutasi dari frontend lewat `app/composables/use<Menu>.ts`.
 
 8. **Pecah UI ke komponen**
-   Tabel, editor, detail, history, payment, dan dokumen dipisah ke `app/components/pages/<menu>/`.
+   Tabel, editor, detail, history, payment, dan dokumen dipisah ke `app/components/Pages/<menu>/`.
 
 9. **Tipiskan page**
     Page menyusun komponen dan menghubungkan event. Pindahkan tabel/card grid, editor, modal, filter domain kompleks, skeleton, dan export logic ke domain component/composable.

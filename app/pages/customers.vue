@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CustomersWorkspace from '~/components/pages/customers/CustomersWorkspace.vue'
+import CustomersWorkspace from '~/components/Pages/Customers/CustomersWorkspace.vue'
 
 useLegacyPage({ title: 'Customers', sweetAlert: false })
 </script>

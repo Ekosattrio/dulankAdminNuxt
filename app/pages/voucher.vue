@@ -16,7 +16,7 @@
             <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
           </li>
           <li>
             <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
@@ -384,7 +384,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import SalesConfirmDelete from "~/components/sales/SalesConfirmDelete.vue";
+import SalesConfirmDelete from "~/components/Sales/SalesConfirmDelete.vue";
 
 useLegacyPage({
   title: 'Voucher',
@@ -595,7 +595,7 @@ const updateCoupon = () => {
   const idx = coupons.value.findIndex((c) => c.id === editingId.value);
   if (idx !== -1) {
     coupons.value[idx] = {
-      ...coupons.value[idx],
+      ...coupons.value[idx]!,
       name: formData.value.name,
       code: formData.value.code,
       type: formData.value.type,
@@ -604,7 +604,7 @@ const updateCoupon = () => {
       limit: formData.value.limit,
       startDate: formData.value.startDate,
       endDate: formData.value.endDate,
-      validDate: formData.value.endDate || coupons.value[idx].validDate,
+      validDate: formData.value.endDate || coupons.value[idx]?.validDate || "",
       allProducts: formData.value.allProducts,
       oncePerCustomer: formData.value.oncePerCustomer,
       status: formData.value.isActive ? "Active" : "Inactive",

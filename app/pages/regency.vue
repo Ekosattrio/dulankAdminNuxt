@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RegencyWorkspace from '~/components/pages/location/RegencyWorkspace.vue'
+import RegencyWorkspace from '~/components/Pages/Location/RegencyWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

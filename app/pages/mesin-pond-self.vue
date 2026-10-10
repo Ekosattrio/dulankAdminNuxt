@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WorkshopServicePage from '~/components/pages/products-services/WorkshopServicePage.vue'
+import WorkshopServicePage from '~/components/Pages/ProductsServices/WorkshopServicePage.vue'
 
 definePageMeta({ layout: 'default' })
 </script>

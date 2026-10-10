@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PosSettingsWorkspace from '~/components/pages/setting/PosSettingsWorkspace.vue'
+import PosSettingsWorkspace from '~/components/Pages/Setting/PosSettingsWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

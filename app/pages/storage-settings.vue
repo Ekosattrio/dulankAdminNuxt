@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StorageSettingsWorkspace from '~/components/pages/setting/StorageSettingsWorkspace.vue'
+import StorageSettingsWorkspace from '~/components/Pages/Setting/StorageSettingsWorkspace.vue'
 
 useLegacyPage({
   title: 'Storage Settings',

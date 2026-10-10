@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import InvoiceSettingWorkspace from '~/components/pages/setting/InvoiceSettingWorkspace.vue'
+import InvoiceSettingWorkspace from '~/components/Pages/Setting/InvoiceSettingWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

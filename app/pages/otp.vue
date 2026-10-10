@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import OtpSettingWorkspace from '~/components/pages/setting/OtpSettingWorkspace.vue'
+import OtpSettingWorkspace from '~/components/Pages/Setting/OtpSettingWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

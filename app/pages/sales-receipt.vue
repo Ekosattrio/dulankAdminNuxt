@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SalesReceiptDocument from '~/components/pages/sales/SalesReceiptDocument.vue'
+import SalesReceiptDocument from '~/components/Pages/Sales/SalesReceiptDocument.vue'
 useLegacyPage({ title: 'Sales Receipt', sweetAlert: false })
 const { record, pending, message } = useSaleDocument()
 </script>

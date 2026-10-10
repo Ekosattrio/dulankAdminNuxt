@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DistrictWorkspace from '~/components/pages/location/DistrictWorkspace.vue'
+import DistrictWorkspace from '~/components/Pages/Location/DistrictWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

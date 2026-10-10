@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
+import FeatherIcon from "~/components/Common/FeatherIcon.vue";
+import BaseModal from "~/components/Modal/BaseModal.vue";
 
 definePageMeta({
   layout: "default",
@@ -123,8 +123,8 @@ const svgPerfMetrics = computed(() => {
 
   const points = months.map((m, i) => {
     const x = padLeft + (i + 0.5) * (innerW / months.length);
-    const pv = activePerformance.value.pageViews[i];
-    const clk = activePerformance.value.clicks[i];
+    const pv = activePerformance.value?.pageViews[i] ?? 0;
+    const clk = activePerformance.value?.clicks[i] ?? 0;
 
     const barH = (pv / maxVal) * innerH;
     const barY = padTop + innerH - barH;
@@ -135,9 +135,9 @@ const svgPerfMetrics = computed(() => {
   });
 
   // Line path D
-  let lineD = `M ${points[0].x} ${points[0].lineY}`;
+  let lineD = `M ${points[0]?.x ?? 0} ${points[0]?.lineY ?? 0}`;
   for (let i = 1; i < points.length; i++) {
-    lineD += ` L ${points[i].x} ${points[i].lineY}`;
+    lineD += ` L ${points[i]?.x ?? 0} ${points[i]?.lineY ?? 0}`;
   }
 
   return { points, lineD, width, height, padLeft, padTop, innerW, innerH };
@@ -449,12 +449,12 @@ function openModal(title: string, desc: string) {
                 v-if="hoveredPerfIndex !== null"
                 class="pointer-events-none absolute -top-1 z-30 transform -translate-x-1/2 rounded-md bg-[#092C4C] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg transition-all"
                 :style="{
-                  left: `${(svgPerfMetrics.points[hoveredPerfIndex].x / svgPerfMetrics.width) * 100}%`,
+                  left: `${((svgPerfMetrics.points[hoveredPerfIndex]?.x ?? 0) / svgPerfMetrics.width) * 100}%`,
                 }"
               >
-                <div>{{ svgPerfMetrics.points[hoveredPerfIndex].month }}</div>
-                <div class="text-[#14B8A6]">Page Views: {{ svgPerfMetrics.points[hoveredPerfIndex].pv }}k</div>
-                <div class="text-[#818CF8]">Clicks: {{ svgPerfMetrics.points[hoveredPerfIndex].clk }}k</div>
+                <div>{{ svgPerfMetrics.points[hoveredPerfIndex]?.month }}</div>
+                <div class="text-[#14B8A6]">Page Views: {{ svgPerfMetrics.points[hoveredPerfIndex]?.pv }}k</div>
+                <div class="text-[#818CF8]">Clicks: {{ svgPerfMetrics.points[hoveredPerfIndex]?.clk }}k</div>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MemberWorkspace from '~/components/pages/user/MemberWorkspace.vue'
+import MemberWorkspace from '~/components/Pages/User/MemberWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

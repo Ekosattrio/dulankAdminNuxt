@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AllBlogWorkspace from '~/components/blog/AllBlogWorkspace.vue'
+import AllBlogWorkspace from '~/components/Blog/AllBlogWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

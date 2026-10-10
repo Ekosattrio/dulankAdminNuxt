@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SupplierDueReportWorkspace from '~/components/pages/reports/SupplierDueReportWorkspace.vue'
+import SupplierDueReportWorkspace from '~/components/Pages/Reports/SupplierDueReportWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

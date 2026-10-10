@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BankSettingsGridWorkspace from '~/components/pages/setting/BankSettingsGridWorkspace.vue'
+import BankSettingsGridWorkspace from '~/components/Pages/Setting/BankSettingsGridWorkspace.vue'
 
 useLegacyPage({
   title: 'Bank Settings Grid',

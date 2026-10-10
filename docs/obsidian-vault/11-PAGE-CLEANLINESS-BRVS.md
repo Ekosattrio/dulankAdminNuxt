@@ -38,8 +38,8 @@ Contoh bentuk yang diharapkan:
 
 ```vue
 <script setup lang="ts">
-import MenuRecordsTable from '~/components/pages/menu/MenuRecordsTable.vue'
-import MenuEditor from '~/components/pages/menu/MenuEditor.vue'
+import MenuRecordsTable from '~/components/Pages/menu/MenuRecordsTable.vue'
+import MenuEditor from '~/components/Pages/menu/MenuEditor.vue'
 import { useMenuPage } from '~/composables/useMenuPage'
 
 useLegacyPage({ title: 'Menu', sweetAlert: false })
@@ -73,12 +73,12 @@ const { items, pending, error, refresh, openAdd, openEdit, save, remove } = useM
 
 | Tanggung jawab | Lokasi |
 | --- | --- |
-| Table, card list, stats, filters UI | `app/components/pages/<menu>/` |
-| Form/editor Add dan Edit | Satu komponen `app/components/pages/<menu>/<Menu>Form.vue` atau `DocumentForm.vue` |
-| Modal detail/history/domain | `app/components/pages/<menu>/` |
+| Table, card list, stats, filters UI | `app/components/Pages/<menu>/` |
+| Form/editor Add dan Edit | Satu komponen `app/components/Pages/<menu>/<Menu>Form.vue` atau `DocumentForm.vue` |
+| Modal detail/history/domain | `app/components/Pages/<menu>/` |
 | Fetch, mutation, busy/error/refresh | `app/composables/use<Menu>.ts` |
 | Editor state dan preview calculation | `app/composables/use<Menu>Editor.ts` |
-| Shared UI lintas menu | `app/components/common/` atau `app/components/sales/` |
+| Shared UI lintas menu | `app/components/Common/` atau `app/components/Sales/` |
 | Shared frontend helper | `app/utils/` |
 | Contract entity/command/query | `server/types/<menu>.ts` |
 | HTTP parsing/response | `server/api/<menu>/` |
@@ -117,7 +117,7 @@ Budget lanjutan setelah page:
 Sebelum menyebut page bersih, AI wajib menjawab dengan bukti:
 
 - Apakah page hanya composition dan state koordinasi ringan?
-- Apakah domain UI sudah berada di `components/pages/<menu>/`?
+- Apakah domain UI sudah berada di `components/Pages/<menu>/`?
 - Apakah Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor, Detail/History/Modal, dan Feedback sudah dipisah menurut tanggung jawab?
 - Apakah Workspace/Screen hanya orchestrator, bukan salinan page monolitik?
 - Apakah seluruh request/mutation melewati domain composable?

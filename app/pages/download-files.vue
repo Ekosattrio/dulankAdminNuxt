@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DownloadFilesWorkspace from '~/components/pages/download-files/DownloadFilesWorkspace.vue'
+import DownloadFilesWorkspace from '~/components/Pages/DownloadFiles/DownloadFilesWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

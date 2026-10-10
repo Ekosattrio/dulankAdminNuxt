@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import QuotationDocumentForm from '~/components/pages/quotation/QuotationDocumentForm.vue'
+import QuotationDocumentForm from '~/components/Pages/Quotation/QuotationDocumentForm.vue'
 useLegacyPage({ title: 'Edit Quotation', sweetAlert: false })
 const { form, number, pending, loadError, busy, actionError, tax, total, submit } =
   useQuotationDocumentEditor(true)

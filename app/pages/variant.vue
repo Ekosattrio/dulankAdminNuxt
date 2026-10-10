@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VariantWorkspace from '~/components/variant/VariantWorkspace.vue'
+import VariantWorkspace from '~/components/Variant/VariantWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

@@ -37,8 +37,8 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 | Lokasi | Tanggung jawab |
 | --- | --- |
 | `app/pages/<route>.vue` | Metadata halaman, pemanggilan composable, state koordinasi seperlunya, dan penyusunan komponen. |
-| `app/components/pages/<menu>/` | Tabel, editor, detail, history, dan bagian dokumen khusus menu. |
-| `app/components/sales/` | Komponen UI bersama yang sudah dipakai dan disetujui di SALES. |
+| `app/components/Pages/<menu>/` | Tabel, editor, detail, history, dan bagian dokumen khusus menu. |
+| `app/components/Sales/` | Komponen UI bersama yang sudah dipakai dan disetujui di SALES. |
 | `app/composables/` | Fetch API, state form, validasi, kalkulasi, dan alur simpan/edit/hapus. |
 | `app/utils/` | Helper UI dan fungsi frontend yang dapat digunakan kembali. |
 | `server/api/`, `server/types/`, `server/utils/` | Endpoint, kontrak data, validasi backend, dan persistensi. |
@@ -55,7 +55,7 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 - Konfigurasi komponen memakai `pathPrefix: false`. Jika ingin nama seperti `PagesSalesTable`, lakukan import alias secara eksplisit; jangan menganggap prefix folder otomatis tersedia.
 - Untuk warning component resolution atau extraneous attributes, baca [docs/TROUBLESHOOTING_VUE_WARNINGS.md](docs/TROUBLESHOOTING_VUE_WARNINGS.md). Jangan memasukkan komponen Vue lokal ke `isCustomElement`. Komponen fragment yang menerima `class`/attribute harus memakai `inheritAttrs: false` dan meneruskan `$attrs` ke root yang memang dituju.
 - Pisahkan form dokumen yang dipakai tambah/edit menjadi komponen bersama. Jangan membuat dua implementasi form yang kemudian berbeda isinya.
-- Baca contoh nyata: [sales.vue](app/pages/sales.vue), [add-quotation.vue](app/pages/add-quotation.vue), [QuotationDocumentForm.vue](app/components/pages/quotation/QuotationDocumentForm.vue), dan [useQuotationDocumentEditor.ts](app/composables/useQuotationDocumentEditor.ts).
+- Baca contoh nyata: [sales.vue](app/pages/sales.vue), [add-quotation.vue](app/pages/add-quotation.vue), [QuotationDocumentForm.vue](app/components/Pages/Quotation/QuotationDocumentForm.vue), dan [useQuotationDocumentEditor.ts](app/composables/useQuotationDocumentEditor.ts).
 
 ### Architecture Gate BRVS
 
@@ -63,7 +63,7 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 - Page tipis tidak cukup. `*Workspace.vue`/`*Screen.vue` juga hanya boleh menjadi orchestrator; dilarang memindahkan seluruh tabel, form, semua modal, export, dan mutation dari page ke satu Workspace besar. Target Workspace maksimal 150 baris; di atas 200 baris wajib decomposition audit dan di atas 300 baris `structural review required`.
 - Pecah UI berdasarkan tanggung jawab nyata: Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor sections, Detail/History/Modal, dan Feedback state. Leaf component ditargetkan maksimal 250 baris; di atas 300 baris wajib dipecah atau memiliki justifikasi satu tanggung jawab yang tertulis.
 - Dilarang menaruh record hardcoded, type domain lokal, business calculation, serializer export, markup tabel/card/form/modal panjang, atau `alert()`/`confirm()` sebagai flow sukses di page.
-- Tabel/list, filter domain kompleks, editor/form, detail, history, stats, dan modal berada di `app/components/pages/<menu>/`. Add dan Edit wajib memakai form/editor yang sama.
+- Tabel/list, filter domain kompleks, editor/form, detail, history, stats, dan modal berada di `app/components/Pages/<menu>/`. Add dan Edit wajib memakai form/editor yang sama.
 - Composable menjadi satu-satunya pintu frontend untuk request domain dan mutation flow. API route menjadi adapter HTTP tipis. Validasi, kalkulasi, relasi, penomoran, serta persistensi berada di domain helper/repository `server/utils/`.
 - Setiap laporan progres menu wajib menyertakan Architecture Evidence Matrix dari `docs/BACKEND_READY_VERTICAL_SLICE.md`. Satu gap pada layer wajib membatasi status menjadi `partial BRVS` atau `implemented, architecture verification pending`.
 - Setiap laporan progres juga wajib menyertakan UI Responsibility Evidence dari `docs/UI_DECOMPOSITION_STANDARD.md`. HTTP 200, page pendek, atau keberadaan Workspace tidak cukup untuk status `verified`.
@@ -87,31 +87,31 @@ Proyek menggunakan **Nuxt 4, Vue 3, TypeScript, dan Tailwind CSS 4**. Frontend b
 - Root proyek tetap 14px untuk menjaga skala layout lama; token `text-xs` sampai `text-3xl` dikalibrasi di `main.css` agar ukuran aktual sesuai standar. Jangan mengubah root ke 16px atau menambah ukuran arbitrary untuk mengakali token.
 - Gunakan semantic class `app-page-title`, `app-page-subtitle`, `app-dialog-title`, `app-section-title`, `app-body-text`, `app-supporting-text`, dan `app-control-text` bila perannya sesuai. Jangan memakai judul halaman untuk heading card/panel yang padat.
 - Untuk filter, search, page-size, dropdown, dan control kecil di toolbar tabel, gunakan gaya light modern yang konsisten: tinggi `h-9`, background putih, border abu halus, radius sedang, shadow kecil, teks `text-sm`, focus ring primary, dan spacing rapat. Jika style ini dipakai lebih dari satu tempat, pindahkan ke shared class/helper, bukan ditulis ulang berbeda per komponen.
-- Jika ada fungsi atau style yang sama berulang di beberapa menu, buat standar reusable di `app/components/common/`, `app/components/sales/`, `app/composables/`, `app/utils/`, atau `server/utils/` sesuai cakupannya. Jangan membiarkan variasi kecil tumbuh per halaman untuk fitur yang sama.
+- Jika ada fungsi atau style yang sama berulang di beberapa menu, buat standar reusable di `app/components/Common/`, `app/components/Sales/`, `app/composables/`, `app/utils/`, atau `server/utils/` sesuai cakupannya. Jangan membiarkan variasi kecil tumbuh per halaman untuk fitur yang sama.
 - Tabel lebar harus bisa di-scroll di dalam wadahnya. Halaman dan modal tidak boleh melebar keluar viewport. Periksa desktop dan layar kecil, termasuk lebar 390px.
 
 Gunakan komponen bersama berikut sebelum membuat variasi baru:
 
 | Komponen | Standar yang dipertahankan |
 | --- | --- |
-| [SalesDataTable.vue](app/components/sales/SalesDataTable.vue) | Font `text-sm` (14px), warna teks konsisten, header, spacing, sorting, pencarian, pagination, dan scroll tabel. |
-| [SalesActionButton.vue](app/components/sales/SalesActionButton.vue) | Ikon Feather 14px untuk aksi baris, gunakan prop semantik `action="view|edit|delete|..."`, tooltip/label aksesibel, serta state disabled. |
-| [SalesListHeader.vue](app/components/sales/SalesListHeader.vue) | Susunan judul dan tombol toolbar; ikon toolbar konsisten. |
-| [SalesStatusBadge.vue](app/components/sales/SalesStatusBadge.vue) | Tampilan status yang seragam, dengan arti status domain tetap dipertahankan. |
-| [SalesMoreMenu.vue](app/components/sales/SalesMoreMenu.vue) | Dropdown aksi yang tidak terpotong oleh wadah scroll tabel. |
-| [SalesDialog.vue](app/components/sales/SalesDialog.vue) | Modal, Escape, judul aksesibel, pengamanan saat busy, dan ukuran dokumen yang responsif. |
-| [SalesFeedback.vue](app/components/sales/SalesFeedback.vue) | Loading, error, feedback hasil, dan retry. |
-| [SalesConfirmDelete.vue](app/components/sales/SalesConfirmDelete.vue) | Konfirmasi sebelum penghapusan record. |
-| [DateRangePicker.vue](app/components/common/DateRangePicker.vue) | Pemilih rentang tanggal standar toolbar (`h-9`, preset tanggal, kustom tanggal). |
-| [TableFilterSelect.vue](app/components/common/TableFilterSelect.vue) | Dropdown filter standar toolbar tabel (`h-9`, `text-sm`, border abu halus, light modern). |
-| [AssigneeSelect.vue](app/components/common/AssigneeSelect.vue) | Pemilih assignee standar modal (`min-h-9`, radio Employees/Department, chips badge, floating dropdown). |
-| [QuantityStepper.vue](app/components/common/QuantityStepper.vue) | Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
-| [ImageUploadGrid.vue](app/components/common/ImageUploadGrid.vue) | Komponen pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
-| [AppSkeleton.vue](app/components/common/AppSkeleton.vue) | Primitif skeleton loader teranimasi pulse dengan bentuk dan ukuran fleksibel (rounded, circle, text line). |
-| [TableSkeleton.vue](app/components/common/TableSkeleton.vue) | Skeleton loader tabel terstruktur penuh yang meniru layout `SalesDataTable` (toolbar filter, search `h-9`, header, baris data, dan pagination). |
-| [CardSkeleton.vue](app/components/common/CardSkeleton.vue) | Skeleton loader metrik KPI / stat widget standar. |
-| [CurrencyInput.vue](app/components/common/CurrencyInput.vue) | Input mata uang / separator ribuan realtime (`h-9`), prefix 'Rp' opsional, justifikasi kanan (`align="right"`) atau kiri (`align="left"`), v-model angka murni. |
-| [CurrencyDisplay.vue](app/components/common/CurrencyDisplay.vue) | Display mata uang / separator ribuan standar (`Rp 10.000`), format monospaced tabular-nums, justifikasi kanan (`align="right"`) atau kiri (`align="left"`). |
+| [SalesDataTable.vue](app/components/Sales/SalesDataTable.vue) | Font `text-sm` (14px), warna teks konsisten, header, spacing, sorting, pencarian, pagination, dan scroll tabel. |
+| [SalesActionButton.vue](app/components/Sales/SalesActionButton.vue) | Ikon Feather 14px untuk aksi baris, gunakan prop semantik `action="view|edit|delete|..."`, tooltip/label aksesibel, serta state disabled. |
+| [SalesListHeader.vue](app/components/Sales/SalesListHeader.vue) | Susunan judul dan tombol toolbar; ikon toolbar konsisten. |
+| [SalesStatusBadge.vue](app/components/Sales/SalesStatusBadge.vue) | Tampilan status yang seragam, dengan arti status domain tetap dipertahankan. |
+| [SalesMoreMenu.vue](app/components/Sales/SalesMoreMenu.vue) | Dropdown aksi yang tidak terpotong oleh wadah scroll tabel. |
+| [SalesDialog.vue](app/components/Sales/SalesDialog.vue) | Modal, Escape, judul aksesibel, pengamanan saat busy, dan ukuran dokumen yang responsif. |
+| [SalesFeedback.vue](app/components/Sales/SalesFeedback.vue) | Loading, error, feedback hasil, dan retry. |
+| [SalesConfirmDelete.vue](app/components/Sales/SalesConfirmDelete.vue) | Konfirmasi sebelum penghapusan record. |
+| [DateRangePicker.vue](app/components/Common/DateRangePicker.vue) | Pemilih rentang tanggal standar toolbar (`h-9`, preset tanggal, kustom tanggal). |
+| [TableFilterSelect.vue](app/components/Common/TableFilterSelect.vue) | Dropdown filter standar toolbar tabel (`h-9`, `text-sm`, border abu halus, light modern). |
+| [AssigneeSelect.vue](app/components/Common/AssigneeSelect.vue) | Pemilih assignee standar modal (`min-h-9`, radio Employees/Department, chips badge, floating dropdown). |
+| [QuantityStepper.vue](app/components/Common/QuantityStepper.vue) | Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
+| [ImageUploadGrid.vue](app/components/Common/ImageUploadGrid.vue) | Komponen pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
+| [AppSkeleton.vue](app/components/Common/AppSkeleton.vue) | Primitif skeleton loader teranimasi pulse dengan bentuk dan ukuran fleksibel (rounded, circle, text line). |
+| [TableSkeleton.vue](app/components/Common/TableSkeleton.vue) | Skeleton loader tabel terstruktur penuh yang meniru layout `SalesDataTable` (toolbar filter, search `h-9`, header, baris data, dan pagination). |
+| [CardSkeleton.vue](app/components/Common/CardSkeleton.vue) | Skeleton loader metrik KPI / stat widget standar. |
+| [CurrencyInput.vue](app/components/Common/CurrencyInput.vue) | Input mata uang / separator ribuan realtime (`h-9`), prefix 'Rp' opsional, justifikasi kanan (`align="right"`) atau kiri (`align="left"`), v-model angka murni. |
+| [CurrencyDisplay.vue](app/components/Common/CurrencyDisplay.vue) | Display mata uang / separator ribuan standar (`Rp 10.000`), format monospaced tabular-nums, justifikasi kanan (`align="right"`) atau kiri (`align="left"`). |
 | [currency.ts](app/utils/currency.ts) | Utility pemformat & parser uang: `formatMoney()`, `formatIDR()`, `parseMoney()`, dan helper alignment `currencyAlignClass()`. |
 | [actionIcons.ts](app/utils/actionIcons.ts) | Kamus tunggal ikon aksi dan ukuran ikon. Ikuti [docs/ICON_STANDARD.md](docs/ICON_STANDARD.md); kode baru tidak memilih glyph CRUD sendiri. |
 | [salesUi.ts](app/utils/salesUi.ts) | Helper kelas UI bersama: `tableFilterControlClass`, `formControlClass`, `modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`, re-export currency utils. |
@@ -202,7 +202,7 @@ Gunakan daftar ini sebagai batas regresi untuk grup menu HRM:
 ## 5.6 Implementasi CALCULATOR APPS (verification pending)
 
 - **Struktur menu:** All Printing Shop (`/semua-percetakan`), All Machine: Offset (`/mesin-cetak`), Laminate (`/mesin-laminasi`), Die Cutting (`/mesin-pond`), Hot Print (`/mesin-poli`), All Paper Shop (`/semua-toko-kertas`), dan All Papers: Paper Group (`/kertas-group`), Paper Size (`/kertas-ukuran`), Paper Type (`/kertas-jenis`), Paper Price (`/kertas-harga`).
-- Seluruh route memakai API, `useCalculatorMarketplace.ts`, komponen reusable di `app/components/pages/calculator/`, `SalesDataTable`, filter standar, detail, moderasi, soft-delete, dan `DocumentPrintModal`; tidak boleh kembali ke array hardcoded page, `alert`, atau raw `window.print()`.
+- Seluruh route memakai API, `useCalculatorMarketplace.ts`, komponen reusable di `app/components/Pages/Calculator/`, `SalesDataTable`, filter standar, detail, moderasi, soft-delete, dan `DocumentPrintModal`; tidak boleh kembali ke array hardcoded page, `alert`, atau raw `window.print()`.
 - Data dipisah menjadi partner, partner metrics, listing, dan moderation history. Relasi listing memakai `sourcePartnerId`; metrics memakai `partnerId`; uang disimpan numerik murni.
 - Modal manage mempertahankan field legacy: Tindakan, Durasi Bekukan kondisional, Notifikasi, dan Pesan. Submit wajib tersimpan melalui API dan riwayat moderasi.
 - Status masih **implemented, verification pending** sampai build/typecheck serta flow browser desktop/mobile, reload persistensi, print/PDF, manage, detail, dan delete selesai diuji.

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { PaperSize, PaperSizeFormData } from '#server/types/paper-shop'
-import PaperSizeStatsWidgets from '~/components/pages/paper-shop/PaperSizeStatsWidgets.vue'
-import PaperSizeRecordsTable from '~/components/pages/paper-shop/PaperSizeRecordsTable.vue'
-import PaperSizeFormModal from '~/components/pages/paper-shop/PaperSizeFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import PaperSizeStatsWidgets from '~/components/Pages/PaperShop/PaperSizeStatsWidgets.vue'
+import PaperSizeRecordsTable from '~/components/Pages/PaperShop/PaperSizeRecordsTable.vue'
+import PaperSizeFormModal from '~/components/Pages/PaperShop/PaperSizeFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

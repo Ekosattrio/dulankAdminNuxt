@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PaymentGatewayWorkspace from '~/components/pages/setting/PaymentGatewayWorkspace.vue'
+import PaymentGatewayWorkspace from '~/components/Pages/Setting/PaymentGatewayWorkspace.vue'
 
 useLegacyPage({
   title: 'Payment Gateway',

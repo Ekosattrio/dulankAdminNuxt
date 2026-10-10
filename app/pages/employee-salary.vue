@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EmployeeSalaryWorkspace from '~/components/pages/employee-salary/EmployeeSalaryWorkspace.vue'
+import EmployeeSalaryWorkspace from '~/components/Pages/EmployeeSalary/EmployeeSalaryWorkspace.vue'
 
 useLegacyPage({ title: 'Employee Salary - Penggajian Karyawan', sweetAlert: false })
 </script>

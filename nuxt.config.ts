@@ -30,21 +30,17 @@ export default defineNuxtConfig({
       pathPrefix: false,
       // Compatibility files remain importable by path but must not collide with newer page components.
       ignore: [
-        'address/AddressViewModal.vue',
-        'customers/CustomerViewModal.vue',
-        'department/DepartmentModal.vue',
-        'department/DepartmentTable.vue',
-        'my-incentive/**',
-        'my-job/**',
-        'payslip/PayslipModal.vue',
-        'payslip/PayslipTable.vue',
-        // Superseded refactor/nuxt4 component set kept in-tree; not registered under pathPrefix: false
-        // to avoid duplicate-name collisions with the canonical components above.
-        'App/**',
-        'Common/**',
-        'Dashboard/**',
-        'Forms/**',
-        'Tables/**'
+        'Address/AddressViewModal.vue',
+        'Customers/CustomerViewModal.vue',
+        'Department/DepartmentModal.vue',
+        'Department/DepartmentTable.vue',
+        'MyIncentive/**',
+        'MyJob/**',
+        'Payslip/PayslipModal.vue',
+        'Payslip/PayslipTable.vue',
+        // App/Layout components are consumed through explicit imports; keep them out of
+        // auto-registration to avoid duplicate basename collisions with Layout/.
+        'App/**'
       ]
     }
   ],

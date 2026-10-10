@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PermissionsWorkspace from '~/components/pages/roles/PermissionsWorkspace.vue'
+import PermissionsWorkspace from '~/components/Pages/Roles/PermissionsWorkspace.vue'
 
 useLegacyPage({
   title: 'Permissions',

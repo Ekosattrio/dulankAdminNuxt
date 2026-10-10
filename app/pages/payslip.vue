@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PayslipWorkspace from '~/components/pages/payslip/PayslipWorkspace.vue'
+import PayslipWorkspace from '~/components/Pages/Payslip/PayslipWorkspace.vue'
 
 useLegacyPage({ title: 'Payslips - Penggajian Karyawan', sweetAlert: false })
 </script>

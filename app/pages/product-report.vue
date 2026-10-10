@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProductReportWorkspace from '~/components/pages/reports/ProductReportWorkspace.vue'
+import ProductReportWorkspace from '~/components/Pages/Reports/ProductReportWorkspace.vue'
 
 useHead({
   title: 'Product Report - Kacetak System'

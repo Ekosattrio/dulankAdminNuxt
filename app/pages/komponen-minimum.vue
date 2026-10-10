@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { KomponenMinimumItem, KomponenMinimumFormData } from '#server/types/calculator-components'
-import KomponenMinimumRecordsTable from '~/components/pages/calculator/components/KomponenMinimumRecordsTable.vue'
-import KomponenMinimumFormModal from '~/components/pages/calculator/components/KomponenMinimumFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import KomponenMinimumRecordsTable from '~/components/Pages/Calculator/Components/KomponenMinimumRecordsTable.vue'
+import KomponenMinimumFormModal from '~/components/Pages/Calculator/Components/KomponenMinimumFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

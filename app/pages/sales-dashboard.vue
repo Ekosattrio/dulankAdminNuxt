@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
+import FeatherIcon from "~/components/Common/FeatherIcon.vue";
+import BaseModal from "~/components/Modal/BaseModal.vue";
 
 definePageMeta({
   layout: "default",
@@ -232,19 +232,20 @@ const currentChartPoints = computed(() => {
   const maxVal = 60;
   const minVal = 10;
 
-  const points = values.map((val, i) => {
-    const x = paddingLeft + (i / (values.length - 1)) * innerW;
+  const series = values ?? [];
+  const points = series.map((val, i) => {
+    const x = paddingLeft + (i / (series.length - 1)) * innerW;
     const y = paddingTop + innerH - ((val - minVal) / (maxVal - minVal)) * innerH;
     return { x, y, val, month: months[i] };
   });
 
   // Build SVG path
-  let pathD = `M ${points[0].x} ${points[0].y}`;
+  let pathD = `M ${points[0]?.x ?? 0} ${points[0]?.y ?? 0}`;
   for (let i = 1; i < points.length; i++) {
-    pathD += ` L ${points[i].x} ${points[i].y}`;
+    pathD += ` L ${points[i]?.x ?? 0} ${points[i]?.y ?? 0}`;
   }
 
-  const areaD = `${pathD} L ${points[points.length - 1].x} ${paddingTop + innerH} L ${points[0].x} ${paddingTop + innerH} Z`;
+  const areaD = `${pathD} L ${points[points.length - 1]?.x ?? 0} ${paddingTop + innerH} L ${points[0]?.x ?? 0} ${paddingTop + innerH} Z`;
 
   return { points, pathD, areaD, width, height, paddingLeft, paddingTop, innerW, innerH };
 });
@@ -740,10 +741,10 @@ const hoveredCountry = ref<CountryData | null>(null);
               v-if="chartHoverIndex !== null"
               class="pointer-events-none absolute -top-1 z-30 transform -translate-x-1/2 rounded-md bg-[#092C4C] px-2.5 py-1 text-[11px] font-semibold text-white shadow-md transition-all duration-75"
               :style="{
-                left: `${(currentChartPoints.points[chartHoverIndex].x / currentChartPoints.width) * 100}%`,
+                left: `${((currentChartPoints.points[chartHoverIndex]?.x ?? 0) / currentChartPoints.width) * 100}%`,
               }"
             >
-              {{ currentChartPoints.points[chartHoverIndex].month }}: ${{ currentChartPoints.points[chartHoverIndex].val }},000
+              {{ currentChartPoints.points[chartHoverIndex]?.month }}: ${{ currentChartPoints.points[chartHoverIndex]?.val }},000
             </div>
           </div>
         </div>

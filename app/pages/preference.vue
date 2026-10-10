@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PreferenceWorkspace from '~/components/pages/setting/PreferenceWorkspace.vue'
+import PreferenceWorkspace from '~/components/Pages/Setting/PreferenceWorkspace.vue'
 
 useLegacyPage({
   title: 'Preferences',

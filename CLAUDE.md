@@ -16,8 +16,8 @@ You are working on **Dulank Admin Nuxt 4**, a modern ERP & printing administrati
 | Layer | Responsibility & Paths |
 |---|---|
 | **Pages (Thin)** | `app/pages/<route>.vue` - Only coordinates metadata, composable, and mounts components. |
-| **Domain Components** | `app/components/pages/<menu>/` - Tables, modals, filters, and widgets for specific domains. |
-| **Shared Components** | `app/components/sales/` and `app/components/common/` - Shared UI (`SalesDataTable`, `DateRangePicker`, `TableFilterSelect`, `DocumentPrintModal`, `CurrencyDisplay`). |
+| **Domain Components** | `app/components/Pages/<menu>/` - Tables, modals, filters, and widgets for specific domains. |
+| **Shared Components** | `app/components/Sales/` and `app/components/Common/` - Shared UI (`SalesDataTable`, `DateRangePicker`, `TableFilterSelect`, `DocumentPrintModal`, `CurrencyDisplay`). |
 | **Shared Action Icons** | `app/utils/actionIcons.ts` - Semantic Add/View/Edit/Delete/More mapping and shared icon sizes. |
 | **State & API** | `app/composables/use<Menu>.ts` - Form state, validation, fetch, and mutations. |
 | **Backend Layer** | `server/api/`, `server/types/`, `server/utils/`, `server/data/` - Pure REST API, domain types, mock DB data. |
@@ -60,10 +60,10 @@ You are working on **Dulank Admin Nuxt 4**, a modern ERP & printing administrati
 2. **Compare Netlify Reference:**
    - Check `https://dulank-admin.netlify.app/<menu>.html`.
 3. **Inspect Existing Nuxt Page:**
-   - Check `app/pages/<menu>.vue`. If it's a monolithic or raw page, refactor it into thin page + modular components in `app/components/pages/<menu>/`.
+   - Check `app/pages/<menu>.vue`. If it's a monolithic or raw page, refactor it into thin page + modular components in `app/components/Pages/<menu>/`.
 4. **Ensure Backend-Ready Architecture:**
    - Page: composition only; no domain data, direct request, business calculation, or large table/form/modal markup.
-   - Domain UI: `app/components/pages/<menu>/`
+   - Domain UI: `app/components/Pages/<menu>/`
    - Types: `server/types/<menu>.ts`
    - Data Mock: `server/data/<menu>.json` (with Primary Key `id`, Foreign Keys, timestamps, pure numbers)
    - API Routes: `server/api/<menu>/index.get.ts`, `server/api/<menu>/index.post.ts`, etc.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CustomFieldWorkspace from '~/components/pages/setting/CustomFieldWorkspace.vue'
+import CustomFieldWorkspace from '~/components/Pages/Setting/CustomFieldWorkspace.vue'
 
 useLegacyPage({
   title: 'Custom Fields',

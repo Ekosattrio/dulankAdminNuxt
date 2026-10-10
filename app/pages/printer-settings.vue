@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrinterSettingsWorkspace from '~/components/pages/setting/PrinterSettingsWorkspace.vue'
+import PrinterSettingsWorkspace from '~/components/Pages/Setting/PrinterSettingsWorkspace.vue'
 
 useLegacyPage({
   title: 'Printer Settings',

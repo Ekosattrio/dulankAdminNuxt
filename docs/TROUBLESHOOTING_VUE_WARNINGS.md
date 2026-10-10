@@ -21,8 +21,8 @@ components: [{ path: '~/components', pathPrefix: false }]
 
 Dengan `pathPrefix: false`, nama auto-import mengikuti **basename file**, bukan struktur folder. Maka:
 
-- `app/components/variant/VariantTable.vue` menjadi `VariantTable`.
-- `app/components/variant/VariantModal.vue` menjadi `VariantModal`.
+- `app/components/Variant/VariantTable.vue` menjadi `VariantTable`.
+- `app/components/Variant/VariantModal.vue` menjadi `VariantModal`.
 - Nuxt tidak otomatis membuat nama `PagesVariantTable` atau `PagesVariantModal`.
 
 ### Perbaikan yang benar
@@ -31,15 +31,15 @@ Gunakan nama basename atau import eksplisit:
 
 ```vue
 <script setup lang="ts">
-import VariantTable from '~/components/variant/VariantTable.vue'
-import VariantModal from '~/components/variant/VariantModal.vue'
+import VariantTable from '~/components/Variant/VariantTable.vue'
+import VariantModal from '~/components/Variant/VariantModal.vue'
 </script>
 ```
 
 Jika nama `Pages...` diperlukan untuk kompatibilitas atau menghindari benturan, gunakan alias eksplisit:
 
 ```ts
-import PagesVariantTable from '~/components/variant/VariantTable.vue'
+import PagesVariantTable from '~/components/Variant/VariantTable.vue'
 ```
 
 Jangan mengubah komponen lokal menjadi custom element. `isCustomElement` hanya untuk web component/native element yang memang bukan komponen Vue.

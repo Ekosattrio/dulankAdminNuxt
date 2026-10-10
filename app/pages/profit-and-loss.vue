@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProfitAndLossWorkspace from '~/components/pages/reports/ProfitAndLossWorkspace.vue'
+import ProfitAndLossWorkspace from '~/components/Pages/Reports/ProfitAndLossWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

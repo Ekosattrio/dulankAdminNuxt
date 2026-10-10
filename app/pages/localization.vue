@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LocalizationWorkspace from '~/components/pages/setting/LocalizationWorkspace.vue'
+import LocalizationWorkspace from '~/components/Pages/Setting/LocalizationWorkspace.vue'
 
 useLegacyPage({
   title: 'Localization Settings',

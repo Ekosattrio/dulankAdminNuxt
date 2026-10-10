@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ExpenseCategory, ExpenseCategoryFormData } from '~/types/expense-category'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import PagesExpenseCategoryModal from '~/components/expense-category/ExpenseCategoryModal.vue'
-import PagesExpenseCategoryTable from '~/components/expense-category/ExpenseCategoryTable.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import PagesExpenseCategoryModal from '~/components/ExpenseCategory/ExpenseCategoryModal.vue'
+import PagesExpenseCategoryTable from '~/components/ExpenseCategory/ExpenseCategoryTable.vue'
 
 definePageMeta({
   layout: 'default'
@@ -37,7 +37,7 @@ const filteredList = computed(() => {
     const matchesSearch =
       !searchQuery.value ||
       cat.categoryName?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      cat.code?.toLowerCase().includes(searchQuery.value.toLowerCase())
+      cat.description?.toLowerCase().includes(searchQuery.value.toLowerCase())
     const matchesStatus = !filterStatus.value || cat.status === filterStatus.value
     return matchesSearch && matchesStatus
   })
@@ -51,7 +51,7 @@ const printColumns = [
   { key: 'status', label: 'Status' }
 ]
 
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 
 const isDeleteConfirmOpen = ref(false)
 const deleteTargetId = ref<string | null>(null)
@@ -143,7 +143,7 @@ const exportPdf = () => {
               </button>
             </li>
             <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
+              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
                 <FeatherIcon name="rotate-cw" size="16" />
               </button>
             </li>

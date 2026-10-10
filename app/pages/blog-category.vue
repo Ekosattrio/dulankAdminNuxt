@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BlogCategoryWorkspace from '~/components/blog/BlogCategoryWorkspace.vue'
+import BlogCategoryWorkspace from '~/components/Blog/BlogCategoryWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

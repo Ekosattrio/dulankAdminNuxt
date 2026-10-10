@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { JasaLainItem, JasaLainFormData } from '#server/types/calculator-components'
-import JasaLainRecordsTable from '~/components/pages/calculator/components/JasaLainRecordsTable.vue'
-import JasaLainFormModal from '~/components/pages/calculator/components/JasaLainFormModal.vue'
-import JasaLainViewModal from '~/components/pages/calculator/components/JasaLainViewModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import JasaLainRecordsTable from '~/components/Pages/Calculator/Components/JasaLainRecordsTable.vue'
+import JasaLainFormModal from '~/components/Pages/Calculator/Components/JasaLainFormModal.vue'
+import JasaLainViewModal from '~/components/Pages/Calculator/Components/JasaLainViewModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

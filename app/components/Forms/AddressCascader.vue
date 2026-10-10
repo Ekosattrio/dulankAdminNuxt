@@ -104,7 +104,7 @@ const openDropdown = () => {
         @click="openDropdown"
       />
       <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-        <CommonFeatherIcon name="map-pin" size="14" />
+        <FeatherIcon name="map-pin" size="14" />
       </span>
     </div>
 
@@ -141,7 +141,7 @@ const openDropdown = () => {
           </button>
         </div>
         <button type="button" class="text-gray-400 hover:text-gray-600" @click="isOpen = false">
-          <CommonFeatherIcon name="x" size="14" />
+          <FeatherIcon name="x" size="14" />
         </button>
       </div>
 

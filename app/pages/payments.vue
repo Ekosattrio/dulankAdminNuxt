@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PaymentRecordsTable from '~/components/pages/payments/PaymentRecordsTable.vue'
+import PaymentRecordsTable from '~/components/Pages/Payments/PaymentRecordsTable.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
 
 useLegacyPage({ title: 'Payments', sweetAlert: false })
@@ -17,7 +17,7 @@ const paymentFilters = computed(() => ({
 }))
 const { payments, pending, error, refresh } = usePayments(paymentFilters)
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

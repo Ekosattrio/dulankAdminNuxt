@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SecuritySettingsWorkspace from '~/components/pages/setting/SecuritySettingsWorkspace.vue'
+import SecuritySettingsWorkspace from '~/components/Pages/Setting/SecuritySettingsWorkspace.vue'
 
 useLegacyPage({
   title: 'Security Settings',

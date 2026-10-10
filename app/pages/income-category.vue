@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { IncomeCategoryItem, IncomeCategoryFormData } from '#server/types/income-category'
-import IncomeCategoryRecordsTable from '~/components/pages/income-category/IncomeCategoryRecordsTable.vue'
-import IncomeCategoryFormModal from '~/components/pages/income-category/IncomeCategoryFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import IncomeCategoryRecordsTable from '~/components/Pages/IncomeCategory/IncomeCategoryRecordsTable.vue'
+import IncomeCategoryFormModal from '~/components/Pages/IncomeCategory/IncomeCategoryFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

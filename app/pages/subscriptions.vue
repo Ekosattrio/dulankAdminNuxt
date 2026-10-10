@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import FeatherIcon from "~/components/common/FeatherIcon.vue";
-import BaseModal from "~/components/modal/BaseModal.vue";
-import ConfirmModal from "~/components/modal/ConfirmModal.vue";
+import FeatherIcon from "~/components/Common/FeatherIcon.vue";
+import BaseModal from "~/components/Modal/BaseModal.vue";
+import ConfirmModal from "~/components/Modal/ConfirmModal.vue";
 
 useLegacyPage({
   title: 'Subscriptions',

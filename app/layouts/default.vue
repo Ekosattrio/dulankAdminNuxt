@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useThemeStore } from "~/stores/theme";
-import AppHeader from "~/components/layout/AppHeader.vue";
-import AppSidebar from "~/components/layout/AppSidebar.vue";
+import AppHeader from "~/components/Layout/AppHeader.vue";
+import AppSidebar from "~/components/Layout/AppSidebar.vue";
 
 const themeStore = useThemeStore();
 

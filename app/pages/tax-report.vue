@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TaxReportWorkspace from '~/components/pages/reports/TaxReportWorkspace.vue'
+import TaxReportWorkspace from '~/components/Pages/Reports/TaxReportWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

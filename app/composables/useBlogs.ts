@@ -13,11 +13,14 @@ export function useBlogs() {
 
   const blogs = computed<Blog[]>(() => data.value?.data ?? [])
 
-  const saveBlog = async (payload: BlogFormData) => {
-    const res = await apiFetch<{ success: boolean; data: Blog; message?: string }>('/api/blogs', {
-      method: 'POST',
-      body: payload
-    })
+  const saveBlog = async (payload: BlogFormData, id?: string) => {
+    const res = await apiFetch<{ success: boolean; data: Blog; message?: string }>(
+      id ? `/api/blogs/${id}` : '/api/blogs',
+      {
+        method: id ? 'PUT' : 'POST',
+        body: payload
+      }
+    )
     await refresh()
     return res
   }

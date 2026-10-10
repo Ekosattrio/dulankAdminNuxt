@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BankAccountWorkspace from '~/components/pages/bank-account/BankAccountWorkspace.vue'
+import BankAccountWorkspace from '~/components/Pages/BankAccount/BankAccountWorkspace.vue'
 
 useLegacyPage({ title: 'Bank Accounts', sweetAlert: false })
 </script>

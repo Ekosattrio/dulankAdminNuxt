@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PaymentBalanceSummary from '~/components/pages/payment-flow/PaymentBalanceSummary.vue'
-import PaymentFlowDetails from '~/components/pages/payment-flow/PaymentFlowDetails.vue'
-import PaymentFlowEditor from '~/components/pages/payment-flow/PaymentFlowEditor.vue'
-import PaymentFlowRecordsTable from '~/components/pages/payment-flow/PaymentFlowRecordsTable.vue'
+import PaymentBalanceSummary from '~/components/Pages/PaymentFlow/PaymentBalanceSummary.vue'
+import PaymentFlowDetails from '~/components/Pages/PaymentFlow/PaymentFlowDetails.vue'
+import PaymentFlowEditor from '~/components/Pages/PaymentFlow/PaymentFlowEditor.vue'
+import PaymentFlowRecordsTable from '~/components/Pages/PaymentFlow/PaymentFlowRecordsTable.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import type { PaymentFlowFormData, PaymentFlowRecord } from '#server/types/payment-flow'
 

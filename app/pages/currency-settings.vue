@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CurrencySettingsWorkspace from '~/components/pages/setting/CurrencySettingsWorkspace.vue'
+import CurrencySettingsWorkspace from '~/components/Pages/Setting/CurrencySettingsWorkspace.vue'
 
 useLegacyPage({
   title: 'Currency Settings',

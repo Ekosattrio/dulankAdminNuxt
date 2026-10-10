@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ExpenseReportWorkspace from '~/components/pages/reports/ExpenseReportWorkspace.vue'
+import ExpenseReportWorkspace from '~/components/Pages/Reports/ExpenseReportWorkspace.vue'
 
 useHead({
   title: 'Expense Report - Kacetak System'

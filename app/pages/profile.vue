@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProfileWorkspace from '~/components/pages/setting/ProfileWorkspace.vue'
+import ProfileWorkspace from '~/components/Pages/Setting/ProfileWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

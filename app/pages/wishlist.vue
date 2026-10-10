@@ -2,12 +2,12 @@
 import type { WishlistFilterQuery } from '#server/types/wishlist'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useWishlists } from '~/composables/useWishlists'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import WishlistStatsWidgets from '~/components/pages/wishlist/WishlistStatsWidgets.vue'
-import WishlistRecordsTable from '~/components/pages/wishlist/WishlistRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import WishlistStatsWidgets from '~/components/Pages/Wishlist/WishlistStatsWidgets.vue'
+import WishlistRecordsTable from '~/components/Pages/Wishlist/WishlistRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

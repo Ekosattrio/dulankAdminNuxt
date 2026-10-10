@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Expense, ExpenseFormData } from '~/types/expense'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import PagesExpenseModal from '~/components/expenses/ExpenseModal.vue'
-import PagesExpenseTable from '~/components/expenses/ExpenseTable.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import PagesExpenseModal from '~/components/Expenses/ExpenseModal.vue'
+import PagesExpenseTable from '~/components/Expenses/ExpenseTable.vue'
 import { formatIDR } from '~/utils/currency'
 
 definePageMeta({
@@ -62,7 +62,7 @@ const openAddModal = () => {
   isModalOpen.value = true
 }
 
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 
 const isDeleteConfirmOpen = ref(false)
 const deleteTargetId = ref<string | null>(null)
@@ -135,7 +135,7 @@ const printList = () => {
               </button>
             </li>
             <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh">
+              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
                 <FeatherIcon name="rotate-cw" size="16" />
               </button>
             </li>

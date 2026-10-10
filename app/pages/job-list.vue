@@ -3,11 +3,11 @@ import type { JobListItem } from '#server/types/job-list'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useJobList } from '~/composables/useJobList'
 import { printSalesRows } from '~/utils/salesDocuments'
-import JobListDetailModal from '~/components/pages/job-list/JobListDetailModal.vue'
-import JobListFlowSidebar from '~/components/pages/job-list/JobListFlowSidebar.vue'
-import JobListRecordsTable from '~/components/pages/job-list/JobListRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import JobListDetailModal from '~/components/Pages/JobList/JobListDetailModal.vue'
+import JobListFlowSidebar from '~/components/Pages/JobList/JobListFlowSidebar.vue'
+import JobListRecordsTable from '~/components/Pages/JobList/JobListRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'All Job List', sweetAlert: false })
 
@@ -32,7 +32,7 @@ function handleViewDetail(item: JobListItem) {
   isDetailModalOpen.value = true
 }
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

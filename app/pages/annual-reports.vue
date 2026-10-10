@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AnnualReportsWorkspace from '~/components/pages/reports/AnnualReportsWorkspace.vue'
+import AnnualReportsWorkspace from '~/components/Pages/Reports/AnnualReportsWorkspace.vue'
 
 useHead({
   title: 'Annual Report (Laporan Rekapitulasi Tahunan) - Kacetak System'

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FlowCategory, FlowCategoryFormData } from '#server/types/flow-category'
 import type { DateRangeValue } from '~/composables/useDateRange'
-import FlowCategoryModal from '~/components/pages/flow-category/FlowCategoryModal.vue'
-import FlowCategoryRecordsTable from '~/components/pages/flow-category/FlowCategoryRecordsTable.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import FlowCategoryModal from '~/components/Pages/FlowCategory/FlowCategoryModal.vue'
+import FlowCategoryRecordsTable from '~/components/Pages/FlowCategory/FlowCategoryRecordsTable.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Flow Category', sweetAlert: false })
 

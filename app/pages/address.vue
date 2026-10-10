@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddressWorkspace from '~/components/pages/address/AddressWorkspace.vue'
+import AddressWorkspace from '~/components/Pages/Address/AddressWorkspace.vue'
 
 useLegacyPage({ title: 'Address List', sweetAlert: false })
 </script>

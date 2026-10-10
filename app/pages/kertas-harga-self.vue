@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { PaperPrice, PaperPriceFormData } from '#server/types/paper-shop'
-import PaperPriceStatsWidgets from '~/components/pages/paper-shop/PaperPriceStatsWidgets.vue'
-import PaperPriceRecordsTable from '~/components/pages/paper-shop/PaperPriceRecordsTable.vue'
-import PaperPriceFormModal from '~/components/pages/paper-shop/PaperPriceFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import PaperPriceStatsWidgets from '~/components/Pages/PaperShop/PaperPriceStatsWidgets.vue'
+import PaperPriceRecordsTable from '~/components/Pages/PaperShop/PaperPriceRecordsTable.vue'
+import PaperPriceFormModal from '~/components/Pages/PaperShop/PaperPriceFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

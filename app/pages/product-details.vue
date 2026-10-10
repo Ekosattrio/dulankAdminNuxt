@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CurrencyDisplay from '~/components/common/CurrencyDisplay.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import CurrencyDisplay from '~/components/Common/CurrencyDisplay.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 import { printDocument } from '~/utils/documentPrinter'
 
 definePageMeta({ layout: 'default' })

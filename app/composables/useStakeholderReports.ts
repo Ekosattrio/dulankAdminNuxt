@@ -105,11 +105,16 @@ export function useSupplierDueReport() {
       const histPaid = item.history ? item.history.reduce((hSum, h) => hSum + (h.paid || 0), 0) : 0
       return sum + histPaid
     }, 0)
+    const dueItems = list.filter((i) => typeof i.daysDue === 'number')
+    const avgDaysDue = dueItems.length
+      ? Math.round(dueItems.reduce((sum, item) => sum + (item.daysDue || 0), 0) / dueItems.length)
+      : 0
     return {
       totalSuppliers,
-      totalOrdersDue,
+      totalPurchasesDue: totalOrdersDue,
       totalAmountDue,
       totalPaid,
+      avgDaysDue,
     }
   })
 
@@ -215,11 +220,16 @@ export function useCustomerDueReport() {
     const totalOrdersDue = list.reduce((sum, item) => sum + (item.orderDue || 0), 0)
     const totalAmountDue = list.reduce((sum, item) => sum + (item.amountDue || 0), 0)
     const totalOverdue = list.reduce((sum, item) => sum + (item.overdueAmount || item.amountDue || 0), 0)
+    const dueItems = list.filter((i) => typeof i.daysDue === 'number')
+    const avgDaysDue = dueItems.length
+      ? Math.round(dueItems.reduce((sum, item) => sum + (item.daysDue || 0), 0) / dueItems.length)
+      : 0
     return {
       totalCustomers,
       totalOrdersDue,
       totalAmountDue,
       totalOverdue,
+      avgDaysDue,
     }
   })
 

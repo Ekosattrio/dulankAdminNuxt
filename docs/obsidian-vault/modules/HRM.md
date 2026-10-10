@@ -22,7 +22,7 @@ updated: 2026-10-08
 
 ## Compatibility
 
-Komponen baru berada di `app/components/pages/`. Path komponen lama dipertahankan agar migration manifest dan pemanggil lama tidak rusak.
+Komponen baru berada di `app/components/Pages/`. Path komponen lama dipertahankan agar migration manifest dan pemanggil lama tidak rusak.
 
 ## Verification Gate
 

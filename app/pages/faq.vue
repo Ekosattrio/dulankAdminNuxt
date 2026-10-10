@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FaqWorkspace from '~/components/pages/faq/FaqWorkspace.vue'
+import FaqWorkspace from '~/components/Pages/Faq/FaqWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

@@ -10611,26 +10611,26 @@
       "sha256After": "378d33d882e79a0748df933b2eafc56e8df056638d14d5c05841e513198edbab"
     },
     {
-      "from": "components/address/AddressModal.vue",
-      "to": "app/components/address/AddressModal.vue",
+      "from": "components/Address/AddressModal.vue",
+      "to": "app/components/Address/AddressModal.vue",
       "sha256Before": "8040d5c215bc782fa06a4b2638414491fb7740b260a11ee3a1925f94f2b75390",
       "sha256After": "8040d5c215bc782fa06a4b2638414491fb7740b260a11ee3a1925f94f2b75390"
     },
     {
-      "from": "components/address/AddressStats.vue",
-      "to": "app/components/address/AddressStats.vue",
+      "from": "components/Address/AddressStats.vue",
+      "to": "app/components/Address/AddressStats.vue",
       "sha256Before": "f7d9e181c714bd68d40c12340b9984e529fc0603879e72766be1db0c3b4bbc6b",
       "sha256After": "f7d9e181c714bd68d40c12340b9984e529fc0603879e72766be1db0c3b4bbc6b"
     },
     {
-      "from": "components/address/AddressTable.vue",
-      "to": "app/components/address/AddressTable.vue",
+      "from": "components/Address/AddressTable.vue",
+      "to": "app/components/Address/AddressTable.vue",
       "sha256Before": "ccdd367d9d36b82178f89374172b986189a78475f1221b5d7341307f28357204",
       "sha256After": "ccdd367d9d36b82178f89374172b986189a78475f1221b5d7341307f28357204"
     },
     {
-      "from": "components/address/AddressViewModal.vue",
-      "to": "app/components/address/AddressViewModal.vue",
+      "from": "components/Address/AddressViewModal.vue",
+      "to": "app/components/Address/AddressViewModal.vue",
       "sha256Before": "e4097dfb870b0f52d9d0712bdedfb13b90d3b879bd9cdb7489e6c1ec945b4493",
       "sha256After": "e4097dfb870b0f52d9d0712bdedfb13b90d3b879bd9cdb7489e6c1ec945b4493"
     },
@@ -10641,182 +10641,182 @@
       "sha256After": "a4ffc0aa7a09acd43be1c3366e5e4ec583cc227f6992f4daee94eaa4bb553603"
     },
     {
-      "from": "components/blog/BlogGrid.vue",
-      "to": "app/components/blog/BlogGrid.vue",
+      "from": "components/Blog/BlogGrid.vue",
+      "to": "app/components/Blog/BlogGrid.vue",
       "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "from": "components/blog/BlogModal.vue",
-      "to": "app/components/blog/BlogModal.vue",
+      "from": "components/Blog/BlogModal.vue",
+      "to": "app/components/Blog/BlogModal.vue",
       "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "from": "components/category/CategoryModal.vue",
-      "to": "app/components/category/CategoryModal.vue",
+      "from": "components/Category/CategoryModal.vue",
+      "to": "app/components/Category/CategoryModal.vue",
       "sha256Before": "886d0c87376c5058030917b1066bd93280aef978a3ea4bf5d1e5d3aee543612f",
       "sha256After": "886d0c87376c5058030917b1066bd93280aef978a3ea4bf5d1e5d3aee543612f"
     },
     {
-      "from": "components/category/CategoryTable.vue",
-      "to": "app/components/category/CategoryTable.vue",
+      "from": "components/Category/CategoryTable.vue",
+      "to": "app/components/Category/CategoryTable.vue",
       "sha256Before": "2142198bdf5abc37a0b8963f0a42c1f9e1d0b445eea747c0daef4962d311f589",
       "sha256After": "2142198bdf5abc37a0b8963f0a42c1f9e1d0b445eea747c0daef4962d311f589"
     },
     {
-      "from": "components/common/FeatherIcon.vue",
-      "to": "app/components/common/FeatherIcon.vue",
+      "from": "components/Common/FeatherIcon.vue",
+      "to": "app/components/Common/FeatherIcon.vue",
       "sha256Before": "3cb75e2b36a86b9bd47d87bc0d184c3577440d4206afca8d3a0b47af5b137c64",
       "sha256After": "3cb75e2b36a86b9bd47d87bc0d184c3577440d4206afca8d3a0b47af5b137c64"
     },
     {
-      "from": "components/common/PageHeader.vue",
-      "to": "app/components/common/PageHeader.vue",
+      "from": "components/Common/PageHeader.vue",
+      "to": "app/components/Common/PageHeader.vue",
       "sha256Before": "af9c49dfe8de5da0c43b4b73fd62b0575d01c0419f545eb8a04917b6979f3454",
       "sha256After": "af9c49dfe8de5da0c43b4b73fd62b0575d01c0419f545eb8a04917b6979f3454"
     },
     {
-      "from": "components/customer-type/CustomerTypeModal.vue",
-      "to": "app/components/customer-type/CustomerTypeModal.vue",
+      "from": "components/CustomerType/CustomerTypeModal.vue",
+      "to": "app/components/CustomerType/CustomerTypeModal.vue",
       "sha256Before": "c0252aed7572c1eaca545b3097ece0d732660edd6c6ecc054a2d1099fbf220d3",
       "sha256After": "c0252aed7572c1eaca545b3097ece0d732660edd6c6ecc054a2d1099fbf220d3"
     },
     {
-      "from": "components/customer-type/CustomerTypeTable.vue",
-      "to": "app/components/customer-type/CustomerTypeTable.vue",
+      "from": "components/CustomerType/CustomerTypeTable.vue",
+      "to": "app/components/CustomerType/CustomerTypeTable.vue",
       "sha256Before": "2459ea195d4b42b4458b0b7c8f17192d9ecdc2b2b57f4046dee6c5f0fefcea31",
       "sha256After": "2459ea195d4b42b4458b0b7c8f17192d9ecdc2b2b57f4046dee6c5f0fefcea31"
     },
     {
-      "from": "components/customers/CustomerModal.vue",
-      "to": "app/components/customers/CustomerModal.vue",
+      "from": "components/Customers/CustomerModal.vue",
+      "to": "app/components/Customers/CustomerModal.vue",
       "sha256Before": "dad49ecbb1f0fea008c43f83e6c9227ad8b9e601765882393b58a72d831ab093",
       "sha256After": "dad49ecbb1f0fea008c43f83e6c9227ad8b9e601765882393b58a72d831ab093"
     },
     {
-      "from": "components/customers/CustomerTable.vue",
-      "to": "app/components/customers/CustomerTable.vue",
+      "from": "components/Customers/CustomerTable.vue",
+      "to": "app/components/Customers/CustomerTable.vue",
       "sha256Before": "6a3242f1b1fe0d370b41092a2f0d3b38775967807a3ab7696ed262122abe1478",
       "sha256After": "6a3242f1b1fe0d370b41092a2f0d3b38775967807a3ab7696ed262122abe1478"
     },
     {
-      "from": "components/customers/CustomerViewModal.vue",
-      "to": "app/components/customers/CustomerViewModal.vue",
+      "from": "components/Customers/CustomerViewModal.vue",
+      "to": "app/components/Customers/CustomerViewModal.vue",
       "sha256Before": "8139fc03d15cdbc63af5adff39c9c458c36f803b60e32a4338ac30e5acfcd333",
       "sha256After": "8139fc03d15cdbc63af5adff39c9c458c36f803b60e32a4338ac30e5acfcd333"
     },
     {
-      "from": "components/dashboard/DashboardPrimaryCard.vue",
-      "to": "app/components/dashboard/DashboardPrimaryCard.vue",
+      "from": "components/Dashboard/DashboardPrimaryCard.vue",
+      "to": "app/components/Dashboard/DashboardPrimaryCard.vue",
       "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "from": "components/dashboard/DashboardRevenueCard.vue",
-      "to": "app/components/dashboard/DashboardRevenueCard.vue",
+      "from": "components/Dashboard/DashboardRevenueCard.vue",
+      "to": "app/components/Dashboard/DashboardRevenueCard.vue",
       "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "from": "components/delivery-note/DeliveryNoteModal.vue",
-      "to": "app/components/delivery-note/DeliveryNoteModal.vue",
+      "from": "components/DeliveryNote/DeliveryNoteModal.vue",
+      "to": "app/components/DeliveryNote/DeliveryNoteModal.vue",
       "sha256Before": "f818ebb38c49040bb48b067928a25aa899e1c1716dca1ddf89b57b709754620c",
       "sha256After": "f818ebb38c49040bb48b067928a25aa899e1c1716dca1ddf89b57b709754620c"
     },
     {
-      "from": "components/delivery-note/DeliveryNoteTable.vue",
-      "to": "app/components/delivery-note/DeliveryNoteTable.vue",
+      "from": "components/DeliveryNote/DeliveryNoteTable.vue",
+      "to": "app/components/DeliveryNote/DeliveryNoteTable.vue",
       "sha256Before": "1c2ada0a39ae0212aa0ad65fc4df40051d46c4dd091ab3da117127110ec6c517",
       "sha256After": "1c2ada0a39ae0212aa0ad65fc4df40051d46c4dd091ab3da117127110ec6c517"
     },
     {
-      "from": "components/department/DepartmentModal.vue",
-      "to": "app/components/department/DepartmentModal.vue",
+      "from": "components/Department/DepartmentModal.vue",
+      "to": "app/components/Department/DepartmentModal.vue",
       "sha256Before": "814e4fafda82d2ddbe1161fed8e373839c0f5e3b6e99048f7b0eaa071e85cdbb",
       "sha256After": "814e4fafda82d2ddbe1161fed8e373839c0f5e3b6e99048f7b0eaa071e85cdbb"
     },
     {
-      "from": "components/department/DepartmentTable.vue",
-      "to": "app/components/department/DepartmentTable.vue",
+      "from": "components/Department/DepartmentTable.vue",
+      "to": "app/components/Department/DepartmentTable.vue",
       "sha256Before": "ad4eabb753e79b355090f5a54b279cc6fee000384a7ce661e49b71c4a1c5a0ce",
       "sha256After": "ad4eabb753e79b355090f5a54b279cc6fee000384a7ce661e49b71c4a1c5a0ce"
     },
     {
-      "from": "components/designation/DesignationModal.vue",
-      "to": "app/components/designation/DesignationModal.vue",
+      "from": "components/Designation/DesignationModal.vue",
+      "to": "app/components/Designation/DesignationModal.vue",
       "sha256Before": "c6c098be5ab6f22664ef6c9504d700c8104f45a45613c41712bc9b95a9d1881b",
       "sha256After": "c6c098be5ab6f22664ef6c9504d700c8104f45a45613c41712bc9b95a9d1881b"
     },
     {
-      "from": "components/designation/DesignationTable.vue",
-      "to": "app/components/designation/DesignationTable.vue",
+      "from": "components/Designation/DesignationTable.vue",
+      "to": "app/components/Designation/DesignationTable.vue",
       "sha256Before": "504817e9d82e8203d706364951dea1df474d4a537e1b6e70c54c9a6ce01a8c1d",
       "sha256After": "504817e9d82e8203d706364951dea1df474d4a537e1b6e70c54c9a6ce01a8c1d"
     },
     {
-      "from": "components/employees/EmployeeModal.vue",
-      "to": "app/components/employees/EmployeeModal.vue",
+      "from": "components/Employees/EmployeeModal.vue",
+      "to": "app/components/Employees/EmployeeModal.vue",
       "sha256Before": "ca59e716894503757fff00f98f51cceddea65bef1084ad2b58e1566bc8f86f52",
       "sha256After": "ca59e716894503757fff00f98f51cceddea65bef1084ad2b58e1566bc8f86f52"
     },
     {
-      "from": "components/employees/EmployeeTable.vue",
-      "to": "app/components/employees/EmployeeTable.vue",
+      "from": "components/Employees/EmployeeTable.vue",
+      "to": "app/components/Employees/EmployeeTable.vue",
       "sha256Before": "35eac01267a71cb5247082ab59d3b5927cf5677c20952cb528546c116fca9b3f",
       "sha256After": "35eac01267a71cb5247082ab59d3b5927cf5677c20952cb528546c116fca9b3f"
     },
     {
-      "from": "components/expense-category/ExpenseCategoryModal.vue",
-      "to": "app/components/expense-category/ExpenseCategoryModal.vue",
+      "from": "components/ExpenseCategory/ExpenseCategoryModal.vue",
+      "to": "app/components/ExpenseCategory/ExpenseCategoryModal.vue",
       "sha256Before": "6c8bf1ab1a3f365d3125866e6dd72c63451c9d8dc8b836bebadc2f1332423b9f",
       "sha256After": "6c8bf1ab1a3f365d3125866e6dd72c63451c9d8dc8b836bebadc2f1332423b9f"
     },
     {
-      "from": "components/expense-category/ExpenseCategoryTable.vue",
-      "to": "app/components/expense-category/ExpenseCategoryTable.vue",
+      "from": "components/ExpenseCategory/ExpenseCategoryTable.vue",
+      "to": "app/components/ExpenseCategory/ExpenseCategoryTable.vue",
       "sha256Before": "3e94c29c29443360b8b014365aec6cbe32bb255e5218d651a547c15198921d3b",
       "sha256After": "3e94c29c29443360b8b014365aec6cbe32bb255e5218d651a547c15198921d3b"
     },
     {
-      "from": "components/expenses/ExpenseModal.vue",
-      "to": "app/components/expenses/ExpenseModal.vue",
+      "from": "components/Expenses/ExpenseModal.vue",
+      "to": "app/components/Expenses/ExpenseModal.vue",
       "sha256Before": "20e135b168bcbc2d5b7233d968f139f951bf2b55cfe9cbaa64a4ef16263fd8ea",
       "sha256After": "20e135b168bcbc2d5b7233d968f139f951bf2b55cfe9cbaa64a4ef16263fd8ea"
     },
     {
-      "from": "components/expenses/ExpenseTable.vue",
-      "to": "app/components/expenses/ExpenseTable.vue",
+      "from": "components/Expenses/ExpenseTable.vue",
+      "to": "app/components/Expenses/ExpenseTable.vue",
       "sha256Before": "5d0064814d72f380c20bd92e00108e9d28cba8a92ecb49a0e9a8fe68bee7a90a",
       "sha256After": "5d0064814d72f380c20bd92e00108e9d28cba8a92ecb49a0e9a8fe68bee7a90a"
     },
     {
-      "from": "components/forms/AddressCascader.vue",
-      "to": "app/components/forms/AddressCascader.vue",
+      "from": "components/Forms/AddressCascader.vue",
+      "to": "app/components/Forms/AddressCascader.vue",
       "sha256Before": "d7e9ad41dfe8c0a14b4dc61133e1f512b2263afb258238e501ac9cb7e847603e",
       "sha256After": "d7e9ad41dfe8c0a14b4dc61133e1f512b2263afb258238e501ac9cb7e847603e"
     },
     {
-      "from": "components/forms/CustomerLiveSearch.vue",
-      "to": "app/components/forms/CustomerLiveSearch.vue",
+      "from": "components/Forms/CustomerLiveSearch.vue",
+      "to": "app/components/Forms/CustomerLiveSearch.vue",
       "sha256Before": "ccded39379a9701900df9711076bf265a4b20a2038fbf15f6ed1603258aaaca6",
       "sha256After": "ccded39379a9701900df9711076bf265a4b20a2038fbf15f6ed1603258aaaca6"
     },
     {
-      "from": "components/forms/EmployeeLiveSearch.vue",
-      "to": "app/components/forms/EmployeeLiveSearch.vue",
+      "from": "components/Forms/EmployeeLiveSearch.vue",
+      "to": "app/components/Forms/EmployeeLiveSearch.vue",
       "sha256Before": "cb0ddb5f5a38c308478059627e26eda316c1088f9152be45229ca4e074e445c1",
       "sha256After": "cb0ddb5f5a38c308478059627e26eda316c1088f9152be45229ca4e074e445c1"
     },
     {
-      "from": "components/forms/NumberInput.vue",
-      "to": "app/components/forms/NumberInput.vue",
+      "from": "components/Forms/NumberInput.vue",
+      "to": "app/components/Forms/NumberInput.vue",
       "sha256Before": "5332c88111b43cdaf10a75b5b93bfa073ff03d227c658baa72fe625b3a710bd8",
       "sha256After": "5332c88111b43cdaf10a75b5b93bfa073ff03d227c658baa72fe625b3a710bd8"
     },
     {
-      "from": "components/forms/ProductLiveSearch.vue",
-      "to": "app/components/forms/ProductLiveSearch.vue",
+      "from": "components/Forms/ProductLiveSearch.vue",
+      "to": "app/components/Forms/ProductLiveSearch.vue",
       "sha256Before": "625e887f5d03fc163b597a1dd231ece71f140e0ae26bc31f8543067b12ac9d00",
       "sha256After": "625e887f5d03fc163b597a1dd231ece71f140e0ae26bc31f8543067b12ac9d00"
     },
@@ -10827,188 +10827,188 @@
       "sha256After": "d536d34f5d109ec496f5fd8454333a815207a001a5465d1d2079e5f22746b33b"
     },
     {
-      "from": "components/incentive/IncentiveModal.vue",
-      "to": "app/components/incentive/IncentiveModal.vue",
+      "from": "components/Incentive/IncentiveModal.vue",
+      "to": "app/components/Incentive/IncentiveModal.vue",
       "sha256Before": "fa0d6f9c2cc876b812b91f2601b94fa013d3eb4f173903c05c3bc7ec6104f434",
       "sha256After": "fa0d6f9c2cc876b812b91f2601b94fa013d3eb4f173903c05c3bc7ec6104f434"
     },
     {
-      "from": "components/incentive/IncentiveTable.vue",
-      "to": "app/components/incentive/IncentiveTable.vue",
+      "from": "components/Incentive/IncentiveTable.vue",
+      "to": "app/components/Incentive/IncentiveTable.vue",
       "sha256Before": "a4f2ed21450fbad5bfe3ac3fd573845967b64c8ac5c82d9dd9ba133ce7ee061f",
       "sha256After": "a4f2ed21450fbad5bfe3ac3fd573845967b64c8ac5c82d9dd9ba133ce7ee061f"
     },
     {
-      "from": "components/income/IncomeModal.vue",
-      "to": "app/components/income/IncomeModal.vue",
+      "from": "components/Income/IncomeModal.vue",
+      "to": "app/components/Income/IncomeModal.vue",
       "sha256Before": "9b3188c4c5b9e01910c6a5b4b499738b9166491db600a9d1c93eae452d02e026",
       "sha256After": "9b3188c4c5b9e01910c6a5b4b499738b9166491db600a9d1c93eae452d02e026"
     },
     {
-      "from": "components/income/IncomeTable.vue",
-      "to": "app/components/income/IncomeTable.vue",
+      "from": "components/Income/IncomeTable.vue",
+      "to": "app/components/Income/IncomeTable.vue",
       "sha256Before": "867000260801868b54b83a663d58386a69a0b9150655d6f8741c38fa25618417",
       "sha256After": "867000260801868b54b83a663d58386a69a0b9150655d6f8741c38fa25618417"
     },
     {
-      "from": "components/invoice/InvoiceModal.vue",
-      "to": "app/components/invoice/InvoiceModal.vue",
+      "from": "components/Invoice/InvoiceModal.vue",
+      "to": "app/components/Invoice/InvoiceModal.vue",
       "sha256Before": "955d49ac69a504fda786415159c605cfa7db7fafa3f8243ee30cfa88b2ca4717",
       "sha256After": "955d49ac69a504fda786415159c605cfa7db7fafa3f8243ee30cfa88b2ca4717"
     },
     {
-      "from": "components/invoice/InvoiceTable.vue",
-      "to": "app/components/invoice/InvoiceTable.vue",
+      "from": "components/Invoice/InvoiceTable.vue",
+      "to": "app/components/Invoice/InvoiceTable.vue",
       "sha256Before": "63a04ec6a764410aa739081ecded643c529b04fb9771a49635df52c2acc19877",
       "sha256After": "63a04ec6a764410aa739081ecded643c529b04fb9771a49635df52c2acc19877"
     },
     {
-      "from": "components/job-order/JobOrderModal.vue",
-      "to": "app/components/job-order/JobOrderModal.vue",
+      "from": "components/JobOrder/JobOrderModal.vue",
+      "to": "app/components/JobOrder/JobOrderModal.vue",
       "sha256Before": "4e8989c64d99d8d93537499b84267f60d1b5e2aa02ff8d7b31d9e909ad899d2a",
       "sha256After": "4e8989c64d99d8d93537499b84267f60d1b5e2aa02ff8d7b31d9e909ad899d2a"
     },
     {
-      "from": "components/job-order/JobOrderProgressModal.vue",
-      "to": "app/components/job-order/JobOrderProgressModal.vue",
+      "from": "components/JobOrder/JobOrderProgressModal.vue",
+      "to": "app/components/JobOrder/JobOrderProgressModal.vue",
       "sha256Before": "c1b3f79f388fd2acdc439976f95e8b93f3c1c602af614250f8f104b02cd0667d",
       "sha256After": "c1b3f79f388fd2acdc439976f95e8b93f3c1c602af614250f8f104b02cd0667d"
     },
     {
-      "from": "components/job-order/JobOrderTable.vue",
-      "to": "app/components/job-order/JobOrderTable.vue",
+      "from": "components/JobOrder/JobOrderTable.vue",
+      "to": "app/components/JobOrder/JobOrderTable.vue",
       "sha256Before": "aefa0fccbb704326a405efb09023fd77922a595b695542aaf8482847e710dfa6",
       "sha256After": "aefa0fccbb704326a405efb09023fd77922a595b695542aaf8482847e710dfa6"
     },
     {
-      "from": "components/kertas-harga/PaperPriceModal.vue",
-      "to": "app/components/kertas-harga/PaperPriceModal.vue",
+      "from": "components/KertasHarga/PaperPriceModal.vue",
+      "to": "app/components/KertasHarga/PaperPriceModal.vue",
       "sha256Before": "ae2892b0b9cc08738fa57ea218ff88f9f3899f0031e4b2252f347237fe341cd1",
       "sha256After": "ae2892b0b9cc08738fa57ea218ff88f9f3899f0031e4b2252f347237fe341cd1"
     },
     {
-      "from": "components/kertas-harga/PaperPriceTable.vue",
-      "to": "app/components/kertas-harga/PaperPriceTable.vue",
+      "from": "components/KertasHarga/PaperPriceTable.vue",
+      "to": "app/components/KertasHarga/PaperPriceTable.vue",
       "sha256Before": "6e1a695e267d6a2554fb52f8928b849190d29c47b2b684ffb169c44fd8e4cbf1",
       "sha256After": "6e1a695e267d6a2554fb52f8928b849190d29c47b2b684ffb169c44fd8e4cbf1"
     },
     {
-      "from": "components/kertas-ukuran/PaperSizeModal.vue",
-      "to": "app/components/kertas-ukuran/PaperSizeModal.vue",
+      "from": "components/KertasUkuran/PaperSizeModal.vue",
+      "to": "app/components/KertasUkuran/PaperSizeModal.vue",
       "sha256Before": "07e181b3bf3581c0cec4689814af2970aaa22ce3922cf76076c38bfc44af5233",
       "sha256After": "07e181b3bf3581c0cec4689814af2970aaa22ce3922cf76076c38bfc44af5233"
     },
     {
-      "from": "components/kertas-ukuran/PaperSizeTable.vue",
-      "to": "app/components/kertas-ukuran/PaperSizeTable.vue",
+      "from": "components/KertasUkuran/PaperSizeTable.vue",
+      "to": "app/components/KertasUkuran/PaperSizeTable.vue",
       "sha256Before": "9a5074a88c3ca1459a9e011abe74fcdeb5b4aa066799785fd1b500afdc849a37",
       "sha256After": "9a5074a88c3ca1459a9e011abe74fcdeb5b4aa066799785fd1b500afdc849a37"
     },
     {
-      "from": "components/layout/AppHeader.vue",
-      "to": "app/components/layout/AppHeader.vue",
+      "from": "components/Layout/AppHeader.vue",
+      "to": "app/components/Layout/AppHeader.vue",
       "sha256Before": "ace9a42337b7878c7f5fd9235d285e23259d1365004c3043ca04e3419136e8af",
       "sha256After": "ace9a42337b7878c7f5fd9235d285e23259d1365004c3043ca04e3419136e8af"
     },
     {
-      "from": "components/layout/AppSidebar.vue",
-      "to": "app/components/layout/AppSidebar.vue",
+      "from": "components/Layout/AppSidebar.vue",
+      "to": "app/components/Layout/AppSidebar.vue",
       "sha256Before": "7ad09d8b730b962533f2fe960db7f26ac2774ccbe358ea587e092fafe578ff3a",
       "sha256After": "7ad09d8b730b962533f2fe960db7f26ac2774ccbe358ea587e092fafe578ff3a"
     },
     {
-      "from": "components/mesin-cetak/PrintingMachineModal.vue",
-      "to": "app/components/mesin-cetak/PrintingMachineModal.vue",
+      "from": "components/MesinCetak/PrintingMachineModal.vue",
+      "to": "app/components/MesinCetak/PrintingMachineModal.vue",
       "sha256Before": "8965178d6e2e26fa924373cab6c089b0932ec314c004f8d294e6fca023a26847",
       "sha256After": "8965178d6e2e26fa924373cab6c089b0932ec314c004f8d294e6fca023a26847"
     },
     {
-      "from": "components/mesin-cetak/PrintingMachineTable.vue",
-      "to": "app/components/mesin-cetak/PrintingMachineTable.vue",
+      "from": "components/MesinCetak/PrintingMachineTable.vue",
+      "to": "app/components/MesinCetak/PrintingMachineTable.vue",
       "sha256Before": "6f392b720919313e1502feec57fe620fff22a1859ee21904c36e83f45d7abc00",
       "sha256After": "6f392b720919313e1502feec57fe620fff22a1859ee21904c36e83f45d7abc00"
     },
     {
-      "from": "components/modal/BaseModal.vue",
-      "to": "app/components/modal/BaseModal.vue",
+      "from": "components/Modal/BaseModal.vue",
+      "to": "app/components/Modal/BaseModal.vue",
       "sha256Before": "284557ebd7b79db3afcd086ba503705c8058c0caefbb72627ca00f013c7bfe3e",
       "sha256After": "284557ebd7b79db3afcd086ba503705c8058c0caefbb72627ca00f013c7bfe3e"
     },
     {
-      "from": "components/modal/ConfirmModal.vue",
-      "to": "app/components/modal/ConfirmModal.vue",
+      "from": "components/Modal/ConfirmModal.vue",
+      "to": "app/components/Modal/ConfirmModal.vue",
       "sha256Before": "77c6a00a333d9c628999a873fd77338adc2083a837ccf46d6d8650407503679b",
       "sha256After": "77c6a00a333d9c628999a873fd77338adc2083a837ccf46d6d8650407503679b"
     },
     {
-      "from": "components/my-incentive/MyIncentiveModal.vue",
-      "to": "app/components/my-incentive/MyIncentiveModal.vue",
+      "from": "components/MyIncentive/MyIncentiveModal.vue",
+      "to": "app/components/MyIncentive/MyIncentiveModal.vue",
       "sha256Before": "dc8dd1d68e4eec5a5cc0d7928b6b2f873aba75a76a7c31d39c925789a13c7e23",
       "sha256After": "dc8dd1d68e4eec5a5cc0d7928b6b2f873aba75a76a7c31d39c925789a13c7e23"
     },
     {
-      "from": "components/my-incentive/MyIncentiveTable.vue",
-      "to": "app/components/my-incentive/MyIncentiveTable.vue",
+      "from": "components/MyIncentive/MyIncentiveTable.vue",
+      "to": "app/components/MyIncentive/MyIncentiveTable.vue",
       "sha256Before": "f662abe1713ca9f23f55a0a017afb029c8244b936522a149c4e9edfda29ac8d9",
       "sha256After": "f662abe1713ca9f23f55a0a017afb029c8244b936522a149c4e9edfda29ac8d9"
     },
     {
-      "from": "components/my-job/MyJobCardGrid.vue",
-      "to": "app/components/my-job/MyJobCardGrid.vue",
+      "from": "components/MyJob/MyJobCardGrid.vue",
+      "to": "app/components/MyJob/MyJobCardGrid.vue",
       "sha256Before": "1c5c64875bf9189735b3929e5a6cf6639d8bf9cf01e793e083d6be9a5e9cbe60",
       "sha256After": "1c5c64875bf9189735b3929e5a6cf6639d8bf9cf01e793e083d6be9a5e9cbe60"
     },
     {
-      "from": "components/my-job/MyJobModal.vue",
-      "to": "app/components/my-job/MyJobModal.vue",
+      "from": "components/MyJob/MyJobModal.vue",
+      "to": "app/components/MyJob/MyJobModal.vue",
       "sha256Before": "442167202db3861b83f69a94470655a007a8b4a4d9e7577c8d7e86258ae5b4ea",
       "sha256After": "442167202db3861b83f69a94470655a007a8b4a4d9e7577c8d7e86258ae5b4ea"
     },
     {
-      "from": "components/payslip/PayslipModal.vue",
-      "to": "app/components/payslip/PayslipModal.vue",
+      "from": "components/Payslip/PayslipModal.vue",
+      "to": "app/components/Payslip/PayslipModal.vue",
       "sha256Before": "b9bfa32631b3970475d48524cf8c5ba71a8c005eaa97ea4a1137c3e0cf585f4e",
       "sha256After": "b9bfa32631b3970475d48524cf8c5ba71a8c005eaa97ea4a1137c3e0cf585f4e"
     },
     {
-      "from": "components/payslip/PayslipTable.vue",
-      "to": "app/components/payslip/PayslipTable.vue",
+      "from": "components/Payslip/PayslipTable.vue",
+      "to": "app/components/Payslip/PayslipTable.vue",
       "sha256Before": "974cde7d5e12e0249a933f56f235eba28ef24acf7ccb0ef9a5ea16e64d9c7001",
       "sha256After": "974cde7d5e12e0249a933f56f235eba28ef24acf7ccb0ef9a5ea16e64d9c7001"
     },
     {
-      "from": "components/product/ProductModal.vue",
-      "to": "app/components/product/ProductModal.vue",
+      "from": "components/Product/ProductModal.vue",
+      "to": "app/components/Product/ProductModal.vue",
       "sha256Before": "306b880ea08aa98823f0b9cdcf15fbfc2ff5c0ce7052a749f63fcafb92029661",
       "sha256After": "306b880ea08aa98823f0b9cdcf15fbfc2ff5c0ce7052a749f63fcafb92029661"
     },
     {
-      "from": "components/product/ProductTable.vue",
-      "to": "app/components/product/ProductTable.vue",
+      "from": "components/Product/ProductTable.vue",
+      "to": "app/components/Product/ProductTable.vue",
       "sha256Before": "07311b41406bb0f6a627d49fb5c549583e243d1ae6bc68648c066adcaac092dd",
       "sha256After": "07311b41406bb0f6a627d49fb5c549583e243d1ae6bc68648c066adcaac092dd"
     },
     {
-      "from": "components/quotation/QuotationModal.vue",
-      "to": "app/components/quotation/QuotationModal.vue",
+      "from": "components/Quotation/QuotationModal.vue",
+      "to": "app/components/Quotation/QuotationModal.vue",
       "sha256Before": "38e89af6b655015a509358943966622923e744acfd3f2decf34a08f41f7ff174",
       "sha256After": "38e89af6b655015a509358943966622923e744acfd3f2decf34a08f41f7ff174"
     },
     {
-      "from": "components/quotation/QuotationTable.vue",
-      "to": "app/components/quotation/QuotationTable.vue",
+      "from": "components/Quotation/QuotationTable.vue",
+      "to": "app/components/Quotation/QuotationTable.vue",
       "sha256Before": "03edaa65413c402e8030ec246e0c6d1a7eb5cdd5d13d2a7220a2ee11bac8aafb",
       "sha256After": "03edaa65413c402e8030ec246e0c6d1a7eb5cdd5d13d2a7220a2ee11bac8aafb"
     },
     {
-      "from": "components/sales/SalesModal.vue",
-      "to": "app/components/sales/SalesModal.vue",
+      "from": "components/Sales/SalesModal.vue",
+      "to": "app/components/Sales/SalesModal.vue",
       "sha256Before": "a5b303076655e30122721efed4194b918c140baa535cc2a105b0cfab1c24e241",
       "sha256After": "a5b303076655e30122721efed4194b918c140baa535cc2a105b0cfab1c24e241"
     },
     {
-      "from": "components/sales/SalesTable.vue",
-      "to": "app/components/sales/SalesTable.vue",
+      "from": "components/Sales/SalesTable.vue",
+      "to": "app/components/Sales/SalesTable.vue",
       "sha256Before": "0610a8598ce453a211ed0c7714bfc314562eabe3e71463f6ac1a444156b22fd8",
       "sha256After": "0610a8598ce453a211ed0c7714bfc314562eabe3e71463f6ac1a444156b22fd8"
     },
@@ -11019,80 +11019,80 @@
       "sha256After": "52254df171aeea913a372489d5543c959812850043bcbd647718587bfaef2177"
     },
     {
-      "from": "components/store/StoreModal.vue",
-      "to": "app/components/store/StoreModal.vue",
+      "from": "components/Store/StoreModal.vue",
+      "to": "app/components/Store/StoreModal.vue",
       "sha256Before": "bb0a678f912b120ac6b4c436414778bf4d02b60647ab61806c280dfb2dfa30c9",
       "sha256After": "bb0a678f912b120ac6b4c436414778bf4d02b60647ab61806c280dfb2dfa30c9"
     },
     {
-      "from": "components/store/StoreTable.vue",
-      "to": "app/components/store/StoreTable.vue",
+      "from": "components/Store/StoreTable.vue",
+      "to": "app/components/Store/StoreTable.vue",
       "sha256Before": "a7288816178ca466f467d683b86210975c4080280a1fe8cd9b33428b9986efb9",
       "sha256After": "a7288816178ca466f467d683b86210975c4080280a1fe8cd9b33428b9986efb9"
     },
     {
-      "from": "components/sub-category/SubCategoryModal.vue",
-      "to": "app/components/sub-category/SubCategoryModal.vue",
+      "from": "components/SubCategory/SubCategoryModal.vue",
+      "to": "app/components/SubCategory/SubCategoryModal.vue",
       "sha256Before": "58c6075343dab40a7847d40f02c2d3e3d6deadefdeb5cf7a86c94a7fc954cebb",
       "sha256After": "58c6075343dab40a7847d40f02c2d3e3d6deadefdeb5cf7a86c94a7fc954cebb"
     },
     {
-      "from": "components/sub-category/SubCategoryTable.vue",
-      "to": "app/components/sub-category/SubCategoryTable.vue",
+      "from": "components/SubCategory/SubCategoryTable.vue",
+      "to": "app/components/SubCategory/SubCategoryTable.vue",
       "sha256Before": "81af89578645f75e387d774ca7d4a41d0bab27cda780dcb73dce04fb82d1e974",
       "sha256After": "81af89578645f75e387d774ca7d4a41d0bab27cda780dcb73dce04fb82d1e974"
     },
     {
-      "from": "components/supplier/SupplierModal.vue",
-      "to": "app/components/supplier/SupplierModal.vue",
+      "from": "components/Supplier/SupplierModal.vue",
+      "to": "app/components/Supplier/SupplierModal.vue",
       "sha256Before": "7d35f67dc5a000e76f9c7475beb6e9134bb60043961ae6983152013a628eca6c",
       "sha256After": "7d35f67dc5a000e76f9c7475beb6e9134bb60043961ae6983152013a628eca6c"
     },
     {
-      "from": "components/supplier/SupplierTable.vue",
-      "to": "app/components/supplier/SupplierTable.vue",
+      "from": "components/Supplier/SupplierTable.vue",
+      "to": "app/components/Supplier/SupplierTable.vue",
       "sha256Before": "b6597ed6eb2ca94477d58ad473f32c6c1266034af07f80d4fe29db6b67967a15",
       "sha256After": "b6597ed6eb2ca94477d58ad473f32c6c1266034af07f80d4fe29db6b67967a15"
     },
     {
-      "from": "components/table/DataTable.vue",
-      "to": "app/components/table/DataTable.vue",
+      "from": "components/Table/DataTable.vue",
+      "to": "app/components/Table/DataTable.vue",
       "sha256Before": "1752bd614be865c2f747adefbd8af7dd8da6f0cf68af363f1274ea292d251fe9",
       "sha256After": "1752bd614be865c2f747adefbd8af7dd8da6f0cf68af363f1274ea292d251fe9"
     },
     {
-      "from": "components/unit/UnitModal.vue",
-      "to": "app/components/unit/UnitModal.vue",
+      "from": "components/Unit/UnitModal.vue",
+      "to": "app/components/Unit/UnitModal.vue",
       "sha256Before": "0f732a5e9f334436524511f878472bf27cb15671f263f7849ec682eb0c07c3ee",
       "sha256After": "0f732a5e9f334436524511f878472bf27cb15671f263f7849ec682eb0c07c3ee"
     },
     {
-      "from": "components/unit/UnitTable.vue",
-      "to": "app/components/unit/UnitTable.vue",
+      "from": "components/Unit/UnitTable.vue",
+      "to": "app/components/Unit/UnitTable.vue",
       "sha256Before": "81405da147b51b977acfed36ca3f915aa08b88124d74d6b6c9416caec839cd0f",
       "sha256After": "81405da147b51b977acfed36ca3f915aa08b88124d74d6b6c9416caec839cd0f"
     },
     {
-      "from": "components/variant/VariantModal.vue",
-      "to": "app/components/variant/VariantModal.vue",
+      "from": "components/Variant/VariantModal.vue",
+      "to": "app/components/Variant/VariantModal.vue",
       "sha256Before": "6c9a443639d05e820762993efe500c31976bd66f28ebffbd5fdcb2be0e501832",
       "sha256After": "6c9a443639d05e820762993efe500c31976bd66f28ebffbd5fdcb2be0e501832"
     },
     {
-      "from": "components/variant/VariantTable.vue",
-      "to": "app/components/variant/VariantTable.vue",
+      "from": "components/Variant/VariantTable.vue",
+      "to": "app/components/Variant/VariantTable.vue",
       "sha256Before": "4027539b6d5a905eef80caa77cbf98b70befca76a25bf358a13c9b8e68008278",
       "sha256After": "4027539b6d5a905eef80caa77cbf98b70befca76a25bf358a13c9b8e68008278"
     },
     {
-      "from": "components/work-flow/WorkFlowModal.vue",
-      "to": "app/components/work-flow/WorkFlowModal.vue",
+      "from": "components/WorkFlow/WorkFlowModal.vue",
+      "to": "app/components/WorkFlow/WorkFlowModal.vue",
       "sha256Before": "3d92c651f7ee14199070255d52fab71708e38d189cfdcb7970cf46e154e9080b",
       "sha256After": "3d92c651f7ee14199070255d52fab71708e38d189cfdcb7970cf46e154e9080b"
     },
     {
-      "from": "components/work-flow/WorkFlowTable.vue",
-      "to": "app/components/work-flow/WorkFlowTable.vue",
+      "from": "components/WorkFlow/WorkFlowTable.vue",
+      "to": "app/components/WorkFlow/WorkFlowTable.vue",
       "sha256Before": "372f25f6e32a1f0271d132c219119b12ff634efaa7b46321001a397868b1bbc2",
       "sha256After": "372f25f6e32a1f0271d132c219119b12ff634efaa7b46321001a397868b1bbc2"
     },

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PagesDeliveryNoteTable from '~/components/pages/delivery-note/DeliveryNoteRecordsTable.vue'
-import PagesDeliveryNoteEditor from '~/components/pages/delivery-note/DeliveryNoteEditor.vue'
+import PagesDeliveryNoteTable from '~/components/Pages/DeliveryNote/DeliveryNoteRecordsTable.vue'
+import PagesDeliveryNoteEditor from '~/components/Pages/DeliveryNote/DeliveryNoteEditor.vue'
 
 useLegacyPage({ title: 'Delivery Note', sweetAlert: false })
 const {

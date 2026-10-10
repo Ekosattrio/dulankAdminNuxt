@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EmployeePageForm from '~/components/pages/employees/EmployeePageForm.vue'
+import EmployeePageForm from '~/components/Pages/Employees/EmployeePageForm.vue'
 
 definePageMeta({
   layout: 'default'

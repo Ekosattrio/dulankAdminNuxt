@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CustomerTypeWorkspace from '~/components/pages/customer-type/CustomerTypeWorkspace.vue'
+import CustomerTypeWorkspace from '~/components/Pages/CustomerType/CustomerTypeWorkspace.vue'
 
 useLegacyPage({ title: 'Customer Type', sweetAlert: false })
 </script>

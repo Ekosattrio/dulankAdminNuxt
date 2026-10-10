@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StoreListWorkspace from '~/components/pages/store-list/StoreListWorkspace.vue'
+import StoreListWorkspace from '~/components/Pages/StoreList/StoreListWorkspace.vue'
 
 useLegacyPage({ title: 'Stores - Toko & Cabang Percetakan', sweetAlert: false })
 </script>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useSupportTicketPage } from '~/composables/useSupportTicketPage'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SupportTicketStatsWidgets from '~/components/pages/support-ticket/SupportTicketStatsWidgets.vue'
-import SupportTicketRecordsTable from '~/components/pages/support-ticket/SupportTicketRecordsTable.vue'
-import SupportTicketAddModal from '~/components/pages/support-ticket/SupportTicketAddModal.vue'
-import SupportTicketDetailModal from '~/components/pages/support-ticket/SupportTicketDetailModal.vue'
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SupportTicketStatsWidgets from '~/components/Pages/SupportTicket/SupportTicketStatsWidgets.vue'
+import SupportTicketRecordsTable from '~/components/Pages/SupportTicket/SupportTicketRecordsTable.vue'
+import SupportTicketAddModal from '~/components/Pages/SupportTicket/SupportTicketAddModal.vue'
+import SupportTicketDetailModal from '~/components/Pages/SupportTicket/SupportTicketDetailModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({ layout: 'default' })

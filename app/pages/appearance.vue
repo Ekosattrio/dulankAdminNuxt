@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppearanceWorkspace from '~/components/pages/setting/AppearanceWorkspace.vue'
+import AppearanceWorkspace from '~/components/Pages/Setting/AppearanceWorkspace.vue'
 
 useLegacyPage({
   title: 'Appearance Settings',

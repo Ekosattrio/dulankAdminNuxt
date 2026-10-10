@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 
 definePageMeta({
   layout: 'default',

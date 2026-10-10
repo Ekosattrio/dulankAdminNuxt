@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DesignationWorkspace from '~/components/designation/DesignationWorkspace.vue'
+import DesignationWorkspace from '~/components/Designation/DesignationWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

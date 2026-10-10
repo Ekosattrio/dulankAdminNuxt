@@ -62,25 +62,25 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 
 | Fungsi | Komponen / Utility | Path | Cara Pakai Singkat |
 |---|---|---|---|
-| **Tabel Standar** | `SalesDataTable.vue` | `app/components/sales/SalesDataTable.vue` | `:columns="columns" :items="items"` + slot `#cell(colKey)="{ item }"` |
-| **Toolbar Header** | `SalesListHeader.vue` | `app/components/sales/SalesListHeader.vue` | `title="..." subtitle="..." @refresh="..." @print="..." @pdf="..."` |
-| **Tombol Baris** | `SalesActionButton.vue` | `app/components/sales/SalesActionButton.vue` | `action="view" \| "edit" \| "delete" @click="..."` |
+| **Tabel Standar** | `SalesDataTable.vue` | `app/components/Sales/SalesDataTable.vue` | `:columns="columns" :items="items"` + slot `#cell(colKey)="{ item }"` |
+| **Toolbar Header** | `SalesListHeader.vue` | `app/components/Sales/SalesListHeader.vue` | `title="..." subtitle="..." @refresh="..." @print="..." @pdf="..."` |
+| **Tombol Baris** | `SalesActionButton.vue` | `app/components/Sales/SalesActionButton.vue` | `action="view" \| "edit" \| "delete" @click="..."` |
 | **Kamus Ikon Aksi** | `actionIcons.ts` | `app/utils/actionIcons.ts` | Sumber Add/View/Edit/Delete/More dan ukuran ikon; jangan pilih glyph CRUD per halaman. |
-| **Modal / Dialog** | `SalesDialog.vue` | `app/components/sales/SalesDialog.vue` | `:open="isOpen" title="..." size="md" \| "lg"` |
-| **Konfirmasi Hapus** | `SalesConfirmDelete.vue` | `app/components/sales/SalesConfirmDelete.vue` | `:open="!!deletingItem" @confirm="..." @close="..."` |
-| **Filter Tanggal** | `DateRangePicker.vue` | `app/components/common/DateRangePicker.vue` | `v-model="filterDateRange" input-class="h-9"` |
-| **Filter Dropdown** | `TableFilterSelect.vue` | `app/components/common/TableFilterSelect.vue` | `v-model="filterStatus" :options="['Active', 'Pending']"` |
-| **Modal Print & PDF**| `DocumentPrintModal.vue`| `app/components/common/DocumentPrintModal.vue`| `:open="isPrintOpen" :columns="cols" :items="data" @close="..."` |
+| **Modal / Dialog** | `SalesDialog.vue` | `app/components/Sales/SalesDialog.vue` | `:open="isOpen" title="..." size="md" \| "lg"` |
+| **Konfirmasi Hapus** | `SalesConfirmDelete.vue` | `app/components/Sales/SalesConfirmDelete.vue` | `:open="!!deletingItem" @confirm="..." @close="..."` |
+| **Filter Tanggal** | `DateRangePicker.vue` | `app/components/Common/DateRangePicker.vue` | `v-model="filterDateRange" input-class="h-9"` |
+| **Filter Dropdown** | `TableFilterSelect.vue` | `app/components/Common/TableFilterSelect.vue` | `v-model="filterStatus" :options="['Active', 'Pending']"` |
+| **Modal Print & PDF**| `DocumentPrintModal.vue`| `app/components/Common/DocumentPrintModal.vue`| `:open="isPrintOpen" :columns="cols" :items="data" @close="..."` |
 | **Composable Print** | `useTablePrint.ts` | `app/composables/useTablePrint.ts` | `const { isPrintModalOpen, openPrintModal, closePrintModal } = useTablePrint()` |
-| **Display Uang** | `CurrencyDisplay.vue` | `app/components/common/CurrencyDisplay.vue` | `<CurrencyDisplay :value="item.price" align="right" />` |
-| **Input Uang** | `CurrencyInput.vue` | `app/components/common/CurrencyInput.vue` | `<CurrencyInput v-model="price" prefix="Rp" align="right" />` |
+| **Display Uang** | `CurrencyDisplay.vue` | `app/components/Common/CurrencyDisplay.vue` | `<CurrencyDisplay :value="item.price" align="right" />` |
+| **Input Uang** | `CurrencyInput.vue` | `app/components/Common/CurrencyInput.vue` | `<CurrencyInput v-model="price" prefix="Rp" align="right" />` |
 | **Utility Format IDR**| `currency.ts` | `app/utils/currency.ts` | `formatIDR(value)`, `formatMoney(value)`, `parseMoney(str)` |
-| **Assignee Select** | `AssigneeSelect.vue` | `app/components/common/AssigneeSelect.vue` | Pemilih petugas/karyawan/departemen standar |
-| **Stepper Jumlah** | `QuantityStepper.vue` | `app/components/common/QuantityStepper.vue` | Kontrol `[-] [ Qty ] [+]` standar |
-| **Skeleton Primitif**| `AppSkeleton.vue` | `app/components/common/AppSkeleton.vue` | `<AppSkeleton height="h-9" rounded="md" />` animasi pulse standar |
-| **Table Skeleton** | `TableSkeleton.vue` | `app/components/common/TableSkeleton.vue` | `<TableSkeleton :rows="6" :cols="10" />` mirror layout SalesDataTable |
-| **Card Skeleton** | `CardSkeleton.vue` | `app/components/common/CardSkeleton.vue` | `<CardSkeleton :count="4" />` placeholder metrik / KPI card |
-| **Loading Feedback** | `SalesFeedback.vue` | `app/components/sales/SalesFeedback.vue` | `:pending="pending" skeleton="table" \| "card"` |
+| **Assignee Select** | `AssigneeSelect.vue` | `app/components/Common/AssigneeSelect.vue` | Pemilih petugas/karyawan/departemen standar |
+| **Stepper Jumlah** | `QuantityStepper.vue` | `app/components/Common/QuantityStepper.vue` | Kontrol `[-] [ Qty ] [+]` standar |
+| **Skeleton Primitif**| `AppSkeleton.vue` | `app/components/Common/AppSkeleton.vue` | `<AppSkeleton height="h-9" rounded="md" />` animasi pulse standar |
+| **Table Skeleton** | `TableSkeleton.vue` | `app/components/Common/TableSkeleton.vue` | `<TableSkeleton :rows="6" :cols="10" />` mirror layout SalesDataTable |
+| **Card Skeleton** | `CardSkeleton.vue` | `app/components/Common/CardSkeleton.vue` | `<CardSkeleton :count="4" />` placeholder metrik / KPI card |
+| **Loading Feedback** | `SalesFeedback.vue` | `app/components/Sales/SalesFeedback.vue` | `:pending="pending" skeleton="table" \| "card"` |
 | **Kelas Form UI** | `salesUi.ts` | `app/utils/salesUi.ts` | `tableFilterControlClass`, `modalFormRowClass`, dll. |
 | **Bundled Data Server**| `data.ts` / `bundledData.ts`| `server/utils/data.ts` | `readJSON<T>()` fallback ke `bundledSources` hanya saat file fisik tidak tersedia; JSON rusak tetap error |
 | **Typed API Boundary** | `useApiFetch.ts` / `apiFetch.ts` | `app/composables/`, `app/utils/` | Request tetap memakai runtime Nuxt, tetapi tidak mengembangkan union seluruh route Nitro; UI tetap wajib memanggil composable domain. |
@@ -162,9 +162,9 @@ Status fitur di atas tidak otomatis berarti struktur route sudah mengikuti Sales
 - **Pembersihan Halaman Calculator Apps (10 Routes):**
   - Seluruh 10 sub-menu Calculator Apps (`/semua-percetakan`, `/mesin-cetak`, `/mesin-laminasi`, `/mesin-pond`, `/mesin-poli`, `/semua-toko-kertas`, `/kertas-group`, `/kertas-ukuran`, `/kertas-jenis`, `/kertas-harga`) tervalidasi sangat bersih (10-11 baris) sebagai wrapper murni atas domain component `CalculatorPartnersPage` dan `CalculatorListingsPage`.
 - **Pembersihan Halaman Products & Services (8 Routes):**
-  - `create-product.vue`: Didekomposisi dari 492 baris menjadi **13 baris** dengan mengekstrak reactive form state, computeds, modal lifecycle, dan submit payload ke `app/composables/useProductEditor.ts` dan template ke `app/components/pages/create-product/ProductDocumentForm.vue`.
-  - `cetak-full-color.vue`: Didekomposisi dari 443 baris menjadi **81 baris** dengan mengekstrak sidebar tabs dan 11 tab configuration table ke `app/components/pages/products-services/CetakFullColorWorkspace.vue`.
-  - `calender.vue`: Didekomposisi dari 449 baris menjadi **77 baris** dengan mengekstrak sidebar tabs dan 11 tab configuration table ke `app/components/pages/products-services/CalendarWorkspace.vue`.
+  - `create-product.vue`: Didekomposisi dari 492 baris menjadi **13 baris** dengan mengekstrak reactive form state, computeds, modal lifecycle, dan submit payload ke `app/composables/useProductEditor.ts` dan template ke `app/components/Pages/CreateProduct/ProductDocumentForm.vue`.
+  - `cetak-full-color.vue`: Didekomposisi dari 443 baris menjadi **81 baris** dengan mengekstrak sidebar tabs dan 11 tab configuration table ke `app/components/Pages/ProductsServices/CetakFullColorWorkspace.vue`.
+  - `calender.vue`: Didekomposisi dari 449 baris menjadi **77 baris** dengan mengekstrak sidebar tabs dan 11 tab configuration table ke `app/components/Pages/ProductsServices/CalendarWorkspace.vue`.
   - Slider multi-gambar pada Product Custom Default diaktifkan penuh dengan array gambar lokal dan fallback Netlify/Wikimedia, tombol navigasi bundar prev/next, dan indikator dots.
   - Seluruh 24 route pada ketiga grup ini teruji dan merespons **HTTP 200 OK**.
 - **Audit Struktural 6 Grup Menu Berikutnya:**
@@ -242,7 +242,7 @@ Status fitur di atas tidak otomatis berarti struktur route sudah mengikuti Sales
 - **Reusable Form Consolidation**:
   - `add-employee.vue` (304 baris) dan `edit-employee.vue` (306 baris) disatukan menggunakan komponen form bersama `EmployeePageForm.vue` (keduanya kini 14 baris).
   - `add-payroll.vue` (460 baris) dan `edit-payroll.vue` (460 baris) disatukan menggunakan komponen form bersama `PayrollPageForm.vue` (keduanya kini 14 baris).
-- **Dekomposisi Domain Workspaces**: Seluruh modul besar (`kalkulator-dashboard`, `harga-jasa-lainya`, `kertas-*-self`, `komponen-*`, `add-product-process`, `category`, `sub-category`, `unit`, `variant`, `permissions`, `balance-sheet`, `account-statement`, `balance-account`, `payslip-detail`, `designation`, serta 22 halaman setting) didekomposisi ke folder `app/components/pages/<menu>/` atau folder domain masing-masing.
+- **Dekomposisi Domain Workspaces**: Seluruh modul besar (`kalkulator-dashboard`, `harga-jasa-lainya`, `kertas-*-self`, `komponen-*`, `add-product-process`, `category`, `sub-category`, `unit`, `variant`, `permissions`, `balance-sheet`, `account-statement`, `balance-account`, `payslip-detail`, `designation`, serta 22 halaman setting) didekomposisi ke folder `app/components/Pages/<menu>/` atau folder domain masing-masing.
 - **Validasi Live Server Berbukti**: Skrip uji live HTTP otomatis menguji seluruh 100 rute terhadap dev server Nuxt aktif (`http://localhost:3000`). Hasilnya: 100 dari 100 rute terverifikasi **HTTP 200 OK** tanpa error.
 - Status: **verified** (arsitektur page gate & live HTTP response 200 OK).
 
@@ -301,7 +301,7 @@ Ikuti langkah-langkah presisi ini:
    - Composable State: `app/composables/use<NamaMenu>.ts`
 3. **Pecah Komponen (Halaman Tipis):**
    - Halaman tipis: `app/pages/<nama-menu>.vue`
-   - Komponen tabel & modal: `app/components/pages/<nama-menu>/`
+   - Komponen tabel & modal: `app/components/Pages/<nama-menu>/`
 4. **Pasang Komponen Standar:**
    - Gunakan `SalesDataTable.vue` untuk tabel (`text-sm`, 14px, sesuai revisi klien).
    - Gunakan `DateRangePicker.vue` dan `TableFilterSelect.vue` (`h-9`) untuk filter.

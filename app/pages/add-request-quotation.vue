@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CreateRequestQuotationForm from '~/components/pages/add-request-quotation/CreateRequestQuotationForm.vue'
+import CreateRequestQuotationForm from '~/components/Pages/AddRequestQuotation/CreateRequestQuotationForm.vue'
 useLegacyPage({ title: 'Add New Request For Quotation (RFQ)', sweetAlert: false })
 const { form, pending, loadError, isSubmitting, actionError, handleSubmit } = useRequestQuotationEditor(false)
 </script>

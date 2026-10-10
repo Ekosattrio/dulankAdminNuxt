@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { MyIncentiveFilterParams } from '#server/types/my-incentive'
 import { useMyIncentives } from '~/composables/useMyIncentives'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import MyIncentiveStatsWidgets from '~/components/pages/my-incentive/MyIncentiveStatsWidgets.vue'
-import MyIncentiveRecordsTable from '~/components/pages/my-incentive/MyIncentiveRecordsTable.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import MyIncentiveStatsWidgets from '~/components/Pages/MyIncentive/MyIncentiveStatsWidgets.vue'
+import MyIncentiveRecordsTable from '~/components/Pages/MyIncentive/MyIncentiveRecordsTable.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

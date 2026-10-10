@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SystemSettingWorkspace from '~/components/pages/setting/SystemSettingWorkspace.vue'
+import SystemSettingWorkspace from '~/components/Pages/Setting/SystemSettingWorkspace.vue'
 
 useLegacyPage({
   title: 'System Settings',

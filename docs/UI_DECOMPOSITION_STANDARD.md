@@ -158,7 +158,7 @@ Setiap menu yang diubah wajib memiliki UI Responsibility Evidence dan Architectu
 | Evidence | Path | Result |
 | --- | --- | --- |
 | Route composer | `app/pages/...` | pass/gap |
-| UI orchestrator | `app/components/pages/.../*Screen.vue` | pass/gap/N/A |
+| UI orchestrator | `app/components/Pages/.../*Screen.vue` | pass/gap/N/A |
 | Responsibility split | Header/Filters/Table/Form/Modal paths | pass/gap |
 | Frontend application | `app/composables/...` | pass/gap |
 | HTTP/domain/data | API + service + type + data | pass/gap |

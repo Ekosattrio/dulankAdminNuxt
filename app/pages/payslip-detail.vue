@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PayslipDetailWorkspace from '~/components/pages/payslip/PayslipDetailWorkspace.vue'
+import PayslipDetailWorkspace from '~/components/Pages/Payslip/PayslipDetailWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

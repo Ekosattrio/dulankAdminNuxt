@@ -1,4 +1,18 @@
-<script setup lang="ts">const props = withDefaults(
+<script setup lang="ts">
+export interface Employee {
+  id: string
+  name: string
+  department: string
+  phone: string
+  email: string
+  address: string
+  salary: number
+  system: string
+  ovtRate: number
+  status: string
+}
+
+const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
@@ -179,7 +193,8 @@ onMounted(() => {
       isOpen.value = false
     }
   })
-})</script>
+})
+</script>
 
 <template>
   <div ref="root" class="relative w-full">
@@ -193,7 +208,7 @@ onMounted(() => {
         @focus="isOpen = true"
       />
       <span class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-2.5 text-gray-400">
-        <CommonFeatherIcon name="search" size="16" />
+        <FeatherIcon name="search" size="16" />
       </span>
     </div>
 

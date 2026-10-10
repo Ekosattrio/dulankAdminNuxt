@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { IncentiveItem, IncentiveFormData } from '#server/types/incentive'
-import PagesIncentiveModal from '~/components/incentive/IncentiveModal.vue'
-import PagesIncentiveTable from '~/components/incentive/IncentiveTable.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import TableFilterSelect from '~/components/common/TableFilterSelect.vue'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
+import PagesIncentiveModal from '~/components/Incentive/IncentiveModal.vue'
+import PagesIncentiveTable from '~/components/Incentive/IncentiveTable.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 import { tableFilterControlClass } from '~/utils/salesUi'
 
 definePageMeta({ layout: 'default' })

@@ -3,11 +3,11 @@ import type { Order, OrderStatus } from '#server/types/order'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useOrders } from '~/composables/useOrders'
 import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
-import OrdersRecordsTable from '~/components/pages/orders/OrdersRecordsTable.vue'
-import OrderStatsWidgets from '~/components/pages/orders/OrderStatsWidgets.vue'
-import OrderStatusModal from '~/components/pages/orders/OrderStatusModal.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import OrdersRecordsTable from '~/components/Pages/Orders/OrdersRecordsTable.vue'
+import OrderStatsWidgets from '~/components/Pages/Orders/OrderStatsWidgets.vue'
+import OrderStatusModal from '~/components/Pages/Orders/OrderStatusModal.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Orders List', sweetAlert: false })
 
@@ -51,7 +51,7 @@ async function handleStatusSubmit(newStatus: OrderStatus) {
   }
 }
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

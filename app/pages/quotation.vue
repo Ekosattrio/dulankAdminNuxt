@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PagesQuotationTable from '~/components/pages/quotation/QuotationRecordsTable.vue'
-import PagesQuotationEditor from '~/components/pages/quotation/QuotationEditor.vue'
+import PagesQuotationTable from '~/components/Pages/Quotation/QuotationRecordsTable.vue'
+import PagesQuotationEditor from '~/components/Pages/Quotation/QuotationEditor.vue'
 
 useLegacyPage({ title: 'Quotation List', sweetAlert: false })
 const {

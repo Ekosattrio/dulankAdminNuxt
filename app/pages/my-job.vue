@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { MyJob, JobStatus } from '#server/types/my-job'
 import { useMyJobs } from '~/composables/useMyJobs'
-import MyJobCardGrid from '~/components/pages/my-job/MyJobCardGrid.vue'
-import MyJobDetailModal from '~/components/pages/my-job/MyJobDetailModal.vue'
-import MyJobStatusModal from '~/components/pages/my-job/MyJobStatusModal.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import MyJobCardGrid from '~/components/Pages/MyJob/MyJobCardGrid.vue'
+import MyJobDetailModal from '~/components/Pages/MyJob/MyJobDetailModal.vue'
+import MyJobStatusModal from '~/components/Pages/MyJob/MyJobStatusModal.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({
   layout: 'default'

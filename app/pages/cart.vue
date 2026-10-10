@@ -2,12 +2,12 @@
 import type { CartFilterQuery } from '#server/types/cart'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useCarts } from '~/composables/useCarts'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import CartStatsWidgets from '~/components/pages/cart/CartStatsWidgets.vue'
-import CartRecordsTable from '~/components/pages/cart/CartRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import CartStatsWidgets from '~/components/Pages/Cart/CartStatsWidgets.vue'
+import CartRecordsTable from '~/components/Pages/Cart/CartRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

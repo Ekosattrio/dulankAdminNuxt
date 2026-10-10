@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import PagesSalesTable from '~/components/pages/sales/SalesRecordsTable.vue'
-import PagesSalesEditor from '~/components/pages/sales/SalesEditor.vue'
-import SalesHistoryDialog from '~/components/pages/sales/SalesHistoryDialog.vue'
-import SalesDetailsDialog from '~/components/pages/sales/SalesDetailsDialog.vue'
-import SalesPaymentsDialog from '~/components/pages/sales/SalesPaymentsDialog.vue'
+import PagesSalesTable from '~/components/Pages/Sales/SalesRecordsTable.vue'
+import PagesSalesEditor from '~/components/Pages/Sales/SalesEditor.vue'
+import SalesHistoryDialog from '~/components/Pages/Sales/SalesHistoryDialog.vue'
+import SalesDetailsDialog from '~/components/Pages/Sales/SalesDetailsDialog.vue'
+import SalesPaymentsDialog from '~/components/Pages/Sales/SalesPaymentsDialog.vue'
 import type { Sale } from '#server/types/sale'
 
 useLegacyPage({ title: 'Sales', sweetAlert: false })
@@ -34,7 +34,7 @@ const {
   printTable,
 } = useSalesPage()
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

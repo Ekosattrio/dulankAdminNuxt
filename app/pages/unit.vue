@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UnitWorkspace from '~/components/unit/UnitWorkspace.vue'
+import UnitWorkspace from '~/components/Unit/UnitWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

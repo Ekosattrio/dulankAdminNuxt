@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GdprSettingsWorkspace from '~/components/pages/setting/GdprSettingsWorkspace.vue'
+import GdprSettingsWorkspace from '~/components/Pages/Setting/GdprSettingsWorkspace.vue'
 
 useLegacyPage({
   title: 'GDPR Settings',

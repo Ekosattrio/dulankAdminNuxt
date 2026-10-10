@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { CalendarConfig } from '#server/types/calendar-setting'
-import FeatherIcon from '~/components/common/FeatherIcon.vue'
-import CalendarWorkspace from '~/components/pages/products-services/CalendarWorkspace.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import CalendarWorkspace from '~/components/Pages/ProductsServices/CalendarWorkspace.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 definePageMeta({ layout: 'default' })
 useLegacyPage({ title: 'Calender', sweetAlert: false })

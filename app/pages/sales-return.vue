@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import SalesReturnRecordsTable from '~/components/pages/sales-return/SalesReturnRecordsTable.vue'
-import SalesReturnEditor from '~/components/pages/sales-return/SalesReturnEditor.vue'
-import SalesReturnDetails from '~/components/pages/sales-return/SalesReturnDetails.vue'
-import SalesReturnPayment from '~/components/pages/sales-return/SalesReturnPayment.vue'
+import SalesReturnRecordsTable from '~/components/Pages/SalesReturn/SalesReturnRecordsTable.vue'
+import SalesReturnEditor from '~/components/Pages/SalesReturn/SalesReturnEditor.vue'
+import SalesReturnDetails from '~/components/Pages/SalesReturn/SalesReturnDetails.vue'
+import SalesReturnPayment from '~/components/Pages/SalesReturn/SalesReturnPayment.vue'
 useLegacyPage({ title: 'Sales Return List', sweetAlert: false })
 const {
   pending,

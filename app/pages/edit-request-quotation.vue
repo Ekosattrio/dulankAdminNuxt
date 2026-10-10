@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EditRequestQuotationForm from '~/components/pages/edit-request-quotation/EditRequestQuotationForm.vue'
+import EditRequestQuotationForm from '~/components/Pages/EditRequestQuotation/EditRequestQuotationForm.vue'
 useLegacyPage({ title: 'Edit Request For Quotation', sweetAlert: false })
 const { form, pending, loadError, isSubmitting, actionError, handleSubmit } = useRequestQuotationEditor(true)
 </script>

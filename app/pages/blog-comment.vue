@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BlogCommentWorkspace from '~/components/blog/BlogCommentWorkspace.vue'
+import BlogCommentWorkspace from '~/components/Blog/BlogCommentWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

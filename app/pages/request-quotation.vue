@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import RequestQuotationRecordsTable from '~/components/pages/request-quotation/RequestQuotationRecordsTable.vue'
-import RequestQuotationDuplicate from '~/components/pages/request-quotation/RequestQuotationDuplicate.vue'
+import RequestQuotationRecordsTable from '~/components/Pages/RequestQuotation/RequestQuotationRecordsTable.vue'
+import RequestQuotationDuplicate from '~/components/Pages/RequestQuotation/RequestQuotationDuplicate.vue'
 useLegacyPage({ title: 'Request Quotation List', sweetAlert: false })
 const {
   pending,

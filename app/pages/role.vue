@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PermissionMatrixWorkspace from '~/components/pages/roles/PermissionMatrixWorkspace.vue'
+import PermissionMatrixWorkspace from '~/components/Pages/Roles/PermissionMatrixWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

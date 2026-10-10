@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FlowName, FlowNameFormData } from '#server/types/flow-name'
 import type { DateRangeValue } from '~/composables/useDateRange'
-import FlowNameModal from '~/components/pages/flow-name/FlowNameModal.vue'
-import FlowNameRecordsTable from '~/components/pages/flow-name/FlowNameRecordsTable.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import FlowNameModal from '~/components/Pages/FlowName/FlowNameModal.vue'
+import FlowNameRecordsTable from '~/components/Pages/FlowName/FlowNameRecordsTable.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Flow Name List', sweetAlert: false })
 

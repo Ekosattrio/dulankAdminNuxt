@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CalculatorPartnersPage from '~/components/pages/calculator/CalculatorPartnersPage.vue'
+import CalculatorPartnersPage from '~/components/Pages/Calculator/CalculatorPartnersPage.vue'
 
 definePageMeta({ layout: 'default' })
 </script>

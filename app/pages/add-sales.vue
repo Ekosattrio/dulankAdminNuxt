@@ -419,7 +419,7 @@ const mockCustomers: Customer[] = [
 ];
 
 const customerSearch = ref("");
-const selectedCustomer = ref<Customer | null>(mockCustomers[0]);
+const selectedCustomer = ref<Customer | null>(mockCustomers[0] ?? null);
 const filteredCustomers = ref<Customer[]>([]);
 
 function searchCustomer() {

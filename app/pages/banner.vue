@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BannerWorkspace from '~/components/pages/banner/BannerWorkspace.vue'
+import BannerWorkspace from '~/components/Pages/Banner/BannerWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

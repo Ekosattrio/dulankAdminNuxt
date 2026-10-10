@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CompanySettingWorkspace from '~/components/pages/setting/CompanySettingWorkspace.vue'
+import CompanySettingWorkspace from '~/components/Pages/Setting/CompanySettingWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MoneyTransferWorkspace from '~/components/pages/money-transfer/MoneyTransferWorkspace.vue'
+import MoneyTransferWorkspace from '~/components/Pages/MoneyTransfer/MoneyTransferWorkspace.vue'
 
 useLegacyPage({ title: 'Money Transfer', sweetAlert: false })
 </script>

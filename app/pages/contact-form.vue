@@ -2,12 +2,12 @@
 import type { ContactFormItem, ContactFormFilterQuery } from '#server/types/contact-form'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useContactForms } from '~/composables/useContactForms'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import ContactFormStatsWidgets from '~/components/pages/contact-form/ContactFormStatsWidgets.vue'
-import ContactFormRecordsTable from '~/components/pages/contact-form/ContactFormRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import ContactFormStatsWidgets from '~/components/Pages/ContactForm/ContactFormStatsWidgets.vue'
+import ContactFormRecordsTable from '~/components/Pages/ContactForm/ContactFormRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

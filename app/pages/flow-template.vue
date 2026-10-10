@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FlowTemplate, FlowTemplateFormData } from '#server/types/flow-template'
 import type { DateRangeValue } from '~/composables/useDateRange'
-import FlowTemplateModal from '~/components/pages/flow-template/FlowTemplateModal.vue'
-import FlowTemplateRecordsTable from '~/components/pages/flow-template/FlowTemplateRecordsTable.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import FlowTemplateModal from '~/components/Pages/FlowTemplate/FlowTemplateModal.vue'
+import FlowTemplateRecordsTable from '~/components/Pages/FlowTemplate/FlowTemplateRecordsTable.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Flow Template', sweetAlert: false })
 

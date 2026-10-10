@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { KomponenFiksItem, KomponenFiksFormData } from '#server/types/calculator-components'
-import KomponenFiksRecordsTable from '~/components/pages/calculator/components/KomponenFiksRecordsTable.vue'
-import KomponenFiksFormModal from '~/components/pages/calculator/components/KomponenFiksFormModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import KomponenFiksRecordsTable from '~/components/Pages/Calculator/Components/KomponenFiksRecordsTable.vue'
+import KomponenFiksFormModal from '~/components/Pages/Calculator/Components/KomponenFiksFormModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

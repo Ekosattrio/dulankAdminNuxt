@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FooterWorkspace from '~/components/pages/footer/FooterWorkspace.vue'
+import FooterWorkspace from '~/components/Pages/Footer/FooterWorkspace.vue'
 
 definePageMeta({
   layout: 'default',

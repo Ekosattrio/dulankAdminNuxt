@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import InvoiceReportWorkspace from '~/components/pages/reports/InvoiceReportWorkspace.vue'
+import InvoiceReportWorkspace from '~/components/Pages/Reports/InvoiceReportWorkspace.vue'
 
 useHead({
   title: 'Invoice Report - Kacetak System'

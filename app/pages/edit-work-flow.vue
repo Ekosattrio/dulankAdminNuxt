@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { WorkFlow, WorkFlowFormData } from "#server/types/work-flow";
-import WorkFlowDocumentForm from "~/components/pages/work-flow/WorkFlowDocumentForm.vue";
-import SalesFeedback from "~/components/sales/SalesFeedback.vue";
-import SalesListHeader from "~/components/sales/SalesListHeader.vue";
+import WorkFlowDocumentForm from "~/components/Pages/WorkFlow/WorkFlowDocumentForm.vue";
+import SalesFeedback from "~/components/Sales/SalesFeedback.vue";
+import SalesListHeader from "~/components/Sales/SalesListHeader.vue";
 
 useLegacyPage({ title: "Edit Work Flow", sweetAlert: false });
 

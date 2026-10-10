@@ -71,7 +71,7 @@ Aturan lengkap decomposition berada di `docs/UI_DECOMPOSITION_STANDARD.md` (**BR
 1. Mendaftarkan metadata halaman dan runtime script/style lewat `useLegacyPage()`.
 2. Memanggil **domain composable** (`useOrders()`, `useUserAddresses()`). `$fetch()` dan `useFetch()` data domain dilarang langsung di page.
 3. Mengelola state koordinasi ringan seperti selected ID, dialog open, atau active tab. Filter/query, editor state, kalkulasi, dan mutation flow berada di composable atau komponen domain.
-4. Menyusun (compose) komponen UI spesifik halaman dari `app/components/pages/<route>/` dan mengirim data ke komponen via **typed props**.
+4. Menyusun (compose) komponen UI spesifik halaman dari `app/components/Pages/<route>/` dan mengirim data ke komponen via **typed props**.
 5. Mendengarkan event dari komponen anak (misalnya `@created="refresh"`) untuk memicu pembaruan data.
 
 Target page maksimal 150 baris. Di atas 200 baris wajib decomposition audit atau justifikasi arsitektural; di atas 300 baris otomatis `structural review required`. Page tetap gagal meskipun pendek bila menyimpan data domain hardcoded, type domain lokal, business calculation, request langsung, markup tabel/form/modal panjang, atau feedback palsu dengan `alert()`/`confirm()`.
@@ -98,9 +98,9 @@ Target Workspace/Screen orchestrator maksimal 150 baris. Workspace di atas 200 b
 
 ### 2.3 Pemanggilan Komponen dari Halaman
 Konfigurasi admin mempertahankan `components.pathPrefix: false`, sehingga nama auto-import mengikuti nama file komponen:
-- `app/components/address/AddressTable.vue` → `<AddressTable />`
-- `app/components/category/CategoryTable.vue` → `<CategoryTable />`
-- `app/components/common/PageHeader.vue` → `<PageHeader />`
+- `app/components/Address/AddressTable.vue` → `<AddressTable />`
+- `app/components/Category/CategoryTable.vue` → `<CategoryTable />`
+- `app/components/Common/PageHeader.vue` → `<PageHeader />`
 
 Gunakan import eksplisit jika nama komponen bertabrakan. Contoh blueprint dengan nama berawalan `Pages...` di bagian berikutnya perlu disesuaikan dengan nama komponen atau alias import yang benar-benar digunakan; pemindahan ke `app/` tidak mengubah nama komponen yang sudah dipakai halaman.
 
@@ -133,7 +133,7 @@ const { addresses } = useUserAddresses();
           <div class="col-lg-3 mb-4"><ProfileSidebar /></div>
 
           <div class="col-lg-9">
-            <!-- Named UI components dari app/components/pages/address/ -->
+            <!-- Named UI components dari app/components/Pages/Address/ -->
             <PagesAddressNoAddressesState v-if="!addresses.length" />
             <PagesAddressAddAddressModal />
             <PagesAddressList
@@ -157,7 +157,7 @@ Komponen dibagi ke dalam kategori yang jelas berdasarkan cakupan tanggung jawab 
 Pemisahan komponen wajib mengikuti tanggung jawab nyata: Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor, Detail/History/Modal, dan Feedback. Nama `Workspace` atau `Screen` hanya untuk orchestrator, bukan wadah tunggal seluruh halaman.
 
 ### 3.1 Kategori Komponen
-1. **Route-Specific Components (`app/components/pages/<route>/`)**:
+1. **Route-Specific Components (`app/components/Pages/<route>/`)**:
    - Wajib ada 1 folder untuk setiap file yang ada di `app/pages/`.
    - Menggunakan **nama file bahasa Inggris** yang menjelaskan fungsi UI spesifiknya:
      - `OrdersHeader.vue`, `OrderStatusTabs.vue`, `OrderRows.vue`, `EmptyOrdersState.vue`.
@@ -169,15 +169,15 @@ Pemisahan komponen wajib mengikuti tanggung jawab nyata: Header/Actions, Stats, 
      - `profile/`: `Sidebar.vue`, `Header.vue`.
      - `support/`: `CreateTicketModal.vue`, `TicketConversation.vue`, `TicketRow.vue`.
      - `cart/`: shared widget cart antar-halaman.
-3. **Global Layout Components (`app/components/layout/`)**:
+3. **Global Layout Components (`app/components/Layout/`)**:
    - Komponen kerangka aplikasi: `AppHeader.vue`, `AppFooter.vue`, `MainNavbar.vue`, `CalculatorNavbar.vue`, `CalculatorHeader.vue`.
-4. **Common Primitive Components (`app/components/common/`)**:
+4. **Common Primitive Components (`app/components/Common/`)**:
    - Komponen generik non-domain: `Breadcrumb.vue`, `EmptyState.vue`, `QuantityControl.vue`.
 
 ### 3.2 Props & Emits Handling
 Komponen adalah presentational & kontraktual. Semua data masuk melalui `defineProps` berbasis TypeScript type, dan aksi dikirim ke atas lewat `defineEmits`.
 
-#### Contoh Komponen Tabel / List (`app/components/pages/address/AddressList.vue`):
+#### Contoh Komponen Tabel / List (`app/components/Pages/Address/AddressList.vue`):
 ```vue
 <script setup lang="ts">
 import type { UserAddress } from "#server/types/user";
@@ -213,7 +213,7 @@ defineProps<{
 </template>
 ```
 
-#### Contoh Form / Control dengan `v-model` (`app/components/pages/orders/OrdersHeader.vue`):
+#### Contoh Form / Control dengan `v-model` (`app/components/Pages/Orders/OrdersHeader.vue`):
 ```vue
 <script setup lang="ts">
 defineProps<{
@@ -318,7 +318,7 @@ Revisi menu tidak boleh berhenti pada pemindahan markup. Setiap menu yang dinyat
 - **Utility server memegang persistensi dan validasi:** route handler tipis, sedangkan normalisasi, penomoran, kalkulasi total, filter tanggal, validasi pembayaran/refund, dan baca/tulis data berada di `server/utils/` atau helper domain yang bisa diganti adapter database.
 - **Response stabil:** gunakan bentuk `success`, `data`, `message`, dan `meta` bila perlu. Perubahan backend berikutnya tidak boleh memaksa komponen UI membaca bentuk response baru per halaman.
 - **Data runtime aman:** `data/` adalah penyimpanan runtime pengguna, `server/data/` adalah sumber JSON awal. GET tidak membuat/mengubah data, array kosong tetap valid, JSON rusak harus error jelas, dan seed ulang tidak boleh menimpa data pengguna.
-- **Frontend tipis:** `app/pages/<route>.vue` hanya menyusun state koordinasi dan komponen. Form/tabel/detail berada di `app/components/pages/<menu>/`, alur fetch/simpan di `app/composables/`, dan helper UI bersama di `app/components/common/` atau `app/utils/`.
+- **Frontend tipis:** `app/pages/<route>.vue` hanya menyusun state koordinasi dan komponen. Form/tabel/detail berada di `app/components/Pages/<menu>/`, alur fetch/simpan di `app/composables/`, dan helper UI bersama di `app/components/Common/` atau `app/utils/`.
 - **Reusable untuk fungsi dan style berulang:** bila filter, search, date range, status, action button, modal, print, formatter, atau control toolbar dipakai lebih dari satu menu, buat standar bersama. Jangan membiarkan setiap menu punya tinggi field, radius, warna, focus state, atau helper parsing yang berbeda untuk fungsi yang sama.
 - **Siap DB:** ketika JSON nanti diganti database, idealnya perubahan berada pada `server/utils/`/repository dan bukan pada page/component. Karena itu ID, relasi record, detail item, payment history, source transaction, status, dan nomor dokumen harus disimpan eksplisit.
 
@@ -612,7 +612,7 @@ sequenceDiagram
     autonumber
     actor User as Pengguna
     participant Page as app/pages/*.vue
-    participant Comp as app/components/pages/*
+    participant Comp as app/components/Pages/*
     participant Composable as app/composables/use*.ts
     participant Nitro as server/api/*
     participant ServerUtil as server/utils/data.ts
@@ -763,7 +763,7 @@ const tickets = computed(() => data.value?.data ?? []);
 </template>
 ```
 
-### 5. Komponen Presentational List (`app/components/pages/support-ticket/TicketList.vue`)
+### 5. Komponen Presentational List (`app/components/Pages/SupportTicket/TicketList.vue`)
 ```vue
 <script setup lang="ts">
 import type { SupportTicket } from "#server/types/ticket";
@@ -835,11 +835,11 @@ Bagian ini adalah **instruksi imperatif yang WAJIB ditaati** oleh setiap model A
    - Jangan membuat folder acak di luar konvensi ini.
 2. **Halaman Harus Menjadi Thin Composition Layer**:
    - Dilarang menaruh template HTML ratusan baris di dalam `app/pages/*.vue`.
-   - Pecah setiap section halaman menjadi komponen di `app/components/pages/<route>/`.
+   - Pecah setiap section halaman menjadi komponen di `app/components/Pages/<route>/`.
    - Halaman hanya bertugas menghubungkan composable data dengan komponen UI.
    - Dilarang memindahkan monolit page ke satu `*Workspace.vue`; audit page, orchestrator, dan seluruh child component.
 3. **Konvensi 1 Folder Komponen per Route**:
-   - Untuk route `app/pages/foo-bar.vue`, wajib membuat folder `app/components/pages/foo-bar/`.
+   - Untuk route `app/pages/foo-bar.vue`, wajib membuat folder `app/components/Pages/foo-bar/`.
    - Komponen di dalam folder ini harus menggunakan bahasa Inggris deskriptif (misal: `HeroSection.vue`, `FilterBar.vue`, `DataTable.vue`).
    - Dilarang menamakan file komponen dengan nama generik seperti `Content.vue`, `Body.vue`, atau `Page.vue`.
 4. **Sentralisasi Types di `#server/types`**:
@@ -894,11 +894,11 @@ Langkah 4: Buat Composable Reaktif (app/composables/)
       ├── Import type dari "#server/types/voucher"
       └── Bungkus useFetch('/api/vouchers', { key: 'vouchers' }) dan ekspos ref/computed.
 
-Langkah 5: Siapkan Folder & Komponen UI (app/components/pages/voucher/)
-  ├── Buat folder app/components/pages/voucher/
-  ├── Buat app/components/pages/voucher/VoucherList.vue (menerima props vouchers: Voucher[])
-  ├── Buat app/components/pages/voucher/VoucherCard.vue (kartu item)
-  └── Buat app/components/pages/voucher/RedeemModal.vue (form modal + emisi aksi)
+Langkah 5: Siapkan Folder & Komponen UI (app/components/Pages/voucher/)
+  ├── Buat folder app/components/Pages/voucher/
+  ├── Buat app/components/Pages/voucher/VoucherList.vue (menerima props vouchers: Voucher[])
+  ├── Buat app/components/Pages/voucher/VoucherCard.vue (kartu item)
+  └── Buat app/components/Pages/voucher/RedeemModal.vue (form modal + emisi aksi)
 
 Langkah 6: Bangun Halaman Route (app/pages/voucher.vue)
   ├── Daftarkan useLegacyPage({ title: 'Voucher', styles: [...], scripts: [...] })
@@ -1258,7 +1258,7 @@ File yang dibuka di editor sekarang adalah `app/pages/address.vue` dan `docs/STR
 
 Tahap ini mencakup tujuh route utama: `/sales`, `/invoice`, `/delivery-note`, `/sales-return`, `/quotation`, `/request-quotation`, dan `/pos`. Halaman sekarang menyusun komponen dan menghubungkan state/composable; markup tabel, editor, dan dialog berada di komponen terpisah. Form tambah/edit RFQ juga dihubungkan ke API daftar yang sama agar alur dari menu RFQ benar-benar menyimpan perubahan.
 
-| Route | Komponen utama di `app/components/pages/` | Composable |
+| Route | Komponen utama di `app/components/Pages/` | Composable |
 |---|---|---|
 | `/sales` | `sales/SalesRecordsTable.vue`, `sales/SalesEditor.vue` | `useSalesPage()` → `useSales()` |
 | `/invoice` | `invoice/InvoiceRecordsTable.vue`, `invoice/InvoiceEditor.vue` | `useInvoicePage()` → `useInvoices()` |
@@ -1274,7 +1274,7 @@ Tahap ini mencakup tujuh route utama: `/sales`, `/invoice`, `/delivery-note`, `/
 - `useLegacyPage({ title, sweetAlert: false })` mendaftarkan metadata. Implementasi admin saat ini tidak menyuntikkan CSS/JavaScript legacy; Tailwind dan event Vue menangani UI. `styles`/`scripts` pada contoh blueprint bukan kewajiban memuat Bootstrap.
 - Komponen route di-import eksplisit bila memakai alias `Pages...`. Jangan mengandalkan awalan folder otomatis karena konfigurasi `pathPrefix: false` masih aktif.
 - Type entitas tetap di `server/types/`, di-import melalui `#server/types/...`. Form dan tabel memakai props/emits TypeScript; `defineModel` dipakai untuk nilai form yang memang dua arah.
-- `app/components/sales/` menyediakan header, feedback, dialog, dan konfirmasi hapus bersama. Nama komponen domain lama tetap tersedia sebagai adapter menuju komponen route, sehingga pemanggil lama tetap kompatibel.
+- `app/components/Sales/` menyediakan header, feedback, dialog, dan konfirmasi hapus bersama. Nama komponen domain lama tetap tersedia sebagai adapter menuju komponen route, sehingga pemanggil lama tetap kompatibel.
 - `useSalesListActions()` menangani status editor, proses simpan/hapus, dan pesan kegagalan. Fungsi cetak di `app/utils/salesDocuments.ts` mencetak data pilihan melalui dialog browser, termasuk pilihan Save as PDF.
 
 ### 20.2 Penyimpanan dan Pelestarian Data
@@ -1331,7 +1331,7 @@ Validasi revisi: build, 13 pemeriksaan integrasi API, validasi struktur, dan uji
 
 Tahap Payment mencakup `/payments`, `/payment-inflow`, dan `/payment-outflow`. Ketiga route ini memakai pola backend-ready yang menjadi acuan setelah Sales: page tipis, tabel/editor/detail dipisah ke komponen, data berasal dari API Nitro, kontrak data berada di `server/types/`, dan helper persistensi/validasi berada di `server/utils/`.
 
-| Route | Komponen utama di `app/components/pages/` | Composable | API |
+| Route | Komponen utama di `app/components/Pages/` | Composable | API |
 |---|---|---|---|
 | `/payments` | `payments/PaymentRecordsTable.vue` | `usePayments()` | `/api/payments` |
 | `/payment-inflow` | `payment-flow/PaymentBalanceSummary.vue`, `PaymentFlowRecordsTable.vue`, `PaymentFlowEditor.vue`, `PaymentFlowDetails.vue` | `usePaymentFlow('inflow')` | `/api/payment-inflow` |
@@ -1349,7 +1349,7 @@ Tahap Payment mencakup `/payments`, `/payment-inflow`, dan `/payment-outflow`. K
 
 Fitur pemilih rentang waktu sudah distandarkan agar dapat dipakai ulang di menu lain:
 
-- Frontend memakai `app/components/common/DateRangePicker.vue`.
+- Frontend memakai `app/components/Common/DateRangePicker.vue`.
 - State dan helper tanggal memakai `app/composables/useDateRange.ts`.
 - Filtering server memakai `server/utils/dateRange.ts`.
 - Preset mengikuti HTML legacy: Kemarin, 7 Hari Terakhir, Bulan Ini, Bulan Lalu, Tahun Lalu, dan Rentang Kustom.
@@ -1387,7 +1387,7 @@ Grup menu WORKFLOW mencakup empat menu operasional:
 
 Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis, komponen domain terpisah, dan susunan visual sesuai file referensi `legacy/static-source/flow-category.html`, `flow-name.html`, `flow-template.html`, `work-flow.html`, `add-work-flow.html`, dan `edit-work-flow.html`.
 
-| Route | Komponen utama di `app/components/pages/` | Composable | API |
+| Route | Komponen utama di `app/components/Pages/` | Composable | API |
 |---|---|---|---|
 | `/flow-category` | `flow-category/FlowCategoryRecordsTable.vue`, `flow-category/FlowCategoryModal.vue` | `useFlowCategories()` | `/api/flow-categories` |
 | `/flow-name` | `flow-name/FlowNameRecordsTable.vue`, `flow-name/FlowNameModal.vue` | `useFlowNames()` | `/api/flow-names` |
@@ -1459,13 +1459,13 @@ Bagian ini mendokumentasikan implementasi backend-ready halaman `/create-product
 | File | Tanggung Jawab |
 |---|---|
 | `app/pages/create-product.vue` | Halaman form utama dengan 3 accordion card (Product Information, Pricing Type, Images), reactive state, integrasi API, feedback error, dan navigasi. |
-| `app/components/pages/create-product/ProductInfoSection.vue` | Form informasi dasar produk: Store, Item Code (dengan tombol `Generate Code`), Product Name, Category (+ Add New modal trigger), Sub Category (+ Add New), Unit (+ Add New), Selling Type, Description. |
-| `app/components/pages/create-product/ProductPricingSection.vue` | Tab navigasi 5 jenis harga (Single Product, Variable Product, Size Calculation, Large Format, Offset Service Price), form input spesifik per tipe, chip tag varian dinamis, serta tabel varian dengan QuantityStepper. |
-| `app/components/pages/create-product/ProductCategoryModal.vue` | Modal dialog tambah kategori baru cepat menggunakan `SalesDialog` dan pola Grid 12 kolom. |
-| `app/components/pages/create-product/ProductAttributeModal.vue` | Modal dialog tambah atribut varian baru (misal: Size, Color) beserta input tags nilainya. |
-| `app/components/pages/create-product/ProductVariationModal.vue` | Modal dialog konfigurasi detail varian terpilih (Quantity, Price, Quantity Alert, Tax, Discount). |
-| `app/components/common/QuantityStepper.vue` | **Reusable Component**: Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
-| `app/components/common/ImageUploadGrid.vue` | **Reusable Component**: Pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
+| `app/components/Pages/CreateProduct/ProductInfoSection.vue` | Form informasi dasar produk: Store, Item Code (dengan tombol `Generate Code`), Product Name, Category (+ Add New modal trigger), Sub Category (+ Add New), Unit (+ Add New), Selling Type, Description. |
+| `app/components/Pages/CreateProduct/ProductPricingSection.vue` | Tab navigasi 5 jenis harga (Single Product, Variable Product, Size Calculation, Large Format, Offset Service Price), form input spesifik per tipe, chip tag varian dinamis, serta tabel varian dengan QuantityStepper. |
+| `app/components/Pages/CreateProduct/ProductCategoryModal.vue` | Modal dialog tambah kategori baru cepat menggunakan `SalesDialog` dan pola Grid 12 kolom. |
+| `app/components/Pages/CreateProduct/ProductAttributeModal.vue` | Modal dialog tambah atribut varian baru (misal: Size, Color) beserta input tags nilainya. |
+| `app/components/Pages/CreateProduct/ProductVariationModal.vue` | Modal dialog konfigurasi detail varian terpilih (Quantity, Price, Quantity Alert, Tax, Discount). |
+| `app/components/Common/QuantityStepper.vue` | **Reusable Component**: Kontrol stepper kuantitas numerik standar (`[-] [ 2 ] [+]`) dengan tombol Feather icon, min/max/step bounding, mode compact tabel dan full form. |
+| `app/components/Common/ImageUploadGrid.vue` | **Reusable Component**: Pengunggah gambar multi-file standar dengan area drag-and-drop, thumbnail preview, hover delete badge, dan validasi berkas. |
 
 ### 23.2 Kontrak Data & Backend Persistence
 
@@ -1478,13 +1478,13 @@ Bagian ini mendokumentasikan implementasi backend-ready halaman `/create-product
 
 ### 23.3 Standarisasi Komponen Reusable Baru
 
-1. **`QuantityStepper.vue` (`app/components/common/QuantityStepper.vue`):**
+1. **`QuantityStepper.vue` (`app/components/Common/QuantityStepper.vue`):**
    - Props: `modelValue: number`, `min?: number` (default 0), `max?: number`, `step?: number` (default 1), `size?: 'sm' | 'md'` (default 'sm'), `disabled?: boolean`.
    - Menggunakan tombol minus (`minus`) dan plus (`plus`) Feather icon 12px/14px.
    - Input numerik diapit di tengah dengan alignment text-center, focus ring primary, dan proteksi batasan `min`/`max`.
    - Standar tinggi: `h-7` untuk compact table row, `h-9` untuk form reguler.
 
-2. **`ImageUploadGrid.vue` (`app/components/common/ImageUploadGrid.vue`):**
+2. **`ImageUploadGrid.vue` (`app/components/Common/ImageUploadGrid.vue`):**
    - Props: `modelValue: string[]` (array gambar URL/base64), `maxImages?: number` (default 10), `disabled?: boolean`.
    - Area drag-and-drop / file selector dengan tombol Browse Files standar Netlify.
    - Grid thumbnail responsif (kolom dinamis 2 hingga 6 kolom), preview gambar terpotong rapi dengan aspect ratio persegi, serta tombol hapus (`x` icon) overlay merah saat di-hover.
@@ -1503,7 +1503,7 @@ Bagian ini mendokumentasikan implementasi lengkap dan backend-ready untuk seluru
 
 ### 24.1 Struktur Komponen & Pemisahan Tanggung Jawab
 
-| Menu | Page (`app/pages/`) | Komponen Domain (`app/components/pages/<menu>/`) | Composable & Endpoint |
+| Menu | Page (`app/pages/`) | Komponen Domain (`app/components/Pages/<menu>/`) | Composable & Endpoint |
 |---|---|---|---|
 | **Orders** | `orders.vue` | `OrderStatsWidgets.vue`<br>`OrdersRecordsTable.vue`<br>`OrderStatusModal.vue` | `useOrders.ts`<br>`/api/orders/` (GET, POST, PUT, DELETE, stats) |
 | **Job Orders** | `job-order.vue` | `JobOrderStatsWidgets.vue`<br>`JobOrderWorkflowSidebar.vue`<br>`JobOrderRecordsTable.vue`<br>`JobOrderEditModal.vue`<br>`JobOrderViewFlowModal.vue` | `useJobOrders.ts`<br>`/api/job-orders/` (GET, POST, DELETE) |
@@ -1580,11 +1580,11 @@ Untuk mengatasi inkonsistensi formatting mata uang (Rupiah / IDR) di seluruh for
    - `formatIDR(value, withSpace?, fallback?)`: Shortcut formatting Rupiah standar (cth: `formatIDR(25000)` ➔ `Rp 25.000`).
    - `parseMoney(value)`: Mengubah string berpemisah ribuan kembali menjadi `number` murni (cth: `"Rp 1.500.000"` ➔ `1500000`).
    - `currencyAlignClass(align)`: Mengembalikan kelas Tailwind untuk perataan teks (`text-right justify-end font-mono tabular-nums` atau `text-left justify-start font-mono tabular-nums`).
-2. **Komponen `CurrencyInput.vue` (`app/components/common/CurrencyInput.vue`):**
+2. **Komponen `CurrencyInput.vue` (`app/components/Common/CurrencyInput.vue`):**
    - Input uang real-time yang memformat pemisah ribuan secara otomatis saat pengguna mengetik dengan menjaga posisi kursor.
    - Mendukung justifikasi kanan (`align="right"`) maupun kiri (`align="left"`).
    - Memiliki prefix badge `"Rp"` yang rapi dan memancarkan nilai asli bertipe `number` ke `v-model` untuk kemudahan persistensi ke database.
-3. **Komponen `CurrencyDisplay.vue` (`app/components/common/CurrencyDisplay.vue`):**
+3. **Komponen `CurrencyDisplay.vue` (`app/components/Common/CurrencyDisplay.vue`):**
    - Komponen representasi nilai uang untuk cell tabel, kartu ringkasan, dan dokumen cetak.
    - Mendukung prop `align="right"` (rata kanan) dan `align="left"` (rata kiri), font monospaced tabular nums, dan prefix custom.
 
@@ -1654,7 +1654,7 @@ Sebelum standardisasi:
    - **Tabel Data Rapi:** Header berlatar abu-abu halus, padding baris proporsional, border solid bersih, kolom numerik/uang otomatis rata kanan (`text-right font-mono`), kolom ID/status rata tengah, dan kolom 'action' / aksi otomatis diabaikan.
    - **Bagian Tanda Tangan (TTD):** Tempat dan tanggal otomatis ("Karawang, [Tanggal]") dan 2 kolom tanda tangan: "Dibuat Oleh" (Staff Administrasi) dan "Mengetahui" (Manager Operasional).
 
-2. **Modal Dialog Interaktif Cetak (`app/components/common/DocumentPrintModal.vue`):**
+2. **Modal Dialog Interaktif Cetak (`app/components/Common/DocumentPrintModal.vue`):**
    - Terbuka otomatis saat tombol **Print** atau **PDF** pada toolbar header tabel (`SalesListHeader.vue`) ditekan.
    - Pilihan Cakupan Data:
      - **Semua Data Terfilter (`all`)**: mencetak seluruh baris data aktif.
@@ -1688,17 +1688,17 @@ Sebelumnya, feedback saat memuat data (*pending state*) hanya berupa teks biasa 
 2. Harus reusable agar dapat digunakan di seluruh 186 halaman admin Nuxt.
 
 ### 27.2 Komponen Skeleton Reusable yang Disediakan
-1. **`AppSkeleton.vue` (`app/components/common/AppSkeleton.vue`):**
+1. **`AppSkeleton.vue` (`app/components/Common/AppSkeleton.vue`):**
    - Komponen primitif dengan animasi `animate-pulse`, warna adaptif Tailwind (`bg-gray-200/80 dark:bg-gray-700/60`), bentuk fleksibel (`rounded-sm`, `md`, `lg`, `xl`, `full` / circle), serta lebar dan tinggi yang dapat dikonfigurasi.
-2. **`TableSkeleton.vue` (`app/components/common/TableSkeleton.vue`):**
+2. **`TableSkeleton.vue` (`app/components/Common/TableSkeleton.vue`):**
    - Komponen skeleton tabel komprehensif yang meniru container kartu `SalesDataTable`:
      - Toolbar baris atas: input pencarian `h-9` dan tombol dropdown filter `h-9`.
      - Header tabel abu-abu halus.
      - Baris data dinamis (`rows` & `cols`) dengan simulasi avatar, teks dengan variasi lebar realistis, dan tombol aksi baris.
      - Pagination bar bawah lengkap dengan tombol navigasi halaman.
-3. **`CardSkeleton.vue` (`app/components/common/CardSkeleton.vue`):**
+3. **`CardSkeleton.vue` (`app/components/Common/CardSkeleton.vue`):**
    - Komponen skeleton kartu statistik/metrik KPI untuk dashboard dan laporan.
-4. **Integrasi ke `SalesFeedback.vue` (`app/components/sales/SalesFeedback.vue`):**
+4. **Integrasi ke `SalesFeedback.vue` (`app/components/Sales/SalesFeedback.vue`):**
    - Dilengkapi prop `skeleton="table" | "card" | "none"` dan `:skeleton-cols="10"` sehingga setiap halaman cukup menyertakan `<SalesFeedback :pending="pending" skeleton="table" />`.
 
 ---
@@ -1712,18 +1712,18 @@ Modul **Customers** di bawah grup menu **PEOPLES** telah direfaktor penuh dari t
    - Menggunakan `useLegacyPage({ title: 'Customers', sweetAlert: false })`.
    - Mengintegrasikan toolbar header `SalesListHeader.vue` dengan aksi Refresh, Print, PDF, dan tombol "Add New Customer".
    - Menggunakan feedback loading modern `<SalesFeedback :pending="pending" skeleton="table" :skeleton-cols="10" />`.
-2. **Tabel Data Pelanggan (`app/components/pages/customers/CustomerRecordsTable.vue`):**
+2. **Tabel Data Pelanggan (`app/components/Pages/Customers/CustomerRecordsTable.vue`):**
    - Menggunakan `SalesDataTable.vue` (`text-sm font-medium`, 14px).
    - 10 kolom literal: Customer ID, Name, Email, Customer Type, Balance (rata kanan numerik via `<CurrencyDisplay>`), Contact No, Join Channel, Date Join, Last Seen, Action.
    - Filter toolbar: Pencarian realtime, `DateRangePicker.vue`, dan dropdown filter `TableFilterSelect.vue` Customer Type.
    - Aksi baris: Tombol `+ Address`, View detail, Edit, dan Delete.
-3. **Form Modal Tambah / Edit (`app/components/pages/customers/CustomerFormModal.vue`):**
+3. **Form Modal Tambah / Edit (`app/components/Pages/Customers/CustomerFormModal.vue`):**
    - Menggunakan `SalesDialog.vue` ukuran medium.
    - Tata letak 12-kolom CSS Grid (`modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`).
    - Kontrol tinggi standar `h-9`.
-4. **Modal Detail & Alamat Pelanggan (`app/components/pages/customers/CustomerViewModal.vue`):**
+4. **Modal Detail & Alamat Pelanggan (`app/components/Pages/Customers/CustomerViewModal.vue`):**
    - 2 Tab interaktif: "Customer Details" dan "Address" (menampilkan daftar alamat pengiriman yang terhubung).
-5. **Modal Tambah Alamat Baru (`app/components/pages/customers/CustomerAddAddressModal.vue`):**
+5. **Modal Tambah Alamat Baru (`app/components/Pages/Customers/CustomerAddAddressModal.vue`):**
    - Form penambahan alamat langsung terhubung ke relasi data `customerId` dan endpoint `/api/address`.
 6. **Dialog Hapus & Cetak Resmi:**
    - Konfirmasi hapus `SalesConfirmDelete.vue`.
@@ -1761,22 +1761,22 @@ Kelompok menu **PEOPLES** sudah diimplementasikan dengan arsitektur Nuxt 4, CSS 
 
 ### 30.1 Customer Types (`/customer-type`)
 - **Thin Page**: `app/pages/customer-type.vue`
-- **Komponen Domain**: `app/components/pages/customer-type/CustomerTypeRecordsTable.vue`, `CustomerTypeFormModal.vue`.
+- **Komponen Domain**: `app/components/Pages/CustomerType/CustomerTypeRecordsTable.vue`, `CustomerTypeFormModal.vue`.
 - **Fitur**: Master klasifikasi pelanggan percetakan (Reguler, Corporate, VIP, Reseller, Membership, dll.), Add/Edit form modal, `SalesConfirmDelete`, `SalesFeedback :skeleton="table"`, dan Print/PDF kop surat resmi.
 
 ### 30.2 Address (`/address`)
 - **Thin Page**: `app/pages/address.vue`
-- **Komponen Domain**: `app/components/pages/address/AddressStatsWidgets.vue`, `AddressRecordsTable.vue`, `AddressFormModal.vue`, `AddressViewModal.vue`.
+- **Komponen Domain**: `app/components/Pages/Address/AddressStatsWidgets.vue`, `AddressRecordsTable.vue`, `AddressFormModal.vue`, `AddressViewModal.vue`.
 - **Fitur**: Master alamat relasional dengan 4 KPI Card statistik, Tab navigasi Customers dan Suppliers, modal Add/Edit (12-kolom CSS Grid), modal View rincian alamat pengiriman, dan Print/PDF kop surat resmi.
 
 ### 30.3 Supplier (`/supplier`)
 - **Thin Page**: `app/pages/supplier.vue`
-- **Komponen Domain**: `app/components/pages/supplier/SupplierRecordsTable.vue`, `SupplierFormModal.vue`, `SupplierAddAddressModal.vue`.
+- **Komponen Domain**: `app/components/Pages/Supplier/SupplierRecordsTable.vue`, `SupplierFormModal.vue`, `SupplierAddAddressModal.vue`.
 - **Fitur**: Database rekanan pemasok bahan baku percetakan (kertas, tinta, pelat CTP). 8 Kolom tabel literal. Aksi baris tombol modal "+ Address" langsung terhubung ke relasi supplier, Edit, Delete, dan Print/PDF kop surat resmi.
 
 ### 30.4 Branch Store (`/store-list`)
 - **Thin Page**: `app/pages/store-list.vue`
-- **Komponen Domain**: `app/components/pages/store-list/StoreListRecordsTable.vue`, `StoreListFormModal.vue`.
+- **Komponen Domain**: `app/components/Pages/StoreList/StoreListRecordsTable.vue`, `StoreListFormModal.vue`.
 - **Fitur**: Pengelolaan gerai cabang fisik & workshop percetakan. 7 Kolom tabel literal. Form modal Add/Edit dengan validasi Store Name, Manager/User, Phone, Email, dan Status. Print/PDF kop surat resmi.
 
 ---
@@ -1792,17 +1792,17 @@ Sub-menu pertama pada kelompok **HRM (Human Resource Management)** telah distand
    - 4 KPI Card metrik via `EmployeeStatsWidgets.vue` (Total Employee, Active, Inactive/Resign, New Joiners).
    - Reusable skeleton loader via `SalesFeedback :pending="pending" skeleton="table" :skeleton-cols="8"`.
    - Cetak & ekspor PDF resmi melalui `DocumentPrintModal.vue` + `useTablePrint.ts` (Kop Surat resmi PT Dulank Semesta Cida dan kolom TTD).
-2. **Tabel Data Karyawan (`app/components/pages/employees/EmployeeRecordsTable.vue`):**
+2. **Tabel Data Karyawan (`app/components/Pages/Employees/EmployeeRecordsTable.vue`):**
    - Menggunakan `SalesDataTable.vue`.
    - 8 Kolom literal: Employee ID, Name (dengan avatar initial & email), Department badge, Alamat lengkap, Phone, Join Date, Status badge, dan Action.
    - Filter toolbar: Pencarian realtime, `DateRangePicker.vue` (Join date), `TableFilterSelect.vue` Department, dan `TableFilterSelect.vue` Status.
    - Aksi baris: View (Modal detail profil lengkap), Edit, dan Delete (`SalesConfirmDelete`).
-3. **Form Modal Tambah / Edit (`app/components/pages/employees/EmployeeFormModal.vue`):**
+3. **Form Modal Tambah / Edit (`app/components/Pages/Employees/EmployeeFormModal.vue`):**
    - Menggunakan `SalesDialog.vue` ukuran large.
    - 12-kolom CSS grid layout (`modalFormRowClass`, `modalFormLabelClass`, `modalFormInputColClass`).
    - Kontrol tinggi standar `h-9`.
    - Field lengkap: ID Karyawan (auto/readonly), Nama Lengkap, Email, Phone, Department, Gender, Tanggal Lahir, Tanggal Bergabung, Join Channel, Alamat Wilayah, Detail Alamat, Kontak Darurat 1 & 2, Status.
-4. **Modal Detail Profil Karyawan (`app/components/pages/employees/EmployeeViewModal.vue`):**
+4. **Modal Detail Profil Karyawan (`app/components/Pages/Employees/EmployeeViewModal.vue`):**
    - Mengadopsi rincian modal `#view-employee` dari acuan HTML: header profil avatar, rincian data pribadi, alamat, akun & kontak, serta kontak darurat.
    - Tombol "Edit Employee" yang langsung mengalihkan ke mode edit.
 
@@ -1920,7 +1920,7 @@ Seluruh 9 sub-menu pada kelompok **CONTENT** telah dimodernisasi dari template l
 
 Sebelumnya di `AppSidebar.vue`, sub-menu **Category** dan **FAQ Question** sama-sama mengarah ke route `/faq`, sehingga keduanya aktif bersamaan dan tidak ada halaman terpisah untuk mengelola kategori FAQ. Kini telah dipisahkan secara bersih:
 
-1. **Sidebar Navigation (`app/components/layout/AppSidebar.vue`)**:
+1. **Sidebar Navigation (`app/components/Layout/AppSidebar.vue`)**:
    - `Category` diarahkan ke route tersendiri: `to: "/faq-category"`.
    - `FAQ Question` diarahkan ke route: `to: "/faq"`.
    - State aktif kini independen dan tidak menyala bersamaan.
@@ -2210,7 +2210,7 @@ Implementasi pusat berada di `SalesDataTable.vue`, `DateRangePicker.vue`, dan he
 
 ### 47.2 Struktur Reusable dan Data
 
-- Orkestrasi frontend berada di `app/components/pages/calculator/CalculatorPartnersPage.vue` dan `CalculatorListingsPage.vue`; sepuluh page route hanya meneruskan jenis domain.
+- Orkestrasi frontend berada di `app/components/Pages/Calculator/CalculatorPartnersPage.vue` dan `CalculatorListingsPage.vue`; sepuluh page route hanya meneruskan jenis domain.
 - Detail, moderasi, statistik, serta tabel memakai komponen reusable pada folder yang sama dan komponen Sales/Common yang sudah disetujui.
 - `useCalculatorMarketplace.ts` menjadi batas komunikasi frontend. Endpoint dan domain helper berada di `server/api/calculator/` dan `server/utils/calculatorMarketplace.ts`.
 - Data dipisah menjadi `calculator-partners.json`, `calculator-partner-metrics.json`, `calculator-listings.json`, dan `calculator-moderation-history.json`. Listing memakai `sourcePartnerId`; metrics memakai `partnerId`; harga selalu numerik.
@@ -2339,7 +2339,7 @@ Keberadaan sebagian file tidak cukup. Route aktif wajib memakai layer tersebut. 
 ### 53.2 Batas Tanggung Jawab
 
 - Page hanya metadata, pemanggilan composable, selected/open/active state ringan, dan komposisi komponen.
-- Table/card list, filters domain kompleks, editor, form, modal, detail, history, stats, skeleton, dan export UI berada di `app/components/pages/<menu>/`.
+- Table/card list, filters domain kompleks, editor, form, modal, detail, history, stats, skeleton, dan export UI berada di `app/components/Pages/<menu>/`.
 - Request, mutation flow, busy/error/refresh, payload mapping, dan editor orchestration berada di composable.
 - API adalah adapter HTTP tipis. Validasi, kalkulasi, penomoran, relasi, filter kompleks, dan persistence berada di server service/repository.
 - Add dan Edit harus memakai form/editor composable yang sama.

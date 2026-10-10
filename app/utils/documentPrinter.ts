@@ -3,7 +3,9 @@ import { formatIDR } from './currency'
 export interface PrintColumn {
   key: string
   label: string
-  align?: 'left' | 'center' | 'right'
+  /** `start`/`end` are accepted as logical aliases for `left`/`right`. */
+  align?: 'left' | 'center' | 'right' | 'start' | 'end'
+  sortable?: boolean
   format?: (val: any, row: any) => string
 }
 
@@ -339,7 +341,8 @@ export function buildDocumentPrintHtml(config: PrintDocumentConfig): string {
       <tr>
         <th style="width: 32px; text-align: center;">No</th>
         ${printableColumns.map(col => {
-          const alignClass = col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
+          const isRight = col.align === 'right' || col.align === 'end'
+          const alignClass = isRight ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
           return `<th class="${alignClass}">${escapeHtml(col.label)}</th>`
         }).join('')}
       </tr>
@@ -359,12 +362,12 @@ export function buildDocumentPrintHtml(config: PrintDocumentConfig): string {
             let formattedVal = ''
             if (col.format) {
               formattedVal = col.format(rawVal, row)
-            } else if (typeof rawVal === 'number' && (col.align === 'right' || /price|amount|total|fee|revenue|subtotal/i.test(col.key))) {
+            } else if (typeof rawVal === 'number' && (col.align === 'right' || col.align === 'end' || /price|amount|total|fee|revenue|subtotal/i.test(col.key))) {
               formattedVal = formatIDR(rawVal)
             } else {
               formattedVal = escapeHtml(rawVal ?? '-')
             }
-            const alignClass = col.align === 'right' ? 'text-right font-mono' : col.align === 'center' ? 'text-center' : 'text-left'
+            const alignClass = col.align === 'right' || col.align === 'end' ? 'text-right font-mono' : col.align === 'center' ? 'text-center' : 'text-left'
             return `<td class="${alignClass}">${formattedVal}</td>`
           }).join('')}
         </tr>`

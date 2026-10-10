@@ -16,7 +16,7 @@
             <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
           </li>
         </ul>
         <div class="page-btn">
@@ -252,7 +252,7 @@
 </template>
 
 <script setup lang="ts">
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue';
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue';
 
 definePageMeta({
   layout: "default",

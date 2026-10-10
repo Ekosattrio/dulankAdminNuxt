@@ -2,14 +2,14 @@
 import type { JobOrder, JobOrderFormData } from '#server/types/job-order'
 import { useJobOrders } from '~/composables/useJobOrders'
 import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
-import JobOrderEditModal from '~/components/pages/job-order/JobOrderEditModal.vue'
-import JobOrderRecordsTable from '~/components/pages/job-order/JobOrderRecordsTable.vue'
-import JobOrderStatsWidgets from '~/components/pages/job-order/JobOrderStatsWidgets.vue'
-import JobOrderViewFlowModal from '~/components/pages/job-order/JobOrderViewFlowModal.vue'
-import JobOrderWorkflowSidebar from '~/components/pages/job-order/JobOrderWorkflowSidebar.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
+import JobOrderEditModal from '~/components/Pages/JobOrder/JobOrderEditModal.vue'
+import JobOrderRecordsTable from '~/components/Pages/JobOrder/JobOrderRecordsTable.vue'
+import JobOrderStatsWidgets from '~/components/Pages/JobOrder/JobOrderStatsWidgets.vue'
+import JobOrderViewFlowModal from '~/components/Pages/JobOrder/JobOrderViewFlowModal.vue'
+import JobOrderWorkflowSidebar from '~/components/Pages/JobOrder/JobOrderWorkflowSidebar.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 useLegacyPage({ title: 'Job Orders', sweetAlert: false })
 
@@ -77,7 +77,7 @@ async function handleConfirmDelete() {
   }
 }
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()

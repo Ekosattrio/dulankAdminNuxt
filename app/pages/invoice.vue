@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PagesInvoiceTable from '~/components/pages/invoice/InvoiceRecordsTable.vue'
-import PagesInvoiceEditor from '~/components/pages/invoice/InvoiceEditor.vue'
+import PagesInvoiceTable from '~/components/Pages/Invoice/InvoiceRecordsTable.vue'
+import PagesInvoiceEditor from '~/components/Pages/Invoice/InvoiceEditor.vue'
 
 useLegacyPage({ title: 'Invoice', sweetAlert: false })
 const {

@@ -1,4 +1,4 @@
-import type { MyJob, MyJobFormData, MyJobFilterParams } from "#server/types/my-job";
+import type { MyJob, MyJobFormData, MyJobFilterParams, MyJobStatusUpdatePayload } from "#server/types/my-job";
 
 interface ResponseData {
   success: boolean;
@@ -33,6 +33,15 @@ export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterPar
     return res;
   };
 
+  const updateJobStatus = async (id: string, payload: MyJobStatusUpdatePayload) => {
+    const res = await apiFetch<{ success: boolean; data: MyJob; message?: string }>(`/api/my-jobs/${id}`, {
+      method: "PUT",
+      body: payload,
+    });
+    await refresh();
+    return res;
+  };
+
   return {
     myJobs,
     pending,
@@ -40,5 +49,6 @@ export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterPar
     refresh,
     saveMyJob,
     deleteMyJob,
+    updateJobStatus,
   };
 }

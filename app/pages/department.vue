@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DepartmentWorkspace from '~/components/pages/department/DepartmentWorkspace.vue'
+import DepartmentWorkspace from '~/components/Pages/Department/DepartmentWorkspace.vue'
 
 useLegacyPage({ title: 'Departments - Departemen Karyawan', sweetAlert: false })
 </script>

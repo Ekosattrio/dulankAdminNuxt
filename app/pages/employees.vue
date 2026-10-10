@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EmployeesWorkspace from '~/components/pages/employees/EmployeesWorkspace.vue'
+import EmployeesWorkspace from '~/components/Pages/Employees/EmployeesWorkspace.vue'
 
 useLegacyPage({ title: 'Employees - Daftar Karyawan', sweetAlert: false })
 </script>

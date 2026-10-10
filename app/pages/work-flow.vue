@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { WorkFlow, WorkFlowFormData } from "#server/types/work-flow";
 import type { DateRangeValue } from "~/composables/useDateRange";
-import WorkFlowProcessModal from "~/components/pages/work-flow/WorkFlowProcessModal.vue";
-import WorkFlowRecordsTable from "~/components/pages/work-flow/WorkFlowRecordsTable.vue";
-import SalesConfirmDelete from "~/components/sales/SalesConfirmDelete.vue";
-import SalesFeedback from "~/components/sales/SalesFeedback.vue";
-import SalesListHeader from "~/components/sales/SalesListHeader.vue";
+import WorkFlowProcessModal from "~/components/Pages/WorkFlow/WorkFlowProcessModal.vue";
+import WorkFlowRecordsTable from "~/components/Pages/WorkFlow/WorkFlowRecordsTable.vue";
+import SalesConfirmDelete from "~/components/Sales/SalesConfirmDelete.vue";
+import SalesFeedback from "~/components/Sales/SalesFeedback.vue";
+import SalesListHeader from "~/components/Sales/SalesListHeader.vue";
 
 useLegacyPage({ title: "Work Flow List", sweetAlert: false });
 

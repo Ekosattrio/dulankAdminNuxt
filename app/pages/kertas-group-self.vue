@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { PaperGroup, PaperGroupFormData } from '#server/types/paper-shop'
-import PaperGroupStatsWidgets from '~/components/pages/paper-shop/PaperGroupStatsWidgets.vue'
-import PaperGroupRecordsTable from '~/components/pages/paper-shop/PaperGroupRecordsTable.vue'
-import PaperGroupFormModal from '~/components/pages/paper-shop/PaperGroupFormModal.vue'
-import PaperGroupViewModal from '~/components/pages/paper-shop/PaperGroupViewModal.vue'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import SalesConfirmDelete from '~/components/sales/SalesConfirmDelete.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import PaperGroupStatsWidgets from '~/components/Pages/PaperShop/PaperGroupStatsWidgets.vue'
+import PaperGroupRecordsTable from '~/components/Pages/PaperShop/PaperGroupRecordsTable.vue'
+import PaperGroupFormModal from '~/components/Pages/PaperShop/PaperGroupFormModal.vue'
+import PaperGroupViewModal from '~/components/Pages/PaperShop/PaperGroupViewModal.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 definePageMeta({ layout: 'default' })
 

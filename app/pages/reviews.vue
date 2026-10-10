@@ -2,12 +2,12 @@
 import type { ReviewFilterQuery } from '#server/types/review'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useReviews } from '~/composables/useReviews'
-import SalesListHeader from '~/components/sales/SalesListHeader.vue'
-import ReviewsStatsWidgets from '~/components/pages/reviews/ReviewsStatsWidgets.vue'
-import ReviewsRecordsTable from '~/components/pages/reviews/ReviewsRecordsTable.vue'
-import SalesFeedback from '~/components/sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
+import ReviewsStatsWidgets from '~/components/Pages/Reviews/ReviewsStatsWidgets.vue'
+import ReviewsRecordsTable from '~/components/Pages/Reviews/ReviewsRecordsTable.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
-import DocumentPrintModal from '~/components/common/DocumentPrintModal.vue'
+import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 definePageMeta({

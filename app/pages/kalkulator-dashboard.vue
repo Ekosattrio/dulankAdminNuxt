@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import KalkulatorDashboardWorkspace from '~/components/pages/calculator/KalkulatorDashboardWorkspace.vue'
+import KalkulatorDashboardWorkspace from '~/components/Pages/Calculator/KalkulatorDashboardWorkspace.vue'
 
 definePageMeta({
   layout: 'default'

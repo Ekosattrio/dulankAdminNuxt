@@ -23,7 +23,7 @@ Route Page
 Shared component, composable, dan utility menjadi lapisan lintas vertical slice:
 
 ```text
-app/components/common/ + app/components/sales/
+app/components/Common/ + app/components/Sales/
 app/composables/shared-or-cross-domain
 app/utils/
 server/utils/shared
@@ -61,7 +61,7 @@ Page dilarang:
 
 ### 2.2 Domain Components
 
-Lokasi: `app/components/pages/<menu>/`.
+Lokasi: `app/components/Pages/<menu>/`.
 
 Pisahkan berdasarkan tanggung jawab nyata:
 
@@ -75,7 +75,7 @@ Pisahkan berdasarkan tanggung jawab nyata:
 
 Komponen menerima typed props dan mengirim typed emits. Komponen domain boleh mengelola interaction state yang murni presentasional, tetapi tidak boleh melakukan persistence atau mengarang data server.
 
-Komponen masuk `app/components/common/` atau `app/components/sales/` hanya jika benar-benar reusable lintas menu. Jangan memindahkan komponen domain ke common hanya untuk mengosongkan page.
+Komponen masuk `app/components/Common/` atau `app/components/Sales/` hanya jika benar-benar reusable lintas menu. Jangan memindahkan komponen domain ke common hanya untuk mengosongkan page.
 
 UI wajib dipecah menurut tanggung jawab nyata: Header/Actions, Stats, Filters, Table/Grid/List, Form/Editor, Detail/History/Modal, dan Feedback. `*Workspace.vue` atau `*Screen.vue` bersifat opsional dan hanya boleh menjadi orchestrator.
 
@@ -174,7 +174,7 @@ Urutan keputusan:
 1. Cari reusable yang sudah ada.
 2. Jika fungsi sama dan kontraknya cocok, gunakan reusable tersebut.
 3. Jika dipakai minimal dua menu dengan bentuk stabil, pindahkan ke shared layer.
-4. Jika hanya milik satu domain, tetap di `components/pages/<menu>/` atau composable domain.
+4. Jika hanya milik satu domain, tetap di `components/Pages/<menu>/` atau composable domain.
 5. Jangan membuat versi lokal untuk date range, table, action icon, currency, print, confirmation, feedback, atau dialog jika standar shared sudah ada.
 
 ## 5. Hard Fail Architecture Gate
@@ -202,8 +202,8 @@ Setiap AI yang mengerjakan menu wajib mengisi bukti berikut sebelum menyebutnya 
 | Layer | Path yang dipakai | Evidence flow | Result |
 | --- | --- | --- | --- |
 | Route composition | `app/pages/...` | Hanya compose/state ringan | pass/gap |
-| UI responsibility split | `app/components/pages/...` | Header/filter/table/form/modal terpisah sesuai tanggung jawab | pass/gap/N/A |
-| Domain UI | `app/components/pages/...` | Table/form/detail/modal | pass/gap/N/A |
+| UI responsibility split | `app/components/Pages/...` | Header/filter/table/form/modal terpisah sesuai tanggung jawab | pass/gap/N/A |
+| Domain UI | `app/components/Pages/...` | Table/form/detail/modal | pass/gap/N/A |
 | Frontend application | `app/composables/...` | Fetch/mutation/editor | pass/gap |
 | Contract | `server/types/...` | Entity/command/query | pass/gap |
 | HTTP adapter | `server/api/...` | Endpoint aktif | pass/gap |
@@ -233,7 +233,7 @@ Audit statis terhadap 188 file `app/pages/*.vue` menemukan indikator berikut:
 - 65 page di atas 300 baris;
 - 29 page di atas 400 baris;
 - 59 page masih mengandung `alert()` atau `confirm()`;
-- 111 page tidak memiliki import eksplisit dari `app/components/pages/`.
+- 111 page tidak memiliki import eksplisit dari `app/components/Pages/`.
 
 Angka tersebut adalah indikator audit, bukan vonis otomatis karena auto-import dan bentuk route dapat berbeda. Namun hasilnya membuktikan bahwa struktur seluruh repo **belum** seragam seperti Sales.
 
