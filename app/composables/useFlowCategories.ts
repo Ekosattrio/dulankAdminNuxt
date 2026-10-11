@@ -25,7 +25,7 @@ export function useFlowCategories(filterParams?: Ref<FlowCategoryFilterParams> |
         body: payload,
       })
     } else {
-      res = await apiFetch<ApiResponse<FlowCategory>>('/api/flow-categories', {
+      res = await apiFetch<ApiResponse<FlowCategory>>('/api/v1/admin/flow-categories', {
         method: 'POST',
         body: payload,
       })

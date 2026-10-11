@@ -25,7 +25,7 @@ export function useFlowNames(filterParams?: Ref<FlowNameFilterParams> | FlowName
         body: payload,
       })
     } else {
-      res = await apiFetch<ApiResponse<FlowName>>('/api/flow-names', {
+      res = await apiFetch<ApiResponse<FlowName>>('/api/v1/admin/flow-names', {
         method: 'POST',
         body: payload,
       })

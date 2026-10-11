@@ -25,7 +25,7 @@ export function useFlowTemplates(filterParams?: Ref<FlowTemplateFilterParams> | 
         body: payload,
       })
     } else {
-      res = await apiFetch<ApiResponse<FlowTemplate>>('/api/flow-templates', {
+      res = await apiFetch<ApiResponse<FlowTemplate>>('/api/v1/admin/flow-templates', {
         method: 'POST',
         body: payload,
       })

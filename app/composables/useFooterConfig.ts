@@ -30,8 +30,8 @@ export function useFooterConfig() {
   })
 
   const saveConfig = async (payload: FooterConfig) => {
-    const res = await apiFetch<{ success: boolean; data: FooterConfig; message?: string }>('/api/footer-config', {
-      method: 'POST',
+    const res = await apiFetch<{ success: boolean; data: FooterConfig; message?: string }>('/api/v1/admin/footer', {
+      method: 'PUT',
       body: payload
     })
     await refresh()
