@@ -7,6 +7,27 @@ interface ResponseData {
   message?: string
 }
 
+interface MutationResponse {
+  success: boolean
+  data?: LanguageItem
+  message?: string
+}
+
+const RELIST = '/api/v1/admin/languages'
+
+const normalizeStatus = (status?: string): string | undefined => {
+  if (!status) return undefined
+
+  if (status === 'active') return 'Active'
+  if (status === 'inactive') return 'Inactive'
+
+  return status
+}
+
+/**
+ * Bahasa & terjemahan — backend Laravel `/api/v1/admin/languages`
+ * (+ `translations` GET/PUT).
+ */
 export function useLanguages(filterQuery?: Ref<{ search?: string; status?: string } | undefined>) {
   const queryParams = computed(() => {
     if (!filterQuery?.value) return {}
@@ -16,7 +37,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     }
   })
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/languages', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>(RELIST, {
     key: 'languages-data',
     query: queryParams,
   })
@@ -24,18 +45,27 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
   const languages = computed<LanguageItem[]>(() => data.value?.data ?? [])
 
   const saveLanguage = async (payload: LanguageFormData) => {
-    const res = await apiFetch<{ success: boolean; data: LanguageItem; message?: string }>('/api/languages', {
-      method: 'POST',
-      body: payload,
-    })
+    const { id, ...body } = payload
+
+    const res = await apiFetch<MutationResponse>(
+      id ? `${RELIST}/${encodeURIComponent(id)}` : RELIST,
+      {
+        method: id ? 'PUT' : 'POST',
+        body: {
+          ...body,
+          status: normalizeStatus(body.status),
+        },
+      },
+    )
     await refresh()
     return res
   }
 
   const deleteLanguage = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; data: { id: string }; message?: string }>(`/api/languages/${id}`, {
-      method: 'DELETE',
-    })
+    const res = await apiFetch<{ success: boolean; data: { id: string }; message?: string }>(
+      `${RELIST}/${encodeURIComponent(id)}`,
+      { method: 'DELETE' },
+    )
     await refresh()
     return res
   }
@@ -61,14 +91,14 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
 
   const getTranslations = async (item: LanguageItem) => {
     return await apiFetch<{ success: boolean; data: LanguageTranslationDocument }>(
-      `/api/languages/${item.id}/translations`,
+      `${RELIST}/${encodeURIComponent(item.id)}/translations`,
     )
   }
 
   const importTranslations = async (item: LanguageItem, translations: Record<string, unknown>) => {
     const response = await apiFetch<{ success: boolean; data: LanguageTranslationDocument; message?: string }>(
-      `/api/languages/${item.id}/translations`,
-      { method: 'POST', body: { translations } },
+      `${RELIST}/${encodeURIComponent(item.id)}/translations`,
+      { method: 'PUT', body: { translations } },
     )
     await refresh()
     return response

@@ -693,3 +693,141 @@ updated: 2026-10-11
 - Menerapkan dialog cetak standar ke Language, Download Files, Our Client, Banner, dan Permission Matrix; scope tanggal dapat disembunyikan untuk data non-tanggal.
 - Menambahkan kompatibilitas event PDF lama pada `SalesListHeader` agar toolbar lama tetap membuka dialog cetak.
 - Validasi revisi print/language: 99 JSON server valid dan 99/99 tercakup bundled registry, 11 SFC terkait lolos parse/compile, 7 file TypeScript terkait lolos pemeriksaan syntax, dan `git diff --check` bersih. Build/dev tidak dijalankan; `nuxi typecheck` belum tersedia karena `vue-tsc`/Golar belum terpasang, sedangkan fallback `tsc --noEmit` masih gagal pada error lama di report composables/endpoint CRUD tanpa menunjuk file print/language baru; validator struktur tetap tertahan aset legacy Sticky Kit/Summernote yang hilang sebelumnya.
+
+## 2026-10-10 — Integrasi backend Laravel (fondasi + modul Sales & Profil)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `app/utils/apiFetch.ts` menjadi fetch terpusat: `baseURL` dari `runtimeConfig.public.apiBase`, header `Authorization: Bearer` otomatis dari cookie + localStorage `dulank_admin_token`.
+- Menambahkan `useAdminAuth` (login/logout/me; token cookie SSR-safe) dan middleware global `auth.global.ts` yang mengarahkan halaman non-publik ke `/signin`.
+- `app/pages/signin.vue` kini memanggil `POST /api/v1/admin/auth/login` (backend Laravel) dengan status loading dan pesan error; kredensial default `admin@dulank.test` / `admin12345` (dev).
+- `nuxt.config.ts`: `runtimeConfig.public.apiBase` + proxy `/api/v1/**` ke `LARAVEL_API_URL` (default `http://127.0.0.1:8000`). Mock Nitro lama `/api/*` tetap dilayani agar migrasi bertahap per modul.
+- `useSales` dimigrasikan ke `/api/v1/admin/sales` (list/create/void/recordPayment). Seluruh konsumen ikut termigrasi otomatis: Sales page, POS, Invoice, Delivery Note, Sales Return, Sale Document, Sales Activity. Aksi hapus dipetakan menjadi **void order** (timeline audit dipertahankan).
+- `useProfile` dimigrasikan ke `/api/v1/admin/profile` (GET/PUT) dan `PUT /api/v1/admin/profile/password`; bentuk `UserProfile` dipertahankan lewat mapping.
+- Validasi: `npm run typecheck` **0 error**; `npm run test:sales` 13 check lolos; smoke runtime dev port 3100 — `/signin` HTTP 200, `/` tanpa token 302 → `/signin`, login via proxy sukses, `GET /api/v1/admin/sales` 11 baris (SO-004 terbaru), `GET /api/v1/admin/profile` roles `super-admin`, mock lama `/api/sales` masih hidup.
+- Status: **implemented, verification pending** untuk modul lain. Modul yang belum dimigrasikan tetap memakai mock Nitro lama.
+- **Fix backend Laravel (repo `dulank-backend`, branch `main` · Commit: NOT COMMITTED · Push: NOT PUSHED):** request guest tanpa header `Accept: application/json` dibalas **500 `Route [login] not defined`** karena default Laravel (`ApplicationBuilder`) mengarahkan guest ke `route('login')` yang tidak ada. `bootstrap/app.php` kini memakai `$middleware->redirectGuestsTo(null)` sehingga semua request gagal-auth dibalas envelope konsisten `401 {"success":false,"message":"Unauthenticated."}`. `routes/web.php` root `/` tidak lagi merender view web, melainkan JSON status.
+- Regression test backend: `tests/Feature/Admin/HardeningTest.php` menegaskan 401 JSON tanpa Accept header; `tests/Feature/ExampleTest.php` menegaskan kontrak JSON `GET /`.
+- Validasi fix backend: `vendor/bin/pint --dirty` bersih; `php artisan test --compact` (suite penuh) **144 tes / 1420 assertion lolos**; verifikasi curl ke `:8000` dan lewat proxy Nitro admin `:3000` — tanpa Accept, token invalid, dan tanpa token semuanya `401 application/json`; login sukses tetap mengembalikan token; `GET /` JSON 200; `/up` 200.
+- Catatan risiko: modul lain masih memakai mock; lanjutkan migrasi per modul (produk, orders, payment, purchases, finance, dst.) dengan pola adapter `apiFetch` + tipe resource backend.
+
+## 2026-10-10 — Integrasi backend (lanjutan): Products, Master Katalog, Orders, Payments
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useProducts` → `/api/v1/admin/products` (GET/POST/PUT/DELETE; kontrak `Product` backend identik dengan tipe admin). `importProducts` dipetakan menjadi urutan POST karena backend tidak punya endpoint import massal.
+- `useCategories`, `useSubCategories`, `useUnits`, `useVariants`, `useProductProcesses`, `useWorkshopServices` → endpoints `/api/v1/admin/categories|sub-categories|units|variants|product-processes|workshop-services`; dukungan edit kini memakai PUT (`payload.id`), hapus DELETE.
+- `useOrders` → `/api/v1/admin/orders` + `/orders/stats`; `updateStatus` memakai `POST /orders/{number}/status` dengan resolusi nomor order dari `id`/`no`; `deleteOrder` dipetakan menjadi pembatalan (status `Cancel`) karena backend tidak menyediakan DELETE order admin; `saveOrder` hanya untuk order yang sudah ada (perubahan status).
+- `usePayments` → `/api/v1/admin/payments` (list + record/verify/reject). Tipe `PaymentStatus` diperbarui menjadi `Pending | Verified | Rejected` (verifikasi bukti bayar); `SalesStatusBadge` menampilkan `Verified` sebagai hijau.
+- Status backend untuk order (`Waiting/Processing/Complete/Cancel`) sengaja identik dengan label admin — tidak perlu mapping.
+- Validasi: `npm run typecheck` **0 error**; smoke runtime via dev server (port 3100, proxy Nitro → Laravel): login sukses, list `products` 6, `categories` 8, `sub-categories` 1, `units` 2, `variants` 1, `product-processes` 0, `workshop-services` 1 (filter category `printing` → "Cetak Offset A3"), `orders` 11, `orders/stats` OK, `payments` 9; jalur tulis POST/PUT/DELETE category & product sukses dan di-cleanup.
+- Status: **implemented, verification pending** untuk modul lain (purchases, finance, HRM, workflow, content, settings, reports, peoples, paper/machines, promo, webstore, calculator, tax, pos, blog, faq, dashboard).
+- Catatan: dev server `nuxt dev` (PID 300315) masih berjalan di port 3100 sejak sesi sebelumnya dan sudah hot-reload seluruh perubahan ini.
+
+## 2026-10-10 — Sesi integrasi backend (lanjutan): auth stack, dashboard real, signin UX, .env, & hapus dummy batch 1
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Root cause read 401 diperbaiki**: `useApiFetch` kini menyuntikkan `$fetch: apiFetch` ke `useFetch` Nuxt → seluruh data read memakai `apiFetch` (baseURL + Authorization Bearer + penanganan 401). Sebelumnya hanya request tulis yang membawa token; semua list/dashboard gagal dengan "Unable to load".
+- `apiFetch`: baseURL SSR dari `useRequestURL().origin` (same-origin ke proxy) bila `apiBase` kosong; respons 401 otomatis membersihkan sesi dan kembali ke `/signin?redirect=...` (kecuali endpoint auth).
+- `middleware/auth.global.ts`: redirect-back (`?redirect=`), pengguna ter-authentikasi di halaman publik diarahkan ke `/`, hydrate profil user (nama/roles/avatar) sekali per sesi.
+- `signin.vue` UI/UX dirombak: blok sosial & "Create an account" (link mati) dihapus; error alert proper + validasi client-side + fokus field invalid + `aria-*`; spinner loading; dark mode; kredensial demo tampil hanya di dev (`import.meta.dev`) dengan tombol "Isi otomatis"; `rememberMe` kini bermakna (token juga disimpan di localStorage hanya jika dicentang).
+- `AppHeader.vue`: logout fungsional (`useAdminAuth().logout` → `/signin`), nama/roles/avatar dari backend (bukan "John Smilga"), dead code `closeAllDropdowns` dihapus, toggle dropdown via inline idiomatis.
+- Perbaikan komponen tak terdaftar: `CommonFeatherIcon` → `FeatherIcon` di 5 file (nuxt.config memakai `pathPrefix: false`).
+- **Dashboard index.vue real data**: `useDashboard` baru memakai `GET /api/v1/admin/dashboard` (backend diperluas: totalSales, totalSalesReturn, totalPurchase, totalPurchaseReturn, totalIncome, totalExpense, invoiceDue, totalCustomers, totalSuppliers, monthlyTrend 12 bulan; test `DashboardTest` 28 asersi — backend repo). Grafik monthly real, Top Products real, Recent Orders real, alert low stock real; reuse komponen StatCard/StatusPill/CurrencyDisplay/SalesFeedback/FeatherIcon.
+- **Dummy data batch 1 dihapus** (modul sudah migrasi penuh, nol referensi di app/test): handler Nitro `orders/*`, `payments/*`, `profile/*`, `products/*`, `categories/*`, `sub-categories/*`, `units/*`, `variants/*`, `product-processes/*`, `workshop-services/*`, `sales-dashboard.ts` (32 file; 356→324 handler). Entri manifest disesuaikan (3266→3251). Mock `sales*`, `delivery-notes`, `invoices`, `quotations`, `request-quotations` dipertahankan karena dipakai `test:sales` + modul belum migrasi.
+- **`.env` & `.env.example` dibuat**: `NUXT_PUBLIC_API_BASE=http://127.0.0.1:8000` → `apiFetch` memanggil Laravel **langsung di port 8000** (terbukti di payload SSR); `LARAVEL_API_URL` fallback proxy `/api/v1/**`; `PORT=3000`. `.env` di-ignore, `.env.example` di-track (aturan .gitignore sudah ada).
+- Validasi: `npm run typecheck` 0 error; `test:sales` 13 check lolos; `validate:structure` hanya error lama summernote (pra-existing); smoke SSR dashboard 200 `Welcome, Dulank` tanpa "Unable to load"; login via 3000 sukses.
+- Status: **implemented, verification pending** untuk modul lain. Sisa mock 324 handler — hapus bertahap mengikuti migrasi modul (sales-returns, quotations, invoices, delivery-notes, customers, suppliers, purchases, finance, reports, settings, webstore, paper, calculator, workflow, HRM, content).
+
+## 2026-10-11 — Migrasi batch 2: Peoples (Customers/Types/Stores/Addresses), Suppliers, Sales Returns + pembersihan dummy data menyeluruh
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): tambah `PUT /api/v1/admin/customer-types/{customerType}` (UI admin mengedit tipe pelanggan) di `PeopleController`; test `PeopleUserTest` +1 kasus (create/update/delete tipe pelanggan) → 6 test / 83 asersi lolos.
+- **Frontend migrasi modul (6 komposabel):**
+  - `useCustomers` → `/api/v1/admin/customers` (GET/POST/PUT/DELETE, kontrak `Customer` identik termasuk saldo).
+  - `useCustomerTypes` → `/api/v1/admin/customer-types` (POST/PUT/DELETE).
+  - `useStores` → `/api/v1/admin/stores` (kontrak `Store` identik).
+  - `useSuppliers` → `/api/v1/admin/suppliers`; route backend memakai kode `{supplierId}` — resolusi `id`→`supplierId` dari list.
+  - `useAddress` → tiga panggilan `/api/v1/admin/addresses` (stats + type=customer + type=supplier) digabung menjaga API `{stats, customers, suppliers}`; mapping `ownerType`/`ownerId`; perbaikan bug ref unwrap (`.value` di computed pending/error).
+  - `useSalesReturns` → `/api/v1/admin/sales-returns`; mutasi pakai `{returnNo}` (resolusi dari list): `POST` create, `POST /{returnNo}/refund` (pengganti `/payment`), `DELETE /{returnNo}`.
+  - `useSalesContacts` (picker kontak form sales) → list + create pakai `/api/v1/admin/customers`; sumber `/assets/json/*` tetap statis.
+- **Pembersihan dummy data menyeluruh:** mock catch-all `server/api/[...mock].ts` menyajikan data dari registry `server/utils/mockStore.ts` — 11 slug dihapus (address, category, customer-type, customers, orders, payments, sales-dashboard, sub-category, supplier, unit, variant) + 14 import seeds; handler statis `server/api/address.ts` dihapus; 22 file `server/data/*` yatim dihapus; `bundledData.ts` dibersihkan (12 import + 12 entri map). `payments.json`/`paymentData.ts` dipertahankan (dipakai modul Finance yang belum migrasi). Manifest: 3236 → 3228.
+- **Validasi:** typecheck 0 error; `test:sales` 13 check lolos; `validate:structure` hanya 8 error legacy lama (sticky-kit/summernote, pra-existing); smoke runtime 3100→Laravel 8000: semua endpoint batch-2 berisi data nyata (customers 4, customer-types 9, stores 5, suppliers 25, addresses 1, sales-returns SR-001); 8 endpoint dummy lama kini **404** (customers, category, customer-type, supplier, orders, payments, address, stores); dashboard SSR 200 `Welcome, Dulank`; signin 200.
+- Status: **implemented** untuk Peoples/Suppliers/Sales-Returns; sisa handler mock 309 — lanjut migrasi (quotations, invoices, delivery-notes, purchases, finance, reports, settings, webstore, paper, calculator, workflow, HRM, content, user-admin).
+- Catatan: Laravel dev (8000) di-restart otomatis di sesi ini untuk verifikasi; dev server admin 3000 milik user sedang mati dan perlu dijalankan ulang (`npm run dev`).
+
+## 2026-10-11 — Migrasi batch 3: Quotations, RFQ, Invoices, Delivery Notes
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useQuotations` → `/api/v1/admin/quotations` (GET/POST/PUT; `{noQuotation}` di-resolve dari list; kontrak `Quotation` identik termasuk status/channel label). `deleteQuotation` memberi pesan jelas karena backend mengikuti alur bisnis (tanpa hapus; ubah status ke Rejected).
+- `useRequestQuotations` → `/api/v1/admin/request-quotations` (GET/POST/DELETE `{noRequest}`; duplikasi tetap via POST; permukaan API dipertahankan persis — spread `actions`, `rfqs`, `printTable`).
+- `useRequestQuotationEditor` → list + save pakai endpoint backend (limit 100).
+- `useInvoices` → `/api/v1/admin/invoices` (monitoring; filter search/status). `saveInvoice`/`deleteInvoice` memberi pesan jelas (invoice otomatis dari order); tambahan `recordPayment(invoiceNo, …)` → `POST /invoices/{invoiceNo}/payments`.
+- `useDeliveryNotes` → `/api/v1/admin/delivery-notes` (GET/POST/PUT/DELETE `{dnNo}`; payload tulis identik dengan tipe admin).
+- **Mock tetap** untuk quotations/request-quotations/invoices/delivery-notes selama `test:sales` masih memakainya — penghapusan dijadwalkan bersama revisi harness.
+- Validasi: typecheck 0 error; smoke 3100→Laravel 8000 — quotations 7 (QT-007), RFQ 7 (RFQ00004), invoices 6 (INV-003), delivery-notes (DN-001); jalur tulis delivery-notes (DN-002) & RFQ (RFQ-003) create+delete sukses dan di-cleanup.
+- Sisa mock: 309 handler (belum termasuk 6 modul sales-returns/quotations/rfq/invoices/delivery-notes yang dimigrasi tapi mocknya dipertahankan untuk test:sales).
+
+## 2026-10-11 — Migrasi batch 4: Purchases family + pembersihan dummy purchase
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `usePurchaseCategories` → `/api/v1/admin/purchase-categories` (GET/POST/PUT/DELETE; kontrak identik: id/name/created/status/itemCount).
+- `usePurchaseItems` → `/api/v1/admin/purchase-items` (kategori via nama; kontrak identik).
+- `usePurchases` → `/api/v1/admin/purchases` (route `{noPurchase}`; save POST/PUT, delete, `recordPayment`). Payload tulis identik (supplier nama, items/qty/unit/price, shippingCost, tax, paid).
+- `usePurchaseOrders` → `/api/v1/admin/purchase-orders` (`{noPo}`; poStatus/goodsStatus identik).
+- `usePurchaseReturns` → `/api/v1/admin/purchase-returns` (`{noPr}`; items returnQty/amount/reason, `recordPayment`). Nama ekspor disamakan dengan versi asli (`purchaseReturns`/`savePurchaseReturn`/`deletePurchaseReturn`, `purchaseOrders`/`savePurchaseOrder`/`deletePurchaseOrder`) agar halaman tetap kompatibel.
+- **Dummy purchase dihapus**: 5 handler Nitro (purchase-categories, purchase-items, purchases, purchase-orders, purchase-returns), 5 slug + 6 import seeds di `mockStore.ts` (126 slug tersisa), 8 file `server/data` yatim, 4 entri `bundledData.ts`. `purchase-report`/`add-purchase` dipertahankan (modul Reports & form legacy).
+- Validasi: typecheck 0 error; 5 endpoint dummy kini 404; backend `/api/v1/admin/purchases` OK; roundtrip create+delete purchase-category, purchase (PR-002 amount 565000 — kalkulasi qty×price+shipping+tax benar), purchase-return (PR-001) sukses & ter-cleanup; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 293 file (belum termasuk 6 modul yang mock-nya dipertahankan untuk test:sales).
+
+## 2026-10-11 — Migrasi batch 5: Finance (bank, transfer, kas bon, pendapatan/pengeluaran, pajak)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): `PUT/DELETE income-categories` & `expense-categories` (IncomeController/ExpenseController + route); payload kategori income +`created`; expense-categories menerima alias `categoryName` dan payload kini `{id, categoryName, description, date, status}` agar cocok dengan tipe admin. Test `FinanceTest` +1 kasus (CRUD dua kategori) → 9 test / 128 asersi lolos.
+- **Frontend migrasi (10 komposabel):**
+  - `useBankAccounts` → `/api/v1/admin/bank-accounts` + `/bank-account-types` (CRUD penuh; saldo `currentBalance` dari LedgerService; stats fallback nol).
+  - `useMoneyTransfers` → `/api/v1/admin/money-transfers` (list + create; transfer = catatan ledger dua sisi, tanpa hapus — `deleteTransfer` pesan jelas).
+  - `useCashAdvances` → `/api/v1/admin/cash-advances` (CRUD + `recordPayment`).
+  - `useIncomes`/`useExpenses` → `/api/v1/admin/incomes|expenses` (POST/PUT/DELETE; strip field turunan di payload).
+  - `useIncomeCategories`/`useExpenseCategories` → kategori backend dengan PUT/DELETE (baru); expense pakai `categoryName`.
+  - `useInputTaxes`/`useOutputTaxes` → `/api/v1/admin/input-taxes|output-taxes` (list + save; `remove` output-tax = PUT status `Cancelled`, bukan hapus).
+  - `useTaxRates` → `/api/v1/admin/tax-rates` (CRUD penuh).
+  - Perbaikan tipe: `MutationResponse.message` wajib `string` (konsisten dengan versi asli; `notify(result.message)`).
+- **Dummy finance dihapus**: 11 handler Nitro, 10 slug + 10 import seeds mockStore (116 slug tersisa), 22 file `server/data`, 12 entri `bundledData`. Dipertahankan: `bank-settings*`/`payment-inflow/outflow`/`finance/*` statements (modul Settings/Finance Statements/Payflow belum migrasi), report data (income-report, expense-report, tax-report).
+- Validasi: typecheck 0 error; test:sales 13 check lolos; validate:structure hanya 8 error legacy lama; 11 endpoint dummy kini 404; smoke backend: bank-accounts 2, money-transfers MT-001, income-category PUT/DELETE (endpoint baru), expense-category alias `categoryName`, income/expense/tax-rate/cash-advance create+delete sukses & ter-cleanup.
+- Sisa handler mock: 260 file.
+
+## 2026-10-11 — Migrasi batch 6: User Management (members, user-admin, roles)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useMembers` → `/api/v1/admin/users` (list + PUT update + DELETE; status `Active Member|Suspended` sesuai payload backend; `saveMember` memberi pesan jelas untuk pembuatan manual — member terdaftar lewat store/web).
+- `useUserAdmins` → `/api/v1/admin/user-admins` (CRUD penuh; body meneruskan name/email/password/role/stores/status/descriptions sesuai validasi backend; hanya strip field turunan id/userId/avatar/createdAt).
+- `useRoles` → `/api/v1/admin/roles` (list + POST/PUT/DELETE; `{name, description, permissions[]}` didukung backend termasuk sync permission).
+- **Permission Matrix (`usePermissions`) DITUNDA**: backend menyediakan daftar permission datar `{id, name}` sementara UI matrix butuh struktur `{groups, roles, matrix}` — butuh adaptasi desain (tugas tersendiri). Mock `/api/permissions` dipertahankan.
+- **Dummy dibersihkan**: handler Nitro `users`, `user-admins`, `roles` (3) + 4 slug & 4 import seeds mockStore (112 slug tersisa) + 5 file data yatim + 2 entri bundledData. Manifest: tak mencatat path ini.
+- **Reports DITUNDA (batch berikutnya)**: 14 fungsi komposabel report (useSalesReports/useFinancialReports/useOperationalReports/useStakeholderReports) serta finance-statements (cash-flow & balance-sheet) membutuhkan pemetaan bentuk per-tipe karena struktur row backend berbeda dari tipe admin; endpoint `/api/v1/admin/reports/{type}` sudah siap.
+- Validasi: typecheck 0 error; smoke 3100→Laravel: users 3, user-admins 1 (Admin Rina), roles 2 (admin, super-admin); roundtrip role + user-admin create→delete sukses; member PUT status `Active Member` sukses; dummy users/user-admins/roles 404; permissions mock tetap 200; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 251 file.
+
+## 2026-10-11 — Migrasi batch 7: Reports (14 tipe) + pembersihan dummy reports
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **`app/utils/reportMappers.ts` (baru)**: 14 mapper + tipe payload yang mengubah bentuk agregat backend (`/api/v1/admin/reports/{type}`) menjadi array item sesuai kontrak tipe admin UI. Karena summary/stat dihitung client-side dari item, filter/summary/kartu laporan bekerja tanpa perubahan UI.
+- Komposabel report dimigrasikan (fetch + rawItems saja):
+  - `useSalesReports` (sales→byChannel+topProducts, best-seller→products, purchases→bySupplier, invoices→byStatus);
+  - `useFinancialReports` (taxes→output/input, profit-loss→revenue/cogs/expense/income, annual→months);
+  - `useOperationalReports` (products→topSelling+lowStock, expenses→byCategory, incomes→byCategory);
+  - `useStakeholderReports` (suppliers, supplier-dues, customers, customer-dues).
+- Catatan pendekatan: dimensi laporan backend (channel/supplier/status/kategori) dipetakan ke kolom tabel admin; kolom turunan yang tidak tersedia di backend ditetapkan 0/'-' — ditandai sebagai pendekatan (approximation) dan dapat ditingkatkan per tipe.
+- **Dummy reports dihapus**: handler Nitro `server/api/reports/*` (14), 13 slug + 13 import seeds mockStore (99 slug tersisa), 27 file `server/data` (termasuk best-seller, report .ts/.json), 14 entri `bundledData`. Manifest: tak mencatat path ini.
+- Validasi: typecheck 0 error; 14 endpoint `/api/v1/admin/reports/{type}` terverifikasi bentuk payload; dummy `reports/sales` & `reports/annual` 404; backend tetap OK; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 237 file (termasuk `permissions`, `finance/*` statements, cash-flow/balance-sheet, bank-settings, payment-inflow/outflow, webstore, promo, paper, calculator, workflow, HRM, content/settings).
+
+## 2026-10-11 — Migrasi batch 8: Content & Settings (blog, FAQ, klien, bahasa, custom field, ban IP, appearance)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): `PUT languages/{language}` (status/rtl/progress), `PUT ban-ips/{banIp}`, `PUT custom-fields/{customField}` + route. `ContentSettingsTest` +3 kasus (language, ban-ip, custom-field) → 7 test / 78 asersi lolos.
+- **Frontend migrasi (13 komposabel):**
+  - Content: `useBlogs` (status dinormalisasi `Active/Inactive` ⇄ `Publish/Unpublish`; save `(payload, id?)`), `useBlogCategories`, `useBlogTags`, `useBlogComments` (moderasi saja; tanpa id → pesan jelas), `useFaqs`, `useFaqCategories` (POST/DELETE), `useClients` (reorder → pesan jelas), `useDownloadFiles` (favorit lokal — kolom tidak ada di DB), `useAppearance` (GET/PUT; +`refresh`).
+  - Settings: `useCustomFields` (POST/PUT/DELETE; jenis di `types/custom-fields`), `useBanIp` (pemetaan `status` string→boolean + `created`→`date`; id number), `useLanguages` (POST/PUT toggle status/rtl; normalisasi status; translations GET/**PUT**).
+- **Dummy content dibersihkan**: 11 handler Nitro (termsuk `settings/ban-ip`), 9 slug + 9 import seeds mockStore (90 slug tersisa), 20 file `server/data`, 11 entri `bundledData`, manifest −4 (entri blogs tercatat). Dipertahankan: settings pages lain (email-settings, otp-settings, pos-settings, security, storage, gdpr, invoice-settings, localization, calendar, currency, printer, bank-settings, company-setting, footer, sms/payment gateways, custom-fields UI sudah migrasi).
+- Validasi: typecheck 0 error; smoke 3100→Laravel: blogs 3, blog-tags 24, faqs 9, faq-categories 5, clients 13, custom-fields 1, ban-ips 1, languages 1, appearance `{theme, primaryColor}`; roundtrip blog (status native Publish), faq, ban-ip PUT/DELETE, custom-field PUT/DELETE, language PUT(rtl) sukses & ter-cleanup; 11 dummy endpoint 404; validate:structure kembali 8 error legacy lama.
+- Sisa handler mock: 202 file.

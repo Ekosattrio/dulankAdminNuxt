@@ -1,7 +1,10 @@
 import type { TaxRateItem, TaxRateInput, TaxRatesResponse } from '#server/types/tax-rates'
 
+/**
+ * Tarif pajak — backend Laravel `/api/v1/admin/tax-rates` (CRUD penuh).
+ */
 export function useTaxRates() {
-  const { data: response, pending, error, refresh } = useApiFetch<TaxRatesResponse>('/api/tax-rates', {
+  const { data: response, pending, error, refresh } = useApiFetch<TaxRatesResponse>('/api/v1/admin/tax-rates', {
     key: 'tax-rates-data',
     lazy: false
   })
@@ -9,7 +12,7 @@ export function useTaxRates() {
   const taxes = computed(() => response.value?.data || [])
 
   async function addTax(payload: TaxRateInput) {
-    const res = await apiFetch<{ success: boolean; data: TaxRateItem; message?: string }>('/api/tax-rates', {
+    const res = await apiFetch<{ success: boolean; data: TaxRateItem; message?: string }>('/api/v1/admin/tax-rates', {
       method: 'POST',
       body: payload
     })
@@ -18,7 +21,7 @@ export function useTaxRates() {
   }
 
   async function updateTax(id: number, payload: Partial<TaxRateInput>) {
-    const res = await apiFetch<{ success: boolean; data: TaxRateItem; message?: string }>(`/api/tax-rates/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: TaxRateItem; message?: string }>(`/api/v1/admin/tax-rates/${id}`, {
       method: 'PUT',
       body: payload
     })
@@ -27,7 +30,7 @@ export function useTaxRates() {
   }
 
   async function deleteTax(id: number) {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/tax-rates/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/tax-rates/${id}`, {
       method: 'DELETE'
     })
     await refresh()
@@ -44,4 +47,3 @@ export function useTaxRates() {
     deleteTax
   }
 }
-

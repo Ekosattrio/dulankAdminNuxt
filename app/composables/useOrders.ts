@@ -6,16 +6,36 @@ interface ApiResponse<T> {
   message?: string
 }
 
+const BASE = '/api/v1/admin/orders'
+
+/**
+ * Monitoring order (webstore) — backend Laravel `/api/v1/admin/orders`.
+ *
+ * Backend memantau order yang dibuat lewat store/quotation (tidak ada
+ * create/delete dari sisi admin), sehingga:
+ * - `updateStatus` → `POST /orders/{number}/status`,
+ * - `deleteOrder` dipetakan menjadi pembatalan (status `Cancel`),
+ * - `saveOrder` hanya berlaku untuk order yang sudah ada (perubahan status).
+ */
 export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh: refreshOrders } = useApiFetch<ApiResponse<Order[]>>('/api/orders', {
+  const query = computed(() => ({
+    search: params.value.search || undefined,
+    shipping: params.value.shipping || undefined,
+    status: params.value.status || undefined,
+    startDate: params.value.startDate || undefined,
+    endDate: params.value.endDate || undefined,
+    limit: 100
+  }))
+
+  const { data, pending, error, refresh: refreshOrders } = useApiFetch<ApiResponse<Order[]>>(BASE, {
     key: 'orders-list',
-    query: params,
+    query
   })
 
-  const { data: statsData, refresh: refreshStats } = useApiFetch<ApiResponse<OrderStats>>('/api/orders/stats', {
-    key: 'orders-stats',
+  const { data: statsData, refresh: refreshStats } = useApiFetch<ApiResponse<OrderStats>>(`${BASE}/stats`, {
+    key: 'orders-stats'
   })
 
   const orders = computed<Order[]>(() => data.value?.data ?? [])
@@ -25,38 +45,36 @@ export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterPar
     await Promise.all([refreshOrders(), refreshStats()])
   }
 
+  /**
+   * Route backend memakai nomor order (`{number}`); terima `id` maupun `no`.
+   */
+  const resolveNumber = (idOrNo: string): string => {
+    return orders.value.find(order => order.id === idOrNo || order.no === idOrNo)?.no ?? idOrNo
+  }
+
   const updateStatus = async (id: string, status: OrderStatus) => {
-    const res = await apiFetch<ApiResponse<Order>>(`/api/orders/${id}`, {
-      method: 'PUT',
-      body: { status },
-    })
+    const res = await apiFetch<ApiResponse<Order>>(
+      `${BASE}/${encodeURIComponent(resolveNumber(id))}/status`,
+      {
+        method: 'POST',
+        body: { status }
+      }
+    )
+
     await refresh()
     return res
   }
 
   const saveOrder = async (payload: OrderFormData) => {
-    let res: ApiResponse<Order>
-    if (payload.id) {
-      res = await apiFetch<ApiResponse<Order>>(`/api/orders/${payload.id}`, {
-        method: 'PUT',
-        body: payload,
-      })
-    } else {
-      res = await apiFetch<ApiResponse<Order>>('/api/orders', {
-        method: 'POST',
-        body: payload,
-      })
+    if (!payload.id || !payload.status) {
+      throw new Error('Order dibuat lewat store/web; admin hanya memantau dan mengubah status.')
     }
-    await refresh()
-    return res
+
+    return await updateStatus(payload.id, payload.status)
   }
 
   const deleteOrder = async (id: string) => {
-    const res = await apiFetch<ApiResponse<Order>>(`/api/orders/${id}`, {
-      method: 'DELETE',
-    })
-    await refresh()
-    return res
+    return await updateStatus(id, 'Cancel')
   }
 
   return {
@@ -67,6 +85,6 @@ export function useOrders(filterParams?: Ref<OrderFilterParams> | OrderFilterPar
     refresh,
     updateStatus,
     saveOrder,
-    deleteOrder,
+    deleteOrder
   }
 }

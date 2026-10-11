@@ -7,6 +7,15 @@ import type {
   AnnualReportItem,
   AnnualReportSummary
 } from '~/server/types/reports-financial'
+
+import {
+  mapTaxReport,
+  mapProfitLoss,
+  mapAnnualReport,
+  type TaxesApiPayload,
+  type ProfitLossApiPayload,
+  type AnnualApiPayload,
+} from '~/utils/reportMappers'
 import { isDateInRange, type DateRangeValue } from '~/composables/useDateRange'
 
 interface TaxReportResponse {
@@ -43,12 +52,12 @@ export function useTaxReports(options: UseTaxReportOptions = {}) {
   const statusFilter = isRef(options.status) ? options.status : ref(options.status || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<TaxReportResponse>('/api/reports/taxes', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: TaxesApiPayload }>('/api/v1/admin/reports/taxes', {
     key: 'reports-taxes',
     lazy: false
   })
 
-  const rawItems = computed<TaxReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<TaxReportItem[]>(() => mapTaxReport(data.value?.data))
 
   const items = computed<TaxReportItem[]>(() => {
     let list = rawItems.value
@@ -110,12 +119,12 @@ export function useProfitLossReports(options: UseProfitLossReportOptions = {}) {
   const periodFilter = isRef(options.period) ? options.period : ref(options.period || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<ProfitLossResponse>('/api/reports/profit-loss', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: ProfitLossApiPayload }>('/api/v1/admin/reports/profit-loss', {
     key: 'reports-profit-loss',
     lazy: false
   })
 
-  const rawItems = computed<ProfitLossItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<ProfitLossItem[]>(() => mapProfitLoss(data.value?.data))
 
   const items = computed<ProfitLossItem[]>(() => {
     let list = rawItems.value
@@ -194,12 +203,12 @@ export function useAnnualReports(options: UseAnnualReportOptions = {}) {
   const yearFilter = isRef(options.year) ? options.year : ref(options.year || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<AnnualReportResponse>('/api/reports/annual', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: AnnualApiPayload }>('/api/v1/admin/reports/annual', {
     key: 'reports-annual',
     lazy: false
   })
 
-  const rawItems = computed<AnnualReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<AnnualReportItem[]>(() => mapAnnualReport(data.value?.data))
 
   const items = computed<AnnualReportItem[]>(() => {
     let list = rawItems.value

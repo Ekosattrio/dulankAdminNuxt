@@ -2,7 +2,7 @@ import type { PosSetting } from '#server/types/pos-setting'
 
 interface PosSettingsResponse {
   success: boolean
-  data: PosSetting
+  data: { group: string; values: PosSetting }
   message?: string
 }
 
@@ -24,17 +24,17 @@ const defaultPosSetting: PosSetting = {
 }
 
 export function usePosSettings() {
-  const { data, pending, error, refresh } = useApiFetch<PosSettingsResponse>('/api/pos-settings', {
+  const { data, pending, error, refresh } = useApiFetch<PosSettingsResponse>('/api/v1/admin/settings/pos', {
     key: 'pos-settings-data'
   })
 
   const settings = computed<PosSetting>(() => {
-    return data.value?.data ?? defaultPosSetting
+    return data.value?.data?.values ?? defaultPosSetting
   })
 
   const saveSettings = async (payload: PosSetting) => {
-    const res = await apiFetch<PosSettingsResponse>('/api/pos-settings', {
-      method: 'POST',
+    const res = await apiFetch<PosSettingsResponse>('/api/v1/admin/settings/pos', {
+      method: 'PUT',
       body: payload
     })
     await refresh()

@@ -3,51 +3,77 @@ import type {
   BestSellerItem,
   PurchaseReportItem,
   InvoiceReportItem,
-} from '~~/server/types/reports-sales'
-import { isDateInRange, type DateRangeValue } from '~/composables/useDateRange'
+} from "~~/server/types/reports-sales";
+
+import {
+  mapSalesReport,
+  mapBestSeller,
+  mapPurchaseReport,
+  mapInvoiceReport,
+  type SalesApiPayload,
+  type BestSellerApiPayload,
+  type PurchasesApiPayload,
+  type InvoicesApiPayload,
+} from "~/utils/reportMappers";
+import { isDateInRange, type DateRangeValue } from "~/composables/useDateRange";
 
 export interface ReportApiResponse<T> {
-  success: boolean
-  data: T
-  message?: string
+  success: boolean;
+  data: T;
+  message?: string;
 }
 
 export function useSalesReport() {
-  const search = ref('')
-  const dateRange = ref<DateRangeValue | null>(null)
+  const search = ref("");
+  const dateRange = ref<DateRangeValue | null>(null);
   const query = computed(() => ({
     search: search.value || undefined,
     startDate: dateRange.value?.start || undefined,
     endDate: dateRange.value?.end || undefined,
-  }))
+  }));
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<SalesReportItem[]>>('/api/reports/sales', {
-    key: 'reports-sales-list',
+  const { data, pending, error, refresh } = useApiFetch<
+    ReportApiResponse<SalesApiPayload>
+  >("/api/v1/admin/reports/sales", {
+    key: "reports-sales-list",
     query,
-  })
+  });
 
-  const rawItems = computed<SalesReportItem[]>(() => data.value?.data ?? [])
-  const items = rawItems
+  const rawItems = computed<SalesReportItem[]>(() => data.value?.data ?? []);
+  const items = rawItems;
 
   const stats = computed(() => {
-    const list = items.value
-    const totalSoldUnit = list.reduce((sum, item) => sum + (item.soldQty || 0), 0)
-    const totalSales = list.reduce((sum, item) => sum + (item.totalSales || 0), 0)
-    const totalDue = list.reduce((sum, item) => sum + (item.totalDue || 0), 0)
-    const totalAmount = list.reduce((sum, item) => sum + (item.totalAmount || 0), 0)
+    const list = items.value;
+    const totalSoldUnit = list.reduce(
+      (sum, item) => sum + (item.soldQty || 0),
+      0,
+    );
+    const totalSales = list.reduce(
+      (sum, item) => sum + (item.totalSales || 0),
+      0,
+    );
+    const totalDue = list.reduce((sum, item) => sum + (item.totalDue || 0), 0);
+    const totalAmount = list.reduce(
+      (sum, item) => sum + (item.totalAmount || 0),
+      0,
+    );
 
     const posSales = list
-      .filter((i) => !i.channel || i.channel.toLowerCase() === 'pos')
-      .reduce((sum, i) => sum + (i.totalAmount || 0), 0)
+      .filter((i) => !i.channel || i.channel.toLowerCase() === "pos")
+      .reduce((sum, i) => sum + (i.totalAmount || 0), 0);
     const websiteSales = list
-      .filter((i) => i.channel?.toLowerCase() === 'website')
-      .reduce((sum, i) => sum + (i.totalAmount || 0), 0)
+      .filter((i) => i.channel?.toLowerCase() === "website")
+      .reduce((sum, i) => sum + (i.totalAmount || 0), 0);
     const quotationSales = list
-      .filter((i) => i.channel?.toLowerCase() === 'quotation')
-      .reduce((sum, i) => sum + (i.totalAmount || 0), 0)
+      .filter((i) => i.channel?.toLowerCase() === "quotation")
+      .reduce((sum, i) => sum + (i.totalAmount || 0), 0);
     const staffSales = list
-      .filter((i) => i.channel?.toLowerCase() === 'sales staff' || i.channel?.toLowerCase() === 'staff')
-      .reduce((sum, i) => sum + (i.totalAmount || 0), 0)
+      .filter(
+        (i) =>
+          i.channel?.toLowerCase() === "sales staff" ||
+          i.channel?.toLowerCase() === "staff",
+      )
+      .reduce((sum, i) => sum + (i.totalAmount || 0), 0);
 
     return {
       totalSoldUnit,
@@ -58,8 +84,8 @@ export function useSalesReport() {
       websiteSales,
       quotationSales,
       staffSales,
-    }
-  })
+    };
+  });
 
   return {
     items,
@@ -70,44 +96,61 @@ export function useSalesReport() {
     error,
     refresh,
     stats,
-  }
+  };
 }
 
 export function useBestSellerReport() {
-  const search = ref('')
-  const category = ref('')
-  const dateRange = ref<DateRangeValue | null>(null)
+  const search = ref("");
+  const category = ref("");
+  const dateRange = ref<DateRangeValue | null>(null);
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<BestSellerItem[]>>('/api/reports/best-seller', {
-    key: 'reports-best-seller-list',
-  })
+  const { data, pending, error, refresh } = useApiFetch<
+    ReportApiResponse<BestSellerApiPayload>
+  >("/api/v1/admin/reports/best-seller", {
+    key: "reports-best-seller-list",
+  });
 
-  const rawItems = computed<BestSellerItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<BestSellerItem[]>(() =>
+    mapBestSeller(data.value?.data),
+  );
 
   const items = computed<BestSellerItem[]>(() => {
-    let list = rawItems.value
-    if (category.value && category.value !== 'All' && category.value !== 'All Categories' && category.value !== '') {
-      list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
+    let list = rawItems.value;
+    if (
+      category.value &&
+      category.value !== "All" &&
+      category.value !== "All Categories" &&
+      category.value !== ""
+    ) {
+      list = list.filter(
+        (i) => i.category.toLowerCase() === category.value.toLowerCase(),
+      );
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || "", dateRange.value));
     }
-    return list
-  })
+    return list;
+  });
 
   const stats = computed(() => {
-    const list = items.value
-    const totalProducts = list.length
-    const totalSoldQty = list.reduce((sum, item) => sum + (item.soldQty || 0), 0)
-    const totalSalesValue = list.reduce((sum, item) => sum + (item.total || 0), 0)
-    const topProduct = list[0]?.product ?? '-'
+    const list = items.value;
+    const totalProducts = list.length;
+    const totalSoldQty = list.reduce(
+      (sum, item) => sum + (item.soldQty || 0),
+      0,
+    );
+    const totalSalesValue = list.reduce(
+      (sum, item) => sum + (item.total || 0),
+      0,
+    );
+    const topProduct = list[0]?.product ?? "-";
     return {
       totalProducts,
       totalSoldQty,
       totalSalesValue,
       topProduct,
-    }
-  })
+    };
+  });
 
   return {
     items,
@@ -119,44 +162,64 @@ export function useBestSellerReport() {
     error,
     refresh,
     stats,
-  }
+  };
 }
 
 export function usePurchaseReport() {
-  const search = ref('')
-  const category = ref('')
-  const dateRange = ref<DateRangeValue | null>(null)
+  const search = ref("");
+  const category = ref("");
+  const dateRange = ref<DateRangeValue | null>(null);
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<PurchaseReportItem[]>>('/api/reports/purchases', {
-    key: 'reports-purchase-list',
-  })
+  const { data, pending, error, refresh } = useApiFetch<
+    ReportApiResponse<PurchasesApiPayload>
+  >("/api/v1/admin/reports/purchases", {
+    key: "reports-purchase-list",
+  });
 
-  const rawItems = computed<PurchaseReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<PurchaseReportItem[]>(() =>
+    mapPurchaseReport(data.value?.data),
+  );
 
   const items = computed<PurchaseReportItem[]>(() => {
-    let list = rawItems.value
-    if (category.value && category.value !== 'All' && category.value !== 'All Categories' && category.value !== '') {
-      list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
+    let list = rawItems.value;
+    if (
+      category.value &&
+      category.value !== "All" &&
+      category.value !== "All Categories" &&
+      category.value !== ""
+    ) {
+      list = list.filter(
+        (i) => i.category.toLowerCase() === category.value.toLowerCase(),
+      );
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || "", dateRange.value));
     }
-    return list
-  })
+    return list;
+  });
 
   const stats = computed(() => {
-    const list = items.value
-    const totalPurchaseUnit = list.reduce((sum, item) => sum + (item.purchaseQty || 0), 0)
-    const totalPurchase = list.reduce((sum, item) => sum + (item.totalPurchase || 0), 0)
-    const totalDue = list.reduce((sum, item) => sum + (item.totalDue || 0), 0)
-    const totalAmount = list.reduce((sum, item) => sum + (item.totalAmount || 0), 0)
+    const list = items.value;
+    const totalPurchaseUnit = list.reduce(
+      (sum, item) => sum + (item.purchaseQty || 0),
+      0,
+    );
+    const totalPurchase = list.reduce(
+      (sum, item) => sum + (item.totalPurchase || 0),
+      0,
+    );
+    const totalDue = list.reduce((sum, item) => sum + (item.totalDue || 0), 0);
+    const totalAmount = list.reduce(
+      (sum, item) => sum + (item.totalAmount || 0),
+      0,
+    );
     return {
       totalPurchaseUnit,
       totalPurchase,
       totalDue,
       totalAmount,
-    }
-  })
+    };
+  });
 
   return {
     items,
@@ -168,50 +231,79 @@ export function usePurchaseReport() {
     error,
     refresh,
     stats,
-  }
+  };
 }
 
 export function useInvoiceReport() {
-  const search = ref('')
-  const month = ref('')
-  const year = ref('')
-  const dateRange = ref<DateRangeValue | null>(null)
+  const search = ref("");
+  const month = ref("");
+  const year = ref("");
+  const dateRange = ref<DateRangeValue | null>(null);
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<InvoiceReportItem[]>>('/api/reports/invoices', {
-    key: 'reports-invoice-list',
-  })
+  const { data, pending, error, refresh } = useApiFetch<
+    ReportApiResponse<InvoicesApiPayload>
+  >("/api/v1/admin/reports/invoices", {
+    key: "reports-invoice-list",
+  });
 
-  const rawItems = computed<InvoiceReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<InvoiceReportItem[]>(() =>
+    mapInvoiceReport(data.value?.data),
+  );
 
   const items = computed<InvoiceReportItem[]>(() => {
-    let list = rawItems.value
-    if (month.value && month.value !== 'All' && month.value !== 'All Months' && month.value !== '') {
-      list = list.filter((i) => i.month.toLowerCase() === month.value.toLowerCase())
+    let list = rawItems.value;
+    if (
+      month.value &&
+      month.value !== "All" &&
+      month.value !== "All Months" &&
+      month.value !== ""
+    ) {
+      list = list.filter(
+        (i) => i.month.toLowerCase() === month.value.toLowerCase(),
+      );
     }
-    if (year.value && year.value !== 'All' && year.value !== 'All Years' && year.value !== '') {
-      list = list.filter((i) => String(i.year) === String(year.value))
+    if (
+      year.value &&
+      year.value !== "All" &&
+      year.value !== "All Years" &&
+      year.value !== ""
+    ) {
+      list = list.filter((i) => String(i.year) === String(year.value));
     }
     if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
+      list = list.filter((i) => isDateInRange(i.date || "", dateRange.value));
     }
-    return list
-  })
+    return list;
+  });
 
   const stats = computed(() => {
-    const list = items.value
-    const totalInvoices = list.reduce((sum, item) => sum + (item.totalInvoice || 0), 0)
-    const totalGrossRevenue = list.reduce((sum, item) => sum + (item.grossRevenue || 0), 0)
-    const totalNetSales = list.reduce((sum, item) => sum + (item.netSales || 0), 0)
-    const avgCollectionRate = list.length > 0
-      ? Math.round(list.reduce((sum, item) => sum + (item.collectionRate || 0), 0) / list.length)
-      : 0
+    const list = items.value;
+    const totalInvoices = list.reduce(
+      (sum, item) => sum + (item.totalInvoice || 0),
+      0,
+    );
+    const totalGrossRevenue = list.reduce(
+      (sum, item) => sum + (item.grossRevenue || 0),
+      0,
+    );
+    const totalNetSales = list.reduce(
+      (sum, item) => sum + (item.netSales || 0),
+      0,
+    );
+    const avgCollectionRate =
+      list.length > 0
+        ? Math.round(
+            list.reduce((sum, item) => sum + (item.collectionRate || 0), 0) /
+              list.length,
+          )
+        : 0;
     return {
       totalInvoices,
       totalGrossRevenue,
       totalNetSales,
       avgCollectionRate,
-    }
-  })
+    };
+  });
 
   return {
     items,
@@ -224,12 +316,14 @@ export function useInvoiceReport() {
     error,
     refresh,
     stats,
-  }
+  };
 }
 
-export function useSalesReports(type: 'sales' | 'best-seller' | 'purchases' | 'invoices' = 'sales') {
-  if (type === 'best-seller') return useBestSellerReport()
-  if (type === 'purchases') return usePurchaseReport()
-  if (type === 'invoices') return useInvoiceReport()
-  return useSalesReport()
+export function useSalesReports(
+  type: "sales" | "best-seller" | "purchases" | "invoices" = "sales",
+) {
+  if (type === "best-seller") return useBestSellerReport();
+  if (type === "purchases") return usePurchaseReport();
+  if (type === "invoices") return useInvoiceReport();
+  return useSalesReport();
 }

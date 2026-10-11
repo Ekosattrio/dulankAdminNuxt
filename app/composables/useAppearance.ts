@@ -2,6 +2,10 @@ import { ref } from 'vue'
 import type { AppearanceSetting } from '#server/types/appearance-setting'
 import { apiFetch } from '~/utils/apiFetch'
 
+/**
+ * Pengaturan tampilan — backend Laravel `/api/v1/admin/appearance`
+ * (GET/PUT, grup Setting `appearance`).
+ */
 export function useAppearance() {
   const settings = ref<AppearanceSetting>({
     theme: 'Light',
@@ -17,7 +21,7 @@ export function useAppearance() {
     pending.value = true
     error.value = null
     try {
-      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance')
+      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/v1/admin/appearance')
       if (res && res.data) {
         settings.value = res.data
       }
@@ -31,8 +35,8 @@ export function useAppearance() {
   async function saveSettings(payload: AppearanceSetting) {
     pending.value = true
     try {
-      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/appearance', {
-        method: 'POST',
+      const res = await apiFetch<{ success: boolean; data: AppearanceSetting }>('/api/v1/admin/appearance', {
+        method: 'PUT',
         body: payload
       })
       settings.value = res.data
@@ -45,14 +49,12 @@ export function useAppearance() {
     }
   }
 
-  fetchSettings()
-
   return {
     settings,
     pending,
     error,
+    fetchSettings,
     refresh: fetchSettings,
-    saveSettings
+    saveSettings,
   }
 }
-

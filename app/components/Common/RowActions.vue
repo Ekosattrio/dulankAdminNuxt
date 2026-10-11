@@ -31,7 +31,7 @@ const btn = "rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 dark:ho
       :title="props.viewTitle"
       @click="emit('view', props.item)"
     >
-      <CommonFeatherIcon name="eye" size="16" />
+      <FeatherIcon name="eye" size="16" />
     </button>
     <button
       type="button"
@@ -39,7 +39,7 @@ const btn = "rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 dark:ho
       title="Edit"
       @click="emit('edit', props.item)"
     >
-      <CommonFeatherIcon name="edit" size="16" />
+      <FeatherIcon name="edit" size="16" />
     </button>
     <button
       type="button"
@@ -47,7 +47,7 @@ const btn = "rounded-lg p-1.5 text-gray-500 transition hover:bg-gray-100 dark:ho
       title="Delete"
       @click="emit('delete', props.item)"
     >
-      <CommonFeatherIcon name="trash-2" size="16" />
+      <FeatherIcon name="trash-2" size="16" />
     </button>
   </div>
 </template>

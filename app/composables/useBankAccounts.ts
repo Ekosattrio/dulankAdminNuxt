@@ -8,7 +8,7 @@ import type {
 interface AccountResponse {
   success: boolean
   data: BankAccountView[]
-  meta: {
+  meta?: {
     stats: { total: number; active: number; inactive: number; totalBalance: number }
   }
 }
@@ -18,13 +18,28 @@ interface TypeResponse {
   data: BankAccountTypeView[]
 }
 
+interface MutationResponse {
+  success: boolean
+  data?: BankAccountView | BankAccountTypeView
+  message: string
+}
+
+/**
+ * Rekening bank + tipe rekening — backend Laravel
+ * `/api/v1/admin/bank-accounts` dan `/bank-account-types`.
+ */
 export function useBankAccounts() {
-  const accountsRequest = useApiFetch<AccountResponse>('/api/bank-accounts', { key: 'bank-account-list' })
-  const typesRequest = useApiFetch<TypeResponse>('/api/bank-account-types', { key: 'bank-account-type-list' })
+  const accountsRequest = useApiFetch<AccountResponse>('/api/v1/admin/bank-accounts', {
+    key: 'bank-account-list',
+    query: { limit: 100 },
+  })
+  const typesRequest = useApiFetch<TypeResponse>('/api/v1/admin/bank-account-types', {
+    key: 'bank-account-type-list',
+  })
 
   const accounts = computed<BankAccountView[]>(() => accountsRequest.data.value?.data ?? [])
   const accountTypes = computed<BankAccountTypeView[]>(() => typesRequest.data.value?.data ?? [])
-  const stats = computed(() => accountsRequest.data.value?.meta.stats ?? {
+  const stats = computed(() => accountsRequest.data.value?.meta?.stats ?? {
     total: 0,
     active: 0,
     inactive: 0,
@@ -38,35 +53,47 @@ export function useBankAccounts() {
   }
 
   async function saveAccount(payload: BankAccountFormData) {
-    const response = await apiFetch<{ success: boolean; data: BankAccountView; message: string }>('/api/bank-accounts', {
-      method: 'POST',
-      body: payload,
-    })
+    const { id, ...body } = payload
+
+    const response = await apiFetch<MutationResponse>(
+      id ? `/api/v1/admin/bank-accounts/${encodeURIComponent(id)}` : '/api/v1/admin/bank-accounts',
+      {
+        method: id ? 'PUT' : 'POST',
+        body,
+      },
+    )
     await refresh()
     return response
   }
 
   async function removeAccount(id: string) {
-    const response = await apiFetch<{ success: boolean; message: string }>(`/api/bank-accounts/${id}`, {
-      method: 'DELETE',
-    })
+    const response = await apiFetch<{ success: boolean; message: string }>(
+      `/api/v1/admin/bank-accounts/${encodeURIComponent(id)}`,
+      { method: 'DELETE' },
+    )
     await refresh()
     return response
   }
 
   async function saveAccountType(payload: BankAccountTypeFormData) {
-    const response = await apiFetch<{ success: boolean; data: BankAccountTypeView; message: string }>(
-      '/api/bank-account-types',
-      { method: 'POST', body: payload },
+    const { id, ...body } = payload
+
+    const response = await apiFetch<MutationResponse>(
+      id ? `/api/v1/admin/bank-account-types/${encodeURIComponent(id)}` : '/api/v1/admin/bank-account-types',
+      {
+        method: id ? 'PUT' : 'POST',
+        body,
+      },
     )
     await refresh()
     return response
   }
 
   async function removeAccountType(id: string) {
-    const response = await apiFetch<{ success: boolean; message: string }>(`/api/bank-account-types/${id}`, {
-      method: 'DELETE',
-    })
+    const response = await apiFetch<{ success: boolean; message: string }>(
+      `/api/v1/admin/bank-account-types/${encodeURIComponent(id)}`,
+      { method: 'DELETE' },
+    )
     await refresh()
     return response
   }
@@ -81,7 +108,6 @@ export function useBankAccounts() {
     saveAccount,
     removeAccount,
     saveAccountType,
-    removeAccountType,
+    removeAccountType
   }
 }
-

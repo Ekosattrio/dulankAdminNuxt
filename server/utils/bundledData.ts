@@ -1,6 +1,6 @@
-import addressData from '../data/address.json'
 import banIpData from '../data/ban-ip.json'
 import bannersData from '../data/banners.json'
+<<<<<<< HEAD
 import blogsData from '../data/blogs.json'
 import billingData from '../data/billing.json'
 import vouchersData from '../data/vouchers.json'
@@ -9,17 +9,15 @@ import blogCategoriesData from '../data/blog-categories.json'
 import blogTagsData from '../data/blog-tags.json'
 import blogCommentsData from '../data/blog-comments.json'
 import calendarSettingsData from '../data/calendar-settings.json'
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
 import cartsData from '../data/carts.json'
-import categoriesData from '../data/categories.json'
 import cetakFullColorData from '../data/cetak-full-color.json'
 import checkoutsData from '../data/checkouts.json'
 import clientsData from '../data/clients.json'
-import companySettingData from '../data/company-setting.json'
 import contactFormsData from '../data/contact-forms.json'
 import customerTypesData from '../data/customer-types.json'
-import customersData from '../data/customers.json'
 import customerAccountEntriesData from '../data/customer-account-entries.json'
-import customFieldsData from '../data/custom-fields.json'
 import calculatorListingsData from '../data/calculator-listings.json'
 import calculatorModerationHistoryData from '../data/calculator-moderation-history.json'
 import calculatorPartnerMetricsData from '../data/calculator-partner-metrics.json'
@@ -32,36 +30,28 @@ import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
 import districtsData from '../data/districts.json'
-import downloadFilesData from '../data/download-files.json'
-import emailSettingsData from '../data/email-settings.json'
 import employeesData from '../data/employees.json'
 import employeeSalariesData from '../data/employeeSalaries.json'
-import expenseCategoriesData from '../data/expense-categories.json'
-import expensesData from '../data/expenses.json'
-import faqsData from '../data/faqs.json'
-import faqCategoriesData from '../data/faq-categories.json'
 import flowCategoriesData from '../data/flow-categories.json'
 import flowNamesData from '../data/flow-names.json'
 import flowTemplatesData from '../data/flow-templates.json'
 import footersData from '../data/footers.json'
 import footerConfigData from '../data/footer-config.json'
 import incentivesData from '../data/incentives.json'
-import incomesData from '../data/incomes.json'
-import incomeCategoriesData from '../data/income-categories.json'
-import invoiceSettingsData from '../data/invoice-settings.json'
 import invoicesData from '../data/invoices.json'
 import jobBranchesHistoryData from '../data/job-branches-history.json'
 import jobBranchesData from '../data/job-branches.json'
 import jobListData from '../data/job-list.json'
 import jobOrdersData from '../data/job-orders.json'
+<<<<<<< HEAD
 import jobProgressData from '../data/job-progress.json'
 import languagesData from '../data/languages.json'
 import languageTranslationsData from '../data/language-translations.json'
 import localizationSettingsData from '../data/localization-settings.json'
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
 import myIncentivesData from '../data/my-incentives.json'
 import myJobsData from '../data/my-jobs.json'
-import ordersData from '../data/orders.json'
-import otpSettingsData from '../data/otp-settings.json'
 import paperGroupsSelfData from '../data/paper-groups-self.json'
 import paperItemsSelfData from '../data/paper-items-self.json'
 import paperPricesData from '../data/paper-prices.json'
@@ -73,41 +63,26 @@ import paymentsData from '../data/payments.json'
 import permissionsData from '../data/permissions.json'
 import payslipsData from '../data/payslips.json'
 import posProductsData from '../data/pos-products.json'
-import posSettingsData from '../data/pos-settings.json'
 import prefixesData from '../data/prefixes.json'
 import printingMachinesData from '../data/printing-machines.json'
-import profileData from '../data/profile.json'
-import productsData from '../data/products.json'
-import productProcessesData from '../data/product-processes.json'
 import provincesData from '../data/provinces.json'
-import purchaseCategoriesData from '../data/purchase-categories.json'
-import purchaseItemsData from '../data/purchase-items.json'
-import purchaseOrdersData from '../data/purchase-orders.json'
-import purchaseReturnsData from '../data/purchase-returns.json'
 import purchasesData from '../data/purchases.json'
 import quotationsData from '../data/quotations.json'
 import regenciesData from '../data/regencies.json'
 import requestQuotationsData from '../data/request-quotations.json'
 import reviewsData from '../data/reviews.json'
-import rolesData from '../data/roles.json'
 import salesHistoryData from '../data/sales-history.json'
 import salesReturnsData from '../data/sales-returns.json'
 import salesVouchersData from '../data/sales-vouchers.json'
-import securitySettingsData from '../data/security-settings.json'
 import socialAuthData from '../data/social-auth.json'
 import salesData from '../data/sales.json'
-import storesData from '../data/stores.json'
-import subCategoriesData from '../data/sub-categories.json'
 import suppliersData from '../data/suppliers.json'
 import supportTicketsData from '../data/support-tickets.json'
 import subscriptionsData from '../data/subscriptions.json'
 import systemIntegrationsData from '../data/system-integrations.json'
-import taxRatesData from '../data/tax-rates.json'
-import unitsData from '../data/units.json'
-import usersData from '../data/users.json'
-import variantsData from '../data/variants.json'
 import wishlistsData from '../data/wishlists.json'
 import workFlowsData from '../data/work-flows.json'
+<<<<<<< HEAD
 import workFlowEditorCatalogData from '../data/work-flow-editor-catalog.json'
 import analyticsDashboardData from '../data/analytics-dashboard.json'
 import adminDashboardData from '../data/admin-dashboard.json'
@@ -126,27 +101,19 @@ import supplierReportsData from '../data/supplier-reports.json'
 import supplierDueReportsData from '../data/supplier-due-reports.json'
 import customerReportsData from '../data/customer-reports.json'
 import customerDueReportsData from '../data/customer-due-reports.json'
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
 import bankSettingsData from '../data/bank-settings.json'
-import bankAccountsData from '../data/bank-accounts.json'
-import bankAccountTypesData from '../data/bank-account-types.json'
-import bankAccountLedgerData from '../data/bank-account-ledger.json'
-import moneyTransfersData from '../data/money-transfers.json'
-import cashAdvancesData from '../data/cash-advances.json'
-import inputTaxDocumentsData from '../data/input-tax-documents.json'
-import outputTaxDocumentsData from '../data/output-tax-documents.json'
 import currencySettingsData from '../data/currency-settings.json'
 import printerSettingsData from '../data/printer-settings.json'
-import gdprSettingsData from '../data/gdpr-settings.json'
-import storageSettingsData from '../data/storage-settings.json'
 import smsGatewaysData from '../data/sms-gateways.json'
 import paymentGatewaysData from '../data/payment-gateways.json'
-import appearanceSettingsData from '../data/appearance-settings.json'
 import preferenceSettingsData from '../data/preference-settings.json'
 
 export const bundledSources: Record<string, unknown> = {
-  'address.json': addressData,
   'ban-ip.json': banIpData,
   'banners.json': bannersData,
+<<<<<<< HEAD
   'blogs.json': blogsData,
   'billing.json': billingData,
   'vouchers.json': vouchersData,
@@ -155,17 +122,15 @@ export const bundledSources: Record<string, unknown> = {
   'blog-tags.json': blogTagsData,
   'blog-comments.json': blogCommentsData,
   'calendar-settings.json': calendarSettingsData,
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
   'carts.json': cartsData,
-  'categories.json': categoriesData,
   'cetak-full-color.json': cetakFullColorData,
   'checkouts.json': checkoutsData,
   'clients.json': clientsData,
-  'company-setting.json': companySettingData,
   'contact-forms.json': contactFormsData,
   'customer-types.json': customerTypesData,
-  'customers.json': customersData,
   'customer-account-entries.json': customerAccountEntriesData,
-  'custom-fields.json': customFieldsData,
   'calculator-listings.json': calculatorListingsData,
   'calculator-moderation-history.json': calculatorModerationHistoryData,
   'calculator-partner-metrics.json': calculatorPartnerMetricsData,
@@ -178,37 +143,29 @@ export const bundledSources: Record<string, unknown> = {
   'departments.json': departmentsData,
   'designations.json': designationsData,
   'districts.json': districtsData,
-  'download-files.json': downloadFilesData,
-  'email-settings.json': emailSettingsData,
   'employees.json': employeesData,
   'employeeSalaries.json': employeeSalariesData,
   'employee-salaries.json': employeeSalariesData,
-  'expense-categories.json': expenseCategoriesData,
-  'expenses.json': expensesData,
-  'faqs.json': faqsData,
-  'faq-categories.json': faqCategoriesData,
   'flow-categories.json': flowCategoriesData,
   'flow-names.json': flowNamesData,
   'flow-templates.json': flowTemplatesData,
   'footers.json': footersData,
   'footer-config.json': footerConfigData,
   'incentives.json': incentivesData,
-  'incomes.json': incomesData,
-  'income-categories.json': incomeCategoriesData,
-  'invoice-settings.json': invoiceSettingsData,
   'invoices.json': invoicesData,
   'job-branches-history.json': jobBranchesHistoryData,
   'job-branches.json': jobBranchesData,
   'job-list.json': jobListData,
   'job-orders.json': jobOrdersData,
+<<<<<<< HEAD
   'job-progress.json': jobProgressData,
   'languages.json': languagesData,
   'language-translations.json': languageTranslationsData,
   'localization-settings.json': localizationSettingsData,
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
   'my-incentives.json': myIncentivesData,
   'my-jobs.json': myJobsData,
-  'orders.json': ordersData,
-  'otp-settings.json': otpSettingsData,
   'paper-groups-self.json': paperGroupsSelfData,
   'paper-items-self.json': paperItemsSelfData,
   'paper-prices.json': paperPricesData,
@@ -220,40 +177,26 @@ export const bundledSources: Record<string, unknown> = {
   'permissions.json': permissionsData,
   'payslips.json': payslipsData,
   'pos-products.json': posProductsData,
-  'pos-settings.json': posSettingsData,
   'prefixes.json': prefixesData,
   'printing-machines.json': printingMachinesData,
-  'profile.json': profileData,
-  'products.json': productsData,
-  'product-processes.json': productProcessesData,
   'provinces.json': provincesData,
-  'purchase-categories.json': purchaseCategoriesData,
-  'purchase-items.json': purchaseItemsData,
-  'purchase-orders.json': purchaseOrdersData,
-  'purchase-returns.json': purchaseReturnsData,
   'purchases.json': purchasesData,
   'quotations.json': quotationsData,
   'regencies.json': regenciesData,
   'request-quotations.json': requestQuotationsData,
   'reviews.json': reviewsData,
-  'roles.json': rolesData,
   'sales-history.json': salesHistoryData,
   'sales-returns.json': salesReturnsData,
   'sales-vouchers.json': salesVouchersData,
-  'security-settings.json': securitySettingsData,
   'social-auth.json': socialAuthData,
   'sales.json': salesData,
-  'stores.json': storesData,
-  'sub-categories.json': subCategoriesData,
   'suppliers.json': suppliersData,
   'support-tickets.json': supportTicketsData,
   'subscriptions.json': subscriptionsData,
   'system-integrations.json': systemIntegrationsData,
-  'units.json': unitsData,
-  'users.json': usersData,
-  'variants.json': variantsData,
   'wishlists.json': wishlistsData,
   'work-flows.json': workFlowsData,
+<<<<<<< HEAD
   'work-flow-editor-catalog.json': workFlowEditorCatalogData,
   'analytics-dashboard.json': analyticsDashboardData,
   'admin-dashboard.json': adminDashboardData,
@@ -273,20 +216,12 @@ export const bundledSources: Record<string, unknown> = {
   'supplier-due-reports.json': supplierDueReportsData,
   'customer-reports.json': customerReportsData,
   'customer-due-reports.json': customerDueReportsData,
+=======
+>>>>>>> 6c2fc9f (connect with api backend)
   'bank-settings.json': bankSettingsData,
-  'bank-accounts.json': bankAccountsData,
-  'bank-account-types.json': bankAccountTypesData,
-  'bank-account-ledger.json': bankAccountLedgerData,
-  'money-transfers.json': moneyTransfersData,
-  'cash-advances.json': cashAdvancesData,
-  'input-tax-documents.json': inputTaxDocumentsData,
-  'output-tax-documents.json': outputTaxDocumentsData,
   'currency-settings.json': currencySettingsData,
   'printer-settings.json': printerSettingsData,
-  'gdpr-settings.json': gdprSettingsData,
-  'storage-settings.json': storageSettingsData,
   'sms-gateways.json': smsGatewaysData,
   'payment-gateways.json': paymentGatewaysData,
-  'appearance-settings.json': appearanceSettingsData,
   'preference-settings.json': preferenceSettingsData,
 }

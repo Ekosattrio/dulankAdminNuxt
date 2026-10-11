@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AppBadge from '~/components/Common/AppBadge.vue'
+import AppBadge from "~/components/Common/AppBadge.vue";
 
-defineProps<{ status: string }>()
+defineProps<{ status: string }>();
 </script>
 
 <template>

@@ -7,6 +7,15 @@ import type {
   IncomeReportItem,
   IncomeReportSummary
 } from '~/server/types/reports-operations'
+
+import {
+  mapProductReport,
+  mapExpenseReport,
+  mapIncomeReport,
+  type ProductsApiPayload,
+  type ExpensesApiPayload,
+  type IncomesApiPayload,
+} from '~/utils/reportMappers'
 import { isDateInRange, type DateRangeValue } from '~/composables/useDateRange'
 
 interface ProductReportResponse {
@@ -41,12 +50,12 @@ export function useProductReports(options: UseProductReportOptions = {}) {
   const categoryFilter = isRef(options.category) ? options.category : ref(options.category || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<ProductReportResponse>('/api/reports/products', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: ProductsApiPayload }>('/api/v1/admin/reports/products', {
     key: 'reports-products',
     lazy: false
   })
 
-  const rawItems = computed<ProductReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<ProductReportItem[]>(() => mapProductReport(data.value?.data))
 
   const items = computed<ProductReportItem[]>(() => {
     let list = rawItems.value
@@ -99,12 +108,12 @@ export function useExpenseReports(options: UseExpenseReportOptions = {}) {
   const paymentMethodFilter = isRef(options.paymentMethod) ? options.paymentMethod : ref(options.paymentMethod || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<ExpenseReportResponse>('/api/reports/expenses', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: ExpensesApiPayload }>('/api/v1/admin/reports/expenses', {
     key: 'reports-expenses',
     lazy: false
   })
 
-  const rawItems = computed<ExpenseReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<ExpenseReportItem[]>(() => mapExpenseReport(data.value?.data))
 
   const items = computed<ExpenseReportItem[]>(() => {
     let list = rawItems.value
@@ -161,12 +170,12 @@ export function useIncomeReports(options: UseIncomeReportOptions = {}) {
   const paymentMethodFilter = isRef(options.paymentMethod) ? options.paymentMethod : ref(options.paymentMethod || '')
   const dateRange = isRef(options.dateRange) ? options.dateRange : ref(options.dateRange || null)
 
-  const { data, pending, error, refresh } = useApiFetch<IncomeReportResponse>('/api/reports/incomes', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: IncomesApiPayload }>('/api/v1/admin/reports/incomes', {
     key: 'reports-incomes',
     lazy: false
   })
 
-  const rawItems = computed<IncomeReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<IncomeReportItem[]>(() => mapIncomeReport(data.value?.data))
 
   const items = computed<IncomeReportItem[]>(() => {
     let list = rawItems.value

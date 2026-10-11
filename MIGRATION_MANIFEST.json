@@ -11,7 +11,8 @@
       "package.json",
       "scripts/scratch/parse_sidebar.cjs"
     ],
-    "missingFiles": 0
+    "missingFiles": 0,
+    "filesRemovedWithBackendMigration": 54
   },
   "files": [
     {
@@ -18495,42 +18496,6 @@
       "sha256After": "f69b0e4fee84df2df82f9bf7eb352cab05a06762aebdc8694de3767907072f73"
     },
     {
-      "from": "server/api/address/[id].delete.ts",
-      "to": "server/api/address/[id].delete.ts",
-      "sha256Before": "b4c9c837af2357cda4550c462fd7f5a078b641b1ccf2ec6b2f38fc35e488ffae",
-      "sha256After": "b4c9c837af2357cda4550c462fd7f5a078b641b1ccf2ec6b2f38fc35e488ffae"
-    },
-    {
-      "from": "server/api/address/index.get.ts",
-      "to": "server/api/address/index.get.ts",
-      "sha256Before": "a60e98001fe4c7ff34f2433110b4026aa7a4c92ec45e8530a827606e60cbf0e1",
-      "sha256After": "a60e98001fe4c7ff34f2433110b4026aa7a4c92ec45e8530a827606e60cbf0e1"
-    },
-    {
-      "from": "server/api/address/index.post.ts",
-      "to": "server/api/address/index.post.ts",
-      "sha256Before": "7bd856df18cefbba9f2d7c857cc19d46976bc275e3390c7d10a5b0e5c5349e3d",
-      "sha256After": "7bd856df18cefbba9f2d7c857cc19d46976bc275e3390c7d10a5b0e5c5349e3d"
-    },
-    {
-      "from": "server/api/blogs/[id].delete.ts",
-      "to": "server/api/blogs/[id].delete.ts",
-      "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "from": "server/api/blogs/index.get.ts",
-      "to": "server/api/blogs/index.get.ts",
-      "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "from": "server/api/blogs/index.post.ts",
-      "to": "server/api/blogs/index.post.ts",
-      "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
       "from": "server/api/calendar-settings/index.get.ts",
       "to": "server/api/calendar-settings/index.get.ts",
       "sha256Before": "3222b8b511c56d87461f6e5cbcf2c38d8e30ded18918c52d113ecb74c583c9ed",
@@ -18543,24 +18508,6 @@
       "sha256After": "a56e10c11c52acad2843bb3c7bcc1340cb9bf7b4cbb3f50f7c0967bfef403205"
     },
     {
-      "from": "server/api/categories/[id].delete.ts",
-      "to": "server/api/categories/[id].delete.ts",
-      "sha256Before": "bfcfd90b5ef2f56145c28bec7bc3ded8787b2ef83f06620617ce0171982a89cc",
-      "sha256After": "bfcfd90b5ef2f56145c28bec7bc3ded8787b2ef83f06620617ce0171982a89cc"
-    },
-    {
-      "from": "server/api/categories/index.get.ts",
-      "to": "server/api/categories/index.get.ts",
-      "sha256Before": "0cdbaedfcd03a738b4486fc3393c7c17ee0d00ac1f76e51118f70abb3bc857f0",
-      "sha256After": "0cdbaedfcd03a738b4486fc3393c7c17ee0d00ac1f76e51118f70abb3bc857f0"
-    },
-    {
-      "from": "server/api/categories/index.post.ts",
-      "to": "server/api/categories/index.post.ts",
-      "sha256Before": "884ddef996ea1b9f7050070c2859a3630264dce65658d5c862fdc742119a1248",
-      "sha256After": "884ddef996ea1b9f7050070c2859a3630264dce65658d5c862fdc742119a1248"
-    },
-    {
       "from": "server/api/cetak-full-color/index.get.ts",
       "to": "server/api/cetak-full-color/index.get.ts",
       "sha256Before": "109a678bf1b6d79210e9c37a60587aa53b606f931c3edf90209918ad4cf44594",
@@ -18571,42 +18518,6 @@
       "to": "server/api/cetak-full-color/index.post.ts",
       "sha256Before": "6848aa78fe4e70e3f8158a430235053e364177651914ad141bab35da1239c643",
       "sha256After": "6848aa78fe4e70e3f8158a430235053e364177651914ad141bab35da1239c643"
-    },
-    {
-      "from": "server/api/customer-types/[id].delete.ts",
-      "to": "server/api/customer-types/[id].delete.ts",
-      "sha256Before": "1e1b5da0b59d298dd43e2841cb3663772a8157ea2359ea5fbc323bca851ce6af",
-      "sha256After": "1e1b5da0b59d298dd43e2841cb3663772a8157ea2359ea5fbc323bca851ce6af"
-    },
-    {
-      "from": "server/api/customer-types/index.get.ts",
-      "to": "server/api/customer-types/index.get.ts",
-      "sha256Before": "7b5c64e0c61a8461344e5745752090d2d49aeb68b0af829dbc950d2f778d6bbe",
-      "sha256After": "7b5c64e0c61a8461344e5745752090d2d49aeb68b0af829dbc950d2f778d6bbe"
-    },
-    {
-      "from": "server/api/customer-types/index.post.ts",
-      "to": "server/api/customer-types/index.post.ts",
-      "sha256Before": "d58a21a1df3f3d77e7071cc72784ed0b8cc41fc179a7dbafc785043451003d94",
-      "sha256After": "d58a21a1df3f3d77e7071cc72784ed0b8cc41fc179a7dbafc785043451003d94"
-    },
-    {
-      "from": "server/api/customers/[id].delete.ts",
-      "to": "server/api/customers/[id].delete.ts",
-      "sha256Before": "7f683d7d009eb93042864e48c97e490c09d57e7d83eb2ab26dbc400ef00e09d4",
-      "sha256After": "7f683d7d009eb93042864e48c97e490c09d57e7d83eb2ab26dbc400ef00e09d4"
-    },
-    {
-      "from": "server/api/customers/index.get.ts",
-      "to": "server/api/customers/index.get.ts",
-      "sha256Before": "b5427d36f5255c19ea23b555969a878129cd3da4e5c121064f3ae7d4795ef5a3",
-      "sha256After": "b5427d36f5255c19ea23b555969a878129cd3da4e5c121064f3ae7d4795ef5a3"
-    },
-    {
-      "from": "server/api/customers/index.post.ts",
-      "to": "server/api/customers/index.post.ts",
-      "sha256Before": "2d25933944496afd81cc4e172d139b92093b4852bd92e48f2bbda5b033e9f7dc",
-      "sha256After": "2d25933944496afd81cc4e172d139b92093b4852bd92e48f2bbda5b033e9f7dc"
     },
     {
       "from": "server/api/delivery-notes/[id].delete.ts",
@@ -18681,42 +18592,6 @@
       "sha256After": "b67e6e1c4af2a9242870fd538d8a4b89643b960ca0fb65bd5a0502e3633d9a8b"
     },
     {
-      "from": "server/api/expense-categories/[id].delete.ts",
-      "to": "server/api/expense-categories/[id].delete.ts",
-      "sha256Before": "83677395e192752841e1b67ca3d4b3221c4f2bb84377da01f6df501c67976b98",
-      "sha256After": "83677395e192752841e1b67ca3d4b3221c4f2bb84377da01f6df501c67976b98"
-    },
-    {
-      "from": "server/api/expense-categories/index.get.ts",
-      "to": "server/api/expense-categories/index.get.ts",
-      "sha256Before": "7790652f31a9a5b740ba2b09da851b40fadeabcb5e2150cdd7502b127d6af59e",
-      "sha256After": "7790652f31a9a5b740ba2b09da851b40fadeabcb5e2150cdd7502b127d6af59e"
-    },
-    {
-      "from": "server/api/expense-categories/index.post.ts",
-      "to": "server/api/expense-categories/index.post.ts",
-      "sha256Before": "ac2ed85591117d89fecc1bc52bd57d82baaa18a6434d4773ef852e22d8304eb8",
-      "sha256After": "ac2ed85591117d89fecc1bc52bd57d82baaa18a6434d4773ef852e22d8304eb8"
-    },
-    {
-      "from": "server/api/expenses/[id].delete.ts",
-      "to": "server/api/expenses/[id].delete.ts",
-      "sha256Before": "33e453d6bbac7e1be47814eb879a30761c51fd60e8485365fcec48becc879cfc",
-      "sha256After": "33e453d6bbac7e1be47814eb879a30761c51fd60e8485365fcec48becc879cfc"
-    },
-    {
-      "from": "server/api/expenses/index.get.ts",
-      "to": "server/api/expenses/index.get.ts",
-      "sha256Before": "c36f6900d6bff4ec39ce39ad7efb76813a340d290dae6d9edd65198475373562",
-      "sha256After": "c36f6900d6bff4ec39ce39ad7efb76813a340d290dae6d9edd65198475373562"
-    },
-    {
-      "from": "server/api/expenses/index.post.ts",
-      "to": "server/api/expenses/index.post.ts",
-      "sha256Before": "928f24b239224d806e1ae3acef1731ba0c5593603b964dcae194c8868f97a90f",
-      "sha256After": "928f24b239224d806e1ae3acef1731ba0c5593603b964dcae194c8868f97a90f"
-    },
-    {
       "from": "server/api/incentives/[id].delete.ts",
       "to": "server/api/incentives/[id].delete.ts",
       "sha256Before": "46aa6a5f99e944ac1a893f9787250d54a41ad4e37a3c6dfa500b5f6d35ed0094",
@@ -18733,24 +18608,6 @@
       "to": "server/api/incentives/index.post.ts",
       "sha256Before": "1b984cb0dfa89c2726665bd601345b03be1d4ceb15532e53662ec3dbb749151e",
       "sha256After": "1b984cb0dfa89c2726665bd601345b03be1d4ceb15532e53662ec3dbb749151e"
-    },
-    {
-      "from": "server/api/incomes/[id].delete.ts",
-      "to": "server/api/incomes/[id].delete.ts",
-      "sha256Before": "f7435202af2d8d6722109816726823b614d99a25e6bf1ad05ffca96b18146ab3",
-      "sha256After": "f7435202af2d8d6722109816726823b614d99a25e6bf1ad05ffca96b18146ab3"
-    },
-    {
-      "from": "server/api/incomes/index.get.ts",
-      "to": "server/api/incomes/index.get.ts",
-      "sha256Before": "cbe140dfcf5c369c3c889e324deaf9924c55b18e73f2ae25b0fa7b76b3333b0d",
-      "sha256After": "cbe140dfcf5c369c3c889e324deaf9924c55b18e73f2ae25b0fa7b76b3333b0d"
-    },
-    {
-      "from": "server/api/incomes/index.post.ts",
-      "to": "server/api/incomes/index.post.ts",
-      "sha256Before": "65615223d71d2a4e3cb51254e86afab0e2b0a5750ab0243f16ea267c216afff8",
-      "sha256After": "65615223d71d2a4e3cb51254e86afab0e2b0a5750ab0243f16ea267c216afff8"
     },
     {
       "from": "server/api/invoices/[id].delete.ts",
@@ -18897,24 +18754,6 @@
       "sha256After": "e9333021012a699dc67d7029e3f569429cf0d07bfab27964c765fbf21d7015c6"
     },
     {
-      "from": "server/api/products/[id].delete.ts",
-      "to": "server/api/products/[id].delete.ts",
-      "sha256Before": "1f177cb654c93296281aba7e950fc5bff8b9f93cb66209ffbfe1fcc8ed7b1e3b",
-      "sha256After": "1f177cb654c93296281aba7e950fc5bff8b9f93cb66209ffbfe1fcc8ed7b1e3b"
-    },
-    {
-      "from": "server/api/products/index.get.ts",
-      "to": "server/api/products/index.get.ts",
-      "sha256Before": "f927fb40a01385ea8427572864957994a3ea3babaa9080fa7507ff2815845b86",
-      "sha256After": "f927fb40a01385ea8427572864957994a3ea3babaa9080fa7507ff2815845b86"
-    },
-    {
-      "from": "server/api/products/index.post.ts",
-      "to": "server/api/products/index.post.ts",
-      "sha256Before": "bf6ccaee3805b109c6771a992a0d36e1827328fea00f3259af1c42a0d09f7c0d",
-      "sha256After": "bf6ccaee3805b109c6771a992a0d36e1827328fea00f3259af1c42a0d09f7c0d"
-    },
-    {
       "from": "server/api/quotations/[id].delete.ts",
       "to": "server/api/quotations/[id].delete.ts",
       "sha256Before": "f8b5c18851020ffc361b0a221ee301a87528f3bce382d082a9b101697ecf8f39",
@@ -18951,96 +18790,6 @@
       "sha256After": "c50d7955ed065249aa21e5833ffae0fe255ac22decf02ae4d2c2b35d468fffd9"
     },
     {
-      "from": "server/api/stores/[id].delete.ts",
-      "to": "server/api/stores/[id].delete.ts",
-      "sha256Before": "d898a392ee27c418bf1cee5544b862ed2665b8ca1a44f16c2ef817bed32bb45c",
-      "sha256After": "d898a392ee27c418bf1cee5544b862ed2665b8ca1a44f16c2ef817bed32bb45c"
-    },
-    {
-      "from": "server/api/stores/index.get.ts",
-      "to": "server/api/stores/index.get.ts",
-      "sha256Before": "ebb5d9eaa95df25b2392c4bd612258fc2c53064716c496551433b218d38feb1f",
-      "sha256After": "ebb5d9eaa95df25b2392c4bd612258fc2c53064716c496551433b218d38feb1f"
-    },
-    {
-      "from": "server/api/stores/index.post.ts",
-      "to": "server/api/stores/index.post.ts",
-      "sha256Before": "995f37698b0a3c20443ec6c6541efeeeccd780c7ad49f66a067cacfe74b28526",
-      "sha256After": "995f37698b0a3c20443ec6c6541efeeeccd780c7ad49f66a067cacfe74b28526"
-    },
-    {
-      "from": "server/api/sub-categories/[id].delete.ts",
-      "to": "server/api/sub-categories/[id].delete.ts",
-      "sha256Before": "8bc530f3ca8c67e4baa0d64e396eb9be56ff8f5f620aef4e84b1714339925483",
-      "sha256After": "8bc530f3ca8c67e4baa0d64e396eb9be56ff8f5f620aef4e84b1714339925483"
-    },
-    {
-      "from": "server/api/sub-categories/index.get.ts",
-      "to": "server/api/sub-categories/index.get.ts",
-      "sha256Before": "357010ec57e17f12acde7f2a34d626ccb2139d29d7ef507c917fe3dcac60a009",
-      "sha256After": "357010ec57e17f12acde7f2a34d626ccb2139d29d7ef507c917fe3dcac60a009"
-    },
-    {
-      "from": "server/api/sub-categories/index.post.ts",
-      "to": "server/api/sub-categories/index.post.ts",
-      "sha256Before": "16d75792f2d4c63e364151d2890e3b792e0b49643846cf8c17d0235c59f64a2a",
-      "sha256After": "16d75792f2d4c63e364151d2890e3b792e0b49643846cf8c17d0235c59f64a2a"
-    },
-    {
-      "from": "server/api/suppliers/[id].delete.ts",
-      "to": "server/api/suppliers/[id].delete.ts",
-      "sha256Before": "cb3dca901af938cb87ff846bb6bf18153eea2f3ffc04f783890c58fae0fbc2dd",
-      "sha256After": "cb3dca901af938cb87ff846bb6bf18153eea2f3ffc04f783890c58fae0fbc2dd"
-    },
-    {
-      "from": "server/api/suppliers/index.get.ts",
-      "to": "server/api/suppliers/index.get.ts",
-      "sha256Before": "248e474958a21304d13b2912cb539f9834c9c2e34d9b336831918b4b703eded1",
-      "sha256After": "248e474958a21304d13b2912cb539f9834c9c2e34d9b336831918b4b703eded1"
-    },
-    {
-      "from": "server/api/suppliers/index.post.ts",
-      "to": "server/api/suppliers/index.post.ts",
-      "sha256Before": "e5e75613deaf44192bf45d0e59aa38aba668f0a6c8d3bda1c0c28ae2cd7ab620",
-      "sha256After": "e5e75613deaf44192bf45d0e59aa38aba668f0a6c8d3bda1c0c28ae2cd7ab620"
-    },
-    {
-      "from": "server/api/units/[id].delete.ts",
-      "to": "server/api/units/[id].delete.ts",
-      "sha256Before": "2a244c3a3bd3c0d4721b13d0935a4dd16522272b17c0dd32651f1c091f510da8",
-      "sha256After": "2a244c3a3bd3c0d4721b13d0935a4dd16522272b17c0dd32651f1c091f510da8"
-    },
-    {
-      "from": "server/api/units/index.get.ts",
-      "to": "server/api/units/index.get.ts",
-      "sha256Before": "6d388449dc3227fc4f36998e1fe4b46622316e8d6cafdbecd4bf6c069a260aba",
-      "sha256After": "6d388449dc3227fc4f36998e1fe4b46622316e8d6cafdbecd4bf6c069a260aba"
-    },
-    {
-      "from": "server/api/units/index.post.ts",
-      "to": "server/api/units/index.post.ts",
-      "sha256Before": "22b79ef7421f728a96427ea3aa1b6fa6a077b514f8f6fc31ca70cb4f43a8571c",
-      "sha256After": "22b79ef7421f728a96427ea3aa1b6fa6a077b514f8f6fc31ca70cb4f43a8571c"
-    },
-    {
-      "from": "server/api/variants/[id].delete.ts",
-      "to": "server/api/variants/[id].delete.ts",
-      "sha256Before": "0d127fbfec017a28dd9dd391e18cedad2838c8e0cc77abb6eda7d5ca68993315",
-      "sha256After": "0d127fbfec017a28dd9dd391e18cedad2838c8e0cc77abb6eda7d5ca68993315"
-    },
-    {
-      "from": "server/api/variants/index.get.ts",
-      "to": "server/api/variants/index.get.ts",
-      "sha256Before": "f6271975ffbfe5b0d2b00cbfc714fbf01ad37d0df51f8af5f3d3a13cfaf423da",
-      "sha256After": "f6271975ffbfe5b0d2b00cbfc714fbf01ad37d0df51f8af5f3d3a13cfaf423da"
-    },
-    {
-      "from": "server/api/variants/index.post.ts",
-      "to": "server/api/variants/index.post.ts",
-      "sha256Before": "d6e76752c30096936d12a6dc5e2e033cb69310270e53ede2e306a30fb8509ac7",
-      "sha256After": "d6e76752c30096936d12a6dc5e2e033cb69310270e53ede2e306a30fb8509ac7"
-    },
-    {
       "from": "server/api/work-flows/[id].delete.ts",
       "to": "server/api/work-flows/[id].delete.ts",
       "sha256Before": "3f036ea75c7cc0f7856290267eff73db3fa99f4e2be6402dbaf5be574fbab12e",
@@ -19059,28 +18808,10 @@
       "sha256After": "0946c407bb0f22c531d12eeb9d6dc9717101fd3e226169bbed1c01560d88f624"
     },
     {
-      "from": "server/data/address.json",
-      "to": "server/data/address.json",
-      "sha256Before": "4ba55a3bd629bf295c9a0d57ffc3c0b1a9f7237a16fc8fbac8c4c7f4300617ed",
-      "sha256After": "4ba55a3bd629bf295c9a0d57ffc3c0b1a9f7237a16fc8fbac8c4c7f4300617ed"
-    },
-    {
-      "from": "server/data/blogs.json",
-      "to": "server/data/blogs.json",
-      "sha256Before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256After": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
       "from": "server/data/calendar-settings.json",
       "to": "server/data/calendar-settings.json",
       "sha256Before": "0effcc2d0b0f64ce39d80ba14996ffeabba6a87d9351fc8c0cef9341d3510f74",
       "sha256After": "0effcc2d0b0f64ce39d80ba14996ffeabba6a87d9351fc8c0cef9341d3510f74"
-    },
-    {
-      "from": "server/data/categories.json",
-      "to": "server/data/categories.json",
-      "sha256Before": "354ce85384d93c97a4c588fc5ae11c389d89fd56e07ca798ad19fddddcbdc047",
-      "sha256After": "354ce85384d93c97a4c588fc5ae11c389d89fd56e07ca798ad19fddddcbdc047"
     },
     {
       "from": "server/data/cetak-full-color.json",
@@ -19093,12 +18824,6 @@
       "to": "server/data/customer-types.json",
       "sha256Before": "a29484ce45da99d029a18cc76361541194475f63360253ebda0daf08a9b1307d",
       "sha256After": "a29484ce45da99d029a18cc76361541194475f63360253ebda0daf08a9b1307d"
-    },
-    {
-      "from": "server/data/customers.json",
-      "to": "server/data/customers.json",
-      "sha256Before": "dc21245e30fd4b20e4146f31b0d1104d2faf608235eddb6412f9a2eae2ba39ac",
-      "sha256After": "dc21245e30fd4b20e4146f31b0d1104d2faf608235eddb6412f9a2eae2ba39ac"
     },
     {
       "from": "server/data/delivery-notes.json",
@@ -19125,28 +18850,10 @@
       "sha256After": "50e2973ff9706bc3e21c0c7f38a290d8a72e7697ac144b00451dcb13d83dd1f6"
     },
     {
-      "from": "server/data/expense-categories.json",
-      "to": "server/data/expense-categories.json",
-      "sha256Before": "d4f70bfe79700b4bc3a006b22bc711c7293cdc1d7593d2f058e90177311aff98",
-      "sha256After": "d4f70bfe79700b4bc3a006b22bc711c7293cdc1d7593d2f058e90177311aff98"
-    },
-    {
-      "from": "server/data/expenses.json",
-      "to": "server/data/expenses.json",
-      "sha256Before": "6fa5ddf73a645a96a78391178a53210b0836d63a89aa4a49e5f8313be74c7764",
-      "sha256After": "6fa5ddf73a645a96a78391178a53210b0836d63a89aa4a49e5f8313be74c7764"
-    },
-    {
       "from": "server/data/incentives.json",
       "to": "server/data/incentives.json",
       "sha256Before": "94b55e6bca3454f0319f3ca50c092c6fd0e240ae767d90e065a0ac580abbb1e8",
       "sha256After": "94b55e6bca3454f0319f3ca50c092c6fd0e240ae767d90e065a0ac580abbb1e8"
-    },
-    {
-      "from": "server/data/incomes.json",
-      "to": "server/data/incomes.json",
-      "sha256Before": "e9cf70b1a18f918adcc5a58e3c567cfef888802dff0aa8018818b7017ccbd2a9",
-      "sha256After": "e9cf70b1a18f918adcc5a58e3c567cfef888802dff0aa8018818b7017ccbd2a9"
     },
     {
       "from": "server/data/invoices.json",
@@ -19197,12 +18904,6 @@
       "sha256After": "946108935ecd4b1fd85a343e1aac11b6ac4010d99116651d438bbf6d3762c743"
     },
     {
-      "from": "server/data/products.json",
-      "to": "server/data/products.json",
-      "sha256Before": "4da22b5fc9989d74daa9c96891d6837d776c1ee5032fad554af3e52e88ad0858",
-      "sha256After": "4da22b5fc9989d74daa9c96891d6837d776c1ee5032fad554af3e52e88ad0858"
-    },
-    {
       "from": "server/data/quotations.json",
       "to": "server/data/quotations.json",
       "sha256Before": "44e07feaf8fe0828b6bba0480bcb5668492dd224a22df5da72b3f85d3ac52efe",
@@ -19215,34 +18916,10 @@
       "sha256After": "1a18f180cab6f1fb689f8312aeede5ea8881cf9978824acbc1a6e95023de763b"
     },
     {
-      "from": "server/data/stores.json",
-      "to": "server/data/stores.json",
-      "sha256Before": "31e19e016273f4471a56e4c118e1fe14a93c8bc67f96a18ba8d0c4ffa9520d50",
-      "sha256After": "31e19e016273f4471a56e4c118e1fe14a93c8bc67f96a18ba8d0c4ffa9520d50"
-    },
-    {
-      "from": "server/data/sub-categories.json",
-      "to": "server/data/sub-categories.json",
-      "sha256Before": "43b6e0e675a153627658b955c488d55de01dca7ccaef0c5da1f5e49aa8b9f3d2",
-      "sha256After": "43b6e0e675a153627658b955c488d55de01dca7ccaef0c5da1f5e49aa8b9f3d2"
-    },
-    {
       "from": "server/data/suppliers.json",
       "to": "server/data/suppliers.json",
       "sha256Before": "22acad9b8a570abbc69275697e0f3728f4bcf280b39611b97a8bf7396b126534",
       "sha256After": "22acad9b8a570abbc69275697e0f3728f4bcf280b39611b97a8bf7396b126534"
-    },
-    {
-      "from": "server/data/units.json",
-      "to": "server/data/units.json",
-      "sha256Before": "e92213aacc006a4ed35158799fc524c09315b95e3be4bfc3b1fc30b1f4b4eea4",
-      "sha256After": "e92213aacc006a4ed35158799fc524c09315b95e3be4bfc3b1fc30b1f4b4eea4"
-    },
-    {
-      "from": "server/data/variants.json",
-      "to": "server/data/variants.json",
-      "sha256Before": "e6b952f0633971d68408d6639643a07d9de56489600407195e826fd1d251ac7b",
-      "sha256After": "e6b952f0633971d68408d6639643a07d9de56489600407195e826fd1d251ac7b"
     },
     {
       "from": "server/data/work-flows.json",

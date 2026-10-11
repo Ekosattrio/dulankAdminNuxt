@@ -3,12 +3,19 @@ import { useThemeStore } from "~/stores/theme";
 import FeatherIcon from "~/components/Common/FeatherIcon.vue";
 
 const themeStore = useThemeStore();
+const { user, roles, logout } = useAdminAuth();
+
 const isSearchOpen = ref(false);
 const isStoreDropdownOpen = ref(false);
 const isFlagDropdownOpen = ref(false);
 const isNotificationsOpen = ref(false);
 const isUserMenuOpen = ref(false);
 const isFullscreen = ref(false);
+const isLoggingOut = ref(false);
+
+const displayName = computed(() => user.value?.name || "Admin");
+const displayRole = computed(() => (roles.value[0] ?? "Admin").replace(/-/g, " "));
+const displayAvatar = computed(() => user.value?.avatar || "/assets/img/profiles/avator1.jpg");
 
 const toggleFullscreen = () => {
   if (!document.fullscreenElement) {
@@ -22,12 +29,21 @@ const toggleFullscreen = () => {
   }
 };
 
-const closeAllDropdowns = () => {
-  isSearchOpen.value = false;
-  isStoreDropdownOpen.value = false;
-  isFlagDropdownOpen.value = false;
-  isNotificationsOpen.value = false;
-  isUserMenuOpen.value = false;
+/**
+ * Logout: panggil endpoint backend (token di-revoke), bersihkan sesi
+ * lokal (cookie + localStorage), lalu kembali ke halaman signin.
+ */
+const handleLogout = async () => {
+  if (isLoggingOut.value) return;
+
+  isLoggingOut.value = true;
+
+  try {
+    await logout();
+  } finally {
+    isLoggingOut.value = false;
+    await navigateTo("/signin");
+  }
 };
 </script>
 
@@ -236,10 +252,10 @@ const closeAllDropdowns = () => {
           class="flex items-center gap-2 rounded-lg p-1 text-start hover:bg-gray-50 dark:hover:bg-gray-800"
           @click="isUserMenuOpen = !isUserMenuOpen"
         >
-          <img src="/assets/img/profiles/avator1.jpg" alt="User" class="h-8 w-8 rounded-full object-cover" />
+          <img :src="displayAvatar" alt="User" class="h-8 w-8 rounded-full object-cover" />
           <div class="hidden text-start lg:block">
-            <p class="text-xs font-bold leading-tight text-gray-800 dark:text-white">John Smilga</p>
-            <span class="text-[11px] leading-tight text-gray-400">Super Admin</span>
+            <p class="text-xs font-bold leading-tight text-gray-800 dark:text-white">{{ displayName }}</p>
+            <span class="text-[11px] leading-tight text-gray-400 capitalize">{{ displayRole }}</span>
           </div>
           <FeatherIcon name="chevron-down" size="14" class="hidden text-gray-400 lg:block" />
         </button>
@@ -266,9 +282,10 @@ const closeAllDropdowns = () => {
           <NuxtLink
             to="/signin"
             class="flex items-center gap-2 px-4 py-2 text-xs text-danger hover:bg-danger-50 dark:hover:bg-gray-700"
+            @click.prevent="handleLogout"
           >
             <FeatherIcon name="log-out" size="14" />
-            <span>Logout</span>
+            <span>{{ isLoggingOut ? "Logging Out..." : "Logout" }}</span>
           </NuxtLink>
         </div>
       </div>

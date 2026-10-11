@@ -1,5 +1,21 @@
 import type { SystemRole } from '#server/types/user-management'
 
+interface RoleResponse {
+  success: boolean
+  data: SystemRole[]
+}
+
+interface MutationResponse {
+  success: boolean
+  data: SystemRole
+  message?: string
+}
+
+const RELIST = '/api/v1/admin/roles'
+
+/**
+ * Role & permission matrix — backend Laravel `/api/v1/admin/roles`.
+ */
 export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>) {
   const query = filterParams
     ? computed(() => ({
@@ -8,7 +24,7 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
       }))
     : undefined
 
-  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: SystemRole[] }>('/api/roles' as string, {
+  const { data, pending, error, refresh } = useApiFetch<RoleResponse>(RELIST, {
     ...(query ? { query } : {}),
     key: 'system-roles-list',
   })
@@ -16,10 +32,16 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
   const roles = computed<SystemRole[]>(() => data.value?.data || [])
 
   const saveRole = async (payload: Partial<SystemRole>) => {
-    const res = await apiFetch<{ success: boolean; data: SystemRole }>('/api/roles', {
-      method: 'POST',
-      body: payload,
-    })
+    const { id, createdOn, ...body } = payload
+    void createdOn
+
+    const res = await apiFetch<MutationResponse>(
+      id ? `${RELIST}/${encodeURIComponent(id)}` : RELIST,
+      {
+        method: id ? 'PUT' : 'POST',
+        body,
+      },
+    )
     if (res?.data && data.value?.data) {
       const idx = data.value.data.findIndex((r: SystemRole) => r.id === res.data.id)
       if (idx !== -1) {
@@ -33,7 +55,7 @@ export function useRoles(filterParams?: Ref<{ search?: string; sort?: string }>)
   }
 
   const deleteRole = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; data: SystemRole }>(`/api/roles/${id}`, {
+    const res = await apiFetch<MutationResponse>(`${RELIST}/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
     if (data.value?.data) {

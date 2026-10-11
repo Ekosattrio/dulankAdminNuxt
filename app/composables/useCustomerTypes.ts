@@ -6,26 +6,46 @@ interface ResponseData {
   message?: string
 }
 
+interface MutationResponse {
+  success: boolean
+  data?: CustomerType
+  message?: string
+}
+
+/**
+ * Tipe pelanggan — backend Laravel `/api/v1/admin/customer-types`.
+ */
 export function useCustomerTypes() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/customer-types', {
-    key: 'customer-types-list'
+  const query = { limit: 100 }
+
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/customer-types', {
+    key: 'customer-types-list',
+    query
   })
 
   const customerTypes = computed<CustomerType[]>(() => data.value?.data ?? [])
 
   const saveCustomerType = async (payload: CustomerTypeFormData) => {
-    const res = await apiFetch<{ success: boolean; data: CustomerType; message?: string }>('/api/customer-types', {
-      method: 'POST',
-      body: payload
-    })
+    const { id, ...body } = payload
+
+    const res = await apiFetch<MutationResponse>(
+      id ? `/api/v1/admin/customer-types/${encodeURIComponent(id)}` : '/api/v1/admin/customer-types',
+      {
+        method: id ? 'PUT' : 'POST',
+        body
+      }
+    )
+
     await refresh()
     return res
   }
 
   const deleteCustomerType = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/customer-types/${id}`, {
-      method: 'DELETE'
-    })
+    const res = await apiFetch<{ success: boolean; message?: string }>(
+      `/api/v1/admin/customer-types/${encodeURIComponent(id)}`,
+      { method: 'DELETE' }
+    )
+
     await refresh()
     return res
   }

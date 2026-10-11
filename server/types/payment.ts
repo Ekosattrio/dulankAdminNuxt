@@ -1,6 +1,6 @@
 export type PaymentType = 'Payment-In' | 'Payment-Out'
-export type PaymentMethod = 'Cash' | 'Transfer'
-export type PaymentStatus = 'Paid' | 'Partial'
+export type PaymentMethod = 'Cash' | 'Transfer' | 'Bank Transfer' | 'Debit Card' | 'E-Wallet' | 'QRIS'
+export type PaymentStatus = 'Pending' | 'Verified' | 'Rejected'
 
 export interface PaymentRecord {
   id: string

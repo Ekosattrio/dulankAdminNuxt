@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useLegacyPage({ title: 'Dashboard Admin', sweetAlert: false })
+useLegacyPage({ title: "Dashboard Admin", sweetAlert: false });
 </script>
 
 <template>
