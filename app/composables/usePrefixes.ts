@@ -43,7 +43,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
       ? Object.fromEntries(payload.map(item => [item.key, item.prefix]))
       : payload
 
-    const res = await apiFetch<{ success: boolean; data: { group: string; values: Record<string, string> } }>(
+    const res = await apiFetch<{ success: boolean; data: { group: string; values: Record<string, string> }; message?: string }>(
       '/api/v1/admin/settings/prefixes',
       { method: 'PUT', body },
     )
@@ -52,7 +52,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
   }
 
   const savePrefixItem = async (payload: PrefixFormData) => {
-    const res = await apiFetch<{ success: boolean; data: { group: string; values: Record<string, string> } }>(
+    const res = await apiFetch<{ success: boolean; data: { group: string; values: Record<string, string> }; message?: string }>(
       '/api/v1/admin/settings/prefixes',
       { method: 'PUT', body: { [payload.key]: payload.prefix } },
     )
