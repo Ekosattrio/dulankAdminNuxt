@@ -5,27 +5,14 @@ import clientsData from '../data/clients.json'
 import customerTypesData from '../data/customer-types.json'
 import customerAccountEntriesData from '../data/customer-account-entries.json'
 import deliveryNotesData from '../data/delivery-notes.json'
-import departmentsData from '../data/departments.json'
-import designationsData from '../data/designations.json'
 import districtsData from '../data/districts.json'
-import employeesData from '../data/employees.json'
-import employeeSalariesData from '../data/employeeSalaries.json'
 import footersData from '../data/footers.json'
 import footerConfigData from '../data/footer-config.json'
-import incentivesData from '../data/incentives.json'
 import invoicesData from '../data/invoices.json'
-import jobBranchesHistoryData from '../data/job-branches-history.json'
-import jobBranchesData from '../data/job-branches.json'
-import jobListData from '../data/job-list.json'
-import jobOrdersData from '../data/job-orders.json'
-import jobProgressData from '../data/job-progress.json'
-import myIncentivesData from '../data/my-incentives.json'
-import myJobsData from '../data/my-jobs.json'
 import paymentBalancesData from '../data/payment-balances.json'
 import paymentInflowsData from '../data/payment-inflows.json'
 import paymentOutflowsData from '../data/payment-outflows.json'
 import permissionsData from '../data/permissions.json'
-import payslipsData from '../data/payslips.json'
 import posProductsData from '../data/pos-products.json'
 import prefixesData from '../data/prefixes.json'
 import printingMachinesData from '../data/printing-machines.json'
@@ -61,28 +48,14 @@ export const bundledSources: Record<string, unknown> = {
   'customer-types.json': customerTypesData,
   'customer-account-entries.json': customerAccountEntriesData,
   'delivery-notes.json': deliveryNotesData,
-  'departments.json': departmentsData,
-  'designations.json': designationsData,
   'districts.json': districtsData,
-  'employees.json': employeesData,
-  'employeeSalaries.json': employeeSalariesData,
-  'employee-salaries.json': employeeSalariesData,
   'footers.json': footersData,
   'footer-config.json': footerConfigData,
-  'incentives.json': incentivesData,
   'invoices.json': invoicesData,
-  'job-branches-history.json': jobBranchesHistoryData,
-  'job-branches.json': jobBranchesData,
-  'job-list.json': jobListData,
-  'job-orders.json': jobOrdersData,
-  'job-progress.json': jobProgressData,
-  'my-incentives.json': myIncentivesData,
-  'my-jobs.json': myJobsData,
   'payment-balances.json': paymentBalancesData,
   'payment-inflows.json': paymentInflowsData,
   'payment-outflows.json': paymentOutflowsData,
   'permissions.json': permissionsData,
-  'payslips.json': payslipsData,
   'pos-products.json': posProductsData,
   'prefixes.json': prefixesData,
   'printing-machines.json': printingMachinesData,

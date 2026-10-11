@@ -876,3 +876,12 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `calculator/*`, `calculator-components/*`, `flow-categories/names/templates`, `work-flows`, `work-flow-context` (8 unit); slug `kalkulator-*|komponen-*|harga-jasa*|flow-*|work-flow` (8 slug + import; 54 slug tersisa); 11 file data; 11 entri bundledData; manifest −14 (paper-prices/sizes/printing/work-flows ikut tercatat). `job-*`, `my-jobs`, `my-incentives`, `incentives`, `edit-work-flow`, `add-work-flow` dipertahankan (modul Job/HRM belum migrasi). `job-list.ts` & `job-order-context.get.ts` sengaja dipulihkan (masih dipakai modul job).
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke 12 endpoint OK (dashboard {telemetry,users}, partners 4, komponen create/delete, moderate partner, context 5 key); 8 dummy endpoint 404.
 - Sisa handler mock: 123 file.
+
+## 2026-10-11 — Migrasi batch 14: Job Orders & HRM (organisasi, karyawan, payroll, insentif, job)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): `GET job-order-context` (JobOrder+Order terkait), `GET job-branches/history` (cabang selesai), `PUT job-progress/{id}` (deskripsi/proses/pic/waktu), `DELETE employee-salaries/{id}` — semua + route & test (`HrmWorkflowTest` +1 kasus → 8 test / 88 asersi lolos).
+- **Frontend (15 komposabel)**: `useDepartments`, `useDesignations`, `useEmployees`, `useEmployeeSalaries`, `usePayslips` (simpan → generate back-end; hapus → pesan jelas), `useIncentives` (hapus → pesan jelas), `useMyIncentives`/`useMyJobs` (view read-only — mutasi pesan jelas), `useJobOrders`, `useJobBranches` (+history), `useJobProgress` (PUT), `useJobList` (flows → flow-names), `useJobOrderDocument` (context backend) → `/api/v1/admin/*`.
+- **Dummy dibersihkan**: handler 12 unit (termasuk dir `job-list` & file `job-order-context`), 12 slug + import seeds mockStore (42 slug tersisa), 25 file data, 25 entri bundledData, manifest −32. Dipertahankan: `online-orders`/`pos-order` (halaman store legacy), `add-work-flow`/`edit-work-flow` (form editor legacy), `invoice`, `subscriptions`, `payment-inflow/outflow`, `social-auth`, `system-integrations`.
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke 14 endpoint HRM/job OK (departments 1, employees 1, payslips 1, job-orders 1, job-branches 1, history 1, progress 1, my-jobs 1, job-list {jobs, flowCategories}, context {jobOrder, order}); 12 dummy endpoint 404.
+- Sisa handler mock: 85 file.

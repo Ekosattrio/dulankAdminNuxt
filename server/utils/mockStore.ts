@@ -23,28 +23,15 @@ import { coupons as couponCouponsSeed } from '../data/coupon'
 import { currencies as currencySettingsCurrenciesSeed } from '../data/currency-settings'
 import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
 import { deliveryNotes as deliveryNoteDeliverynotesSeed } from '../data/delivery-note'
-import { departments as departmentDepartmentsSeed } from '../data/department'
-import { designations as designationDesignationsSeed } from '../data/designation'
 import { discounts as discountDiscountsSeed } from '../data/discount'
 import { districts as districtDistrictsSeed } from '../data/district'
 import { orderProducts as editJobOrderOrderproductsSeed } from '../data/edit-job-order'
 import { items as editQuotationItemsSeed } from '../data/edit-quotation'
 import { flowSteps as editWorkFlowFlowstepsSeed } from '../data/edit-work-flow'
-import { records as employeeSalaryRecordsSeed } from '../data/employee-salary'
-import { employees as employeesEmployeesSeed } from '../data/employees'
-import { incentives as incentiveIncentivesSeed } from '../data/incentive'
 import { invoices as invoiceInvoicesSeed } from '../data/invoice'
-import { jobs as jobBranchJobsSeed } from '../data/job-branch'
-import { flowCategories as jobListFlowcategoriesSeed } from '../data/job-list'
-import { jobs as jobListJobsSeed } from '../data/job-list'
-import { jobOrders as jobOrderJobordersSeed } from '../data/job-order'
-import { progressList as jobProgressProgresslistSeed } from '../data/job-progress'
-import { items as myIncentiveItemsSeed } from '../data/my-incentive'
-import { jobs as myJobJobsSeed } from '../data/my-job'
 import { orders as onlineOrdersOrdersSeed } from '../data/online-orders'
 import { inflows as paymentInflowInflowsSeed } from '../data/payment-inflow'
 import { outflows as paymentOutflowOutflowsSeed } from '../data/payment-outflow'
-import { payslips as payslipPayslipsSeed } from '../data/payslip'
 import { modules as permissionsModulesSeed } from '../data/permissions'
 import { orders as posOrderOrdersSeed } from '../data/pos-order'
 import { products as posProductsSeed } from '../data/pos'
@@ -170,18 +157,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       deliveryNotes: deliveryNoteDeliverynotesSeed,
     },
   },
-  'department': {
-    names: ['departments'],
-    cols: {
-      departments: departmentDepartmentsSeed,
-    },
-  },
-  'designation': {
-    names: ['designations'],
-    cols: {
-      designations: designationDesignationsSeed,
-    },
-  },
   'discount': {
     names: ['discounts'],
     cols: {
@@ -212,65 +187,10 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       flowSteps: editWorkFlowFlowstepsSeed,
     },
   },
-  'employee-salary': {
-    names: ['records'],
-    cols: {
-      records: employeeSalaryRecordsSeed,
-    },
-  },
-  'employees': {
-    names: ['employees'],
-    cols: {
-      employees: employeesEmployeesSeed,
-    },
-  },
-  'incentive': {
-    names: ['incentives'],
-    cols: {
-      incentives: incentiveIncentivesSeed,
-    },
-  },
   'invoice': {
     names: ['invoices'],
     cols: {
       invoices: invoiceInvoicesSeed,
-    },
-  },
-  'job-branch': {
-    names: ['jobs'],
-    cols: {
-      jobs: jobBranchJobsSeed,
-    },
-  },
-  'job-list': {
-    names: ['flowCategories', 'jobs'],
-    cols: {
-      flowCategories: jobListFlowcategoriesSeed,
-      jobs: jobListJobsSeed,
-    },
-  },
-  'job-order': {
-    names: ['jobOrders'],
-    cols: {
-      jobOrders: jobOrderJobordersSeed,
-    },
-  },
-  'job-progress': {
-    names: ['progressList'],
-    cols: {
-      progressList: jobProgressProgresslistSeed,
-    },
-  },
-  'my-incentive': {
-    names: ['items'],
-    cols: {
-      items: myIncentiveItemsSeed,
-    },
-  },
-  'my-job': {
-    names: ['jobs'],
-    cols: {
-      jobs: myJobJobsSeed,
     },
   },
   'online-orders': {
@@ -289,12 +209,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['outflows'],
     cols: {
       outflows: paymentOutflowOutflowsSeed,
-    },
-  },
-  'payslip': {
-    names: ['payslips'],
-    cols: {
-      payslips: payslipPayslipsSeed,
     },
   },
   'permissions': {

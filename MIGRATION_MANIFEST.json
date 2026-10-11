@@ -12,7 +12,7 @@
       "scripts/scratch/parse_sidebar.cjs"
     ],
     "missingFiles": 0,
-    "filesRemovedWithBackendMigration": 71
+    "filesRemovedWithBackendMigration": 103
   },
   "files": [
     {
@@ -18526,78 +18526,6 @@
       "sha256After": "dd9eb94474df46c2a032472de41069af4f99a02e643876cca7afcf485b7054c6"
     },
     {
-      "from": "server/api/departments/[id].delete.ts",
-      "to": "server/api/departments/[id].delete.ts",
-      "sha256Before": "a6254a2e3e008854150d13e78485ed305a8c2b248475e57573a85dac5c585802",
-      "sha256After": "a6254a2e3e008854150d13e78485ed305a8c2b248475e57573a85dac5c585802"
-    },
-    {
-      "from": "server/api/departments/index.get.ts",
-      "to": "server/api/departments/index.get.ts",
-      "sha256Before": "40bd619a2ec10e73a24a40d29edca48f0479e7b3642e98bd5c1818aca24c9718",
-      "sha256After": "40bd619a2ec10e73a24a40d29edca48f0479e7b3642e98bd5c1818aca24c9718"
-    },
-    {
-      "from": "server/api/departments/index.post.ts",
-      "to": "server/api/departments/index.post.ts",
-      "sha256Before": "329ce4cba5c1f07b4d85b947629f8d99553d448618ea8f9277cbc894550fa270",
-      "sha256After": "329ce4cba5c1f07b4d85b947629f8d99553d448618ea8f9277cbc894550fa270"
-    },
-    {
-      "from": "server/api/designations/[id].delete.ts",
-      "to": "server/api/designations/[id].delete.ts",
-      "sha256Before": "285c5d0e1760d347559567a9a14c408ee96e266b9cf13cafe68d47ea12c3ece4",
-      "sha256After": "285c5d0e1760d347559567a9a14c408ee96e266b9cf13cafe68d47ea12c3ece4"
-    },
-    {
-      "from": "server/api/designations/index.get.ts",
-      "to": "server/api/designations/index.get.ts",
-      "sha256Before": "c0663ad5348a15bb54fe3765467f38755b6c50025a9cdf28fcf1db4d24a92c70",
-      "sha256After": "c0663ad5348a15bb54fe3765467f38755b6c50025a9cdf28fcf1db4d24a92c70"
-    },
-    {
-      "from": "server/api/designations/index.post.ts",
-      "to": "server/api/designations/index.post.ts",
-      "sha256Before": "3f1ca65685163baf5ce966645e59a90938de5ea7c2aa3bd682889cc2dd3ef714",
-      "sha256After": "3f1ca65685163baf5ce966645e59a90938de5ea7c2aa3bd682889cc2dd3ef714"
-    },
-    {
-      "from": "server/api/employees/[id].delete.ts",
-      "to": "server/api/employees/[id].delete.ts",
-      "sha256Before": "9c01d8d612a25274d3b630b59f0d3da4f544a520120993623dabb23229f6579e",
-      "sha256After": "9c01d8d612a25274d3b630b59f0d3da4f544a520120993623dabb23229f6579e"
-    },
-    {
-      "from": "server/api/employees/index.get.ts",
-      "to": "server/api/employees/index.get.ts",
-      "sha256Before": "fd9079344a9e1b62f3dcb21bc8e2bc1d5d408c0faa32945fa410f0caa1e2ed4d",
-      "sha256After": "fd9079344a9e1b62f3dcb21bc8e2bc1d5d408c0faa32945fa410f0caa1e2ed4d"
-    },
-    {
-      "from": "server/api/employees/index.post.ts",
-      "to": "server/api/employees/index.post.ts",
-      "sha256Before": "b67e6e1c4af2a9242870fd538d8a4b89643b960ca0fb65bd5a0502e3633d9a8b",
-      "sha256After": "b67e6e1c4af2a9242870fd538d8a4b89643b960ca0fb65bd5a0502e3633d9a8b"
-    },
-    {
-      "from": "server/api/incentives/[id].delete.ts",
-      "to": "server/api/incentives/[id].delete.ts",
-      "sha256Before": "46aa6a5f99e944ac1a893f9787250d54a41ad4e37a3c6dfa500b5f6d35ed0094",
-      "sha256After": "46aa6a5f99e944ac1a893f9787250d54a41ad4e37a3c6dfa500b5f6d35ed0094"
-    },
-    {
-      "from": "server/api/incentives/index.get.ts",
-      "to": "server/api/incentives/index.get.ts",
-      "sha256Before": "17cb9f276da00d05fb01dc980972f1392d09c9e61314b865e7080985c9cfc679",
-      "sha256After": "17cb9f276da00d05fb01dc980972f1392d09c9e61314b865e7080985c9cfc679"
-    },
-    {
-      "from": "server/api/incentives/index.post.ts",
-      "to": "server/api/incentives/index.post.ts",
-      "sha256Before": "1b984cb0dfa89c2726665bd601345b03be1d4ceb15532e53662ec3dbb749151e",
-      "sha256After": "1b984cb0dfa89c2726665bd601345b03be1d4ceb15532e53662ec3dbb749151e"
-    },
-    {
       "from": "server/api/invoices/[id].delete.ts",
       "to": "server/api/invoices/[id].delete.ts",
       "sha256Before": "4180ca61bf05c5212d388d091b3e0f7a31e6874a17ff4e4b43d56b1c3f96d934",
@@ -18614,78 +18542,6 @@
       "to": "server/api/invoices/index.post.ts",
       "sha256Before": "9af373114ecb521ca2013f766af2f1ae8007e05673fbb43e58ddddcaedd7d6c6",
       "sha256After": "9af373114ecb521ca2013f766af2f1ae8007e05673fbb43e58ddddcaedd7d6c6"
-    },
-    {
-      "from": "server/api/job-orders/[id].delete.ts",
-      "to": "server/api/job-orders/[id].delete.ts",
-      "sha256Before": "871b2a576435cf4c8112eaf6dfc7f471719ea4c98e7b8f5a5a3cbc4c100df589",
-      "sha256After": "871b2a576435cf4c8112eaf6dfc7f471719ea4c98e7b8f5a5a3cbc4c100df589"
-    },
-    {
-      "from": "server/api/job-orders/index.get.ts",
-      "to": "server/api/job-orders/index.get.ts",
-      "sha256Before": "53e2b7b59b344b79d366bacf629a552cdf7142575ebfd255e1dea559a81e4091",
-      "sha256After": "53e2b7b59b344b79d366bacf629a552cdf7142575ebfd255e1dea559a81e4091"
-    },
-    {
-      "from": "server/api/job-orders/index.post.ts",
-      "to": "server/api/job-orders/index.post.ts",
-      "sha256Before": "aa5caf8f22bacc1324b68eb1e1d46c369057008d7a14131a695044080919ff77",
-      "sha256After": "aa5caf8f22bacc1324b68eb1e1d46c369057008d7a14131a695044080919ff77"
-    },
-    {
-      "from": "server/api/my-incentives/[id].delete.ts",
-      "to": "server/api/my-incentives/[id].delete.ts",
-      "sha256Before": "bcde6f3bc1bc0f7bb265e42197df889ba9312bbe314669fe35ac7bdcd792aa8d",
-      "sha256After": "bcde6f3bc1bc0f7bb265e42197df889ba9312bbe314669fe35ac7bdcd792aa8d"
-    },
-    {
-      "from": "server/api/my-incentives/index.get.ts",
-      "to": "server/api/my-incentives/index.get.ts",
-      "sha256Before": "fd2906d53a99601c910ddb1582563b4865a98b6ccc4921c6b3300ff5ba1167a0",
-      "sha256After": "fd2906d53a99601c910ddb1582563b4865a98b6ccc4921c6b3300ff5ba1167a0"
-    },
-    {
-      "from": "server/api/my-incentives/index.post.ts",
-      "to": "server/api/my-incentives/index.post.ts",
-      "sha256Before": "9b6557a952bf0b7ed724b9e94b2e6477d384e9936fc1d422537a354b129df972",
-      "sha256After": "9b6557a952bf0b7ed724b9e94b2e6477d384e9936fc1d422537a354b129df972"
-    },
-    {
-      "from": "server/api/my-jobs/[id].delete.ts",
-      "to": "server/api/my-jobs/[id].delete.ts",
-      "sha256Before": "cd390bee6c28a4bf1f54e2d25a905714b018244f9bbc23f495466527f599f975",
-      "sha256After": "cd390bee6c28a4bf1f54e2d25a905714b018244f9bbc23f495466527f599f975"
-    },
-    {
-      "from": "server/api/my-jobs/index.get.ts",
-      "to": "server/api/my-jobs/index.get.ts",
-      "sha256Before": "d1ed6eaaee4fb842fc66591624bc1ea4add1d3d85fe591d75c9272cd6107a4a3",
-      "sha256After": "d1ed6eaaee4fb842fc66591624bc1ea4add1d3d85fe591d75c9272cd6107a4a3"
-    },
-    {
-      "from": "server/api/my-jobs/index.post.ts",
-      "to": "server/api/my-jobs/index.post.ts",
-      "sha256Before": "525975bda30c53d33baacd931fb59c3fa12a748dd9737ac5c4898762173117e8",
-      "sha256After": "525975bda30c53d33baacd931fb59c3fa12a748dd9737ac5c4898762173117e8"
-    },
-    {
-      "from": "server/api/payslips/[id].delete.ts",
-      "to": "server/api/payslips/[id].delete.ts",
-      "sha256Before": "967ab29368dd263e7704e0c51930022bebe5fc0fe312c21637457fb5f3ad5f40",
-      "sha256After": "967ab29368dd263e7704e0c51930022bebe5fc0fe312c21637457fb5f3ad5f40"
-    },
-    {
-      "from": "server/api/payslips/index.get.ts",
-      "to": "server/api/payslips/index.get.ts",
-      "sha256Before": "518c2edcda36dbc803e1239eaa4ed9593ee6b6ab4365ba54b5fd4f12711fe8aa",
-      "sha256After": "518c2edcda36dbc803e1239eaa4ed9593ee6b6ab4365ba54b5fd4f12711fe8aa"
-    },
-    {
-      "from": "server/api/payslips/index.post.ts",
-      "to": "server/api/payslips/index.post.ts",
-      "sha256Before": "037a5fa1750e308ac8dd148a6e44a429f45763b37a8dbea94e05b17be7016972",
-      "sha256After": "037a5fa1750e308ac8dd148a6e44a429f45763b37a8dbea94e05b17be7016972"
     },
     {
       "from": "server/api/quotations/[id].delete.ts",
@@ -18742,58 +18598,10 @@
       "sha256After": "1c3ed1eaab5bfb5791813a5a655c12e334c5cc58241bed0856705a7bc2971714"
     },
     {
-      "from": "server/data/departments.json",
-      "to": "server/data/departments.json",
-      "sha256Before": "fc94a024f081bad0b2cfed458b7a2b3792761ab448c694ed868f4f4834cd9b55",
-      "sha256After": "fc94a024f081bad0b2cfed458b7a2b3792761ab448c694ed868f4f4834cd9b55"
-    },
-    {
-      "from": "server/data/designations.json",
-      "to": "server/data/designations.json",
-      "sha256Before": "49d1de64309ebc377e1a28354a25acff702ca869a5671485621ea780f9eb504b",
-      "sha256After": "49d1de64309ebc377e1a28354a25acff702ca869a5671485621ea780f9eb504b"
-    },
-    {
-      "from": "server/data/employees.json",
-      "to": "server/data/employees.json",
-      "sha256Before": "50e2973ff9706bc3e21c0c7f38a290d8a72e7697ac144b00451dcb13d83dd1f6",
-      "sha256After": "50e2973ff9706bc3e21c0c7f38a290d8a72e7697ac144b00451dcb13d83dd1f6"
-    },
-    {
-      "from": "server/data/incentives.json",
-      "to": "server/data/incentives.json",
-      "sha256Before": "94b55e6bca3454f0319f3ca50c092c6fd0e240ae767d90e065a0ac580abbb1e8",
-      "sha256After": "94b55e6bca3454f0319f3ca50c092c6fd0e240ae767d90e065a0ac580abbb1e8"
-    },
-    {
       "from": "server/data/invoices.json",
       "to": "server/data/invoices.json",
       "sha256Before": "9a92db37619005369484b81247cc2cb93ba5f8d78cd23a4b9ab5ed2cfeebdc6b",
       "sha256After": "9a92db37619005369484b81247cc2cb93ba5f8d78cd23a4b9ab5ed2cfeebdc6b"
-    },
-    {
-      "from": "server/data/job-orders.json",
-      "to": "server/data/job-orders.json",
-      "sha256Before": "51793f13ee6e94ce47ad5d4ce144c33fb52c01c42c40bed84118981d80c1f4a7",
-      "sha256After": "51793f13ee6e94ce47ad5d4ce144c33fb52c01c42c40bed84118981d80c1f4a7"
-    },
-    {
-      "from": "server/data/my-incentives.json",
-      "to": "server/data/my-incentives.json",
-      "sha256Before": "1a3ecd84532936a19826ea9f88bd1453fc14e77b556e00d7ee86d4969fa031d4",
-      "sha256After": "1a3ecd84532936a19826ea9f88bd1453fc14e77b556e00d7ee86d4969fa031d4"
-    },
-    {
-      "from": "server/data/my-jobs.json",
-      "to": "server/data/my-jobs.json",
-      "sha256Before": "12d4daa63555a64fc750f8aa2269602ae7d3e3931f59a404736fbcc222476e2a",
-      "sha256After": "12d4daa63555a64fc750f8aa2269602ae7d3e3931f59a404736fbcc222476e2a"
-    },
-    {
-      "from": "server/data/payslips.json",
-      "to": "server/data/payslips.json",
-      "sha256Before": "87c80a264ed51c9afb1c016285533f34d680216e3f64a8fdb31f9b50bfcaf3ae",
-      "sha256After": "87c80a264ed51c9afb1c016285533f34d680216e3f64a8fdb31f9b50bfcaf3ae"
     },
     {
       "from": "server/data/printing-machines.json",

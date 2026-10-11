@@ -10,7 +10,7 @@ interface ResponseData {
 export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrderFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/job-orders', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/job-orders', {
     key: 'job-orders-list',
     query: params
   })
@@ -19,7 +19,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
   const workflowCounts = computed<Record<string, number>>(() => data.value?.meta?.workflowCounts ?? {})
 
   const saveJobOrder = async (payload: JobOrderFormData) => {
-    const res = await apiFetch<{ success: boolean; data: JobOrder; message?: string }>('/api/job-orders', {
+    const res = await apiFetch<{ success: boolean; data: JobOrder; message?: string }>('/api/v1/admin/job-orders', {
       method: 'POST',
       body: payload
     })
@@ -28,7 +28,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
   }
 
   const deleteJobOrder = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/job-orders/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/job-orders/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()

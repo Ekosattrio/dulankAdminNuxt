@@ -10,7 +10,7 @@ interface ResponseData {
 export function useMyIncentives(filterParams?: Ref<MyIncentiveFilterParams> | MyIncentiveFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/my-incentives', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/my-incentives', {
     key: 'my-incentives-list',
     query: params
   })
@@ -21,23 +21,20 @@ export function useMyIncentives(filterParams?: Ref<MyIncentiveFilterParams> | My
     totalAmount: myIncentives.value.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
   })
 
-  const saveMyIncentive = async (payload: MyIncentiveFormData) => {
-    const res = await apiFetch<{ success: boolean; data: MyIncentive; message?: string }>('/api/my-incentives', {
-      method: 'POST',
-      body: payload
-    })
-    await refresh()
-    return res
+  const saveMyIncentive = async (_payload: MyIncentiveFormData) => {
+    void _payload
+
+    throw new Error('Insentif dihitung dari penyelesaian job; halaman ini hanya pemantauan.')
   }
 
-  const deleteMyIncentive = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/my-incentives/${id}`, {
-      method: 'DELETE'
-    })
-    await refresh()
-    return res
+  
+  const deleteMyIncentive = async (_id: string) => {
+    void _id
+
+    throw new Error('Insentif tidak dihapus manual; dibatalkan lewat job terkait.')
   }
 
+  
   return {
     myIncentives,
     stats,

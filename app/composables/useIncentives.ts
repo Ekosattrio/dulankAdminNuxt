@@ -9,7 +9,7 @@ interface ResponseData {
 export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | IncentiveFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/incentives', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/incentives', {
     key: 'incentives-list',
     query: params
   })
@@ -17,7 +17,7 @@ export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | Incent
   const incentives = computed<IncentiveItem[]>(() => data.value?.data ?? [])
 
   const saveIncentive = async (payload: IncentiveFormData) => {
-    const res = await apiFetch<{ success: boolean; data: IncentiveItem; message?: string }>('/api/incentives', {
+    const res = await apiFetch<{ success: boolean; data: IncentiveItem; message?: string }>('/api/v1/admin/incentives', {
       method: 'POST',
       body: payload
     })
@@ -25,14 +25,13 @@ export function useIncentives(filterParams?: Ref<IncentiveFilterParams> | Incent
     return res
   }
 
-  const deleteIncentive = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/incentives/${id}`, {
-      method: 'DELETE'
-    })
-    await refresh()
-    return res
+  const deleteIncentive = async (_id: string) => {
+    void _id
+
+    throw new Error('Insentif tidak dihapus; gunakan pembayaran/status untuk mengelolanya.')
   }
 
+  
   return {
     incentives,
     pending,
