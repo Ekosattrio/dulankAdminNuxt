@@ -4,6 +4,10 @@ import FeatherIcon from "~/components/Common/FeatherIcon.vue";
 
 const themeStore = useThemeStore();
 const { user, roles, logout } = useAdminAuth();
+const { stores } = useStores();
+const { languages } = useLanguages();
+const { summary } = useDashboard();
+const { tickets: supportTickets } = useSupportTickets();
 
 const isSearchOpen = ref(false);
 const isStoreDropdownOpen = ref(false);
@@ -12,6 +16,36 @@ const isNotificationsOpen = ref(false);
 const isUserMenuOpen = ref(false);
 const isFullscreen = ref(false);
 const isLoggingOut = ref(false);
+const selectedStoreCode = ref("");
+const selectedLanguageCode = ref("");
+
+const activeStores = computed(() => stores.value.filter(store => store.status === "Active"));
+const selectedStore = computed(() =>
+  activeStores.value.find(store => store.id === selectedStoreCode.value) || activeStores.value[0],
+);
+const activeLanguages = computed(() => languages.value.filter(language => language.status === "active"));
+const selectedLanguage = computed(() =>
+  activeLanguages.value.find(language => language.code === selectedLanguageCode.value) || activeLanguages.value[0],
+);
+
+const pendingPayments = computed(() => summary.value?.pendingPayments ?? 0);
+const openTickets = computed(() => supportTickets.value.filter(ticket => ticket.status === "Open").slice(0, 3));
+
+const notificationItems = computed(() => {
+  const items: { icon: string; title: string; time: string }[] = [];
+
+  if (pendingPayments.value > 0) {
+    items.push({ icon: "credit-card", title: `${pendingPayments.value} pembayaran menunggu verifikasi`, time: "hari ini" });
+  }
+
+  for (const ticket of openTickets.value) {
+    items.push({ icon: "message-square", title: `Tiket: ${ticket.subject}`, time: "menunggu" });
+  }
+
+  return items;
+});
+
+const notificationCount = computed(() => notificationItems.value.length);
 
 const displayName = computed(() => user.value?.name || "Admin");
 const displayRole = computed(() => (roles.value[0] ?? "Admin").replace(/-/g, " "));
@@ -148,28 +182,23 @@ const handleLogout = async () => {
           @click="isStoreDropdownOpen = !isStoreDropdownOpen"
         >
           <img src="/assets/img/store/store-01.png" alt="Store" class="h-4 w-4 rounded-full" />
-          <span>Select Store</span>
+          <span>{{ selectedStore?.storeName || "Select Store" }}</span>
           <FeatherIcon name="chevron-down" size="14" />
         </button>
         <div
           v-if="isStoreDropdownOpen"
           class="absolute end-0 mt-1.5 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         >
-          <a
-            href="javascript:void(0)"
-            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-            >Grocery Alpha</a
+          <button
+            v-for="store in activeStores"
+            :key="store.id"
+            type="button"
+            class="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+            @click="selectedStoreCode = store.id"
           >
-          <a
-            href="javascript:void(0)"
-            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-            >Grocery Apex</a
-          >
-          <a
-            href="javascript:void(0)"
-            class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-            >Grocery Bevy</a
-          >
+            {{ store.storeName }}
+          </button>
+          <p v-if="activeStores.length === 0" class="px-3 py-2 text-[11px] text-gray-400">Belum ada toko.</p>
         </div>
       </div>
 
@@ -181,16 +210,23 @@ const handleLogout = async () => {
           title="Language (English)"
           @click="isFlagDropdownOpen = !isFlagDropdownOpen"
         >
-          <img src="/assets/img/flags/us.png" alt="English" class="h-4 w-5 rounded-sm object-cover" />
+          <img :src="`/assets/img/flags/${selectedLanguage?.code || 'us'}.png`" :alt="selectedLanguage?.name || 'English'" class="h-4 w-5 rounded-sm object-cover" />
         </button>
         <div
           v-if="isFlagDropdownOpen"
           class="absolute end-0 mt-1.5 w-36 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         >
-          <div class="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-primary bg-primary-50 dark:bg-gray-700">
-            <img src="/assets/img/flags/us.png" alt="English" class="h-3.5 w-4.5 rounded-sm" />
-            <span>English</span>
-          </div>
+          <button
+            v-for="language in activeLanguages"
+            :key="language.code"
+            type="button"
+            class="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+            :class="{ 'font-semibold text-primary bg-primary-50 dark:bg-gray-700': language.code === selectedLanguage?.code }"
+            @click="selectedLanguageCode = language.code"
+          >
+            <img :src="`/assets/img/flags/${language.code}.png`" :alt="language.name" class="h-3.5 w-4.5 rounded-sm" />
+            <span>{{ language.name }}</span>
+          </button>
         </div>
       </div>
 
@@ -224,23 +260,19 @@ const handleLogout = async () => {
         >
           <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-700">
             <h6 class="text-xs font-bold text-gray-800 dark:text-white">Notifications</h6>
-            <span class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-semibold text-primary">2 New</span>
+            <span v-if="notificationCount > 0" class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-semibold text-primary">{{ notificationCount }} New</span>
           </div>
           <div class="mt-2 space-y-2">
-            <div class="flex gap-2.5 text-xs">
-              <div class="mt-0.5 text-primary"><FeatherIcon name="check-circle" size="14" /></div>
+            <div v-for="(item, index) in notificationItems" :key="index" class="flex gap-2.5 text-xs">
+              <div class="mt-0.5 text-primary"><FeatherIcon :name="item.icon" size="14" /></div>
               <div>
-                <p class="font-medium text-gray-800 dark:text-gray-200">Job Order #25250025452 approved</p>
-                <span class="text-[10px] text-gray-400">4 mins ago</span>
+                <p class="font-medium text-gray-800 dark:text-gray-200">{{ item.title }}</p>
+                <span class="text-[10px] text-gray-400">{{ item.time }}</span>
               </div>
             </div>
-            <div class="flex gap-2.5 text-xs">
-              <div class="mt-0.5 text-primary"><FeatherIcon name="shopping-bag" size="14" /></div>
-              <div>
-                <p class="font-medium text-gray-800 dark:text-gray-200">New Sales Order PT002 received</p>
-                <span class="text-[10px] text-gray-400">12 mins ago</span>
-              </div>
-            </div>
+            <p v-if="notificationItems.length === 0" class="py-2 text-center text-[11px] text-gray-400">
+              Tidak ada notifikasi baru.
+            </p>
           </div>
         </div>
       </div>
