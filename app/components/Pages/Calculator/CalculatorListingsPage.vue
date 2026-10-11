@@ -4,6 +4,8 @@ import { useCalculatorListings } from '~/composables/useCalculatorMarketplace'
 import { useTablePrint } from '~/composables/useTablePrint'
 import { calculatorListingConfigs, formatCalculatorDate } from '~/utils/calculatorMarketplace'
 import { formatIDR } from '~/utils/currency'
+import AppBadge from '~/components/Common/AppBadge.vue'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
 
 const props = defineProps<{ category: CalculatorListingCategory }>()
 const config = computed(() => calculatorListingConfigs[props.category])
@@ -104,7 +106,7 @@ async function confirmDelete() {
           <TableFilterSelect v-model="visibilityFilter" :options="['Publish', 'Private']" placeholder="All Visibility" />
           <TableFilterSelect v-model="statusFilter" :options="['Active', 'Inactive']" placeholder="All Status" />
         </template>
-        <template #cell(source)="{ item }"><div class="max-w-48 whitespace-normal"><p class="font-semibold text-gray-900 dark:text-white">{{ item.sourceName }}</p><p class="text-xs text-gray-500">{{ item.sourceAddress }}</p></div></template>
+        <template #cell(source)="{ item }"><EntityIdentity :name="item.sourceName" :subtitle="item.sourceAddress" kind="business" /></template>
         <template #cell(name)="{ item }"><div class="max-w-52 whitespace-normal"><p class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</p><p v-if="category === 'offset'" class="text-xs text-gray-500">{{ item.colors }} colors</p></div></template>
         <template #cell(priceSummary)="{ item }"><div class="text-right"><CurrencyDisplay :value="item.minimumPrice" /><p class="text-xs text-gray-500">Druck {{ item.druck }}%</p></div></template>
         <template #cell(pricePerCm)="{ item }"><CurrencyDisplay :value="item.pricePerCm" /></template>
@@ -112,7 +114,7 @@ async function confirmDelete() {
         <template #cell(standard)="{ item }"><div class="text-right"><CurrencyDisplay :value="item.standardRate" /><p class="text-xs text-gray-500">Min <CurrencyDisplay :value="item.standardMinimum" /></p></div></template>
         <template #cell(halfCut)="{ item }"><div class="text-right"><CurrencyDisplay :value="item.halfCutRate" /><p class="text-xs text-gray-500">Min <CurrencyDisplay :value="item.halfCutMinimum" /></p></div></template>
         <template #cell(paperPrice)="{ item }"><div class="text-right"><CurrencyDisplay :value="item.paperPrice" /><p class="text-xs text-gray-500">per {{ item.priceUnit }}</p></div></template>
-        <template #cell(statusLabel)="{ item }"><div class="flex flex-col items-center gap-1"><span :class="['rounded px-2 py-0.5 text-xs font-semibold', item.visibility === 'Publish' ? 'bg-cyan-50 text-cyan-700' : 'bg-gray-100 text-gray-600']">{{ item.visibility }}</span><span :class="['rounded px-2 py-0.5 text-xs font-semibold', item.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700']">{{ item.status }}</span></div></template>
+        <template #cell(statusLabel)="{ item }"><div class="flex flex-col items-center gap-1"><AppBadge :label="item.visibility" :tone="item.visibility === 'Publish' ? 'info' : 'neutral'" /><AppBadge :label="item.status" /></div></template>
         <template #cell(actions)="{ item }"><div class="flex justify-center gap-1"><SalesActionButton icon="eye" label="View detail" @click="selected = item._record" /><SalesActionButton icon="settings" label="Manage source" @click="manageTarget = item._record" /><SalesActionButton icon="trash-2" label="Delete listing" @click="deleteTarget = item._record" /></div></template>
       </SalesDataTable>
     </template>

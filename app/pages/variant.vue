@@ -7,14 +7,12 @@ definePageMeta({
 
 useLegacyPage({
   title: 'Variant',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false
 })
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-variant">
+  <div class="dulank-page dulank-page-variant inventory-master-page">
     <VariantWorkspace />
   </div>
 </template>

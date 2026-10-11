@@ -3,6 +3,7 @@ import type { Department } from '#server/types/department'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 defineProps<{
   departments: Department[]
@@ -98,14 +99,7 @@ function getStatusBadgeClass(status: string) {
 
     <!-- Status -->
     <template #cell(status)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold',
-          getStatusBadgeClass(item.status)
-        ]"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <!-- Action -->

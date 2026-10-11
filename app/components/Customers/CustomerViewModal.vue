@@ -14,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div v-if="isOpen && customer" class="modal-backdrop-custom">
+  <div v-if="isOpen && customer" class="modal-backdrop-custom" @click.self="emit('close')">
     <div class="modal-dialog-centered custom-modal-two" style="max-width: 550px; width: 100%; margin: auto;">
       <div class="modal-content bg-white rounded-3 shadow border-0 overflow-hidden">
         <div class="p-4">

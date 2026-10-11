@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SubCategory, SubCategoryFormData } from '~/types/sub-category'
-import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 import PagesSubCategoryModal from '~/components/SubCategory/SubCategoryModal.vue'
 import PagesSubCategoryTable from '~/components/SubCategory/SubCategoryTable.vue'
 
@@ -132,44 +133,11 @@ const exportPdf = () => {
 <template>
   <div class="page-wrapper mt-3">
     <div class="content container-fluid">
-      <div v-if="toastMessage" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg z-3 d-flex align-items-center gap-2" role="alert">
-        <FeatherIcon name="check-circle" size="18" />
-        <div>{{ toastMessage }}</div>
-      </div>
-
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Sub Categories / Sub Kategori</h4>
-          <h6 class="text-muted mb-0">Kelola sub kelompok jenis spesifikasi produk</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Print" @click="printTable">
-                <FeatherIcon name="printer" size="16" />
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Sub Category</span>
-          </button>
-        </div>
-      </div>
-
-      <div v-if="pending" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+      <SalesListHeader title="Sub Categories / Sub Kategori" subtitle="Kelola sub kelompok jenis spesifikasi produk" add-label="Add Sub Category" :refreshing="pending" @add="handleAdd" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
+      <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="8" @dismiss="toastMessage = ''" />
 
       <PagesSubCategoryTable
-        v-else
+        v-if="!pending"
         :sub-categories="filteredList"
         :categories="categoryNames"
         :search-query="searchQuery"

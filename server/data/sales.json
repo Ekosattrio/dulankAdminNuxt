@@ -12,7 +12,8 @@
     "delivery": "Shipping",
     "channel": "Website",
     "status": "Paid",
-    "method": "Bank Transfer"
+    "method": "Bank Transfer",
+    "items": [{ "id": "sale-1-item-1", "name": "Brosur Full Color A4", "qty": 1, "unit": "Order", "price": 899500, "specs": "Rincian produk tersimpan pada transaksi legacy." }]
   },
   {
     "id": "2",
@@ -27,7 +28,8 @@
     "delivery": "Pick Up",
     "channel": "POS",
     "status": "Partial",
-    "method": "Cash"
+    "method": "Cash",
+    "items": [{ "id": "sale-2-item-1", "name": "Brosur Full Color A4", "qty": 1, "unit": "Order", "price": 900000, "specs": "Rincian produk tersimpan pada transaksi legacy." }]
   },
   {
     "id": "3",
@@ -42,7 +44,8 @@
     "delivery": "Pick Up",
     "channel": "POS",
     "status": "Paid",
-    "method": "Cash"
+    "method": "Cash",
+    "items": [{ "id": "sale-3-item-1", "name": "Brosur Full Color A4", "qty": 1, "unit": "Order", "price": 450000, "specs": "Rincian produk tersimpan pada transaksi legacy." }]
   },
   {
     "id": "4",
@@ -57,7 +60,8 @@
     "delivery": "Shipping",
     "channel": "Website",
     "status": "Paid",
-    "method": "Bank Transfer"
+    "method": "Bank Transfer",
+    "items": [{ "id": "sale-4-item-1", "name": "Brosur Full Color A4", "qty": 1, "unit": "Order", "price": 2400000, "specs": "Rincian produk tersimpan pada transaksi legacy." }]
   },
   {
     "id": "5",
@@ -72,7 +76,8 @@
     "delivery": "Shipping",
     "channel": "Website",
     "status": "Unpaid",
-    "method": "Bank Transfer"
+    "method": "Bank Transfer",
+    "items": [{ "id": "sale-5-item-1", "name": "Brosur Full Color A4", "qty": 1, "unit": "Order", "price": 3500000, "specs": "Rincian produk tersimpan pada transaksi legacy." }]
   }
 ]
 

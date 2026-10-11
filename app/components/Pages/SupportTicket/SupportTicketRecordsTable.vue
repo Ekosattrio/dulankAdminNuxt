@@ -5,6 +5,8 @@ import DateRangePicker from '~/components/Common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import AppBadge from '~/components/Common/AppBadge.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 const props = defineProps<{
   tickets: SupportTicket[]
@@ -139,25 +141,11 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(priority)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border',
-          getPriorityBadgeClass(item.priority)
-        ]"
-      >
-        {{ item.priority }}
-      </span>
+      <AppBadge :label="item.priority" />
     </template>
 
     <template #cell(status)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border',
-          getStatusBadgeClass(item.status)
-        ]"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <template #cell(createdDate)="{ item }">

@@ -7,14 +7,12 @@ definePageMeta({
 
 useLegacyPage({
   title: 'Unit',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
+  sweetAlert: false
 })
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-unit">
+  <div class="dulank-page dulank-page-unit inventory-master-page">
     <UnitWorkspace />
   </div>
 </template>

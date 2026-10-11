@@ -116,7 +116,7 @@
     </div>
 
     <!-- Add/Edit Modal -->
-    <div v-if="modalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div v-if="modalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)" @click.self="modalVisible = false">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header border-0">
@@ -161,7 +161,7 @@
     </div>
 
     <!-- View Detail Modal -->
-    <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5)" @click.self="detailModalVisible = false">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header border-0">

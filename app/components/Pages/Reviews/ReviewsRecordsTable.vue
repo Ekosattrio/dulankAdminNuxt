@@ -5,6 +5,7 @@ import DateRangePicker from '~/components/Common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 const props = defineProps<{
   reviews: ReviewItem[]
@@ -115,14 +116,7 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(status)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border',
-          getStatusBadgeClass(item.status)
-        ]"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
   </SalesDataTable>
 </template>

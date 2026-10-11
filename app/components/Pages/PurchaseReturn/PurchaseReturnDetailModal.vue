@@ -2,6 +2,8 @@
 import type { PurchaseReturn } from '#server/types/purchase-return'
 import SalesDialog from '~/components/Sales/SalesDialog.vue'
 import { formatNumber } from '~/composables/useFormatters'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 const props = defineProps<{
   open: boolean
@@ -26,7 +28,7 @@ const emit = defineEmits<{
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-xl border border-gray-200/80 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-gray-800/40">
         <div>
           <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100">DATA SUPPLIER RETUR:</h4>
-          <p class="font-bold text-primary mt-1 text-sm">{{ returnData.supplier }}</p>
+          <div class="mt-2"><EntityIdentity :name="returnData.supplier" kind="supplier" size="md" /></div>
           <p class="text-gray-500 mt-2">Catatan Masalah:</p>
           <p class="text-gray-800 dark:text-gray-200 font-medium italic">{{ returnData.notes || 'Tidak ada catatan' }}</p>
         </div>
@@ -37,9 +39,7 @@ const emit = defineEmits<{
           <p class="text-gray-500">Tanggal Retur: <span class="font-medium text-gray-800 dark:text-gray-200">{{ returnData.date }}</span></p>
           <p class="text-gray-500">Dibuat Oleh: <span class="font-medium text-gray-800 dark:text-gray-200">{{ returnData.created }}</span></p>
           <p class="text-gray-500">Status Retur: 
-            <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
-              {{ returnData.status }}
-            </span>
+            <SalesStatusBadge :status="returnData.status" />
           </p>
         </div>
       </div>

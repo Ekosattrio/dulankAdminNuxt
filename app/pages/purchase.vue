@@ -9,7 +9,6 @@ import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
-import PurchaseStatsWidgets from '~/components/Pages/Purchase/PurchaseStatsWidgets.vue'
 import PurchaseRecordsTable from '~/components/Pages/Purchase/PurchaseRecordsTable.vue'
 import PurchaseDetailModal from '~/components/Pages/Purchase/PurchaseDetailModal.vue'
 import PurchaseFormModal from '~/components/Pages/Purchase/PurchaseFormModal.vue'
@@ -43,22 +42,6 @@ const supplierOptions = computed(() => {
     return suppliers.value.map(s => s.name)
   }
   return ['PT Kertas Jaya', 'CV Kimia Prima', 'Global Inkindo', 'PT Sinar Grafika']
-})
-
-// KPI stats calculation
-const stats = computed(() => {
-  const all = purchases.value
-  const totalPurchases = all.length
-  const totalAmount = all.reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
-  const totalPaid = all.reduce((sum, p) => sum + (Number(p.paid) || 0), 0)
-  const totalDue = all.reduce((sum, p) => sum + (Number(p.due) || 0), 0)
-
-  return {
-    totalPurchases,
-    totalAmount,
-    totalPaid,
-    totalDue,
-  }
 })
 
 // Modal states
@@ -179,7 +162,7 @@ function handleExportExcel() {
 </script>
 
 <template>
-  <div class="space-y-4 p-4 md:p-6">
+  <div class="dulank-page dulank-page-purchase">
     <!-- Header -->
     <SalesListHeader
       title="Purchase List"
@@ -191,9 +174,6 @@ function handleExportExcel() {
       @export-pdf="openPrintModal('pdf')"
       @export-excel="handleExportExcel"
     />
-
-    <!-- KPI Stats Widgets -->
-    <PurchaseStatsWidgets :stats="stats" />
 
     <!-- Feedback Toast -->
     <SalesFeedback

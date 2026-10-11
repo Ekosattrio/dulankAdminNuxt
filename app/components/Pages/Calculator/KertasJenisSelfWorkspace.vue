@@ -131,6 +131,7 @@
       class="modal fade show d-block"
       style="background-color: rgba(0,0,0,0.5);"
       tabindex="-1"
+      @click.self="closeModal"
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">

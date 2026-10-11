@@ -149,7 +149,7 @@ function handleSubmit() {
     wide
     @close="emit('close')"
   >
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    <form @submit.prevent="handleSubmit" class="space-y-5 text-sm">
       <!-- Error banner -->
       <div
         v-if="errorMessage"

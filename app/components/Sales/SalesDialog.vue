@@ -24,6 +24,13 @@ function cancel(event: Event) {
   event.preventDefault()
   if (!props.busy) emit('close')
 }
+function closeFromBackdrop(event: MouseEvent) {
+  if (props.busy || event.target !== dialog.value || !dialog.value) return
+  const bounds = dialog.value.getBoundingClientRect()
+  const inside = event.clientX >= bounds.left && event.clientX <= bounds.right
+    && event.clientY >= bounds.top && event.clientY <= bounds.bottom
+  if (!inside) emit('close')
+}
 </script>
 <template>
   <dialog
@@ -34,6 +41,7 @@ function cancel(event: Event) {
       document ? 'max-w-6xl' : wide ? 'max-w-5xl' : medium ? 'max-w-2xl' : size === 'sm' ? 'max-w-md' : size === 'md' ? 'max-w-xl' : size === 'lg' ? 'max-w-2xl' : size === 'xl' ? 'max-w-4xl' : 'max-w-xl',
     ]"
     @cancel="cancel"
+    @click="closeFromBackdrop"
   >
     <div
       class="flex items-center justify-between gap-4 border-b border-gray-200 bg-[#fafbfe] px-6 py-4 dark:border-gray-700 dark:bg-gray-800"

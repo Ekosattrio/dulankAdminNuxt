@@ -4,6 +4,8 @@ import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 defineProps<{
   suppliers: Supplier[]
@@ -57,9 +59,7 @@ const columns = [
     </template>
 
     <template #cell(name)="{ item }">
-      <span class="font-medium text-gray-900 dark:text-gray-100">
-        {{ item.name }}
-      </span>
+      <EntityIdentity :name="item.name" :subtitle="item.picName" kind="supplier" />
     </template>
 
     <template #cell(email)="{ item }">
@@ -75,16 +75,7 @@ const columns = [
     </template>
 
     <template #cell(status)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold',
-          item.status === 'Active'
-            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-            : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800'
-        ]"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <template #cell(date)="{ item }">
