@@ -932,3 +932,13 @@ updated: 2026-10-11
 - **Frontend** `usePermissions` ditulis ulang: sumber = `/api/v1/admin/roles` + `/api/v1/admin/permissions`; group/pages diturunkan dari nama permission (prefix modul); setiap aksi (create/edit/delete/view/allowAll) dicerminkan dari kepemilikan permission; `savePermissions` → `PUT roles/{id}` {permissions} (sync Spatie) per role; `super-admin` dikecualikan dari edit.
 - **Dummy dibersihkan**: handler `server/api/permissions`, slug `permissions` (34 slug tersisa), 2 file data, 1 entri bundledData → mock `/api/permissions` 404; backend 200.
 - Validasi: typecheck 0; validate:structure 0; smoke roles: `admin` & `super-admin` masing-masing 13 permission (dashboard.view, products.manage, …); sisa handler mock 47 file.
+
+## 2026-10-11 — SAPUAN BERSIH: hapus harness test:* + seluruh mock API + dead code (sesuai keputusan)
+
+- Branch: `dev` · Push: ya.
+- **Gap 5 MIXED ditutup**: `useFlowCategories/Names/Templates` (create POST → v1), `useFooterConfig` (save → `PUT /api/v1/admin/footer`), `usePrefixes` (list unwrap `values`→items; save/update → `PUT settings/prefixes`). Smoke: flow-category create/delete ✓, footer PUT `judul` ✓, prefixes PUT `order=SO-` ✓.
+- **Harness dihapus**: semua `scripts/test-*.mjs` (+browser) & entry `test:*` di package.json — tersisa `validate:structure`, `apply-legacy-orchestrator.cjs`, `audit-legacy-parity.mjs`.
+- **Mock API dihapus total**: seluruh handler `server/api/*` (kecuali `health.ts`), `[...mock].ts` (catch-all), `server/utils/` (mockStore, bundledData, dsb.), `server/data/` — layer dummy API TIADA lagi.
+- Manifest: −24 entri server (3139 tersisa) → `validate:structure` **0 ENOENT**.
+- Validasi: typecheck 0 error; runtime: signin 200, dashboard SSR 200 (`Welcome, Dulank`), backend sales OK, `/api/sales` (mock lama) → 302 (tak ada handler).
+- Status akhir: aplikasi 100% data dari Laravel `/api/v1` — nol dependensi mock.

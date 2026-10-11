@@ -12,7 +12,7 @@
       "scripts/scratch/parse_sidebar.cjs"
     ],
     "missingFiles": 0,
-    "filesRemovedWithBackendMigration": 103
+    "filesRemovedWithBackendMigration": 127
   },
   "files": [
     {
@@ -18496,144 +18496,6 @@
       "sha256After": "f69b0e4fee84df2df82f9bf7eb352cab05a06762aebdc8694de3767907072f73"
     },
     {
-      "from": "server/api/cetak-full-color/index.get.ts",
-      "to": "server/api/cetak-full-color/index.get.ts",
-      "sha256Before": "109a678bf1b6d79210e9c37a60587aa53b606f931c3edf90209918ad4cf44594",
-      "sha256After": "109a678bf1b6d79210e9c37a60587aa53b606f931c3edf90209918ad4cf44594"
-    },
-    {
-      "from": "server/api/cetak-full-color/index.post.ts",
-      "to": "server/api/cetak-full-color/index.post.ts",
-      "sha256Before": "6848aa78fe4e70e3f8158a430235053e364177651914ad141bab35da1239c643",
-      "sha256After": "6848aa78fe4e70e3f8158a430235053e364177651914ad141bab35da1239c643"
-    },
-    {
-      "from": "server/api/delivery-notes/[id].delete.ts",
-      "to": "server/api/delivery-notes/[id].delete.ts",
-      "sha256Before": "dbdf36979f03a891f02be9fea745939338a6dfd463cd1105f23b95088819c499",
-      "sha256After": "dbdf36979f03a891f02be9fea745939338a6dfd463cd1105f23b95088819c499"
-    },
-    {
-      "from": "server/api/delivery-notes/index.get.ts",
-      "to": "server/api/delivery-notes/index.get.ts",
-      "sha256Before": "8ddac9b62ca83cf90f7787d596ed5729bbd96429fc7df7d42ee32f89eb16c620",
-      "sha256After": "8ddac9b62ca83cf90f7787d596ed5729bbd96429fc7df7d42ee32f89eb16c620"
-    },
-    {
-      "from": "server/api/delivery-notes/index.post.ts",
-      "to": "server/api/delivery-notes/index.post.ts",
-      "sha256Before": "dd9eb94474df46c2a032472de41069af4f99a02e643876cca7afcf485b7054c6",
-      "sha256After": "dd9eb94474df46c2a032472de41069af4f99a02e643876cca7afcf485b7054c6"
-    },
-    {
-      "from": "server/api/invoices/[id].delete.ts",
-      "to": "server/api/invoices/[id].delete.ts",
-      "sha256Before": "4180ca61bf05c5212d388d091b3e0f7a31e6874a17ff4e4b43d56b1c3f96d934",
-      "sha256After": "4180ca61bf05c5212d388d091b3e0f7a31e6874a17ff4e4b43d56b1c3f96d934"
-    },
-    {
-      "from": "server/api/invoices/index.get.ts",
-      "to": "server/api/invoices/index.get.ts",
-      "sha256Before": "017f3be0056beed9cf3cbe6f52f8d4e0b5a5624aed36e1f2043806510ac85d17",
-      "sha256After": "017f3be0056beed9cf3cbe6f52f8d4e0b5a5624aed36e1f2043806510ac85d17"
-    },
-    {
-      "from": "server/api/invoices/index.post.ts",
-      "to": "server/api/invoices/index.post.ts",
-      "sha256Before": "9af373114ecb521ca2013f766af2f1ae8007e05673fbb43e58ddddcaedd7d6c6",
-      "sha256After": "9af373114ecb521ca2013f766af2f1ae8007e05673fbb43e58ddddcaedd7d6c6"
-    },
-    {
-      "from": "server/api/quotations/[id].delete.ts",
-      "to": "server/api/quotations/[id].delete.ts",
-      "sha256Before": "f8b5c18851020ffc361b0a221ee301a87528f3bce382d082a9b101697ecf8f39",
-      "sha256After": "f8b5c18851020ffc361b0a221ee301a87528f3bce382d082a9b101697ecf8f39"
-    },
-    {
-      "from": "server/api/quotations/index.get.ts",
-      "to": "server/api/quotations/index.get.ts",
-      "sha256Before": "88033830037b876b174703fd8115b7f0d139e63e23b608377b037bc11796d513",
-      "sha256After": "88033830037b876b174703fd8115b7f0d139e63e23b608377b037bc11796d513"
-    },
-    {
-      "from": "server/api/quotations/index.post.ts",
-      "to": "server/api/quotations/index.post.ts",
-      "sha256Before": "44f2d1f9e7f6319758d6382f2e1a3969d94e9ce2d3acbe84b448251d0dcfcc17",
-      "sha256After": "44f2d1f9e7f6319758d6382f2e1a3969d94e9ce2d3acbe84b448251d0dcfcc17"
-    },
-    {
-      "from": "server/api/sales/[id].delete.ts",
-      "to": "server/api/sales/[id].delete.ts",
-      "sha256Before": "ce79cde603342b9d6a02d222ba8542988260cf2db54b395b3637a37a943068ba",
-      "sha256After": "ce79cde603342b9d6a02d222ba8542988260cf2db54b395b3637a37a943068ba"
-    },
-    {
-      "from": "server/api/sales/index.get.ts",
-      "to": "server/api/sales/index.get.ts",
-      "sha256Before": "5dfa6a07d24495e87c45c1026d5860fcf9404a8c66b86abf9c38fcbf4a04379e",
-      "sha256After": "5dfa6a07d24495e87c45c1026d5860fcf9404a8c66b86abf9c38fcbf4a04379e"
-    },
-    {
-      "from": "server/api/sales/index.post.ts",
-      "to": "server/api/sales/index.post.ts",
-      "sha256Before": "c50d7955ed065249aa21e5833ffae0fe255ac22decf02ae4d2c2b35d468fffd9",
-      "sha256After": "c50d7955ed065249aa21e5833ffae0fe255ac22decf02ae4d2c2b35d468fffd9"
-    },
-    {
-      "from": "server/data/cetak-full-color.json",
-      "to": "server/data/cetak-full-color.json",
-      "sha256Before": "309448f2d310445c1b03912d1bc53c72c2819df1c68693359c6ca0caa48f9e9b",
-      "sha256After": "309448f2d310445c1b03912d1bc53c72c2819df1c68693359c6ca0caa48f9e9b"
-    },
-    {
-      "from": "server/data/customer-types.json",
-      "to": "server/data/customer-types.json",
-      "sha256Before": "a29484ce45da99d029a18cc76361541194475f63360253ebda0daf08a9b1307d",
-      "sha256After": "a29484ce45da99d029a18cc76361541194475f63360253ebda0daf08a9b1307d"
-    },
-    {
-      "from": "server/data/delivery-notes.json",
-      "to": "server/data/delivery-notes.json",
-      "sha256Before": "1c3ed1eaab5bfb5791813a5a655c12e334c5cc58241bed0856705a7bc2971714",
-      "sha256After": "1c3ed1eaab5bfb5791813a5a655c12e334c5cc58241bed0856705a7bc2971714"
-    },
-    {
-      "from": "server/data/invoices.json",
-      "to": "server/data/invoices.json",
-      "sha256Before": "9a92db37619005369484b81247cc2cb93ba5f8d78cd23a4b9ab5ed2cfeebdc6b",
-      "sha256After": "9a92db37619005369484b81247cc2cb93ba5f8d78cd23a4b9ab5ed2cfeebdc6b"
-    },
-    {
-      "from": "server/data/printing-machines.json",
-      "to": "server/data/printing-machines.json",
-      "sha256Before": "946108935ecd4b1fd85a343e1aac11b6ac4010d99116651d438bbf6d3762c743",
-      "sha256After": "946108935ecd4b1fd85a343e1aac11b6ac4010d99116651d438bbf6d3762c743"
-    },
-    {
-      "from": "server/data/quotations.json",
-      "to": "server/data/quotations.json",
-      "sha256Before": "44e07feaf8fe0828b6bba0480bcb5668492dd224a22df5da72b3f85d3ac52efe",
-      "sha256After": "44e07feaf8fe0828b6bba0480bcb5668492dd224a22df5da72b3f85d3ac52efe"
-    },
-    {
-      "from": "server/data/sales.json",
-      "to": "server/data/sales.json",
-      "sha256Before": "1a18f180cab6f1fb689f8312aeede5ea8881cf9978824acbc1a6e95023de763b",
-      "sha256After": "1a18f180cab6f1fb689f8312aeede5ea8881cf9978824acbc1a6e95023de763b"
-    },
-    {
-      "from": "server/data/suppliers.json",
-      "to": "server/data/suppliers.json",
-      "sha256Before": "22acad9b8a570abbc69275697e0f3728f4bcf280b39611b97a8bf7396b126534",
-      "sha256After": "22acad9b8a570abbc69275697e0f3728f4bcf280b39611b97a8bf7396b126534"
-    },
-    {
-      "from": "server/data/work-flows.json",
-      "to": "server/data/work-flows.json",
-      "sha256Before": "84644ab6295b794a1f1479b59ebbd3fab96203f469b54187c5dd5542ce0fd95e",
-      "sha256After": "84644ab6295b794a1f1479b59ebbd3fab96203f469b54187c5dd5542ce0fd95e"
-    },
-    {
       "from": "server/types/address.ts",
       "to": "server/types/address.ts",
       "sha256Before": "967005b8b7bbcd16520205cf460eb58673d49cc509dcf694454fc9f2f1fd8629",
@@ -18824,12 +18686,6 @@
       "to": "server/types/work-flow.ts",
       "sha256Before": "73b53935eb24f1ccf8ef97b0d559145d4c008497b8ad6037d146b852655c1ee5",
       "sha256After": "73b53935eb24f1ccf8ef97b0d559145d4c008497b8ad6037d146b852655c1ee5"
-    },
-    {
-      "from": "server/utils/data.ts",
-      "to": "server/utils/data.ts",
-      "sha256Before": "d7750ff21426c5fbdefea4018de60399eebb84697493fe728e891388b13c9d76",
-      "sha256After": "d7750ff21426c5fbdefea4018de60399eebb84697493fe728e891388b13c9d76"
     },
     {
       "from": "signin.html",
