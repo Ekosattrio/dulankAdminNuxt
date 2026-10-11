@@ -942,3 +942,9 @@ updated: 2026-10-11
 - Manifest: −24 entri server (3139 tersisa) → `validate:structure` **0 ENOENT**.
 - Validasi: typecheck 0 error; runtime: signin 200, dashboard SSR 200 (`Welcome, Dulank`), backend sales OK, `/api/sales` (mock lama) → 302 (tak ada handler).
 - Status akhir: aplikasi 100% data dari Laravel `/api/v1` — nol dependensi mock.
+
+## 2026-10-11 — Dashboard stats: seluruh data statistik kini disediakan backend
+
+- **Backend** (dev): `GET calculator/dashboard` kini menyertakan `telemetry.chart` (7 hari) & daftar `users` (partner pemilik listing); endpoint BARU `GET dashboard/admin` (welcomeName, ordersToday, lowStockNotice, primary/secondary metrics, chartSeries 1D/1W/1M/1Y, overview, topSelling w/ image/price/sku/stock, lowStock, recentSales, salesStatics, transactionGroups (sale/purchase/quotation/expense/invoice), topCustomers, categories, categoryTotals, orderStatistics), `GET dashboard/sales` (bestSellers, recentTransactions, countryMarkers, yearlyData), `GET dashboard/analytics` (kpis, conversion, performance, browsers, regions, topPages) — `DashboardTest` 2 test / 50 asersi.
+- **Frontend**: `useAdminDashboard`/`useSalesDashboard`/`useAnalyticsDashboard` diarahkan ke endpoint masing-masing; `useCalculatorDashboard` otomatis dapat chart+users.
+- Catatan jujur (data belum direkam backend): dimensi web-analytics (browsers/regions/topPages/pageViews) kosong, `countryMarkers` kosong, `firstTime/returning` = 0, growth `0%` — UI menampilkannya sebagai kosong, bukan simulasi.
