@@ -841,3 +841,12 @@ updated: 2026-10-11
 - Dipertahankan (belum migrasi): `currency-settings`, `printer-settings`, `bank-settings`, `sms-gateways`, `payment-gateways` (list-item semantics — batch berikutnya), `settings/social-auth`, `settings/system-integrations` (useSocialAuth/useSystemIntegrations masih mock), `footer-config`/`preferences` (belum dicek), `email-settings/test` (belum ada endpoint backend).
 - Validasi: typecheck 0 error; smoke: 10 grup `settings/{group}` OK, PUT company dengan objek bersarang (`profile`) tersimpan benar; dummy 404 (company-setting, email-settings, otp-settings, pos-settings, gdpr-settings, invoice-settings, calendar-settings, storage-settings, settings/security, settings/localization); social-auth tetap 200 (mock); validate:structure kembali 8 error legacy lama.
 - Sisa handler mock: 185 file.
+
+## 2026-10-11 — Migrasi batch 10: Promo (banner, voucher, discount plan) — worktree di branch dev
+
+- Branch: `dev` (tracking origin/dev) · Push: **ya, setelah commit**
+- **Backend** (repo dulank-backend): `PUT /api/v1/admin/discount-plans/{discountPlan}` (update nama/customers/status) + route; `PaperPromoWebstoreTest` +1 kasus → 6 test / 80 asersi lolos.
+- **Frontend**: `useBanners` → `/api/v1/admin/banners` (save PUT-aware saat `id` ada; tipe banner `main|product`); `useVouchers` → `/api/v1/admin/vouchers` (list/create/update/delete; `meta` fallback kosong karena backend tak menyediakan opsi filter); `useDiscountPlans` → `/api/v1/admin/discount-plans` (update→PUT; `createCustomer` memberi pesan jelas — segmen dikelola via master Tipe Pelanggan).
+- **Dummy dibersihkan**: handler `banners`/`vouchers`/`discount-plans` + `banner.ts`, 3 slug + 4 import seeds mockStore (87 slug tersisa), 6 file data promo, 3 entri bundledData. `billing`/`discounts` dipertahankan (modul lain/masih mock).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke roundtrip banner create/update/delete, voucher create/delete, discount-plan PUT baru create/update/delete sukses & ter-cleanup; dummy 404.
+- Sisa handler mock: 186 file.

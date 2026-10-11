@@ -1,8 +1,5 @@
 import banIpData from '../data/ban-ip.json'
-import bannersData from '../data/banners.json'
 import billingData from '../data/billing.json'
-import vouchersData from '../data/vouchers.json'
-import discountPlansData from '../data/discount-plans.json'
 import cartsData from '../data/carts.json'
 import cetakFullColorData from '../data/cetak-full-color.json'
 import checkoutsData from '../data/checkouts.json'
@@ -79,10 +76,7 @@ import preferenceSettingsData from '../data/preference-settings.json'
 
 export const bundledSources: Record<string, unknown> = {
   'ban-ip.json': banIpData,
-  'banners.json': bannersData,
   'billing.json': billingData,
-  'vouchers.json': vouchersData,
-  'discount-plans.json': discountPlansData,
   'carts.json': cartsData,
   'cetak-full-color.json': cetakFullColorData,
   'checkouts.json': checkoutsData,

@@ -12,8 +12,6 @@ import { blogs as allBlogBlogsSeed } from '../data/all-blog'
 import { customers as balanceAccountCustomersSeed } from '../data/balance-account'
 import { accounts as bankSettingsGridAccountsSeed } from '../data/bank-settings-grid'
 import { accounts as bankSettingsListAccountsSeed } from '../data/bank-settings-list'
-import { mainBanners as bannerMainbannersSeed } from '../data/banner'
-import { productBanners as bannerProductbannersSeed } from '../data/banner'
 import { billings as billingBillingsSeed } from '../data/billing'
 import { calendarProducts as calenderCalendarproductsSeed } from '../data/calender'
 import { calendarSizes as calenderCalendarsizesSeed } from '../data/calender'
@@ -30,7 +28,6 @@ import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
 import { deliveryNotes as deliveryNoteDeliverynotesSeed } from '../data/delivery-note'
 import { departments as departmentDepartmentsSeed } from '../data/department'
 import { designations as designationDesignationsSeed } from '../data/designation'
-import { plans as discountPlanPlansSeed } from '../data/discount-plan'
 import { discounts as discountDiscountsSeed } from '../data/discount'
 import { districts as districtDistrictsSeed } from '../data/district'
 import { orderProducts as editJobOrderOrderproductsSeed } from '../data/edit-job-order'
@@ -98,7 +95,6 @@ import { tickets as supportTicketTicketsSeed } from '../data/support-ticket'
 import { activityList as ticketDetailActivitylistSeed } from '../data/ticket-detail'
 import { messages as ticketDetailMessagesSeed } from '../data/ticket-detail'
 import { tickets as ticketListTicketsSeed } from '../data/ticket-list'
-import { coupons as voucherCouponsSeed } from '../data/voucher'
 import { wishlist as wishlistWishlistSeed } from '../data/wishlist'
 import { workflows as workFlowWorkflowsSeed } from '../data/work-flow'
 
@@ -161,13 +157,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['accounts'],
     cols: {
       accounts: bankSettingsListAccountsSeed,
-    },
-  },
-  'banner': {
-    names: ['mainBanners', 'productBanners'],
-    cols: {
-      mainBanners: bannerMainbannersSeed,
-      productBanners: bannerProductbannersSeed,
     },
   },
   'billing': {
@@ -244,12 +233,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['designations'],
     cols: {
       designations: designationDesignationsSeed,
-    },
-  },
-  'discount-plan': {
-    names: ['plans'],
-    cols: {
-      plans: discountPlanPlansSeed,
     },
   },
   'discount': {
@@ -632,12 +615,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['tickets'],
     cols: {
       tickets: ticketListTicketsSeed,
-    },
-  },
-  'voucher': {
-    names: ['coupons'],
-    cols: {
-      coupons: voucherCouponsSeed,
     },
   },
   'wishlist': {
