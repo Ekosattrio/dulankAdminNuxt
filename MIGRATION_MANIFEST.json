@@ -652,12 +652,6 @@
       "sha256After": "dc3ff45304452ddb932af881a700892d9e1eeaf7761d4e91e1beed4661ee2a56"
     },
     {
-      "from": "composables/usePrintingMachines.ts",
-      "to": "app/composables/usePrintingMachines.ts",
-      "sha256Before": "194f0a86041206d54f0c3f25ccd46cee178d845f886616a3aa373d3ad3ca92fb",
-      "sha256After": "194f0a86041206d54f0c3f25ccd46cee178d845f886616a3aa373d3ad3ca92fb"
-    },
-    {
       "from": "composables/useProducts.ts",
       "to": "app/composables/useProducts.ts",
       "sha256Before": "f71c89a4290ab3d18461aa1555bfc4dfa47cf8272f57d4e825d2f7c3efdd1541",

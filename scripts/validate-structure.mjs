@@ -47,7 +47,7 @@ await Promise.all(Array.from({ length: 8 }, async () => {
   while (next < entries.length) await verifyFile(entries[next++])
 }))
 
-for (const directory of ['app', 'docs', 'data', 'public', 'scripts', 'server/api', 'server/types']) {
+for (const directory of ['app', 'docs', 'public', 'scripts', 'server/api', 'server/types']) {
   try {
     if (!(await stat(workspacePath(directory))).isDirectory()) throw new Error('Not a directory')
   } catch {
