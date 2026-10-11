@@ -924,3 +924,11 @@ updated: 2026-10-11
 - **Frontend**: `useSubscriptions` → `/api/v1/admin/subscriptions` (list + PUT); `useDeleteAccounts` → `/api/v1/admin/delete-accounts`.
 - **Dummy dibersihkan**: handler `subscriptions` & `delete-accounts` (2), slug (2; 35 slug tersisa), 3 file data, 1 entri bundledData.
 - Validasi: typecheck 0; validate:structure 0; smoke: list + summary OK, PUT subscription (Unpaid/900000) mengubah summary benar, dummy 404; sisa handler mock 49 file.
+
+## 2026-10-11 — Migrasi batch 19: Permission Matrix (redesign ke permission datar backend)
+
+- Branch: `dev` · Push: ya.
+- **Backend**: `GET /api/v1/admin/roles` kini menyertakan `permissions[]` per role (Spatie) — matrix dapat dibangun dari data nyata.
+- **Frontend** `usePermissions` ditulis ulang: sumber = `/api/v1/admin/roles` + `/api/v1/admin/permissions`; group/pages diturunkan dari nama permission (prefix modul); setiap aksi (create/edit/delete/view/allowAll) dicerminkan dari kepemilikan permission; `savePermissions` → `PUT roles/{id}` {permissions} (sync Spatie) per role; `super-admin` dikecualikan dari edit.
+- **Dummy dibersihkan**: handler `server/api/permissions`, slug `permissions` (34 slug tersisa), 2 file data, 1 entri bundledData → mock `/api/permissions` 404; backend 200.
+- Validasi: typecheck 0; validate:structure 0; smoke roles: `admin` & `super-admin` masing-masing 13 permission (dashboard.view, products.manage, …); sisa handler mock 47 file.

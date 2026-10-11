@@ -12,7 +12,6 @@ import invoicesData from '../data/invoices.json'
 import paymentBalancesData from '../data/payment-balances.json'
 import paymentInflowsData from '../data/payment-inflows.json'
 import paymentOutflowsData from '../data/payment-outflows.json'
-import permissionsData from '../data/permissions.json'
 import posProductsData from '../data/pos-products.json'
 import prefixesData from '../data/prefixes.json'
 import printingMachinesData from '../data/printing-machines.json'
@@ -47,7 +46,6 @@ export const bundledSources: Record<string, unknown> = {
   'payment-balances.json': paymentBalancesData,
   'payment-inflows.json': paymentInflowsData,
   'payment-outflows.json': paymentOutflowsData,
-  'permissions.json': permissionsData,
   'pos-products.json': posProductsData,
   'prefixes.json': prefixesData,
   'printing-machines.json': printingMachinesData,

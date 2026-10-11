@@ -29,7 +29,6 @@ import { invoices as invoiceInvoicesSeed } from '../data/invoice'
 import { orders as onlineOrdersOrdersSeed } from '../data/online-orders'
 import { inflows as paymentInflowInflowsSeed } from '../data/payment-inflow'
 import { outflows as paymentOutflowOutflowsSeed } from '../data/payment-outflow'
-import { modules as permissionsModulesSeed } from '../data/permissions'
 import { orders as posOrderOrdersSeed } from '../data/pos-order'
 import { products as posProductsSeed } from '../data/pos'
 import { cart as posCartSeed } from '../data/pos'
@@ -184,12 +183,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['outflows'],
     cols: {
       outflows: paymentOutflowOutflowsSeed,
-    },
-  },
-  'permissions': {
-    names: ['modules'],
-    cols: {
-      modules: permissionsModulesSeed,
     },
   },
   'pos-order': {
