@@ -1,8 +1,0 @@
-{
-  "position": "Right",
-  "agreeText": "Agree",
-  "policyLink": "https://test.com",
-  "declineText": "Decline",
-  "consentText": "Test Consent",
-  "showDecline": true
-}
