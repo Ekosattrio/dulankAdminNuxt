@@ -885,3 +885,13 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler 12 unit (termasuk dir `job-list` & file `job-order-context`), 12 slug + import seeds mockStore (42 slug tersisa), 25 file data, 25 entri bundledData, manifest −32. Dipertahankan: `online-orders`/`pos-order` (halaman store legacy), `add-work-flow`/`edit-work-flow` (form editor legacy), `invoice`, `subscriptions`, `payment-inflow/outflow`, `social-auth`, `system-integrations`.
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke 14 endpoint HRM/job OK (departments 1, employees 1, payslips 1, job-orders 1, job-branches 1, history 1, progress 1, my-jobs 1, job-list {jobs, flowCategories}, context {jobOrder, order}); 12 dummy endpoint 404.
 - Sisa handler mock: 85 file.
+
+## 2026-10-11 — Migrasi batch 15: Finance statements + fix menu Customer Subscription
+
+- Branch: `dev` · Push: ya.
+- **Fix**: menu "Customer Subscription" di `App/Layout/Sidebar.vue` menunjuk `/customer-due-report` (salah) → `/subscriptions` (halaman ada).
+- **Backend**: `GET finance/balance-sheet` BARU di `FinanceReportController` (neraca ringkas: kas+bank ledger, piutang, stok pembelian, utang, laba ditahan; `balanced` dihitung) + route + test → `FinanceTest` 10 test / 138 asersi lolos.
+- **Frontend** `useFinanceStatements`: `useCustomerBalances` → `finance/customer-entries` (agregasi saldo per pelanggan), `useAccountStatements` → `bank-accounts/{id}/statement` (running balance kronologis), `useCashFlowStatement` → `finance/cash-flow` (pemetaan breakdown → kategori arus kas), `useBalanceSheet` → endpoint baru.
+- **Dummy dibersihkan**: handler `server/api/finance/*` (4). Util `financeReportData` tak terpakai lagi (tanpa dangling).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke customer-entries 1, cash-flow {totalInflow,outflow,net,breakdown}, balance-sheet 5 key, statement (Bank Mandiri, 1 entri); dummy 404.
+- Sisa handler mock: 81 file.
