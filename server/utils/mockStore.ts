@@ -20,7 +20,6 @@ import { boards as calenderBoardsSeed } from '../data/calender'
 import { calendarLogs as calenderCalendarlogsSeed } from '../data/calender'
 import { products as cetakFullColorProductsSeed } from '../data/cetak-full-color'
 import { coupons as couponCouponsSeed } from '../data/coupon'
-import { currencies as currencySettingsCurrenciesSeed } from '../data/currency-settings'
 import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
 import { deliveryNotes as deliveryNoteDeliverynotesSeed } from '../data/delivery-note'
 import { discounts as discountDiscountsSeed } from '../data/discount'
@@ -37,7 +36,6 @@ import { orders as posOrderOrdersSeed } from '../data/pos-order'
 import { products as posProductsSeed } from '../data/pos'
 import { cart as posCartSeed } from '../data/pos'
 import { preferences as preferencePreferencesSeed } from '../data/preference'
-import { printers as printerSettingsPrintersSeed } from '../data/printer-settings'
 import { products as productListProductsSeed } from '../data/product-list'
 import { provinces as provinceProvincesSeed } from '../data/province'
 import { quotations as quotationQuotationsSeed } from '../data/quotation'
@@ -139,12 +137,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       coupons: couponCouponsSeed,
     },
   },
-  'currency-settings': {
-    names: ['currencies'],
-    cols: {
-      currencies: currencySettingsCurrenciesSeed,
-    },
-  },
   'delete-account': {
     names: ['requests'],
     cols: {
@@ -234,12 +226,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['preferences'],
     cols: {
       preferences: preferencePreferencesSeed,
-    },
-  },
-  'printer-settings': {
-    names: ['printers'],
-    cols: {
-      printers: printerSettingsPrintersSeed,
     },
   },
   'product-list': {

@@ -895,3 +895,13 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `server/api/finance/*` (4). Util `financeReportData` tak terpakai lagi (tanpa dangling).
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke customer-entries 1, cash-flow {totalInflow,outflow,net,breakdown}, balance-sheet 5 key, statement (Bank Mandiri, 1 entri); dummy 404.
 - Sisa handler mock: 81 file.
+
+## 2026-10-11 — Migrasi batch 16: Settings list-type (currency/printer/bank) + gateways (SMS/payment)
+
+- Branch: `dev` · Push: ya.
+- **Frontend (5 komposabel)**:
+  - `useCurrencySettings`/`usePrinterSettings`/`useBankSettings` → `settings/{group}` dengan kunci `items` (nilai JSON): simpan/hapus item = merge lokal + PUT seluruh list — tanpa perubahan backend.
+  - `useSmsGateway`/`usePaymentGateways` → `gateways/sms-gateways|payment-gateways` (item {name, code, status, config}); fetch dict provider dari list; simpan = PUT/POST per provider + refresh.
+- **Dummy dibersihkan**: handler `currency-settings`, `printer-settings`, `bank-settings`, `sms-gateways`, `payment-gateways` (5), slug `currency-settings|printer-settings` (2; 40 slug tersisa), 7 file data, 5 entri bundledData.
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke settings/currency items (PUT 1 → GET id IDR) + gateway sms POST (gw-4f0e0e40) OK; dummy 5 endpoint 404.
+- Sisa handler mock: 76 file.

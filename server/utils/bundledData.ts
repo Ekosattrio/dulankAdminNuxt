@@ -33,11 +33,6 @@ import workFlowsData from '../data/work-flows.json'
 import workFlowEditorCatalogData from '../data/work-flow-editor-catalog.json'
 import analyticsDashboardData from '../data/analytics-dashboard.json'
 import adminDashboardData from '../data/admin-dashboard.json'
-import bankSettingsData from '../data/bank-settings.json'
-import currencySettingsData from '../data/currency-settings.json'
-import printerSettingsData from '../data/printer-settings.json'
-import smsGatewaysData from '../data/sms-gateways.json'
-import paymentGatewaysData from '../data/payment-gateways.json'
 import preferenceSettingsData from '../data/preference-settings.json'
 
 export const bundledSources: Record<string, unknown> = {
@@ -77,10 +72,5 @@ export const bundledSources: Record<string, unknown> = {
   'analytics-dashboard.json': analyticsDashboardData,
   'admin-dashboard.json': adminDashboardData,
 
-  'bank-settings.json': bankSettingsData,
-  'currency-settings.json': currencySettingsData,
-  'printer-settings.json': printerSettingsData,
-  'sms-gateways.json': smsGatewaysData,
-  'payment-gateways.json': paymentGatewaysData,
   'preference-settings.json': preferenceSettingsData,
 }
