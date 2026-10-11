@@ -8,7 +8,7 @@ interface ApiResponse<T> {
 
 export function useSalesHistory() {
   const { data, pending, error, refresh } = useApiFetch<ApiResponse<SalesHistoryEntry[]>>(
-    '/api/sales/history',
+    '/api/v1/admin/sales',
     { key: 'sales-history' },
   )
 
@@ -22,7 +22,7 @@ export function useSalesHistory() {
 
 export function useSalesPayments() {
   async function addPayment(saleId: string, payload: Pick<SalesPayment, 'amount' | 'method' | 'notes'>) {
-    return apiFetch<ApiResponse<unknown>>(`/api/sales/${saleId}/payments`, {
+    return apiFetch<ApiResponse<unknown>>(`/api/v1/admin/sales/${encodeURIComponent(saleId)}/payments`, {
       method: 'POST',
       body: payload,
     })

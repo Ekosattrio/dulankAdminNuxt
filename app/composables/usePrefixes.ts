@@ -13,7 +13,7 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
     return { search: searchQuery.value }
   })
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/prefixes', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/settings/prefixes', {
     key: 'prefixes-data',
     query: queryParams,
   })

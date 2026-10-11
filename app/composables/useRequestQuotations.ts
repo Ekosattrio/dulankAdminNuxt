@@ -33,7 +33,7 @@ export function useRequestQuotations() {
 
   const save = async (body: Partial<RFQItem>) => {
     const response = await apiFetch<{ success: boolean; data: RFQItem }>(
-      "/api/request-quotations",
+      RELIST,
       { method: "POST", body },
     );
     await refresh();

@@ -7,7 +7,7 @@ interface ResponseData {
 }
 
 export function useFooterConfig() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/footer-config', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/footer', {
     key: 'footer-config-data'
   })
 

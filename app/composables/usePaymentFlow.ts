@@ -17,7 +17,7 @@ interface ResponseData {
 
 export function usePaymentFlow(kind: PaymentFlowKind, filterParams?: Ref<PaymentFlowFilterParams> | PaymentFlowFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
-  const baseUrl = kind === 'inflow' ? '/api/payment-inflow' : '/api/payment-outflow'
+  const baseUrl = '/api/v1/admin/payments'
   const { data, pending, error, refresh } = useApiFetch<ResponseData>(baseUrl, {
     key: `payment-${kind}-list`,
     query: params,

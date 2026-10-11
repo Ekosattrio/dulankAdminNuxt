@@ -11,7 +11,7 @@ export function useSalesContacts() {
   const { data, refresh } = useApiFetch<{
     success: boolean;
     data: SalesContact[];
-  }>("/api/sales/contacts", {
+  }>('/api/v1/admin/customers', {
     key: "sales-contacts",
   });
   const contacts = computed(() => data.value?.data ?? []);

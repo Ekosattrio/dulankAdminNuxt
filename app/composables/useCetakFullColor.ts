@@ -6,14 +6,14 @@ interface CetakResponse {
 }
 
 export function useCetakFullColor() {
-  const { data, pending, error, refresh } = useApiFetch<CetakResponse>('/api/cetak-full-color', {
+  const { data, pending, error, refresh } = useApiFetch<CetakResponse>('/api/v1/admin/products', {
     key: 'cetak-full-color'
   })
 
   const config = computed<CetakFullColorConfig | undefined>(() => data.value?.data)
 
   const saveCetakFullColorConfig = async (payload: Partial<CetakFullColorConfig>) => {
-    const res = await apiFetch<{ success: boolean; data: CetakFullColorConfig; message?: string }>('/api/cetak-full-color', {
+    const res = await apiFetch<{ success: boolean; data: CetakFullColorConfig; message?: string }>('/api/v1/admin/products', {
       method: 'POST',
       body: payload
     })
