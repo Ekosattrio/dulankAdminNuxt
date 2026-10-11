@@ -12,21 +12,22 @@ interface PrefixFieldDef {
 }
 
 const prefixFields: PrefixFieldDef[] = [
-  { key: 'product_sku', label: 'Product (SKU)', defaultPrefix: 'SKU - ' },
-  { key: 'supplier', label: 'Supplier', defaultPrefix: 'SUP - ' },
-  { key: 'purchase', label: 'Purchase', defaultPrefix: 'PU - ' },
-  { key: 'purchase_return', label: 'Purchase Return', defaultPrefix: 'PR - ' },
-  { key: 'sales', label: 'Sales', defaultPrefix: 'SA - ' },
-  { key: 'sales_return', label: 'Sales Return', defaultPrefix: 'SR - ' },
-  { key: 'customer', label: 'Customer', defaultPrefix: 'CT - ' },
-  { key: 'expense', label: 'Expense', defaultPrefix: 'EX - ' },
-  { key: 'stock_transfer', label: 'Stock Transfer', defaultPrefix: 'ST - ' },
-  { key: 'stock_adjustment', label: 'Stock Adjustmentt', defaultPrefix: 'SA - ' },
-  { key: 'sales_order', label: 'Sales Order', defaultPrefix: 'SO - ' },
-  { key: 'pos_invoice', label: 'POS Invoice', defaultPrefix: 'PINV - ' },
-  { key: 'estimation', label: 'Estimation', defaultPrefix: 'EST - ' },
-  { key: 'transaction', label: 'Transaction', defaultPrefix: 'TRN - ' },
-  { key: 'employee', label: 'Employee', defaultPrefix: 'EMP - ' },
+  { key: 'order', label: 'Order', defaultPrefix: 'SO-' },
+  { key: 'invoice', label: 'Invoice', defaultPrefix: 'INV' },
+  { key: 'quotation', label: 'Quotation', defaultPrefix: 'QT' },
+  { key: 'request_quotation', label: 'Request Quotation', defaultPrefix: 'RFQ' },
+  { key: 'purchase', label: 'Purchase', defaultPrefix: 'PU' },
+  { key: 'purchase_return', label: 'Purchase Return', defaultPrefix: 'PR' },
+  { key: 'sales_return', label: 'Sales Return', defaultPrefix: 'SR' },
+  { key: 'delivery_note', label: 'Delivery Note', defaultPrefix: 'DN' },
+  { key: 'expense', label: 'Expense', defaultPrefix: 'EX' },
+  { key: 'income', label: 'Income', defaultPrefix: 'INC' },
+  { key: 'payment', label: 'Payment', defaultPrefix: 'PAY' },
+  { key: 'payslip', label: 'Payslip', defaultPrefix: 'SLP' },
+  { key: 'money_transfer', label: 'Money Transfer', defaultPrefix: 'MT' },
+  { key: 'supplier', label: 'Supplier', defaultPrefix: 'SUP' },
+  { key: 'job', label: 'Job Order', defaultPrefix: 'JO' },
+  { key: 'ticket', label: 'Support Ticket', defaultPrefix: 'TK' },
 ]
 
 // Form model binding keyed by field key

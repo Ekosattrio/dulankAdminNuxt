@@ -957,3 +957,10 @@ updated: 2026-10-11
 - `useDiscounts` (baru) → `/api/v1/admin/discounts` (list+create/update/delete); pilihan plan dari `useDiscountPlans`.
 - `server/types/discount.ts` (baru).
 - Smoke: create id=1 → PUT (Smoke Diskon Edit/15/Inactive) → DELETE ✓; halaman SSR 200; typecheck 0 error.
+
+## 2026-10-11 — UI/UX income + fix bug prefixes ([object Object])
+
+- Branch: `dev` · Push: ya.
+- **Bug prefixes fixed**: nilai seed `settings/prefixes` tersimpan sebagai objek `{"prefix":"DN"}` (bukan string) → `String(prefix)` menghasilkan `[object Object]`. `usePrefixes` kini menormalkan nilai string ATAU objek `{prefix}`; daftar field workspace disinkronkan dengan 16 key seeder (order/invoice/quotation/rfq/purchase/purchase_return/sales_return/delivery_note/expense/income/payment/payslip/money_transfer/supplier/job/ticket) menggantikan daftar lama yang tidak cocok.
+- **UI halaman Income dirombak** (pola modern reuse komponen): `IncomeWorkspace` + `IncomeRecordsTable` (kolom No/Date/Name/Category/Amount/Method/Bank + filter kategori) + `IncomeFormDialog` (date/name/category/nominal/method/bank/notes; status `isCancelled` di-strip) + halaman tipis. `income-category.vue` sudah modern (dibiarkan).
+- Validasi: typecheck 0; smoke prefix PUT (`income=INC-`), income create id=3 → PUT (Edit/300000) → DELETE ✓; SSR income & prefixes 200.

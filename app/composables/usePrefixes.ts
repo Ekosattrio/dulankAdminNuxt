@@ -21,12 +21,22 @@ export function usePrefixes(searchQuery?: Ref<string | undefined>) {
     query: queryParams,
   })
 
+  const normalizePrefix = (value: unknown): string => {
+    if (value === null || value === undefined) return ''
+    if (typeof value === 'string') return value
+    if (typeof value === 'object') {
+      const candidate = (value as Record<string, unknown>).prefix
+      return typeof candidate === 'string' ? candidate : ''
+    }
+    return String(value)
+  }
+
   const prefixes = computed<PrefixItem[]>(() =>
     Object.entries(data.value?.data?.values ?? {}).map(([key, prefix]) => ({
       id: key,
       key,
       name: key,
-      prefix: String(prefix),
+      prefix: normalizePrefix(prefix),
     })),
   )
 
