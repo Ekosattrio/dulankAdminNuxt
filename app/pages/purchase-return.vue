@@ -137,7 +137,7 @@ async function handleDeleteExecute() {
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-purchase-return space-y-6">
+  <div class="dulank-page dulank-page-purchase-return">
     <!-- Header with Breadcrumb and Action Buttons -->
     <SalesListHeader
       title="Purchase Return List"

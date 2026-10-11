@@ -116,7 +116,7 @@ const handleToggleSwitch = async () => {
       </div>
 
       <!-- Config Modal -->
-      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
+      <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)" @click.self="showModal = false">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header border-0 custom-modal-header pb-0">

@@ -51,7 +51,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop-custom">
+  <div v-if="isOpen" class="modal-backdrop-custom" @click.self="emit('close')">
     <div class="modal-dialog-custom modal-md">
       <div class="modal-content border-0 shadow-lg rounded-3">
         <div class="modal-header border-bottom px-4 py-3 bg-light">

@@ -4,6 +4,7 @@ import type { DateRangeValue } from '~/composables/useDateRange'
 import DateRangePicker from '~/components/Common/DateRangePicker.vue'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 const props = defineProps<{
   orders: Order[]
@@ -103,12 +104,7 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(status)="{ item }">
-      <span
-        class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold"
-        :class="getStatusBadgeClass(item.status)"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <template #cell(statusBy)="{ item }">

@@ -81,6 +81,8 @@ Sebelum membuat komponen atau kode baru, **GUNAKAN KOMPONEN BERSAMA YANG SUDAH T
 | **Table Skeleton** | `TableSkeleton.vue` | `app/components/Common/TableSkeleton.vue` | `<TableSkeleton :rows="6" :cols="10" />` mirror layout SalesDataTable |
 | **Card Skeleton** | `CardSkeleton.vue` | `app/components/Common/CardSkeleton.vue` | `<CardSkeleton :count="4" />` placeholder metrik / KPI card |
 | **Loading Feedback** | `SalesFeedback.vue` | `app/components/Sales/SalesFeedback.vue` | `:pending="pending" skeleton="table" \| "card"` |
+| **Badge Semantik** | `AppBadge.vue` / `SalesStatusBadge.vue` | `app/components/Common/`, `app/components/Sales/` | Gunakan `AppBadge` untuk label/tag dan `SalesStatusBadge` untuk status domain; bentuk mengikuti `/user-admin`. |
+| **Identitas Berfoto** | `EntityIdentity.vue` | `app/components/Common/EntityIdentity.vue` | Nama toko/supplier/sumber/percetakan memakai avatar lokal stabil dan fallback inisial. |
 | **Kelas Form UI** | `salesUi.ts` | `app/utils/salesUi.ts` | `tableFilterControlClass`, `modalFormRowClass`, dll. |
 | **Bundled Data Server**| `data.ts` / `bundledData.ts`| `server/utils/data.ts` | `readJSON<T>()` fallback ke `bundledSources` hanya saat file fisik tidak tersedia; JSON rusak tetap error |
 | **Typed API Boundary** | `useApiFetch.ts` / `apiFetch.ts` | `app/composables/`, `app/utils/` | Request tetap memakai runtime Nuxt, tetapi tidak mengembangkan union seluruh route Nitro; UI tetap wajib memanggil composable domain. |
@@ -104,10 +106,10 @@ Peta detail per rute, dekomposisi komponen, composable, dan relasi database bera
 | **Finance & Account** | **Implemented, static verification passed** | BRVS account/ledger/transfer/cash advance/report/tax tersedia. | Rekonsiliasi, browser lifecycle, persistence, print/PDF, dan Netlify belum diuji. |
 | **Peoples, HRM** | **Implemented, verification pending** | UI/API/data domain tersedia luas. | Workspace besar, relasi payroll/balance, upload, dan reload perlu diuji. |
 | **Calculator, Products & Services** | **Implemented/partial BRVS** | Composable/API/data dan reusable UI tersedia. | Workspace/UI responsibility dan flow browser belum tuntas. |
-| **Paper Shop, Inventory** | **Partial BRVS-UI** | Page tipis, typecheck, confirm, dan print standar. | Workspace masih besar dan service/relasi perlu verifikasi. |
+| **Paper Shop, Inventory** | **Partial BRVS-UI** | Page tipis; Category/Sub Category/Unit/Variant memakai shared header, feedback, table/filter/status/action, confirm, dan print. Typecheck/build/HTTP route lulus. | Workspace masih besar, service/relasi dan browser desktop/390px perlu verifikasi. |
 | **Content, User Management, Setting, Reports** | **Implemented, verification pending** | Route, composable, endpoint, dan data tersedia. | Decomposition, authorization/integrasi production, upload, dan rekonsiliasi belum selesai. |
 | **Dashboard, Promo** | **Dashboard routes passed; Promo partial** | Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, dan Voucher sudah menjadi typed BRVS/BRVS-UI dan lulus API/browser. | Promo tersisa Discount Plan, Discount, dan Coupon masih memerlukan rekonsiliasi runtime/arsitektur. |
-| **Purchases** | **Imported, verification pending** | API/composable dan flow dasar tersedia. | Page besar, legacy fields, server validation, ID generation, dan reload perlu audit. |
+| **Purchases** | **Imported, verification pending** | Lima list memakai shared page spacing, table/filter/status/action, avatar supplier, modal detail/form, API/composable, dan HTTP route lulus. | Page besar, legacy fields, server validation, ID generation, mutation/reload, dan browser 390px perlu audit. |
 | **POS** | **Deferred** | Hanya shared fixes yang ikut masuk. | Fitur tidak dilanjutkan sampai diminta pengguna. |
 
 Tabel scorecard `100% VERIFIED/BRVS-UI` yang pernah berada di bagian ini telah dipensiunkan karena bertentangan dengan audit source aktual. Riwayat implementasi di bagian bawah tetap dipertahankan, tetapi label status lamanya tidak boleh dipakai sebagai status aktif.

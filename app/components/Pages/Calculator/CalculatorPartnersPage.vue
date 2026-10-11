@@ -2,6 +2,8 @@
 import type { CalculatorModerationInput, CalculatorPartnerKind, CalculatorPartnerRow } from '#server/types/calculator-marketplace'
 import { useCalculatorPartners } from '~/composables/useCalculatorMarketplace'
 import { useTablePrint } from '~/composables/useTablePrint'
+import AppBadge from '~/components/Common/AppBadge.vue'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
 
 const props = defineProps<{ kind: Extract<CalculatorPartnerKind, 'printing_shop' | 'paper_shop'> }>()
 const isPrinting = computed(() => props.kind === 'printing_shop')
@@ -103,10 +105,10 @@ async function confirmDelete() {
       <CalculatorStatsGrid :items="stats" />
       <SalesDataTable :columns="columns" :items="rows" :search-placeholder="`Search ${isPrinting ? 'percetakan' : 'toko kertas'} or location...`" @update:current-page-items="currentPageItems = $event">
         <template #filters><TableFilterSelect v-model="subscriptionFilter" :options="[{ label: 'Subscription: Yes', value: 'Yes' }, { label: 'Subscription: No', value: 'No' }]" placeholder="All Subscriptions" /></template>
-        <template #cell(name)="{ item }"><span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span></template>
-        <template #cell(subscription)="{ item }"><span :class="['inline-flex rounded px-2 py-1 text-xs font-semibold', item.subscribed ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600']">{{ item.subscription }}</span></template>
+        <template #cell(name)="{ item }"><EntityIdentity :name="item.name" :subtitle="item.address" :kind="isPrinting ? 'business' : 'store'" /></template>
+        <template #cell(subscription)="{ item }"><AppBadge :label="item.subscription" /></template>
         <template #cell(whatsapp)="{ item }"><a class="text-emerald-600 hover:underline" :href="`https://wa.me/${item.whatsapp}`" target="_blank" rel="noopener">{{ item.whatsapp }}</a></template>
-        <template #cell(capabilitiesLabel)="{ item }"><div class="flex max-w-52 flex-wrap gap-1"><span v-for="capability in item.capabilities" :key="capability" class="rounded bg-cyan-50 px-1.5 py-0.5 text-xs text-cyan-700">{{ capability }}</span></div></template>
+        <template #cell(capabilitiesLabel)="{ item }"><div class="flex max-w-52 flex-wrap gap-1"><AppBadge v-for="capability in item.capabilities" :key="capability" :label="capability" tone="info" /></div></template>
         <template #cell(actions)="{ item }"><div class="flex justify-center gap-1"><SalesActionButton icon="eye" label="View detail" @click="selected = item._record" /><SalesActionButton icon="settings" label="Manage partner" @click="manageTarget = item._record" /><SalesActionButton icon="trash-2" label="Delete partner" @click="deleteTarget = item._record" /></div></template>
       </SalesDataTable>
     </template>

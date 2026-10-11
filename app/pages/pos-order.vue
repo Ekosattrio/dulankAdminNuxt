@@ -156,7 +156,7 @@
     </div>
 
     <!-- Sale Detail Modal -->
-    <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
+    <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)" @click.self="detailModalVisible = false">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header border-0">
@@ -201,7 +201,7 @@
     </div>
 
     <!-- Create Payment Modal -->
-    <div v-if="createPaymentVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)">
+    <div v-if="createPaymentVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)" @click.self="createPaymentVisible = false">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header border-0">

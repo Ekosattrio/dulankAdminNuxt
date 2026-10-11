@@ -3,6 +3,8 @@ import type { Purchase } from '#server/types/purchase'
 import SalesDialog from '~/components/Sales/SalesDialog.vue'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 import { formatNumber } from '~/composables/useFormatters'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 const props = defineProps<{
   open: boolean
@@ -57,22 +59,12 @@ function handlePrint() {
     wide
     @close="emit('close')"
   >
-    <div v-if="purchase" class="space-y-6">
+    <div v-if="purchase" class="space-y-6 text-sm">
       <!-- Top Actions Bar -->
       <div class="flex items-center justify-between border-b pb-4 dark:border-gray-800">
         <div class="flex items-center gap-2">
-          <span
-            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold"
-            :class="purchase.status === 'Received' || purchase.status === 'Complete' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400'"
-          >
-            {{ purchase.status }}
-          </span>
-          <span
-            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold"
-            :class="purchase.paymentStatus === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400'"
-          >
-            Payment: {{ purchase.paymentStatus }}
-          </span>
+          <SalesStatusBadge :status="purchase.status" />
+          <SalesStatusBadge :status="purchase.paymentStatus" />
         </div>
 
         <div class="flex items-center gap-2">
@@ -81,7 +73,7 @@ function handlePrint() {
             class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
             @click="emit('edit', purchase)"
           >
-            <FeatherIcon name="edit-2" size="14" />
+            <FeatherIcon name="edit" size="14" />
             Edit Purchase
           </button>
           <button
@@ -101,9 +93,7 @@ function handlePrint() {
           <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
             Supplier Info
           </h4>
-          <p class="text-base font-bold text-gray-900 dark:text-white">
-            {{ purchase.supplier }}
-          </p>
+          <EntityIdentity :name="purchase.supplier" subtitle="Supplier resmi bahan percetakan" kind="supplier" size="md" />
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
             Supplier resmi bahan percetakan & supply rantai pasok.
           </p>

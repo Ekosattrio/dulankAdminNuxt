@@ -72,6 +72,27 @@ updated: 2026-10-11
 - **Remaining risk:** Kalkulator Dashboard dan 138 route lain belum direkonsiliasi dalam batch ini; total 139 route legacy tetap pending. Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
 - **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
 
+## 2026-10-11
+
+- **Perbaikan Inventory, Purchases, dan detail transaksi:** route Category, Sub Category, Unit, dan Variant tidak lagi memuat asset/script legacy per halaman yang dapat menimpa styling Tailwind; skin bersama ditambahkan untuk header, filter, tabel, tombol, dan modal master data agar konsisten dengan Sales.
+- **Penyelarasan lanjutan Inventory:** empat tabel master dipecah dari markup tabel/pagination Bootstrap lokal dan kini memakai `SalesDataTable`, `TableFilterSelect`, `SalesStatusBadge`, serta `SalesActionButton` yang sama dengan halaman lain.
+- **Purchases:** root page, tabel, form, detail, serta Purchase Item/Purchase Category diselaraskan ke kontrol, tipografi tabel, spacing, dan ikon aksi reusable yang sama dengan Sales. `edit-2` diganti ke action semantik `edit`.
+- **Avatar entitas:** menambahkan `EntityIdentity.vue` dan memasangnya pada nama toko, sumber marketplace, percetakan, supplier, serta tabel/detail Purchases. Komponen memilih aset lokal stabil berdasarkan nama, menerima gambar domain bila tersedia, dan jatuh kembali ke inisial bila aset gagal dimuat.
+- **Badge lintas halaman:** menambahkan `AppBadge.vue` dengan bentuk pill, border, padding, tipografi 12px, tone semantik, dan dark mode mengikuti `/user-admin`. `SalesStatusBadge` sekarang menjadi adapter ke primitive ini sehingga seluruh pemakai shared status otomatis konsisten; Inventory, Purchases, Calculator marketplace, Store, Supplier, HRM, Orders, Webstore, Support Ticket, dan `/user-admin` dimigrasikan untuk badge terkait. Compatibility style global menyamakan badge Bootstrap yang masih dipakai route legacy ke bahasa visual pill yang sama.
+- **Modal backdrop:** `SalesDialog` sekarang menutup saat area backdrop native dialog diklik (dengan guard `busy`), `BaseModal` tetap memakai `@click.self`, 26 modal legacy berbasis `.modal-backdrop-custom` mendapat `@click.self="emit('close')"`, dan 22 overlay Bootstrap tersisa pada Calculator, Setting, Coupon, Discount, Online/POS Order, serta Ticket List mendapat handler backdrop. Klik di dalam panel tidak menutup modal.
+- **Inventory/Purchases UI:** Header, feedback, skeleton, tabel, filter, status, dan action pada Category/Sub Category/Unit/Variant memakai komponen Sales shared. Purchase Order dan Purchase Return tidak lagi memiliki toolbar lokal ganda; search/filter dipindahkan ke slot `SalesDataTable`, dan lima list Purchases menggunakan spacing/root page yang sama.
+- **Koreksi visual klien:** warna tombol Add shared dikembalikan persis ke baseline awal—background oranye solid dengan teks/ikon putih. Grup Purchases mengikuti container halaman Sales/Invoice tanpa padding root tambahan atau card pembungkus ganda; empat KPI non-legacy pada `/purchase` dihapus karena `purchase.html` hanya memiliki satu card tabel.
+- **Perbaikan cascade tombol:** selector compatibility badge kini diwajibkan memiliki class `.badge`/`.badges`; utility warna seperti `.bg-primary` pada tombol biasa tidak lagi tertangkap. Ini memperbaiki penyebab aktual Add Sales tetap oranye transparan meskipun class komponen sudah kembali ke baseline.
+- **Sales Detail:** seed `server/data/sales.json` sekarang menyimpan minimal satu line item typed per transaksi sehingga modal Sales Detail menampilkan Product Name, Qty, Unit, Price, Amount, dan spesifikasi yang tersimpan; baris kosong tidak lagi dirender ketika item tersedia.
+- **Validation run:** `npm.cmd run typecheck`, `npm.cmd run build`, `npm.cmd run validate:structure`, dan `git diff --check` lulus. Dev server mengembalikan HTTP 200 untuk 12 route `/category`, `/sub-category`, `/unit`, `/variant`, lima list Purchases, `/sales`, `/semua-percetakan`, dan `/semua-toko-kertas`. GET `/api/sales` mengembalikan 5/5 record dengan minimal satu item produk.
+- **Validation not run:** browser visual desktop/390px tidak dapat dijalankan karena inventory Computer Use tidak menyediakan browser; lifecycle mutation/reload Purchases dan deployment Netlify belum diuji.
+- **Feature/BRVS status:** Inventory tetap `partial BRVS` (perbaikan visual/shared styling, responsibility split penuh belum ditutup); Purchases tetap `implemented, verification pending`; Sales detail data seed diperbaiki, tetapi runtime status tetap verification pending.
+- **Git branch:** `Rama`.
+- **Commit status:** `NOT COMMITTED`.
+- **Push status:** `NOT PUSHED`.
+- **Remote verification:** `N/A`.
+- **Remaining risks:** data runtime pengguna dapat memiliki `sales.json` sendiri dan tidak otomatis menerima seed baru; detail runtime lama tanpa `items` masih bergantung pada data yang tersedia dan tidak boleh diisi otomatis tanpa sumber domain. Inventory/Purchases tetap memerlukan visual browser 390px dan audit BRVS service/repository sebelum status dinaikkan.
+
 ## 2026-10-10
 
 ### Rekonsiliasi Dashboard Admin

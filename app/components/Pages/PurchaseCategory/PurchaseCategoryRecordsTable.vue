@@ -3,6 +3,8 @@ import type { PurchaseCategory } from '#server/types/purchase-category'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import AppBadge from '~/components/Common/AppBadge.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 defineProps<{
   categories: PurchaseCategory[]
@@ -27,12 +29,6 @@ const columns = [
   { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center whitespace-nowrap' },
 ]
 
-function getStatusBadgeClass(status: string) {
-  if (status === 'Active') {
-    return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-  }
-  return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800'
-}
 </script>
 
 <template>
@@ -59,9 +55,7 @@ function getStatusBadgeClass(status: string) {
         <span class="font-semibold text-gray-900 dark:text-gray-100">
           {{ item.name }}
         </span>
-        <span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-mono text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-          {{ item.id }}
-        </span>
+        <AppBadge :label="item.id" tone="neutral" />
       </div>
     </template>
 
@@ -81,19 +75,14 @@ function getStatusBadgeClass(status: string) {
 
     <!-- Status -->
     <template #cell(status)="{ item }">
-      <span
-        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-        :class="getStatusBadgeClass(item.status)"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <!-- Actions -->
     <template #cell(actions)="{ item }">
       <div class="flex items-center justify-center gap-1">
         <SalesActionButton
-          icon="edit-2"
+          action="edit"
           label="Edit"
           variant="ghost"
           @click="emit('edit', item)"

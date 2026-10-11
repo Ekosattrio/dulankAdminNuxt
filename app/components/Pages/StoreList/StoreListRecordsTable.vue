@@ -3,6 +3,8 @@ import type { Store } from '#server/types/store'
 import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import EntityIdentity from '~/components/Common/EntityIdentity.vue'
+import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
 
 defineProps<{
   stores: Store[]
@@ -48,9 +50,7 @@ const columns = [
     </template>
 
     <template #cell(storeName)="{ item }">
-      <div class="font-semibold text-gray-900 dark:text-gray-100">
-        {{ item.storeName }}
-      </div>
+      <EntityIdentity :name="item.storeName" :subtitle="item.address" kind="store" />
     </template>
 
     <template #cell(userName)="{ item }">
@@ -75,16 +75,7 @@ const columns = [
     </template>
 
     <template #cell(status)="{ item }">
-      <span
-        :class="[
-          'inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold',
-          item.status === 'Active'
-            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-            : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800'
-        ]"
-      >
-        {{ item.status }}
-      </span>
+      <SalesStatusBadge :status="item.status" />
     </template>
 
     <template #cell(actions)="{ item }">

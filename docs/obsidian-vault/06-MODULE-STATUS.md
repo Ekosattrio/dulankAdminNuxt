@@ -44,6 +44,8 @@ Status ini berarti flow/perilaku pernah disetujui pengguna sebagai batas regresi
 - Calculator Apps.
 - Products & Services selain `/cetak-full-color` yang telah verified secara route-scope.
 - Finance & Account: Bank Account/Type, Money Transfer, Cash Advance, Income/Expense ledger, Customer Balance, Account Statement, Cash Flow, Balance Sheet, Input Tax, dan Output Tax.
+- Inventory master Category/Sub Category/Unit/Variant telah memakai shared Sales header/table/filter/status/action dan modal backdrop-close; status tetap partial karena service/repository serta browser 390px belum diverifikasi.
+- Purchases telah memakai shared list surface, badge, avatar supplier, dan modal backdrop-close dengan typecheck/build/HTTP route lulus; status tetap verification pending sampai legacy, mutation/reload, dan browser selesai.
 
 Kode dan data kelompok tersebut sudah luas, tetapi status belum menjadi approved baseline sampai validasi struktur, browser flow, Netlify read, mutation persistence target, rekonsiliasi Finance, dan referensi klien selesai diperiksa.
 

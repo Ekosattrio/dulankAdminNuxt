@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UserAdmin } from '#server/types/user-management'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import AppBadge from '~/components/Common/AppBadge.vue'
 
 defineProps<{
   userAdmins: UserAdmin[]
@@ -20,16 +21,16 @@ const emit = defineEmits<{
 const roles = ['Admin', 'Manager', 'Supervisor', 'Staff']
 const statuses = ['Active', 'Inactive']
 
-const getRoleBadge = (role: string) => {
+const getRoleTone = (role: string) => {
   switch (role) {
     case 'Admin':
-      return 'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-400'
+      return 'info' as const
     case 'Manager':
-      return 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400'
+      return 'warning' as const
     case 'Supervisor':
-      return 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400'
+      return 'success' as const
     default:
-      return 'border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300'
+      return 'neutral' as const
   }
 }
 </script>
@@ -107,37 +108,20 @@ const getRoleBadge = (role: string) => {
             </td>
             <td class="px-4 py-3.5 text-gray-600 dark:text-gray-400">{{ adm.email }}</td>
             <td class="px-4 py-3.5">
-              <span
-                :class="[
-                  'inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold border',
-                  getRoleBadge(adm.role)
-                ]"
-              >
-                {{ adm.role }}
-              </span>
+              <AppBadge :label="adm.role" :tone="getRoleTone(adm.role)" />
             </td>
             <td class="px-4 py-3.5">
               <div class="flex flex-wrap gap-1">
-                <span
+                <AppBadge
                   v-for="st in adm.stores"
                   :key="st"
-                  class="inline-flex items-center rounded bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary border border-primary/20"
-                >
-                  {{ st }}
-                </span>
+                  :label="st"
+                  tone="primary"
+                />
               </div>
             </td>
             <td class="px-4 py-3.5 text-center">
-              <span
-                :class="[
-                  'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border',
-                  adm.status === 'Active'
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400'
-                    : 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
-                ]"
-              >
-                {{ adm.status }}
-              </span>
+              <AppBadge :label="adm.status" />
             </td>
             <td class="px-4 py-3.5 text-end">
               <div class="inline-flex items-center gap-1.5">

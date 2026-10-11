@@ -156,7 +156,7 @@ function handleExportExcel() {
 </script>
 
 <template>
-  <div class="space-y-4 p-4 md:p-6">
+  <div class="dulank-page dulank-page-purchase-item">
     <!-- Header -->
     <SalesListHeader
       title="Purchase Item"

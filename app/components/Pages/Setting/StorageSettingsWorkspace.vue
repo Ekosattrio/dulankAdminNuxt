@@ -148,7 +148,7 @@ const sendTestEmail = () => {
       </div>
 
       <!-- AWS Config Modal -->
-      <div v-if="showAwsModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)">
+      <div v-if="showAwsModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)" @click.self="showAwsModal = false">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
           <div class="modal-content">
             <div class="page-wrapper-new p-0">
