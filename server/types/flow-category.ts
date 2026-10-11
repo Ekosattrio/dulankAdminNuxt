@@ -9,6 +9,7 @@ export interface FlowCategory {
 
 export interface FlowCategoryFilterParams {
   search?: string;
+  category?: string;
   startDate?: string;
   endDate?: string;
 }

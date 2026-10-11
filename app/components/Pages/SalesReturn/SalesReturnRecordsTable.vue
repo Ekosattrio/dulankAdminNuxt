@@ -30,19 +30,7 @@ const columns = [
     :search="search"
     @update:search="$emit('update:search', $event)"
   >
-    <template #filters
-      ><select
-        :value="paymentStatus"
-        aria-label="Payment Status"
-        :class="salesField"
-        class="!w-auto"
-        @change="$emit('update:paymentStatus', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">Payment Status</option>
-        <option>Paid</option>
-        <option>Unpaid</option>
-      </select></template
-    >
+    <template #filters><TableFilterSelect :model-value="paymentStatus" placeholder="Payment Status" aria-label="Payment Status" :options="['Paid', 'Unpaid']" @update:model-value="$emit('update:paymentStatus', $event)" /></template>
     <template #cell(paymentStatus)="{ item }"><SalesStatusBadge :status="item.paymentStatus" /></template>
     <template #cell(total)="{ item }">{{ formatRupiah(item.total) }}</template>
     <template #cell(actions)="{ item }"

@@ -12,6 +12,7 @@ export interface WorkFlow {
   date: string;
   category: string;
   product: string;
+  productId?: string;
   workflowSteps: string;
   steps?: WorkFlowStepItem[];
   createdAt?: string;
@@ -31,6 +32,29 @@ export interface WorkFlowFormData {
   date?: string;
   category: string;
   product: string;
+  productId?: string;
   workflowSteps: string;
   steps?: WorkFlowStepItem[];
+}
+
+export interface WorkFlowEditorFlow {
+  id: string
+  name: string
+  category: string
+  templateNames: string[]
+}
+
+export interface WorkFlowEditorProduct {
+  id: string
+  code: string
+  name: string
+  category: string
+}
+
+export interface WorkFlowEditorContext {
+  products: WorkFlowEditorProduct[]
+  productCategories: string[]
+  flowCategories: string[]
+  flows: WorkFlowEditorFlow[]
+  templates: string[]
 }

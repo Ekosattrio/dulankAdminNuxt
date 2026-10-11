@@ -1,4 +1,4 @@
-import type { MyJob } from '~/types/my-job'
+import { deleteMyJob } from '#server/utils/myJobs'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
@@ -10,18 +10,6 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const allJobs = await readJSON<MyJob[]>('my-jobs.json', [])
-  const newJobs = allJobs.filter(j => j.id !== id)
-
-  if (allJobs.length === newJobs.length) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Job not found'
-    })
-  }
-
-  await writeJSON('my-jobs.json', newJobs)
-
-  return createResponse({ id }, 'Job task deleted successfully')
+  return createResponse(deleteMyJob(id), 'Job task deleted successfully')
 })
 

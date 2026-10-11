@@ -1,8 +1,9 @@
-import type { MyJob, MyJobFormData } from '~/types/my-job'
+import type { MyJobStatusUpdatePayload } from '#server/types/my-job'
+import { updateMyJob } from '#server/utils/myJobs'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-  const body = await readBody<Partial<MyJobFormData>>(event)
+  const body = await readBody<MyJobStatusUpdatePayload>(event)
 
   if (!id) {
     throw createError({
@@ -11,28 +12,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const allJobs = await readJSON<MyJob[]>('my-jobs.json', [])
-  const idx = allJobs.findIndex(j => String(j.id) === String(id))
-
-  if (idx === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Job not found'
-    })
-  }
-
-  const current = allJobs[idx]
-  if (!current) {
-    throw createError({ statusCode: 404, statusMessage: 'Job not found' })
-  }
-  const updated: MyJob = {
-    ...current,
-    ...body,
-    id: current.id
-  }
-  allJobs[idx] = updated
-
-  await writeJSON('my-jobs.json', allJobs)
-
-  return createResponse(updated, 'Job updated successfully')
+  return createResponse(updateMyJob(id, body), 'Job updated successfully')
 })

@@ -77,13 +77,13 @@ function getStepBadgeClass(status: string) {
               class="flex items-center justify-between rounded border border-gray-100 p-2 dark:border-gray-800"
             >
               <div class="flex items-center gap-2">
-                <span class="flex size-5 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                <span class="flex size-5 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
                   {{ idx + 1 }}
                 </span>
                 <span class="font-medium text-gray-800 dark:text-gray-200">{{ st.name }}</span>
               </div>
               <span
-                class="rounded border px-2 py-0.5 text-[10px] font-semibold capitalize"
+                class="rounded border px-2 py-0.5 text-xs font-semibold capitalize"
                 :class="getStepBadgeClass(st.status)"
               >
                 {{ st.status }}

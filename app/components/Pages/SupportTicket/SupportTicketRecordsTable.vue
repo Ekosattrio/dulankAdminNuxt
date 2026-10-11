@@ -175,13 +175,13 @@ function getStatusBadgeClass(status: string) {
     <template #cell(actions)="{ item }">
       <div class="flex items-center justify-center gap-1">
         <SalesActionButton
-          icon="eye"
+          action="view"
           label="View Detail"
           tooltip="View Detail"
           @click="$emit('view-detail', item)"
         />
         <SalesActionButton
-          icon="trash-2"
+          action="delete"
           label="Delete"
           tooltip="Delete"
           tone="danger"

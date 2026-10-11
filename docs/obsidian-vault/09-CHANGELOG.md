@@ -1,8 +1,220 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-09
+updated: 2026-10-11
 ---
+
+## 2026-10-11
+
+### Rekonsiliasi Cetak Full Color
+
+- **Date:** 2026-10-11
+- **Actor:** Codex
+- **Scope:** Menutup `/cetak-full-color` terhadap `cetak-full-color.html`, BRVS, dan BRVS-UI. Runtime `data/cetak-full-color.json` dipertahankan secara semantik; seed referensi berada di `server/data/` dan fixture lama dinormalisasi in-memory tanpa write pada GET.
+- **Parity/UI:** lima kartu produk, sebelas tab, Size/Paper/Machine/Laminate/Fold/Print Side/Components/Work Flow/Profit Setting, serta sepuluh Log Transaction sekarang memakai label, urutan, opsi, dan nilai legacy. `Effective Paper Group` dan target workflow lain memakai `<select multiple>` nyata, mendukung banyak pilihan, tersimpan ke API, dan tetap terpilih setelah reload.
+- **BRVS/data:** page 80 baris tetap composer; workspace 177 baris hanya mengorkestrasi section. Kontrak v2 typed memakai ID stabil, nilai uang numerik, timestamps produk, workflow target array, dan log output-only. GET/POST tipis memakai `server/utils/cetakFullColor.ts` untuk migration, validation, strict read, dan persistence.
+- **BRVS-UI:** Product, Size, Paper, workflow settings, sequence, Profit, dan Log dipisah berdasarkan tanggung jawab; tabel/action/dialog/currency/feedback tetap memakai shared components. Tampilan 390px tidak melebar keluar viewport.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run validate:structure` PASS; `npm run test:cetak-full-color` PASS; `npm run test:cetak-full-color-browser` PASS; `git diff --check` PASS. Browser mencakup exact data lintas tab, multiple-select save/reload, desktop/390px, dan zero runtime exception.
+- **Remaining risk:** durable mutation persistence pada Netlify serverless belum tersedia; `/calender` dan route Products & Services lain tidak ikut dinaikkan statusnya. Status route ini `verified`, bukan `approved baseline`.
+- **Git:** branch `main`; baseline HEAD `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Voucher
+
+- **Date:** 2026-10-11
+- **Actor:** Codex
+- **Scope:** Menutup `/voucher` terhadap `voucher.html`, BRVS, dan BRVS-UI tanpa mengubah data runtime pengguna; seluruh mutation/safeguard test memakai direktori sementara.
+- **Parity/UI:** judul/subtitle, sembilan kolom, empat record, search, Date/Store/Product/Name/Type/Report, Add New Coupons, PDF/Print/Refresh/Collapse, serta semua field/toggle Add/Edit dipertahankan. Opsi Product toolbar (`Laptop`, `Lemari`) dipisahkan dari opsi modal (`Nike Jordan`, `Amazon Echo Dot`) sesuai HTML.
+- **BRVS/data:** page 654 baris menjadi composer 9 baris. Dataset typed/bundled memiliki PK, FK store/creator/product, timestamps, serta discount/limit/used numeric; API tipis memakai service untuk filter, validation, uniqueness, CRUD, dan persistence strict.
+- **BRVS-UI:** workspace, records table, dan satu shared Add/Edit form dipisah berdasarkan tanggung jawab; table/filter/date/currency/quantity/status/action/dialog/confirm/feedback/print memakai shared components.
+- **Inventory:** evidence manual/runtime kini 50/186 route; 136 route tetap pending. Distribusi page menjadi 114 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 7 di atas 300 baris. Source memiliki 573 component, 153 composable, 143 JSON bundled, 375 API files, dan 106 server types.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:voucher` PASS; `npm run test:voucher-browser` PASS; audit generator PASS. Browser mencakup exact content/options, Add/Edit/Delete persistence, print/collapse, desktop/390px, overflow, dan zero runtime exception.
+- **Remaining risk:** 136 route legacy lain belum direkonsiliasi manual/browser; Discount Plan menjadi prioritas berikutnya. Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Billing
+
+- **Date:** 2026-10-11
+- **Actor:** Codex
+- **Scope:** Menutup `/billing` terhadap `billing.html`, BRVS, dan BRVS-UI tanpa mengubah data runtime pengguna; seluruh safeguard test memakai direktori sementara.
+- **Parity/UI:** tiga KPI, Search, Date, Metode, Status, sebelas kolom literal, sepuluh record, dan footer totals dipertahankan. Action, detail modal, serta toolbar PDF/Print/Refresh/Collapse dihapus karena tidak ada pada legacy.
+- **BRVS/data:** page 318 baris menjadi composer 9 baris. Dataset typed/bundled memiliki PK, FK transaksi/pengguna, timestamps, dan nilai uang numeric; GET list memakai service filter strict serta tidak mengganti JSON fisik rusak dengan seed.
+- **BRVS-UI:** workspace, stats, dan records table dipisah berdasarkan tanggung jawab; filter/table/currency/skeleton/feedback memakai shared components dan tabel tidak dibungkus double-card.
+- **Inventory:** evidence manual/runtime kini 49/186 route; 137 route tetap pending. Distribusi page menjadi 113 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 8 di atas 300 baris. Source memiliki 570 component, 152 composable, 142 JSON bundled, 371 API files, dan 105 server types.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run validate:structure` PASS; `npm run test:billing` PASS; `npm run test:billing-browser` PASS; audit generator PASS. Browser mencakup exact KPI/columns/rows, no invented action/modal, search/status filters, desktop/390px, overflow, dan zero runtime exception.
+- **Remaining risk:** 137 route legacy lain belum direkonsiliasi manual/browser; Promo menjadi prioritas berikutnya. Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Kalkulator Dashboard
+
+- **Date:** 2026-10-11
+- **Actor:** Codex
+- **Scope:** Menutup `/kalkulator-dashboard` terhadap HTML legacy, BRVS, dan BRVS-UI dengan mutation test di direktori sementara.
+- **Parity/UI:** subtitle `Manage kalkulator`, Realtime Database, tiga metric/chart memakai angka dan seri legacy, sepuluh nama/angka/status tabel, kolom literal, Category dropdown, View/Edit/Delete, toolbar PDF/Print/Refresh/Collapse dipertahankan. Filter Status non-legacy dihapus.
+- **BRVS/data:** binding `SalesDataTable` dan slot yang sebelumnya salah diperbaiki. Dataset kini memiliki `userId`, `employeeId`, `departmentId`, timestamps, dan chart series typed/bundled; service tidak lagi menelan JSON rusak dan memvalidasi nama, angka, usage 0-100, status, 404, update, serta delete.
+- **BRVS-UI:** route 11 baris; telemetry, table, view, edit, confirm, feedback, dan print dipisah memakai komponen shared. Workspace 180 baris tetap satu tanggung jawab orchestrasi dan berada di bawah ambang audit wajib 200 baris.
+- **Inventory:** evidence manual/runtime kini 48/186 route; 138 route tetap pending. Distribusi page tetap 112 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 9 di atas 300 baris.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:calculator-dashboard` PASS; `npm run test:calculator-dashboard-browser` PASS; audit generator PASS. Browser mencakup legacy rows/KPI/chart labels, View/Edit/Delete, collapse, print, desktop/390px, overflow, dan zero runtime exception.
+- **Remaining risk:** Billing dan 137 route lain belum direkonsiliasi dalam batch ini; total 138 route legacy tetap pending. Category dropdown legacy tidak memfilter karena HTML tidak menyediakan kategori per record. Netlify durable mutation persistence belum tersedia.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Subscriptions
+
+- **Date:** 2026-10-11
+- **Actor:** Codex
+- **Scope:** Menutup `/subscriptions` terhadap `subscriptions.html`, BRVS, dan BRVS-UI tanpa menyentuh data runtime pengguna; seluruh mutation test memakai direktori sementara.
+- **Parity/UI:** empat KPI, toolbar PDF/Print/Refresh, Search, date range, Plan/Payment/Status filters, sembilan kolom literal, footer Total, dan aksi View/Edit/Delete dipertahankan. Tidak ditambahkan flow Add, upgrade, atau payment karena tidak ada pada HTML legacy.
+- **BRVS/data:** page 960 baris menjadi composer 9 baris. Sembilan record legacy disimpan sebagai data relasional typed/bundled dengan `subscriberId`, amount numeric, ISO date, dan timestamps; aggregate KPI legacy dipertahankan sebagai summary snapshot. GET list/detail, PUT, dan DELETE melewati service validasi/persistensi strict.
+- **BRVS-UI:** stats, table/filter/total, detail dialog, edit form, dan workspace dipisah; UI memakai shared SalesDataTable, DateRangePicker, TableFilterSelect, currency/status/action/dialog/confirm/feedback/skeleton, serta DocumentPrintModal.
+- **Inventory:** evidence manual/runtime kini 47/186 route; 139 route tetap pending. Distribusi page menjadi 112 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 9 di atas 300 baris. Source memiliki 760 SFC, 567 component, 151 composable, 141 JSON bundled, 370 API files, dan 104 server types.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run validate:structure` PASS; `npm run test:subscriptions` PASS; `npm run test:subscriptions-browser` PASS; audit generator PASS. Browser mencakup content/column/KPI, View/Edit/Delete, filter, print dialog, desktop/390px, overflow, dan zero runtime exception.
+- **Remaining risk:** Kalkulator Dashboard dan 138 route lain belum direkonsiliasi dalam batch ini; total 139 route legacy tetap pending. Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+## 2026-10-10
+
+### Rekonsiliasi Dashboard Admin
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menutup route root `/` terhadap `index.html`, BRVS, dan BRVS-UI tanpa mengubah data runtime pengguna.
+- **Parity/UI:** memulihkan Welcome/low-stock dismiss, delapan metric cards, Sales & Purchase range, Overall Information dengan period/radial chart, Top Selling, Low Stock, Recent Sales, Sales Statics, lima tab Recent Transactions (termasuk ejaan legacy `Puchase` dan urutan khusus Invoice), Top Customers, Top Categories/donut, serta Order Statistics heatmap.
+- **BRVS/data:** page 345 baris turun menjadi composer 9 baris. Seluruh uang/metric disimpan numeric dalam snapshot typed/bundled dan dibaca strict melalui service, API tipis, serta `useAdminDashboard`; JSON rusak menghasilkan error eksplisit.
+- **BRVS-UI:** workspace 15 baris menyusun sembilan responsibility components untuk welcome, metrics, chart, overview, product panels, statics, transaction tabs, dan insights.
+- **Inventory:** evidence manual/runtime kini 46/186 route; 140 route tetap pending. Distribusi page menjadi 111 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 10 di atas 300 baris. Source memiliki 755 SFC, 562 component, 150 composable, 140 JSON bundled, dan 366 API files.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:dashboard` PASS; `npm run test:dashboard-browser` PASS; audit generator PASS. Browser mencakup transaction tabs, Invoice order, chart range, dropdown, alert dismiss, desktop/390px, overflow, dan zero runtime exception.
+- **Remaining risk:** Subscriptions, Kalkulator Dashboard, dan 138 route lain belum direkonsiliasi dalam batch ini; total 140 route legacy tetap pending. Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Analytics Dashboard
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menutup `/analytics-dashboard` terhadap HTML legacy, BRVS, dan BRVS-UI tanpa menyentuh data runtime pengguna.
+- **Parity/UI:** KPI Page View/Clicks/Conversions/New Users, conversion card dan View Details, grafik Performance, Session By Browser, Sessions by Country, serta tabel Top Pages dengan kolom literal legacy dipertahankan. Kontrol Refresh non-legacy dihapus.
+- **BRVS/data:** page 645 baris turun menjadi composer 9 baris. Snapshot analytics numeric dan typed dibaca strict melalui service/API/composable; JSON rusak menghasilkan error eksplisit dan bundled source hanya menjadi fallback file yang tidak tersedia.
+- **BRVS-UI:** workspace 18 baris menyusun komponen KPI, conversion, performance, dan traffic/table terpisah; feedback serta modal detail memakai komponen bersama.
+- **Inventory:** evidence manual/runtime kini 45/186 route; 141 route tetap pending. Distribusi page menjadi 110 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 11 di atas 300 baris. Source memiliki 746 SFC, 553 component, 149 composable, 139 JSON bundled, dan 365 API files.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:dashboard` PASS; `npm run test:dashboard-browser` PASS; audit generator PASS. Browser mencakup konten legacy, modal detail, desktop/390px, horizontal overflow, dan zero runtime exception.
+- **Remaining risk:** Dashboard utama, Subscriptions, Kalkulator Dashboard, dan 138 route lain belum direkonsiliasi dalam batch ini; secara total 141 route legacy tetap pending. Netlify durable mutation persistence juga belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Enam Route Master Workflow
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menutup `/flow-category`, `/flow-name`, `/flow-template`, `/work-flow`, `/add-work-flow`, dan `/edit-work-flow` terhadap HTML legacy, BRVS, serta BRVS-UI tanpa menimpa data runtime pengguna.
+- **Parity/UI:** tabel/filter/kolom, modal Category, modal Name lengkap dengan Assignee/Flow Type/Incentive, editor Template dengan inline information dan submodal Data Select, navigasi Edit terpisah, serta form Add/Edit Work Flow bersama dipertahankan. List memakai shared Print/PDF.
+- **BRVS/data:** empat repository lama dipindah ke strict `readJSON`/`writeJSON`; validation/filter/numbering berada di domain service. Context editor typed menggabungkan produk, kategori, nama flow, template, dan catalog legacy bundled. Submodal Add Category/Name kini menyimpan lewat API, bukan hanya array lokal.
+- **BRVS-UI:** `WorkFlowDocumentForm.vue` turun dari 705 menjadi 78 baris dan dipisah menjadi Product Picker, Flow Catalog, dan Arrange Panel. `FlowTemplateModal.vue` turun dari 416 menjadi 50 baris dengan Information Editor terpisah. Enam page berada pada 27-68 baris.
+- **Inventory:** evidence manual/runtime kini 44/186 route; 142 route tetap pending. Source memiliki 741 SFC dan 138 JSON bundled.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:workflow` PASS; `npm run test:workflow-browser` PASS; audit generator PASS. Browser mencakup modal/persistence, create–redirect, selected edit, desktop/390px, dan zero runtime exception.
+- **Remaining risk:** Netlify durable mutation persistence belum tersedia; 142 route lain belum direkonsiliasi. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Job Progress
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menutup gap `/job-progress` sebagai route kesembilan pada batch Orders/Job Order, tanpa mengubah arsip legacy atau data runtime pengguna selama test.
+- **Parity/UI:** KPI, filter Date dan Job Proses, kolom literal `Complete by`/`Time`, status progress, aksi Complete/Pending, serta Print/PDF mengikuti referensi legacy dan standar tabel bersama pada desktop maupun viewport 390px.
+- **BRVS/data:** `job-progress.vue` turun dari 249 baris menjadi composer tipis. `useJobProgress.ts` menjadi satu pintu frontend; API tipis memakai `jobProgress.ts`; dataset typed menyimpan FK order/job/customer/branch/product/employee, spesifikasi input/output, Qty OK/Rusak, dan timestamp. KPI/filter diturunkan server dan mutation dipersistensikan. Array kosong tetap valid; JSON rusak menghasilkan error eksplisit.
+- **Inventory:** evidence manual/runtime kini 38/186 route; 148 route tetap pending. Distribusi page menjadi 109 <=20, 55 pada 21-150, 2 pada 151-200, 10 pada 201-300, dan 12 di atas 300 baris.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:orders` PASS; `npm run test:orders-browser` PASS; audit generator PASS. Browser mencakup mutation terpilih, reload, desktop/390px, dan zero runtime exception.
+- **Remaining risk:** enam route master Workflow berikutnya belum direkonsiliasi; Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Job Order Detail dan Editor Mandiri
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menutup gap `/job-order-detail` dan `/edit-job-order` yang dipanggil dari aksi Orders, tanpa mengubah arsip legacy atau data runtime pengguna selama test.
+- **Parity/UI:** detail mempertahankan Sales Information, Product Detail, urutan flow, aksi Edit/Print, dan explicit unavailable values. Editor mempertahankan Sales Information, Order Detail, Work Flow Default, Assignee, Incentive, dynamic Add/Arrange/Remove Flow, Flow Type conditional Branch/Outsource, serta information before/after completion.
+- **BRVS/data:** kedua page turun dari 276/307 menjadi 16/32 baris. `useJobOrderDocument.ts` menjadi satu pintu frontend; endpoint context menyelesaikan relasi Order–Job Order; `jobOrders.ts` memvalidasi dan menyimpan flow, info, assignee, serta incentive typed. Detail tidak lagi mengarang spesifikasi teknis yang tidak tersimpan.
+- **Inventory:** evidence manual/runtime kini 37/186 route; 149 route tetap pending. Distribusi page menjadi 109 <=20, 54 pada 21-150, 2 pada 151-200, 11 pada 201-300, dan 12 di atas 300 baris.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:orders` PASS; `npm run test:orders-browser` PASS setelah perbaikan implicit grid overflow; audit generator PASS. Browser mencakup selected detail, edit workflow–save–redirect–reload, desktop/390px, serta zero runtime exception.
+- **Remaining risk:** route Workflow lain belum direkonsiliasi; Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Enam Route Inti Orders
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Melanjutkan restorasi pada `/orders`, `/job-order`, `/job-list`, `/job-branch`, `/my-job`, dan `/my-incentive`; arsip legacy dan data runtime pengguna tidak diubah oleh pengujian.
+- **Parity/UI:** layout list/sidebar/KPI, filter, modal status/edit/view/history, nested information editor, assignee, incentive, serta aksi navigasi terpilih dipertahankan. Teks aktif di bawah 12px dihapus dan `job-order.vue` turun dari 182 menjadi 113 baris.
+- **BRVS/data:** Orders dan Job Orders memakai domain service/repository bersama; workflow counter, flow count, dan My Incentive totals dihitung dari data server aktif. Job Branch memvalidasi nested before/after information serta incentive. My Job memvalidasi Qty OK/Rusak. Array kosong tetap valid dan JSON rusak menghasilkan error.
+- **Inventory:** evidence manual/runtime kini 35/186 route; 151 route belum direkonsiliasi manual/browser. Distribusi page menjadi 108 <=20, 53 pada 21-150, 2 pada 151-200, 12 pada 201-300, dan 13 di atas 300 baris.
+- **Validation run:** `npm run test:orders` PASS; `npm run test:orders-browser` PASS; `npm run typecheck` PASS; `npm run build` PASS; audit legacy generator PASS. Browser suite mencakup enam route, selected modal/mutation, navigasi action terpisah, desktop/390px, dan zero runtime exception.
+- **Remaining risk:** `/job-order-detail` dan `/edit-job-order` masih menjadi route audit terpisah; Netlify durable mutation persistence belum tersedia. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Webstore dan Lifecycle Support Ticket
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Melanjutkan full-application restoration pada `/cart`, `/checkout`, `/wishlist`, `/reviews`, `/contact-form`, `/support-ticket`, dan `/support-ticket-detail` tanpa mengubah arsip legacy atau menimpa data runtime pengguna.
+- **Parity/UI:** lima list read-only mempertahankan KPI, filter, kolom literal, currency numerik, rating star, serta ketiadaan kolom Action sesuai approved behavior. Support Ticket mempertahankan empat KPI, sembilan kolom, Add lengkap termasuk image/identity/location/description 60 karakter, dan View kembali bernavigasi ke halaman detail sesuai legacy.
+- **Lifecycle:** detail hardcoded diganti selected-record detail melalui `id`. Edit memakai editor yang sama dengan Add; chat, Close/Reopen, delete, feedback, dan reload memakai API/repository yang sama. Record not-found menghasilkan 404, bukan form/detail contoh.
+- **BRVS:** enam GET route menjadi adapter tipis menuju `webstoreLists.ts`; Support Ticket GET/POST/PUT/DELETE menuju `supportTickets.ts` yang menangani filter, stats, validasi, ID, activity, chat, dan persistence. Detail UI dipecah menjadi panel detail, chat, workspace, dan route composer 15 baris.
+- **Inventory:** parity matrix kini mencatat 29 route dengan manual/runtime evidence; 147/186 masih memiliki gap static/manual dan 157/186 belum mendapat rekonsiliasi manual/browser penuh. Page 151-200 turun dari empat menjadi tiga.
+- **Validation run:** `npm run test:webstore` PASS; `npm run test:webstore-browser` PASS; `npm run typecheck` PASS; `npm run build` PASS. API suite mencakup enam dataset, filter/stats, numeric money, ticket CRUD/detail/chat/status/reload, invalid payload, 404, empty array, dan invalid JSON. Browser mencakup lima list pada 390px serta Add/detail navigation/Edit/chat/status/delete pada desktop tanpa runtime exception.
+- **Remaining risk:** storage image avatar dan mutation durable pada Netlify belum memiliki adapter production; 157 route legacy lain tetap pending. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Sales Dashboard, Sales Report, Sales Note, dan Sales Receipt
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Melanjutkan full-application restoration pada `/sales-dashboard`, `/sales-report`, `/sales-note`, dan `/sales-receipt` tanpa mengubah arsip legacy atau me-seed ulang data runtime pengguna.
+- **Parity/UI:** Dashboard mempertahankan KPI, Best Seller, Recent Transactions, analytics, country markers, dan Product Details. Sales Report kembali memakai toolbar Search + Date saja, delapan KPI, delapan kolom literal, detail `Print Outdoor` 10 baris, serta alur PDF/Print. Sales Note/Receipt memakai transaksi terpilih melalui `id/no` dan tidak lagi bergantung pada contoh tetap. Token teks 11px pada dokumen dinaikkan ke standar 12px.
+- **BRVS/BRVS-UI:** `sales-dashboard.vue` turun dari 964 menjadi 9 baris; UI dipecah menjadi Header, KPI, Best Seller, Transactions, Analytics, Countries, dan Dialogs. Dashboard/report melewati composable dan Nitro adapter tipis menuju `salesDashboard.ts`/`salesReports.ts` dengan kontrak typed. `SalesReportWorkspace.vue` menjadi orchestrator 132 baris dan tabel/detail dipisah.
+- **Data integrity:** dashboard memakai snapshot typed read-only dari server. Filter Search/Date laporan dijalankan di service; runtime array kosong tetap valid dan JSON fisik rusak menghasilkan 500. Nilai uang tetap angka murni. Note/Receipt memakai data Sales yang benar-benar dipilih.
+- **Inventory:** parity matrix kini mencatat 22 route dengan manual/runtime evidence; 153/186 masih memiliki gap static/manual dan 164/186 belum mendapat rekonsiliasi manual/browser penuh. Backlog page >300 turun dari 14 menjadi 13.
+- **Validation run:** `npm run test:sales-adjacent` PASS; `npm run test:sales-adjacent-browser` PASS; `npm run build` PASS; `npm run typecheck` PASS pada source batch; audit generator PASS. Browser memeriksa dashboard/dialog, kontrol dan detail report, selected-record note/receipt, viewport 390px, overflow, dan runtime exception.
+- **Remaining risk:** Netlify mutation persistence/durable storage belum dibuktikan; 164 route legacy masih memerlukan audit manual/browser dan gap BRVS/BRVS-UI lintas modul tetap terbuka. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Payment dan Penutupan P0 Aset Legacy
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Melanjutkan master full-application parity pada `/payments`, `/payment-inflow`, dan `/payment-outflow`; memulihkan delapan aset arsip yang sebelumnya hilang tanpa mengubah manifest atau data runtime pengguna.
+- **Parity/UI:** dataset daftar cocok dengan baris default legacy. Balance Summary kembali collapsed; filter source/status dan page-size non-legacy dihilangkan. Add/Edit/Payment mempertahankan date, method/transfer, transaction details, note, dan amount; split payment kini dinamis, dapat menambah baris, dan tersimpan. Desktop dan viewport 390px tidak mengalami document/dialog overflow.
+- **BRVS:** page 81/134/134 baris menyusun komponen domain. `PaymentFlowEditor.vue` 245 baris mengorkestrasi `PaymentMethodFields`, `PaymentSplitEditor`, dan `PaymentTransactionDetailsTable`. Request melalui `usePayments()`/`usePaymentFlow()`; Nitro routes menjadi adapter tipis; validasi, derived total/status/history, dan persistence berada di `paymentData.ts`, `paymentFlowData.ts`, dan `paymentFlow.ts` dengan kontrak `payment.ts`/`payment-flow.ts`.
+- **Data integrity:** amount uang tetap numerik; server menolak overpayment, menurunkan status transaksi dari pembayaran, dan menyimpan split history. Record lama tanpa transaction details menampilkan keadaan unavailable/kosong dan tidak mendapat rincian buatan.
+- **P0 assets:** `sticky-kit.js`, `sticky-kit.min.js`, dan enam file Summernote root dipulihkan dari `app/assets/plugins` ke path `legacy/static-source`; SHA-256 masing-masing identik dengan entry manifest. `MIGRATION_MANIFEST.json` tidak diubah. `.gitignore` mendapat pengecualian sempit agar delapan file di direktori `dist` dapat ikut delivery. Global `--check-hashes` tetap merupakan perbandingan snapshot pramigrasi dan bukan gate source aktif.
+- **Inventory:** parity matrix kini mencatat 18 route dengan manual/runtime evidence; 156/186 masih memiliki gap static/manual dan 168/186 belum mendapat rekonsiliasi manual/browser penuh.
+- **Validation run:** `npm run validate:structure` PASS (0 failure); `npm run test:payment` PASS; `npm run test:payment-browser` PASS; `npm run typecheck` PASS; `npm run build` PASS; `node scripts/audit-legacy-parity.mjs --write` PASS; `git diff --check` PASS setelah newline diperbaiki. Browser suite memeriksa collapse/expand, modal Add, split rows, reactive amount/status, desktop/390px overflow, dan runtime exception.
+- **Remaining risk:** Netlify mutation persistence/durable storage belum dibuktikan; integrasi Payment lintas ledger belum direkonsiliasi; 14 page masih >300 baris dan 168 route legacy belum mendapat audit manual/browser penuh. Seluruh aplikasi belum boleh disebut `verified`.
+- **Git:** branch `main`; HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+
+### Rekonsiliasi Invoice, Delivery Note, Sales Return, Quotation, dan RFQ
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Melanjutkan master parity audit pada lima dokumen transaksi Sales dan route add/edit/detail terkait, tanpa mengubah arsip legacy atau data runtime pengguna.
+- **Parity/UI:** urutan kolom dan aksi lima daftar direkonsiliasi; filter memakai `TableFilterSelect`. Token global `h-9`/`min-h-9` dikalibrasi menjadi 36px aktual pada root 14px. Browser membuktikan modal Add Sales Return, halaman Add Quotation, editor dokumen Delivery Note, modal pilihan penerima Duplicate RFQ, empat halaman detail, dan layout detail 390px tanpa overflow.
+- **Data integrity:** empat halaman detail yang sebelumnya berisi transaksi contoh tetap diganti menjadi selected-record detail melalui `id/no`. Detail historis yang tidak tersimpan kini menampilkan unavailable state eksplisit; tidak ada produk, alamat, rekening, atau identitas buatan.
+- **BRVS:** route Invoice, Delivery Note, Sales Return, Quotation, dan RFQ menjadi adapter tipis. Validasi, kalkulasi, nomor, status action, refund, dan persistensi berada di `server/utils/invoices.ts`, `deliveryNotes.ts`, `salesReturns.ts`, `quotations.ts`, dan `requestQuotations.ts`. Page detail turun menjadi 14-27 baris; domain detail component 61-72 baris.
+- **Behavior:** Complete/Reschedule Delivery Note, Accept/Reject Quotation, serta Order/Unavailable RFQ tersimpan melalui composable/API/service. Duplicate RFQ tetap memilih `To:` lebih dulu dan mempertahankan source. Sales Return total diturunkan server dari line item dan Payment-OUT tetap memvalidasi nilai/refund detail.
+- **Inventory:** `scripts/audit-legacy-parity.mjs` dan `docs/LEGACY_PARITY_AUDIT_2026-10-10.md` diperbarui. Route manual/runtime yang memiliki evidence menjadi 15; 159/186 masih memuat gap statis/manual dan 171 route masih belum mendapat rekonsiliasi manual/browser penuh.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:sales` PASS (14 grup, data sementara); browser desktop pada lima list dan empat detail PASS; representative 390px detail PASS; zero runtime exception; `git diff --check` PASS; audit generator PASS; tidak ada file baru 0-byte.
+- **Validation blocked:** `npm run validate:structure` FAIL tepat pada 8 aset legacy Sticky Kit/Summernote yang sumber hash cocoknya belum tersedia; tidak ada failure baru. Status final tidak dinaikkan menjadi `verified`. Netlify mutation persistence dan 171 route lain tetap pending.
+- **Git:** branch `main`; baseline HEAD/origin `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command. Perubahan `package-lock.json` adalah perubahan pengguna yang sudah ada dan tidak disentuh/revert.
+
+### Full Legacy Inventory dan Rekonsiliasi Sales/Add Sales
+
+- **Date:** 2026-10-10
+- **Actor:** Codex
+- **Scope:** Menjalankan master prompt full-content restoration secara bertahap: membangun inventaris seluruh halaman terlebih dahulu, memverifikasi sumber legacy terhadap repository asli, lalu menutup slice pertama Sales/Add Sales tanpa mengubah arsip legacy atau data runtime pengguna.
+- **Source evidence:** 186 HTML top-level lokal mempunyai pasangan 1:1 dan konten ternormalisasi identik dengan repository `Ekosattrio/DulankADmin-front-end-` branch `main` commit `6123241083ffa762405ab7330bab2ee40f694d5d`. Nuxt memiliki 188 page: 186 exact route mapping dan dua route tambahan `/faq-category` serta `/invoice-template`.
+- **Inventory (snapshot sebelum batch dokumen; superseded oleh entry di atas):** menambahkan generator `scripts/audit-legacy-parity.mjs` dan matrix kanonik `docs/LEGACY_PARITY_AUDIT_2026-10-10.md`. Saat itu 172/186 route masih membutuhkan review manual, 12 route hanya lolos kandidat static-text, dan Sales/Add Sales memiliki evidence manual/runtime tetapi status final tertahan gate P0.
+- **Sales/Add Sales:** Add Sales kini membuka route `/add-sales` sesuai HTML, Edit Sale tetap modal, dan keduanya berbagi `SalesDocumentForm.vue`. Form dipecah menjadi Parties, Items, Adjustments, dan Summary; mencakup customer plus Add Customer lengkap, alamat Shipping/Pickup terpisah, PO, produk dinamis, quantity stepper, voucher, shipping cost, diskon, PPN/transaction code, notes, serta seluruh baris kalkulasi legacy.
+- **BRVS:** `add-sales.vue` turun dari 571 menjadi 12 baris. Request frontend melewati `useAddSalesPage()`/`useSalesEditor()`, POST route Sales menjadi adapter tipis, dan validasi/kalkulasi/penomoran/persistensi berpindah ke `server/utils/sales.ts`. Lookup contact melewati `/api/sales/contacts`; 30 opsi legacy dipadukan dengan customer tersimpan di server tanpa request `/assets/json/*.json` dari UI.
+- **Data/contract:** menambahkan breakdown numerik `voucherDiscount`/`directDiscount`, transaction code, dan voucher legacy `DUILANK12`/`PROMO20`. Total server diturunkan dari item dan adjustment, bukan dipercaya dari UI. Data transaksi lama tanpa line item tidak diisi dengan rincian fiktif.
+- **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run test:sales` PASS dengan 14 grup skenario dan direktori data sementara; JSON voucher valid; `git diff --check` dijalankan pada tahap validasi akhir. Browser headless desktop dan 390px membuktikan zero document overflow, Add navigation, delapan More actions, Edit modal dengan record terpilih, dynamic row, Pickup switch, conditional transaction code, Add Customer modal lengkap, dan zero runtime exception/log error setelah source contact diperbaiki.
+- **Validation blocked/failed (snapshot sebelum batch dokumen):** `npm run validate:structure` tetap FAIL pada 8 aset legacy yang sudah dikenal (2 Sticky Kit dan 6 Summernote). `validate:structure -- --check-hashes` juga melaporkan snapshot hash historis berbeda pada source yang memang telah direvisi. Pada titik ini Netlify serverless mutation persistence dan 184 route legacy lain belum diuji manual/browser.
+- **Remaining risk (snapshot sebelum batch dokumen):** seluruh aplikasi belum 100% selesai; 14 page masih di atas 300 baris, 16 page berada pada 201-300, 55 Workspace/Screen di atas 200, P0 aset belum pulih, dan saat itu matrix menyisakan 184 route untuk rekonsiliasi perilaku/visual/runtime. Status `verified` tidak diberikan selama P0 belum hijau.
+- **Git:** branch `main`; baseline HEAD `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command. Remote read-only diverifikasi: `refs/heads/main` = `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`. Perubahan `package-lock.json` sudah ada sebelum pekerjaan ini dan tidak disentuh/revert.
 
 ## 2026-10-09
 

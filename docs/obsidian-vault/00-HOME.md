@@ -1,14 +1,14 @@
 ---
 title: Dulank Admin Knowledge Vault
 tags: [dulank, index, architecture]
-updated: 2026-10-09
+updated: 2026-10-10
 ---
 
 # Dulank Admin Knowledge Vault
 
 Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokumen aturan. Mulai audit atau implementasi dari halaman ini.
 
-> **Status terbaru 2026-10-09:** P0 TypeScript, direct-request UI, native browser dialog, dan direct print list/report sudah ditutup; Finance BRVS sudah implemented dan lolos verifikasi statis. Sebelas direct print tersisa telah diaudit sebagai dokumen/detail khusus. Status belum `verified` karena 8 aset legacy belum memiliki sumber dengan hash yang cocok, backlog BRVS-UI lintas menu, serta build/browser/persistence runtime belum diuji. Gunakan audit pada item 12 sebagai TODO kanonik.
+> **Status terbaru 2026-10-11:** seluruh 186 HTML lokal sudah dipetakan 1:1 dan dibuktikan identik secara konten dengan repository referensi. Sebanyak 50 route pada Sales/dokumen, Payment, Sales-adjacent, Webstore/Support Ticket, sembilan route Orders/Job Order, enam route master Workflow, Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, dan Voucher sudah direkonsiliasi manual serta memiliki evidence API/persistence/data safeguards dan browser desktop/390px. Delapan aset Sticky Kit/Summernote telah dipulihkan dari salinan internal yang hash SHA-256-nya identik dengan manifest; structure validator kini lulus. Seluruh aplikasi belum `verified` karena 136 route legacy lain masih menunggu audit manual/browser dan gap BRVS/BRVS-UI lintas modul tetap terbuka. Gunakan audit pada item 12 sebagai TODO kanonik dan item 13 sebagai matrix parity penuh.
 
 ## Jalur Baca
 
@@ -24,6 +24,7 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 10. [[10-AI-QUALITY-GATES]]
 11. [[11-PAGE-CLEANLINESS-BRVS]]
 12. [Audit kepatuhan codebase dan master TODO 2026-10-09](../CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md)
+13. [Full legacy parity inventory 2026-10-10](../LEGACY_PARITY_AUDIT_2026-10-10.md)
 
 ## Modul Audit 2026-10-08
 
@@ -50,6 +51,7 @@ Vault ini adalah peta pengetahuan proyek, bukan pengganti source code atau dokum
 - [Troubleshooting warning Vue](../TROUBLESHOOTING_VUE_WARNINGS.md)
 - [Matrix status dan kebersihan page](../PAGE_CLEANLINESS_AND_STATUS_MATRIX.md)
 - [Audit kepatuhan codebase dan master TODO 2026-10-09](../CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md)
+- [Full legacy parity inventory 2026-10-10](../LEGACY_PARITY_AUDIT_2026-10-10.md)
 - [Dokumentasi proyek/skripsi](../DOKUMENTASI_SKRIPSI_KACETAK.md)
 - [README](../../README.md)
 - [Panduan ringkas Claude](../../CLAUDE.md)

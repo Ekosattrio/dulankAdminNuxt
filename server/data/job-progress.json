@@ -1,0 +1,27 @@
+[
+  {
+    "id": "1", "progressCode": "PROG-001", "jobOrderId": "1", "orderId": "ORD-2510000001", "customerId": "ID000001", "branchId": "BR-01", "productId": "PRD-001", "employeeId": "EMP-001",
+    "product": "Kartu Nama", "description": "Kartu Nama 90x55mm, Art Carton 310gr, Laminasi Glossy 2 Sisi", "process": "Printing", "completedBy": "Eko Satrio", "completedAt": "2025-10-01 09:30", "note": "Selesai cetak, kualitas baik.", "isCompleted": true,
+    "inputSpecs": { "size": "90x55mm", "material": "Art Carton 310gr" }, "outputSpecs": { "finishing": "Laminasi Glossy 2 Sisi" }, "qtyOk": 1000, "qtyRusak": 0, "createdAt": "2025-10-01T08:00:00.000Z", "updatedAt": "2025-10-01T09:30:00.000Z"
+  },
+  {
+    "id": "2", "progressCode": "PROG-002", "jobOrderId": "1", "orderId": "ORD-2510000001", "customerId": "ID000001", "branchId": "BR-01", "productId": "PRD-001", "employeeId": "EMP-002",
+    "product": "Kartu Nama", "description": "Kartu Nama 90x55mm, Art Carton 310gr, Laminasi Glossy 2 Sisi", "process": "Cutting", "completedBy": "Desman Dwi", "completedAt": "2025-10-01 11:45", "note": "Sudah di potong, siap laminasi.", "isCompleted": true,
+    "inputSpecs": { "size": "90x55mm" }, "outputSpecs": { "cutting": "Completed" }, "qtyOk": 1000, "qtyRusak": 0, "createdAt": "2025-10-01T10:00:00.000Z", "updatedAt": "2025-10-01T11:45:00.000Z"
+  },
+  {
+    "id": "3", "progressCode": "PROG-003", "jobOrderId": "2", "orderId": "ORD-2510000002", "customerId": "ID000002", "branchId": "BR-01", "productId": "PRD-002",
+    "product": "Flyer", "description": "Flyer A5, Art Carton 260gr, Laminasi Doff 1 Sisi", "process": "Printing", "completedBy": "", "completedAt": "", "note": "", "isCompleted": false,
+    "inputSpecs": { "size": "A5", "material": "Art Carton 260gr" }, "outputSpecs": {}, "qtyOk": 0, "qtyRusak": 0, "createdAt": "2025-10-01T12:00:00.000Z", "updatedAt": "2025-10-01T12:00:00.000Z"
+  },
+  {
+    "id": "4", "progressCode": "PROG-004", "jobOrderId": "2", "orderId": "ORD-2510000002", "customerId": "ID000002", "branchId": "BR-01", "productId": "PRD-002", "employeeId": "EMP-003",
+    "product": "Flyer", "description": "Flyer A5, Art Carton 260gr, Laminasi Doff 1 Sisi", "process": "Cutting", "completedBy": "Adi Nugroho", "completedAt": "", "note": "Sedang proses potong, antrian panjang.", "isCompleted": false,
+    "inputSpecs": { "size": "A5" }, "outputSpecs": {}, "qtyOk": 0, "qtyRusak": 0, "createdAt": "2025-10-01T12:15:00.000Z", "updatedAt": "2025-10-01T12:15:00.000Z"
+  },
+  {
+    "id": "5", "progressCode": "PROG-005", "jobOrderId": "3", "orderId": "ORD-2510000003", "customerId": "ID000003", "branchId": "BR-01", "productId": "PRD-003", "employeeId": "EMP-001",
+    "product": "Banner", "description": "Spanduk Flexi 280gr, Ukuran 3x1 Meter, Mata Ayam di Setiap Sudut", "process": "Printing", "completedBy": "Eko Satrio", "completedAt": "2025-09-30 18:00", "note": "Hasil cetak oke, warna sesuai.", "isCompleted": true,
+    "inputSpecs": { "material": "Flexi 280gr", "size": "3x1 Meter" }, "outputSpecs": { "finishing": "Mata Ayam" }, "qtyOk": 1, "qtyRusak": 0, "createdAt": "2025-09-30T15:00:00.000Z", "updatedAt": "2025-09-30T18:00:00.000Z"
+  }
+]

@@ -16,8 +16,8 @@ function getChartPath(points: number[], maxVal = 1000, height = 90, width = 340)
     .join(' ')
 }
 
-const thisWeekPath = computed(() => getChartPath([0, 100, 0, 0, 1000, 0, 0]))
-const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
+const thisWeekPath = computed(() => getChartPath(props.telemetry.chart.thisWeek))
+const lastWeekPath = computed(() => getChartPath(props.telemetry.chart.lastWeek))
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
       <div class="flex flex-col justify-between">
         <div>
           <div class="text-xs font-semibold text-slate-400">User (current)</div>
-          <div class="text-3xl font-bold text-white mb-2">{{ telemetry.currentUsers || 56 }}</div>
+          <div class="text-3xl font-bold text-white mb-2">{{ telemetry.currentUsers }}</div>
         </div>
         <div class="w-full pt-2">
           <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
@@ -41,6 +41,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
             <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
             <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
           </svg>
+          <div class="flex justify-between text-xs text-slate-500"><span v-for="label in telemetry.chart.labels" :key="label">{{ label }}</span></div>
         </div>
       </div>
 
@@ -48,8 +49,8 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
       <div class="flex flex-col justify-between">
         <div>
           <div class="text-xs font-semibold text-slate-400">Total Request (7d total)</div>
-          <div class="text-3xl font-bold text-white">{{ (telemetry.totalRequest || 7920).toLocaleString() }} Requests</div>
-          <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">{{ telemetry.requestGrowth || '+5,056.2%' }}</div>
+          <div class="text-3xl font-bold text-white">{{ telemetry.totalRequest }} Requests</div>
+          <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">{{ telemetry.requestGrowth }}</div>
         </div>
         <div class="w-full pt-2">
           <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
@@ -57,6 +58,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
             <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
             <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
           </svg>
+          <div class="flex justify-between text-xs text-slate-500"><span v-for="label in telemetry.chart.labels" :key="label">{{ label }}</span></div>
         </div>
       </div>
 
@@ -64,8 +66,8 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
       <div class="flex flex-col justify-between">
         <div>
           <div class="text-xs font-semibold text-slate-400">Total Calculate (7d total)</div>
-          <div class="text-3xl font-bold text-white">{{ (telemetry.totalCalculate || 18032).toLocaleString() }} Calculates</div>
-          <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">{{ telemetry.calculateGrowth || '+2,056.2%' }}</div>
+          <div class="text-3xl font-bold text-white">{{ telemetry.totalCalculate }} Calculates</div>
+          <div class="text-xs font-semibold text-[#28C76F] mt-0.5 mb-2">{{ telemetry.calculateGrowth }}</div>
         </div>
         <div class="w-full pt-2">
           <svg viewBox="0 0 340 90" class="w-full h-24 overflow-visible">
@@ -73,6 +75,7 @@ const lastWeekPath = computed(() => getChartPath([16, 16, 15, 15, 16, 16, 16]))
             <path :d="thisWeekPath" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
             <circle cx="226" cy="18" r="4.5" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
           </svg>
+          <div class="flex justify-between text-xs text-slate-500"><span v-for="label in telemetry.chart.labels" :key="label">{{ label }}</span></div>
         </div>
       </div>
     </div>

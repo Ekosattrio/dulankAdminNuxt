@@ -44,12 +44,16 @@
     "date": "2025-01-16",
     "channel": "Website",
     "details": [
-      { "product": "Flexy Frontlit 280gsm", "soldQty": 450, "unit": "Meter", "totalRevenue": 9000000, "percentage": 36.0 },
-      { "product": "Flexy Korea 440gsm", "soldQty": 120, "unit": "Meter", "totalRevenue": 6000000, "percentage": 24.0 },
-      { "product": "Flexy Jerman 510gsm", "soldQty": 85, "unit": "Meter", "totalRevenue": 6800000, "percentage": 27.2 },
-      { "product": "Sticker Vinyl Outdoor", "soldQty": 200, "unit": "Meter", "totalRevenue": 14000000, "percentage": 56.0 },
-      { "product": "Sticker One Way Vision", "soldQty": 50, "unit": "Meter", "totalRevenue": 4500000, "percentage": 18.0 },
-      { "product": "Backlit Film Outdoor", "soldQty": 30, "unit": "Meter", "totalRevenue": 3600000, "percentage": 14.4 }
+      { "product": "Flexy Frontlit 280gsm", "soldQty": 450, "unit": "Meter", "totalRevenue": 9000000, "percentage": 15.69 },
+      { "product": "Flexy Korea 440gsm", "soldQty": 120, "unit": "Meter", "totalRevenue": 6000000, "percentage": 10.46 },
+      { "product": "Flexy Jerman 510gsm", "soldQty": 85, "unit": "Meter", "totalRevenue": 6800000, "percentage": 11.86 },
+      { "product": "Sticker Vinyl Outdoor", "soldQty": 200, "unit": "Meter", "totalRevenue": 14000000, "percentage": 24.41 },
+      { "product": "Sticker One Way Vision", "soldQty": 50, "unit": "Meter", "totalRevenue": 4500000, "percentage": 7.85 },
+      { "product": "Backlit Film Outdoor", "soldQty": 30, "unit": "Meter", "totalRevenue": 3600000, "percentage": 6.28 },
+      { "product": "Kain Banner / Pongee", "soldQty": 150, "unit": "Meter", "totalRevenue": 4500000, "percentage": 7.85 },
+      { "product": "Flexy Backlit China", "soldQty": 60, "unit": "Meter", "totalRevenue": 3900000, "percentage": 6.8 },
+      { "product": "Sticker Transparan Outdoor", "soldQty": 40, "unit": "Meter", "totalRevenue": 2800000, "percentage": 4.88 },
+      { "product": "Mesh Banner (Berlubang)", "soldQty": 25, "unit": "Meter", "totalRevenue": 2250000, "percentage": 3.92 }
     ]
   },
   {

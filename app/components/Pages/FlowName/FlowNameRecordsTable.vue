@@ -52,10 +52,10 @@ const columns = [
       <!-- Date Range Picker -->
       <DateRangePicker
         :model-value="filterDateRange"
-        aria-label="Date"
+        aria-label="Search Assignee"
         input-class="w-44 max-w-44"
         align="end"
-        placeholder="Date"
+        placeholder="Search Assignee"
         @update:model-value="$emit('update:filterDateRange', $event)"
       />
 

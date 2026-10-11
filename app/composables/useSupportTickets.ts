@@ -1,4 +1,10 @@
-import type { SupportTicket, SupportTicketStats, SupportTicketFilterQuery } from '#server/types/support-ticket'
+import type {
+  SupportTicket,
+  SupportTicketCommand,
+  SupportTicketStats,
+  SupportTicketFilterQuery,
+  SupportTicketUpdateCommand,
+} from '#server/types/support-ticket'
 
 interface ResponseData {
   success: boolean
@@ -23,7 +29,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
     totalDeleteTickets: 0
   })
 
-  const createTicket = async (payload: Partial<SupportTicket> & { customerName?: string; email?: string; phone?: string; descriptions?: string }) => {
+  const createTicket = async (payload: SupportTicketCommand) => {
     const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>('/api/webstore/support-tickets', {
       method: 'POST',
       body: payload
@@ -32,7 +38,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
     return res
   }
 
-  const updateTicket = async (id: string, payload: Partial<SupportTicket> & { newMessage?: string; senderName?: string }) => {
+  const updateTicket = async (id: string, payload: SupportTicketUpdateCommand) => {
     const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>(`/api/webstore/support-tickets/${id}`, {
       method: 'PUT',
       body: payload

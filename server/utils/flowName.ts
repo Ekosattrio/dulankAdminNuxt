@@ -2,6 +2,33 @@ import type { FlowName, FlowNameFilterParams, FlowNameFormData } from '#server/t
 import { isDateWithinRange } from './dateRange'
 import { readFlowNameData, writeFlowNameData } from './flowNameData'
 
+const allowedUnits = new Set(['', 'Per Job', 'Per Meter', 'Per Pieces', 'Per Ream'])
+const allowedTypes = new Set(['In-House', 'Branch Store', 'OutSource'])
+
+function normalizeFlowType(value?: string): string {
+  const normalized = (value || 'In-House').trim().toLowerCase().replace(/[-_\s]/g, '')
+  if (normalized === 'inhouse') return 'In-House'
+  if (normalized === 'branchstore') return 'Branch Store'
+  if (normalized === 'outsource' || normalized === 'outs') return 'OutSource'
+  throw createError({ statusCode: 400, statusMessage: 'Invalid flow type' })
+}
+
+function validateIncentive(value: unknown): number {
+  const amount = value === undefined ? 0 : Number(value)
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw createError({ statusCode: 400, statusMessage: 'Incentive amount must be a non-negative number' })
+  }
+  return amount
+}
+
+function validateUnit(value?: string): string {
+  const unit = value === undefined ? 'Per Job' : value.trim()
+  if (!allowedUnits.has(unit)) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid incentive unit' })
+  }
+  return unit
+}
+
 function nextFlowNameNo(items: FlowName[]): string {
   const numbers = items
     .map((item) => {
@@ -92,10 +119,10 @@ export function createFlowName(payload: FlowNameFormData): FlowName {
     no: payload.no?.trim() || nextFlowNameNo(items),
     category,
     name,
-    incentiveAmount: payload.incentiveAmount !== undefined ? Number(payload.incentiveAmount) : 0,
-    unitIncentive: payload.unitIncentive !== undefined ? payload.unitIncentive.trim() : 'Per Job',
+    incentiveAmount: validateIncentive(payload.incentiveAmount),
+    unitIncentive: validateUnit(payload.unitIncentive),
     flowAssignee: payload.flowAssignee?.trim() || 'Admin',
-    flowType: payload.flowType?.trim() || 'In-House',
+    flowType: normalizeFlowType(payload.flowType),
     createDate: payload.createDate?.trim() || dateFormatted,
   }
 
@@ -129,10 +156,10 @@ export function updateFlowName(id: string, payload: FlowNameFormData): FlowName 
     ...current,
     category,
     name,
-    incentiveAmount: payload.incentiveAmount !== undefined ? Number(payload.incentiveAmount) : current.incentiveAmount,
-    unitIncentive: payload.unitIncentive !== undefined ? payload.unitIncentive.trim() : current.unitIncentive,
+    incentiveAmount: payload.incentiveAmount !== undefined ? validateIncentive(payload.incentiveAmount) : current.incentiveAmount,
+    unitIncentive: payload.unitIncentive !== undefined ? validateUnit(payload.unitIncentive) : current.unitIncentive,
     flowAssignee: payload.flowAssignee !== undefined ? payload.flowAssignee.trim() : current.flowAssignee,
-    flowType: payload.flowType !== undefined ? payload.flowType.trim() : current.flowType,
+    flowType: payload.flowType !== undefined ? normalizeFlowType(payload.flowType) : normalizeFlowType(current.flowType),
   }
 
   items[index] = updated

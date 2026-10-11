@@ -22,6 +22,7 @@ export interface SalesDocument {
   notes: string
   voucher: string
   taxRate: number
+  transactionCode?: string
 }
 export interface SalesPayment {
   id: string

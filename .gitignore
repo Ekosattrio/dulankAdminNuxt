@@ -5,6 +5,16 @@
 .nuxt/**
 dist
 dist/**
+!legacy/static-source/assets/plugins/sticky-kit-master/dist/
+!legacy/static-source/assets/plugins/sticky-kit-master/dist/sticky-kit.js
+!legacy/static-source/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js
+!legacy/static-source/assets/plugins/summernote/dist/
+!legacy/static-source/assets/plugins/summernote/dist/summernote-bs4.css
+!legacy/static-source/assets/plugins/summernote/dist/summernote-bs4.js
+!legacy/static-source/assets/plugins/summernote/dist/summernote-lite.css
+!legacy/static-source/assets/plugins/summernote/dist/summernote-lite.js
+!legacy/static-source/assets/plugins/summernote/dist/summernote.css
+!legacy/static-source/assets/plugins/summernote/dist/summernote.js
 
 # Dependencies
 node_modules

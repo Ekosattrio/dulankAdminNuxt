@@ -124,11 +124,11 @@ export function printJobDetailTicket(job: Record<string, any>) {
     <div class="section-title">SPESIFIKASI TEKNIS PRODUKSI</div>
     <table>
       <tbody>
-        <tr><th style="width: 25%;">Kertas / Bahan</th><td style="width: 25%;">${job.kertas || 'Ap150 Gr'}</td><th style="width: 25%;">Jumlah Plat</th><td style="width: 25%;">${job.jumlahPlat || '4 pcs'}</td></tr>
-        <tr><th>Sisi Cetak</th><td>${job.sisiCetak || '2 Sisi'}</td><th>Jumlah Bahan</th><td>${job.jumlahBahan || '5100'}</td></tr>
-        <tr><th>Ukuran Kertas</th><td>${job.panjangKertas || '32.5 cm'} x ${job.lebarKertas || '45 cm'}</td><th>Insit / Rusak</th><td>${job.jumlahInsit || '100'}</td></tr>
-        <tr><th>Kater / Model</th><td>${job.katerModel || '1 kater'}</td><th>Jumlah Butuh</th><td>${job.jumlahButuh || '5000'}</td></tr>
-        <tr><th>Ada Contoh</th><td>${job.adaContoh || 'Tidak'}</td><th>Acc Warna</th><td>${job.accWarna || 'Tidak'}</td></tr>
+        <tr><th style="width: 25%;">Kertas / Bahan</th><td style="width: 25%;">${job.kertas || '-'}</td><th style="width: 25%;">Jumlah Plat</th><td style="width: 25%;">${job.jumlahPlat || '-'}</td></tr>
+        <tr><th>Sisi Cetak</th><td>${job.sisiCetak || '-'}</td><th>Jumlah Bahan</th><td>${job.jumlahBahan || '-'}</td></tr>
+        <tr><th>Ukuran Kertas</th><td>${job.panjangKertas || '-'} x ${job.lebarKertas || '-'}</td><th>Insit / Rusak</th><td>${job.jumlahInsit || '-'}</td></tr>
+        <tr><th>Kater / Model</th><td>${job.katerModel || '-'}</td><th>Jumlah Butuh</th><td>${job.jumlahButuh || '-'}</td></tr>
+        <tr><th>Ada Contoh</th><td>${job.adaContoh || '-'}</td><th>Acc Warna</th><td>${job.accWarna || '-'}</td></tr>
         <tr><th>Catatan Khusus</th><td colspan="3">${job.keterangan || '-'}</td></tr>
       </tbody>
     </table>
@@ -140,7 +140,7 @@ export function printJobDetailTicket(job: Record<string, any>) {
       </div>
       <div>
         <div style="height: 50px;"></div>
-        <div class="sig-box">Operator Pelaksana (${job.assignedTo || 'Operator'})</div>
+        <div class="sig-box">Operator Pelaksana (${job.assignedTo || '-'})</div>
       </div>
     </div>
   `

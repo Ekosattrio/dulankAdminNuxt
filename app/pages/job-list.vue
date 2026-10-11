@@ -2,7 +2,6 @@
 import type { JobListItem } from '#server/types/job-list'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useJobList } from '~/composables/useJobList'
-import { printSalesRows } from '~/utils/salesDocuments'
 import JobListDetailModal from '~/components/Pages/JobList/JobListDetailModal.vue'
 import JobListFlowSidebar from '~/components/Pages/JobList/JobListFlowSidebar.vue'
 import JobListRecordsTable from '~/components/Pages/JobList/JobListRecordsTable.vue'

@@ -15,6 +15,7 @@ const props = withDefaults(
     searchable?: boolean
     searchPlaceholder?: string
     defaultPageSize?: number
+    showPageSize?: boolean
     search?: string
   }>(),
   {
@@ -23,6 +24,7 @@ const props = withDefaults(
     searchable: true,
     searchPlaceholder: 'Search...',
     defaultPageSize: 10,
+    showPageSize: true,
   },
 )
 
@@ -180,6 +182,7 @@ watch(totalPages, (value) => {
         <slot name="filters" />
         <!-- Page Size Selector -->
         <select
+          v-if="showPageSize"
           v-model="pageSize"
           aria-label="Rows per page"
           :class="tableControlClass"

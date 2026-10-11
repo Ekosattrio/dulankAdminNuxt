@@ -1,9 +1,14 @@
 import type { Order, OrderFilterParams, OrderFormData, OrderStats, OrderStatus } from '#server/types/order'
 import { isDateWithinRange } from './dateRange'
-import { readOrderData, writeOrderData } from './orderData'
+
+const filename = 'orders.json'
+const statuses: OrderStatus[] = ['Complete', 'Waiting', 'Processing', 'Cancel']
+
+function readItems(): Order[] { return readJSON<Order[]>(filename, []) }
+function writeItems(items: Order[]): void { writeJSON(filename, items) }
 
 export function listOrders(filters: OrderFilterParams = {}): Order[] {
-  const items = readOrderData()
+  const items = readItems()
   const search = filters.search?.trim().toLowerCase()
   const shipping = filters.shipping?.trim().toLowerCase()
   const status = filters.status?.trim().toLowerCase()
@@ -36,7 +41,7 @@ export function listOrders(filters: OrderFilterParams = {}): Order[] {
 }
 
 export function getOrderStats(): OrderStats {
-  const items = readOrderData()
+  const items = readItems()
   const customers = new Set(items.map((i) => i.customer.trim().toLowerCase()))
 
   return {
@@ -48,12 +53,15 @@ export function getOrderStats(): OrderStats {
 }
 
 export function getOrderById(id: string): Order | null {
-  const items = readOrderData()
+  const items = readItems()
   return items.find((item) => String(item.id) === String(id) || item.no === id) || null
 }
 
 export function updateOrderStatus(id: string, status: OrderStatus, statusBy: string = 'Admin'): Order {
-  const items = readOrderData()
+  if (!statuses.includes(status)) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid order status' })
+  }
+  const items = readItems()
   const index = items.findIndex((item) => String(item.id) === String(id) || item.no === id)
   if (index === -1) {
     throw createError({ statusCode: 404, statusMessage: 'Order not found' })
@@ -70,33 +78,39 @@ export function updateOrderStatus(id: string, status: OrderStatus, statusBy: str
   }
 
   items[index] = updated
-  writeOrderData(items)
+  writeItems(items)
   return updated
 }
 
 export function createOrder(payload: OrderFormData): Order {
-  const items = readOrderData()
+  const items = readItems()
+  if (!payload.customer?.trim() || !payload.orderDate?.trim() || !payload.salesChannel?.trim() || !payload.shipping?.trim()) {
+    throw createError({ statusCode: 400, statusMessage: 'Customer, order date, sales channel, and shipping are required' })
+  }
+  if (payload.status && !statuses.includes(payload.status)) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid order status' })
+  }
   const nextId = String(items.length ? Math.max(...items.map((i) => Number(i.id) || 0)) + 1 : 1)
   const nextNo = payload.no || `ORD-${Date.now().toString().slice(-8)}`
 
   const newOrder: Order = {
     id: nextId,
     no: nextNo,
-    customer: payload.customer || 'Guest Customer',
-    orderDate: payload.orderDate || new Date().toLocaleDateString('en-US'),
+    customer: payload.customer.trim(),
+    orderDate: payload.orderDate.trim(),
     status: payload.status || 'Waiting',
     statusBy: payload.statusBy || 'Admin',
-    salesChannel: payload.salesChannel || 'Quotation',
-    shipping: payload.shipping || 'Courier',
+    salesChannel: payload.salesChannel.trim(),
+    shipping: payload.shipping.trim(),
   }
 
   items.unshift(newOrder)
-  writeOrderData(items)
+  writeItems(items)
   return newOrder
 }
 
 export function deleteOrder(id: string): Order {
-  const items = readOrderData()
+  const items = readItems()
   const index = items.findIndex((item) => String(item.id) === String(id) || item.no === id)
   if (index === -1) {
     throw createError({ statusCode: 404, statusMessage: 'Order not found' })
@@ -106,6 +120,6 @@ export function deleteOrder(id: string): Order {
   if (!removed) {
     throw createError({ statusCode: 404, statusMessage: 'Order not found' })
   }
-  writeOrderData(items)
+  writeItems(items)
   return removed
 }

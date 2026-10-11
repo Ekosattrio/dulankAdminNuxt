@@ -13,7 +13,7 @@ export interface DeliveryNote {
   customer: string
   noSales: string
   shippingAddress: string
-  status: 'Complete' | 'Pending' | 'Ordered' | 'Received'
+  status: 'Complete' | 'Pending' | 'Ordered' | 'Received' | 'Rescheduled'
   dateStatus: string
   po: string
   shippingBy: string
@@ -36,7 +36,7 @@ export interface DeliveryNoteFormData {
   customer: string
   noSales: string
   shippingAddress: string
-  status: 'Complete' | 'Pending' | 'Ordered' | 'Received'
+  status: 'Complete' | 'Pending' | 'Ordered' | 'Received' | 'Rescheduled'
   po: string
   shippingBy: string
   reference: string

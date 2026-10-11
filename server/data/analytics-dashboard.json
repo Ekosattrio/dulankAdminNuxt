@@ -1,0 +1,32 @@
+{
+  "kpis": [
+    { "title": "Page View", "value": "13,647", "change": "+2.3%", "direction": "up", "icon": "feather" },
+    { "title": "Clicks", "value": "9,526", "change": "+8.1%", "direction": "up", "icon": "mouse-pointer" },
+    { "title": "Conversions", "value": "976", "change": "-0.3%", "direction": "down", "icon": "layers" },
+    { "title": "New Users", "value": "$123.6k", "change": "-10.6%", "direction": "down", "icon": "user-plus" }
+  ],
+  "conversion": { "rate": 65.2, "thisWeek": "23.5k", "lastWeek": "41.05k" },
+  "performance": {
+    "ALL": { "pageViews": [30,60,70,55,70,60,40,75,50,65,45,60], "clicks": [10,20,15,25,30,20,10,35,20,30,25,40] },
+    "1M": { "pageViews": [45,50,60,55,65,70,55,80,65,70,60,75], "clicks": [15,20,25,22,30,35,25,40,30,35,28,45] },
+    "6M": { "pageViews": [25,45,55,40,60,50,35,65,45,55,40,50], "clicks": [8,15,12,18,22,16,8,28,18,25,20,32] },
+    "1Y": { "pageViews": [30,60,70,55,70,60,40,75,50,65,45,60], "clicks": [10,20,15,25,30,20,10,35,20,30,25,40] }
+  },
+  "browsers": [
+    { "name": "Chrome", "percent": 62.5, "count": "5.06k" }, { "name": "Firefox", "percent": 12.3, "count": "1.5k" },
+    { "name": "Safari", "percent": 9.86, "count": "1.03k" }, { "name": "Brave", "percent": 3.15, "count": "0.3k" },
+    { "name": "Opera", "percent": 3.01, "count": "1.58k" }, { "name": "Falkon", "percent": 2.8, "count": "0.01k" },
+    { "name": "Web", "percent": 1.05, "count": "2.51k" }, { "name": "Other", "percent": 3.36, "count": "3.6k" }
+  ],
+  "regions": [
+    { "name": "Jawa Barat", "count": "659k", "percent": 45 }, { "name": "Jakarta", "count": "485k", "percent": 33 },
+    { "name": "Banten", "count": "355k", "percent": 24 }, { "name": "Jawa Tengah", "count": "204k", "percent": 14 }
+  ],
+  "topPages": [
+    { "path": "rasket/dashboard.html", "views": 4265, "avgTime": "09m:45s", "exitRate": "20.4%" },
+    { "path": "rasket/chat.html", "views": 2584, "avgTime": "05m:02s", "exitRate": "12.25%" },
+    { "path": "rasket/auth-login.html", "views": 3369, "avgTime": "04m:25s", "exitRate": "5.2%" },
+    { "path": "rasket/email.html", "views": 985, "avgTime": "02m:03s", "exitRate": "64.2%" },
+    { "path": "rasket/social.html", "views": 653, "avgTime": "15m:56s", "exitRate": "2.4%" }
+  ]
+}

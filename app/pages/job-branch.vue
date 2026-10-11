@@ -2,7 +2,7 @@
 import type { JobBranchItem, JobBranchUpdatePayload } from '#server/types/job-branch'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useJobBranches } from '~/composables/useJobBranches'
-import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
+import { salesErrorMessage } from '~/utils/salesDocuments'
 import JobBranchRecordsTable from '~/components/Pages/JobBranch/JobBranchRecordsTable.vue'
 import JobBranchSettingModal from '~/components/Pages/JobBranch/JobBranchSettingModal.vue'
 import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
@@ -89,6 +89,8 @@ const jobBranchPrintColumns = [
       :error="error ? 'Unable to load job branch data. Please try again.' : ''"
       @retry="refresh()"
     />
+
+    <SalesFeedback v-if="actionError" :error="actionError" @retry="actionError = ''" />
 
     <JobBranchRecordsTable
       v-if="!pending && !error"

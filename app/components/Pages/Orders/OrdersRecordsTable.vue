@@ -104,7 +104,7 @@ function getStatusBadgeClass(status: string) {
 
     <template #cell(status)="{ item }">
       <span
-        class="inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold"
+        class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold"
         :class="getStatusBadgeClass(item.status)"
       >
         {{ item.status }}
@@ -128,8 +128,8 @@ function getStatusBadgeClass(status: string) {
         <!-- Detail button -->
         <button
           type="button"
-          class="rounded bg-[#00cfe8] px-2 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:opacity-90"
-          @click="router.push(`/job-order`)"
+          class="rounded bg-[#00cfe8] px-2 py-1 text-xs font-semibold text-white shadow-sm transition hover:opacity-90"
+          @click="router.push({ path: '/job-order-detail', query: { id: item.id, orderId: item.id } })"
         >
           Detail
         </button>
@@ -137,7 +137,7 @@ function getStatusBadgeClass(status: string) {
         <!-- Status button -->
         <button
           type="button"
-          class="rounded bg-[#28c76f] px-2 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:opacity-90"
+          class="rounded bg-[#28c76f] px-2 py-1 text-xs font-semibold text-white shadow-sm transition hover:opacity-90"
           @click="$emit('update-status', item)"
         >
           Status
@@ -146,8 +146,8 @@ function getStatusBadgeClass(status: string) {
         <!-- Add Job Order button -->
         <button
           type="button"
-          class="rounded bg-[#82868b] px-2 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:opacity-90"
-          @click="router.push(`/job-order`)"
+          class="rounded bg-[#82868b] px-2 py-1 text-xs font-semibold text-white shadow-sm transition hover:opacity-90"
+          @click="router.push({ path: '/edit-job-order', query: { orderId: item.id, mode: 'add' } })"
         >
           Add Job Order
         </button>
@@ -155,8 +155,8 @@ function getStatusBadgeClass(status: string) {
         <!-- Edit Job Order button -->
         <button
           type="button"
-          class="rounded bg-[#ff9f43] px-2 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:opacity-90"
-          @click="router.push(`/job-order`)"
+          class="rounded bg-[#ff9f43] px-2 py-1 text-xs font-semibold text-white shadow-sm transition hover:opacity-90"
+          @click="router.push({ path: '/edit-job-order', query: { orderId: item.id, mode: 'edit' } })"
         >
           Edit Job Order
         </button>

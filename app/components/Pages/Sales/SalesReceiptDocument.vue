@@ -56,14 +56,14 @@ const printReceipt = printDoc
 
         <!-- Header Store Info -->
         <h5 class="text-sm font-bold text-gray-900 mb-1">Percetakan Dulank</h5>
-        <p class="text-[11px] text-gray-600 mb-3 leading-tight">
+        <p class="mb-3 text-xs leading-tight text-gray-600">
           Jl. Arif Rahman Hakim / Niaga (depan stasiun) Karawang<br />
           Chat WA: +6287788131400
         </p>
 
         <!-- Transaction Details -->
         <div
-          class="border-t border-b border-dashed border-gray-300 py-2 mb-3 text-start space-y-1 text-[11px]"
+          class="mb-3 space-y-1 border-y border-dashed border-gray-300 py-2 text-start text-xs"
         >
           <p><strong>No Sales:</strong> {{ record.saleNo }}</p>
           <p><strong>Customer:</strong> {{ record.customer }}</p>
@@ -86,14 +86,18 @@ const printReceipt = printDoc
           <p v-if="!record.items?.length" class="text-xs text-gray-500">No item details recorded.</p>
         </div>
         <!-- Payment Details Section -->
-        <div class="border-b border-dashed border-gray-300 pb-2 mb-3 space-y-1 text-start text-[11px]">
+        <div class="mb-3 space-y-1 border-b border-dashed border-gray-300 pb-2 text-start text-xs">
           <h6 class="text-center font-bold text-xs mb-1 uppercase text-gray-700">Payment Details</h6>
           <div class="flex justify-between">
             <span>Sub Total</span><span>{{ formatRupiah(record.subTotal) }}</span>
           </div>
           <div class="flex justify-between">
             <span>Voucher {{ record.document?.voucher }}</span
-            ><span>{{ formatRupiah(record.discount) }}</span>
+            ><span>{{ formatRupiah(record.voucherDiscount ?? (record.document?.voucher ? record.discount : 0)) }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Discount</span
+            ><span>{{ formatRupiah(record.directDiscount ?? (record.document?.voucher ? 0 : record.discount)) }}</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping Cost</span><span>{{ formatRupiah(record.deliveryFee) }}</span>
@@ -121,7 +125,7 @@ const printReceipt = printDoc
         </div>
 
         <!-- Footer -->
-        <div class="pt-2 text-[11px] text-gray-500">
+        <div class="pt-2 text-xs text-gray-500">
           <p>Thank You For Shopping With Us. Please Come Again</p>
         </div>
       </div>

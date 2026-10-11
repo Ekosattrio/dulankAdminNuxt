@@ -1,0 +1,18 @@
+[
+  { "id": "design-artwork", "name": "Artwork", "category": "Design", "templateNames": ["Multilith A", "Multilith B", "Standard Ready Print"] },
+  { "id": "design-editing", "name": "Editing", "category": "Design", "templateNames": ["Color Proof", "Layout Adjustment"] },
+  { "id": "cetak-sm52", "name": "Mesin Sm52", "category": "Cetak", "templateNames": ["SM52 4 Warna", "SM52 1 Warna", "SM52 Bolak-Balik"] },
+  { "id": "cetak-multilith", "name": "Mesin Multilith", "category": "Cetak", "templateNames": ["Multilith A", "Multilith B"] },
+  { "id": "cetak-myjet", "name": "Myjet Outdoor Km512", "category": "Cetak", "templateNames": ["Outdoor Hi-Res 720dpi", "Outdoor Draft Mode"] },
+  { "id": "cetak-xerox", "name": "Cetak Xerox C800", "category": "Cetak", "templateNames": ["A3+ Art Paper 260", "A3+ Stiker Kromo"] },
+  { "id": "pracetak-klise", "name": "Klise", "category": "Pracetak", "templateNames": ["Klise Sablon 1 Warna", "Klise Sablon Full Color"] },
+  { "id": "pracetak-pisopond", "name": "Piso Pond", "category": "Pracetak", "templateNames": ["Pond Kotak Standar", "Custom Die Cut"] },
+  { "id": "pracetak-ctp", "name": "Plat CTP", "category": "Pracetak", "templateNames": ["CTP SM52", "CTP Oliver58"] },
+  { "id": "finishing-glossy", "name": "Glossy", "category": "Finishing", "templateNames": ["Thermal Glossy 1 Sisi", "Thermal Glossy 2 Sisi"] },
+  { "id": "finishing-doff", "name": "Doff", "category": "Finishing", "templateNames": ["Thermal Doff 1 Sisi", "Thermal Doff 2 Sisi"] },
+  { "id": "finishing-poliemas", "name": "Poli Emas", "category": "Finishing", "templateNames": ["Hot Stamping Gold", "Hot Stamping Silver"] },
+  { "id": "finishing-potong", "name": "Potong", "category": "Finishing", "templateNames": ["Potong Sisir", "Potong Standar"] },
+  { "id": "finishing-lipat", "name": "Lipat", "category": "Finishing", "templateNames": ["Lipat 2 (Half Fold)", "Lipat 3 (Z-Fold)"] },
+  { "id": "finishing-sortir", "name": "Sortir", "category": "Finishing", "templateNames": ["Quality Control Manual", "Counting Inspection"] },
+  { "id": "finishing-packing", "name": "Packing", "category": "Finishing", "templateNames": ["Kardus Dulank", "Wrapping Plastik"] }
+]

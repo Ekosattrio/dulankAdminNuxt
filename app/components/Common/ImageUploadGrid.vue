@@ -95,7 +95,7 @@ function removeImage(index: number) {
         <div class="mb-1 rounded-full bg-orange-100 p-1.5 text-primary dark:bg-orange-950/40">
           <FeatherIcon name="plus-circle" :size="16" />
         </div>
-        <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-300">Add Images</span>
+        <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Add Images</span>
       </div>
 
       <!-- Preview list -->

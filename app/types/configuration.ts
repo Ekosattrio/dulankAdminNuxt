@@ -1,9 +1,10 @@
 export interface ConfigurationField {
   key: string
   label: string
-  type?: 'text' | 'number' | 'currency' | 'boolean'
+  type?: 'text' | 'number' | 'currency' | 'boolean' | 'select'
   required?: boolean
   min?: number
+  options?: string[]
 }
 
 export interface ConfigurationColumn {

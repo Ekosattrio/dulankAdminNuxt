@@ -56,7 +56,7 @@ function onInput(event: Event) {
   <div
     class="inline-flex items-center rounded-md border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
     :class="[
-      compact ? 'h-7' : 'h-8',
+      compact ? 'h-7' : 'h-9',
       disabled ? 'opacity-50 cursor-not-allowed' : '',
     ]"
   >

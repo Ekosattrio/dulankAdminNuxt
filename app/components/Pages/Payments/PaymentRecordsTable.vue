@@ -38,6 +38,7 @@ const columns = [
     :columns="columns"
     :items="payments"
     :search="searchQuery"
+    :show-page-size="false"
     search-placeholder="Search ref no, name..."
     @update:search="$emit('update:searchQuery', $event)"
   >
@@ -73,7 +74,7 @@ const columns = [
     </template>
     <template #cell(type)="{ item }">
       <span
-        class="inline-flex rounded px-2 py-0.5 text-[11px] font-semibold"
+        class="inline-flex rounded px-2 py-0.5 text-xs font-semibold"
         :class="
           item.type === 'Payment-In'
             ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
@@ -85,7 +86,7 @@ const columns = [
     </template>
     <template #cell(method)="{ item }">
       <span
-        class="inline-flex rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+        class="inline-flex rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
       >
         {{ item.method }}
       </span>

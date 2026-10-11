@@ -9,7 +9,16 @@ const draft = reactive<Record<string, any>>({})
 watch(() => [props.open, props.record, props.fields] as const, () => {
   if (!props.open) return
   for (const key of Object.keys(draft)) delete draft[key]
-  for (const field of props.fields) draft[field.key] = props.record?.[field.key] ?? (field.type === 'boolean' ? true : field.type === 'number' || field.type === 'currency' ? 0 : '')
+  for (const field of props.fields) {
+    const fallback = field.type === 'boolean'
+      ? true
+      : field.type === 'number' || field.type === 'currency'
+        ? 0
+        : field.type === 'select'
+          ? (field.options?.[0] || '')
+          : ''
+    draft[field.key] = props.record?.[field.key] ?? fallback
+  }
 }, { immediate: true })
 
 function submit() {
@@ -27,6 +36,9 @@ function submit() {
         <div :class="modalFormInputColClass">
           <label v-if="field.type === 'boolean'" class="flex min-h-9 items-center gap-2 text-sm"><input v-model="draft[field.key]" type="checkbox" class="size-4 rounded border-gray-300 text-primary" />{{ draft[field.key] ? 'Active' : 'Inactive' }}</label>
           <CurrencyInput v-else-if="field.type === 'currency'" v-model="draft[field.key]" prefix="Rp" :min="field.min ?? 0" />
+          <select v-else-if="field.type === 'select'" v-model="draft[field.key]" :required="field.required" :class="formControlClass">
+            <option v-for="option in field.options" :key="option" :value="option">{{ option }}</option>
+          </select>
           <input v-else v-model="draft[field.key]" :type="field.type === 'number' ? 'number' : 'text'" :min="field.min" :required="field.required" :class="formControlClass" />
         </div>
       </div>

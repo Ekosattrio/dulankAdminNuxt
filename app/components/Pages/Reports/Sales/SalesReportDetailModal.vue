@@ -2,37 +2,39 @@
 import SalesDialog from '~/components/Sales/SalesDialog.vue'
 import CurrencyDisplay from '~/components/Common/CurrencyDisplay.vue'
 import type { SalesReportItem } from '~~/server/types/reports-sales'
+import { dateRangeToDisplay, type DateRangeValue } from '~/composables/useDateRange'
 
-defineProps<{
+const props = defineProps<{
   open: boolean
   item: SalesReportItem | null
+  dateRange: DateRangeValue | null
 }>()
 
 const emit = defineEmits<{
   close: []
+  print: []
+  pdf: []
+  submit: []
 }>()
+const period = computed(() => dateRangeToDisplay(props.dateRange, 'All Periods'))
 </script>
 
 <template>
   <SalesDialog
     :open="open"
-    :title="item ? `Category Breakdown: ${item.category}` : 'Category Breakdown'"
+    title="Detail Report Product"
     size="md"
     @close="emit('close')"
   >
     <div v-if="item" class="space-y-4">
-      <div class="grid grid-cols-2 gap-4 rounded-lg bg-gray-50 p-3 text-xs dark:bg-gray-800">
-        <div>
-          <span class="text-gray-500 dark:text-gray-400">Total Sales:</span>
-          <span class="ms-2 font-bold text-gray-900 dark:text-white">
-            <CurrencyDisplay :value="item.totalSales" align="left" />
-          </span>
-        </div>
-        <div>
-          <span class="text-gray-500 dark:text-gray-400">Total Due:</span>
-          <span class="ms-2 font-bold text-amber-600 dark:text-amber-400">
-            <CurrencyDisplay :value="item.totalDue" align="left" />
-          </span>
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <dl class="grid min-w-0 grid-cols-[8rem_1fr] gap-x-3 gap-y-2 text-sm">
+          <dt>Product Category</dt><dd class="font-bold">: {{ item.category }}</dd>
+          <dt>Periode</dt><dd class="font-bold">: {{ period }}</dd>
+        </dl>
+        <div class="flex items-center gap-2">
+          <SalesActionButton action="pdf" label="PDF detail report" @click="emit('pdf')" />
+          <SalesActionButton action="print" label="Print detail report" @click="emit('print')" />
         </div>
       </div>
 
@@ -64,14 +66,9 @@ const emit = defineEmits<{
         No sub-product breakdown data for this category.
       </p>
 
-      <div class="flex justify-end pt-2">
-        <button
-          type="button"
-          class="inline-flex min-h-9 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-          @click="emit('close')"
-        >
-          Close
-        </button>
+      <div class="flex justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <button type="button" class="min-h-9 rounded-md bg-[#212b36] px-4 text-sm font-semibold text-white" @click="emit('close')">Cancel</button>
+        <button type="button" class="min-h-9 rounded-md bg-[#ff9f43] px-4 text-sm font-semibold text-white" @click="emit('submit')">Submit</button>
       </div>
     </div>
   </SalesDialog>

@@ -1,7 +1,7 @@
 ---
 title: Products and Services
 tags: [module, products, services, printing]
-updated: 2026-10-08
+updated: 2026-10-11
 ---
 
 # Products & Services
@@ -34,6 +34,8 @@ Relasi utama: `categoryId`, `subCategoryId`, `unitId`, `storeId`. Harga, quantit
   - Tab 10: Profit Setting (`ProfitSettingSection.vue`) dengan pengaturan margin POS % dan Website %.
   - Tab 11: Log Transaction (`CalculationLogTable.vue`) dengan Calculation Detail modal (`CalculationDetailModal.vue`) memuat Order Specification, System Suggestion, dan breakdown Detail Cost produksi.
 - Seluruh mutasi konfigurasi tervalidasi via API `/api/calendar-settings` dan `/api/cetak-full-color`.
+- Rekonsiliasi khusus `/cetak-full-color` 2026-10-11 mengganti fixture generik dengan data literal legacy untuk seluruh sebelas tab. Semua Effective Target memakai array dan multiple-select nyata; Paper Group terbukti menyimpan lebih dari satu opsi dan mempertahankannya setelah reload.
+- Konfigurasi Cetak Full Color memakai typed schema v2, API adapter tipis, dan domain service strict. Seed deploy berada di `server/data/`; runtime lama dinormalisasi tanpa write pada GET dan Log Transaction tidak dapat ditimpa melalui POST konfigurasi.
 
 ## Services Flow
 
@@ -45,4 +47,4 @@ Relasi utama: `categoryId`, `subCategoryId`, `unitId`, `storeId`. Harga, quantit
 
 ## Status
 
-**Implemented, verification pending.** Seluruh rute Products & Services (`/create-product`, `/cetak-full-color`, `/calender`, `/product-list`, 4 services) mengembalikan HTTP 200 OK. Persistensi GET/POST pada mock API teruji roundtrip dengan format numerik murni. Ready for user audit.
+**Mixed per route.** `/cetak-full-color` berstatus **verified** berdasarkan typecheck, build, API/persistence/safeguard, browser desktop/390px, dan zero runtime exception. Rute Products & Services lain tetap **implemented, verification pending** sampai evidence masing-masing lengkap. Netlify durable mutation persistence belum diverifikasi.

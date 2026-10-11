@@ -21,9 +21,11 @@ const form = ref({
   qtyOk: '',
   qtyRusak: ''
 })
+const validationError = ref('')
 
 watch(() => props.isOpen, (open) => {
   if (open) {
+    validationError.value = ''
     form.value = {
       qtyOk: props.job?.qtyOk != null ? String(props.job.qtyOk) : '',
       qtyRusak: props.job?.qtyRusak != null ? String(props.job.qtyRusak) : ''
@@ -39,6 +41,15 @@ const handleClose = () => {
 
 const handleSubmit = () => {
   if (!props.targetStatus) return
+  if (form.value.qtyOk === '' || form.value.qtyRusak === '') {
+    validationError.value = 'Qty Lembar OK dan Lembar Rusak wajib diisi.'
+    return
+  }
+  if (Number(form.value.qtyOk) < 0 || Number(form.value.qtyRusak) < 0) {
+    validationError.value = 'Kuantitas tidak boleh bernilai negatif.'
+    return
+  }
+  validationError.value = ''
   emit('submit', {
     status: props.targetStatus,
     qtyOk: form.value.qtyOk,
@@ -62,6 +73,7 @@ const handleSubmit = () => {
           <strong>{{ job.title }}</strong> &rarr; <span class="font-bold text-amber-900 dark:text-amber-100 uppercase">{{ targetStatus }}</span>
         </p>
       </div>
+      <p v-if="validationError" role="alert" class="text-xs font-semibold text-red-600">{{ validationError }}</p>
 
       <!-- 12-Column CSS Grid Form -->
       <div class="space-y-3">

@@ -17,9 +17,9 @@ export interface CustomProductCardItem {
   binding?: string
   sizesSummary?: string
   papersSummary?: string
-  laminatesSummary?: string
+  laminatesSummary?: string | null
   printSidesSummary?: string
-  foldsSummary?: string
+  foldsSummary?: string | null
   description?: string
   displayPos?: boolean
   displayWebsite?: boolean
@@ -50,16 +50,8 @@ const defaultFallbackImages = [
 ]
 
 function getProductImages(product: CustomProductCardItem): string[] {
-  if (product.images && product.images.length > 1) {
-    return product.images
-  }
-  if (product.images && product.images.length === 1) {
-    const first = product.images[0]
-    if (first) return [first, ...defaultFallbackImages.filter(img => img !== first)]
-  }
-  if (product.image) {
-    return [product.image, ...defaultFallbackImages.filter(img => img !== product.image)]
-  }
+  if (product.images?.length) return product.images
+  if (product.image) return [product.image]
   return defaultFallbackImages
 }
 
@@ -169,7 +161,7 @@ function nextImage(product: CustomProductCardItem) {
 
             <!-- Ukuran -->
             <div class="product-spec-row">
-              <div class="font-medium text-gray-500 dark:text-gray-400 mb-1">Ukuran {{ product.name }}</div>
+              <div class="font-medium text-gray-500 dark:text-gray-400 mb-1">Ukuran Brosur</div>
               <div class="text-xs text-gray-700 dark:text-gray-200 leading-snug">
                 {{ product.sizesSummary || product.defaultSize || 'A4 (297x210mm) (Default), A5 (210x149mm)' }}
               </div>
@@ -184,7 +176,7 @@ function nextImage(product: CustomProductCardItem) {
             </div>
 
             <!-- Laminasi -->
-            <div class="product-spec-row">
+            <div v-if="product.laminatesSummary !== null" class="product-spec-row">
               <div class="font-medium text-gray-500 dark:text-gray-400 mb-1">Laminasi</div>
               <div class="text-xs text-gray-700 dark:text-gray-200 leading-snug">
                 {{ product.laminatesSummary || 'Tanpa Laminasi (Default), Glossy, Doff, UV Vernish, Spot UV' }}
@@ -200,7 +192,7 @@ function nextImage(product: CustomProductCardItem) {
             </div>
 
             <!-- Lipatan / Binding -->
-            <div class="product-spec-row">
+            <div v-if="product.foldsSummary !== null || product.binding" class="product-spec-row">
               <div class="font-medium text-gray-500 dark:text-gray-400 mb-1">{{ product.binding ? 'Binding / Hanger' : 'Lipatan' }}</div>
               <div class="text-xs text-gray-700 dark:text-gray-200 leading-snug">
                 {{ product.binding || product.foldsSummary || 'Tanpa Lipatan (default), 1 Lipatan, 2 Lipatan' }}

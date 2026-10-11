@@ -107,7 +107,7 @@ function getStatusBadgeClass(status: string) {
 
         <template #cell(priority)="{ item }">
           <span
-            class="inline-flex items-center rounded border px-2 py-0.5 text-[11px] font-semibold"
+            class="inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold"
             :class="getPriorityBadgeClass(item.priority)"
           >
             {{ item.priority }}
@@ -116,7 +116,7 @@ function getStatusBadgeClass(status: string) {
 
         <template #cell(status)="{ item }">
           <span
-            class="inline-flex items-center rounded border px-2 py-0.5 text-[11px] font-semibold"
+            class="inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold"
             :class="getStatusBadgeClass(item.status)"
           >
             {{ item.status }}
@@ -126,17 +126,17 @@ function getStatusBadgeClass(status: string) {
         <template #cell(actions)="{ item }">
           <div class="flex items-center justify-center gap-1.5 whitespace-nowrap">
             <SalesActionButton
-              icon="eye"
+              action="view"
               label="View Flow"
               @click="$emit('view-flow', item)"
             />
             <SalesActionButton
-              icon="edit"
+              action="edit"
               label="Edit"
               @click="$emit('edit', item)"
             />
             <SalesActionButton
-              icon="trash-2"
+              action="delete"
               label="Delete"
               @click="$emit('delete', item)"
             />

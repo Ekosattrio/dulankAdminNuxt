@@ -212,7 +212,7 @@ function submit() {
               <button
                 type="button"
                 :disabled="!opt.enabled"
-                class="flex items-center gap-1 text-[11px] disabled:opacity-40"
+                class="flex items-center gap-1 text-xs disabled:opacity-40"
                 @click="setDefault(form.sizes, opt)"
               >
                 <FeatherIcon name="star" :size="13" :class="opt.isDefault ? 'fill-amber-400 text-amber-500' : 'text-gray-400'" />
@@ -249,7 +249,7 @@ function submit() {
               <button
                 type="button"
                 :disabled="!opt.enabled"
-                class="flex items-center gap-1 text-[11px] disabled:opacity-40"
+                class="flex items-center gap-1 text-xs disabled:opacity-40"
                 @click="setDefault(form.papers, opt)"
               >
                 <FeatherIcon name="star" :size="13" :class="opt.isDefault ? 'fill-amber-400 text-amber-500' : 'text-gray-400'" />
@@ -286,7 +286,7 @@ function submit() {
               <button
                 type="button"
                 :disabled="!opt.enabled"
-                class="flex items-center gap-1 text-[11px] disabled:opacity-40"
+                class="flex items-center gap-1 text-xs disabled:opacity-40"
                 @click="setDefault(form.laminates, opt)"
               >
                 <FeatherIcon name="star" :size="13" :class="opt.isDefault ? 'fill-amber-400 text-amber-500' : 'text-gray-400'" />
@@ -323,7 +323,7 @@ function submit() {
               <button
                 type="button"
                 :disabled="!opt.enabled"
-                class="flex items-center gap-1 text-[11px] disabled:opacity-40"
+                class="flex items-center gap-1 text-xs disabled:opacity-40"
                 @click="setDefault(form.printSides, opt)"
               >
                 <FeatherIcon name="star" :size="13" :class="opt.isDefault ? 'fill-amber-400 text-amber-500' : 'text-gray-400'" />
@@ -360,7 +360,7 @@ function submit() {
               <button
                 type="button"
                 :disabled="!opt.enabled"
-                class="flex items-center gap-1 text-[11px] disabled:opacity-40"
+                class="flex items-center gap-1 text-xs disabled:opacity-40"
                 @click="setDefault(form.folds, opt)"
               >
                 <FeatherIcon name="star" :size="13" :class="opt.isDefault ? 'fill-amber-400 text-amber-500' : 'text-gray-400'" />
@@ -397,7 +397,7 @@ function submit() {
               <img :src="img" alt="Product preview" class="size-full object-cover" />
               <button
                 type="button"
-                class="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-red-600 text-white text-[11px] shadow hover:bg-red-700"
+                class="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-red-600 text-xs text-white shadow hover:bg-red-700"
                 @click="removeImage(idx)"
               >
                 ✕
@@ -406,7 +406,7 @@ function submit() {
 
             <label class="flex size-20 cursor-pointer flex-col items-center justify-center rounded border-2 border-dashed border-gray-300 bg-white text-gray-500 hover:border-amber-500 hover:text-amber-600 dark:border-gray-700 dark:bg-gray-900">
               <FeatherIcon name="plus" :size="18" />
-              <span class="mt-1 text-[10px] font-semibold">Add Image</span>
+              <span class="mt-1 text-xs font-semibold">Add Image</span>
               <input type="file" accept="image/*" multiple class="hidden" @change="handleImageUpload" />
             </label>
           </div>

@@ -143,6 +143,39 @@ try {
   assert.deepEqual(order.items, [item])
   checks.push('POS: line items and printing specifications persist')
 
+  const calculatedSale = await request('/api/sales', 'POST', {
+    customer: 'Calculation Test',
+    subTotal: 1,
+    deliveryFee: 25000,
+    voucherDiscount: 1,
+    directDiscount: 10000,
+    tax: 1,
+    items: [{ ...item, id: 'calculation-item', price: 100000, qty: 2, unit: 'Ream' }],
+    document: {
+      contact: { name: 'Calculation Test', email: 'calc@example.com', phone: '08123', address: '' },
+      shipping: { method: 'Shipping', recipient: 'Calculation Test', phone: '08123', address: '', pickup: '' },
+      po: 'PO-CALC',
+      notes: 'Seven-line total test',
+      voucher: 'DUILANK12',
+      taxRate: 11,
+      transactionCode: '01',
+    },
+  })
+  assert.equal(calculatedSale.subTotal, 200000)
+  assert.equal(calculatedSale.voucherDiscount, 20000)
+  assert.equal(calculatedSale.directDiscount, 10000)
+  assert.equal(calculatedSale.discount, 30000)
+  assert.equal(calculatedSale.deliveryFee, 25000)
+  assert.equal(calculatedSale.tax, 21450)
+  assert.equal(calculatedSale.total, 216450)
+  assert.equal(calculatedSale.transactionCode, '01')
+  assert.equal(
+    (await request('/api/sales')).find((entry) => entry.id === calculatedSale.id).total,
+    216450,
+  )
+  await request(`/api/sales/${calculatedSale.id}`, 'DELETE')
+  checks.push('Add Sales: subtotal, voucher, shipping, discount, pre-tax, tax and grand total persist')
+
   const rfqs = await request('/api/request-quotations')
   const rfq = await request('/api/request-quotations', 'POST', {
     ...rfqs[0],
@@ -218,12 +251,14 @@ try {
   const deliveryEdit = await request('/api/delivery-notes', 'POST', {
     ...delivery,
     reference: '',
+    status: 'Rescheduled',
     items: [{ ...delivery.items[0], packingQty: '3 Boxes', weight: '5 Kg' }],
   })
   assert.equal(deliveryEdit.reference, '')
   assert.equal(deliveryEdit.issuedBy, 'Issuer')
   assert.equal(deliveryEdit.items[0].packingQty, '3 Boxes')
-  checks.push('Delivery Note: dates, signature fields and edited packing details persist')
+  assert.equal(deliveryEdit.status, 'Rescheduled')
+  checks.push('Delivery Note: dates, signature fields, status action and edited packing details persist')
 
   const quotation = await request('/api/quotations', 'POST', {
     customer: contact.name,
@@ -262,10 +297,12 @@ try {
   assert.equal(quotation.document.items[0].amount, 3000)
   const quoteEdit = await request('/api/quotations', 'POST', {
     ...quotation,
+    status: 'Ordered',
     document: { ...quotation.document, pricesIncludeTax: true },
   })
   assert.equal(quoteEdit.total, 4000)
   assert.equal(quoteEdit.document.position, 'Sales')
+  assert.equal(quoteEdit.status, 'Ordered')
   await request(
     '/api/quotations',
     'POST',
@@ -275,7 +312,7 @@ try {
     },
     400,
   )
-  checks.push('Quotation: product document persists; totals and MOQ are validated')
+  checks.push('Quotation: product document and status action persist; totals and MOQ are validated')
 
   const originalRFQ = await request('/api/request-quotations', 'POST', {
     customer: contact.name,
@@ -306,11 +343,13 @@ try {
   assert.equal(duplicate.document.rfqNo, duplicate.noRequest)
   assert.equal(duplicate.document.email, 'recipient@example.com')
   assert.equal(duplicate.document.requestedTo[0].department, 'Finance')
+  const unavailable = await request('/api/request-quotations', 'POST', { ...duplicate, status: 'Unavailable' })
+  assert.equal(unavailable.status, 'Unavailable')
   assert.equal(
     (await request('/api/request-quotations')).find((r) => r.id === originalRFQ.id).customer,
     contact.name,
   )
-  checks.push('RFQ: duplication changes recipient and number, preserves items/contacts and source')
+  checks.push('RFQ: duplication changes recipient and number, preserves items/contacts/source, and status action persists')
 
   const returned = await request('/api/sales-returns', 'POST', {
     customer: 'Refund Test',

@@ -14,29 +14,20 @@ export interface ReportApiResponse<T> {
 
 export function useSalesReport() {
   const search = ref('')
-  const category = ref('')
-  const channel = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
+  const query = computed(() => ({
+    search: search.value || undefined,
+    startDate: dateRange.value?.start || undefined,
+    endDate: dateRange.value?.end || undefined,
+  }))
 
   const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<SalesReportItem[]>>('/api/reports/sales', {
     key: 'reports-sales-list',
+    query,
   })
 
   const rawItems = computed<SalesReportItem[]>(() => data.value?.data ?? [])
-
-  const items = computed<SalesReportItem[]>(() => {
-    let list = rawItems.value
-    if (category.value && category.value !== 'All' && category.value !== 'All Categories' && category.value !== '') {
-      list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
-    }
-    if (channel.value && channel.value !== 'All' && channel.value !== 'All Channels' && channel.value !== '') {
-      list = list.filter((i) => i.channel?.toLowerCase() === channel.value.toLowerCase())
-    }
-    if (dateRange.value?.start || dateRange.value?.end) {
-      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
-    }
-    return list
-  })
+  const items = rawItems
 
   const stats = computed(() => {
     const list = items.value
@@ -74,8 +65,6 @@ export function useSalesReport() {
     items,
     rawItems,
     search,
-    category,
-    channel,
     dateRange,
     pending,
     error,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CalculatorDashboardUser } from '#server/types/calculator-dashboard'
+import type { CalculatorDashboardUser, CalculatorDashboardUserUpdate } from '#server/types/calculator-dashboard'
 import SalesDialog from '~/components/Sales/SalesDialog.vue'
 import { modalFormRowClass, modalFormLabelClass, modalFormInputColClass, formControlClass } from '~/utils/salesUi'
 
@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  submit: [payload: Partial<CalculatorDashboardUser>]
+  submit: [payload: CalculatorDashboardUserUpdate]
 }>()
 
 const form = ref({
@@ -49,7 +49,7 @@ function handleSubmit() {
   <SalesDialog
     :open="open"
     title="Edit Data User Kalkulator"
-    max-width="md"
+    medium
     @close="emit('close')"
   >
     <form class="space-y-4 py-2" @submit.prevent="handleSubmit">

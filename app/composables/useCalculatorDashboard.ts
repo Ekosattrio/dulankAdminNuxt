@@ -1,6 +1,7 @@
 import type {
   CalculatorDashboardData,
   CalculatorDashboardUser,
+  CalculatorDashboardUserUpdate,
   CalculatorDashboardResponse
 } from '#server/types/calculator-dashboard'
 
@@ -15,12 +16,13 @@ export function useCalculatorDashboard() {
     totalRequest: 0,
     totalCalculate: 0,
     requestGrowth: '0%',
-    calculateGrowth: '0%'
+    calculateGrowth: '0%',
+    chart: { labels: [], thisWeek: [], lastWeek: [] }
   })
 
   const users = computed(() => response.value?.data?.users || [])
 
-  async function updateUser(id: number, payload: Partial<CalculatorDashboardUser>) {
+  async function updateUser(id: number, payload: CalculatorDashboardUserUpdate) {
     const res = await apiFetch<CalculatorDashboardResponse>(`/api/calculator/dashboard/${id}`, {
       method: 'PUT',
       body: payload

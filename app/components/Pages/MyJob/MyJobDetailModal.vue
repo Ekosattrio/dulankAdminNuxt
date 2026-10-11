@@ -68,15 +68,15 @@ const handlePrint = () => {
         </div>
         <div class="grid grid-cols-12 gap-2">
           <span class="col-span-4 text-gray-500 dark:text-gray-400">No Sales</span>
-          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.noSales || `SO-${job.id}` }}</span>
+          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.noSales || '-' }}</span>
         </div>
         <div class="grid grid-cols-12 gap-2">
           <span class="col-span-4 text-gray-500 dark:text-gray-400">Customer</span>
-          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.customer || 'Customer Umum' }}</span>
+          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.customer || '-' }}</span>
         </div>
         <div class="grid grid-cols-12 gap-2">
           <span class="col-span-4 text-gray-500 dark:text-gray-400">Order Summary</span>
-          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.orderSummary || '1 of 1 Products' }}</span>
+          <span class="col-span-8 font-medium text-gray-900 dark:text-white">{{ job.orderSummary || '-' }}</span>
         </div>
         <div class="grid grid-cols-12 gap-2">
           <span class="col-span-4 text-gray-500 dark:text-gray-400">Product</span>
@@ -104,47 +104,47 @@ const handlePrint = () => {
           <tbody class="divide-y divide-gray-100 dark:divide-gray-750">
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="w-1/2 px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Kertas</td>
-              <td class="w-1/2 px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.kertas || 'Ap150 Gr' }}</td>
+              <td class="w-1/2 px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.kertas || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Sisi Cetak</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.sisiCetak || '2 Sisi' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.sisiCetak || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Panjang Kertas</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.panjangKertas || '32.5 cm' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.panjangKertas || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Lebar Kertas</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.lebarKertas || '45 cm' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.lebarKertas || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Kater/Model</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.katerModel || '1 kater' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.katerModel || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Jumlah Plat</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahPlat || '4 pcs' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahPlat || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Jumlah Bahan</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahBahan || '5100' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahBahan || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Jumlah Insit</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahInsit || '100' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahInsit || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Jumlah Butuh</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahButuh || '5000' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.jumlahButuh || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Ada Contoh</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.adaContoh || 'Tidak' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.adaContoh || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Acc Warna</td>
-              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.accWarna || 'Tidak' }}</td>
+              <td class="px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200">{{ job.accWarna || '-' }}</td>
             </tr>
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
               <td class="px-3 py-1.5 text-gray-500 dark:text-gray-400 bg-gray-50/30 dark:bg-gray-800/20">Keterangan</td>

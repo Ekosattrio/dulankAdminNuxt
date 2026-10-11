@@ -1,4 +1,4 @@
-import type { SupportTicket, SupportTicketFilterQuery } from '#server/types/support-ticket'
+import type { SupportTicket, SupportTicketCommand, SupportTicketFilterQuery } from '#server/types/support-ticket'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useSupportTickets } from '~/composables/useSupportTickets'
 
@@ -23,20 +23,18 @@ export function useSupportTicketPage() {
     error,
     refresh,
     createTicket,
-    updateTicket,
     deleteTicket
   } = useSupportTickets(filterParams)
 
   const showAddModal = ref(false)
-  const showDetailModal = ref(false)
   const showDeleteConfirm = ref(false)
-  const selectedTicket = ref<SupportTicket | null>(null)
   const ticketToDelete = ref<SupportTicket | null>(null)
   const isBusy = ref(false)
+  const mutationError = ref('')
+  const message = ref('')
 
   const openDetail = (ticket: SupportTicket) => {
-    selectedTicket.value = ticket
-    showDetailModal.value = true
+    return navigateTo({ path: '/support-ticket-detail', query: { id: ticket.id } })
   }
 
   const confirmDelete = (ticket: SupportTicket) => {
@@ -47,56 +45,30 @@ export function useSupportTicketPage() {
   const handleDeleteTicket = async () => {
     if (!ticketToDelete.value) return
     isBusy.value = true
+    mutationError.value = ''
     try {
       await deleteTicket(ticketToDelete.value.id)
+      message.value = 'Support ticket deleted successfully'
       showDeleteConfirm.value = false
       ticketToDelete.value = null
     } catch (err) {
-      console.error('Failed to delete ticket', err)
+      mutationError.value = err instanceof Error ? err.message : 'Failed to delete ticket'
     } finally {
       isBusy.value = false
     }
   }
 
-  const handleAddTicket = async (formData: {
-    customerName: string
-    email: string
-    phone: string
-    address: string
-    city: string
-    country: string
-    descriptions: string
-  }) => {
+  const handleAddTicket = async (formData: SupportTicketCommand) => {
     isBusy.value = true
+    mutationError.value = ''
     try {
       await createTicket(formData)
       showAddModal.value = false
+      message.value = 'Support ticket successfully created'
     } catch (err) {
-      console.error('Failed to create ticket', err)
+      mutationError.value = err instanceof Error ? err.message : 'Failed to create ticket'
     } finally {
       isBusy.value = false
-    }
-  }
-
-  const handleSendReply = async (ticketId: string, message: string) => {
-    try {
-      const res = await updateTicket(ticketId, { newMessage: message, senderName: 'Admin' })
-      if (res.data && selectedTicket.value && selectedTicket.value.id === ticketId) {
-        selectedTicket.value = res.data
-      }
-    } catch (err) {
-      console.error('Failed to send reply', err)
-    }
-  }
-
-  const handleUpdateStatus = async (ticketId: string, newStatus: 'Open' | 'Closed' | 'Pending') => {
-    try {
-      const res = await updateTicket(ticketId, { status: newStatus })
-      if (res.data && selectedTicket.value && selectedTicket.value.id === ticketId) {
-        selectedTicket.value = res.data
-      }
-    } catch (err) {
-      console.error('Failed to update ticket status', err)
     }
   }
 
@@ -111,17 +83,15 @@ export function useSupportTicketPage() {
     filterStatus,
     filterDateRange,
     showAddModal,
-    showDetailModal,
     showDeleteConfirm,
-    selectedTicket,
     ticketToDelete,
     isBusy,
+    mutationError,
+    message,
     openDetail,
     confirmDelete,
     handleDeleteTicket,
     handleAddTicket,
-    handleSendReply,
-    handleUpdateStatus
   }
 }
 

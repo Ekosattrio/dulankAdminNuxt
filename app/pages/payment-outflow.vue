@@ -10,8 +10,6 @@ useLegacyPage({ title: 'Payment Outflow', sweetAlert: false })
 
 const searchQuery = ref('')
 const filterDateRange = ref<DateRangeValue | null>(null)
-const filterSource = ref('')
-const filterStatus = ref('')
 const modalMode = ref<'add' | 'edit' | 'payment' | null>(null)
 const selectedRecord = ref<PaymentFlowRecord | null>(null)
 const deleting = ref<PaymentFlowRecord | null>(null)
@@ -21,8 +19,6 @@ const filters = computed(() => ({
   search: searchQuery.value,
   startDate: filterDateRange.value?.start || '',
   endDate: filterDateRange.value?.end || '',
-  source: filterSource.value,
-  status: filterStatus.value,
 }))
 const { records, balances, pending, error, refresh, saveRecord, deleteRecord } = usePaymentFlow('outflow', filters)
 
@@ -105,12 +101,8 @@ function printTable() {
         :records="records"
         :search-query="searchQuery"
         :filter-date-range="filterDateRange"
-        :filter-source="filterSource"
-        :filter-status="filterStatus"
         @update:search-query="searchQuery = $event"
         @update:filter-date-range="filterDateRange = $event"
-        @update:filter-source="filterSource = $event"
-        @update:filter-status="filterStatus = $event"
         @view="selectedRecord = $event"
         @payment="openEditor('payment', $event)"
         @edit="openEditor('edit', $event)"

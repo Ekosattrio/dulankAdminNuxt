@@ -21,6 +21,8 @@ const props = withDefaults(defineProps<{
   workflowItems?: WorkflowItem[]
   workflowTitle?: string
   workflowTargetLabel?: string
+  workflowOptions?: string[]
+  workflowAddLabel?: string
 }>(), {
   addLabel: 'Add Record',
   readonly: false,
@@ -31,6 +33,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [rows: Record<string, any>[]]
+  'update:workflowItems': [rows: WorkflowItem[]]
   change: []
 }>()
 
@@ -116,8 +119,8 @@ function removeRecord() {
       >
         <template #cell(actions)="{ item }">
           <div class="flex justify-center gap-1">
-            <SalesActionButton icon="edit-2" label="Edit item" @click="openEdit(item._index)" />
-            <SalesActionButton icon="trash-2" label="Delete item" @click="deleteIndex = item._index" />
+            <SalesActionButton action="edit" label="Edit item" @click="openEdit(item._index)" />
+            <SalesActionButton action="delete" label="Delete item" @click="deleteIndex = item._index" />
           </div>
         </template>
       </SalesDataTable>
@@ -148,6 +151,9 @@ function removeRecord() {
       :title="workflowTitle || 'Work Flow Setting'"
       :items="workflowItems"
       :target-label="workflowTargetLabel || 'Effective Paper Group'"
+      :options="workflowOptions"
+      :add-label="workflowAddLabel"
+      @update:items="$emit('update:workflowItems', $event)"
       @save="$emit('change')"
     />
   </div>

@@ -38,6 +38,36 @@ export interface SupportTicket {
   tags?: string[]
   activities?: SupportTicketActivity[]
   chat?: SupportTicketChatMessage[]
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface SupportTicketCommand {
+  customerName: string
+  email: string
+  phone?: string
+  avatar?: string
+  address?: string
+  city?: string
+  country?: string
+  descriptions: string
+}
+
+export interface SupportTicketUpdateCommand {
+  requestedBy?: string
+  customerEmail?: string
+  customerPhone?: string
+  avatar?: string
+  address?: string
+  city?: string
+  country?: string
+  subject?: string
+  assignee?: string
+  priority?: SupportTicket['priority']
+  status?: SupportTicket['status']
+  description?: string
+  newMessage?: string
+  senderName?: string
 }
 
 export interface SupportTicketStats {

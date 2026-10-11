@@ -5,7 +5,7 @@ export interface RFQItem {
   email: string
   telp: string
   date: string
-  status: 'Ordered' | 'Complete' | 'Pending' | 'Received'
+  status: 'Ordered' | 'Complete' | 'Pending' | 'Received' | 'Unavailable'
   document?: RFQDocument
 }
 

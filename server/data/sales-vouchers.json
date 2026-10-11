@@ -1,5 +1,37 @@
 [
   {
+    "id": 5,
+    "name": "Dulank 12 Legacy Voucher",
+    "code": "DUILANK12",
+    "type": "Percentage",
+    "discount": 10,
+    "discountDisplay": "10%",
+    "limit": 0,
+    "used": 0,
+    "validDate": "No expiry",
+    "startDate": "2020-01-01",
+    "endDate": "2099-12-31",
+    "allProducts": true,
+    "oncePerCustomer": false,
+    "status": "Active"
+  },
+  {
+    "id": 6,
+    "name": "Promo 20 Legacy Voucher",
+    "code": "PROMO20",
+    "type": "Percentage",
+    "discount": 20,
+    "discountDisplay": "20%",
+    "limit": 0,
+    "used": 0,
+    "validDate": "No expiry",
+    "startDate": "2020-01-01",
+    "endDate": "2099-12-31",
+    "allProducts": true,
+    "oncePerCustomer": false,
+    "status": "Active"
+  },
+  {
     "id": 1,
     "name": "Coupons 21",
     "code": "Christmas",

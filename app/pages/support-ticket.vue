@@ -6,7 +6,6 @@ import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 import SupportTicketStatsWidgets from '~/components/Pages/SupportTicket/SupportTicketStatsWidgets.vue'
 import SupportTicketRecordsTable from '~/components/Pages/SupportTicket/SupportTicketRecordsTable.vue'
 import SupportTicketAddModal from '~/components/Pages/SupportTicket/SupportTicketAddModal.vue'
-import SupportTicketDetailModal from '~/components/Pages/SupportTicket/SupportTicketDetailModal.vue'
 import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
@@ -24,17 +23,15 @@ const {
   filterStatus,
   filterDateRange,
   showAddModal,
-  showDetailModal,
   showDeleteConfirm,
-  selectedTicket,
   ticketToDelete,
   isBusy,
+  mutationError,
+  message,
   openDetail,
   confirmDelete,
   handleDeleteTicket,
   handleAddTicket,
-  handleSendReply,
-  handleUpdateStatus
 } = useSupportTicketPage()
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
@@ -57,9 +54,8 @@ const supportTicketPrintColumns = [
     <SalesListHeader
       title="Support Ticket List"
       subtitle="Manage your Support Ticket"
-      has-action
-      action-label="Add Ticket"
-      @action="showAddModal = true"
+      add-label="Add Ticket"
+      @add="showAddModal = true"
       @refresh="refresh"
       @print="openPrintModal('print')"
       @pdf="openPrintModal('pdf')"
@@ -76,6 +72,12 @@ const supportTicketPrintColumns = [
       :skeleton-rows="6"
       :error="error ? (error.message || 'Gagal memuat tiket bantuan. Silakan coba lagi.') : ''"
       @retry="refresh"
+    />
+    <SalesFeedback
+      :error="mutationError"
+      :message="message"
+      @retry="mutationError = ''"
+      @dismiss="message = ''"
     />
 
     <!-- Support Ticket Records Table -->
@@ -95,15 +97,6 @@ const supportTicketPrintColumns = [
       v-model:show="showAddModal"
       :busy="isBusy"
       @submit="handleAddTicket"
-    />
-
-    <!-- Ticket Detail & Chat Modal -->
-    <SupportTicketDetailModal
-      v-model:show="showDetailModal"
-      :ticket="selectedTicket"
-      :busy="isBusy"
-      @send-reply="handleSendReply"
-      @update-status="handleUpdateStatus"
     />
 
     <!-- Confirm Delete Modal -->
