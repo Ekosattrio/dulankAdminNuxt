@@ -3,41 +3,40 @@ import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 
 const props = defineProps<{
   activeType: string
+  counts?: Record<string, number>
 }>()
 
 const emit = defineEmits<{
   'select-type': [type: string, label: string]
 }>()
 
-const showMore = ref(false)
-
 const groups = [
   {
     label: 'Design',
     items: [
-      { id: 'design', label: 'Design', icon: 'pen-tool', count: 5 },
-      { id: 'editing', label: 'Editing', icon: 'edit-3', count: 5 },
+      { id: 'design', label: 'Design', icon: 'pen-tool' },
+      { id: 'editing', label: 'Editing', icon: 'edit-3' },
     ],
   },
   {
     label: 'Pracetak',
     items: [
-      { id: 'klise', label: 'Plate Klise', icon: 'grid', count: 5 },
-      { id: 'ctp', label: 'Plate CTP', icon: 'layers', count: 5 },
+      { id: 'klise', label: 'Plate Klise', icon: 'grid' },
+      { id: 'ctp', label: 'Plate CTP', icon: 'layers' },
     ],
   },
   {
     label: 'Cetak',
     items: [
-      { id: 'sm52', label: 'Mesin Sm52', icon: 'printer', count: 5 },
-      { id: 'multilith', label: 'Mesin Multilith', icon: 'copy', count: 5 },
+      { id: 'sm52', label: 'Mesin Sm52', icon: 'printer' },
+      { id: 'multilith', label: 'Mesin Multilith', icon: 'copy' },
     ],
   },
   {
     label: 'Finishing',
     items: [
-      { id: 'nota', label: 'Finishing Nota', icon: 'file-text', count: 5 },
-      { id: 'potong', label: 'Potong', icon: 'scissors', count: 5 },
+      { id: 'nota', label: 'Finishing Nota', icon: 'file-text' },
+      { id: 'potong', label: 'Potong', icon: 'scissors' },
     ],
   },
 ]
@@ -48,13 +47,13 @@ const groups = [
     <div class="mb-4 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
       <h5 class="text-sm font-bold text-gray-900 dark:text-gray-100">All Work Flow</h5>
       <span class="rounded-full bg-[#ff9f43]/10 px-2.5 py-0.5 text-xs font-bold text-[#ff9f43]">
-        40
+        {{ Object.values(counts || {}).reduce((sum, count) => sum + count, 0) }}
       </span>
     </div>
 
     <div class="space-y-4">
       <div v-for="group in groups" :key="group.label" class="space-y-1.5">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
           {{ group.label }}
         </p>
 
@@ -75,10 +74,10 @@ const groups = [
                 <span>{{ item.label }}</span>
               </span>
               <span
-                class="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                class="rounded px-1.5 py-0.5 text-xs font-bold"
                 :class="activeType === item.id ? 'bg-white/20 text-white' : 'text-gray-400'"
               >
-                {{ item.count }}
+                {{ counts?.[item.id] || 0 }}
               </span>
             </button>
           </li>

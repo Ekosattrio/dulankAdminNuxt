@@ -1,36 +1,15 @@
 <script setup lang="ts">
 import type { CalculatorDashboardUser } from '#server/types/calculator-dashboard'
-import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
-import SalesStatusBadge from '~/components/Sales/SalesStatusBadge.vue'
-import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
-import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 
-const props = defineProps<{
-  users: CalculatorDashboardUser[]
-}>()
-
+defineProps<{ users: CalculatorDashboardUser[]; search: string; category: string }>()
 const emit = defineEmits<{
+  'update:search': [value: string]
+  'update:category': [value: string]
+  'update:currentPageItems': [value: CalculatorDashboardUser[]]
   view: [item: CalculatorDashboardUser]
   edit: [item: CalculatorDashboardUser]
   delete: [item: CalculatorDashboardUser]
 }>()
-
-const searchQuery = ref('')
-const selectedStatus = ref('')
-
-const statusOptions = [
-  { label: 'All Status', value: '' },
-  { label: 'Active', value: 'Active' },
-  { label: 'Disabled', value: 'Disabled' }
-]
-
-const filteredUsers = computed(() => {
-  return props.users.filter(item => {
-    const matchesSearch = !searchQuery.value || item.user.toLowerCase().includes(searchQuery.value.toLowerCase()) || (item.role && item.role.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    const matchesStatus = !selectedStatus.value || item.status === selectedStatus.value
-    return matchesSearch && matchesStatus
-  })
-})
 
 const columns = [
   { key: 'user', label: 'User', sortable: true },
@@ -38,71 +17,38 @@ const columns = [
   { key: 'request', label: 'Request', sortable: true },
   { key: 'usage', label: 'Usage', sortable: true },
   { key: 'status', label: 'Status', sortable: true },
-  { key: 'actions', label: 'Actions', align: 'center' as const }
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 </script>
 
 <template>
   <SalesDataTable
-    :data="filteredUsers"
+    :items="users"
     :columns="columns"
-    search-placeholder="Cari user calculator..."
-    v-model:search="searchQuery"
+    :search="search"
+    search-placeholder="Search users..."
+    @update:search="emit('update:search', $event)"
+    @update:current-page-items="emit('update:currentPageItems', $event)"
   >
     <template #filters>
       <TableFilterSelect
-        v-model="selectedStatus"
-        :options="statusOptions"
-        aria-label="Filter status"
+        :model-value="category"
+        placeholder="Category"
+        :options="['Action', 'Another action', 'Something else here', 'Separated link']"
+        @update:model-value="emit('update:category', $event)"
       />
     </template>
-
-    <template #cell-user="{ row }">
-      <div class="flex items-center gap-2.5">
-        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-          {{ row.user.charAt(0) }}
-        </div>
-        <div>
-          <div class="font-medium text-gray-900 dark:text-gray-100">{{ row.user }}</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">{{ row.role || 'Estimator' }}</div>
-        </div>
-      </div>
-    </template>
-
-    <template #cell-calculate="{ row }">
-      <span class="font-medium text-gray-800 dark:text-gray-200">{{ row.calculate.toLocaleString() }}</span>
-    </template>
-
-    <template #cell-request="{ row }">
-      <span class="font-medium text-gray-800 dark:text-gray-200">{{ row.request.toLocaleString() }}</span>
-    </template>
-
-    <template #cell-usage="{ row }">
-      <div class="w-full max-w-[140px]">
-        <div class="mb-1 flex items-center justify-between text-xs">
-          <span class="font-medium text-gray-700 dark:text-gray-300">{{ row.usage }}%</span>
-        </div>
-        <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-          <div
-            class="h-full rounded-full transition-all duration-300"
-            :class="row.usage > 80 ? 'bg-[#28C76F]' : row.usage > 40 ? 'bg-primary' : 'bg-[#FF9F43]'"
-            :style="{ width: `${Math.min(row.usage, 100)}%` }"
-          />
-        </div>
-      </div>
-    </template>
-
-    <template #cell-status="{ row }">
-      <SalesStatusBadge :status="row.status" />
-    </template>
-
-    <template #cell-actions="{ row }">
-      <div class="flex items-center justify-center gap-1">
-        <SalesActionButton action="view" label="View Stats" @click="emit('view', row)" />
-        <SalesActionButton action="edit" label="Edit Record" @click="emit('edit', row)" />
-        <SalesActionButton action="delete" label="Delete Record" @click="emit('delete', row)" />
+    <template #cell(user)="{ item }"><span class="font-medium text-gray-900 dark:text-gray-100">{{ item.user }}</span></template>
+    <template #cell(calculate)="{ item }"><span class="tabular-nums">{{ item.calculate }}</span></template>
+    <template #cell(request)="{ item }"><span class="tabular-nums">{{ item.request }}</span></template>
+    <template #cell(usage)="{ item }"><span class="tabular-nums">{{ item.usage }}%</span></template>
+    <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
+    <template #cell(actions)="{ item }">
+      <div class="flex items-center justify-center gap-1.5">
+        <SalesActionButton action="view" label="View Stats" @click="emit('view', item)" />
+        <SalesActionButton action="edit" label="Edit Record" @click="emit('edit', item)" />
+        <SalesActionButton action="delete" label="Delete Record" danger @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>
 </template>
-

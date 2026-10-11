@@ -19,21 +19,7 @@ const columns = [
 </script>
 <template>
   <SalesDataTable :columns="columns" :items="filteredRFQs">
-    <template #filters
-      ><select
-        :value="statusFilter"
-        aria-label="Status"
-        :class="salesField"
-        class="!w-auto"
-        @change="$emit('update:statusFilter', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="All">Status</option>
-        <option>Ordered</option>
-        <option>Complete</option>
-        <option>Pending</option>
-        <option>Received</option>
-      </select></template
-    >
+    <template #filters><TableFilterSelect :model-value="statusFilter === 'All' ? '' : statusFilter" placeholder="Status" aria-label="Status" :options="['Ordered', 'Complete', 'Pending', 'Received', 'Unavailable']" @update:model-value="$emit('update:statusFilter', $event || 'All')" /></template>
     <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
     <template #cell(actions)="{ item }"
       ><div class="flex items-center gap-1.5">

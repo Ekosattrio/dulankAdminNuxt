@@ -1,7 +1,9 @@
-// Mock data untuk halaman /sales-dashboard (dipindah dari app/pages/sales-dashboard.vue)
+import type { SalesDashboardBestSeller, SalesDashboardCountry, SalesDashboardTransaction } from '../types/sales-dashboard'
+
+// Snapshot konten legacy untuk halaman read-only /sales-dashboard.
 // Dikonsumsi oleh server/api/sales-dashboard.ts
 
-export const bestSellers = [
+export const bestSellers: SalesDashboardBestSeller[] = [
   {
     id: 1,
     name: "Lenovo 3rd Generation",
@@ -49,7 +51,7 @@ export const bestSellers = [
   },
 ]
 
-export const recentTransactions = [
+export const recentTransactions: SalesDashboardTransaction[] = [
   {
     id: 1,
     name: "Lobar Handy",
@@ -107,7 +109,7 @@ export const recentTransactions = [
   },
 ]
 
-export const countryMarkers = [
+export const countryMarkers: SalesDashboardCountry[] = [
   { id: "US", name: "United States", sales: "1,000,000 Sales", percentage: 55, x: 25, y: 38 },
   { id: "UK", name: "United Kingdom", sales: "5,467 Sales", percentage: 8, x: 47, y: 28 },
   { id: "RU", name: "Russia", sales: "5,488 Sales", percentage: 6, x: 68, y: 24 },
@@ -117,3 +119,9 @@ export const countryMarkers = [
   { id: "SA", name: "Saudi Arabia", sales: "54,678 Sales", percentage: 12, x: 57, y: 49 },
   { id: "AFR", name: "Africa", sales: "3,455 Sales", percentage: 5, x: 51, y: 62 },
 ]
+
+export const yearlyData: Record<string, number[]> = {
+  '2023': [25, 30, 18, 15, 22, 20, 30, 20, 22, 18, 15, 20],
+  '2022': [20, 24, 28, 18, 25, 32, 22, 28, 24, 20, 18, 25],
+  '2021': [16, 20, 22, 18, 20, 24, 19, 21, 25, 22, 19, 21],
+}

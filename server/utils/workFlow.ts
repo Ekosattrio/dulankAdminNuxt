@@ -2,6 +2,27 @@ import type { WorkFlow, WorkFlowFilterParams, WorkFlowFormData } from '#server/t
 import { isDateWithinRange } from './dateRange'
 import { readWorkFlowData, writeWorkFlowData } from './workFlowData'
 
+function normalizeSteps(steps: WorkFlowFormData['steps'] = []) {
+  const names = new Set<string>()
+  return steps.map((step, index) => {
+    const name = step.name?.trim()
+    const category = step.category?.trim()
+    if (!name || !category) {
+      throw createError({ statusCode: 400, statusMessage: `Workflow step ${index + 1} is incomplete` })
+    }
+    const key = name.toLowerCase()
+    if (names.has(key)) throw createError({ statusCode: 400, statusMessage: `Duplicate workflow step: ${name}` })
+    names.add(key)
+    return {
+      id: step.id || `step-${index + 1}`,
+      name,
+      category,
+      template: step.template?.trim() || '',
+      selected: true,
+    }
+  })
+}
+
 function nextWorkFlowNo(items: WorkFlow[]): string {
   const numbers = items
     .map((item) => {
@@ -64,7 +85,8 @@ export function getWorkFlowById(id: string): WorkFlow | null {
 export function createWorkFlow(payload: WorkFlowFormData): WorkFlow {
   const product = payload.product?.trim()
   const category = payload.category?.trim()
-  const workflowSteps = payload.workflowSteps?.trim()
+  const steps = normalizeSteps(payload.steps)
+  const workflowSteps = steps.length ? steps.map((step) => step.name).join(', ') : payload.workflowSteps?.trim()
 
   if (!product) {
     throw createError({ statusCode: 400, statusMessage: 'Product is required' })
@@ -86,8 +108,9 @@ export function createWorkFlow(payload: WorkFlowFormData): WorkFlow {
     date: dateFormatted,
     category,
     product,
+    productId: payload.productId?.trim(),
     workflowSteps,
-    steps: payload.steps || [],
+    steps,
     createdAt: now.toISOString(),
     updatedAt: now.toISOString(),
   }
@@ -100,7 +123,8 @@ export function createWorkFlow(payload: WorkFlowFormData): WorkFlow {
 export function updateWorkFlow(id: string, payload: WorkFlowFormData): WorkFlow {
   const product = payload.product?.trim()
   const category = payload.category?.trim()
-  const workflowSteps = payload.workflowSteps?.trim()
+  const steps = payload.steps ? normalizeSteps(payload.steps) : undefined
+  const workflowSteps = steps?.length ? steps.map((step) => step.name).join(', ') : payload.workflowSteps?.trim()
 
   if (!product) {
     throw createError({ statusCode: 400, statusMessage: 'Product is required' })
@@ -125,10 +149,11 @@ export function updateWorkFlow(id: string, payload: WorkFlowFormData): WorkFlow 
   const updated: WorkFlow = {
     ...current,
     product,
+    productId: payload.productId?.trim() || current.productId,
     category,
     workflowSteps,
     date: payload.date?.trim() || current.date,
-    steps: payload.steps || current.steps || [],
+    steps: steps || current.steps || [],
     updatedAt: new Date().toISOString(),
   }
 

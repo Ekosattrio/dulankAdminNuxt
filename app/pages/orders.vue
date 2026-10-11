@@ -2,7 +2,7 @@
 import type { Order, OrderStatus } from '#server/types/order'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import { useOrders } from '~/composables/useOrders'
-import { salesErrorMessage, printSalesRows } from '~/utils/salesDocuments'
+import { salesErrorMessage } from '~/utils/salesDocuments'
 import OrdersRecordsTable from '~/components/Pages/Orders/OrdersRecordsTable.vue'
 import OrderStatsWidgets from '~/components/Pages/Orders/OrderStatsWidgets.vue'
 import OrderStatusModal from '~/components/Pages/Orders/OrderStatusModal.vue'
@@ -89,6 +89,8 @@ const orderPrintColumns = [
       :error="error ? 'Unable to load orders. Please try again.' : ''"
       @retry="refresh()"
     />
+
+    <SalesFeedback v-if="actionError" :error="actionError" @retry="actionError = ''" />
 
     <OrdersRecordsTable
       v-if="!pending && !error"

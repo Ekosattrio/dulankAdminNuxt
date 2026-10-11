@@ -33,6 +33,12 @@ export interface PaymentBankTransfer {
   reference?: string
 }
 
+export interface PaymentSplitEntry {
+  id: string
+  method: Exclude<PaymentFlowMethod, '-'>
+  amount: number
+}
+
 export interface PaymentFlowRecord {
   id: string
   date: string
@@ -47,6 +53,7 @@ export interface PaymentFlowRecord {
   paymentDate?: string
   bankTransfer?: PaymentBankTransfer
   transactionDetails?: PaymentTransactionDetail[]
+  splitPayments?: PaymentSplitEntry[]
   payments?: PaymentHistoryEntry[]
 }
 
@@ -65,6 +72,7 @@ export interface PaymentFlowFormData {
   paymentAmount?: number
   bankTransfer?: PaymentBankTransfer
   transactionDetails?: PaymentTransactionDetail[]
+  splitPayments?: PaymentSplitEntry[]
 }
 
 export interface PaymentFlowFilterParams {

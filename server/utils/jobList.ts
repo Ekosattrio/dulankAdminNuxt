@@ -1,9 +1,8 @@
 import type { FlowSummary, JobListFilterParams, JobListItem } from '#server/types/job-list'
 import { isDateWithinRange } from './dateRange'
-import { readJobListData } from './jobListData'
 
 export function listJobItems(filters: JobListFilterParams = {}): JobListItem[] {
-  const items = readJobListData()
+  const items = readJSON<JobListItem[]>('job-list.json', [])
   const search = filters.search?.trim().toLowerCase()
   const flow = filters.flow?.trim().toLowerCase()
 
@@ -32,25 +31,13 @@ export function listJobItems(filters: JobListFilterParams = {}): JobListItem[] {
 }
 
 export function getJobItemById(id: string): JobListItem | null {
-  const items = readJobListData()
+  const items = readJSON<JobListItem[]>('job-list.json', [])
   return items.find((i) => String(i.id) === String(id) || i.no === id) || null
 }
 
 export function getFlowSummaries(): FlowSummary[] {
-  const baselineFlows: Record<string, number> = {
-    'Design': 252,
-    'Cetak SM 52': 15,
-    'Potong Sisir': 210,
-    'Cetak Outdoor': 56,
-    'Cetak A3+': 125,
-    'Cetak Multilith': 137,
-    'Finishing Komplit': 255,
-    'Sablon Kaos': 5,
-    'Laminating': 25,
-  }
-
-  const items = readJobListData()
-  const counts: Record<string, number> = { ...baselineFlows }
+  const items = readJSON<JobListItem[]>('job-list.json', [])
+  const counts: Record<string, number> = {}
 
   items.forEach((item) => {
     counts[item.flow] = (counts[item.flow] ?? 0) + 1

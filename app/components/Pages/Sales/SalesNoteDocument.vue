@@ -2,17 +2,7 @@
 import type { Sale } from '#server/types/sale'
 const props = defineProps<{ record: Sale }>()
 const { formatRupiah } = useFormatters()
-const paid = computed(() =>
-  props.record.status === 'Paid'
-    ? props.record.total
-    : props.record.payments?.length
-      ? props.record.payments.reduce((sum, p) => sum + p.amount, 0)
-      : props.record.status === 'Partial'
-        ? null
-        : 0,
-)
 const printDoc = () => window.print()
-const printReceipt = printDoc
 </script>
 <template>
   <div>
@@ -133,7 +123,15 @@ const printReceipt = printDoc
                 Voucher {{ record.document?.voucher }}
               </td>
               <td class="border border-gray-200 px-4 py-2 text-end font-semibold">
-                {{ formatRupiah(record.discount) }}
+                {{ formatRupiah(record.voucherDiscount ?? (record.document?.voucher ? record.discount : 0)) }}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="border border-gray-200 px-4 py-2 text-end font-semibold text-gray-700">
+                Discount
+              </td>
+              <td class="border border-gray-200 px-4 py-2 text-end font-semibold">
+                {{ formatRupiah(record.directDiscount ?? (record.document?.voucher ? 0 : record.discount)) }}
               </td>
             </tr>
             <tr>
@@ -181,7 +179,7 @@ const printReceipt = printDoc
             <p><span class="font-medium">Account Number:</span> 109-2993242</p>
             <p><span class="font-medium">Account Name:</span> PT. Dulank Semesta Cida</p>
           </div>
-          <p class="text-[11px] text-gray-500 mt-3">
+          <p class="mt-3 text-xs text-gray-500">
             Kindly be informed if the payment has been sent,<br />Thank you
           </p>
         </div>

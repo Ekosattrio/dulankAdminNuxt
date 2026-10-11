@@ -12,6 +12,8 @@ export interface Sale {
   date: string
   subTotal: number
   deliveryFee: number
+  voucherDiscount?: number
+  directDiscount?: number
   discount: number
   tax: number
   total: number
@@ -37,8 +39,11 @@ export interface SaleFormData {
   customer: string
   subTotal: number
   deliveryFee?: number
+  voucherDiscount?: number
+  directDiscount?: number
   discount?: number
   tax?: number
+  transactionCode?: string
   delivery?: 'Pick Up' | 'Shipping'
   channel?: 'POS' | 'Website'
   status?: 'Paid' | 'Unpaid' | 'Partial'

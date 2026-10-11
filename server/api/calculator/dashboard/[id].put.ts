@@ -1,5 +1,6 @@
 import { createError, defineEventHandler, readBody } from 'h3'
 import { updateCalculatorDashboardUser } from '#server/utils/calculatorDashboardData'
+import type { CalculatorDashboardUserUpdate } from '#server/types/calculator-dashboard'
 
 export default defineEventHandler(async (event) => {
   const rawId = event.context.params?.id
@@ -8,7 +9,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid ID' })
   }
 
-  const body = await readBody(event)
+  const body = await readBody<CalculatorDashboardUserUpdate>(event)
   const updated = updateCalculatorDashboardUser(id, body)
   if (!updated) {
     throw createError({ statusCode: 404, statusMessage: 'User record not found' })

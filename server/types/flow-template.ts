@@ -11,10 +11,15 @@ export interface FlowTemplate {
   name: string;
   information: string;
   items?: FlowTemplateItem[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface FlowTemplateFilterParams {
   search?: string;
+  template?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface FlowTemplateFormData {

@@ -113,7 +113,7 @@ const onStatusDropdownChange = (event: Event, job: MyJob) => {
         <div>
           <!-- Card Header -->
           <div class="border-b border-gray-100 dark:border-gray-700 pb-2 mb-2">
-            <span class="text-[11px] text-gray-500 dark:text-gray-400 block">Flow Name :</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 block">Flow Name :</span>
             <h6 class="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">{{ job.flowName }}</h6>
           </div>
 
@@ -126,19 +126,19 @@ const onStatusDropdownChange = (event: Event, job: MyJob) => {
 
           <!-- Product -->
           <div class="mb-3">
-            <span class="text-[11px] text-gray-500 dark:text-gray-400 block">Product</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 block">Product</span>
             <p class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">{{ job.product }}</p>
           </div>
 
           <!-- Job Title -->
           <div class="mb-3">
-            <span class="text-[11px] text-gray-500 dark:text-gray-400 block">Job Title</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 block">Job Title</span>
             <p class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">{{ job.title }}</p>
           </div>
 
           <!-- Description -->
           <div class="mb-4">
-            <span class="text-[11px] text-gray-500 dark:text-gray-400 block">Description</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 block">Description</span>
             <p class="text-xs text-gray-700 dark:text-gray-300 font-medium line-clamp-3 leading-relaxed">
               {{ job.description }}
             </p>

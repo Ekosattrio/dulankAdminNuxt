@@ -73,7 +73,11 @@ const { formatRupiah } = useFormatters()
           </div>
           <div class="flex justify-between">
             <dt>Voucher {{ record.document?.voucher }}</dt>
-            <dd>{{ formatRupiah(record.discount) }}</dd>
+            <dd>{{ formatRupiah(record.voucherDiscount ?? (record.document?.voucher ? record.discount : 0)) }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt>Discount</dt>
+            <dd>{{ formatRupiah(record.directDiscount ?? (record.document?.voucher ? 0 : record.discount)) }}</dd>
           </div>
           <div class="flex justify-between">
             <dt>Shipping Costs</dt>

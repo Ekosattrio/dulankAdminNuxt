@@ -1,7 +1,7 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
 ## Repositori: Dulank Admin Nuxt 4 (Percetakan & ERP System)
 
-> **LATEST CODE AUDIT OVERRIDE (2026-10-09):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` sebelum memakai scorecard di bawah. Setelah remediasi, source aktual memiliki 188 page, 35 page di atas 150 baris, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, dan **0 direct print pada list/report**. Sebanyak 11 `window.print()` tersisa adalah dokumen/detail khusus yang diaudit. Seluruh 136 JSON valid dan bundled; 8 structure-validator failure tetap berupa aset arsip Sticky Kit/Summernote dengan provenance yang belum cocok. Finance BRVS sudah diimplementasikan dan lolos verifikasi statis, tetapi build/dev/browser/persistence runtime belum dijalankan. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
+> **LATEST CODE AUDIT OVERRIDE (2026-10-11):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` dan inventaris penuh `docs/LEGACY_PARITY_AUDIT_2026-10-10.md` sebelum memakai scorecard di bawah. Source aktual memiliki 188 page, 19 page di atas 150 baris, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, dan **0 direct print pada list/report**. Seluruh 186 HTML lokal identik secara konten dengan repository asli commit `6123241`; semuanya mempunyai route Nuxt, ditambah dua route Nuxt-only. Sebanyak 50 route—Sales/dokumen, Payment, Sales-adjacent, Webstore/Support Ticket, sembilan route Orders/Job Order, enam route master Workflow, Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, serta Voucher—telah direkonsiliasi manual dengan API/persistence/data safeguards serta browser desktop/390px. Delapan aset Sticky Kit/Summernote telah dipulihkan dari salinan internal ber-hash manifest dan structure validator lulus. Seluruh aplikasi belum selesai: 136 route legacy masih memerlukan audit manual/browser. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
 
 > **DOKUMEN INI WAJIB DIBACA OLEH AI PENGGANTI SEBELUM MEMULAI SESI APAPUN.**
 > Dokumen ini dirancang dengan struktur atensi tinggi (High Attention Weight) agar AI memahami arsitektur, batasan pantangan mutlak, komponen reusable yang wajib dipakai, serta status modul yang sudah selesai dikerjakan.
@@ -98,15 +98,15 @@ Peta detail per rute, dekomposisi komponen, composable, dan relasi database bera
 
 | Grup Menu | Status aktif | Yang sudah ada | Yang belum selesai |
 |---|---|---|---|
-| **Sales & Payment** | **Approved behavior baseline; architecture/runtime re-check pending** | Flow utama, composable/API, shared table/dialog/date range. | Add Sales masih besar; browser, persistence, dan regression test belum dijalankan. |
-| **Orders & Workflow** | **Approved behavior baseline; partial BRVS** | Flow order/job dan API tersedia. | Decomposition beberapa route dan lifecycle runtime belum diverifikasi. |
-| **Webstore** | **Implemented, verification pending** | Route, composable/API, tabel utama, dan feedback tersedia. | Browser flow, date-range contract, mutation/reload, dan Netlify belum diverifikasi. |
+| **Sales & Payment** | **Primary slices implemented; route-scope runtime passed** | Sales/Add Sales, lima dokumen transaksi, tiga route Payment, serta Sales Dashboard/Report/Note/Receipt memakai composable/API/domain service, selected-record data, data safeguards, dan browser desktop/390px. | Netlify persistence dan route di luar batch tervalidasi masih terbuka. |
+| **Orders & Workflow** | **Fifteen route-scope runtime passed** | Sembilan route Orders/Job Order serta enam route master Workflow memakai selected relational context, composable/API/service, persistent mutations, dan lulus desktop/390px. | Deployment Netlify tetap belum diuji. |
+| **Webstore** | **Route-scope runtime passed** | Lima list read-only dan Support Ticket list/detail memakai composable, API tipis, service/repository, filter/stats, selected-record detail, dan lifecycle persisten; browser desktop/390px lulus. | Deployment Netlify dan durable mutation persistence production belum diverifikasi. |
 | **Finance & Account** | **Implemented, static verification passed** | BRVS account/ledger/transfer/cash advance/report/tax tersedia. | Rekonsiliasi, browser lifecycle, persistence, print/PDF, dan Netlify belum diuji. |
 | **Peoples, HRM** | **Implemented, verification pending** | UI/API/data domain tersedia luas. | Workspace besar, relasi payroll/balance, upload, dan reload perlu diuji. |
 | **Calculator, Products & Services** | **Implemented/partial BRVS** | Composable/API/data dan reusable UI tersedia. | Workspace/UI responsibility dan flow browser belum tuntas. |
 | **Paper Shop, Inventory** | **Partial BRVS-UI** | Page tipis, typecheck, confirm, dan print standar. | Workspace masih besar dan service/relasi perlu verifikasi. |
 | **Content, User Management, Setting, Reports** | **Implemented, verification pending** | Route, composable, endpoint, dan data tersedia. | Decomposition, authorization/integrasi production, upload, dan rekonsiliasi belum selesai. |
-| **Dashboard, Promo** | **Non-compliant** | Sebagian UI dan print standar tersedia. | Data lokal/page monolitik harus dibangun menjadi BRVS. |
+| **Dashboard, Promo** | **Dashboard routes passed; Promo partial** | Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, dan Voucher sudah menjadi typed BRVS/BRVS-UI dan lulus API/browser. | Promo tersisa Discount Plan, Discount, dan Coupon masih memerlukan rekonsiliasi runtime/arsitektur. |
 | **Purchases** | **Imported, verification pending** | API/composable dan flow dasar tersedia. | Page besar, legacy fields, server validation, ID generation, dan reload perlu audit. |
 | **POS** | **Deferred** | Hanya shared fixes yang ikut masuk. | Fitur tidak dilanjutkan sampai diminta pengguna. |
 
@@ -122,7 +122,7 @@ Label ini hanya mengunci perilaku yang pernah disetujui pengguna. Ia tidak mengg
 |---|---|---|
 | **Sales** | `/sales`, `/invoice`, `/delivery-note`, `/sales-return`, `/quotation`, `/request-quotation`, dokumen Sales | Approved sesuai aturan rinci di `AGENTS.md`. |
 | **Payment** | `/payments`, `/payment-inflow`, `/payment-outflow` | Approved, server/API/composable dan date range reusable. |
-| **Orders & Workflow** | `/orders`, `/job-order`, `/job-list`, `/job-branch`, `/my-job`, `/my-incentive` | Approved sesuai flow yang tercatat. |
+| **Orders & Workflow** | `/orders`, `/job-order`, `/job-list`, `/job-branch`, `/my-job`, `/my-incentive`, `/job-order-detail`, `/edit-job-order`, `/job-progress`, `/flow-category`, `/flow-name`, `/flow-template`, `/work-flow`, `/add-work-flow`, `/edit-work-flow` | Approved sesuai flow yang tercatat; lima belas route memiliki evidence lokal desktop/390px. |
 | **Webstore** | `/cart`, `/checkout`, `/wishlist`, `/reviews`, `/support-ticket`, `/contact-form` | Approved sesuai kolom, KPI, dan aksi masing-masing. |
 | **Print & PDF** | Shared list/report dan dokumen khusus | Approved dengan `DocumentPrintModal`, iframe printer, letterhead, TTD, dan pengecualian dokumen khusus. |
 
@@ -211,6 +211,14 @@ Status fitur di atas tidak otomatis berarti struktur route sudah mengikuti Sales
 - Seluruh endpoint API `/api/calendar-settings` dan `/api/cetak-full-color` tervalidasi 200 OK untuk GET dan POST dengan persistensi data murni numerik.
 - Status: **implemented, verification pending**.
 
+### Progress 2026-10-11: Rekonsiliasi Data dan Multiple-Select Cetak Full Color
+
+- `/cetak-full-color` direkonsiliasi ulang terhadap HTML lokal yang cocok dengan URL Netlify: lima kartu produk, seluruh master option/workflow/profit, serta sepuluh log transaksi kini memakai nilai dan label legacy.
+- `Effective Paper Group`, `Effective Printing Type`, `Effective Papper name`, `Effective Fold Type`, `Effective Print Side`, dan `Effective Component` memakai multiple-select nyata dan menyimpan target sebagai array; save/reload browser telah dibuktikan.
+- Page tetap 80 baris; UI dipisah menjadi section Product/Size/Paper/Workflow/Profit/Log, composable menjadi request boundary, API menjadi adapter tipis, dan domain service menangani migrasi kompatibel, validasi, strict read, serta persistence.
+- Runtime data lama tidak di-seed ulang. Normalisasi fixture terdahulu terjadi in-memory pada GET; mutation konfigurasi mempertahankan log transaksi output-only.
+- `npm run typecheck`, `npm run build`, `npm run validate:structure`, test API/safeguard, test browser desktop/390px, dan `git diff --check` lulus. Status khusus route ini **verified**, bukan approved baseline; Products & Services lain tetap pada status sebelumnya.
+
 ### Progress 2026-10-08: Standar Tipografi Global
 
 - Baseline visual sidebar 14px dijadikan ukuran body, paragraf, tabel, filter, input/select, dropdown action, dan tombol teks.
@@ -273,7 +281,7 @@ Status fitur di atas tidak otomatis berarti struktur route sudah mengikuti Sales
    - `expenses.vue` (197 baris) & `expense-category.vue` (178 baris): Dekomposisi ke leaf components terpisah dan connect API.
    - `income.vue`, `money-transfer.vue`, `cash-advance.vue`: Standarisasi backend dan leaf components.
 2. **PRIORITAS 2 (Hard Fail Over-Limit):**
-   - `edit-job-order.vue` (307 baris $\to$ $\le 150$ baris): Ekstrak form pengerjaan & kalkulasi spesifikasi cetak ke `JobOrderForm.vue`.
+   - `edit-job-order.vue` selesai direkonsiliasi dari 307 menjadi 32 baris; form dipecah ke source panel, workflow form, flow-information editor, workspace, dan composable selected context.
 3. **PRIORITAS 3 (Calculator Apps Sisa PR):**
    - `harga-jasa-lainya.vue`, `komponen-minimum.vue`, `komponen-fiks.vue`: Finalisasi integrasi leaf components & pembersihan aman 7 workspace usang.
 4. **PRIORITAS 4 (Inventory & Produk Sisa):**

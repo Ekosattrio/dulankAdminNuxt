@@ -17,7 +17,7 @@ const emit = defineEmits<{
   <SalesDialog
     :open="open"
     title="Detail Kalkulator User"
-    max-width="md"
+    medium
     @close="emit('close')"
   >
     <div v-if="user" class="space-y-4 py-2 text-sm">

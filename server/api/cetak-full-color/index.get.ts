@@ -1,8 +1,7 @@
-import { readJSON } from '~/server/utils/data'
-import type { CetakFullColorConfig } from '~/types/cetak-full-color'
+import { readCetakFullColorConfig } from '~/server/utils/cetakFullColor'
 
 export default defineEventHandler(async () => {
-  const config = readJSON<CetakFullColorConfig>('cetak-full-color.json')
+  const config = readCetakFullColorConfig()
 
   return {
     success: true,

@@ -73,7 +73,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
 
         <div class="grid grid-cols-2 gap-3 p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg border border-gray-200 dark:border-gray-700">
           <div>
-            <span class="text-[11px] font-semibold tracking-wider text-gray-400 uppercase block mb-1">
+            <span class="text-xs font-semibold tracking-wider text-gray-400 uppercase block mb-1">
               REQUESTED BY
             </span>
             <div class="flex items-center gap-2">
@@ -86,13 +86,13 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
                 <p class="text-xs font-bold text-gray-900 dark:text-gray-100 leading-tight">
                   {{ ticket.requestedBy }}
                 </p>
-                <p class="text-[11px] text-gray-500">{{ ticket.customerEmail }}</p>
+                <p class="text-xs text-gray-500">{{ ticket.customerEmail }}</p>
               </div>
             </div>
           </div>
 
           <div>
-            <span class="text-[11px] font-semibold tracking-wider text-gray-400 uppercase block mb-1">
+            <span class="text-xs font-semibold tracking-wider text-gray-400 uppercase block mb-1">
               ASSIGNED AGENT
             </span>
             <div class="flex items-center gap-2">
@@ -103,14 +103,14 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
                 <p class="text-xs font-bold text-gray-900 dark:text-gray-100 leading-tight">
                   {{ ticket.assignee }}
                 </p>
-                <p class="text-[11px] text-gray-500">Support Specialist</p>
+                <p class="text-xs text-gray-500">Support Specialist</p>
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <span class="text-[11px] font-semibold tracking-wider text-gray-400 uppercase block mb-1">
+          <span class="text-xs font-semibold tracking-wider text-gray-400 uppercase block mb-1">
             DESCRIPTION
           </span>
           <div class="text-xs text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700 leading-relaxed">
@@ -119,7 +119,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
         </div>
 
         <div v-if="ticket.tags && ticket.tags.length">
-          <span class="text-[11px] font-semibold tracking-wider text-gray-400 uppercase block mb-1">
+          <span class="text-xs font-semibold tracking-wider text-gray-400 uppercase block mb-1">
             TAGS
           </span>
           <div class="flex flex-wrap gap-1.5">
@@ -134,7 +134,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
         </div>
 
         <div>
-          <span class="text-[11px] font-semibold tracking-wider text-gray-400 uppercase block mb-2">
+          <span class="text-xs font-semibold tracking-wider text-gray-400 uppercase block mb-2">
             ACTIVITY TIMELINE
           </span>
           <div class="space-y-3 pl-2 border-l-2 border-amber-300 dark:border-amber-700 ml-1">
@@ -146,7 +146,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
               <span class="absolute -left-[19px] top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-white dark:ring-gray-900"></span>
               <p class="text-xs font-bold text-gray-900 dark:text-gray-100">{{ act.title }}</p>
               <p class="text-xs text-gray-500">{{ act.description }}</p>
-              <p class="text-[10px] text-gray-400 mt-0.5">{{ act.author }} • {{ act.timeAgo }}</p>
+              <p class="text-xs text-gray-400 mt-0.5">{{ act.author }} • {{ act.timeAgo }}</p>
             </div>
           </div>
         </div>
@@ -174,7 +174,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
       <div class="lg:col-span-5 flex flex-col h-[480px] bg-gray-50 dark:bg-gray-800/80 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
         <div class="font-bold text-xs text-gray-700 dark:text-gray-300 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <span>Ticket Chat History</span>
-          <span class="text-[11px] font-normal text-emerald-600 flex items-center gap-1">
+          <span class="text-xs font-normal text-emerald-600 flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Active
           </span>
         </div>
@@ -195,7 +195,7 @@ function handleStatusChange(status: 'Open' | 'Closed' | 'Pending') {
             >
               {{ msg.message }}
             </div>
-            <span class="text-[10px] text-gray-400 mt-1 px-1">
+            <span class="text-xs text-gray-400 mt-1 px-1">
               {{ msg.senderName }} • {{ msg.time }}
             </span>
           </div>

@@ -10,33 +10,44 @@ export const cetakFullColorTabs: SidebarTabItem[] = [
   { id: 'printSides', label: 'Print Side', icon: 'copy' },
   { id: 'components', label: 'Components', icon: 'grid' },
   { id: 'workflowSteps', label: 'Work Flow', icon: 'git-branch' },
-  { id: 'profitTiers', label: 'Profit Setting', icon: 'percent' },
+  { id: 'profitSettings', label: 'Profit Setting', icon: 'percent' },
   { id: 'logTransactions', label: 'Log Transaction', icon: 'clipboard' },
 ]
 
 const text = (key: string, label: string, required = true): ConfigurationField => ({ key, label, required })
 const number = (key: string, label: string, min = 0): ConfigurationField => ({ key, label, type: 'number', required: true, min })
-const money = (key: string, label: string): ConfigurationField => ({ key, label, type: 'currency', required: true, min: 0 })
+const visibility = (key = 'status'): ConfigurationField => ({ key, label: 'Status', type: 'select', required: true, options: ['Show', 'Hide'] })
 const col = (key: string, label: string, align?: 'start' | 'center' | 'end'): ConfigurationColumn => ({ key, label, align })
 
-export const cetakFullColorSizeColumns = [col('name', 'Size Name'), col('widthMm', 'Width (mm)', 'end'), col('heightMm', 'Height (mm)', 'end'), col('isStandard', 'Standard', 'center')]
-export const cetakFullColorSizeFields = [text('name', 'Size Name'), number('widthMm', 'Width (mm)', 1), number('heightMm', 'Height (mm)', 1), { key: 'isStandard', label: 'Standard Size', type: 'boolean' as const }]
+export const cetakFullColorSizeColumns = [col('name', 'Size Name'), col('size', 'size'), col('status', 'Status')]
+export const cetakFullColorSizeFields = [text('name', 'Size Name'), text('size', 'size'), visibility()]
 
-export const cetakFullColorMachineColumns = [col('name', 'Machine Name'), col('maxArea', 'Max Print Area'), col('plateCost', 'Plate Cost', 'end'), col('runChargeMin', 'Minimum Run Charge', 'end')]
-export const cetakFullColorMachineFields = [text('name', 'Machine Name'), text('maxArea', 'Max Print Area'), money('plateCost', 'Plate Cost'), money('runChargeMin', 'Minimum Run Charge')]
+export const cetakFullColorMachineColumns = [
+  col('printingType', 'Printing Type'),
+  col('printingName', 'Printing Name'),
+  col('unitColor', 'Unit Color'),
+  col('paperArea', 'Paper Area'),
+  col('status', 'Status'),
+]
+export const cetakFullColorMachineFields = [
+  text('printingType', 'Printing Type'),
+  text('printingName', 'Printing Name'),
+  text('unitColor', 'Unit Color'),
+  text('paperArea', 'Paper Area'),
+  visibility(),
+]
 
-export const cetakFullColorLaminateColumns = [col('name', 'Laminate Type'), col('costPerSide', 'Cost / Side', 'end')]
-export const cetakFullColorLaminateFields = [text('name', 'Laminate Type'), money('costPerSide', 'Cost / Side')]
+export const cetakFullColorLaminateColumns = [col('name', 'Name'), col('status', 'Status')]
+export const cetakFullColorLaminateFields = [text('name', 'Name'), visibility()]
 
-export const cetakFullColorFoldColumns = [col('name', 'Fold Type'), col('costPer1000', 'Cost / 1000', 'end')]
-export const cetakFullColorFoldFields = [text('name', 'Fold Type'), money('costPer1000', 'Cost / 1000')]
+export const cetakFullColorFoldColumns = [col('name', 'Fold Type'), col('status', 'Status')]
+export const cetakFullColorFoldFields = [text('name', 'Fold Type'), visibility()]
 
-export const cetakFullColorPrintSideColumns = [col('name', 'Print Side'), col('plateMultiplier', 'Plate Multiplier', 'end'), col('runMultiplier', 'Run Multiplier', 'end')]
-export const cetakFullColorPrintSideFields = [text('name', 'Print Side'), number('plateMultiplier', 'Plate Multiplier'), number('runMultiplier', 'Run Multiplier')]
+export const cetakFullColorPrintSideColumns = [col('name', 'Print Side'), col('status', 'Status')]
+export const cetakFullColorPrintSideFields = [text('name', 'Print Side'), visibility()]
 
-export const cetakFullColorComponentColumns = [col('name', 'Component Name'), col('type', 'Type')]
-export const cetakFullColorComponentFields = [text('name', 'Component Name'), text('type', 'Type')]
+export const cetakFullColorComponentColumns = [col('name', 'Component'), col('value', 'Value', 'end'), col('unit', 'Unit Value')]
+export const cetakFullColorComponentFields = [text('name', 'Component'), number('value', 'Value'), text('unit', 'Unit Value')]
 
-export const cetakFullColorWorkflowStepColumns = [col('step', 'Step', 'end'), col('name', 'Flow Name'), col('department', 'Department')]
-export const cetakFullColorWorkflowStepFields = [number('step', 'Step', 1), text('name', 'Flow Name'), text('department', 'Department')]
-
+export const cetakFullColorWorkflowStepColumns = [col('step', 'No', 'end'), col('category', 'Flow Category'), col('name', 'Flow Name')]
+export const cetakFullColorWorkflowStepFields = [number('step', 'No', 1), text('category', 'Flow Category'), text('name', 'Flow Name')]

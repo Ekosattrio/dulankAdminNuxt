@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DateRangePicker from '~/components/Common/DateRangePicker.vue'
-import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import type { DateRangeValue } from '~/composables/useDateRange'
 import type { PaymentFlowKind, PaymentFlowRecord } from '#server/types/payment-flow'
 
@@ -9,14 +8,10 @@ const props = defineProps<{
   records: PaymentFlowRecord[]
   searchQuery: string
   filterDateRange: DateRangeValue | null
-  filterSource: string
-  filterStatus: string
 }>()
 const emit = defineEmits<{
   'update:searchQuery': [value: string]
   'update:filterDateRange': [value: DateRangeValue | null]
-  'update:filterSource': [value: string]
-  'update:filterStatus': [value: string]
   view: [record: PaymentFlowRecord]
   payment: [record: PaymentFlowRecord]
   edit: [record: PaymentFlowRecord]
@@ -24,11 +19,6 @@ const emit = defineEmits<{
 }>()
 
 const { formatNumber } = useFormatters()
-const sourceOptions = computed(() =>
-  props.kind === 'inflow'
-    ? ['Sales', 'Purchase Return', 'Income']
-    : ['Payroll', 'Cash Advance', 'Purchase', 'Expense', 'Sales Return'],
-)
 const columns = computed(() =>
   props.kind === 'inflow'
     ? [
@@ -63,6 +53,7 @@ const columns = computed(() =>
     :columns="columns"
     :items="records"
     :search="searchQuery"
+    :show-page-size="false"
     search-placeholder="Search ref no, name..."
     @update:search="$emit('update:searchQuery', $event)"
   >
@@ -75,20 +66,6 @@ const columns = computed(() =>
         placeholder="Date"
         @update:model-value="$emit('update:filterDateRange', $event)"
       />
-      <TableFilterSelect
-        :model-value="filterSource"
-        :options="sourceOptions"
-        placeholder="All Sources"
-        aria-label="Source"
-        @update:model-value="$emit('update:filterSource', $event)"
-      />
-      <TableFilterSelect
-        :model-value="filterStatus"
-        :options="['Paid', 'Partial', 'Unpaid']"
-        placeholder="All Statuses"
-        aria-label="Status"
-        @update:model-value="$emit('update:filterStatus', $event)"
-      />
     </template>
     <template #cell(refNo)="{ item }">
       <span class="font-semibold text-primary">{{ item.refNo }}</span>
@@ -98,7 +75,7 @@ const columns = computed(() =>
     </template>
     <template #cell(source)="{ item }">
       <span
-        class="inline-flex rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+        class="inline-flex rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >{{ item.source }}</span
       >
     </template>
@@ -112,10 +89,10 @@ const columns = computed(() =>
     </template>
     <template #cell(actions)="{ item }">
       <div class="flex justify-end gap-2">
-        <SalesActionButton icon="eye" label="View" @click="emit('view', item)" />
+        <SalesActionButton action="view" label="View" @click="emit('view', item)" />
         <SalesActionButton icon="dollar-sign" label="Payment" @click="emit('payment', item)" />
-        <SalesActionButton icon="edit" label="Edit" @click="emit('edit', item)" />
-        <SalesActionButton icon="trash-2" label="Delete" @click="emit('delete', item)" />
+        <SalesActionButton action="edit" label="Edit" @click="emit('edit', item)" />
+        <SalesActionButton action="delete" label="Delete" @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>

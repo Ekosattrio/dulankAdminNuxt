@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { SupportTicket, SupportTicketCommand } from '#server/types/support-ticket'
 import SalesDialog from '~/components/Sales/SalesDialog.vue'
-import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import ImageUploadGrid from '~/components/Common/ImageUploadGrid.vue'
 import {
   modalFormRowClass,
   modalFormLabelClass,
@@ -11,44 +12,63 @@ import {
 const props = defineProps<{
   show: boolean
   busy?: boolean
+  ticket?: SupportTicket | null
 }>()
 
 const emit = defineEmits<{
   'update:show': [value: boolean]
-  submit: [formData: {
-    customerName: string
-    email: string
-    phone: string
-    address: string
-    city: string
-    country: string
-    descriptions: string
-  }]
+  submit: [formData: SupportTicketCommand]
 }>()
 
 const form = ref({
   customerName: '',
   email: '',
   phone: '',
+  avatar: '',
   address: '',
   city: '',
-  country: 'United Kingdom',
+  country: '',
   descriptions: ''
 })
 
-const countryOptions = ['United Kingdom', 'United States', 'Indonesia', 'Singapore', 'Malaysia']
+const countryOptions = ['United Kingdom', 'United State']
+
+const avatarImages = computed({
+  get: () => form.value.avatar ? [form.value.avatar] : [],
+  set: (images: string[]) => { form.value.avatar = images[0] || '' },
+})
 
 function resetForm() {
   form.value = {
     customerName: '',
     email: '',
     phone: '',
+    avatar: '',
     address: '',
     city: '',
-    country: 'United Kingdom',
+    country: '',
     descriptions: ''
   }
 }
+
+function loadForm() {
+  const ticket = props.ticket
+  if (!ticket) return resetForm()
+  form.value = {
+    customerName: ticket.requestedBy,
+    email: ticket.customerEmail,
+    phone: ticket.customerPhone || '',
+    avatar: ticket.avatar || '',
+    address: ticket.address || '',
+    city: ticket.city || '',
+    country: ticket.country || '',
+    descriptions: ticket.description || '',
+  }
+}
+
+watch(() => [props.show, props.ticket] as const, ([show]) => {
+  if (show) loadForm()
+})
 
 function handleClose() {
   emit('update:show', false)
@@ -57,27 +77,21 @@ function handleClose() {
 
 function handleSubmit() {
   emit('submit', { ...form.value })
-  handleClose()
 }
 </script>
 
 <template>
   <SalesDialog
     :open="show"
-    title="Add Support Ticket"
+    :title="ticket ? 'Edit Support Ticket' : 'Add Support Ticket'"
     medium
     :busy="busy"
     @close="handleClose"
   >
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <div class="flex items-center gap-4 pb-2 border-b border-gray-100 dark:border-gray-800">
-        <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-400">
-          <FeatherIcon name="plus-circle" class="w-6 h-6" />
-        </div>
-        <div>
-          <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Customer Avatar</label>
-          <p class="text-xs text-gray-500">Upload profile image (optional)</p>
-        </div>
+      <div class="pb-3 border-b border-gray-100 dark:border-gray-800">
+        <label class="mb-2 block text-xs font-semibold text-gray-700 dark:text-gray-300">Customer Image</label>
+        <ImageUploadGrid v-model="avatarImages" :max-images="1" :disabled="busy" />
       </div>
 
       <div :class="modalFormRowClass">
@@ -147,6 +161,7 @@ function handleSubmit() {
         <div>
           <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Country</label>
           <select v-model="form.country" :class="formControlClass">
+            <option value="">Choose</option>
             <option v-for="c in countryOptions" :key="c" :value="c">{{ c }}</option>
           </select>
         </div>
@@ -160,26 +175,27 @@ function handleSubmit() {
           v-model="form.descriptions"
           rows="3"
           required
-          maxlength="300"
+          maxlength="60"
           placeholder="Detailed problem description..."
-          class="w-full text-xs rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2.5 focus:ring-1 focus:ring-amber-500 focus:outline-none"
+          class="w-full text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2.5 focus:ring-1 focus:ring-amber-500 focus:outline-none"
         ></textarea>
-        <p class="text-xs text-gray-400 mt-1">Maximum 300 Characters</p>
+        <p class="text-xs text-gray-400 mt-1">Maximum 60 Characters</p>
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 dark:border-gray-800">
         <button
           type="button"
-          class="h-9 px-4 rounded-md text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 transition-colors"
+          class="h-9 px-4 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 transition-colors"
           @click="handleClose"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="h-9 px-5 rounded-md text-xs font-medium text-white bg-amber-500 hover:bg-amber-600 transition-colors shadow-xs"
+          :disabled="busy"
+          class="h-9 px-5 rounded-md text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-60 transition-colors shadow-xs"
         >
-          Submit
+          {{ busy ? 'Saving…' : 'Submit' }}
         </button>
       </div>
     </form>

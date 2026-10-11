@@ -13,7 +13,7 @@
 
 > **Interpretation rule 2026-10-09:** jumlah baris page dan HTTP 200 hanya membuktikan page shell serta route availability. Status BRVS/UI yang sebenarnya wajib mengikuti `docs/BACKEND_READY_VERTICAL_SLICE.md`, `docs/UI_DECOMPOSITION_STANDARD.md`, dan `docs/AI_WORK_QUALITY_FRAMEWORK.md`. Baris lama yang masih menulis `Local Reactive Form`, `Static Persistence`, atau Workspace monolitik tidak otomatis `verified` dan harus diaudit ulang sebelum dipakai sebagai klaim selesai.
 >
-> **Latest audit override:** hasil source audit terbaru berada di [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md). Audit ulang sesudah remediasi mencatat 104 page <=20 baris, 49 page 21-150, 4 page 151-200, 16 page 201-300, dan 15 page >300. TypeScript, direct-request UI, native browser dialog, dan direct print list/report sudah 0; 11 direct print tersisa adalah pengecualian dokumen/detail khusus. Finance BRVS sudah implemented/static-verified; validator struktur masih gagal pada 8 aset arsip dan runtime browser belum diuji. Scorecard 120/121 route serta klaim 100% pada dokumen ini dipertahankan sebagai riwayat, bukan bukti status verified.
+> **Latest audit override (2026-10-11):** hasil source audit terbaru berada di [CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md](CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md), sedangkan inventaris 186 HTML/route berada di [LEGACY_PARITY_AUDIT_2026-10-10.md](LEGACY_PARITY_AUDIT_2026-10-10.md). Audit ulang mencatat 114 page <=20 baris, 55 page 21-150, 2 page 151-200, 10 page 201-300, dan 7 page >300. TypeScript, direct-request UI, native browser dialog, direct print list/report, dan structure validator sudah hijau. Sebanyak 50 route—Sales/dokumen, Payment, Sales-adjacent, Webstore/Support Ticket, sembilan route Orders/Job Order, enam route master Workflow, Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, serta Voucher—sudah melewati source review, API/persistence/data safeguards, dan browser desktop/390px. Sebanyak 136 route legacy lain belum diaudit manual/browser. Scorecard lama serta klaim 100% pada dokumen ini dipertahankan sebagai riwayat, bukan bukti status verified seluruh aplikasi.
 
 ---
 
@@ -122,9 +122,9 @@ server/
 >
 > Mengacu pada `docs/UI_DECOMPOSITION_STANDARD.md` (Branch `Rama` commit `76f6e79`), terdapat 4 pilar evaluasi:
 >
-> 1. **Pilar 1 - Thin Composition Layer:** dari 188 page, 153 berada pada batas maksimal 150 baris dan 35 melewati batas; 15 di antaranya di atas 300 baris.
-> 2. **Pilar 2 - UI Responsibility Decomposition:** belum lulus menyeluruh; 60 component di atas 250 baris dan 39 di atas 300 baris masih perlu audit tanggung jawab.
-> 3. **Pilar 3 - Anti-Monolithic Workspace:** dari 92 Workspace/Screen, 55 masih di atas 200 baris dan 15 di atas 300 baris.
+> 1. **Pilar 1 - Thin Composition Layer:** dari 188 page, 167 berada pada batas maksimal 150 baris dan 21 melewati batas; 9 di antaranya di atas 300 baris.
+> 2. **Pilar 2 - UI Responsibility Decomposition:** belum lulus menyeluruh; 58 component di atas 250 baris dan 36 di atas 300 baris masih perlu audit tanggung jawab.
+> 3. **Pilar 3 - Anti-Monolithic Workspace:** dari 97 Workspace/Screen, 54 masih di atas 200 baris dan 15 di atas 300 baris.
 > 4. **Pilar 4 - BRVS Backend:** request UI sudah melalui composable, tetapi 99 API mutation route masih menulis JSON langsung dan memerlukan service/repository audit.
 
 ### 3.1.1. Ringkasan Status Aktif
@@ -134,7 +134,7 @@ Ringkasan aktif tidak diduplikasi di sini. Gunakan tabel **Status Kanonik Singka
 - **Approved behavior baseline:** Sales, Payment, Orders/Workflow, Webstore, dan shared Print/PDF.
 - **Implemented, static verification passed:** Finance & Account.
 - **Implemented, verification pending:** Peoples, HRM, Content, User Management, Setting, Reports, Calculator, dan sebagian Products & Services.
-- **Partial/non-compliant:** Dashboard, Promo, Purchases, Paper/Inventory gap, page/workspace besar, dan repository backend yang belum dipisah.
+- **Partial/non-compliant:** Promo tersisa, Purchases, Paper/Inventory gap, page/workspace besar, dan repository backend yang belum dipisah. Lima route Dashboard utama serta Voucher sudah lulus route-scope runtime.
 - **Deferred:** POS.
 
 Tabel detail route di bawah dipertahankan sebagai inventory implementasi historis. Kolom `VERIFIED`, persentase decomposition, dan jumlah baris di tabel lama **dipensiunkan sebagai status aktif** sampai baris tersebut diaudit ulang dan disinkronkan dengan audit kanonik.
@@ -177,9 +177,23 @@ Tabel detail route di bawah dipertahankan sebagai inventory implementasi histori
 
 | No  | Rute / Template Page                           | Pecahan Komponen (Rama UI Standard)                                                                                                                       | Composable Domain                        | Endpoint & Service Backend                    | Status Relasi Backend (DB-Ready)                                                  |     Adopsi UI Rama      |     Status BRVS      |
 | :-: | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------- | :---------------------: | :------------------: |
-|  8  | `app/pages/payments.vue`<br>(82 baris)         | `PaymentsRecordsTable`, `PaymentInflowModal`, `PaymentOutflowModal`, `PaymentDetailModal`, `PaymentsPrintModal`, `SalesListHeader`, `SalesConfirmDelete`  | `usePayments()`<br>_(Aktif)_             | `/api/payments`<br>(`paymentsData.ts`)        | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `saleId`, `customerId`, `invoiceId`    | 🟢 100% Full Decomposed | 🟢 APPROVED BASELINE |
-|  9  | `app/pages/payment-inflow.vue`<br>(143 baris)  | `PaymentFlowStatsWidgets`, `PaymentFlowRecordsTable`, `PaymentFlowTransactionModal`, `PaymentFlowDetailModal`, `PaymentFlowPrintModal`, `SalesListHeader` | `usePaymentFlow('inflow')`<br>_(Aktif)_  | `/api/payment-flow`<br>(`paymentFlowData.ts`) | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `saleId`, `customerId`, `accountId`    | 🟢 100% Full Decomposed | 🟢 APPROVED BASELINE |
-| 10  | `app/pages/payment-outflow.vue`<br>(143 baris) | `PaymentFlowStatsWidgets`, `PaymentFlowRecordsTable`, `PaymentFlowTransactionModal`, `PaymentFlowDetailModal`, `PaymentFlowPrintModal`, `SalesListHeader` | `usePaymentFlow('outflow')`<br>_(Aktif)_ | `/api/payment-flow`<br>(`paymentFlowData.ts`) | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `supplierId`, `expenseId`, `accountId` | 🟢 100% Full Decomposed | 🟢 APPROVED BASELINE |
+|  8  | `app/pages/payments.vue`<br>(81 baris)         | `PaymentRecordsTable`, `SalesListHeader`                                                                                                              | `usePayments()`<br>_(Aktif)_             | `/api/payments`<br>(`paymentData.ts`)          | 🟢 Typed payment record; numeric amount and source IDs retained                  | 🟢 Responsibility split | 🟢 ROUTE-SCOPE RUNTIME PASSED |
+|  9  | `app/pages/payment-inflow.vue`<br>(134 baris)  | `PaymentBalanceSummary`, `PaymentFlowRecordsTable`, `PaymentFlowEditor`, `PaymentFlowDetails`, `PaymentMethodFields`, `PaymentSplitEditor`, `PaymentTransactionDetailsTable` | `usePaymentFlow('inflow')`<br>_(Aktif)_  | `/api/payment-inflow`<br>(`paymentFlow.ts`, `paymentFlowData.ts`) | 🟢 Typed detail/history/transfer/split; numeric amount and IDs retained | 🟢 Responsibility split | 🟢 ROUTE-SCOPE RUNTIME PASSED |
+| 10  | `app/pages/payment-outflow.vue`<br>(134 baris) | `PaymentBalanceSummary`, `PaymentFlowRecordsTable`, `PaymentFlowEditor`, `PaymentFlowDetails`, `PaymentMethodFields`, `PaymentTransactionDetailsTable` | `usePaymentFlow('outflow')`<br>_(Aktif)_ | `/api/payment-outflow`<br>(`paymentFlow.ts`, `paymentFlowData.ts`) | 🟢 Typed detail/history/transfer; numeric amount and IDs retained | 🟢 Responsibility split | 🟢 ROUTE-SCOPE RUNTIME PASSED |
+
+---
+
+### B.1 Dashboard Billing
+
+| Rute / Template Page | Pecahan Komponen | Composable Domain | Endpoint & Service Backend | Status Relasi Backend | Status BRVS |
+| --- | --- | --- | --- | --- | --- |
+| `app/pages/billing.vue` (9 baris) | `BillingWorkspace.vue`, `BillingStats.vue`, `BillingRecordsTable.vue` | `useBillings()` | `/api/billings` (`server/utils/billing.ts`) | PK `id`; FK `transactionId`, `userId`; nilai uang numeric; timestamps | 🔵 ROUTE-SCOPE RUNTIME PASSED |
+
+### B.2 Promo Voucher
+
+| Page | Komponen | Composable | API / Service | Data relasional | Status |
+|---|---|---|---|---|---|
+| `app/pages/voucher.vue` (9 baris) | `VoucherWorkspace.vue`, `VoucherRecordsTable.vue`, `VoucherFormDialog.vue` | `useVouchers()` | `/api/vouchers` (`server/utils/vouchers.ts`) | PK `id`; FK `storeId`, `createdByEmployeeId`, `productIds`; discount numeric; timestamps | 🔵 ROUTE-SCOPE RUNTIME PASSED |
 
 ---
 
@@ -200,7 +214,7 @@ Tabel detail route di bawah dipertahankan sebagai inventory implementasi histori
 
 | No  | Rute / Template Page                               | Pecahan Komponen (Rama UI Standard)                                                                                                        | Composable Domain                         | Endpoint & Service Backend                  | Status Relasi Backend (DB-Ready)                                                                |              Adopsi UI Rama               |   Status BRVS   |
 | :-: | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------- | :---------------------------------------: | :-------------: |
-| 17  | `app/pages/kalkulator-dashboard.vue`<br>(19 baris) | `KalkulatorDashboardWorkspace.vue` (117 baris), `CalculatorDashboardTelemetry.vue`, `CalculatorDashboardTable.vue`, `CalculatorDashboardViewModal.vue`, `CalculatorDashboardEditModal.vue` | `useCalculatorDashboard()`<br>_(Aktif)_ | `/api/calculator/dashboard` | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `employeeId`, numeric metrics | 🟢 100% Full Decomposed | 🔵 VERIFIED |
+| 17  | `app/pages/kalkulator-dashboard.vue`<br>(11 baris) | `KalkulatorDashboardWorkspace.vue` (180 baris), `CalculatorDashboardTelemetry.vue`, `CalculatorDashboardTable.vue`, `CalculatorDashboardViewModal.vue`, `CalculatorDashboardEditModal.vue` | `useCalculatorDashboard()`<br>_(Aktif)_ | `/api/calculator/dashboard` | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `employeeId`, `departmentId`, numeric metrics | 🟢 Responsibility split | 🔵 ROUTE-SCOPE RUNTIME PASSED |
 | 18  | `app/pages/harga-jasa-lainya.vue`<br>(133 baris)   | `JasaLainRecordsTable.vue`, `JasaLainFormModal.vue`, `JasaLainViewModal.vue`, `SalesListHeader.vue`, `SalesConfirmDelete.vue`                              | `useJasaLain()`<br>_(Aktif)_              | `/api/calculator-components/jasa-lain`     | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `category`, `unit`, numeric `hargaDasar`           | 🟢 100% Full Decomposed | 🔵 VERIFIED |
 | 19  | `app/pages/kertas-group.vue`<br>(11 baris)         | `CalculatorListingsPage.vue`, `CalculatorDetailDialog.vue`, `CalculatorManageDialog.vue`                                                   | `useCalculatorMarketplace()`<br>_(Aktif)_ | `/api/calculator/listings`                  | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `partnerId`, `categoryId`                            | 🟢 85-90% Decomposed | 🔵 VERIFIED |
 | 20  | `app/pages/kertas-group-self.vue`<br>(124 baris)   | `PaperGroupStatsWidgets.vue`, `PaperGroupRecordsTable.vue`, `PaperGroupFormModal.vue`, `PaperGroupViewModal.vue`, `SalesConfirmDelete.vue` | `usePaperGroupsSelf()`<br>_(Aktif)_       | `/api/paper-groups`<br>(`paperShopData.ts`) | 🟢 **Relasional Penuh**<br>PK: `id`<br>name, merk, priceType, status                            | 🟢 100% Full Decomposed | 🔵 VERIFIED |
@@ -231,7 +245,7 @@ Tabel detail route di bawah dipertahankan sebagai inventory implementasi histori
 | :-: | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------- | ---------------------------------------------------------------------------- | :---------------------------------------: | :-------------: |
 | 39  | `app/pages/create-product.vue`<br>(13 baris)      | `ProductDocumentForm.vue`, `ProductInfoSection.vue`, `ProductPricingSection.vue`, `ProductAttributeModal.vue`, `ProductCategoryModal.vue`, `ProductVariationModal.vue`                    | `useProductEditor()`<br>_(Aktif)_    | `/api/products`<br>(`productData.ts`) | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `categoryId`, `unitId`, `brandId` | 🟢 100% Full Decomposed | 🔵 VERIFIED |
 | 40  | `app/pages/add-product-process.vue`<br>(112 baris)| `ProductProcessStatsWidgets.vue`, `ProductProcessRecordsTable.vue`, `ProductProcessFormModal.vue`, `SalesListHeader.vue`, `SalesConfirmDelete.vue`                                            | `useProductProcesses()`<br>_(Aktif)_ | `/api/product-processes`              | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `productId` (products 1-5), `orderId` | 🟢 100% Full Decomposed | 🔵 VERIFIED |
-| 41  | `app/pages/cetak-full-color.vue`<br>(81 baris)    | `CetakFullColorWorkspace.vue` (199 baris), `CustomProductCardsGrid.vue`, `CalculationDetailModal.vue`, `CalculationLogTable.vue`, `SalesListHeader.vue`                                     | `useCetakFullColor()`<br>_(Aktif)_   | `/api/cetak-full-color`               | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `productId`, pricing config | 🟢 100% Full Decomposed | 🔵 VERIFIED |
+| 41  | `app/pages/cetak-full-color.vue`<br>(80 baris)    | `CetakFullColorWorkspace.vue` (177 baris), section Product/Size/Paper/Workflow/Profit/Log, shared table/action/dialog/currency/feedback                                     | `useCetakFullColor()`<br>_(Aktif)_   | `/api/cetak-full-color` -> `server/utils/cetakFullColor.ts`               | 🟢 **Typed configuration v2**<br>PK stabil, workflow targets array, timestamps, numeric money, log output-only | 🟢 BRVS-UI verified; workspace orchestrator <200 | 🔵 VERIFIED (2026-10-11 API + browser desktop/390px) |
 | 42  | `app/pages/calender.vue`<br>(77 baris)            | `CalendarWorkspace.vue` (211 baris), `CustomProductCardsGrid.vue`, `CalculationDetailModal.vue`, `CalculationLogTable.vue`, `SalesListHeader.vue`                                           | `useCalendarSettings()`<br>_(Aktif)_ | `/api/calendar-settings`              | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `productId`, pricing config | 🟢 100% Full Decomposed | 🔵 VERIFIED |
 | 43  | `app/pages/product-list.vue`<br>(100 baris)       | `ProductRecordsTable.vue`, `ProductImportModal.vue`, `CustomProductModal.vue`, `SalesListHeader.vue`                                                                                      | `useProducts()`<br>_(Aktif)_         | `/api/products`<br>(`productData.ts`) | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `categoryId`, `unitId`, `brandId` | 🟢 100% Full Decomposed | 🔵 VERIFIED |
 | 44  | `app/pages/product-details.vue`<br>(80 baris)     | `CalculationDetailModal.vue`, `CalculationLogTable.vue`                                                                                                                                   | `useProducts()`<br>_(Aktif)_         | `/api/products/[id]`                  | 🟢 **Relasional Penuh**<br>PK: `id`<br>FK: `categoryId`, `unitId`            | 🟢 85-90% Decomposed | 🔵 VERIFIED |
@@ -364,7 +378,7 @@ Tabel detail route di bawah dipertahankan sebagai inventory implementasi histori
 | **Inventory & Stock**   | `expired-products`, `low-stocks`, `category-list`, `sub-categories`, `brand-list`, `units` |      ⚪ PENDING       | Dekomposisi ke `components/Pages/inventory/`               |
 | **Finance & Cash**      | `bank-account`, `money-transfer`, `cash-advance`, `balance-account`, `account-statement`, `cash-flow`, `balance-sheet`, `input-tax`, `output-tax`, serta ledger `income`/`expenses` | Implemented, static verification passed | Browser CRUD/reload, rekonsiliasi, print/PDF, dan persistence verification |
 | **Purchases**           | `purchase`, `purchase-order`, `purchase-return`, `purchase-item`, `purchase-category`      | ⚪ PENDING (Imported) | Audit validasi server, ID generation, legacy fidelity      |
-| **Promo & Marketing**   | `discount`, `discount-plan`, `coupon`, `voucher`                                           |      ⚪ PENDING       | Pembuatan form promo & relasi diskon                       |
+| **Promo & Marketing**   | `discount`, `discount-plan`, `coupon`, `voucher`                                           |      🟡 PARTIAL       | Voucher passed; Discount Plan, Discount, dan Coupon pending |
 | **POS (Point of Sale)** | `pos.vue`, `pos-order.vue`                                                                 |      ⚪ DITUNDA       | Sesuai instruksi pengguna, POS ditunda sampai diminta lagi |
 
 ---
@@ -491,7 +505,7 @@ Rantai Finance utama sudah diimplementasikan: type, relational JSON/bundled sour
    - Ledger/account relation sudah aktif; ekstrak koordinasi page tersisa agar kembali di bawah 150 baris.
 
 ### Prioritas 2: Perbaikan Halaman Over-limit (Hard Fail > 300 Baris)
-1. **`edit-job-order.vue`** (Saat ini: 307 baris | Target: $\le 150$ baris)
+1. **`edit-job-order.vue`** selesai: 32 baris, dengan UI dan state dipisah berdasarkan tanggung jawab.
    - Acuan: `legacy/static-source/edit-job-order.html`
    - Ekstrak form rincian spesifikasi cetak, finishing, dan mutasi job order ke komponen domain `JobOrderForm.vue` / sub-sections terpisah.
    - Bersihkan dari page shell agar lolos Architecture Gate BRVS ($\le 150$ baris).

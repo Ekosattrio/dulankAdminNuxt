@@ -1,42 +1,25 @@
 <script setup lang="ts">
+import type { CetakFullColorWorkflow } from '#server/types/cetak-full-color'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
+import CurrencyInput from '~/components/Common/CurrencyInput.vue'
 import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
+import { formatMoney } from '~/utils/currency'
 import { formControlClass } from '~/utils/salesUi'
+import ConfigurationMultiSelect from './ConfigurationMultiSelect.vue'
 
-export interface WorkflowItem {
-  id: string
-  category: string
-  name: string
-  assignee: string
-  incentive: string | number
-  targets: string[]
-}
+export type WorkflowItem = CetakFullColorWorkflow
 
 const props = withDefaults(defineProps<{
   title?: string
   items?: WorkflowItem[]
   targetLabel?: string
+  options?: string[]
+  addLabel?: string
 }>(), {
   title: 'Work Flow Setting',
   targetLabel: 'Effective Paper Group',
-  items: () => [
-    {
-      id: 'wf-1',
-      category: 'Pracetak',
-      name: 'Pesan Kertas ke Toko',
-      assignee: 'Nurdin',
-      incentive: '5.000 per Job',
-      targets: ['Art Paper', 'Art Carton', 'HVS', 'Carton BC'],
-    },
-    {
-      id: 'wf-2',
-      category: 'Finishing',
-      name: 'Potong & Sisir Kertas',
-      assignee: 'Budi Santoso',
-      incentive: '3.000 per Job',
-      targets: ['Art Paper', 'Art Carton'],
-    },
-  ],
+  options: () => [],
+  addLabel: 'Add Flow Name',
 })
 
 const emit = defineEmits<{
@@ -44,125 +27,145 @@ const emit = defineEmits<{
   save: []
 }>()
 
-const localItems = ref<WorkflowItem[]>(props.items ? [...props.items] : [])
-watch(() => props.items, (val) => { if (val) localItems.value = [...val] }, { deep: true })
-
 const isAdding = ref(false)
-const newCategory = ref('Pracetak')
-const newName = ref('')
-const newAssignee = ref('')
-const newIncentive = ref('5.000 per Job')
-const newTargets = ref('Art Paper, Art Carton')
+const fallbackItems = ref<WorkflowItem[]>([
+  { id: 'wf-1', category: 'Pracetak', name: 'Pesan Kertas ke Toko', assignee: 'Nurdin', incentiveAmount: 5000, incentiveUnit: 'per Job', targets: ['Art Paper', 'Art Carton', 'HVS', 'Carton BC'] },
+  { id: 'wf-2', category: 'Finishing', name: 'Potong & Sisir Kertas', assignee: 'Budi Santoso', incentiveAmount: 3000, incentiveUnit: 'per Job', targets: ['Art Paper', 'Art Carton'] },
+])
+const displayedItems = computed(() => props.items ?? fallbackItems.value)
+const newItem = reactive<Omit<WorkflowItem, 'id'>>({
+  category: 'Pracetak',
+  name: '',
+  assignee: '',
+  incentiveAmount: 5000,
+  incentiveUnit: 'per Job',
+  targets: [],
+})
 
-function removeRow(idx: number) {
-  localItems.value.splice(idx, 1)
-  emit('update:items', [...localItems.value])
-  emit('save')
+const availableOptions = computed(() => {
+  const combined = [...props.options, ...displayedItems.value.flatMap(item => item.targets)]
+  return [...new Set(combined.filter(Boolean))]
+})
+
+function updateTargets(index: number, targets: string[]) {
+  const rows = displayedItems.value.map(item => ({ ...item, targets: [...item.targets] }))
+  const row = rows[index]
+  if (!row) return
+  row.targets = targets
+  if (!props.items) fallbackItems.value = rows
+  emit('update:items', rows)
+}
+
+function removeRow(index: number) {
+  const rows = displayedItems.value.filter((_, itemIndex) => itemIndex !== index)
+  if (!props.items) fallbackItems.value = rows
+  emit('update:items', rows)
 }
 
 function addWorkflow() {
-  if (!newName.value.trim()) return
-  const targets = newTargets.value.split(',').map(s => s.trim()).filter(Boolean)
-  localItems.value.push({
-    id: `wf-${Date.now()}`,
-    category: newCategory.value,
-    name: newName.value.trim(),
-    assignee: newAssignee.value.trim() || 'Nurdin',
-    incentive: newIncentive.value,
-    targets: targets.length ? targets : ['Semua'],
-  })
-  emit('update:items', [...localItems.value])
-  newName.value = ''
-  newAssignee.value = ''
+  if (!newItem.name.trim() || !newItem.assignee.trim() || !newItem.targets.length) return
+  const rows = [
+    ...displayedItems.value,
+    {
+      id: `workflow-${Date.now()}`,
+      category: newItem.category.trim(),
+      name: newItem.name.trim(),
+      assignee: newItem.assignee.trim(),
+      incentiveAmount: Number(newItem.incentiveAmount) || 0,
+      incentiveUnit: newItem.incentiveUnit.trim() || 'per Job',
+      targets: [...newItem.targets],
+    },
+  ]
+  if (!props.items) fallbackItems.value = rows
+  emit('update:items', rows)
+  newItem.name = ''
+  newItem.assignee = ''
+  newItem.targets = []
   isAdding.value = false
-  emit('save')
 }
 </script>
 
 <template>
-  <div class="mt-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-    <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
-      <h4 class="text-sm font-bold text-gray-900 dark:text-white">{{ title }}</h4>
+  <section class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3 dark:border-gray-800">
+      <h4 class="app-section-title text-gray-900 dark:text-white">{{ title }}</h4>
       <button
         v-if="!isAdding"
         type="button"
-        class="inline-flex h-8 items-center gap-1.5 rounded-md bg-amber-500 px-3 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
+        class="inline-flex h-9 items-center gap-1.5 rounded-md bg-[#ff9f43] px-3 text-sm font-semibold text-white shadow-sm hover:bg-[#e08a36]"
         @click="isAdding = true"
       >
-        <FeatherIcon name="plus" :size="13" />
-        Add Work Flow
+        <FeatherIcon name="plus" :size="14" />
+        {{ addLabel }}
       </button>
     </div>
 
-    <div class="overflow-x-auto mt-4">
-      <table class="w-full text-left text-xs">
-        <thead class="border-b border-gray-200 bg-gray-50 text-[11px] font-semibold text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-[980px] w-full text-left text-sm">
+        <thead class="border-b border-gray-200 bg-gray-50 font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
           <tr>
-            <th class="px-4 py-2.5">Flow Category</th>
-            <th class="px-4 py-2.5">Flow Name</th>
-            <th class="px-4 py-2.5">Assigne</th>
-            <th class="px-4 py-2.5">Incentive</th>
-            <th class="px-4 py-2.5">{{ targetLabel }}</th>
-            <th class="px-4 py-2.5 text-center">Action</th>
+            <th class="px-4 py-3">Flow Category</th>
+            <th class="px-4 py-3">Flow Name</th>
+            <th class="px-4 py-3">Assignee</th>
+            <th class="px-4 py-3">Incentive</th>
+            <th class="min-w-56 px-4 py-3">{{ targetLabel }}</th>
+            <th class="px-4 py-3 text-center">Action</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-          <tr v-for="(item, idx) in localItems" :key="item.id" class="hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
-            <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">{{ item.category }}</td>
-            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ item.name }}</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ item.assignee }}</td>
-            <td class="px-4 py-3 font-medium text-emerald-600 dark:text-emerald-400">{{ item.incentive }}</td>
+          <tr v-for="(item, index) in displayedItems" :key="item.id" class="align-top">
+            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ item.category }}</td>
+            <td class="px-4 py-3">{{ item.name }}</td>
+            <td class="px-4 py-3">{{ item.assignee }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ formatMoney(item.incentiveAmount) }} {{ item.incentiveUnit }}</td>
             <td class="px-4 py-3">
-              <div class="flex flex-wrap gap-1">
-                <span
-                  v-for="target in item.targets"
-                  :key="target"
-                  class="rounded bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
-                >
-                  {{ target }}
-                </span>
-              </div>
+              <ConfigurationMultiSelect
+                :model-value="item.targets"
+                :options="availableOptions"
+                :label="`${targetLabel} untuk ${item.name}`"
+                @update:model-value="updateTargets(index, $event)"
+              />
             </td>
             <td class="px-4 py-3 text-center">
-              <div class="flex justify-center">
-                <SalesActionButton
-                  action="delete"
-                  label="Remove workflow step"
-                  @click="removeRow(idx)"
-                />
+              <SalesActionButton action="delete" :label="`Remove ${item.name}`" @click="removeRow(index)" />
+            </td>
+          </tr>
+
+          <tr v-if="isAdding" class="align-top bg-amber-50/50 dark:bg-amber-950/20">
+            <td class="px-3 py-3"><input v-model="newItem.category" :class="formControlClass" aria-label="Flow Category" /></td>
+            <td class="px-3 py-3"><input v-model="newItem.name" :class="formControlClass" aria-label="Flow Name" /></td>
+            <td class="px-3 py-3"><input v-model="newItem.assignee" :class="formControlClass" aria-label="Assignee" /></td>
+            <td class="px-3 py-3">
+              <div class="flex min-w-52 gap-2">
+                <CurrencyInput v-model="newItem.incentiveAmount" :min="0" align="left" aria-label="Incentive amount" />
+                <input v-model="newItem.incentiveUnit" :class="formControlClass" aria-label="Incentive unit" />
+              </div>
+            </td>
+            <td class="px-3 py-3">
+              <ConfigurationMultiSelect
+                v-model="newItem.targets"
+                :options="availableOptions"
+                :label="targetLabel"
+              />
+            </td>
+            <td class="px-3 py-3">
+              <div class="flex justify-center gap-2">
+                <button type="button" class="h-9 rounded-md bg-[#ff9f43] px-3 text-sm font-semibold text-white" @click="addWorkflow">Add</button>
+                <button type="button" class="h-9 rounded-md bg-gray-800 px-3 text-sm font-semibold text-white" @click="isAdding = false">Cancel</button>
               </div>
             </td>
           </tr>
 
-          <!-- Inline Add Form -->
-          <tr v-if="isAdding" class="bg-amber-50/40 dark:bg-amber-950/20">
-            <td class="px-3 py-2">
-              <select v-model="newCategory" :class="formControlClass">
-                <option value="Pracetak">Pracetak</option>
-                <option value="Cetak">Cetak</option>
-                <option value="Finishing">Finishing</option>
-              </select>
-            </td>
-            <td class="px-3 py-2">
-              <input v-model="newName" type="text" placeholder="Nama alur pengerjaan" :class="formControlClass" />
-            </td>
-            <td class="px-3 py-2">
-              <input v-model="newAssignee" type="text" placeholder="Petugas" :class="formControlClass" />
-            </td>
-            <td class="px-3 py-2">
-              <input v-model="newIncentive" type="text" placeholder="Insentif" :class="formControlClass" />
-            </td>
-            <td class="px-3 py-2">
-              <input v-model="newTargets" type="text" placeholder="Target pisahkan koma" :class="formControlClass" />
-            </td>
-            <td class="px-3 py-2 text-center space-x-1">
-              <button type="button" class="rounded bg-amber-500 px-2.5 py-1 text-xs font-semibold text-white hover:bg-amber-600" @click="addWorkflow">Simpan</button>
-              <button type="button" class="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-300" @click="isAdding = false">Batal</button>
-            </td>
+          <tr v-if="!displayedItems.length && !isAdding">
+            <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500">No workflow configured.</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
-</template>
 
+    <div class="mt-4 flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white">Cancel</button>
+      <button type="button" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white" @click="emit('save')">Save</button>
+    </div>
+  </section>
+</template>

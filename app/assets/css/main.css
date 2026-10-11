@@ -104,6 +104,17 @@
   }
 }
 
+@layer utilities {
+  /* The project keeps a 14px root; calibrate the shared control token to its documented 36px size. */
+  .h-9 {
+    height: 36px;
+  }
+
+  .min-h-9 {
+    min-height: 36px;
+  }
+}
+
 @layer components {
   .app-page-title {
     @apply text-xl font-bold text-gray-900 dark:text-white;

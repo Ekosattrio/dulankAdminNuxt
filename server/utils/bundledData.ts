@@ -2,6 +2,9 @@ import addressData from '../data/address.json'
 import banIpData from '../data/ban-ip.json'
 import bannersData from '../data/banners.json'
 import blogsData from '../data/blogs.json'
+import billingData from '../data/billing.json'
+import vouchersData from '../data/vouchers.json'
+import discountPlansData from '../data/discount-plans.json'
 import blogCategoriesData from '../data/blog-categories.json'
 import blogTagsData from '../data/blog-tags.json'
 import blogCommentsData from '../data/blog-comments.json'
@@ -51,6 +54,7 @@ import jobBranchesHistoryData from '../data/job-branches-history.json'
 import jobBranchesData from '../data/job-branches.json'
 import jobListData from '../data/job-list.json'
 import jobOrdersData from '../data/job-orders.json'
+import jobProgressData from '../data/job-progress.json'
 import languagesData from '../data/languages.json'
 import languageTranslationsData from '../data/language-translations.json'
 import localizationSettingsData from '../data/localization-settings.json'
@@ -96,6 +100,7 @@ import storesData from '../data/stores.json'
 import subCategoriesData from '../data/sub-categories.json'
 import suppliersData from '../data/suppliers.json'
 import supportTicketsData from '../data/support-tickets.json'
+import subscriptionsData from '../data/subscriptions.json'
 import systemIntegrationsData from '../data/system-integrations.json'
 import taxRatesData from '../data/tax-rates.json'
 import unitsData from '../data/units.json'
@@ -103,6 +108,9 @@ import usersData from '../data/users.json'
 import variantsData from '../data/variants.json'
 import wishlistsData from '../data/wishlists.json'
 import workFlowsData from '../data/work-flows.json'
+import workFlowEditorCatalogData from '../data/work-flow-editor-catalog.json'
+import analyticsDashboardData from '../data/analytics-dashboard.json'
+import adminDashboardData from '../data/admin-dashboard.json'
 import workshopServicesData from '../data/workshop-services.json'
 import salesReportsData from '../data/sales-reports.json'
 import bestSellerReportsData from '../data/best-seller-reports.json'
@@ -140,6 +148,9 @@ export const bundledSources: Record<string, unknown> = {
   'ban-ip.json': banIpData,
   'banners.json': bannersData,
   'blogs.json': blogsData,
+  'billing.json': billingData,
+  'vouchers.json': vouchersData,
+  'discount-plans.json': discountPlansData,
   'blog-categories.json': blogCategoriesData,
   'blog-tags.json': blogTagsData,
   'blog-comments.json': blogCommentsData,
@@ -190,6 +201,7 @@ export const bundledSources: Record<string, unknown> = {
   'job-branches.json': jobBranchesData,
   'job-list.json': jobListData,
   'job-orders.json': jobOrdersData,
+  'job-progress.json': jobProgressData,
   'languages.json': languagesData,
   'language-translations.json': languageTranslationsData,
   'localization-settings.json': localizationSettingsData,
@@ -235,12 +247,16 @@ export const bundledSources: Record<string, unknown> = {
   'sub-categories.json': subCategoriesData,
   'suppliers.json': suppliersData,
   'support-tickets.json': supportTicketsData,
+  'subscriptions.json': subscriptionsData,
   'system-integrations.json': systemIntegrationsData,
   'units.json': unitsData,
   'users.json': usersData,
   'variants.json': variantsData,
   'wishlists.json': wishlistsData,
   'work-flows.json': workFlowsData,
+  'work-flow-editor-catalog.json': workFlowEditorCatalogData,
+  'analytics-dashboard.json': analyticsDashboardData,
+  'admin-dashboard.json': adminDashboardData,
   'workshop-services.json': workshopServicesData,
   'sales-reports.json': salesReportsData,
   'best-seller-reports.json': bestSellerReportsData,

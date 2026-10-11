@@ -80,7 +80,7 @@ function getFlowTypeBadgeClass(type: string) {
 
       <template #cell(flowType)="{ item }">
         <span
-          class="inline-flex items-center rounded border px-2 py-0.5 text-[11px] font-semibold"
+          class="inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold"
           :class="getFlowTypeBadgeClass(item.flowType)"
         >
           {{ item.flowType }}

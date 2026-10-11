@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { SalesContact } from '#server/types/sales-document'
+import type { CustomerFormData } from '#server/types/customer'
+import CustomerFormModal from '~/components/Pages/Customers/CustomerFormModal.vue'
 const model = defineModel<SalesContact>({ required: true })
 withDefaults(defineProps<{ label?: string; allowNew?: boolean }>(), { label: 'Customer:', allowNew: true })
 const emit = defineEmits<{ select: [contact: SalesContact] }>()
-const { contacts, createContact } = useSalesContacts()
+const { contacts } = useSalesContacts()
+const { saveCustomer } = useCustomers()
 const fieldId = useId()
 const adding = ref(false)
 const saving = ref(false)
@@ -15,17 +18,19 @@ function select() {
     emit('select', model.value)
   }
 }
-async function createCustomer() {
+async function createCustomer(form: CustomerFormData) {
   if (saving.value) return
-  if (!model.value.name.trim() || !model.value.email.trim()) {
-    error.value = 'Name and email are required.'
-    return
-  }
   saving.value = true
   error.value = ''
   try {
-    const result = await createContact(model.value)
+    const result = await saveCustomer(form)
     if (!result.success) throw new Error(result.message || 'Unable to add customer')
+    model.value = {
+      name: result.data.name,
+      email: result.data.email,
+      phone: result.data.phone,
+      address: '',
+    }
     adding.value = false
     emit('select', model.value)
   } catch (e) {
@@ -63,23 +68,21 @@ async function createCustomer() {
         {{ contact.phone }}
       </option>
     </datalist>
-    <div v-if="adding" class="space-y-3 rounded-md border border-gray-200 p-3 dark:border-gray-700">
-      <label :class="salesLabel">Email<input v-model="model.email" type="email" :class="salesField" /></label>
-      <label :class="salesLabel">Phone<input v-model="model.phone" :class="salesField" /></label>
-      <label :class="salesLabel"
-        >Address<textarea v-model="model.address" :class="salesField" rows="2" />
-      </label>
-      <p v-if="error" role="alert" class="text-red-600">{{ error }}</p>
-      <button type="button" :disabled="saving" :class="salesPrimaryButton" @click="createCustomer">
-        {{ saving ? 'Saving...' : 'Save Customer' }}
-      </button>
-    </div>
-    <div v-else-if="model.name" class="space-y-1 rounded-md bg-gray-50 p-3 leading-5 dark:bg-gray-800">
+    <p v-if="error" role="alert" class="text-red-600">{{ error }}</p>
+    <div v-if="model.name" class="space-y-1 rounded-md bg-gray-50 p-3 leading-5 dark:bg-gray-800">
       <p class="font-medium">
         {{ model.name }} <span class="font-normal">{{ model.phone }}</span>
       </p>
       <p v-if="model.email">{{ model.email }}</p>
       <p v-if="model.address">{{ model.address }}</p>
     </div>
+    <CustomerFormModal
+      :open="adding"
+      :is-edit="false"
+      :customer-data="null"
+      :busy="saving"
+      @close="adding = false"
+      @submit="createCustomer"
+    />
   </div>
 </template>

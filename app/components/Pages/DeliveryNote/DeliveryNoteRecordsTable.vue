@@ -30,21 +30,7 @@ const columns = [
     :search="searchQuery"
     @update:search="$emit('update:searchQuery', $event)"
   >
-    <template #filters
-      ><select
-        :value="filterStatus"
-        aria-label="Status"
-        :class="salesField"
-        class="!w-auto"
-        @change="$emit('update:filterStatus', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">Status</option>
-        <option>Complete</option>
-        <option>Pending</option>
-        <option>Ordered</option>
-        <option>Received</option>
-      </select></template
-    >
+    <template #filters><TableFilterSelect :model-value="filterStatus" placeholder="Status" aria-label="Status" :options="['Complete', 'Pending', 'Ordered', 'Received', 'Rescheduled']" @update:model-value="$emit('update:filterStatus', $event)" /></template>
     <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
 
     <template #cell(actions)="{ item }"

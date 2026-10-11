@@ -15,6 +15,8 @@ const props = defineProps<{
   record: FlowName | null
   busy?: boolean
   error?: string
+  initialCategory?: string
+  categoryOptions?: string[]
 }>()
 
 const emit = defineEmits<{
@@ -22,7 +24,7 @@ const emit = defineEmits<{
   submit: [form: FlowNameFormData]
 }>()
 
-const categories = ['Design', 'Pracetak', 'Cetak', 'Finishing']
+const categories = computed(() => [...new Set([...(props.categoryOptions || []), 'Design', 'Pracetak', 'Cetak', 'Finishing'])])
 const unitIncentives = ['Per Job', 'Per Meter', 'Per Pieces', 'Per Ream']
 
 const form = ref<FlowNameFormData>({
@@ -46,8 +48,9 @@ function normalizeFlowType(type?: string): string {
 }
 
 watch(
-  () => props.record,
-  (rec) => {
+  () => [props.record, props.open, props.initialCategory] as const,
+  ([rec, open]) => {
+    if (!open) return
     if (rec) {
       form.value = {
         id: rec.id,
@@ -63,7 +66,7 @@ watch(
       isIncentiveOpen.value = true
     } else {
       form.value = {
-        category: 'Design',
+        category: props.initialCategory || 'Design',
         name: '',
         incentiveAmount: 0,
         unitIncentive: 'Per Job',

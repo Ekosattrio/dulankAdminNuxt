@@ -10,7 +10,7 @@ defineProps<{
 defineEmits<{
   'update:dateRange': [value: DateRangeValue | null]
 }>()
-const collapsed = ref(false)
+const collapsed = ref(true)
 const { formatNumber } = useFormatters()
 </script>
 

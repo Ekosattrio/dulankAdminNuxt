@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import KalkulatorDashboardWorkspace from '~/components/Pages/Calculator/KalkulatorDashboardWorkspace.vue'
 
-definePageMeta({
-  layout: 'default'
-})
-
-useLegacyPage({
-  title: 'Kalkulator Dashboard',
-  styles: ['/assets/css/style.css'],
-  scripts: ['/assets/js/theme-script.js'],
-  sweetAlert: true
-})
+useLegacyPage({ title: 'Kalkulator Dashboard', sweetAlert: false })
 </script>
 
 <template>

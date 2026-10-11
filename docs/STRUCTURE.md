@@ -1313,7 +1313,7 @@ Revisi ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan 
 
 - Keenam daftar menggunakan `SalesDataTable`, `SalesActionButton`, dan `SalesStatusBadge`. Ukuran font tabel mengikuti `text-sm` (14px) agar konsisten dengan font menu sidebar sesuai catatan client; warna teks, ukuran ikon Feather, pencarian, sorting, pagination, dan area scroll konsisten. Label serta urutan kolom mengikuti masing-masing HTML, termasuk **Sales Channel** dan **Quotation Channel**.
 - Sales memiliki More pada kolom pertama, sebelum No Sales. Aksinya mencakup Sale Detail, Edit Sale, Show Payments, Sales Receipt, Sales Note, Create Invoice, Create Delivery Note, dan Delete Sale. Tombol Delete Sales History dan Cancel Transaction History membuka tabel riwayat dengan filter tanggal. Penghapusan melalui API juga mencatat riwayat.
-- Add/Edit Sales memakai customer, pengiriman/pickup, PO, baris produk, voucher, biaya kirim, pajak, dan notes. Rincian tersebut disimpan bersama transaksi. Voucher diperiksa berdasarkan kode, periode aktif, dan batas pemakaian; tidak menampilkan keberhasilan palsu untuk kode yang tidak valid.
+- Add Sales memakai halaman terpisah `/add-sales` sesuai tautan asli `add-sales.html`, sedangkan Edit Sale tetap berupa modal dari menu More. Keduanya memakai form bersama dengan customer, pengiriman/pickup, PO, baris produk, voucher, biaya kirim, diskon, pajak/transaction code, notes, dan ringkasan lengkap. Rincian tersebut disimpan bersama transaksi. Voucher diperiksa berdasarkan kode, periode aktif, dan batas pemakaian; tidak menampilkan keberhasilan palsu untuk kode yang tidak valid.
 - Daftar Invoice mengikuti referensi dengan aksi lihat/hapus, tanpa tombol Edit atau Create Invoice pada header. Pembuatan invoice tetap tersedia dari menu More Sales dengan customer dan nilai transaksi terisi.
 - Add/Edit Delivery Note memakai susunan dokumen: perusahaan, customer/Ship To, DN No, Dn Date, PO, Shipping BY, Reference, tabel barang/packing/berat, serta Receive By, Security / Check, Driver, dan Issued By. Editor mengisi data record yang dipilih dan menyimpan seluruh rinciannya.
 - Modal Sales Return memakai pilihan customer dan No Sales, tabel Qty/Qty Return/Unit/Price/Amount/Description, Notes, dan Grand Total. Pemilihan penjualan mengisi item jika rinciannya tersedia; data lama yang belum menyimpan item tetap dapat dilengkapi. Detail dan Payment-OUT menampilkan data refund beserta rekening/referensi yang tersimpan.
@@ -1324,6 +1324,22 @@ Revisi ini mencakup Sales, Invoice, Delivery Note, Sales Return, Quotation, dan 
 Tambahan JSON sumber `sales-history.json` dan `sales-vouchers.json` menyalin data contoh yang memang sudah ada di HTML/halaman voucher. Seluruh JSON sumber lama, data runtime pengguna, dan HTML/aset referensi tetap dipertahankan. Pengujian mutasi menggunakan direktori sementara.
 
 Validasi revisi: build, 13 pemeriksaan integrasi API, validasi struktur, dan uji browser lulus. Uji browser mencocokkan seluruh nama/urutan kolom serta computed font/warna keenam tabel, alur More dan history, add/edit dokumen, refund transfer, duplikasi RFQ ke penerima lain, serta pergantian alamat Shipping/Pickup. Keenam daftar dan modal Sales/Delivery Note/Sales Return diperiksa pada lebar 390px tanpa overflow halaman/modal. Tidak ada exception browser. Hash 1.953 file yang dilindungi tetap sama dan tidak ada file terlacak yang dihapus. Typecheck seluruh proyek masih memiliki 196 error di luar file yang diubah; file revisi tidak menghasilkan error TypeScript.
+
+### 20.5 Rekonsiliasi Sales/Add Sales 2026-10-10
+
+Audit ulang terhadap repository asli commit `6123241083ffa762405ab7330bab2ee40f694d5d` menegaskan bahwa Add Sales berpindah ke `add-sales.html`, sementara Edit Sale berada di modal. `app/pages/add-sales.vue` sekarang hanya 12 baris dan menyusun `SalesStandaloneEditor.vue`; Add/Edit berbagi `SalesDocumentForm.vue` serta section Parties, Items, Adjustments, dan Summary. Penyimpanan melewati `useAddSalesPage()`/`useSalesEditor()`, API tipis, lalu `server/utils/sales.ts` untuk validasi, kalkulasi, penomoran, dan persistensi.
+
+Kalkulasi server memisahkan voucher dan diskon langsung, menurunkan subtotal dari item, menghitung biaya kirim, total sebelum pajak, pajak, dan grand total. Voucher `DUILANK12` dan `PROMO20` berasal dari script legacy. Lookup customer aktif melewati `/api/sales/contacts`; sumber kontak legacy dipadukan dengan customer tersimpan di server sehingga tidak lagi meminta `/assets/json/*.json` melalui Vue Router.
+
+Evidence 2026-10-10: typecheck dan build lulus; suite Sales berisi 14 skenario lulus pada direktori data sementara; browser headless desktop dan 390px membuktikan tidak ada document overflow, Add navigation, delapan More actions, Edit modal berisi data record, baris produk dinamis, Pickup, transaction code pajak, dan modal Add Customer lengkap. Tidak ada browser exception/log error setelah lookup kontak diperbaiki. Gate aset P0 kemudian ditutup dengan pemulihan delapan file yang hash-nya cocok dengan manifest.
+
+### 20.6 Rekonsiliasi Dokumen Transaksi Sales 2026-10-10
+
+Invoice, Delivery Note, Sales Return, Quotation, dan Request for Quotation kini memakai rantai aktif `page -> domain component -> domain composable -> Nitro adapter -> domain service -> typed JSON`. Route GET/POST/DELETE serta Payment-OUT Sales Return tidak lagi memuat validasi dan direct persistence sendiri; logika tersebut berada di `server/utils/invoices.ts`, `deliveryNotes.ts`, `salesReturns.ts`, `quotations.ts`, dan `requestQuotations.ts`.
+
+Empat halaman detail yang sebelumnya menampilkan pelanggan, alamat, barang, dan nilai contoh tetap telah diganti dengan komponen detail berdasarkan `id/no` record yang dipilih. Delivery Note menampilkan item tersimpan. Invoice, Quotation, dan RFQ lama yang memang belum memiliki rincian menampilkan unavailable state eksplisit sambil mempertahankan metadata/total yang diketahui; data yang hilang tidak direka. Tombol Complete/Reschedule, Accept/Reject, serta Order/Unavailable menyimpan perubahan melalui domain composable dan service.
+
+Kelima tabel memakai `SalesDataTable` dan `TableFilterSelect`; Invoice hanya memiliki View/Delete sesuai legacy, sedangkan Delivery Note, Sales Return, Quotation, dan RFQ mempertahankan aksi domainnya. Browser membuktikan urutan kolom/aksi lima daftar, modal Add Sales Return, dokumen Add Quotation, editor Delivery Note, modal penerima Duplicate RFQ, empat detail record, serta layout detail 390px tanpa document overflow dan tanpa runtime exception. Suite API terisolasi membuktikan create/update/delete, kalkulasi, status action, duplicate RFQ, refund, reload, empty array, dan invalid JSON safeguard.
 
 ---
 
@@ -1360,7 +1376,7 @@ Jika halaman lain memiliki input `pemilihrentang`/Date Range dari HTML legacy, g
 ### 21.3 Batas Regresi Payment
 
 - `/payments` tidak boleh kembali ke data hardcoded di page. Tabel tetap memakai `PaymentRecordsTable.vue` dan `usePayments()`.
-- `/payment-inflow` dan `/payment-outflow` harus mempertahankan balance summary, filter tanggal, filter source/status, detail record, editor add/edit/payment, payment history, dan delete confirmation.
+- `/payment-inflow` dan `/payment-outflow` harus mempertahankan balance summary, filter tanggal, detail record, editor add/edit/payment, payment history, dan delete confirmation. Jangan menambah filter source/status atau page-size selector yang tidak ada di legacy.
 - Tombol View, Payment, Edit, Delete harus selalu memakai record yang dipilih. Detail/cetak tidak boleh memakai contoh statis.
 - Data lama yang belum memiliki rincian tertentu harus ditampilkan sebagai kosong/known value, bukan diisi transaksi, rekening, customer, atau pembayaran buatan.
 - Label, urutan kolom, opsi source/status/method, dan flow modal tetap mengikuti `legacy/static-source/payment-inflow.html`, `payment-outflow.html`, `payments.html`, serta referensi Netlify yang diberikan pengguna.
@@ -1374,6 +1390,14 @@ Jika halaman lain memiliki input `pemilihrentang`/Date Range dari HTML legacy, g
   - Tombol aksi dialog mengikuti skema Netlify: Cancel berwarna gelap (`#212b36`) dan Submit berwarna aksen oranye/emas (`#ff9f43`).
 - Sanity check rentang data dan pembacaan JSON Payment terverifikasi.
 - Pada revisi Payment saat itu, `npm run build` dilaporkan berhasil tanpa error. Status tersebut bersifat historis dan bukan pengganti validasi ulang setelah perubahan berikutnya.
+
+### 21.5 Rekonsiliasi Payment 2026-10-10
+
+- Tiga route aktif mengikuti rantai `page -> domain component -> domain composable -> Nitro adapter -> payment service/repository -> typed JSON`.
+- `PaymentFlowEditor.vue` menjadi orchestrator di bawah 250 baris dan menyusun komponen method/transfer, split payment dinamis, serta transaction details. Add Inflow memakai Balance dan nominal legacy; nilai total/status baris dihitung reaktif.
+- Split payment dapat menambah lebih dari dua baris, menyimpan setiap method/amount, dan menghasilkan payment history. Server menolak overpayment serta menurunkan amount, due, record status, dan transaction-detail status dari payload domain.
+- Record historis tanpa `transactionDetails` menampilkan keadaan unavailable/kosong; editor tidak mengarang rincian transaksi.
+- Suite `test:payment` lulus pada direktori sementara untuk fixture/filter/date range, derived totals/status, split history, CRUD/reload, not-found, overpayment, empty array, dan invalid JSON. Suite `test:payment-browser` lulus untuk Balance Summary collapsed/expand, modal Add, split row, perubahan nominal/status, desktop, dan viewport 390px tanpa overflow/runtime exception.
 
 ---
 
@@ -1392,23 +1416,23 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 | `/flow-category` | `flow-category/FlowCategoryRecordsTable.vue`, `flow-category/FlowCategoryModal.vue` | `useFlowCategories()` | `/api/flow-categories` |
 | `/flow-name` | `flow-name/FlowNameRecordsTable.vue`, `flow-name/FlowNameModal.vue` | `useFlowNames()` | `/api/flow-names` |
 | `/flow-template` | `flow-template/FlowTemplateRecordsTable.vue`, `flow-template/FlowTemplateModal.vue` | `useFlowTemplates()` | `/api/flow-templates` |
-| `/work-flow` | `work-flow/WorkFlowRecordsTable.vue`, `work-flow/WorkFlowProcessModal.vue` | `useWorkFlows()` | `/api/work-flows` |
-| `/add-work-flow` | `work-flow/WorkFlowDocumentForm.vue` | `useWorkFlows()` | `/api/work-flows` (POST) |
-| `/edit-work-flow` | `work-flow/WorkFlowDocumentForm.vue` | `useWorkFlows()` | `/api/work-flows/[id]` (GET, PUT) |
+| `/work-flow` | `work-flow/WorkFlowRecordsTable.vue` | `useWorkFlows()` | `/api/work-flows` |
+| `/add-work-flow` | `WorkFlowDocumentForm.vue`, Product Picker, Flow Catalog, Arrange Panel | `useWorkFlowDocumentEditor()` + `useWorkFlows()` | `/api/work-flow-context`, `/api/work-flows` (POST) |
+| `/edit-work-flow` | Form/editor yang sama dengan Add | `useWorkFlowDocumentEditor()` + `useWorkFlows()` | `/api/work-flow-context`, `/api/work-flows/[id]` (GET, PUT) |
 
 ### 22.1 Kontrak Data dan Backend
 
 - `server/types/flow-category.ts`: `id`, `no` (`PCC-xxx`), `name`, `used`, `createdBy`, `createdDate`.
 - `server/types/flow-name.ts`: `id`, `no` (`JBP-xxxx`), `category`, `name`, `incentiveAmount`, `unitIncentive`, `flowAssignee`, `flowType`, `createDate`.
 - `server/types/flow-template.ts`: `id`, `no` (`FT-xxxx`), `name`, `information`, `items?: FlowTemplateItem[]` di mana `FlowTemplateItem` terdiri dari `id`, `label`, `type` (`Input Type` | `Select Type`), dan `options?: string[]`.
-- `server/types/work-flow.ts`: `id`, `no` (`JAP-xxxx`), `date`, `category`, `product`, `workflowSteps`, `steps: WorkFlowStepItem[]`.
-- Seluruh JSON sumber awal tersimpan di `server/data/flow-categories.json`, `flow-names.json`, `flow-templates.json`, dan `work-flows.json`. Penyimpanan runtime disimpan terisolasi di `data/*.json` dan tidak ditimpa oleh seed.
+- `server/types/work-flow.ts`: `id`, `no` (`JAP-xxxx`), `date`, `category`, `productId`, `product`, `workflowSteps`, `steps: WorkFlowStepItem[]`, serta kontrak editor context.
+- Seluruh JSON sumber awal tersimpan di `server/data/flow-categories.json`, `flow-names.json`, `flow-templates.json`, `work-flows.json`, dan catalog editor `work-flow-editor-catalog.json`. Penyimpanan runtime disimpan terisolasi di `data/*.json` dan tidak ditimpa oleh seed.
 - Validasi, penomoran otomatis prefix domain, dan filter tanggal ditangani di `server/utils/`.
 
 ### 22.2 Arsitektur UI & Komponen
 
 - Tabel pada keempat menu menggunakan standar bersama `SalesDataTable.vue` (`text-sm`/14px), kontrol toolbar light modern `h-9`, `DateRangePicker.vue`, dan `SalesActionButton.vue`.
-- Modal Add/Edit (`FlowCategoryModal`, `FlowNameModal`, `FlowTemplateModal`, `WorkFlowProcessModal`) menggunakan standar modal Netlify: lebar medium, header `#fafbfe`, judul `#092c4c`, tombol Cancel `#212b36`, dan Submit `#ff9f43`.
+- Modal Add/Edit (`FlowCategoryModal`, `FlowNameModal`, `FlowTemplateModal`) menggunakan standar modal Netlify. Edit Work Flow mengikuti link legacy menuju halaman `/edit-work-flow`, bukan quick-edit modal.
 - **Flow Template Add/Edit Modal (`FlowTemplateModal.vue`) & Sub-modal (`FlowTemplateDataSelectModal.vue`):**
   - Mengimplementasikan alur lengkap HTML `flow-template.html`:
     - Field input `Flow Templete Name`.
@@ -1430,12 +1454,10 @@ Keempat menu ini mengikuti standar backend-ready, reusable-first, halaman tipis,
 
 ### 22.4 Status Validasi
 
-- Sesuai arahan tegas pengguna, **`npm run dev` dan `npm run build` TIDAK dijalankan**.
-- Validasi dilakukan secara statis:
-  - Pemeriksaan integritas ukuran file seluruh modul di grup workflow (tidak ada file 0-byte atau placeholder).
-  - Validitas syntax seluruh JSON data awal (`flow-categories.json`, `flow-names.json`, `flow-templates.json`, `work-flows.json`) terverifikasi.
-  - Pemeriksaan statis kontrak tipe, API endpoints Nitro, utility server, dan composables untuk keempat submenu terhubung utuh tanpa broken paths.
-  - Pemeriksaan kecocokan struktur tabel, toolbar, filter tanggal, modal, dan form dokumen dengan HTML legacy.
+- `npm run typecheck` dan `npm run build` lulus.
+- `npm run test:workflow` lulus untuk filter, CRUD/get/reload, ID generation, nested template/step persistence, invalid payload, empty array, dan malformed JSON pada direktori sementara.
+- `npm run test:workflow-browser` lulus untuk enam route, modal master, create–redirect, selected edit, desktop/390px, overflow, dan runtime exception.
+- Audit generator dan structure validator lulus; seluruh JSON termasuk catalog editor terdaftar pada `bundledData.ts`.
 
 ### 22.5 Standarisasi Dimensi & Komponen Reusable
 
@@ -2261,6 +2283,14 @@ Status: **implemented, verification pending**. Build, typecheck penuh, browser d
 
 Status: **implemented, verification pending**.
 
+### 48.6 Rekonsiliasi `/cetak-full-color` (2026-10-11)
+
+- Data aktif sebelas tab diselaraskan literal dengan `legacy/static-source/cetak-full-color.html`: lima kartu produk, ukuran, grup/gramatur kertas, mesin, laminate, fold, print side, component, urutan workflow, profit setting, dan sepuluh log transaksi.
+- Target workflow, termasuk **Effective Paper Group**, disimpan sebagai `string[]` dan diedit melalui multiple-select nyata. Pilihan ganda terbukti persisten setelah POST dan reload.
+- Rantai aktif adalah `cetak-full-color.vue` -> `CetakFullColorWorkspace.vue` dan section domain -> `useCetakFullColor()` -> API GET/POST tipis -> `server/utils/cetakFullColor.ts` -> JSON typed. GET tidak menulis dan JSON fisik rusak tetap menghasilkan error.
+- Runtime fixture lama dimigrasikan in-memory agar data pengguna tidak ditimpa otomatis; seed deploy berada di `server/data/cetak-full-color.json`, sedangkan log transaksi adalah output-only pada mutation konfigurasi.
+- Evidence: typecheck, production build, structure validation, API/persistence/safeguard test, serta browser desktop/390px lulus. Status route: **verified**; belum menjadi approved baseline pengguna dan Netlify durable mutation tetap pending.
+
 ---
 
 ## 49. Standar Tipografi Global (2026-10-08)
@@ -2359,6 +2389,140 @@ Audit sampel aktif:
 - `/edit-job-order`: non-compliant; data/mutasi lokal serta tidak memakai composable/API Job Order yang sudah ada.
 
 Detail kontrak layer, hard fail, status struktur, dan Architecture Evidence Matrix berada di `docs/BACKEND_READY_VERTICAL_SLICE.md`. Audit dokumentasi ini tidak mengubah source code atau status fitur.
+
+---
+
+## 54. Rekonsiliasi Sales-Adjacent (2026-10-10)
+
+- `/sales-dashboard` kini memakai rantai `page -> SalesDashboardWorkspace -> useSalesDashboard -> /api/sales-dashboard -> salesDashboard service -> typed snapshot`. Page turun dari 964 menjadi 9 baris; Header, KPI, Best Seller, Transactions, Analytics, Countries, dan Dialogs dipisah berdasarkan tanggung jawab.
+- `/sales-report` memakai `useSalesReports` dan server-side Search/Date filter. Toolbar non-legacy Category/Channel dihapus; delapan KPI, kolom laporan, detail `Print Outdoor` 10 baris, CSV, PDF, dan Print mengikuti referensi.
+- `/sales-note` dan `/sales-receipt` memakai `useSaleDocument` dan selalu memilih transaksi Sales dari query `id/no`. Data transaksi contoh tetap tidak dipakai.
+- API test membuktikan dashboard aggregation, report fixtures/search/date, empty array, dan invalid JSON. Browser test membuktikan dialog/interaksi, selected-record document, desktop/390px tanpa overflow, dan tanpa runtime exception.
+- Architecture Evidence Matrix dan UI Responsibility Evidence lengkap berada di `docs/LEGACY_PARITY_AUDIT_2026-10-10.md`. Dengan batch ini 22/186 route mempunyai evidence manual/runtime; 164 route lain tetap pending.
+
+---
+
+## 55. Rekonsiliasi Webstore dan Support Ticket (2026-10-10)
+
+- Cart, Checkout, Wishlist, Reviews, dan Contact Form mempertahankan pola list read-only yang disetujui: domain Stats + RecordsTable, filter tanggal/dropdown standar, numeric currency, dan tidak memiliki kolom Action.
+- Enam endpoint GET Webstore menjadi adapter tipis menuju `server/utils/webstoreLists.ts`; filtering, date range, dan stats tidak lagi tinggal di route HTTP.
+- Support Ticket memakai `server/utils/supportTickets.ts` untuk validasi Add/Edit, ID, activity/status history, chat, CRUD, dan persistence. API detail `/api/webstore/support-tickets/:id` ditambahkan agar halaman detail memilih record sebenarnya.
+- View Ticket mengikuti link legacy ke `/support-ticket-detail?id=...`, bukan modal. Detail hardcoded diganti route composer 15 baris, workspace, detail panel, chat panel, serta editor Add/Edit bersama.
+- API dan browser suites membuktikan filter/stats/numeric money, empty/invalid data, not-found, Add/Edit/chat/status/delete/reload, lima list pada 390px, dan zero runtime exception. Matrix penuh berada di `docs/LEGACY_PARITY_AUDIT_2026-10-10.md`.
+- Total evidence manual/runtime menjadi 29/186 route; 157 route lain tetap pending.
+
+---
+
+## 56. Rekonsiliasi Enam Route Inti Orders (2026-10-10)
+
+- `/orders`, `/job-order`, `/job-list`, `/job-branch`, `/my-job`, dan `/my-incentive` telah melewati rekonsiliasi source, API/persistence/data safeguards, serta browser desktop/390px tanpa runtime exception.
+- `job-order.vue` menjadi composer 113 baris melalui `useJobOrderPage.ts`; workflow sidebar memakai counter hasil service server, bukan angka tetap. Aksi Orders membawa ID record terpilih ke route detail/editor.
+- Service `jobOrders.ts`, `myJobs.ts`, dan `myIncentives.ts` menangani filter, validasi, ID, derived totals/counters, serta persistence. `order.ts`, `jobList.ts`, dan `jobBranch.ts` memakai utility JSON bersama agar array kosong valid dan JSON rusak tidak diam-diam diganti seed.
+- `JobBranchSettingModal.vue` dipecah menjadi orchestrator, `JobBranchInformationEditor.vue`, dan `JobBranchAssignmentFields.vue`; editor nested before/after information, assignee, serta incentive tetap lengkap.
+- Suite `test:orders` membuktikan enam dataset, filter/derived stats, selected mutations, nested branch data, persistence, validation, empty array, dan malformed JSON. `test:orders-browser` membuktikan enam route, modal/mutation terpilih, navigasi action, desktop/390px, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 35/186 route; 151 route lain tetap pending. Route mandiri `/job-order-detail` dan `/edit-job-order` belum termasuk status ini dan menjadi pekerjaan berikutnya.
+
+---
+
+## 57. Rekonsiliasi Job Order Detail dan Editor Mandiri (2026-10-10)
+
+- `/job-order-detail` dan `/edit-job-order` kini menyelesaikan record melalui `id` Job Order atau `orderId` transaksi sumber. Endpoint context mengembalikan relasi typed Order–Job Order; record contoh tetap telah dihapus.
+- Detail menampilkan Sales Information, Product Detail, input/output specs yang benar-benar tersimpan, serta urutan flow dan informasi dinamis. Nilai teknis yang tidak tersedia ditampilkan `-`, bukan diisi contoh legacy.
+- Editor mempertahankan tiga tab legacy: Work Flow Default, Assignee, dan Incentive. Pengguna dapat menambah, mengurutkan, menghapus flow; memilih In-House/Branch Store/Outsource; mengisi informasi sebelum/sesudah proses; memilih assignee; serta menyimpan incentive numerik dan unit.
+- Kedua page menjadi composer 16/32 baris. UI dipisah ke `JobOrderDetailDocument.vue`, `JobOrderEditorWorkspace.vue`, `JobOrderSourcePanel.vue`, `JobOrderWorkflowForm.vue`, dan `JobOrderFlowInformation.vue`; request dan mutation berada di `useJobOrderDocument.ts`.
+- `jobOrders.ts` memvalidasi flow name, label informasi, dan incentive non-negatif, lalu mempertahankan kontrak lama untuk modal Job Order. Suite Orders API/browser kini mencakup delapan route, selected context, workflow persistence, redirect/reload, desktop/390px, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 37/186 route; 149 route lain tetap pending.
+
+---
+
+## 58. Rekonsiliasi Job Progress (2026-10-10)
+
+- `/job-progress` mempertahankan empat KPI, filter Date dan Job Proses, kolom legacy termasuk `Complete by` dan `Time`, serta aksi Complete/Pending yang bekerja pada record terpilih.
+- Page 249 baris diubah menjadi composer tipis. UI dipisah menjadi `JobProgressStats.vue` dan `JobProgressRecordsTable.vue`; request, state, mutation, feedback, serta export orchestration berada di `useJobProgress.ts`.
+- Rantai aktif adalah `page -> domain components -> useJobProgress -> /api/job-progress -> jobProgress service -> typed relational JSON`. HTTP route hanya menjadi adapter.
+- Dataset Job Progress memiliki primary key, FK order/job/customer/branch/product/employee, input/output specs, Qty OK/Rusak, serta timestamp. Stats dan filter dihitung dari dataset aktif; toggle status dipersistensikan melalui utility JSON bersama.
+- Suite Orders API membuktikan filter, stats, update/reload, validasi, 404, empty array, dan malformed JSON. Suite browser membuktikan tabel/aksi terpilih, desktop/390px, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 38/186 route; 148 route lain tetap pending.
+
+---
+
+## 59. Rekonsiliasi Master Workflow (2026-10-10)
+
+- `/flow-category`, `/flow-name`, `/flow-template`, dan `/work-flow` mempertahankan header, filter, tabel, kolom, modal, serta aksi legacy; Edit Work Flow tetap bernavigasi ke halaman terpisah.
+- Semua list memakai `SalesDataTable`, filter bersama, `DocumentPrintModal`, `SalesFeedback`, dan `SalesConfirmDelete`. Filter Category/Name/Template/Date sekarang benar-benar diterapkan di service.
+- Modal Flow Name mempertahankan Assignee Employees/Department, Flow Category, Flow Type, Incentive Amount, dan Unit Incentive. Flow Template mempertahankan inline Add/Edit/Delete Information, pergantian Input/Select Type, serta submodal Add Data Select.
+- Add/Edit Work Flow berbagi `WorkFlowDocumentForm.vue`. Form dipecah menjadi `WorkFlowProductPicker.vue`, `WorkFlowCatalog.vue`, dan `WorkFlowArrangePanel.vue`; modal Category/Name memakai komponen master yang sama dan menyimpan melalui API.
+- `work-flow-context` mengirim produk, product category, flow category/name, template, dan catalog legacy dari data typed/bundled. Empat store master memakai strict shared JSON agar array kosong valid dan JSON rusak menghasilkan error.
+- Suite `test:workflow` membuktikan filter, CRUD/get/reload, ID, nested template/step persistence, invalid payload, empty array, dan malformed JSON. Suite browser membuktikan enam route, modal penuh, create redirect, selected edit, desktop/390px, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 44/186 route; 142 route lain tetap pending.
+
+---
+
+## 60. Rekonsiliasi Analytics Dashboard (2026-10-10)
+
+- `/analytics-dashboard` mempertahankan KPI Page View/Clicks/Conversions/New Users, conversion detail, Performance, Session By Browser, Sessions by Country, dan Top Pages sesuai HTML legacy.
+- Page monolitik 645 baris menjadi composer 9 baris. `AnalyticsDashboardWorkspace.vue` hanya menyusun `AnalyticsKpiGrid.vue`, `AnalyticsConversionCard.vue`, `AnalyticsPerformanceChart.vue`, dan `AnalyticsTrafficPanels.vue`.
+- Rantai aktif adalah `page -> responsibility components -> useAnalyticsDashboard -> /api/analytics-dashboard -> analyticsDashboard service -> typed bundled JSON`.
+- Snapshot menyimpan angka sebagai number; strict loader memvalidasi seluruh array dan menolak JSON rusak. Tombol Refresh non-legacy tidak ditampilkan; retry tetap tersedia saat error.
+- Suite `test:dashboard` membuktikan kontrak snapshot dan malformed-data safeguard. Suite browser membuktikan isi legacy, View Details, desktop/390px tanpa page overflow, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 45/186 route; 141 route lain tetap pending.
+
+---
+
+## 61. Rekonsiliasi Dashboard Admin (2026-10-10)
+
+- Route root `/` mempertahankan seluruh susunan `index.html`: Welcome/low-stock alert, delapan metrics, Sales & Purchase, Overall Information, Top Selling, Low Stock, Recent Sales, Sales Statics, lima tab Recent Transactions, Top Customers, Top Categories, dan Order Statistics.
+- Page 345 baris menjadi composer 9 baris. `AdminDashboardWorkspace.vue` menyusun sembilan komponen tanggung jawab tanpa menampung data atau business calculation.
+- Rantai aktif adalah `page -> AdminDashboard responsibility components -> useAdminDashboard -> /api/admin-dashboard -> adminDashboard service -> typed bundled JSON`.
+- Semua nilai uang/metric di snapshot berupa number. Strict service memvalidasi struktur utama dan menolak JSON rusak; bundled source hanya fallback ketika file tidak tersedia.
+- Interaksi range chart, period/year selects, dismiss alert, dan lima transaction tabs diuji; urutan tab Invoice tetap `Customer`, `Due Date`, `Status`, `Amount`.
+- Suite Dashboard API/browser membuktikan snapshot Admin/Analytics, malformed-data safeguards, isi/interaksi desktop, viewport 390px tanpa page overflow, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 46/186 route; 140 route lain tetap pending.
+
+---
+
+## 62. Rekonsiliasi Subscriptions (2026-10-11)
+
+- `/subscriptions` mempertahankan seluruh isi `subscriptions.html`: empat KPI, toolbar PDF/Print/Refresh, search, date range, filter Plan/Payment/Status, sembilan kolom, footer Total, dan aksi View/Edit/Delete. Tidak ada Add, upgrade, atau payment flow baru.
+- Page 960 baris menjadi composer 9 baris. `SubscriptionWorkspace.vue` mengoordinasikan `SubscriptionStats.vue`, `SubscriptionRecordsTable.vue`, `SubscriptionDetailDialog.vue`, dan `SubscriptionFormDialog.vue` tanpa menyimpan record domain lokal.
+- Rantai aktif adalah `page -> Subscription responsibility components -> useSubscriptions -> /api/subscriptions -> subscriptions service -> typed relational bundled JSON`.
+- Record memiliki PK `id`, FK `subscriberId`, amount numeric, tanggal ISO, dan timestamps. KPI legacy disimpan sebagai aggregate summary snapshot; data rusak menghasilkan error eksplisit dan bundled source hanya dipakai saat file fisik tidak tersedia.
+- GET list/detail, PUT, dan DELETE diuji dengan filter search/date/plan/payment/status, edit/reload, delete/reload, invalid payload, 404, serta malformed JSON pada cwd sementara.
+- Browser test membuktikan content/kolom/KPI legacy, View/Edit/Delete, filter, print dialog, desktop/390px tanpa page overflow, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 47/186 route; 139 route lain tetap pending.
+
+---
+
+## 63. Rekonsiliasi Kalkulator Dashboard (2026-10-11)
+
+- `/kalkulator-dashboard` mempertahankan `Manage kalkulator`, Realtime Database, tiga metric/chart beserta seri legacy, sepuluh user/angka/status, enam kolom tabel, Category dropdown, View/Edit/Delete, dan toolbar PDF/Print/Refresh/Collapse.
+- Prop/slot tabel yang tidak cocok dengan `SalesDataTable` diperbaiki sehingga record benar-benar dirender. Filter Status non-legacy dihapus; Category mempertahankan opsi presentasional legacy karena sumber tidak memberi kategori per user.
+- Rantai aktif adalah `page -> Calculator Dashboard components -> useCalculatorDashboard -> /api/calculator/dashboard -> calculatorDashboardData service -> typed relational bundled JSON`.
+- Record memiliki PK, `userId`, FK employee/department, metrics numeric, serta timestamps. Chart labels/series tidak lagi hardcoded di component. Loader strict membuat JSON rusak menghasilkan error eksplisit.
+- Update/delete memvalidasi nama, angka non-negatif, usage 0-100, status, dan ID; suite API membuktikan persistence/reload, 400, 404, delete, serta malformed JSON pada cwd sementara.
+- Browser test membuktikan isi legacy, View/Edit/Delete, collapse/expand, print dialog, desktop/390px tanpa page overflow, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 48/186 route; 138 route lain tetap pending.
+
+---
+
+## 64. Rekonsiliasi Billing (2026-10-11)
+
+- `/billing` mempertahankan `Billing List` / `Manage Billing`, tiga KPI legacy, Search, Date, Metode, Status, sebelas kolom tabel, sepuluh record, serta footer total. Action/modal dan toolbar print yang tidak ada pada `billing.html` dihapus.
+- Page 318 baris menjadi composer 9 baris. `BillingWorkspace.vue` menyusun `BillingStats.vue` dan `BillingRecordsTable.vue`; tabel memakai shared `SalesDataTable`, `DateRangePicker`, `TableFilterSelect`, dan `CurrencyDisplay`.
+- Rantai aktif adalah `page -> Billing responsibility components -> useBillings -> /api/billings -> billing service -> typed relational bundled JSON`.
+- Record memiliki PK `id`, FK `transactionId`/`userId`, timestamps, dan nilai subtotal/diskon/pajak/pengiriman/total numeric. Loader strict mempertahankan array kosong sebagai data valid dan membuat JSON rusak menghasilkan error eksplisit.
+- Suite API membuktikan exact snapshot, relasi/numeric data, search/method/status/date filter, empty state, dan malformed JSON. Browser suite membuktikan KPI/kolom/record legacy, ketiadaan action/modal buatan, interaksi search/status, desktop/390px tanpa overflow, dan zero runtime exception.
+- Total evidence manual/runtime menjadi 49/186 route; 137 route lain tetap pending.
+
+## 65. Rekonsiliasi Voucher (2026-10-11)
+
+- `/voucher` mempertahankan `Coupons` / `Manage Your Coupons`, empat record dan sembilan kolom legacy, search, filter Date/Store/Product/Name/Type, Report, serta toolbar Add/PDF/Print/Refresh/Collapse.
+- Page 654 baris menjadi composer 9 baris. `VoucherWorkspace.vue` menyusun `VoucherRecordsTable.vue` dan shared `VoucherFormDialog.vue`; Add/Edit tidak lagi berupa dua form lokal yang dapat drift.
+- Rantai aktif adalah `page -> Voucher responsibility components -> useVouchers -> /api/vouchers -> vouchers service -> typed relational bundled JSON`.
+- Store, creator, dan product disimpan sebagai relasi; discount/limit/used berupa angka murni. Service memvalidasi tipe/status/tanggal/percentage/product, uniqueness code, filter, CRUD, serta malformed JSON secara strict.
+- Toolbar Product (`Laptop`, `Lemari`) dan modal Product (`Nike Jordan`, `Amazon Echo Dot`) dipisahkan karena HTML legacy memang memakai pilihan berbeda. `Used` tetap output dan tidak dijadikan input Add/Edit.
+- Typecheck, production build, API create/update/delete/reload dan invalid-data suite, audit generator, serta browser desktop/390px untuk Add/Edit/Delete/print/collapse lulus.
+- Total evidence manual/runtime menjadi 50/186 route; 136 route lain tetap pending.
 
 
 

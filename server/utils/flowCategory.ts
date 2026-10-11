@@ -23,6 +23,7 @@ function nextFlowCategoryId(items: FlowCategory[]): string {
 export function listFlowCategories(filters: FlowCategoryFilterParams = {}): FlowCategory[] {
   const items = readFlowCategoryData();
   const search = filters.search?.trim().toLowerCase();
+  const category = filters.category?.trim().toLowerCase();
   const startDate = filters.startDate?.trim();
   const endDate = filters.endDate?.trim();
 
@@ -31,6 +32,8 @@ export function listFlowCategories(filters: FlowCategoryFilterParams = {}): Flow
       const haystack = [item.no, item.name, item.createdBy].filter(Boolean).join(" ").toLowerCase();
       if (!haystack.includes(search)) return false;
     }
+
+    if (category && category !== 'all' && item.name.toLowerCase() !== category) return false;
 
     if ((startDate || endDate) && item.createdDate) {
       // Date may be ISO or "YYYY-MM-DD HH:mm:ss"
@@ -63,7 +66,7 @@ export function createFlowCategory(payload: FlowCategoryFormData): FlowCategory 
     id: nextFlowCategoryId(items),
     no: payload.no?.trim() || nextFlowCategoryNo(items),
     name,
-    used: payload.used !== undefined ? Number(payload.used) : 0,
+    used: 0,
     createdBy: payload.createdBy?.trim() || "Admin",
     createdDate: payload.createdDate?.trim() || dateFormatted,
   };
@@ -92,7 +95,7 @@ export function updateFlowCategory(id: string, payload: FlowCategoryFormData): F
   const updated: FlowCategory = {
     ...current,
     name,
-    used: payload.used !== undefined ? Number(payload.used) : current.used,
+    used: current.used,
   };
 
   items[index] = updated;

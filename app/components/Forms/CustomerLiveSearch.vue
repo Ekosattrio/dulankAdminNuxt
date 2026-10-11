@@ -1,10 +1,5 @@
 <script setup lang="ts">
-export interface Customer {
-  name: string
-  phone: string
-  email: string
-  address: string
-}
+import type { SalesContact as Customer } from '#server/types/sales-document'
 
 const props = withDefaults(
   defineProps<{
@@ -23,16 +18,14 @@ const emit = defineEmits<{
 }>()
 
 const query = ref(props.modelValue)
-const customers = ref<Customer[]>([])
+const { contacts: customers, refresh } = useSalesContacts()
 const isOpen = ref(false)
 const isLoaded = ref(false)
 
 const loadCustomers = async () => {
   if (isLoaded.value) return
   try {
-    const res = await fetch('/assets/json/customer.json')
-    const data = await res.json()
-    customers.value = data.customer || []
+    await refresh()
     isLoaded.value = true
   } catch (err) {
     console.error('Failed to load customers:', err)

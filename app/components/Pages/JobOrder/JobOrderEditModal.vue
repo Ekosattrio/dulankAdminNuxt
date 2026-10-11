@@ -46,14 +46,14 @@ watch(
         workflowCategory: val.workflowCategory,
         workflowType: val.workflowType,
       }
-      qty.value = '500'
+      qty.value = val.qty == null ? '' : String(val.qty)
     }
   },
   { immediate: true },
 )
 
 function handleSubmit() {
-  emit('submit', { ...form.value })
+  emit('submit', { ...form.value, qty: qty.value })
 }
 </script>
 

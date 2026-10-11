@@ -26,7 +26,6 @@ const {
   busy,
   actionError,
   toastMessage,
-  handleAdd,
   handleEdit,
   handleDelete,
   handleSubmit,
@@ -38,6 +37,7 @@ import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
 import { useTablePrint } from '~/composables/useTablePrint'
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
+const openAddSales = () => navigateTo('/add-sales')
 
 const salesPrintColumns = [
   { key: 'saleNo', label: 'No Sales' },
@@ -49,7 +49,7 @@ const salesPrintColumns = [
   { key: 'tax', label: 'Tax', align: 'right' as const },
   { key: 'total', label: 'Total (IDR)', align: 'right' as const },
   { key: 'delivery', label: 'Delivery' },
-  { key: 'channel', label: 'Channel' },
+  { key: 'channel', label: 'Sales Channel' },
   { key: 'status', label: 'Status', align: 'center' as const }
 ]
 </script>
@@ -61,7 +61,7 @@ const salesPrintColumns = [
       subtitle="Manage Yours sales"
       add-label="Add Sales"
       :refreshing="pending"
-      @add="handleAdd"
+      @add="openAddSales"
       @refresh="refresh()"
       @print="openPrintModal('print')"
       @pdf="openPrintModal('pdf')"
@@ -94,7 +94,7 @@ const salesPrintColumns = [
       @update:filter-status="filterStatus = $event"
       @update:filter-channel="filterChannel = $event"
       @update:filter-transaction-code="filterTransactionCode = $event"
-      @add-sale="handleAdd"
+      @add-sale="openAddSales"
       @edit-sale="handleEdit"
       @delete-sale="handleDelete"
       @view-sale="selectedSale = $event"

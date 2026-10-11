@@ -12,8 +12,9 @@ export function useRequestQuotations() {
     rfqs.value.filter((item) => statusFilter.value === 'All' || item.status === statusFilter.value),
   )
   const save = async (body: Partial<RFQItem>) => {
-    await apiFetch('/api/request-quotations', { method: 'POST', body })
+    const response = await apiFetch<{ success: boolean; data: RFQItem }>('/api/request-quotations', { method: 'POST', body })
     await refresh()
+    return response
   }
   const remove = async (id: string) => {
     await apiFetch(`/api/request-quotations/${id}`, { method: 'DELETE' })
@@ -83,6 +84,7 @@ export function useRequestQuotations() {
     duplicateRFQ,
     duplicating,
     confirmDuplicate,
+    saveRequestQuotation: save,
     printTable,
   }
 }

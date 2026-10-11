@@ -2,26 +2,22 @@
 import type { WorkFlow } from "#server/types/work-flow";
 import type { DateRangeValue } from "~/composables/useDateRange";
 import DateRangePicker from "~/components/Common/DateRangePicker.vue";
-import TableFilterSelect from "~/components/Common/TableFilterSelect.vue";
 import SalesActionButton from "~/components/Sales/SalesActionButton.vue";
 import SalesDataTable from "~/components/Sales/SalesDataTable.vue";
 
 const props = defineProps<{
   workFlows: WorkFlow[];
   searchQuery: string;
-  filterCategory: string;
   filterDateRange: DateRangeValue | null;
 }>();
 
 const emit = defineEmits<{
   "update:searchQuery": [value: string];
-  "update:filterCategory": [value: string];
   "update:filterDateRange": [value: DateRangeValue | null];
   edit: [item: WorkFlow];
   delete: [item: WorkFlow];
 }>();
 
-const categories = ["Offset", "Large Format", "Digital A3+", "Sablon"];
 const selectedIds = ref<string[]>([]);
 
 const allSelected = computed(() => {
@@ -68,15 +64,6 @@ const columns = [
     @update:search="$emit('update:searchQuery', $event)"
   >
     <template #filters>
-      <!-- Category Filter (Reusable TableFilterSelect) -->
-      <TableFilterSelect
-        :model-value="filterCategory"
-        :options="categories"
-        placeholder="All Categories"
-        aria-label="Filter Category"
-        @update:model-value="$emit('update:filterCategory', $event)"
-      />
-
       <!-- Date Range Picker -->
       <DateRangePicker
         :model-value="filterDateRange"

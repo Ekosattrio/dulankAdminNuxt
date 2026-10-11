@@ -4,6 +4,7 @@ interface ResponseData {
   success: boolean
   data: JobOrder[]
   message?: string
+  meta?: { workflowCounts?: Record<string, number> }
 }
 
 export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrderFilterParams) {
@@ -15,6 +16,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
   })
 
   const jobOrders = computed<JobOrder[]>(() => data.value?.data ?? [])
+  const workflowCounts = computed<Record<string, number>>(() => data.value?.meta?.workflowCounts ?? {})
 
   const saveJobOrder = async (payload: JobOrderFormData) => {
     const res = await apiFetch<{ success: boolean; data: JobOrder; message?: string }>('/api/job-orders', {
@@ -35,6 +37,7 @@ export function useJobOrders(filterParams?: Ref<JobOrderFilterParams> | JobOrder
 
   return {
     jobOrders,
+    workflowCounts,
     pending,
     error,
     refresh,

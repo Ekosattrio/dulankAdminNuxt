@@ -19,6 +19,22 @@ const isProductModalOpen = ref(false)
 const editingProduct = ref<CustomProductFormModel | null>(null)
 const deleteTargetProduct = ref<CustomProductCardItem | null>(null)
 
+function summaryOptions(summary: string | null | undefined, fallback: string[]): CustomProductFormModel['sizes'] {
+  const values = summary?.split(',').map(value => value.trim()).filter(Boolean) || fallback
+  return values.map((value, index) => ({
+    label: value.replace(/\s*\(default\)/i, ''),
+    enabled: true,
+    isDefault: /\(default\)/i.test(value) || index === 0,
+  }))
+}
+
+function optionSummary(options: CustomProductFormModel['sizes']): string {
+  return options
+    .filter(option => option.enabled)
+    .map(option => `${option.label}${option.isDefault ? ' (Default)' : ''}`)
+    .join(', ')
+}
+
 // Product Cards Mapping
 const productCards = computed<CustomProductCardItem[]>(() => {
   if (!props.products) return []
@@ -27,17 +43,16 @@ const productCards = computed<CustomProductCardItem[]>(() => {
     name: p.name,
     defaultSize: p.defaultSize,
     paperTypes: p.paperTypes,
-    machine: p.machine,
     image: p.image,
     images: p.images?.length ? p.images : (p.image ? [p.image] : ['/assets/img/products/brosur.png']),
     sizesSummary: p.defaultSize,
     papersSummary: p.paperTypes,
-    laminatesSummary: 'Tanpa Laminasi (Default), Glossy, Doff, UV Vernish, Spot UV',
-    printSidesSummary: 'Cetak 1 Sisi (default), Cetak Bolak Balik',
-    foldsSummary: 'Tanpa Lipatan (default), 1 Lipatan, 2 Lipatan',
-    description: `Ini text ${p.name} cetak full color berkualitas tinggi dengan mesin offset prima.`,
-    displayPos: true,
-    displayWebsite: p.active,
+    laminatesSummary: p.laminates,
+    printSidesSummary: p.printSides,
+    foldsSummary: p.folds,
+    description: p.description,
+    displayPos: p.displayPos,
+    displayWebsite: p.displayWebsite,
   }))
 })
 
@@ -50,31 +65,11 @@ function openEditProduct(item: CustomProductCardItem) {
   editingProduct.value = {
     id: item.id,
     name: item.name,
-    sizes: [
-      { label: item.defaultSize || 'A4 (297x210mm)', enabled: true, isDefault: true },
-      { label: 'A5 (210x149mm)', enabled: true, isDefault: false },
-      { label: 'A3 (297x420mm)', enabled: false, isDefault: false },
-    ],
-    papers: [
-      { label: item.paperTypes || 'Art Paper', enabled: true, isDefault: true },
-      { label: 'Art Carton', enabled: true, isDefault: false },
-      { label: 'HVS', enabled: true, isDefault: false },
-    ],
-    laminates: [
-      { label: 'Glossy', enabled: true, isDefault: true },
-      { label: 'Doff', enabled: true, isDefault: false },
-      { label: 'UV Vernish', enabled: false, isDefault: false },
-      { label: 'Spot UV', enabled: false, isDefault: false },
-    ],
-    printSides: [
-      { label: 'Cetak 1 Sisi', enabled: true, isDefault: true },
-      { label: 'Cetak Bolak Balik', enabled: true, isDefault: false },
-    ],
-    folds: [
-      { label: 'Tanpa Lipatan', enabled: true, isDefault: true },
-      { label: '1 Lipatan', enabled: true, isDefault: false },
-      { label: '2 Lipatan', enabled: true, isDefault: false },
-    ],
+    sizes: summaryOptions(item.defaultSize, ['A4 (297x210mm)', 'A5 (210x149mm)']),
+    papers: summaryOptions(item.paperTypes, ['Art Paper', 'Art Carton', 'HVS', 'Carton BC']),
+    laminates: summaryOptions(item.laminatesSummary, ['Tanpa Laminasi', 'Glossy', 'Doff', 'UV Vernish', 'Spot UV']),
+    printSides: summaryOptions(item.printSidesSummary, ['Cetak 1 Sisi', 'Cetak Bolak Balik']),
+    folds: summaryOptions(item.foldsSummary, ['Tanpa Lipatan', '1 Lipatan', '2 Lipatan']),
     description: item.description || '',
     images: item.images?.length ? [...item.images] : (item.image ? [item.image] : ['/assets/img/products/brosur.png']),
     displayPos: item.displayPos ?? false,
@@ -85,15 +80,24 @@ function openEditProduct(item: CustomProductCardItem) {
 
 function handleProductSubmit(formData: CustomProductFormModel) {
   const targetId = formData.id || `custom-product-${Date.now()}`
+  const existing = props.products.find(product => product.id === targetId)
+  const now = new Date().toISOString()
   const newProduct: ProductCustom = {
     id: targetId,
     name: formData.name,
-    defaultSize: formData.sizes.find(s => s.isDefault)?.label || formData.sizes[0]?.label || 'A4 (297x210mm)',
-    paperTypes: formData.papers.find(p => p.isDefault)?.label || formData.papers[0]?.label || 'Art Paper',
-    machine: 'Heidelberg SM52',
+    defaultSize: optionSummary(formData.sizes),
+    paperTypes: optionSummary(formData.papers),
+    laminates: optionSummary(formData.laminates) || null,
+    printSides: optionSummary(formData.printSides),
+    folds: optionSummary(formData.folds) || null,
+    description: formData.description,
+    displayPos: formData.displayPos,
+    displayWebsite: formData.displayWebsite,
     active: formData.displayWebsite,
     image: formData.images[0] || '/assets/img/products/brosur.png',
     images: formData.images.length ? [...formData.images] : ['/assets/img/products/brosur.png'],
+    createdAt: existing?.createdAt || now,
+    updatedAt: now,
   }
 
   const updated = [...props.products]
@@ -111,10 +115,9 @@ function handleProductSubmit(formData: CustomProductFormModel) {
 
 function handleToggleDisplay(item: CustomProductCardItem, field: 'pos' | 'website', val: boolean) {
   const updated = props.products.map(p => {
-    if (p.id === item.id && field === 'website') {
-      return { ...p, active: val }
-    }
-    return p
+    if (p.id !== item.id) return p
+    if (field === 'website') return { ...p, active: val, displayWebsite: val, updatedAt: new Date().toISOString() }
+    return { ...p, displayPos: val, updatedAt: new Date().toISOString() }
   })
   emit('update:products', updated)
   emit('save')
@@ -133,7 +136,7 @@ function confirmDeleteProduct() {
   <div>
     <CustomProductCardsGrid
       :products="productCards"
-      title="All Product Cetak Full Color"
+      title="All Product Custom"
       add-label="Add Product"
       :busy="busy"
       @add="openAddProduct"

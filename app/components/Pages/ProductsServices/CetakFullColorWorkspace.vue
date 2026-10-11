@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { CetakFullColorConfig } from '~/types/cetak-full-color'
-import CalculationLogTable from '~/components/Pages/ProductsServices/CalculationLogTable.vue'
-import CetakFullColorProductSection from '~/components/Pages/ProductsServices/CetakFullColorProductSection.vue'
-import GenericSettingTable from '~/components/Pages/ProductsServices/GenericSettingTable.vue'
-import PaperGramatureSection from '~/components/Pages/ProductsServices/PaperGramatureSection.vue'
-import ProfitSettingSection from '~/components/Pages/ProductsServices/ProfitSettingSection.vue'
-import SettingSidebarNav from '~/components/Pages/ProductsServices/SettingSidebarNav.vue'
+import CetakFullColorLogTable from './CetakFullColorLogTable.vue'
+import CetakFullColorProductSection from './CetakFullColorProductSection.vue'
+import CetakFullColorProfitSection from './CetakFullColorProfitSection.vue'
+import CetakFullColorSizeSection from './CetakFullColorSizeSection.vue'
+import CetakFullColorWorkflowSequence from './CetakFullColorWorkflowSequence.vue'
+import GenericSettingTable from './GenericSettingTable.vue'
+import PaperGramatureSection from './PaperGramatureSection.vue'
+import SettingSidebarNav from './SettingSidebarNav.vue'
 import {
   cetakFullColorTabs,
-  cetakFullColorSizeColumns,
-  cetakFullColorSizeFields,
   cetakFullColorMachineColumns,
   cetakFullColorMachineFields,
   cetakFullColorLaminateColumns,
@@ -21,33 +21,17 @@ import {
   cetakFullColorPrintSideFields,
   cetakFullColorComponentColumns,
   cetakFullColorComponentFields,
-  cetakFullColorWorkflowStepColumns,
-  cetakFullColorWorkflowStepFields
 } from '~/utils/cetakFullColorSchemas'
 
-const props = defineProps<{
-  draft: CetakFullColorConfig
-  busy?: boolean
-}>()
-
-const emit = defineEmits<{
-  'update:draft': [val: CetakFullColorConfig]
-  save: []
-}>()
-
+defineProps<{ draft: CetakFullColorConfig; busy?: boolean }>()
+const emit = defineEmits<{ 'update:draft': [value: CetakFullColorConfig]; save: [] }>()
 const activeTab = ref('products')
 </script>
 
 <template>
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
-    <!-- Left Sidebar -->
-    <SettingSidebarNav
-      v-model="activeTab"
-      :tabs="cetakFullColorTabs"
-      title="Setting And Optional"
-    />
+    <SettingSidebarNav v-model="activeTab" :tabs="cetakFullColorTabs" title="Setting And Optional" />
 
-    <!-- Right Tab Content Pane -->
     <main class="min-w-0">
       <CetakFullColorProductSection
         v-if="activeTab === 'products'"
@@ -57,21 +41,23 @@ const activeTab = ref('products')
         @save="emit('save')"
       />
 
-      <GenericSettingTable
-        v-else-if="activeTab === 'productSizes'"
-        :model-value="draft.sizes"
-        title="Product Size"
-        add-label="Add Size"
-        :columns="cetakFullColorSizeColumns"
-        :fields="cetakFullColorSizeFields"
+      <CetakFullColorSizeSection
+        v-else-if="activeTab === 'sizes'"
+        :sizes="draft.sizes"
+        :custom-size-enabled="draft.customSizeEnabled"
         :busy="busy"
-        @update:model-value="draft.sizes = $event as any"
-        @change="emit('save')"
+        @update:sizes="draft.sizes = $event"
+        @update:custom-size-enabled="draft.customSizeEnabled = $event; emit('save')"
+        @save="emit('save')"
       />
 
       <PaperGramatureSection
         v-else-if="activeTab === 'papers'"
+        :groups="draft.paperGroups"
+        :workflow-items="draft.paperWorkflows"
         :busy="busy"
+        @update:groups="draft.paperGroups = $event"
+        @update:workflow-items="draft.paperWorkflows = $event"
         @save="emit('save')"
       />
 
@@ -79,13 +65,18 @@ const activeTab = ref('products')
         v-else-if="activeTab === 'machines'"
         :model-value="draft.machines"
         title="Machine Type Option"
-        add-label="Add Machine"
+        add-label="Add Offset Machine"
         :columns="cetakFullColorMachineColumns"
         :fields="cetakFullColorMachineFields"
         :busy="busy"
         with-workflow
         workflow-title="Work Flow Setting"
+        workflow-target-label="Effective Printing Type"
+        workflow-add-label="Add Flow Name"
+        :workflow-items="draft.machineWorkflows"
+        :workflow-options="['Ofsett', 'Digital A3']"
         @update:model-value="draft.machines = $event as any"
+        @update:workflow-items="draft.machineWorkflows = $event"
         @change="emit('save')"
       />
 
@@ -93,13 +84,18 @@ const activeTab = ref('products')
         v-else-if="activeTab === 'laminates'"
         :model-value="draft.laminates"
         title="Laminate Option"
-        add-label="Add Laminate"
+        add-label="Add Laminate Type"
         :columns="cetakFullColorLaminateColumns"
         :fields="cetakFullColorLaminateFields"
         :busy="busy"
         with-workflow
         workflow-title="Work Flow Setting"
+        workflow-target-label="Effective Papper name"
+        workflow-add-label="Add Process"
+        :workflow-items="draft.laminateWorkflows"
+        :workflow-options="draft.paperGroups.map(item => item.name)"
         @update:model-value="draft.laminates = $event as any"
+        @update:workflow-items="draft.laminateWorkflows = $event"
         @change="emit('save')"
       />
 
@@ -107,13 +103,18 @@ const activeTab = ref('products')
         v-else-if="activeTab === 'folds'"
         :model-value="draft.folds"
         title="Fold Option"
-        add-label="Add Fold"
+        add-label="Add Fold Type"
         :columns="cetakFullColorFoldColumns"
         :fields="cetakFullColorFoldFields"
         :busy="busy"
         with-workflow
         workflow-title="Work Flow Setting"
+        workflow-target-label="Effective Fold Type"
+        workflow-add-label="Add Flow Name"
+        :workflow-items="draft.foldWorkflows"
+        :workflow-options="['1 lipatan', '2 lipatan']"
         @update:model-value="draft.folds = $event as any"
+        @update:workflow-items="draft.foldWorkflows = $event"
         @change="emit('save')"
       />
 
@@ -126,48 +127,51 @@ const activeTab = ref('products')
         :fields="cetakFullColorPrintSideFields"
         :busy="busy"
         with-workflow
-        workflow-title="Work Flow Setting"
+        workflow-title="Work Flow"
+        workflow-target-label="Effective Print Side"
+        workflow-add-label="Add Flow"
+        :workflow-items="draft.printSideWorkflows"
+        :workflow-options="['Cetak 1 Sisi', 'Cetak Bolak-Balik']"
         @update:model-value="draft.printSides = $event as any"
+        @update:workflow-items="draft.printSideWorkflows = $event"
         @change="emit('save')"
       />
 
       <GenericSettingTable
         v-else-if="activeTab === 'components'"
         :model-value="draft.components"
-        title="Component"
-        add-label="Add Component"
+        title="Component Option"
+        add-label="Add Component Type"
         :columns="cetakFullColorComponentColumns"
         :fields="cetakFullColorComponentFields"
         :busy="busy"
+        with-workflow
+        workflow-title="Work Flow Setting"
+        workflow-target-label="Effective Component"
+        workflow-add-label="Add Flow Name"
+        :workflow-items="draft.componentWorkflows"
+        :workflow-options="['1 lipatan', '2 lipatan']"
         @update:model-value="draft.components = $event as any"
+        @update:workflow-items="draft.componentWorkflows = $event"
         @change="emit('save')"
       />
 
-      <GenericSettingTable
+      <CetakFullColorWorkflowSequence
         v-else-if="activeTab === 'workflowSteps'"
-        :model-value="draft.workflowSteps"
-        title="Work Flow Step Option"
-        add-label="Add Step"
-        :columns="cetakFullColorWorkflowStepColumns"
-        :fields="cetakFullColorWorkflowStepFields"
-        :busy="busy"
-        @update:model-value="draft.workflowSteps = $event as any"
-        @change="emit('save')"
-      />
-
-      <ProfitSettingSection
-        v-else-if="activeTab === 'profitTiers'"
-        :tiers="draft.profitTiers"
-        :busy="busy"
-        @update:tiers="draft.profitTiers = $event"
+        :items="draft.workflowSteps"
+        @update:items="draft.workflowSteps = $event"
         @save="emit('save')"
       />
 
-      <CalculationLogTable
-        v-else-if="activeTab === 'calculationLogs'"
-        :logs="draft.logTransactions"
-        title="Log Transaction"
+      <CetakFullColorProfitSection
+        v-else-if="activeTab === 'profitSettings'"
+        :settings="draft.profitSettings"
+        :busy="busy"
+        @update:settings="draft.profitSettings = $event"
+        @save="emit('save')"
       />
+
+      <CetakFullColorLogTable v-else-if="activeTab === 'logTransactions'" :logs="draft.logTransactions" />
     </main>
   </div>
 </template>
