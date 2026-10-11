@@ -948,3 +948,12 @@ updated: 2026-10-11
 - **Backend** (dev): `GET calculator/dashboard` kini menyertakan `telemetry.chart` (7 hari) & daftar `users` (partner pemilik listing); endpoint BARU `GET dashboard/admin` (welcomeName, ordersToday, lowStockNotice, primary/secondary metrics, chartSeries 1D/1W/1M/1Y, overview, topSelling w/ image/price/sku/stock, lowStock, recentSales, salesStatics, transactionGroups (sale/purchase/quotation/expense/invoice), topCustomers, categories, categoryTotals, orderStatistics), `GET dashboard/sales` (bestSellers, recentTransactions, countryMarkers, yearlyData), `GET dashboard/analytics` (kpis, conversion, performance, browsers, regions, topPages) — `DashboardTest` 2 test / 50 asersi.
 - **Frontend**: `useAdminDashboard`/`useSalesDashboard`/`useAnalyticsDashboard` diarahkan ke endpoint masing-masing; `useCalculatorDashboard` otomatis dapat chart+users.
 - Catatan jujur (data belum direkam backend): dimensi web-analytics (browsers/regions/topPages/pageViews) kosong, `countryMarkers` kosong, `firstTime/returning` = 0, growth `0%` — UI menampilkannya sebagai kosong, bukan simulasi.
+
+## 2026-10-11 — UI halaman Discount diperbaiki (backend + komponen reuse)
+
+- Branch: `dev` · Push: ya.
+- `app/pages/discount.vue` (605 baris legacy, data lokal) → halaman tipis + **`DiscountWorkspace`** mengikuti pola modern (SalesListHeader, SalesFeedback×2, SalesDataTable, SalesConfirmDelete, DocumentPrintModal, useTablePrint) — reuse penuh komponen yang ada.
+- Komponen baru: `DiscountRecordsTable` (kolom Name/Plan/Value/Valid/Used/Status; filter plan+status; badge via SalesStatusBadge; nilai format Rp/% via tipe), `DiscountFormDialog` (name, plan select, type radio Fixed/Percentage, value, validFrom/validTill, status).
+- `useDiscounts` (baru) → `/api/v1/admin/discounts` (list+create/update/delete); pilihan plan dari `useDiscountPlans`.
+- `server/types/discount.ts` (baru).
+- Smoke: create id=1 → PUT (Smoke Diskon Edit/15/Inactive) → DELETE ✓; halaman SSR 200; typecheck 0 error.
