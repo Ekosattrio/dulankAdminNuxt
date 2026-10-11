@@ -24,7 +24,7 @@ async function createCustomer(form: CustomerFormData) {
   error.value = ''
   try {
     const result = await saveCustomer(form)
-    if (!result.success) throw new Error(result.message || 'Unable to add customer')
+    if (!result.success || !result.data) throw new Error(result.message || 'Unable to add customer')
     model.value = {
       name: result.data.name,
       email: result.data.email,
