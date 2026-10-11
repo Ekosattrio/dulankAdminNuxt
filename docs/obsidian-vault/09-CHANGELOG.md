@@ -905,3 +905,13 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `currency-settings`, `printer-settings`, `bank-settings`, `sms-gateways`, `payment-gateways` (5), slug `currency-settings|printer-settings` (2; 40 slug tersisa), 7 file data, 5 entri bundledData.
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke settings/currency items (PUT 1 → GET id IDR) + gateway sms POST (gw-4f0e0e40) OK; dummy 5 endpoint 404.
 - Sisa handler mock: 76 file.
+
+## 2026-10-11 — Migrasi batch 17: Regions (provinsi/kabupaten/kecamatan) + social-auth & system-integrations
+
+- Branch: `dev` · Push: ya.
+- **Backend**: `RegionController` BARU — `GET/POST/DELETE provinces|regencies|districts` (filter `province`/`regency`/`search`; payload regency menyertakan nama provinsi, district nama kabupaten) + route (permission peoples.manage) + test (`PeopleUserTest` → 7 test / 85 asersi).
+- **Frontend**: `useLocations` (provinsi/regencies/districts CRUD) → `/api/v1/admin/provinces|regencies|districts`; `useSocialAuth` & `useSystemIntegrations` → `settings/{group}` dengan unwrap `values` (tipe respons disesuaikan).
+- **Dummy dibersihkan**: handler regions (3) + settings/social-auth & system-integrations (file .get/.put), 3 slug (provinces dsb; 37 slug tersisa), 5 file data, 4 entri bundledData.
+- **Dipertahankan (belum ada domain backend)**: `subscriptions` & `delete-accounts` (mock masih dipakai) — butuh model + endpoint baru di backend (tugas berikutnya).
+- Validasi: typecheck 0; validate:structure 0; smoke: provinces 34, regencies 514, districts 19 (data region nyata), social-auth PUT nested OK, province create/delete OK; dummy 404.
+- Sisa handler mock: 55 file.

@@ -23,7 +23,6 @@ import { coupons as couponCouponsSeed } from '../data/coupon'
 import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
 import { deliveryNotes as deliveryNoteDeliverynotesSeed } from '../data/delivery-note'
 import { discounts as discountDiscountsSeed } from '../data/discount'
-import { districts as districtDistrictsSeed } from '../data/district'
 import { orderProducts as editJobOrderOrderproductsSeed } from '../data/edit-job-order'
 import { items as editQuotationItemsSeed } from '../data/edit-quotation'
 import { flowSteps as editWorkFlowFlowstepsSeed } from '../data/edit-work-flow'
@@ -37,9 +36,7 @@ import { products as posProductsSeed } from '../data/pos'
 import { cart as posCartSeed } from '../data/pos'
 import { preferences as preferencePreferencesSeed } from '../data/preference'
 import { products as productListProductsSeed } from '../data/product-list'
-import { provinces as provinceProvincesSeed } from '../data/province'
 import { quotations as quotationQuotationsSeed } from '../data/quotation'
-import { regencies as regencyRegenciesSeed } from '../data/regency'
 import { rfqs as requestQuotationRfqsSeed } from '../data/request-quotation'
 import { returns as salesReturnReturnsSeed } from '../data/sales-return'
 import { salesList as salesSaleslistSeed } from '../data/sales'
@@ -155,12 +152,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       discounts: discountDiscountsSeed,
     },
   },
-  'district': {
-    names: ['districts'],
-    cols: {
-      districts: districtDistrictsSeed,
-    },
-  },
   'edit-job-order': {
     names: ['orderProducts'],
     cols: {
@@ -234,22 +225,10 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       products: productListProductsSeed,
     },
   },
-  'province': {
-    names: ['provinces'],
-    cols: {
-      provinces: provinceProvincesSeed,
-    },
-  },
   'quotation': {
     names: ['quotations'],
     cols: {
       quotations: quotationQuotationsSeed,
-    },
-  },
-  'regency': {
-    names: ['regencies'],
-    cols: {
-      regencies: regencyRegenciesSeed,
     },
   },
   'request-quotation': {

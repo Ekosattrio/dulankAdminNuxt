@@ -1,12 +1,12 @@
 import type { SystemIntegrations, SystemIntegrationsResponse } from '#server/types/system-integrations'
 
 export function useSystemIntegrations() {
-  const { data: response, pending, error, refresh } = useApiFetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
+  const { data: response, pending, error, refresh } = useApiFetch<SystemIntegrationsResponse>('/api/v1/admin/settings/system-integrations', {
     key: 'system-integrations-data',
     lazy: false
   })
 
-  const integrations = computed(() => response.value?.data || {
+  const integrations = computed(() => response.value?.data?.values || {
     captcha: { enabled: true, siteKey: '', secretKey: '' },
     analytics: { enabled: true, trackingId: '' },
     adsense: { enabled: false, code: '' },
@@ -14,7 +14,7 @@ export function useSystemIntegrations() {
   })
 
   async function updateIntegrations(payload: Partial<SystemIntegrations>) {
-    const res = await apiFetch<SystemIntegrationsResponse>('/api/settings/system-integrations', {
+    const res = await apiFetch<SystemIntegrationsResponse>('/api/v1/admin/settings/system-integrations', {
       method: 'PUT',
       body: payload
     })

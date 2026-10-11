@@ -11,7 +11,7 @@ export type SocialAuthConfig = Record<SocialProviderKey, SocialProviderConfig>
 
 export interface SocialAuthResponse {
   success: boolean
-  data: SocialAuthConfig
+  data: { group: string; values: SocialAuthConfig }
   message?: string
 }
 
