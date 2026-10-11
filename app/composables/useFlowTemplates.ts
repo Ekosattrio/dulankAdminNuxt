@@ -10,7 +10,7 @@ interface ApiResponse<T> {
 export function useFlowTemplates(filterParams?: Ref<FlowTemplateFilterParams> | FlowTemplateFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<FlowTemplate[]>>('/api/flow-templates', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<FlowTemplate[]>>('/api/v1/admin/flow-templates', {
     key: 'flow-templates-list',
     query: params,
   })
@@ -20,7 +20,7 @@ export function useFlowTemplates(filterParams?: Ref<FlowTemplateFilterParams> | 
   const saveFlowTemplate = async (payload: FlowTemplateFormData) => {
     let res: ApiResponse<FlowTemplate>
     if (payload.id) {
-      res = await apiFetch<ApiResponse<FlowTemplate>>(`/api/flow-templates/${payload.id}`, {
+      res = await apiFetch<ApiResponse<FlowTemplate>>(`/api/v1/admin/flow-templates/${encodeURIComponent(payload.id)}`, {
         method: 'PUT',
         body: payload,
       })
@@ -35,7 +35,7 @@ export function useFlowTemplates(filterParams?: Ref<FlowTemplateFilterParams> | 
   }
 
   const deleteFlowTemplate = async (id: string) => {
-    const res = await apiFetch<ApiResponse<FlowTemplate>>(`/api/flow-templates/${id}`, {
+    const res = await apiFetch<ApiResponse<FlowTemplate>>(`/api/v1/admin/flow-templates/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
     await refresh()

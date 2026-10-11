@@ -867,3 +867,12 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `paper-groups/items/sizes/prices` + `printing-machines` (5), 16 slug `kertas-*`/`mesin-*` + 16 import seeds mockStore (62 slug tersisa), 20 file data, 4 entri bundledData. `die-cutting-blades` (backend-only, belum ada konsumen frontend).
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke: paper-groups 11, items 9, sizes 8, prices 9, machines 14, blades 3; roundtrip group set PUT/DELETE + machine create/delete OK; dummy 5 endpoint 404.
 - Sisa handler mock: 174 file (menunggu hitung ulang di akhir).
+
+## 2026-10-11 — Migrasi batch 13: Calculator (komponen/partner/dashboard) + Flow (kategori/nama/template/work-flow)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): `POST /api/v1/admin/calculator/partners/{partner}/moderate` (status Active/Inactive/Flagged + note) di `CalculatorController`; `GET /api/v1/admin/work-flow-context` baru di `WorkflowController` (products, productCategories, flowCategories, flows, templates) — `PaperPromoWebstoreTest` +1 & `HrmWorkflowTest` +1 → lolos.
+- **Frontend (10 komposabel)**: `useCalculatorDashboard`, `useCalculatorMarketplace` (partners+listings+moderate), `useJasaLain`, `useKomponenFiks`, `useKomponenMinimum`, `useFlowCategories`, `useFlowNames`, `useFlowTemplates`, `useWorkFlows`, `useWorkFlowDocumentEditor` → endpoint backend `/api/v1/admin/*`.
+- **Dummy dibersihkan**: handler `calculator/*`, `calculator-components/*`, `flow-categories/names/templates`, `work-flows`, `work-flow-context` (8 unit); slug `kalkulator-*|komponen-*|harga-jasa*|flow-*|work-flow` (8 slug + import; 54 slug tersisa); 11 file data; 11 entri bundledData; manifest −14 (paper-prices/sizes/printing/work-flows ikut tercatat). `job-*`, `my-jobs`, `my-incentives`, `incentives`, `edit-work-flow`, `add-work-flow` dipertahankan (modul Job/HRM belum migrasi). `job-list.ts` & `job-order-context.get.ts` sengaja dipulihkan (masih dipakai modul job).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke 12 endpoint OK (dashboard {telemetry,users}, partners 4, komponen create/delete, moderate partner, context 5 key); 8 dummy endpoint 404.
+- Sisa handler mock: 123 file.

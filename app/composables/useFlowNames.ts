@@ -10,7 +10,7 @@ interface ApiResponse<T> {
 export function useFlowNames(filterParams?: Ref<FlowNameFilterParams> | FlowNameFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<FlowName[]>>('/api/flow-names', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<FlowName[]>>('/api/v1/admin/flow-names', {
     key: 'flow-names-list',
     query: params,
   })
@@ -20,7 +20,7 @@ export function useFlowNames(filterParams?: Ref<FlowNameFilterParams> | FlowName
   const saveFlowName = async (payload: FlowNameFormData) => {
     let res: ApiResponse<FlowName>
     if (payload.id) {
-      res = await apiFetch<ApiResponse<FlowName>>(`/api/flow-names/${payload.id}`, {
+      res = await apiFetch<ApiResponse<FlowName>>(`/api/v1/admin/flow-names/${encodeURIComponent(payload.id)}`, {
         method: 'PUT',
         body: payload,
       })
@@ -35,7 +35,7 @@ export function useFlowNames(filterParams?: Ref<FlowNameFilterParams> | FlowName
   }
 
   const deleteFlowName = async (id: string) => {
-    const res = await apiFetch<ApiResponse<FlowName>>(`/api/flow-names/${id}`, {
+    const res = await apiFetch<ApiResponse<FlowName>>(`/api/v1/admin/flow-names/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
     await refresh()

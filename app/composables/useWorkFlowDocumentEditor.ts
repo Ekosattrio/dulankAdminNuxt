@@ -5,7 +5,7 @@ import type { WorkFlow, WorkFlowEditorContext, WorkFlowEditorFlow, WorkFlowEdito
 interface ApiResponse<T> { success: boolean; data: T; message?: string }
 
 export function useWorkFlowDocumentEditor(initialData: Ref<WorkFlow | null | undefined>) {
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<WorkFlowEditorContext>>('/api/work-flow-context', { key: 'work-flow-editor-context' })
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<WorkFlowEditorContext>>('/api/v1/admin/work-flow-context', { key: 'work-flow-editor-context' })
   const form = ref<WorkFlowFormData>({ product: '', productId: '', category: '', workflowSteps: '', steps: [] })
   const arrangedFlows = ref<WorkFlowStepItem[]>([])
 
@@ -57,12 +57,12 @@ export function useWorkFlowDocumentEditor(initialData: Ref<WorkFlow | null | und
   }
 
   async function createFlowCategory(payload: FlowCategoryFormData) {
-    await apiFetch('/api/flow-categories', { method: 'POST', body: payload })
+    await apiFetch('/api/v1/admin/flow-categories', { method: 'POST', body: payload })
     await refresh()
   }
 
   async function createFlowName(payload: FlowNameFormData) {
-    await apiFetch('/api/flow-names', { method: 'POST', body: payload })
+    await apiFetch('/api/v1/admin/flow-names', { method: 'POST', body: payload })
     await refresh()
   }
 

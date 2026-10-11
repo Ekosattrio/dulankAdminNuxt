@@ -12,7 +12,7 @@
       "scripts/scratch/parse_sidebar.cjs"
     ],
     "missingFiles": 0,
-    "filesRemovedWithBackendMigration": 57
+    "filesRemovedWithBackendMigration": 71
   },
   "files": [
     {
@@ -18670,42 +18670,6 @@
       "sha256After": "525975bda30c53d33baacd931fb59c3fa12a748dd9737ac5c4898762173117e8"
     },
     {
-      "from": "server/api/paper-prices/[id].delete.ts",
-      "to": "server/api/paper-prices/[id].delete.ts",
-      "sha256Before": "e52bf8b5cf9cacb904bcc2ca591ccfd84d13254aecfd6de125cf7ac56f186351",
-      "sha256After": "e52bf8b5cf9cacb904bcc2ca591ccfd84d13254aecfd6de125cf7ac56f186351"
-    },
-    {
-      "from": "server/api/paper-prices/index.get.ts",
-      "to": "server/api/paper-prices/index.get.ts",
-      "sha256Before": "dae796486a136e915882111506cf3fb1d40b8cfe34021fb24adc912e208b6d7e",
-      "sha256After": "dae796486a136e915882111506cf3fb1d40b8cfe34021fb24adc912e208b6d7e"
-    },
-    {
-      "from": "server/api/paper-prices/index.post.ts",
-      "to": "server/api/paper-prices/index.post.ts",
-      "sha256Before": "1657d04891406177f49073c05cc91f9c8739b2b39c64777b1b81010e0a4704b0",
-      "sha256After": "1657d04891406177f49073c05cc91f9c8739b2b39c64777b1b81010e0a4704b0"
-    },
-    {
-      "from": "server/api/paper-sizes/[id].delete.ts",
-      "to": "server/api/paper-sizes/[id].delete.ts",
-      "sha256Before": "55a1f3357f75012d6217f659847f026192942b4cf0b1e47dcbb5e6f66411a05f",
-      "sha256After": "55a1f3357f75012d6217f659847f026192942b4cf0b1e47dcbb5e6f66411a05f"
-    },
-    {
-      "from": "server/api/paper-sizes/index.get.ts",
-      "to": "server/api/paper-sizes/index.get.ts",
-      "sha256Before": "5b58d83c55ed758805794e6a0e3064d998b827e60c84f850a408de72583f0a4b",
-      "sha256After": "5b58d83c55ed758805794e6a0e3064d998b827e60c84f850a408de72583f0a4b"
-    },
-    {
-      "from": "server/api/paper-sizes/index.post.ts",
-      "to": "server/api/paper-sizes/index.post.ts",
-      "sha256Before": "c0c915decab9083057c59737a9d6c029114ba3468d0c6b576c7e27d474a96219",
-      "sha256After": "c0c915decab9083057c59737a9d6c029114ba3468d0c6b576c7e27d474a96219"
-    },
-    {
       "from": "server/api/payslips/[id].delete.ts",
       "to": "server/api/payslips/[id].delete.ts",
       "sha256Before": "967ab29368dd263e7704e0c51930022bebe5fc0fe312c21637457fb5f3ad5f40",
@@ -18722,24 +18686,6 @@
       "to": "server/api/payslips/index.post.ts",
       "sha256Before": "037a5fa1750e308ac8dd148a6e44a429f45763b37a8dbea94e05b17be7016972",
       "sha256After": "037a5fa1750e308ac8dd148a6e44a429f45763b37a8dbea94e05b17be7016972"
-    },
-    {
-      "from": "server/api/printing-machines/[id].delete.ts",
-      "to": "server/api/printing-machines/[id].delete.ts",
-      "sha256Before": "a658fdd74c3d9686498b269fa13492d7a3472d4c09b16364ba365375b4dbf981",
-      "sha256After": "a658fdd74c3d9686498b269fa13492d7a3472d4c09b16364ba365375b4dbf981"
-    },
-    {
-      "from": "server/api/printing-machines/index.get.ts",
-      "to": "server/api/printing-machines/index.get.ts",
-      "sha256Before": "363e1c9ee2d44a5a356103a75b26807097cff887a6d96e28708235ed3ccdc3ee",
-      "sha256After": "363e1c9ee2d44a5a356103a75b26807097cff887a6d96e28708235ed3ccdc3ee"
-    },
-    {
-      "from": "server/api/printing-machines/index.post.ts",
-      "to": "server/api/printing-machines/index.post.ts",
-      "sha256Before": "e9333021012a699dc67d7029e3f569429cf0d07bfab27964c765fbf21d7015c6",
-      "sha256After": "e9333021012a699dc67d7029e3f569429cf0d07bfab27964c765fbf21d7015c6"
     },
     {
       "from": "server/api/quotations/[id].delete.ts",
@@ -18776,24 +18722,6 @@
       "to": "server/api/sales/index.post.ts",
       "sha256Before": "c50d7955ed065249aa21e5833ffae0fe255ac22decf02ae4d2c2b35d468fffd9",
       "sha256After": "c50d7955ed065249aa21e5833ffae0fe255ac22decf02ae4d2c2b35d468fffd9"
-    },
-    {
-      "from": "server/api/work-flows/[id].delete.ts",
-      "to": "server/api/work-flows/[id].delete.ts",
-      "sha256Before": "3f036ea75c7cc0f7856290267eff73db3fa99f4e2be6402dbaf5be574fbab12e",
-      "sha256After": "3f036ea75c7cc0f7856290267eff73db3fa99f4e2be6402dbaf5be574fbab12e"
-    },
-    {
-      "from": "server/api/work-flows/index.get.ts",
-      "to": "server/api/work-flows/index.get.ts",
-      "sha256Before": "e93e7ab4c531c0ee1e6ae4080be85eff77bd347fb946695eb4a4b91a8a8bf4fb",
-      "sha256After": "e93e7ab4c531c0ee1e6ae4080be85eff77bd347fb946695eb4a4b91a8a8bf4fb"
-    },
-    {
-      "from": "server/api/work-flows/index.post.ts",
-      "to": "server/api/work-flows/index.post.ts",
-      "sha256Before": "0946c407bb0f22c531d12eeb9d6dc9717101fd3e226169bbed1c01560d88f624",
-      "sha256After": "0946c407bb0f22c531d12eeb9d6dc9717101fd3e226169bbed1c01560d88f624"
     },
     {
       "from": "server/data/cetak-full-color.json",
@@ -18860,18 +18788,6 @@
       "to": "server/data/my-jobs.json",
       "sha256Before": "12d4daa63555a64fc750f8aa2269602ae7d3e3931f59a404736fbcc222476e2a",
       "sha256After": "12d4daa63555a64fc750f8aa2269602ae7d3e3931f59a404736fbcc222476e2a"
-    },
-    {
-      "from": "server/data/paper-prices.json",
-      "to": "server/data/paper-prices.json",
-      "sha256Before": "7e96a68c7edd4b4871b18524def9297d7c6a092956899d9c37e5e3603c4653de",
-      "sha256After": "7e96a68c7edd4b4871b18524def9297d7c6a092956899d9c37e5e3603c4653de"
-    },
-    {
-      "from": "server/data/paper-sizes.json",
-      "to": "server/data/paper-sizes.json",
-      "sha256Before": "52b82ba267930b3ef33bf888d1a98f72960c13d178b6c70400f7859971ac035e",
-      "sha256After": "52b82ba267930b3ef33bf888d1a98f72960c13d178b6c70400f7859971ac035e"
     },
     {
       "from": "server/data/payslips.json",

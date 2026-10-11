@@ -6,7 +6,7 @@ import type {
 } from '#server/types/calculator-dashboard'
 
 export function useCalculatorDashboard() {
-  const { data: response, pending, error, refresh } = useApiFetch<CalculatorDashboardResponse>('/api/calculator/dashboard', {
+  const { data: response, pending, error, refresh } = useApiFetch<CalculatorDashboardResponse>('/api/v1/admin/calculator/dashboard', {
     key: 'calculator-dashboard-data',
     lazy: false
   })
@@ -23,7 +23,7 @@ export function useCalculatorDashboard() {
   const users = computed(() => response.value?.data?.users || [])
 
   async function updateUser(id: number, payload: CalculatorDashboardUserUpdate) {
-    const res = await apiFetch<CalculatorDashboardResponse>(`/api/calculator/dashboard/${id}`, {
+    const res = await apiFetch<CalculatorDashboardResponse>(`/api/v1/admin/calculator/dashboard/${encodeURIComponent(id)}`, {
       method: 'PUT',
       body: payload
     })
@@ -32,7 +32,7 @@ export function useCalculatorDashboard() {
   }
 
   async function deleteUser(id: number) {
-    const res = await apiFetch<{ success: boolean; message: string }>(`/api/calculator/dashboard/${id}`, {
+    const res = await apiFetch<{ success: boolean; message: string }>(`/api/v1/admin/calculator/dashboard/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()

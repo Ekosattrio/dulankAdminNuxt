@@ -32,10 +32,6 @@ import { items as editQuotationItemsSeed } from '../data/edit-quotation'
 import { flowSteps as editWorkFlowFlowstepsSeed } from '../data/edit-work-flow'
 import { records as employeeSalaryRecordsSeed } from '../data/employee-salary'
 import { employees as employeesEmployeesSeed } from '../data/employees'
-import { categories as flowCategoryCategoriesSeed } from '../data/flow-category'
-import { flowNames as flowNameFlownamesSeed } from '../data/flow-name'
-import { templates as flowTemplateTemplatesSeed } from '../data/flow-template'
-import { items as hargaJasaLainyaItemsSeed } from '../data/harga-jasa-lainya'
 import { incentives as incentiveIncentivesSeed } from '../data/incentive'
 import { invoices as invoiceInvoicesSeed } from '../data/invoice'
 import { jobs as jobBranchJobsSeed } from '../data/job-branch'
@@ -43,9 +39,6 @@ import { flowCategories as jobListFlowcategoriesSeed } from '../data/job-list'
 import { jobs as jobListJobsSeed } from '../data/job-list'
 import { jobOrders as jobOrderJobordersSeed } from '../data/job-order'
 import { progressList as jobProgressProgresslistSeed } from '../data/job-progress'
-import { tableData as kalkulatorDashboardTabledataSeed } from '../data/kalkulator-dashboard'
-import { components as komponenFiksComponentsSeed } from '../data/komponen-fiks'
-import { components as komponenMinimumComponentsSeed } from '../data/komponen-minimum'
 import { items as myIncentiveItemsSeed } from '../data/my-incentive'
 import { jobs as myJobJobsSeed } from '../data/my-job'
 import { orders as onlineOrdersOrdersSeed } from '../data/online-orders'
@@ -69,7 +62,6 @@ import { vendors as semuaPercetakanVendorsSeed } from '../data/semua-percetakan'
 import { shops as semuaTokoKertasShopsSeed } from '../data/semua-toko-kertas'
 import { stores as storeListStoresSeed } from '../data/store-list'
 import { subscriptions as subscriptionsSubscriptionsSeed } from '../data/subscriptions'
-import { workflows as workFlowWorkflowsSeed } from '../data/work-flow'
 
 const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }> = {
   'account-statement': {
@@ -232,30 +224,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       employees: employeesEmployeesSeed,
     },
   },
-  'flow-category': {
-    names: ['categories'],
-    cols: {
-      categories: flowCategoryCategoriesSeed,
-    },
-  },
-  'flow-name': {
-    names: ['flowNames'],
-    cols: {
-      flowNames: flowNameFlownamesSeed,
-    },
-  },
-  'flow-template': {
-    names: ['templates'],
-    cols: {
-      templates: flowTemplateTemplatesSeed,
-    },
-  },
-  'harga-jasa-lainya': {
-    names: ['items'],
-    cols: {
-      items: hargaJasaLainyaItemsSeed,
-    },
-  },
   'incentive': {
     names: ['incentives'],
     cols: {
@@ -291,24 +259,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['progressList'],
     cols: {
       progressList: jobProgressProgresslistSeed,
-    },
-  },
-  'kalkulator-dashboard': {
-    names: ['tableData'],
-    cols: {
-      tableData: kalkulatorDashboardTabledataSeed,
-    },
-  },
-  'komponen-fiks': {
-    names: ['components'],
-    cols: {
-      components: komponenFiksComponentsSeed,
-    },
-  },
-  'komponen-minimum': {
-    names: ['components'],
-    cols: {
-      components: komponenMinimumComponentsSeed,
     },
   },
   'my-incentive': {
@@ -442,12 +392,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['subscriptions'],
     cols: {
       subscriptions: subscriptionsSubscriptionsSeed,
-    },
-  },
-  'work-flow': {
-    names: ['workflows'],
-    cols: {
-      workflows: workFlowWorkflowsSeed,
     },
   },
 }

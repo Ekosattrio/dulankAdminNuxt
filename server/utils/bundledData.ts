@@ -4,23 +4,12 @@ import cetakFullColorData from '../data/cetak-full-color.json'
 import clientsData from '../data/clients.json'
 import customerTypesData from '../data/customer-types.json'
 import customerAccountEntriesData from '../data/customer-account-entries.json'
-import calculatorListingsData from '../data/calculator-listings.json'
-import calculatorModerationHistoryData from '../data/calculator-moderation-history.json'
-import calculatorPartnerMetricsData from '../data/calculator-partner-metrics.json'
-import calculatorPartnersData from '../data/calculator-partners.json'
-import calculatorDashboardData from '../data/calculator-dashboard.json'
-import calculatorJasaLainData from '../data/calculator-jasa-lain.json'
-import calculatorKomponenMinimumData from '../data/calculator-komponen-minimum.json'
-import calculatorKomponenFiksData from '../data/calculator-komponen-fiks.json'
 import deliveryNotesData from '../data/delivery-notes.json'
 import departmentsData from '../data/departments.json'
 import designationsData from '../data/designations.json'
 import districtsData from '../data/districts.json'
 import employeesData from '../data/employees.json'
 import employeeSalariesData from '../data/employeeSalaries.json'
-import flowCategoriesData from '../data/flow-categories.json'
-import flowNamesData from '../data/flow-names.json'
-import flowTemplatesData from '../data/flow-templates.json'
 import footersData from '../data/footers.json'
 import footerConfigData from '../data/footer-config.json'
 import incentivesData from '../data/incentives.json'
@@ -71,14 +60,6 @@ export const bundledSources: Record<string, unknown> = {
   'clients.json': clientsData,
   'customer-types.json': customerTypesData,
   'customer-account-entries.json': customerAccountEntriesData,
-  'calculator-listings.json': calculatorListingsData,
-  'calculator-moderation-history.json': calculatorModerationHistoryData,
-  'calculator-partner-metrics.json': calculatorPartnerMetricsData,
-  'calculator-partners.json': calculatorPartnersData,
-  'calculator-dashboard.json': calculatorDashboardData,
-  'calculator-jasa-lain.json': calculatorJasaLainData,
-  'calculator-komponen-minimum.json': calculatorKomponenMinimumData,
-  'calculator-komponen-fiks.json': calculatorKomponenFiksData,
   'delivery-notes.json': deliveryNotesData,
   'departments.json': departmentsData,
   'designations.json': designationsData,
@@ -86,9 +67,6 @@ export const bundledSources: Record<string, unknown> = {
   'employees.json': employeesData,
   'employeeSalaries.json': employeeSalariesData,
   'employee-salaries.json': employeeSalariesData,
-  'flow-categories.json': flowCategoriesData,
-  'flow-names.json': flowNamesData,
-  'flow-templates.json': flowTemplatesData,
   'footers.json': footersData,
   'footer-config.json': footerConfigData,
   'incentives.json': incentivesData,
