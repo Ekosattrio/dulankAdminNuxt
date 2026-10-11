@@ -12,7 +12,7 @@
       "scripts/scratch/parse_sidebar.cjs"
     ],
     "missingFiles": 0,
-    "filesRemovedWithBackendMigration": 54
+    "filesRemovedWithBackendMigration": 57
   },
   "files": [
     {
@@ -18496,18 +18496,6 @@
       "sha256After": "f69b0e4fee84df2df82f9bf7eb352cab05a06762aebdc8694de3767907072f73"
     },
     {
-      "from": "server/api/calendar-settings/index.get.ts",
-      "to": "server/api/calendar-settings/index.get.ts",
-      "sha256Before": "3222b8b511c56d87461f6e5cbcf2c38d8e30ded18918c52d113ecb74c583c9ed",
-      "sha256After": "3222b8b511c56d87461f6e5cbcf2c38d8e30ded18918c52d113ecb74c583c9ed"
-    },
-    {
-      "from": "server/api/calendar-settings/index.post.ts",
-      "to": "server/api/calendar-settings/index.post.ts",
-      "sha256Before": "a56e10c11c52acad2843bb3c7bcc1340cb9bf7b4cbb3f50f7c0967bfef403205",
-      "sha256After": "a56e10c11c52acad2843bb3c7bcc1340cb9bf7b4cbb3f50f7c0967bfef403205"
-    },
-    {
       "from": "server/api/cetak-full-color/index.get.ts",
       "to": "server/api/cetak-full-color/index.get.ts",
       "sha256Before": "109a678bf1b6d79210e9c37a60587aa53b606f931c3edf90209918ad4cf44594",
@@ -18806,12 +18794,6 @@
       "to": "server/api/work-flows/index.post.ts",
       "sha256Before": "0946c407bb0f22c531d12eeb9d6dc9717101fd3e226169bbed1c01560d88f624",
       "sha256After": "0946c407bb0f22c531d12eeb9d6dc9717101fd3e226169bbed1c01560d88f624"
-    },
-    {
-      "from": "server/data/calendar-settings.json",
-      "to": "server/data/calendar-settings.json",
-      "sha256Before": "0effcc2d0b0f64ce39d80ba14996ffeabba6a87d9351fc8c0cef9341d3510f74",
-      "sha256After": "0effcc2d0b0f64ce39d80ba14996ffeabba6a87d9351fc8c0cef9341d3510f74"
     },
     {
       "from": "server/data/cetak-full-color.json",
