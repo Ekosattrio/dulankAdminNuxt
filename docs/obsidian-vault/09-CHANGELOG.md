@@ -859,3 +859,11 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `webstore/*` (6) + slug `cart|checkout|contact-form|reviews|support-ticket|support-ticket-detail|ticket-detail|ticket-list` (9 slug + import; 78 slug tersisa) + 13 file data + 6 entri bundledData. `subscriptions`, `delete-accounts`, `payment-inflow/outflow`, `social-auth`, `system-integrations` dipertahankan (belum migrasi).
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke: carts/checkout/wishlist/reviews/contact-forms/support-tickets list + stats OK; roundtrip tiket create→update(Closed/Low)→show(SUPPORT_TICKET-00001)→delete OK; 8 dummy endpoint 404; backend 200.
 - Sisa handler mock: 174 file.
+
+## 2026-10-11 — Migrasi batch 12: Paper & Machines (kertas-*, mesin-*, printing machines)
+
+- Branch: `dev` · Push: ya.
+- **Frontend (7 komposabel)**: `usePaperGroupsSelf`, `usePaperItemsSelf`, `usePaperSizes` + `usePaperSizesSelf`, `usePaperPrices` + `usePaperPricesSelf`, `usePrintingMachines` → `/api/v1/admin/paper-groups|paper-items|paper-sizes|paper-prices|printing-machines` (CRUD penuh, filter search/group/status).
+- **Dummy dibersihkan**: handler `paper-groups/items/sizes/prices` + `printing-machines` (5), 16 slug `kertas-*`/`mesin-*` + 16 import seeds mockStore (62 slug tersisa), 20 file data, 4 entri bundledData. `die-cutting-blades` (backend-only, belum ada konsumen frontend).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke: paper-groups 11, items 9, sizes 8, prices 9, machines 14, blades 3; roundtrip group set PUT/DELETE + machine create/delete OK; dummy 5 endpoint 404.
+- Sisa handler mock: 174 file (menunggu hitung ulang di akhir).

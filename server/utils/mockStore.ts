@@ -44,24 +44,8 @@ import { jobs as jobListJobsSeed } from '../data/job-list'
 import { jobOrders as jobOrderJobordersSeed } from '../data/job-order'
 import { progressList as jobProgressProgresslistSeed } from '../data/job-progress'
 import { tableData as kalkulatorDashboardTabledataSeed } from '../data/kalkulator-dashboard'
-import { groups as kertasGroupSelfGroupsSeed } from '../data/kertas-group-self'
-import { groups as kertasGroupGroupsSeed } from '../data/kertas-group'
-import { prices as kertasHargaSelfPricesSeed } from '../data/kertas-harga-self'
-import { prices as kertasHargaPricesSeed } from '../data/kertas-harga'
-import { items as kertasJenisSelfItemsSeed } from '../data/kertas-jenis-self'
-import { paperTypes as kertasJenisPapertypesSeed } from '../data/kertas-jenis'
-import { sizes as kertasUkuranSelfSizesSeed } from '../data/kertas-ukuran-self'
-import { sizes as kertasUkuranSizesSeed } from '../data/kertas-ukuran'
 import { components as komponenFiksComponentsSeed } from '../data/komponen-fiks'
 import { components as komponenMinimumComponentsSeed } from '../data/komponen-minimum'
-import { machines as mesinCetakSelfMachinesSeed } from '../data/mesin-cetak-self'
-import { machines as mesinCetakMachinesSeed } from '../data/mesin-cetak'
-import { laminates as mesinLaminasiSelfLaminatesSeed } from '../data/mesin-laminasi-self'
-import { laminates as mesinLaminasiLaminatesSeed } from '../data/mesin-laminasi'
-import { polis as mesinPoliSelfPolisSeed } from '../data/mesin-poli-self'
-import { polis as mesinPoliPolisSeed } from '../data/mesin-poli'
-import { ponds as mesinPondSelfPondsSeed } from '../data/mesin-pond-self'
-import { ponds as mesinPondPondsSeed } from '../data/mesin-pond'
 import { items as myIncentiveItemsSeed } from '../data/my-incentive'
 import { jobs as myJobJobsSeed } from '../data/my-job'
 import { orders as onlineOrdersOrdersSeed } from '../data/online-orders'
@@ -315,54 +299,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       tableData: kalkulatorDashboardTabledataSeed,
     },
   },
-  'kertas-group-self': {
-    names: ['groups'],
-    cols: {
-      groups: kertasGroupSelfGroupsSeed,
-    },
-  },
-  'kertas-group': {
-    names: ['groups'],
-    cols: {
-      groups: kertasGroupGroupsSeed,
-    },
-  },
-  'kertas-harga-self': {
-    names: ['prices'],
-    cols: {
-      prices: kertasHargaSelfPricesSeed,
-    },
-  },
-  'kertas-harga': {
-    names: ['prices'],
-    cols: {
-      prices: kertasHargaPricesSeed,
-    },
-  },
-  'kertas-jenis-self': {
-    names: ['items'],
-    cols: {
-      items: kertasJenisSelfItemsSeed,
-    },
-  },
-  'kertas-jenis': {
-    names: ['paperTypes'],
-    cols: {
-      paperTypes: kertasJenisPapertypesSeed,
-    },
-  },
-  'kertas-ukuran-self': {
-    names: ['sizes'],
-    cols: {
-      sizes: kertasUkuranSelfSizesSeed,
-    },
-  },
-  'kertas-ukuran': {
-    names: ['sizes'],
-    cols: {
-      sizes: kertasUkuranSizesSeed,
-    },
-  },
   'komponen-fiks': {
     names: ['components'],
     cols: {
@@ -373,54 +309,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['components'],
     cols: {
       components: komponenMinimumComponentsSeed,
-    },
-  },
-  'mesin-cetak-self': {
-    names: ['machines'],
-    cols: {
-      machines: mesinCetakSelfMachinesSeed,
-    },
-  },
-  'mesin-cetak': {
-    names: ['machines'],
-    cols: {
-      machines: mesinCetakMachinesSeed,
-    },
-  },
-  'mesin-laminasi-self': {
-    names: ['laminates'],
-    cols: {
-      laminates: mesinLaminasiSelfLaminatesSeed,
-    },
-  },
-  'mesin-laminasi': {
-    names: ['laminates'],
-    cols: {
-      laminates: mesinLaminasiLaminatesSeed,
-    },
-  },
-  'mesin-poli-self': {
-    names: ['polis'],
-    cols: {
-      polis: mesinPoliSelfPolisSeed,
-    },
-  },
-  'mesin-poli': {
-    names: ['polis'],
-    cols: {
-      polis: mesinPoliPolisSeed,
-    },
-  },
-  'mesin-pond-self': {
-    names: ['ponds'],
-    cols: {
-      ponds: mesinPondSelfPondsSeed,
-    },
-  },
-  'mesin-pond': {
-    names: ['ponds'],
-    cols: {
-      ponds: mesinPondPondsSeed,
     },
   },
   'my-incentive': {

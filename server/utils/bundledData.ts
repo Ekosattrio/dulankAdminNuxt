@@ -32,10 +32,6 @@ import jobOrdersData from '../data/job-orders.json'
 import jobProgressData from '../data/job-progress.json'
 import myIncentivesData from '../data/my-incentives.json'
 import myJobsData from '../data/my-jobs.json'
-import paperGroupsSelfData from '../data/paper-groups-self.json'
-import paperItemsSelfData from '../data/paper-items-self.json'
-import paperPricesData from '../data/paper-prices.json'
-import paperSizesData from '../data/paper-sizes.json'
 import paymentBalancesData from '../data/payment-balances.json'
 import paymentInflowsData from '../data/payment-inflows.json'
 import paymentOutflowsData from '../data/payment-outflows.json'
@@ -104,10 +100,6 @@ export const bundledSources: Record<string, unknown> = {
   'job-progress.json': jobProgressData,
   'my-incentives.json': myIncentivesData,
   'my-jobs.json': myJobsData,
-  'paper-groups-self.json': paperGroupsSelfData,
-  'paper-items-self.json': paperItemsSelfData,
-  'paper-prices.json': paperPricesData,
-  'paper-sizes.json': paperSizesData,
   'payment-balances.json': paymentBalancesData,
   'payment-inflows.json': paymentInflowsData,
   'payment-outflows.json': paymentOutflowsData,
