@@ -1,10 +1,7 @@
 import banIpData from '../data/ban-ip.json'
 import billingData from '../data/billing.json'
-import cartsData from '../data/carts.json'
 import cetakFullColorData from '../data/cetak-full-color.json'
-import checkoutsData from '../data/checkouts.json'
 import clientsData from '../data/clients.json'
-import contactFormsData from '../data/contact-forms.json'
 import customerTypesData from '../data/customer-types.json'
 import customerAccountEntriesData from '../data/customer-account-entries.json'
 import calculatorListingsData from '../data/calculator-listings.json'
@@ -52,17 +49,14 @@ import purchasesData from '../data/purchases.json'
 import quotationsData from '../data/quotations.json'
 import regenciesData from '../data/regencies.json'
 import requestQuotationsData from '../data/request-quotations.json'
-import reviewsData from '../data/reviews.json'
 import salesHistoryData from '../data/sales-history.json'
 import salesReturnsData from '../data/sales-returns.json'
 import salesVouchersData from '../data/sales-vouchers.json'
 import socialAuthData from '../data/social-auth.json'
 import salesData from '../data/sales.json'
 import suppliersData from '../data/suppliers.json'
-import supportTicketsData from '../data/support-tickets.json'
 import subscriptionsData from '../data/subscriptions.json'
 import systemIntegrationsData from '../data/system-integrations.json'
-import wishlistsData from '../data/wishlists.json'
 import workFlowsData from '../data/work-flows.json'
 import workFlowEditorCatalogData from '../data/work-flow-editor-catalog.json'
 import analyticsDashboardData from '../data/analytics-dashboard.json'
@@ -77,11 +71,8 @@ import preferenceSettingsData from '../data/preference-settings.json'
 export const bundledSources: Record<string, unknown> = {
   'ban-ip.json': banIpData,
   'billing.json': billingData,
-  'carts.json': cartsData,
   'cetak-full-color.json': cetakFullColorData,
-  'checkouts.json': checkoutsData,
   'clients.json': clientsData,
-  'contact-forms.json': contactFormsData,
   'customer-types.json': customerTypesData,
   'customer-account-entries.json': customerAccountEntriesData,
   'calculator-listings.json': calculatorListingsData,
@@ -130,17 +121,14 @@ export const bundledSources: Record<string, unknown> = {
   'quotations.json': quotationsData,
   'regencies.json': regenciesData,
   'request-quotations.json': requestQuotationsData,
-  'reviews.json': reviewsData,
   'sales-history.json': salesHistoryData,
   'sales-returns.json': salesReturnsData,
   'sales-vouchers.json': salesVouchersData,
   'social-auth.json': socialAuthData,
   'sales.json': salesData,
   'suppliers.json': suppliersData,
-  'support-tickets.json': supportTicketsData,
   'subscriptions.json': subscriptionsData,
   'system-integrations.json': systemIntegrationsData,
-  'wishlists.json': wishlistsData,
   'work-flows.json': workFlowsData,
   'work-flow-editor-catalog.json': workFlowEditorCatalogData,
   'analytics-dashboard.json': analyticsDashboardData,

@@ -18,10 +18,7 @@ import { calendarSizes as calenderCalendarsizesSeed } from '../data/calender'
 import { finishings as calenderFinishingsSeed } from '../data/calender'
 import { boards as calenderBoardsSeed } from '../data/calender'
 import { calendarLogs as calenderCalendarlogsSeed } from '../data/calender'
-import { carts as cartCartsSeed } from '../data/cart'
 import { products as cetakFullColorProductsSeed } from '../data/cetak-full-color'
-import { checkouts as checkoutCheckoutsSeed } from '../data/checkout'
-import { messages as contactFormMessagesSeed } from '../data/contact-form'
 import { coupons as couponCouponsSeed } from '../data/coupon'
 import { currencies as currencySettingsCurrenciesSeed } from '../data/currency-settings'
 import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
@@ -82,20 +79,12 @@ import { provinces as provinceProvincesSeed } from '../data/province'
 import { quotations as quotationQuotationsSeed } from '../data/quotation'
 import { regencies as regencyRegenciesSeed } from '../data/regency'
 import { rfqs as requestQuotationRfqsSeed } from '../data/request-quotation'
-import { reviews as reviewsReviewsSeed } from '../data/reviews'
 import { returns as salesReturnReturnsSeed } from '../data/sales-return'
 import { salesList as salesSaleslistSeed } from '../data/sales'
 import { vendors as semuaPercetakanVendorsSeed } from '../data/semua-percetakan'
 import { shops as semuaTokoKertasShopsSeed } from '../data/semua-toko-kertas'
 import { stores as storeListStoresSeed } from '../data/store-list'
 import { subscriptions as subscriptionsSubscriptionsSeed } from '../data/subscriptions'
-import { activityList as supportTicketDetailActivitylistSeed } from '../data/support-ticket-detail'
-import { messages as supportTicketDetailMessagesSeed } from '../data/support-ticket-detail'
-import { tickets as supportTicketTicketsSeed } from '../data/support-ticket'
-import { activityList as ticketDetailActivitylistSeed } from '../data/ticket-detail'
-import { messages as ticketDetailMessagesSeed } from '../data/ticket-detail'
-import { tickets as ticketListTicketsSeed } from '../data/ticket-list'
-import { wishlist as wishlistWishlistSeed } from '../data/wishlist'
 import { workflows as workFlowWorkflowsSeed } from '../data/work-flow'
 
 const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }> = {
@@ -175,28 +164,10 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       calendarLogs: calenderCalendarlogsSeed,
     },
   },
-  'cart': {
-    names: ['carts'],
-    cols: {
-      carts: cartCartsSeed,
-    },
-  },
   'cetak-full-color': {
     names: ['products'],
     cols: {
       products: cetakFullColorProductsSeed,
-    },
-  },
-  'checkout': {
-    names: ['checkouts'],
-    cols: {
-      checkouts: checkoutCheckoutsSeed,
-    },
-  },
-  'contact-form': {
-    names: ['messages'],
-    cols: {
-      messages: contactFormMessagesSeed,
     },
   },
   'coupon': {
@@ -549,12 +520,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
       rfqs: requestQuotationRfqsSeed,
     },
   },
-  'reviews': {
-    names: ['reviews'],
-    cols: {
-      reviews: reviewsReviewsSeed,
-    },
-  },
   'sales-return': {
     names: ['returns'],
     cols: {
@@ -589,38 +554,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['subscriptions'],
     cols: {
       subscriptions: subscriptionsSubscriptionsSeed,
-    },
-  },
-  'support-ticket-detail': {
-    names: ['activityList', 'messages'],
-    cols: {
-      activityList: supportTicketDetailActivitylistSeed,
-      messages: supportTicketDetailMessagesSeed,
-    },
-  },
-  'support-ticket': {
-    names: ['tickets'],
-    cols: {
-      tickets: supportTicketTicketsSeed,
-    },
-  },
-  'ticket-detail': {
-    names: ['activityList', 'messages'],
-    cols: {
-      activityList: ticketDetailActivitylistSeed,
-      messages: ticketDetailMessagesSeed,
-    },
-  },
-  'ticket-list': {
-    names: ['tickets'],
-    cols: {
-      tickets: ticketListTicketsSeed,
-    },
-  },
-  'wishlist': {
-    names: ['wishlist'],
-    cols: {
-      wishlist: wishlistWishlistSeed,
     },
   },
   'work-flow': {

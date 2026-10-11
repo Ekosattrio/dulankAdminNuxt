@@ -850,3 +850,12 @@ updated: 2026-10-11
 - **Dummy dibersihkan**: handler `banners`/`vouchers`/`discount-plans` + `banner.ts`, 3 slug + 4 import seeds mockStore (87 slug tersisa), 6 file data promo, 3 entri bundledData. `billing`/`discounts` dipertahankan (modul lain/masih mock).
 - Validasi: typecheck 0 error; validate:structure 0 error; smoke roundtrip banner create/update/delete, voucher create/delete, discount-plan PUT baru create/update/delete sukses & ter-cleanup; dummy 404.
 - Sisa handler mock: 186 file.
+
+## 2026-10-11 — Migrasi batch 11: Webstore monitoring (cart, checkout, wishlist, review, contact form, support ticket)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): endpoint webstore/support-tickets LENGKAP & BARU (stats, list, show, store, update status/priority/assignee, destroy) di `WebstoreController` (+ perbaikan namespace `App\Support\DocumentNumber`); `PaperPromoWebstoreTest` +1 kasus end-to-end → 7 test / 107 asersi lolos.
+- **Frontend (7 komposabel)**: `useReviews` (+stats endpoint), `useContactForms` (stats; submit → pesan jelas — pengunjung web yang kirim), `useSupportTickets` (+stats), `useSupportTicketDetail`, `useCarts`/`useWishlists`/`useCheckouts` (mapping row backend → tipe admin: product/user/qty/status; status checkout Complete→Berhasil).
+- **Dummy dibersihkan**: handler `webstore/*` (6) + slug `cart|checkout|contact-form|reviews|support-ticket|support-ticket-detail|ticket-detail|ticket-list` (9 slug + import; 78 slug tersisa) + 13 file data + 6 entri bundledData. `subscriptions`, `delete-accounts`, `payment-inflow/outflow`, `social-auth`, `system-integrations` dipertahankan (belum migrasi).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke: carts/checkout/wishlist/reviews/contact-forms/support-tickets list + stats OK; roundtrip tiket create→update(Closed/Low)→show(SUPPORT_TICKET-00001)→delete OK; 8 dummy endpoint 404; backend 200.
+- Sisa handler mock: 174 file.
