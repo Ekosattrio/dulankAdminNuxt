@@ -1,387 +1,600 @@
 {
+  "schemaVersion": 2,
   "products": [
     {
-      "id": "1",
+      "id": "cfc-product-1",
       "name": "Brosur",
       "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
-      "paperTypes": "Art Paper 150gr, Art Paper 120gr",
-      "machine": "SM 52 4 Warna",
+      "paperTypes": "Art Paper (default), Art Carton, HVS, Carton BC",
+      "laminates": "Tanpa Laminasi (Default), Glossy, Doff, UV Vernish, Spot UV",
+      "printSides": "Cetak 1 Sisi (default), Cetak Bolak Balik",
+      "folds": "Tanpa Lipatan (default), 1 Lipatan, 2 Lipatan",
+      "description": "Ini text brosur amet consectetur adipisicing elit. Quod, harum repudiandae nihil sint obcaecati consequuntur veniam dignissimos saepe nobis ipsa velit eum.",
+      "displayPos": false,
+      "displayWebsite": true,
       "active": true,
       "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
       "images": [
-        "https://percetakan-dulank.netlify.app/images/brosur.jpg",
-        "/assets/img/products/brosur.png",
-        "https://upload.wikimedia.org/wikipedia/commons/c/c9/Tri_Fold_Brochure_Mockup_01.jpg",
-        "/assets/img/products/pos-product-01.png"
-      ]
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
     },
     {
-      "id": "2",
-      "name": "Kartu Nama",
-      "defaultSize": "90x54mm (Default)",
-      "paperTypes": "Art Carton 260gr",
-      "machine": "Digital Press Fuji Xerox",
+      "id": "cfc-product-2",
+      "name": "Brosur",
+      "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
+      "paperTypes": "Art Paper (default), Art Carton, HVS, Carton BC",
+      "laminates": "Tanpa Laminasi (Default), Glossy, Doff, UV Vernish, Spot UV",
+      "printSides": "Cetak 1 Sisi (default), Cetak Bolak Balik",
+      "folds": "Tanpa Lipatan (default), 1 Lipatan, 2 Lipatan",
+      "description": "Ini text brosur amet consectetur adipisicing elit. Quod, harum repudiandae nihil sint obcaecati consequuntur veniam dignissimos saepe nobis ipsa velit eum.",
+      "displayPos": false,
+      "displayWebsite": true,
       "active": true,
-      "image": "/assets/img/products/pos-product-01.png",
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
       "images": [
-        "/assets/img/products/pos-product-01.png",
-        "/assets/img/products/product1.jpg",
-        "/assets/img/products/product2.jpg",
-        "/assets/img/products/product3.jpg"
-      ]
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
     },
     {
-      "id": "3",
+      "id": "cfc-product-3",
+      "name": "Produk Label",
+      "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
+      "paperTypes": "Art Paper (default), Art Carton, HVS, Carton BC",
+      "laminates": "Tanpa Laminasi (Default), Glossy, Doff, UV Vernish, Spot UV",
+      "printSides": "Cetak 1 Sisi (default), Cetak Bolak Balik",
+      "folds": "Tanpa Lipatan (default), 1 Lipatan, 2 Lipatan",
+      "description": "Ini text brosur amet consectetur adipisicing elit. Quod, harum repudiandae nihil sint obcaecati consequuntur veniam dignissimos saepe nobis ipsa velit eum.",
+      "displayPos": false,
+      "displayWebsite": true,
+      "active": true,
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+      "images": [
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "cfc-product-4",
+      "name": "Tiket Karcis",
+      "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
+      "paperTypes": "Art Paper (default), Art Carton, HVS, Carton BC",
+      "laminates": null,
+      "printSides": "Cetak 1 Sisi (default)",
+      "folds": null,
+      "description": "Ini text brosur amet consectetur adipisicing elit. Quod, harum repudiandae nihil sint obcaecati consequuntur veniam dignissimos saepe nobis ipsa velit eum.",
+      "displayPos": false,
+      "displayWebsite": true,
+      "active": true,
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
+      "images": [
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "cfc-product-5",
       "name": "Flyer",
-      "defaultSize": "A5 (210x148mm) (Default), DL (210x99mm)",
-      "paperTypes": "Art Paper 120gr, HVS 80gr",
-      "machine": "SM 52 4 Warna",
+      "defaultSize": "A4 (297x210mm) (Default), A5 (210x149mm)",
+      "paperTypes": "Art Paper (default), Art Carton, HVS, Carton BC",
+      "laminates": null,
+      "printSides": "Cetak 1 Sisi (default), Cetak Bolak Balik",
+      "folds": null,
+      "description": "Ini text brosur amet consectetur adipisicing elit. Quod, harum repudiandae nihil sint obcaecati consequuntur veniam dignissimos saepe nobis ipsa velit eum.",
+      "displayPos": false,
+      "displayWebsite": true,
       "active": true,
-      "image": "/assets/img/products/pos-product-04.png",
+      "image": "https://percetakan-dulank.netlify.app/images/brosur.jpg",
       "images": [
-        "/assets/img/products/pos-product-04.png",
-        "/assets/img/products/product4.jpg",
-        "/assets/img/products/product5.jpg",
-        "/assets/img/products/pos-product-02.png"
-      ]
-    },
-    {
-      "id": "4",
-      "name": "Kalender Meja",
-      "defaultSize": "210x150mm Horizontal",
-      "paperTypes": "Art Carton 230gr, Board No. 30",
-      "machine": "Komori Lithrone 4 Warna",
-      "active": true,
-      "image": "/assets/img/products/pos-product-10.png",
-      "images": [
-        "/assets/img/products/pos-product-10.png",
-        "/assets/img/products/product10.jpg",
-        "/assets/img/products/product11.jpg",
-        "/assets/img/products/pos-product-03.png"
-      ]
+        "https://percetakan-dulank.netlify.app/images/brosur.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
     }
   ],
   "sizes": [
     {
-      "id": "1",
-      "name": "A4",
-      "widthMm": 210,
-      "heightMm": 297,
-      "isStandard": true
-    },
-    {
-      "id": "2",
+      "id": "cfc-size-a5",
       "name": "A5",
-      "widthMm": 148,
-      "heightMm": 210,
-      "isStandard": true
+      "size": "21x15cm",
+      "status": "Show"
     },
     {
-      "id": "3",
+      "id": "cfc-size-a4",
+      "name": "A4",
+      "size": "21x30cm",
+      "status": "Show"
+    },
+    {
+      "id": "cfc-size-a3",
       "name": "A3",
-      "widthMm": 297,
-      "heightMm": 420,
-      "isStandard": true
+      "size": "30x42cm",
+      "status": "Hide"
     },
     {
-      "id": "4",
-      "name": "A3+",
-      "widthMm": 320,
-      "heightMm": 480,
-      "isStandard": true
-    },
-    {
-      "id": "5",
-      "name": "F4 / Folio",
-      "widthMm": 215,
-      "heightMm": 330,
-      "isStandard": true
-    },
-    {
-      "id": "6",
-      "name": "Kartu Nama Standard",
-      "widthMm": 90,
-      "heightMm": 54,
-      "isStandard": true
+      "id": "cfc-size-folio",
+      "name": "Folio",
+      "size": "21x33cm",
+      "status": "Show"
     }
   ],
-  "papers": [
+  "customSizeEnabled": true,
+  "paperGroups": [
     {
-      "id": "1",
-      "name": "Art Paper 120gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 2200
+      "id": "paper-art-paper",
+      "name": "Art Paper",
+      "gramatures": [
+        {
+          "id": "art-paper-100",
+          "label": "100 gr",
+          "enabled": false
+        },
+        {
+          "id": "art-paper-120",
+          "label": "120 gr",
+          "enabled": false
+        },
+        {
+          "id": "art-paper-150",
+          "label": "150 gr",
+          "enabled": false
+        }
+      ]
     },
     {
-      "id": "2",
-      "name": "Art Paper 150gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 2750
+      "id": "paper-art-carton",
+      "name": "Art Carton",
+      "gramatures": [
+        {
+          "id": "art-carton-210",
+          "label": "210 gr",
+          "enabled": false
+        },
+        {
+          "id": "art-carton-230",
+          "label": "230 gr",
+          "enabled": false
+        },
+        {
+          "id": "art-carton-260",
+          "label": "260 gr",
+          "enabled": false
+        },
+        {
+          "id": "art-carton-290",
+          "label": "290 gr",
+          "enabled": false
+        }
+      ]
     },
     {
-      "id": "3",
-      "name": "Art Carton 210gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 3400
+      "id": "paper-hvs",
+      "name": "HVS",
+      "gramatures": [
+        {
+          "id": "hvs-60",
+          "label": "60 gr",
+          "enabled": false
+        },
+        {
+          "id": "hvs-70",
+          "label": "70 gr",
+          "enabled": false
+        },
+        {
+          "id": "hvs-80",
+          "label": "80 gr",
+          "enabled": false
+        },
+        {
+          "id": "hvs-100",
+          "label": "100 gr",
+          "enabled": false
+        }
+      ]
     },
     {
-      "id": "4",
-      "name": "Art Carton 260gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 4200
-    },
-    {
-      "id": "5",
-      "name": "HVS 70gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 1600
-    },
-    {
-      "id": "6",
-      "name": "HVS 80gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 1850
-    },
-    {
-      "id": "7",
-      "name": "Matte Paper 150gr",
-      "plano": "65 x 100 cm",
-      "pricePlano": 2900
+      "id": "paper-carton-bc",
+      "name": "Carton BC",
+      "gramatures": [
+        {
+          "id": "carton-bc-180",
+          "label": "180 gr",
+          "enabled": false
+        }
+      ]
     }
   ],
   "machines": [
     {
-      "id": "1",
-      "name": "Heidelberg SM 52 (4 Warna)",
-      "maxArea": "360 x 520 mm",
-      "plateCost": 45000,
-      "runChargeMin": 150000
+      "id": "machine-sm52",
+      "printingType": "OffSet",
+      "printingName": "heidlberg sm52",
+      "unitColor": "4 Color",
+      "paperArea": "104x72 cm",
+      "status": "Show"
     },
     {
-      "id": "2",
-      "name": "Komori Lithrone 26 (4 Warna)",
-      "maxArea": "480 x 650 mm",
-      "plateCost": 65000,
-      "runChargeMin": 250000
+      "id": "machine-sm74",
+      "printingType": "OffSet",
+      "printingName": "heidlberg sm74",
+      "unitColor": "4 Color",
+      "paperArea": "75 x 52 cm",
+      "status": "Show"
     },
     {
-      "id": "3",
-      "name": "Oliver 58 (1 Warna)",
-      "maxArea": "440 x 570 mm",
-      "plateCost": 35000,
-      "runChargeMin": 75000
+      "id": "machine-sm104",
+      "printingType": "OffSet",
+      "printingName": "heidlberg sm104",
+      "unitColor": "4 Color",
+      "paperArea": "52 x 36 cm",
+      "status": "Show"
     },
     {
-      "id": "4",
-      "name": "Konica Minolta C1085 (Digital)",
-      "maxArea": "320 x 480 mm",
-      "plateCost": 0,
-      "runChargeMin": 2500
+      "id": "machine-xerox-c60",
+      "printingType": "A3",
+      "printingName": "Xerox C 60",
+      "unitColor": "Digital",
+      "paperArea": "32 x 48 cm",
+      "status": "Show"
     }
   ],
   "laminates": [
     {
-      "id": "1",
-      "name": "Tanpa Laminasi",
-      "costPerSide": 0
+      "id": "laminate-doff",
+      "name": "Laminasi Doff",
+      "status": "Show"
     },
     {
-      "id": "2",
-      "name": "Laminasi Doff Panas 1 Sisi",
-      "costPerSide": 450
+      "id": "laminate-glossy",
+      "name": "Laminasi Glossy",
+      "status": "Show"
     },
     {
-      "id": "3",
-      "name": "Laminasi Glossy Panas 1 Sisi",
-      "costPerSide": 400
-    },
-    {
-      "id": "4",
-      "name": "Laminasi Doff Panas 2 Sisi",
-      "costPerSide": 900
-    },
-    {
-      "id": "5",
-      "name": "Laminasi Glossy Panas 2 Sisi",
-      "costPerSide": 800
-    },
-    {
-      "id": "6",
-      "name": "Spot UV Custom",
-      "costPerSide": 1200
+      "id": "laminate-spot-uv",
+      "name": "Spot UV",
+      "status": "Show"
     }
   ],
   "folds": [
     {
-      "id": "1",
+      "id": "fold-none",
       "name": "Tanpa Lipatan",
-      "costPer1000": 0
+      "status": "Show"
     },
     {
-      "id": "2",
-      "name": "Lipat 2 (Half Fold)",
-      "costPer1000": 25000
-    },
-    {
-      "id": "3",
-      "name": "Lipat 3 (Tri-Fold / Z-Fold)",
-      "costPer1000": 45000
-    },
-    {
-      "id": "4",
-      "name": "Lipat 3 (Gate Fold)",
-      "costPer1000": 60000
+      "id": "fold-one",
+      "name": "1 Lipatan",
+      "status": "Show"
     }
   ],
   "printSides": [
     {
-      "id": "1",
-      "name": "1 Sisi (4/0)",
-      "plateMultiplier": 1,
-      "runMultiplier": 1
+      "id": "print-one-side",
+      "name": "Cetak 1 Sisi",
+      "status": "Show"
     },
     {
-      "id": "2",
-      "name": "2 Sisi Bolak-Balik Sama (4/4 Work & Turn)",
-      "plateMultiplier": 1,
-      "runMultiplier": 2
-    },
-    {
-      "id": "3",
-      "name": "2 Sisi Bolak-Balik Beda (4/4 Sheetwise)",
-      "plateMultiplier": 2,
-      "runMultiplier": 2
+      "id": "print-two-side",
+      "name": "Cetak Bolak Balik",
+      "status": "Show"
     }
   ],
   "components": [
     {
-      "id": "1",
-      "name": "Cover Depan & Belakang",
-      "type": "Cover"
+      "id": "component-work-hours",
+      "name": "Jam Kerja",
+      "value": 8,
+      "unit": "Jam"
     },
     {
-      "id": "2",
-      "name": "Lembar Isi Buku / Brosur",
-      "type": "Content"
-    },
-    {
-      "id": "3",
-      "name": "Finishing Jilid / Staples",
-      "type": "Binding"
-    },
-    {
-      "id": "4",
-      "name": "Packaging Box & Shrink Wrap",
-      "type": "Packing"
+      "id": "component-packing-capacity",
+      "name": "Kapasitas Packing Brosur Per Hari",
+      "value": 2,
+      "unit": "Jam"
     }
   ],
   "workflowSteps": [
     {
+      "id": "workflow-step-1",
       "step": 1,
-      "name": "Pre-Press / CTCP Plate Making",
-      "department": "Pre-Press"
+      "category": "Pracetak",
+      "name": "Pesen Kertas ke Toko"
     },
     {
+      "id": "workflow-step-2",
       "step": 2,
-      "name": "Cutting Bahan Baku (Paper Sheeting)",
-      "department": "Potong"
+      "category": "Cetak",
+      "name": "Cetak Offset 4 Warna"
     },
     {
+      "id": "workflow-step-3",
       "step": 3,
-      "name": "Printing Offset (Cetak)",
-      "department": "Produksi Cetak"
+      "category": "Pracetak",
+      "name": "Buat Plat CTP"
     },
     {
+      "id": "workflow-step-4",
       "step": 4,
-      "name": "Laminating Doff / Glossy",
-      "department": "Finishing"
+      "category": "Finishing",
+      "name": "Laminasi doff dari Cetak Offset"
     },
     {
+      "id": "workflow-step-5",
       "step": 5,
-      "name": "Folding / Creasing (Lipat)",
-      "department": "Finishing"
-    },
-    {
-      "step": 6,
-      "name": "Final Trimming (Potong Jadi)",
-      "department": "Potong"
-    },
-    {
-      "step": 7,
-      "name": "Quality Control & Packaging",
-      "department": "Packing"
+      "category": "Finishing",
+      "name": "Proses Lipat ke mesin"
     }
   ],
-  "profitTiers": [
+  "paperWorkflows": [
     {
-      "id": "1",
-      "minQty": 1,
-      "maxQty": 500,
-      "profitPosPercent": 35,
-      "profitWebstorePercent": 25
-    },
-    {
-      "id": "2",
-      "minQty": 501,
-      "maxQty": 1000,
-      "profitPosPercent": 30,
-      "profitWebstorePercent": 20
-    },
-    {
-      "id": "3",
-      "minQty": 1001,
-      "maxQty": 5000,
-      "profitPosPercent": 25,
-      "profitWebstorePercent": 18
-    },
-    {
-      "id": "4",
-      "minQty": 5001,
-      "maxQty": 10000,
-      "profitPosPercent": 20,
-      "profitWebstorePercent": 15
-    },
-    {
-      "id": "5",
-      "minQty": 10001,
-      "maxQty": 50000,
-      "profitPosPercent": 15,
-      "profitWebstorePercent": 10
+      "id": "paper-workflow-1",
+      "category": "Pracetak",
+      "name": "Pesan Kertas ke Toko",
+      "assignee": "Nurdin",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "Art Paper"
+      ]
     }
   ],
+  "machineWorkflows": [
+    {
+      "id": "machine-workflow-1",
+      "category": "Pracetak",
+      "name": "Plat CTP",
+      "assignee": "Nurdin",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "Ofsett",
+        "Digital A3"
+      ]
+    },
+    {
+      "id": "machine-workflow-2",
+      "category": "Cetak",
+      "name": "Print A3",
+      "assignee": "Nurdin,Raffi",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "Digital A3"
+      ]
+    },
+    {
+      "id": "machine-workflow-3",
+      "category": "Cetak",
+      "name": "Spk Cetak Offset",
+      "assignee": "Arif,Galih",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "Ofsett"
+      ]
+    }
+  ],
+  "laminateWorkflows": [
+    {
+      "id": "laminate-workflow-1",
+      "category": "Finishing",
+      "name": "Laminasi",
+      "assignee": "Galih",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "Art Paper"
+      ]
+    }
+  ],
+  "foldWorkflows": [
+    {
+      "id": "fold-workflow-1",
+      "category": "Finising",
+      "name": "Cari Jasa Lipat",
+      "assignee": "Nurdin",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "1 lipatan"
+      ]
+    }
+  ],
+  "printSideWorkflows": [
+    {
+      "id": "print-workflow-1",
+      "category": "Finishing",
+      "name": "Proses Lipat",
+      "assignee": "Nurdin",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "Per Job",
+      "targets": [
+        "Cetak 1 Sisi",
+        "Cetak Bolak-Balik"
+      ]
+    }
+  ],
+  "componentWorkflows": [
+    {
+      "id": "component-workflow-1",
+      "category": "Finising",
+      "name": "Cari Jasa Lipat",
+      "assignee": "Nurdin",
+      "incentiveAmount": 5000,
+      "incentiveUnit": "per Job",
+      "targets": [
+        "1 lipatan"
+      ]
+    }
+  ],
+  "profitSettings": {
+    "updatedLabel": "19:30 - 20 Januari 2024",
+    "mode": "production-cost",
+    "productionCostPosPercent": null,
+    "productionCostWebstorePercent": null,
+    "ranges": [
+      {
+        "id": "profit-range-1",
+        "from": null,
+        "to": null,
+        "posPercent": null,
+        "webstorePercent": null
+      },
+      {
+        "id": "profit-range-2",
+        "from": null,
+        "to": null,
+        "posPercent": null,
+        "webstorePercent": null
+      },
+      {
+        "id": "profit-range-3",
+        "from": null,
+        "to": null,
+        "posPercent": null,
+        "webstorePercent": null
+      },
+      {
+        "id": "profit-range-4",
+        "from": null,
+        "to": null,
+        "posPercent": null,
+        "webstorePercent": null
+      }
+    ],
+    "additionalFees": [
+      {
+        "id": "fee-transport",
+        "name": "Biaya Transport",
+        "amount": null,
+        "unit": "Per Pekerjaan/Job"
+      },
+      {
+        "id": "fee-packing",
+        "name": "Biaya Packing",
+        "amount": null,
+        "unit": "Per Lembar"
+      }
+    ],
+    "taxes": [
+      {
+        "id": "tax-ppn",
+        "name": "Ppn",
+        "percent": null
+      },
+      {
+        "id": "tax-pph",
+        "name": "Pph",
+        "percent": null
+      }
+    ]
+  },
   "logTransactions": [
     {
-      "id": "1",
+      "id": "cfc-log-1",
+      "noSales": "2511000001",
       "customerId": null,
-      "date": "01/12/2025 14:22",
       "customer": "PT Makmur Abadi",
-      "product": "Brosur A4 150gr",
-      "qty": 2500,
-      "totalCost": 850000,
-      "sellingPrice": 1332000,
-      "status": "Quoted"
+      "date": "01/10/2025",
+      "channel": "Webstore",
+      "productName": "Brosur",
+      "price": 1200000
     },
     {
-      "id": "2",
+      "id": "cfc-log-2",
+      "noSales": "2511000002",
       "customerId": null,
-      "date": "02/12/2025 10:05",
       "customer": "Toko Buku Cerdas",
-      "product": "Flyer A5 120gr",
-      "qty": 5000,
-      "totalCost": 2250000,
-      "sellingPrice": 3552000,
-      "status": "In Production"
+      "date": "03/10/2025",
+      "channel": "POS",
+      "productName": "Flyer",
+      "price": 850000
     },
     {
-      "id": "3",
+      "id": "cfc-log-3",
+      "noSales": "2511000003",
       "customerId": null,
-      "date": "03/12/2025 16:40",
-      "customer": "Bpk. Rahmat",
-      "product": "Kartu Nama 260gr",
-      "qty": 500,
-      "totalCost": 380000,
-      "sellingPrice": 610500,
-      "status": "Completed"
+      "customer": "CV Jaya Sentosa",
+      "date": "05/10/2025",
+      "channel": "POS",
+      "productName": "Tiket Karcis",
+      "price": 500000
+    },
+    {
+      "id": "cfc-log-4",
+      "noSales": "2511000004",
+      "customerId": null,
+      "customer": "PT Global Solusi",
+      "date": "08/10/2025",
+      "channel": "Webstore",
+      "productName": "Produk Label",
+      "price": 257000
+    },
+    {
+      "id": "cfc-log-5",
+      "noSales": "2511000005",
+      "customerId": null,
+      "customer": "Klinik Sehat",
+      "date": "10/11/2025",
+      "channel": "POS",
+      "productName": "Brosur",
+      "price": 450000
+    },
+    {
+      "id": "cfc-log-6",
+      "noSales": "2511000006",
+      "customerId": null,
+      "customer": "Yayasan Lentera",
+      "date": "14/10/2025",
+      "channel": "POS",
+      "productName": "Flyer",
+      "price": 785000
+    },
+    {
+      "id": "cfc-log-7",
+      "noSales": "2511000007",
+      "customerId": null,
+      "customer": "PT Dirgantara",
+      "date": "17/10/2025",
+      "channel": "Webstore",
+      "productName": "Tiket Karcis",
+      "price": 225000
+    },
+    {
+      "id": "cfc-log-8",
+      "noSales": "2511000008",
+      "customerId": null,
+      "customer": "Toko Perlengkapan",
+      "date": "20/10/2025",
+      "channel": "POS",
+      "productName": "Produk Label",
+      "price": 478000
+    },
+    {
+      "id": "cfc-log-9",
+      "noSales": "2511000009",
+      "customerId": null,
+      "customer": "PT Angkasa Raya",
+      "date": "23/10/2025",
+      "channel": "Webstore",
+      "productName": "Brosur",
+      "price": 900000
+    },
+    {
+      "id": "cfc-log-10",
+      "noSales": "2511000010",
+      "customerId": null,
+      "customer": "Universitas Bintang",
+      "date": "26/10/2025",
+      "channel": "POS",
+      "productName": "Flyer",
+      "price": 1450000
     }
   ]
 }

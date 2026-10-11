@@ -27,7 +27,7 @@ let id = 0
 const calls = new Map()
 const exceptions = []
 function call(method, params = {}) { const requestId = ++id; socket.send(JSON.stringify({ id: requestId, method, params })); return new Promise((resolvePromise, rejectPromise) => calls.set(requestId, { resolve: resolvePromise, reject: rejectPromise })) }
-async function evaluate(expression) { const result = await call('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }); if (result.exceptionDetails) throw new Error(result.exceptionDetails.text); return result.result?.value }
+async function evaluate(expression) { const result = await call('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }); if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text || JSON.stringify(result.exceptionDetails)); return result.result?.value }
 async function wait(expression, label) { for (let index = 0; index < 180; index += 1) { if (await evaluate(expression)) return; await delay(100) } throw new Error(`Timeout ${label}`) }
 async function navigate(url, expression, label) { await call('Page.navigate', { url }); await wait(expression, label); await wait("Boolean(document.querySelector('#__nuxt')?.__vue_app__)", `${label} hydration`) }
 async function clickButton(text) { await evaluate(`([...document.querySelectorAll('button')].find(button => button.innerText.trim() === ${JSON.stringify(text)})?.click(), true)`); await delay(100) }
@@ -51,13 +51,19 @@ try {
   await clickButton('Paper Type')
   await wait("document.body.innerText.includes('Paper Type Option') && document.body.innerText.includes('Effective Paper Group')", 'paper tab')
   assert.equal(await evaluate("['Art Paper','Art Carton','HVS','Carton BC','100 gr','120 gr','150 gr','Pesan Kertas ke Toko','Nurdin','5.000 per Job'].every(text => document.body.innerText.includes(text))"), true)
-  assert.deepEqual(await evaluate("(()=>{const select=document.querySelector('select[multiple]');return {multiple:select?.multiple,options:[...select.options].map(option=>option.text),selected:[...select.selectedOptions].map(option=>option.text)}})()"), { multiple: true, options: ['Art Paper', 'Art Carton', 'HVS', 'Carton BC'], selected: ['Art Paper'] })
-  await evaluate("(()=>{const select=document.querySelector('select[multiple]');[...select.options].forEach(option=>{option.selected=['Art Paper','Art Carton'].includes(option.value)});select.dispatchEvent(new Event('change',{bubbles:true}))})()")
+  await evaluate("(()=>{const buttons=document.querySelector('.configuration-multi-select')?.querySelectorAll('button');buttons?.[buttons.length-1]?.click()})()")
+  await wait("document.querySelectorAll('.configuration-multi-select div.absolute button').length === 4", 'target dropdown')
+  assert.deepEqual(await evaluate("(()=>{const box=document.querySelector('.configuration-multi-select');return {chips:[...box.querySelectorAll('span.inline-flex > span:first-child')].map(chip=>chip.innerText.trim()),options:[...box.querySelectorAll('div.absolute button')].map(button=>button.innerText.trim())}})()"), { chips: ['Art Paper'], options: ['Art Paper', 'Art Carton', 'HVS', 'Carton BC'] })
+  await evaluate("(()=>{[...document.querySelectorAll('button')].find(button=>button.innerText.trim()==='Art Carton')?.click()})()")
+  await evaluate("(()=>{[...document.querySelectorAll('button')].find(button=>button.innerText.trim()==='HVS')?.click()})()")
+  await delay(300)
+  assert.equal(await evaluate("!document.body.innerText.includes('Configuration saved successfully.')"), true)
+  await evaluate("(()=>{const section=document.querySelector('.configuration-multi-select')?.closest('section');[...section?.querySelectorAll('button') || []].find(button=>button.innerText.trim()==='Save')?.click()})()")
   await wait("document.body.innerText.includes('Configuration saved successfully.')", 'multiple selection save')
   await navigate(`${base}/cetak-full-color`, "document.body.innerText.includes('All Product Custom')", 'reload')
   await clickButton('Paper Type')
   await wait("document.body.innerText.includes('Effective Paper Group')", 'paper tab after reload')
-  assert.deepEqual(await evaluate("[...document.querySelector('select[multiple]').selectedOptions].map(option=>option.text)"), ['Art Paper', 'Art Carton'])
+  assert.deepEqual(await evaluate("[...document.querySelector('.configuration-multi-select').querySelectorAll('span.inline-flex > span:first-child')].map(chip=>chip.innerText.trim())"), ['Art Paper', 'Art Carton', 'HVS'])
 
   await clickButton('Machine Type')
   await wait("document.body.innerText.includes('heidlberg sm52') && document.body.innerText.includes('Effective Printing Type')", 'machine tab')

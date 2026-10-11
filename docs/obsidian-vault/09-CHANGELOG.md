@@ -17,6 +17,8 @@ updated: 2026-10-11
 - **Validation run:** `npm run typecheck` PASS; `npm run build` PASS; `npm run validate:structure` PASS; `npm run test:cetak-full-color` PASS; `npm run test:cetak-full-color-browser` PASS; `git diff --check` PASS. Browser mencakup exact data lintas tab, multiple-select save/reload, desktop/390px, dan zero runtime exception.
 - **Remaining risk:** durable mutation persistence pada Netlify serverless belum tersedia; `/calender` dan route Products & Services lain tidak ikut dinaikkan statusnya. Status route ini `verified`, bukan `approved baseline`.
 - **Git:** branch `main`; baseline HEAD `62bbdb8ca7cf3c25e2e4f4d7255d48bfed2c71ca`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command.
+- Kontrol Effective Target kemudian disamakan dengan pola `/flow-name`: chip oranye, tombol hapus `×`, input pencarian, chevron, dan dropdown opsi. Native `<select multiple>` dihapus dari UI aktif; nilai tetap dikirim sebagai `targets: string[]`. Perubahan input, checkbox, dan chip hanya mengubah draft lokal tanpa reload atau request; persistensi API baru terjadi saat tombol `Save` bagian bawah diklik, termasuk pada tab Workflow. Browser regression mencakup tambah pilihan, verifikasi tanpa autosave, save/reload, dan desktop/390px.
+- Revisi lanjutan menjaga daftar pilihan tetap akumulatif saat memilih lebih dari dua opsi, menghapus autosave saat menggeser urutan workflow, dan menambahkan tombol `Save` eksplisit pada tab `Work Flow Setting`/workflow sequence.
 
 ### Rekonsiliasi Voucher
 

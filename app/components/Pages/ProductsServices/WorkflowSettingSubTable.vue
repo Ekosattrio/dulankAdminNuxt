@@ -54,14 +54,12 @@ function updateTargets(index: number, targets: string[]) {
   row.targets = targets
   if (!props.items) fallbackItems.value = rows
   emit('update:items', rows)
-  nextTick(() => emit('save'))
 }
 
 function removeRow(index: number) {
   const rows = displayedItems.value.filter((_, itemIndex) => itemIndex !== index)
   if (!props.items) fallbackItems.value = rows
   emit('update:items', rows)
-  nextTick(() => emit('save'))
 }
 
 function addWorkflow() {
@@ -84,7 +82,6 @@ function addWorkflow() {
   newItem.assignee = ''
   newItem.targets = []
   isAdding.value = false
-  nextTick(() => emit('save'))
 }
 </script>
 

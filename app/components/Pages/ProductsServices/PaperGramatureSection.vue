@@ -63,7 +63,7 @@ function addPaperGroup() {
   newPaperName.value = ''
   newGramatures.value = ''
   isAddingPaper.value = false
-  publishGroups(true)
+  publishGroups()
 }
 </script>
 

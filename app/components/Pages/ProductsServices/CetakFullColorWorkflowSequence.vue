@@ -16,7 +16,6 @@ function move(index: number, direction: -1 | 1) {
   rows[target] = current
   rows.forEach((item, itemIndex) => { item.step = itemIndex + 1 })
   emit('update:items', rows)
-  nextTick(() => emit('save'))
 }
 </script>
 
@@ -42,6 +41,10 @@ function move(index: number, direction: -1 | 1) {
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="mt-4 flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white">Cancel</button>
+      <button type="button" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white" @click="emit('save')">Save</button>
     </div>
   </section>
 </template>
