@@ -20,7 +20,6 @@ import { boards as calenderBoardsSeed } from '../data/calender'
 import { calendarLogs as calenderCalendarlogsSeed } from '../data/calender'
 import { products as cetakFullColorProductsSeed } from '../data/cetak-full-color'
 import { coupons as couponCouponsSeed } from '../data/coupon'
-import { requests as deleteAccountRequestsSeed } from '../data/delete-account'
 import { deliveryNotes as deliveryNoteDeliverynotesSeed } from '../data/delivery-note'
 import { discounts as discountDiscountsSeed } from '../data/discount'
 import { orderProducts as editJobOrderOrderproductsSeed } from '../data/edit-job-order'
@@ -43,7 +42,6 @@ import { salesList as salesSaleslistSeed } from '../data/sales'
 import { vendors as semuaPercetakanVendorsSeed } from '../data/semua-percetakan'
 import { shops as semuaTokoKertasShopsSeed } from '../data/semua-toko-kertas'
 import { stores as storeListStoresSeed } from '../data/store-list'
-import { subscriptions as subscriptionsSubscriptionsSeed } from '../data/subscriptions'
 
 const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }> = {
   'account-statement': {
@@ -132,12 +130,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['coupons'],
     cols: {
       coupons: couponCouponsSeed,
-    },
-  },
-  'delete-account': {
-    names: ['requests'],
-    cols: {
-      requests: deleteAccountRequestsSeed,
     },
   },
   'delivery-note': {
@@ -265,12 +257,6 @@ const seeds: Record<string, { names: string[]; cols: Record<string, unknown[]> }
     names: ['stores'],
     cols: {
       stores: storeListStoresSeed,
-    },
-  },
-  'subscriptions': {
-    names: ['subscriptions'],
-    cols: {
-      subscriptions: subscriptionsSubscriptionsSeed,
     },
   },
 }

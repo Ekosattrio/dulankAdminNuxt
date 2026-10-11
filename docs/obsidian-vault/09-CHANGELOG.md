@@ -915,3 +915,12 @@ updated: 2026-10-11
 - **Dipertahankan (belum ada domain backend)**: `subscriptions` & `delete-accounts` (mock masih dipakai) — butuh model + endpoint baru di backend (tugas berikutnya).
 - Validasi: typecheck 0; validate:structure 0; smoke: provinces 34, regencies 514, districts 19 (data region nyata), social-auth PUT nested OK, province create/delete OK; dummy 404.
 - Sisa handler mock: 55 file.
+
+## 2026-10-11 — Migrasi batch 18: Subscriptions & Delete-Accounts (domain backend baru) + fix import route
+
+- Branch: `dev` · Push: ya.
+- **Backend (domain baru)**: migration `subscriptions` + `delete_account_requests` (dipisah dua file, timestamp sama), model `Subscription` & `DeleteAccountRequest`, `SubscriptionController` (list + filter + `summary` top-level + PUT update) & `DeleteAccountController` (list + DELETE) + route + test → `PaperPromoWebstoreTest` + `PeopleUserTest` = **17 test / 227 asersi** lolos. Migration dijalankan di dev MySQL juga.
+- **Fix import route**: import `PurchaseReturnController` sempat tertimpa saat menambah `RegionController` (kesalahan edit) — dipulihkan.
+- **Frontend**: `useSubscriptions` → `/api/v1/admin/subscriptions` (list + PUT); `useDeleteAccounts` → `/api/v1/admin/delete-accounts`.
+- **Dummy dibersihkan**: handler `subscriptions` & `delete-accounts` (2), slug (2; 35 slug tersisa), 3 file data, 1 entri bundledData.
+- Validasi: typecheck 0; validate:structure 0; smoke: list + summary OK, PUT subscription (Unpaid/900000) mengubah summary benar, dummy 404; sisa handler mock 49 file.

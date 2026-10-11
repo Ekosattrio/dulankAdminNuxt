@@ -26,7 +26,6 @@ import salesReturnsData from '../data/sales-returns.json'
 import salesVouchersData from '../data/sales-vouchers.json'
 import salesData from '../data/sales.json'
 import suppliersData from '../data/suppliers.json'
-import subscriptionsData from '../data/subscriptions.json'
 import workFlowsData from '../data/work-flows.json'
 import workFlowEditorCatalogData from '../data/work-flow-editor-catalog.json'
 import analyticsDashboardData from '../data/analytics-dashboard.json'
@@ -62,7 +61,6 @@ export const bundledSources: Record<string, unknown> = {
   'sales-vouchers.json': salesVouchersData,
   'sales.json': salesData,
   'suppliers.json': suppliersData,
-  'subscriptions.json': subscriptionsData,
   'work-flows.json': workFlowsData,
   'work-flow-editor-catalog.json': workFlowEditorCatalogData,
   'analytics-dashboard.json': analyticsDashboardData,
