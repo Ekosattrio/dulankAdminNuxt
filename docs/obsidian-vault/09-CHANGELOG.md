@@ -6,6 +6,17 @@ updated: 2026-10-17
 
 ## 2026-10-17
 
+### Pembersihan File Duplikat, Arsip HTML Mentah, dan Technical Debt Komponen
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Melakukan pembersihan file duplikat, arsip statis HTML mentah, dan file cadangan yang tidak terpakai sesuai instruksi pengguna agar arsitektur proyek lebih rapi, terstruktur, dan memiliki *Single Source of Truth*:
+  1. **Penghapusan Arsip HTML Mentah di Folder Komponen:** Menghapus `app/components/sidebar.html`, `app/components/header.html`, dan `app/components/bekup.html` yang merupakan sisa arsip slicing statis lama dan tidak dirender oleh runtime Nuxt.
+  2. **Konsolidasi Komponen Layout:** Menghapus komponen duplikat `app/components/App/Layout/Header.vue` dan `app/components/App/Layout/Sidebar.vue` (beserta direktori `app/components/App`), mengunci Single Source of Truth layout pada komponen kanonikal aktif: `app/components/Layout/AppHeader.vue` dan `app/components/Layout/AppSidebar.vue`.
+  3. **Penghapusan File Cadangan CSS & Komponen Kosong:** Menghapus `app/assets/css/style-backup.css` serta file kosong tak bertemplate `app/components/Dashboard/PrimaryCard.vue` dan `app/components/Dashboard/RevenueCard.vue`.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ### Penyesuaian Form Create Product & Relokasi Menu PRODUCTS & SERVICES
 
 - **Date:** 2026-10-17
