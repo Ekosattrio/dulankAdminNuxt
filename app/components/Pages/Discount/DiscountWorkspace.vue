@@ -5,12 +5,14 @@ import type { DiscountPlanView } from '#server/types/discount-plan'
 const search = ref('')
 const status = ref('')
 const plan = ref('')
+const customer = ref('')
 const collapsed = ref(false)
 
 const query = computed(() => ({
   search: search.value || undefined,
   plan: plan.value || undefined,
   status: status.value || undefined,
+  customer: customer.value || undefined,
 }))
 
 const { discounts, pending, error, refresh, saveDiscount, deleteDiscount } = useDiscounts(query)
@@ -29,11 +31,12 @@ const actionError = ref('')
 
 const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 const printColumns = [
-  { key: 'name', label: 'Discount Name' },
-  { key: 'plan', label: 'Discount Plan' },
+  { key: 'name', label: 'Name' },
   { key: 'value', label: 'Value' },
-  { key: 'validFrom', label: 'Valid From' },
-  { key: 'validTill', label: 'Valid Till' },
+  { key: 'plan', label: 'Discount Plan' },
+  { key: 'validity', label: 'Validity' },
+  { key: 'days', label: 'Days' },
+  { key: 'products', label: 'Products' },
   { key: 'used', label: 'Used' },
   { key: 'status', label: 'Status' },
 ]
@@ -42,6 +45,7 @@ function resetFilters() {
   search.value = ''
   status.value = ''
   plan.value = ''
+  customer.value = ''
   refresh()
 }
 
@@ -124,10 +128,12 @@ async function remove() {
       :search="search"
       :status="status"
       :plan="plan"
+      :customer="customer"
       :plan-options="planOptions"
       @update:search="search = $event"
       @update:status="status = $event"
       @update:plan="plan = $event"
+      @update:customer="customer = $event"
       @edit="openEdit"
       @delete="deleting = $event"
     />

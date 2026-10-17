@@ -10,6 +10,9 @@ export interface DiscountItem {
   type: DiscountType
   validFrom: string | null
   validTill: string | null
+  validity?: string | null
+  days?: string[] | string | null
+  products?: string[] | string | null
   used: number
   status: DiscountStatus
 }
@@ -21,13 +24,17 @@ export interface DiscountFormData {
   name: string
   value: number
   type: DiscountType
+  applicableFor?: string | null
   validFrom?: string | null
   validTill?: string | null
+  days?: string[] | null
+  products?: string[] | null
   status?: DiscountStatus
 }
 
 export interface DiscountQuery {
   search?: string
   plan?: string
+  customer?: string
   status?: string
 }

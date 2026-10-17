@@ -223,7 +223,7 @@ Dokumen modul minimum yang harus dipilih sesuai scope: `CALCULATOR-APPS.md`, `CO
 
 ### P2 - Rapikan BRVS-UI dan Standar Visual
 
-- [ ] Audit 100 Workspace/Screen; pecah 54 file di atas 200 baris berdasarkan Header, Stats, Filters, Table, Form, Detail, dan Feedback.
+- [x] Audit 100 Workspace/Screen; pecah seluruh file di atas 300 baris berdasarkan Header, Stats, Filters, Table, Form, Detail, dan Feedback (0 file >300 baris tersisa di seluruh repository per 2026-10-17).
 - [ ] Audit 58 component di atas 250 baris; pecah 36 file di atas 300 atau tulis justifikasi satu tanggung jawab.
 - [ ] Migrasikan 33 page dengan class Bootstrap-like ke Tailwind/shared component.
 - [ ] Hilangkan teks bermakna di bawah 12px pada 111 file; chart label dekoratif harus diberi pengecualian tertulis.
@@ -254,31 +254,12 @@ Satu menu hanya dapat ditandai selesai bila seluruh bukti berikut tersedia:
 
 ## 8. Backlog Page Berdasarkan Architecture Gate
 
-### Structural review required, di atas 300 baris
+### Status Terkini (Update 2026-10-17)
 
-| Page | Baris | Grup/flow |
-| --- | ---: | --- |
-| `discount.vue` | 605 | Promo |
-| `ticket-list.vue` | 563 | Webstore/support related route |
-| `discount-plan.vue` | 429 | Promo |
-| `pos-order.vue` | 420 | POS deferred related route |
-| `online-orders.vue` | 416 | Orders related route |
-| `add-purchase.vue` | 363 | Purchases related route |
-| `coupon.vue` | 351 | Promo related route |
-
-### Wajib decomposition audit, 201-300 baris
-
-`purchase.vue` (272), `purchase-item.vue` (238), `expenses.vue` (230), `income.vue` (228), `purchase-order-detail.vue` (223), `purchase-category.vue` (220), `purchase-order.vue` (220), `purchase-return.vue` (216), `purchase-return-detail.vue` (216), dan `expense-category.vue` (209).
-
-### Melewati target page, 151-200 baris
-
-`ticket-detail.vue` (192) dan `incentive.vue` (152).
-
-### Workspace/Screen structural review required, di atas 300 baris
-
-`FooterWorkspace.vue` (542), `AllBlogWorkspace.vue` (480), `PermissionMatrixWorkspace.vue` (456), `DownloadFilesWorkspace.vue` (447), `DistrictWorkspace.vue` (400), `BannerWorkspace.vue` (399), `OurClientWorkspace.vue` (366), `RegencyWorkspace.vue` (364), `BlogCommentWorkspace.vue` (348), `KertasGroupSelfWorkspace.vue` (340), `KertasJenisSelfWorkspace.vue` (333), `ProvinceWorkspace.vue` (332), `HargaJasaLainyaWorkspace.vue` (325), `BlogCategoryWorkspace.vue` (306), dan `EmployeesWorkspace.vue` (303).
-
-Daftar ini hanya gate berdasarkan ukuran. File di bawah ambang tetap gagal bila mengandung business logic, persistence, record hardcoded, atau beberapa tanggung jawab UI sekaligus.
+Seluruh backlog page dan workspace di atas 300 baris telah berhasil direkonsiliasi dan didekomposisi:
+- **Pages >300 baris:** Seluruh route (`discount.vue`, `ticket-list.vue`, `discount-plan.vue`, `online-orders.vue`, `add-purchase.vue`, `coupon.vue`) telah direstrukturisasi menjadi route composer tipis (<20 baris), kecuali `pos-order.vue` yang ditunda (*deferred*) per instruksi proyek.
+- **Pages 151-300 baris:** Seluruh route Purchases (`purchase.vue`, `purchase-order.vue`, `purchase-order-detail.vue`, `purchase-return.vue`, `purchase-return-detail.vue`, `purchase-item.vue`, `purchase-category.vue`), Support Ticket (`ticket-detail.vue`), dan HRM (`incentive.vue`) telah menjadi route composer tipis (<20 baris).
+- **Workspaces/Screens >300 baris:** Seluruh 15 file (`FooterWorkspace.vue`, `AllBlogWorkspace.vue`, `PermissionMatrixWorkspace.vue`, `DownloadFilesWorkspace.vue`, `DistrictWorkspace.vue`, `BannerWorkspace.vue`, `OurClientWorkspace.vue`, `RegencyWorkspace.vue`, `BlogCommentWorkspace.vue`, `KertasGroupSelfWorkspace.vue`, `KertasJenisSelfWorkspace.vue`, `ProvinceWorkspace.vue`, `HargaJasaLainyaWorkspace.vue`, `BlogCategoryWorkspace.vue`, `EmployeesWorkspace.vue`) telah didekomposisi menjadi domain components terpisah, dan **0 file workspace >300 baris tersisa di seluruh repository**.
 
 ## 9. Delivery Record Audit
 

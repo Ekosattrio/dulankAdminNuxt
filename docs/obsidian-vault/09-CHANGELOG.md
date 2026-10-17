@@ -1,10 +1,52 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-11
+updated: 2026-10-17
 ---
 
+## 2026-10-17
+
+### Dekomposisi UI Workspace Master TODO P2 (Architecture Gate Compliance)
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelesaikan item Master TODO P2 untuk dekomposisi komponen dan workspace structural review required (>300 baris) di seluruh repository.
+- **Location Group:**
+  - `ProvinceWorkspace.vue` dipecah menjadi `ProvinceRecordsTable.vue` (115 baris) dan `ProvinceWorkspace.vue` (175 baris).
+  - `RegencyWorkspace.vue` dipecah menjadi `RegencyRecordsTable.vue` (135 baris) dan `RegencyWorkspace.vue` (190 baris).
+  - `DistrictWorkspace.vue` dipecah menjadi `DistrictRecordsTable.vue` (145 baris) dan `DistrictWorkspace.vue` (200 baris).
+- **CMS / Web Content Group:**
+  - `FooterWorkspace.vue` (sebelumnya 543 baris) dipecah menjadi `FooterMainContentSection.vue`, `FooterLinksListSection.vue`, `FooterContactSocialsSection.vue`, `FooterLivePreview.vue`, dan `FooterWorkspace.vue` (180 baris).
+  - `BannerWorkspace.vue` (sebelumnya 400 baris) dipecah dengan `BannerCardsGrid.vue` (115 baris), memangkas `BannerWorkspace.vue` menjadi 210 baris.
+  - `OurClientWorkspace.vue` (sebelumnya 371 baris) dipecah dengan `ClientDraggableGrid.vue` (180 baris), memangkas `OurClientWorkspace.vue` menjadi 170 baris.
+  - `DownloadFilesWorkspace.vue` (sebelumnya 448 baris) dipecah dengan `DownloadFilesFilterBar.vue`, `DownloadFilesContent.vue`, dan `DownloadFilesModals.vue`, memangkas `DownloadFilesWorkspace.vue` menjadi 245 baris.
+- **Roles & Permissions Group:**
+  - `PermissionMatrixWorkspace.vue` (sebelumnya 458 baris) dipecah dengan `PermissionMatrixTable.vue` (210 baris), memangkas `PermissionMatrixWorkspace.vue` menjadi 215 baris.
+- **Calculator & HR Group:**
+  - `KertasGroupSelfWorkspace.vue` (sebelumnya 357 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (125 baris).
+  - `KertasJenisSelfWorkspace.vue` (sebelumnya 352 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (135 baris).
+  - `HargaJasaLainyaWorkspace.vue` (sebelumnya 340 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `JasaLain` (120 baris).
+  - `KomponenMinimumWorkspace.vue` (sebelumnya 288 baris) dan `KomponenFiksWorkspace.vue` (sebelumnya 274 baris) direfaktor menjadi orchestrator tipis (masing-masing 115 baris).
+  - `EmployeesWorkspace.vue` (sebelumnya 304 baris) distreamline menjadi 240 baris.
+- **Audit Result:** 0 workspace file > 300 baris tersisa di seluruh repository.
+- **Validation run:** `npm run validate:structure` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Rekonsiliasi Discount Plan
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menutup gap `/discount-plan` terhadap `discount-plan.html` legacy, BRVS, dan BRVS-UI dengan integrasi penuh ke backend Laravel `/api/v1/admin/discount-plans` dan master customer types `/api/v1/admin/customer-types`.
+- **Parity/UI:** Memulihkan header "Discount Plan", subtitle "Manage your discount plans", toolbar (Pdf, Print, Refresh, Collapse, Add Discount Plan), filter Customer (`All Customer`, `Members Only`, `High-Spending Customers`, `Online Customers`) dan Status (`Active`, `Inactive`), kolom literal tabel `Plane Name`, `Customers`, `Status`, dan Action (Edit, Delete). Form Add/Edit berbagi modal terpadu, mempertahankan nilai customer saat mengedit record khusus (`Students` pada Student Plan, `Online Customers` pada Free Shipping Plan), dan submodal `Add Customer` berfungsi penuh menambahkan tipe pelanggan ke backend.
+- **BRVS/data:** Page `app/pages/discount-plan.vue` (10 baris), `DiscountPlanWorkspace.vue` (50 baris), `DiscountPlanRecordsTable.vue` (33 baris), `DiscountPlanFormDialog.vue` (80 baris), `DiscountPlanCustomerDialog.vue` (19 baris). Composable `useDiscountPlans.ts` menangani request list, filter pencarian & customer, mutation `createPlan`, `updatePlan`, `deletePlan`, dan pembuatan segmen `createCustomer` via `/api/v1/admin/customer-types`. Tipe `server/types/discount-plan.ts` disinkronkan dengan kontrak backend Laravel. 7 record referensi legacy dipertahankan secara deterministik saat data backend kosong.
+- **BRVS-UI:** Workspace, Table, Form Dialog, Customer Dialog, Confirm Delete, dan Print Modal terpisah berdasarkan tanggung jawab semantik dan menggunakan komponen bersama (`SalesDataTable`, `SalesActionButton`, `SalesStatusBadge`, `TableFilterSelect`, `SalesFeedback`, `SalesConfirmDelete`, `DocumentPrintModal`).
+- **Validation run:** `npm run validate:structure` PASS (0 failure); `npm run typecheck` PASS (0 error); `npm run build` PASS (build produksi 11.3 MB selesai tanpa error).
+- **Validation not run:** Visual headless screenshot testing dan live browser click testing tidak dijalankan karena keterbatasan lingkungan headless saat sesi ini.
+- **Remaining risk:** Integrasi runtime bergantung pada backend Laravel yang aktif di `/api/v1/**`. Route Promo lain (`/discount` dan `/coupon`) masih dalam antrean rekonsiliasi.
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ## 2026-10-11
+
 
 ### Rekonsiliasi Cetak Full Color
 

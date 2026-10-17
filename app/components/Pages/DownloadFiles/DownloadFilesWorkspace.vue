@@ -3,14 +3,8 @@ import { ref, computed } from 'vue'
 import type { DownloadFileItem, DownloadFileFormData } from '#server/types/download-file'
 import { useDownloadFiles } from '~/composables/useDownloadFiles'
 import { useTablePrint } from '~/composables/useTablePrint'
-import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
-import DownloadFileSidebar from '~/components/Pages/DownloadFiles/DownloadFileSidebar.vue'
-import DownloadFileCardGrid from '~/components/Pages/DownloadFiles/DownloadFileCardGrid.vue'
-import DownloadFileTable from '~/components/Pages/DownloadFiles/DownloadFileTable.vue'
-import UploadFileModal from '~/components/Pages/DownloadFiles/UploadFileModal.vue'
-import CreateFolderModal from '~/components/Pages/DownloadFiles/CreateFolderModal.vue'
-import DownloadFileFormModal from '~/components/Pages/DownloadFiles/DownloadFileFormModal.vue'
-import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import DownloadFilesContent from '~/components/Pages/DownloadFiles/DownloadFilesContent.vue'
+import DownloadFilesModals from '~/components/Pages/DownloadFiles/DownloadFilesModals.vue'
 import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 
@@ -46,17 +40,12 @@ function showToast(msg: string) {
 }
 
 // Separate files into Pinned (Top Section "Files") and All Files (Bottom Section)
-const pinnedFiles = computed(() => {
-  return files.value.filter(f => f.isPinned)
-})
+const pinnedFiles = computed(() => files.value.filter(f => f.isPinned))
 
 const tableFiles = computed(() => {
   let list = files.value.filter(f => !f.isPinned)
-  if (list.length === 0) {
-    list = files.value
-  }
+  if (list.length === 0) list = files.value
 
-  // Filter by search
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.trim().toLowerCase()
     list = list.filter(item =>
@@ -66,7 +55,6 @@ const tableFiles = computed(() => {
     )
   }
 
-  // Filter by File Type
   if (fileTypeFilter.value !== 'All File types') {
     const ft = fileTypeFilter.value.toLowerCase()
     list = list.filter(item => {
@@ -80,7 +68,6 @@ const tableFiles = computed(() => {
     })
   }
 
-  // Sort by
   if (sortBy.value === 'Sort By Size') {
     list = [...list].sort((a, b) => (parseFloat(b.size) || 0) - (parseFloat(a.size) || 0))
   } else if (sortBy.value === 'Order Ascending') {
@@ -92,29 +79,12 @@ const tableFiles = computed(() => {
   return list
 })
 
-// Modals
+// Modals state
 const isUploadModalOpen = ref(false)
 const isCreateFolderModalOpen = ref(false)
 const isEditModalOpen = ref(false)
 const activeFileForEdit = ref<DownloadFileItem | null>(null)
 const fileToDelete = ref<DownloadFileItem | null>(null)
-
-function handleOpenUpload() {
-  isUploadModalOpen.value = true
-}
-
-function handleOpenCreateFolder() {
-  isCreateFolderModalOpen.value = true
-}
-
-function handleEditFile(item: DownloadFileItem) {
-  activeFileForEdit.value = item
-  isEditModalOpen.value = true
-}
-
-function handleDeleteRequest(item: DownloadFileItem) {
-  fileToDelete.value = item
-}
 
 async function handleUploadSubmit(formData: DownloadFileFormData) {
   isBusy.value = true
@@ -232,7 +202,7 @@ function handleDownload(item: DownloadFileItem) {
         <button
           type="button"
           class="inline-flex h-9 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
-          @click="handleOpenUpload"
+          @click="isUploadModalOpen = true"
         >
           <FeatherIcon name="upload" :size="15" />
           <span>Upload Files</span>
@@ -255,193 +225,53 @@ function handleDownload(item: DownloadFileItem) {
       </button>
     </div>
 
-    <!-- Main Content Area: 2 Columns -->
-    <div class="flex flex-col lg:flex-row gap-6 items-start pt-2">
-      <!-- Left Sidebar (Files, + New, Storage) -->
-      <div
-        v-show="isSidebarOpen"
-        class="w-full lg:w-64 shrink-0 transition-all duration-200"
-      >
-        <DownloadFileSidebar
-          :total-files="files.length"
-          @upload-file="handleOpenUpload"
-          @upload-folder="handleOpenUpload"
-          @create-folder="handleOpenCreateFolder"
-        />
-      </div>
-
-      <!-- Right Main Content Area -->
-      <div class="flex-1 space-y-6 w-full min-w-0">
-        <!-- Filter Bar (Sort by Date, Search, Recent, All File types) -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <!-- Left: Sort by Date & Search -->
-          <div class="flex items-center gap-2.5 flex-1 max-w-md">
-            <!-- Sort by Date -->
-            <div class="relative inline-flex items-center">
-              <select
-                v-model="sortBy"
-                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              >
-                <option>Sort by Date</option>
-                <option>Sort By Relevance</option>
-                <option>Sort By Size</option>
-                <option>Order Ascending</option>
-                <option>Order Descending</option>
-              </select>
-              <FeatherIcon
-                name="sliders"
-                :size="14"
-                class="pointer-events-none absolute left-2.5 text-gray-400"
-              />
-            </div>
-
-            <!-- Search input -->
-            <div class="relative flex-1">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search"
-                class="h-9 w-full rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-xs font-medium text-gray-700 placeholder-gray-400 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              />
-              <FeatherIcon
-                name="search"
-                :size="14"
-                class="pointer-events-none absolute left-2.5 top-2.5 text-gray-400"
-              />
-            </div>
-          </div>
-
-          <!-- Right: Recent & All File types -->
-          <div class="flex items-center gap-2.5">
-            <!-- Recent Dropdown -->
-            <div class="relative inline-flex items-center">
-              <select
-                v-model="recentFilter"
-                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              >
-                <option>Recent</option>
-                <option>Last Week</option>
-                <option>Last Month</option>
-              </select>
-              <FeatherIcon
-                name="clock"
-                :size="14"
-                class="pointer-events-none absolute left-2.5 text-gray-400"
-              />
-            </div>
-
-            <!-- All File Types Dropdown -->
-            <div class="relative inline-flex items-center">
-              <select
-                v-model="fileTypeFilter"
-                class="h-9 rounded-lg border border-gray-200 bg-white pl-8 pr-7 text-xs font-medium text-gray-700 hover:border-gray-300 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              >
-                <option>All File types</option>
-                <option>Folders</option>
-                <option>PDF</option>
-                <option>Images</option>
-                <option>Videos</option>
-                <option>Audios</option>
-                <option>Excel</option>
-              </select>
-              <FeatherIcon
-                name="filter"
-                :size="14"
-                class="pointer-events-none absolute left-2.5 text-gray-400"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Skeleton Loader for Files & Table -->
-        <div v-if="pending" class="space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            <div
-              v-for="i in 4"
-              :key="`file-card-skel-${i}`"
-              class="rounded-xl border border-gray-100 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-gray-900 animate-pulse space-y-3"
-            >
-              <div class="flex items-center justify-between">
-                <div class="h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800" />
-                <div class="h-4 w-4 rounded bg-gray-200 dark:bg-gray-800" />
-              </div>
-              <div class="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-800" />
-              <div class="h-3 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
-            </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-gray-900 animate-pulse space-y-3">
-            <div class="h-8 w-full rounded bg-gray-200 dark:bg-gray-800" />
-            <div v-for="r in 5" :key="`file-row-skel-${r}`" class="h-12 w-full rounded bg-gray-100 dark:bg-gray-800" />
-          </div>
-        </div>
-
-        <template v-else>
-          <!-- Section 1: Pinned / Quick Access "Files" Grid -->
-          <DownloadFileCardGrid
-            :files="pinnedFiles"
-            @toggle-favorite="handleToggleFavorite"
-            @download="handleDownload"
-            @delete="handleDeleteRequest"
-            @edit="handleEditFile"
-          />
-
-          <!-- Section 2: "All Files" Table / Grid with View Switchers -->
-          <DownloadFileTable
-            :files="tableFiles"
-            @current-page-items="currentPageFiles = $event"
-            @toggle-favorite="handleToggleFavorite"
-            @download="handleDownload"
-            @delete="handleDeleteRequest"
-            @edit="handleEditFile"
-          />
-        </template>
-      </div>
-    </div>
-
-    <!-- Modals -->
-    <UploadFileModal
-      :open="isUploadModalOpen"
-      :busy="isBusy"
-      @close="isUploadModalOpen = false"
-      @submit="handleUploadSubmit"
+    <!-- Main Content Area: 2 Columns using DownloadFilesContent -->
+    <DownloadFilesContent
+      :files="files"
+      :pinned-files="pinnedFiles"
+      :table-files="tableFiles"
+      :pending="pending"
+      :is-sidebar-open="isSidebarOpen"
+      :search-query="searchQuery"
+      :sort-by="sortBy"
+      :recent-filter="recentFilter"
+      :file-type-filter="fileTypeFilter"
+      @update:search-query="searchQuery = $event"
+      @update:sort-by="sortBy = $event"
+      @update:recent-filter="recentFilter = $event"
+      @update:file-type-filter="fileTypeFilter = $event"
+      @upload-file="isUploadModalOpen = true"
+      @upload-folder="isUploadModalOpen = true"
+      @create-folder="isCreateFolderModalOpen = true"
+      @toggle-favorite="handleToggleFavorite"
+      @download="handleDownload"
+      @delete="fileToDelete = $event"
+      @edit="activeFileForEdit = $event; isEditModalOpen = true"
+      @current-page-items="currentPageFiles = $event"
     />
 
-    <CreateFolderModal
-      :open="isCreateFolderModalOpen"
-      :busy="isBusy"
-      @close="isCreateFolderModalOpen = false"
-      @submit="handleCreateFolderSubmit"
-    />
-
-    <DownloadFileFormModal
-      :open="isEditModalOpen"
-      :is-edit="true"
-      :file-data="activeFileForEdit"
-      :busy="isBusy"
-      @close="isEditModalOpen = false"
-      @submit="handleEditSubmit"
-    />
-
-    <SalesConfirmDelete
-      :open="!!fileToDelete"
-      :title="fileToDelete?.name ? `Hapus File '${fileToDelete.name}'?` : 'Hapus File?'"
-      :message="`Apakah Anda yakin ingin menghapus file ini? Tindakan ini tidak dapat dibatalkan.`"
-      :busy="isBusy"
-      @confirm="confirmDelete"
-      @close="fileToDelete = null"
-    />
-
-    <DocumentPrintModal
-      :open="isPrintModalOpen"
-      title="Download Files Report"
-      subtitle="Managed files, ownership, size, and download activity"
-      :columns="printColumns"
-      :items="tableFiles"
-      :current-page-items="currentPageFiles"
-      date-field="uploadedDate"
-      :default-action="defaultPrintAction"
-      @close="closePrintModal"
+    <!-- Modals Container -->
+    <DownloadFilesModals
+      :is-upload-modal-open="isUploadModalOpen"
+      :is-create-folder-modal-open="isCreateFolderModalOpen"
+      :is-edit-modal-open="isEditModalOpen"
+      :file-to-delete="fileToDelete"
+      :active-file-for-edit="activeFileForEdit"
+      :is-busy="isBusy"
+      :is-print-modal-open="isPrintModalOpen"
+      :print-columns="printColumns"
+      :table-files="tableFiles"
+      :current-page-files="currentPageFiles"
+      :default-print-action="defaultPrintAction"
+      @close-upload="isUploadModalOpen = false"
+      @close-create-folder="isCreateFolderModalOpen = false"
+      @close-edit="isEditModalOpen = false"
+      @close-delete="fileToDelete = null"
+      @close-print="closePrintModal"
+      @submit-upload="handleUploadSubmit"
+      @submit-create-folder="handleCreateFolderSubmit"
+      @submit-edit="handleEditSubmit"
+      @confirm-delete="confirmDelete"
     />
   </div>
 </template>
-
