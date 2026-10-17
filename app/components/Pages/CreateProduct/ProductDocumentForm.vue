@@ -95,19 +95,13 @@ const {
             v-model:store="form.store"
             v-model:item-code="form.itemCode"
             v-model:name="form.name"
-            v-model:category="form.category"
-            v-model:sub-category="form.subCategory"
             v-model:unit="form.unit"
             v-model:selling-type="form.sellingType"
             v-model:description="form.description"
-            :categories="categoryNames"
-            :sub-categories="subCategoryNames"
             :units="unitNames"
             :stores="stores"
             :disabled="busy"
             @generate-code="generateCode"
-            @add-category="handleAddCategoryModal"
-            @add-sub-category="isSubCategoryModalOpen = true"
             @add-unit="isUnitModalOpen = true"
           />
         </div>
@@ -138,6 +132,8 @@ const {
         <div v-show="openPricing" class="p-5">
           <ProductPricingSection
             v-model:price-type="form.priceType"
+            v-model:sub-category="form.subCategory"
+            :sub-categories="subCategoryNames"
             v-model:quantity="form.quantity"
             v-model:price="form.price"
             v-model:min-order-qty="form.minOrderQty"
@@ -153,6 +149,7 @@ const {
             v-model:selected-attribute="form.selectedAttribute"
             v-model:attribute-tags="form.attributeTags"
             :disabled="busy"
+            @add-sub-category="isSubCategoryModalOpen = true"
             @open-attribute-modal="isAttributeModalOpen = true"
             @open-variation-modal="handleOpenVariationModal"
           />

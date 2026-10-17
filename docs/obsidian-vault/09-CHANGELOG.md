@@ -6,6 +6,19 @@ updated: 2026-10-17
 
 ## 2026-10-17
 
+### Penyesuaian Form Create Product & Relokasi Menu PRODUCTS & SERVICES
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyesuaikan form `create-product` dan hirarki navigasi menu `PRODUCTS & SERVICES` sesuai instruksi pengguna:
+  1. **Option Baru Price Type:** Menambahkan opsi radio baru `"Minimum Qty or Price"` sebelum `"Large Format"` pada `ProductPricingSection.vue` dan tipe `PriceTypeTab`, dengan input: *Sub Category*, *Minimum Qty*, *Minimum Price*, dan *Price (IDR)*.
+  2. **Pembersihan Product Information:** Menghapus input *Category* dan *Sub Category* dari kartu informasi produk (`ProductInfoSection.vue` & `ProductDocumentForm.vue`).
+  3. **Relokasi Sub-Category:** Memindahkan kontrol input *Sub Category* ke dalam masing-masing opsi tab pada `ProductPricingSection.vue` (*Single Product*, *Variable Product*, *Size Calculation*, *Minimum Qty or Price*, *Large Format*, *Offset Service Price*), lengkap dengan opsi pemilih dan tombol dialog modal tambah sub-kategori baru.
+  4. **Struktur Navigasi Sidebar:** Memindahkan menu *Variable Product* (`/variable-product`) dan *Large Format* (`/large-format`) menjadi sub-menu di dalam grup menu `Product List` pada `AppSidebar.vue` dan `Sidebar.vue`.
+  5. **Data Awal Bersih:** Mengosongkan data dummy contoh pada `useLargeFormatProducts.ts` dan `useVariableProducts.ts` sehingga tabel Large Format dan Variable Product memulai state dari array kosong (`[]`) dan menampilkan empty state sebelum diisi melalui form atau API.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse PASS (0 errors); `npm.cmd run typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ### Perbaikan Template Syntax & Audit Global SFC Compiler
 
 - **Date:** 2026-10-17
