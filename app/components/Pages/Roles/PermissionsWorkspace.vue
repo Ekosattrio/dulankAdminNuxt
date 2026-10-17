@@ -1,7 +1,6 @@
 <template>
-  <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="page-header mt-3">
+  <div class="space-y-6">
+    <div class="page-header mt-3">
         <div class="add-item d-flex">
           <div class="page-title">
             <h4>Permission</h4>
@@ -119,7 +118,6 @@
           <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
             <button type="button" class="btn btn-light" @click="resetMatrix">Reset</button>
             <button type="button" class="btn btn-warning text-white" @click="saveMatrix">Save Permissions</button>
-          </div>
         </div>
       </div>
     </div>

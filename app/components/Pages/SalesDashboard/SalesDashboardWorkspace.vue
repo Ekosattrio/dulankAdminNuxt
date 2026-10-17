@@ -12,7 +12,7 @@ function notify(label: string) { message.value = `${label} refreshed.` }
 </script>
 
 <template>
-  <div class="mx-auto max-w-[1600px] px-4 py-4 sm:px-6">
+  <div class="space-y-6">
     <SalesDashboardHeader v-model:date-range="dateRange" :collapsed="collapsed" :refreshing="page.pending.value" @refresh="refresh" @collapse="collapsed = !collapsed" />
     <SalesFeedback :pending="page.pending.value" :error="page.error.value?.message || ''" :message="message" skeleton="card" @retry="refresh" @dismiss="message = ''">
       <SalesDashboardKpis @refresh="notify" />

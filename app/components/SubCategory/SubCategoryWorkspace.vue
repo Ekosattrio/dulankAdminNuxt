@@ -131,29 +131,27 @@ const exportPdf = () => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <SalesListHeader title="Sub Categories / Sub Kategori" subtitle="Kelola sub kelompok jenis spesifikasi produk" add-label="Add Sub Category" :refreshing="pending" @add="handleAdd" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
-      <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="8" @dismiss="toastMessage = ''" />
+  <div class="space-y-6">
+    <SalesListHeader title="Sub Categories / Sub Kategori" subtitle="Kelola sub kelompok jenis spesifikasi produk" add-label="Add Sub Category" :refreshing="pending" @add="handleAdd" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
+    <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="8" @dismiss="toastMessage = ''" />
 
-      <PagesSubCategoryTable
-        v-if="!pending"
-        :sub-categories="filteredList"
-        :categories="categoryNames"
-        :search-query="searchQuery"
-        :selected-category="selectedCategory"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:selected-category="selectedCategory = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-sub-category="handleAdd"
-        @edit-sub-category="handleEdit"
-        @delete-sub-category="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
+    <PagesSubCategoryTable
+      v-if="!pending"
+      :sub-categories="filteredList"
+      :categories="categoryNames"
+      :search-query="searchQuery"
+      :selected-category="selectedCategory"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:selected-category="selectedCategory = $event"
+      @update:filter-status="filterStatus = $event"
+      @add-sub-category="handleAdd"
+      @edit-sub-category="handleEdit"
+      @delete-sub-category="handleDelete"
+      @export-pdf="exportPdf"
+      @print-table="printTable"
+      @refresh="refresh"
+    />
 
     <PagesSubCategoryModal
       :is-open="isModalOpen"

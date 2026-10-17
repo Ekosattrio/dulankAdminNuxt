@@ -84,7 +84,7 @@ function exportCsv() {
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
+  <div class="space-y-6">
     <!-- Header -->
     <SalesListHeader
       title="Bestseller Products Report"
@@ -109,7 +109,7 @@ function exportCsv() {
     </SalesListHeader>
 
     <!-- 4 KPI Summary Cards -->
-    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div class="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400">
           <FeatherIcon name="award" :size="22" />

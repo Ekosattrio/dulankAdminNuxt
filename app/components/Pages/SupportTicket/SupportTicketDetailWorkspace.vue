@@ -33,7 +33,7 @@ function retry() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-6">
+  <div class="space-y-6">
     <SalesFeedback
       :pending="pending"
       skeleton="card"

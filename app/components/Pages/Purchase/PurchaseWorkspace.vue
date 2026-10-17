@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Purchase, PurchaseFormData } from '#server/types/purchase'
 import { formatNumber } from '~/composables/useFormatters'
+import PurchaseStatsWidgets from '~/components/Pages/Purchase/PurchaseStatsWidgets.vue'
 
 const searchQuery = ref('')
 const filterStatus = ref('')
@@ -16,6 +17,16 @@ const filterParams = computed(() => ({
 const { purchases, pending, error, refresh, savePurchase, deletePurchase } = usePurchases(filterParams)
 const { suppliers } = useSuppliers()
 const { items: catalogItems } = usePurchaseItems()
+
+const stats = computed(() => {
+  const all = purchases.value || []
+  return {
+    totalPurchases: all.length,
+    totalAmount: all.reduce((sum, p) => sum + (Number(p.amount) || 0), 0),
+    totalPaid: all.reduce((sum, p) => sum + (Number(p.paid) || 0), 0),
+    totalDue: all.reduce((sum, p) => sum + (Number(p.due) || 0), 0),
+  }
+})
 
 const supplierOptions = computed(() => {
   if (suppliers.value && suppliers.value.length > 0) {
@@ -121,6 +132,9 @@ async function confirmDelete() {
         </button>
       </template>
     </SalesListHeader>
+
+    <!-- KPI Stats Widgets -->
+    <PurchaseStatsWidgets v-if="!collapsed" :stats="stats" />
 
     <SalesFeedback :message="toastMessage" :error="actionError" @dismiss="toastMessage = ''" @retry="actionError = ''" />
     <SalesFeedback

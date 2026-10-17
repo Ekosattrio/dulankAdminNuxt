@@ -6,6 +6,54 @@ updated: 2026-10-17
 
 ## 2026-10-17
 
+### Perbaikan Template Syntax & Audit Global SFC Compiler
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Mengatasi compile error `Invalid end tag` pada `/pages/pos-order.vue` dan menjalankan audit kompilasi menyeluruh terhadap seluruh komponen Vue di repository.
+- **Root Cause & Fixes:**
+  - `pos-order.vue`: Menghapus tag penutup `</div>` sisa legacy wrapper `.page-wrapper` di baris 155 yang menutup root container secara prematur sebelum modal dialog.
+  - `GdprSettingsWorkspace.vue`: Menyelaraskan jumlah tag penutup `</div>` di akhir template sehingga tepat menutup seluruh hierarki kolom/row.
+  - `PrimaryCard.vue` & `RevenueCard.vue`: Memberikan struktur SFC dasar `<template><div /></template>` pada 2 file kosong agar tidak menimbulkan warning/error pada parser Vue SFC.
+- **Global Audit:** Seluruh file `.vue` di dalam `app/` diparse dan dikompilasi menggunakan `@vue/compiler-sfc` dan `@vue/compiler-core` -> **0 errors**.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Harmonisasi Desain Visual & Eliminasi Inkonsistensi Layout Global
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelaraskan seluruh styling visual, padding container halaman, KPI stats widget cards, dan standarisasi kontrol form/tombol aksi di seluruh aplikasi Dulank Admin sesuai arahan pengguna dan standar AGENTS.md, tanpa mengubah UI/UX, fungsionalitas, field input, tombol, opsi, maupun isi/label halaman.
+- **Root Cause Padding & Margin Tereliminasi (100% Bebas `.page-wrapper`):**
+  - Mengidentifikasi bahwa `.page-wrapper` pada legacy `style.css` memiliki `margin: 0 0 0 260px; padding: 66px 0 0;`, yang jika dikombinasikan dengan Nuxt default layout (`lg:ms-[260px]` dan `p-4 sm:p-6 lg:p-8`) menyebabkan offset margin ganda dan padding berlebih pada berbagai halaman.
+  - Mengganti seluruh container `.page-wrapper` dan `.content container-fluid` dengan standar `<div class="space-y-6">` pada seluruh modul:
+    - Inventory & Master: `CategoryWorkspace.vue`, `SubCategoryWorkspace.vue`, `UnitWorkspace.vue`, `VariantWorkspace.vue`.
+    - HR & Master: `DesignationWorkspace.vue` (sekaligus mengganti header legacy menjadi `SalesListHeader` dan input filter setinggi `h-9`).
+    - Calculator Master: `KertasHargaSelfWorkspace.vue` dan `KertasUkuranSelfWorkspace.vue` (sekaligus mengintegrasikan `SalesListHeader` dan kontrol `h-9`).
+    - Roles: `PermissionsWorkspace.vue`.
+    - Pages: `tax-rates.vue`, `blank.vue`, dan `pos-order.vue`.
+    - Settings Group (11 workspace): `AppearanceWorkspace.vue`, `BankSettingsGridWorkspace.vue`, `BankSettingsListWorkspace.vue`, `CurrencySettingsWorkspace.vue`, `GdprSettingsWorkspace.vue`, `PaymentGatewayWorkspace.vue`, `PreferenceWorkspace.vue`, `PrinterSettingsWorkspace.vue`, `SmsGatewayWorkspace.vue`, `StorageSettingsWorkspace.vue` (menghapus `.page-wrapper-new`), `InvoiceSettingWorkspace.vue` & `PosSettingsWorkspace.vue` (menghapus nested `p-4 md:p-6 min-h-screen bg-gray-50/50`).
+    - Hasil audit global: Tersisa **0 file dengan `.page-wrapper` di seluruh `app/`**. 100% halaman `app/pages/` (kecuali auth pages) kini seragam menggunakan `dulank-page` & `space-y-6`.
+- **Harmonisasi KPI Stats Card Widget (Menu Purchase & Reports):**
+  - Menghubungkan dan memasang widget statistik `PurchaseStatsWidgets.vue` pada `PurchaseWorkspace.vue` (`/purchase`) yang sebelumnya tidak tampil, dengan reaktifitas `stats` lengkap dan sinkronisasi toggle collapse header.
+  - Menyelaraskan seluruh 5 widget kartu Purchase ke standar kanonikal horizontal `CardSkeleton.vue` (`rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 flex items-center gap-4` dengan `size-12 shrink-0 rounded-lg`, label `text-xs font-medium text-gray-500`, dan value `text-xl font-bold`):
+    - `PurchaseStatsWidgets.vue`, `PurchaseOrderStatsWidgets.vue`, `PurchaseReturnStatsWidgets.vue`, `PurchaseCategoryStatsWidgets.vue`, `PurchaseItemStatsWidgets.vue`.
+  - Menghapus conflicting `mb-6` pada grid widget di dalam container `space-y-6` pada:
+    - `InvoiceReportStatsWidgets.vue`, `CartStatsWidgets.vue`, `CheckoutStatsWidgets.vue`, `ContactFormStatsWidgets.vue`, `MyIncentiveStatsWidgets.vue`, `ReviewsStatsWidgets.vue`, `SupportTicketStatsWidgets.vue`, `WishlistStatsWidgets.vue`, `BestSellerWorkspace.vue`.
+- **Eliminasi Anomali Double-Padding & Container Width:**
+  - `BestSellerWorkspace.vue` & `InvoiceReportWorkspace.vue`: menghapus wrapper `mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8` menjadi `space-y-6`.
+  - `SupportTicketDetailWorkspace.vue`: menghapus wrapper `mx-auto max-w-7xl px-4 py-6` menjadi `space-y-6`.
+  - `PayslipWorkspace.vue`: menghapus nested padding `p-4 md:p-6` menjadi `space-y-6`.
+  - `SalesDashboardWorkspace.vue`: menghapus `mx-auto max-w-[1600px] px-4 py-4 sm:px-6` menjadi `space-y-6` selaras dengan `AdminDashboardWorkspace` dan `AnalyticsDashboardWorkspace`.
+- **Standarisasi Kontrol Form & Header Navigasi Halaman Add/Edit/Detail:**
+  - `EmployeePageForm.vue` (`/add-employee`, `/edit-employee`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar tinggi `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayrollPageForm.vue` (`/add-payroll`, `/edit-payroll`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayslipDetailWorkspace.vue` (`/payslip-detail`): standarisasi tombol Back, Download, dan Print ke standar `h-9` dengan font `text-sm` dan token `bg-primary`.
+  - `add-work-flow.vue` & `edit-work-flow.vue` (`/add-work-flow`, `/edit-work-flow`): mengganti header list generik menjadi header Add/Edit dengan back button `NuxtLink to="/work-flow" :class="salesSecondaryButton"`, serta standarisasi tombol Save di `WorkFlowDocumentForm.vue` ke `bg-primary hover:bg-primary-600`.
+  - `ProductDocumentForm.vue` (`/create-product`): perbaikan text size back button ke `text-sm font-semibold`, serta standarisasi tombol Cancel dan Save di footer dari warna hardcoded arbitrer ke token bersama (`bg-primary hover:bg-primary-600` dan standard border gray button `h-9`).
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ### Dekomposisi UI Workspace Master TODO P2 (Architecture Gate Compliance)
 
 - **Date:** 2026-10-17
