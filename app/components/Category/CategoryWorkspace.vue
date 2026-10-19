@@ -125,27 +125,25 @@ const exportPdf = () => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <SalesListHeader title="Product Category" subtitle="Kelola dan atur kategori produk percetakan" add-label="Add New Category" :refreshing="pending" @add="openAddModal" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
-      <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
+  <div class="space-y-6">
+    <SalesListHeader title="Product Category" subtitle="Kelola dan atur kategori produk percetakan" add-label="Add New Category" :refreshing="pending" @add="openAddModal" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
+    <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
 
-      <!-- Table Component -->
-      <PagesCategoryTable
-        v-if="!pending"
-        :categories="filteredCategories"
-        :search-query="searchQuery"
-        :filter-status="selectedStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="selectedStatus = $event"
-        @add-category="openAddModal"
-        @edit-category="handleEdit"
-        @delete-category="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
+    <!-- Table Component -->
+    <PagesCategoryTable
+      v-if="!pending"
+      :categories="filteredCategories"
+      :search-query="searchQuery"
+      :filter-status="selectedStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="selectedStatus = $event"
+      @add-category="openAddModal"
+      @edit-category="handleEdit"
+      @delete-category="handleDelete"
+      @export-pdf="exportPdf"
+      @print-table="printTable"
+      @refresh="refresh"
+    />
 
     <!-- Modal Component -->
     <PagesCategoryModal

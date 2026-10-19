@@ -50,7 +50,7 @@ const {
       <div class="flex items-center gap-2">
         <NuxtLink
           to="/product-list"
-          class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-200 bg-white px-3.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-200 bg-white px-3.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
         >
           <FeatherIcon name="arrow-left" :size="14" />
           <span>Back to Product</span>
@@ -95,19 +95,13 @@ const {
             v-model:store="form.store"
             v-model:item-code="form.itemCode"
             v-model:name="form.name"
-            v-model:category="form.category"
-            v-model:sub-category="form.subCategory"
             v-model:unit="form.unit"
             v-model:selling-type="form.sellingType"
             v-model:description="form.description"
-            :categories="categoryNames"
-            :sub-categories="subCategoryNames"
             :units="unitNames"
             :stores="stores"
             :disabled="busy"
             @generate-code="generateCode"
-            @add-category="handleAddCategoryModal"
-            @add-sub-category="isSubCategoryModalOpen = true"
             @add-unit="isUnitModalOpen = true"
           />
         </div>
@@ -138,6 +132,8 @@ const {
         <div v-show="openPricing" class="p-5">
           <ProductPricingSection
             v-model:price-type="form.priceType"
+            v-model:sub-category="form.subCategory"
+            :sub-categories="subCategoryNames"
             v-model:quantity="form.quantity"
             v-model:price="form.price"
             v-model:min-order-qty="form.minOrderQty"
@@ -153,6 +149,7 @@ const {
             v-model:selected-attribute="form.selectedAttribute"
             v-model:attribute-tags="form.attributeTags"
             :disabled="busy"
+            @add-sub-category="isSubCategoryModalOpen = true"
             @open-attribute-modal="isAttributeModalOpen = true"
             @open-variation-modal="handleOpenVariationModal"
           />
@@ -193,14 +190,14 @@ const {
       <div class="flex items-center justify-end gap-3 pb-8 pt-2">
         <NuxtLink
           to="/product-list"
-          class="min-w-28 rounded-md bg-[#212b36] px-5 py-2.5 text-center text-xs font-semibold text-white shadow-sm transition hover:bg-[#092c4c] focus:outline-none"
+          class="min-w-28 inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
         >
           Cancel
         </NuxtLink>
         <button
           type="submit"
           :disabled="busy"
-          class="min-w-32 rounded-md bg-[#ff9f43] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#f39334] focus:outline-none disabled:opacity-50"
+          class="min-w-32 inline-flex h-9 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 focus:outline-none disabled:opacity-50"
         >
           {{ busy ? 'Saving Product...' : isEdit ? 'Update Product' : 'Save Product' }}
         </button>

@@ -125,26 +125,24 @@ const exportPdf = () => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <SalesListHeader title="Variant Attributes / Varian" subtitle="Kelola atribut opsi warna, ukuran, dan gramatur produk" add-label="Add Variant" :refreshing="pending" @add="handleAdd" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
-      <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
+  <div class="space-y-6">
+    <SalesListHeader title="Variant Attributes / Varian" subtitle="Kelola atribut opsi warna, ukuran, dan gramatur produk" add-label="Add Variant" :refreshing="pending" @add="handleAdd" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
+    <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
 
-      <VariantTable
-        v-if="!pending"
-        :variants="filteredList"
-        :search-query="searchQuery"
-        :filter-status="filterStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="filterStatus = $event"
-        @add-variant="handleAdd"
-        @edit-variant="handleEdit"
-        @delete-variant="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
+    <VariantTable
+      v-if="!pending"
+      :variants="filteredList"
+      :search-query="searchQuery"
+      :filter-status="filterStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="filterStatus = $event"
+      @add-variant="handleAdd"
+      @edit-variant="handleEdit"
+      @delete-variant="handleDelete"
+      @export-pdf="exportPdf"
+      @print-table="printTable"
+      @refresh="refresh"
+    />
 
     <VariantModal
       :is-open="isModalOpen"

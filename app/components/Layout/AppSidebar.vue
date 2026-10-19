@@ -161,17 +161,21 @@ const menuGroups: MenuGroup[] = [
           { title: "Calender", to: "/calender" },
         ],
       },
+      { title: "Category", icon: "codepen", to: "/category" },
+      { title: "Sub Category", icon: "speaker", to: "/sub-category" },
+      { title: "Single Product", icon: "box", to: "/product-list" },
       {
-        title: "Services Category",
+        title: "Product List",
         icon: "list",
         submenus: [
-          { title: "Printing", to: "/mesin-cetak-self" },
-          { title: "Laminate", to: "/mesin-laminasi-self" },
-          { title: "Die Cutting", to: "/mesin-pond-self" },
+          { title: "Offset Service", to: "/mesin-cetak-self" },
+          { title: "Size Calculation", to: "/mesin-laminasi-self" },
+          { title: "Minimum Qty Or Price", to: "/mesin-pond-self" },
           { title: "Hot Print", to: "/mesin-poli-self" },
+          { title: "Variable Product", to: "/variable-product" },
+          { title: "Large Format", to: "/large-format" },
         ],
       },
-      { title: "Product List", icon: "box", to: "/product-list" },
     ],
   },
   {
@@ -186,8 +190,6 @@ const menuGroups: MenuGroup[] = [
   {
     header: "INVENTORY",
     items: [
-      { title: "Category", icon: "codepen", to: "/category" },
-      { title: "Sub Category", icon: "speaker", to: "/sub-category" },
       { title: "Unit", icon: "git-commit", to: "/unit" },
       { title: "Variant", icon: "layers", to: "/variant" },
       {

@@ -6,13 +6,9 @@ const props = defineProps<{
   store: string
   itemCode: string
   name: string
-  category: string
-  subCategory: string
   unit: string
   sellingType: string
   description: string
-  categories: string[]
-  subCategories: string[]
   units: string[]
   stores: string[]
   disabled?: boolean
@@ -22,14 +18,10 @@ const emit = defineEmits<{
   'update:store': [value: string]
   'update:itemCode': [value: string]
   'update:name': [value: string]
-  'update:category': [value: string]
-  'update:subCategory': [value: string]
   'update:unit': [value: string]
   'update:sellingType': [value: string]
   'update:description': [value: string]
   'generate-code': []
-  'add-category': []
-  'add-sub-category': []
   'add-unit': []
 }>()
 
@@ -93,52 +85,6 @@ const sellingTypes = ['Single Price', 'Size Calculation', 'Quantity Tier', 'Leno
         />
       </div>
 
-      <!-- Category + Add New -->
-      <div class="lg:col-span-3">
-        <div class="mb-1 flex items-center justify-between">
-          <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Category</label>
-          <button
-            type="button"
-            class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
-            @click="emit('add-category')"
-          >
-            <FeatherIcon name="plus-circle" :size="12" />
-            <span>Add New</span>
-          </button>
-        </div>
-        <select
-          :value="category"
-          :disabled="disabled"
-          :class="formControlClass"
-          @change="emit('update:category', ($event.target as HTMLSelectElement).value)"
-        >
-          <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
-        </select>
-      </div>
-
-      <!-- Sub Category + Add New -->
-      <div class="lg:col-span-3">
-        <div class="mb-1 flex items-center justify-between">
-          <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
-          <button
-            type="button"
-            class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
-            @click="emit('add-sub-category')"
-          >
-            <FeatherIcon name="plus-circle" :size="12" />
-            <span>Add New</span>
-          </button>
-        </div>
-        <select
-          :value="subCategory"
-          :disabled="disabled"
-          :class="formControlClass"
-          @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
-        >
-          <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
-        </select>
-      </div>
-
       <!-- Unit -->
       <div class="lg:col-span-6">
         <div class="mb-1 flex items-center justify-between">
@@ -164,7 +110,7 @@ const sellingTypes = ['Single Price', 'Size Calculation', 'Quantity Tier', 'Leno
       </div>
 
       <!-- Selling Type -->
-      <div class="lg:col-span-6">
+      <div class="lg:col-span-12">
         <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Selling Type</label>
         <select
           :value="sellingType"

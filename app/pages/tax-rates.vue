@@ -14,7 +14,7 @@ useLegacyPage({
 </script>
 
 <template>
-  <div class="page-wrapper mt-3 dulank-page dulank-page-tax-rates">
+  <div class="dulank-page dulank-page-tax-rates">
     <TaxRatesWorkspace />
   </div>
 </template>

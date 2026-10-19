@@ -51,8 +51,16 @@ async function handleSubmit(formData: WorkFlowFormData) {
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-edit-work-flow">
-    <SalesListHeader title="Edit Work Flow" subtitle="Manage your product with default Work Flow" />
+  <div class="dulank-page dulank-page-edit-work-flow space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Edit Work Flow</h1>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Manage your product with default Work Flow</p>
+      </div>
+      <NuxtLink to="/work-flow" :class="salesSecondaryButton">
+        <FeatherIcon name="arrow-left" :size="14" />Back to Work Flow List
+      </NuxtLink>
+    </div>
 
     <SalesFeedback :pending="loading" :error="loadError || saveError" @retry="fetchWorkflow()" />
 

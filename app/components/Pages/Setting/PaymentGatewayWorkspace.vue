@@ -52,9 +52,8 @@ const handleToggleSwitch = async () => {
 </script>
 
 <template>
-  <div class="page-wrapper">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header mt-3">
+  <div class="space-y-6">
+    <div class="page-header settings-pg-header mt-3">
         <div class="add-item d-flex">
           <div class="page-title">
             <h4>Settings</h4>
@@ -151,6 +150,5 @@ const handleToggleSwitch = async () => {
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>

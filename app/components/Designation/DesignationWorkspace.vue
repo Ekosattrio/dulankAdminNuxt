@@ -4,6 +4,7 @@ import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 import PagesDesignationModal from '~/components/Designation/DesignationModal.vue'
 import PagesDesignationTable from '~/components/Designation/DesignationTable.vue'
 import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 definePageMeta({
   layout: 'default'
@@ -75,67 +76,53 @@ const handleSave = async (payload: DesignationFormData) => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Designation / Jabatan</h4>
-          <h6 class="text-muted mb-0">Kelola daftar posisi, jabatan, dan tanggung jawab kerja</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <ul class="table-top-head d-flex align-items-center list-unstyled gap-2 mb-0">
-            <li>
-              <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
-                <FeatherIcon name="rotate-cw" size="16" />
-              </button>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="openAddModal">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Designation</span>
-          </button>
-        </div>
-      </div>
+  <div class="space-y-6">
+    <SalesListHeader
+      title="Designation / Jabatan"
+      subtitle="Kelola daftar posisi, jabatan, dan tanggung jawab kerja"
+      add-label="Add Designation"
+      :refreshing="pending"
+      @add="openAddModal"
+      @refresh="refresh()"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari nama jabatan..."
-                />
-              </div>
-            </div>
-            <div class="col-md-4 d-flex justify-content-md-end gap-2">
-              <select v-model="selectedStatus" class="form-select form-select-sm" style="width: auto">
-                <option value="">Semua Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-
-          <PagesDesignationTable
-            v-else
-            :designations="filteredDesignations"
-            @edit="handleEdit"
-            @delete="handleDelete"
+    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="relative w-full max-w-xs">
+          <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <FeatherIcon name="search" size="14" />
+          </span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="h-9 w-full rounded-md border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            placeholder="Cari nama jabatan..."
           />
         </div>
+        <div>
+          <select
+            v-model="selectedStatus"
+            class="h-9 rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            <option value="">Semua Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
       </div>
+
+      <div v-if="pending" class="py-12 text-center text-sm text-gray-500">
+        <div class="spinner-border text-primary inline-block h-8 w-8 animate-spin rounded-full border-4" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
+      <PagesDesignationTable
+        v-else
+        :designations="filteredDesignations"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      />
     </div>
 
     <PagesDesignationModal

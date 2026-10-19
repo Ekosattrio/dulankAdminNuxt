@@ -72,7 +72,9 @@ export function useProductEditor() {
     unit: '',
     sellingType: 'Size Calculation',
     description: '',
-    priceType: 'Single Product',
+    priceType: (typeof route.query.type === 'string' && ['Single Product', 'Variable Product', 'Size Calculation', 'Minimum Qty or Price', 'Large Format', 'Offset Service Price'].includes(route.query.type))
+      ? (route.query.type as PriceTypeTab)
+      : 'Single Product',
     quantity: 100,
     price: 15000,
     minOrderQty: 1,
@@ -98,10 +100,7 @@ export function useProductEditor() {
   })
 
   const subCategoryNames = computed(() => {
-    const category = categories.value.find(item => item.name === form.category)
-    return subCategories.value
-      .filter(item => !category || item.categoryId === category.id || item.category === category.name)
-      .map(item => item.name)
+    return subCategories.value.map(item => item.name)
   })
 
   const unitNames = computed(() => {
@@ -145,11 +144,10 @@ export function useProductEditor() {
     if (!form.category && categoryNames.value[0]) form.category = categoryNames.value[0]
     if (!form.subCategory && subCategoryNames.value[0]) form.subCategory = subCategoryNames.value[0]
     if (!form.unit && unitNames.value[0]) form.unit = unitNames.value[0]
+    if (!isEdit.value && typeof route.query.type === 'string' && ['Single Product', 'Variable Product', 'Size Calculation', 'Minimum Qty or Price', 'Large Format', 'Offset Service Price'].includes(route.query.type)) {
+      form.priceType = route.query.type as PriceTypeTab
+    }
   }, { immediate: true })
-
-  watch(() => form.category, () => {
-    if (!subCategoryNames.value.includes(form.subCategory)) form.subCategory = subCategoryNames.value[0] || ''
-  })
 
   function generateCode() {
     const nextCode = products.value.reduce((max, product) => Math.max(max, Number(product.code) || 0), 1000) + 1

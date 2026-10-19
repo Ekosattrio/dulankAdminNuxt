@@ -10,7 +10,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-4 mb-6">
+  <div class="flex flex-wrap gap-4">
     <div
       class="bg-white dark:bg-gray-800 rounded-md p-5 border border-gray-200 dark:border-gray-700 shadow-xs flex items-center w-full sm:w-72"
     >

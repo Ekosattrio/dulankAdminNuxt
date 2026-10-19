@@ -11,14 +11,18 @@ const props = defineProps<{
 
 const emit = defineEmits<{ close: []; submit: [payload: DiscountFormData] }>()
 
-const form = reactive<DiscountFormData>({
+const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+const form = reactive({
   name: '',
-  planId: null,
+  planId: '' as string | null,
+  applicableFor: 'All Products',
+  validFrom: '',
+  validTill: '',
+  type: 'Percentage' as DiscountType,
   value: 0,
-  type: 'Fixed',
-  validFrom: null,
-  validTill: null,
-  status: 'Active',
+  days: ['Monday'] as string[],
+  status: 'Active' as 'Active' | 'Inactive'
 })
 
 const errorMessage = ref('')
@@ -27,19 +31,75 @@ watch(
   () => [props.open, props.item] as const,
   ([open, item]) => {
     if (!open) return
-    Object.assign(form, item
-      ? { name: item.name, planId: item.planId, value: item.value, type: item.type, validFrom: item.validFrom, validTill: item.validTill, status: item.status }
-      : { name: '', planId: null, value: 0, type: 'Fixed' as DiscountType, validFrom: null, validTill: null, status: 'Active' })
+    if (item) {
+      let initialDays: string[] = ['Monday']
+      if (Array.isArray(item.days)) {
+        initialDays = item.days
+      } else if (typeof item.days === 'string' && item.days !== '—') {
+        const parsed = item.days.split(',').map(s => s.trim())
+        const matched = daysList.filter(d => parsed.some(p => d.toLowerCase().startsWith(p.toLowerCase())))
+        if (matched.length > 0) initialDays = matched
+      }
+
+      let appFor = 'All Products'
+      if (typeof item.products === 'string' && item.products.includes('Specific')) {
+        appFor = 'Specific Products'
+      }
+
+      Object.assign(form, {
+        name: item.name,
+        planId: item.planId || (props.plans[0]?.value ?? null),
+        applicableFor: appFor,
+        validFrom: item.validFrom || '',
+        validTill: item.validTill || '',
+        type: item.type || 'Percentage',
+        value: item.value || 0,
+        days: initialDays,
+        status: item.status || 'Active'
+      })
+    } else {
+      Object.assign(form, {
+        name: '',
+        planId: props.plans[0]?.value ?? null,
+        applicableFor: 'All Products',
+        validFrom: '',
+        validTill: '',
+        type: 'Percentage',
+        value: 0,
+        days: ['Monday'],
+        status: 'Active'
+      })
+    }
     errorMessage.value = ''
   },
-  { immediate: true },
+  { immediate: true }
 )
+
+function toggleDay(day: string) {
+  const idx = form.days.indexOf(day)
+  if (idx > -1) {
+    if (form.days.length > 1) form.days.splice(idx, 1)
+  } else {
+    form.days.push(day)
+  }
+}
 
 function submit() {
   if (!form.name.trim()) return void (errorMessage.value = 'Discount Name is required')
-  if (!form.value || form.value <= 0) return void (errorMessage.value = 'Value harus lebih dari 0')
+  if (form.value === undefined || form.value === null || form.value < 0) return void (errorMessage.value = 'Value is required')
   errorMessage.value = ''
-  emit('submit', { ...form, name: form.name.trim() })
+  emit('submit', {
+    name: form.name.trim(),
+    planId: form.planId,
+    applicableFor: form.applicableFor,
+    validFrom: form.validFrom || null,
+    validTill: form.validTill || null,
+    type: form.type,
+    value: Number(form.value) || 0,
+    days: form.days,
+    products: [form.applicableFor],
+    status: form.status
+  })
 }
 </script>
 
@@ -54,50 +114,78 @@ function submit() {
       </div>
 
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Discount Plan</label>
+        <label :class="modalFormLabelClass">Discount Plan<span class="ml-1 text-rose-600">*</span></label>
         <div :class="modalFormInputColClass">
           <select v-model="form.planId" :class="formControlClass">
-            <option :value="null">Tanpa Plan</option>
+            <option :value="null">Select</option>
             <option v-for="plan in plans" :key="plan.value" :value="plan.value">{{ plan.label }}</option>
           </select>
         </div>
       </div>
 
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Type<span class="ml-1 text-rose-600">*</span></label>
+        <label :class="modalFormLabelClass">Applicable For<span class="ml-1 text-rose-600">*</span></label>
         <div :class="modalFormInputColClass">
-          <div class="flex gap-3">
-            <label class="flex min-h-9 items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
-              <input v-model="form.type" type="radio" value="Fixed" class="accent-primary" /> Fixed (Rp)
-            </label>
-            <label class="flex min-h-9 items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
-              <input v-model="form.type" type="radio" value="Percentage" class="accent-primary" /> Percentage (%)
-            </label>
-          </div>
+          <select v-model="form.applicableFor" :class="formControlClass">
+            <option value="All Products">All Products</option>
+            <option value="Specific Products">Specific Products</option>
+          </select>
+        </div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Valid From<span class="ml-1 text-rose-600">*</span></label>
+        <div :class="modalFormInputColClass"><input v-model="form.validFrom" :class="formControlClass" type="date" /></div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Valid Till<span class="ml-1 text-rose-600">*</span></label>
+        <div :class="modalFormInputColClass"><input v-model="form.validTill" :class="formControlClass" type="date" /></div>
+      </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Discount Type<span class="ml-1 text-rose-600">*</span></label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.type" :class="formControlClass">
+            <option value="Percentage">Percentage</option>
+            <option value="Fixed">Flat</option>
+          </select>
         </div>
       </div>
 
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Value<span class="ml-1 text-rose-600">*</span></label>
         <div :class="modalFormInputColClass">
-          <input v-model.number="form.value" :class="formControlClass" type="number" min="0" required :placeholder="form.type === 'Percentage' ? 'mis. 10' : 'mis. 50000'" />
+          <input v-model.number="form.value" :class="formControlClass" type="number" min="0" required :placeholder="form.type === 'Percentage' ? 'e.g. 10' : 'e.g. 50000'" />
         </div>
       </div>
 
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Valid From</label>
-        <div :class="modalFormInputColClass"><input v-model="form.validFrom" :class="formControlClass" type="date" /></div>
-      </div>
-
-      <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Valid Till</label>
-        <div :class="modalFormInputColClass"><input v-model="form.validTill" :class="formControlClass" type="date" /></div>
+        <label :class="modalFormLabelClass">Valid on Following Days<span class="ml-1 text-rose-600">*</span></label>
+        <div :class="modalFormInputColClass">
+          <div class="flex flex-wrap gap-2 pt-1">
+            <label
+              v-for="day in daysList"
+              :key="day"
+              class="flex cursor-pointer items-center gap-1.5 rounded border border-gray-200 px-2 py-1 text-xs text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              :class="{ 'border-primary bg-primary/10 font-semibold text-primary dark:border-primary dark:bg-primary/20': form.days.includes(day) }"
+            >
+              <input
+                type="checkbox"
+                :checked="form.days.includes(day)"
+                class="size-3.5 accent-primary"
+                @change="toggleDay(day)"
+              />
+              {{ day.slice(0, 3) }}
+            </label>
+          </div>
+        </div>
       </div>
 
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Status</label>
         <div :class="modalFormInputColClass">
-          <label class="flex min-h-9 items-center gap-2 text-sm">
+          <label class="flex min-h-9 items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input v-model="form.status" type="checkbox" true-value="Active" false-value="Inactive" class="size-4 accent-primary" />{{ form.status }}
           </label>
         </div>

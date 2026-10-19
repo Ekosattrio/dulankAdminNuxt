@@ -6,17 +6,17 @@ export interface DiscountPlanCustomerSegment {
   filterLabel?: string
   availableInFilter: boolean
   availableInForm: boolean
-  createdAt: string
+  createdAt?: string
 }
 
 export interface DiscountPlanRecord {
   id: string
-  customerSegmentId: string
-  createdByEmployeeId: string
+  customerSegmentId?: string
+  createdByEmployeeId?: string
   name: string
   status: DiscountPlanStatus
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface DiscountPlanStore {
@@ -24,8 +24,15 @@ export interface DiscountPlanStore {
   records: DiscountPlanRecord[]
 }
 
-export interface DiscountPlanView extends DiscountPlanRecord {
+export interface DiscountPlanView {
+  id: string
+  name: string
   customers: string
+  customerSegmentId?: string
+  discountCount?: number
+  status: DiscountPlanStatus
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface DiscountPlanMeta {
@@ -41,10 +48,13 @@ export interface DiscountPlanQuery {
 
 export interface DiscountPlanCommand {
   name: string
-  customerSegmentId: string
+  customer?: string
+  customerSegmentId?: string
+  customers?: string[]
   status: DiscountPlanStatus
 }
 
 export interface DiscountPlanCustomerSegmentCommand {
   name: string
 }
+

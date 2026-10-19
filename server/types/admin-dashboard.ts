@@ -86,20 +86,20 @@ export interface AdminDashboardCategory {
 }
 
 export interface AdminDashboardSnapshot {
-  welcomeName: string
-  ordersToday: number
-  lowStockNotice: { productName: string; threshold: number; link: string }
-  primaryMetrics: AdminDashboardMetric[]
-  secondaryMetrics: AdminDashboardMetric[]
-  chartSeries: Record<AdminDashboardChartRange, AdminDashboardChartSeries>
-  overview: AdminDashboardOverview
-  topSelling: AdminDashboardProduct[]
-  lowStock: AdminDashboardProduct[]
-  recentSales: AdminDashboardRecentSale[]
-  salesStatics: { year: number; revenue: number; expense: number; revenueChange: number; expenseChange: number; points: number[] }
-  transactionGroups: AdminDashboardTransactionGroup[]
-  topCustomers: AdminDashboardCustomer[]
-  categories: AdminDashboardCategory[]
-  categoryTotals: { categories: number; products: number }
-  orderStatistics: { labels: string[]; values: number[][] }
+  welcomeName?: string
+  ordersToday?: number
+  lowStockNotice?: { productName: string; threshold: number; link?: string } | null
+  primaryMetrics?: AdminDashboardMetric[]
+  secondaryMetrics?: AdminDashboardMetric[]
+  chartSeries?: Record<AdminDashboardChartRange, AdminDashboardChartSeries>
+  overview?: AdminDashboardOverview
+  topSelling?: AdminDashboardProduct[]
+  lowStock?: AdminDashboardProduct[]
+  recentSales?: AdminDashboardRecentSale[]
+  salesStatics?: { year: number; revenue: number; expense: number; revenueChange: number; expenseChange: number; points: number[] }
+  transactionGroups?: AdminDashboardTransactionGroup[]
+  topCustomers?: AdminDashboardCustomer[]
+  categories?: AdminDashboardCategory[]
+  categoryTotals?: { categories: number; products: number } | null
+  orderStatistics?: { labels: string[]; values: number[][] } | null
 }

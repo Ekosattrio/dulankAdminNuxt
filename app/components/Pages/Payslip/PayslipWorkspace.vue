@@ -183,7 +183,7 @@ function handleExportExcel() {
 </script>
 
 <template>
-  <div class="space-y-4 p-4 md:p-6">
+  <div class="space-y-6">
     <!-- Header -->
     <SalesListHeader
       title="Payslips / Slip Gaji"

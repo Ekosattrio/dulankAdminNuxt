@@ -5,12 +5,10 @@ import { useProvinces } from '~/composables/useLocations'
 import { useTablePrint } from '~/composables/useTablePrint'
 import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
-import SalesDataTable from '~/components/Sales/SalesDataTable.vue'
-import SalesActionButton from '~/components/Sales/SalesActionButton.vue'
 import SalesConfirmDelete from '~/components/Sales/SalesConfirmDelete.vue'
 import DocumentPrintModal from '~/components/Common/DocumentPrintModal.vue'
-import TableFilterSelect from '~/components/Common/TableFilterSelect.vue'
 import ProvinceModal from '~/components/Pages/Location/ProvinceModal.vue'
+import ProvinceRecordsTable from '~/components/Pages/Location/ProvinceRecordsTable.vue'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 
 const { provinces, pending, error, refresh, saveProvince, deleteProvince } = useProvinces()
@@ -38,17 +36,6 @@ function showToast(msg: string) {
     toastMessage.value = ''
   }, 3500)
 }
-
-const statusOptions = ['Active', 'Inactive']
-
-// Columns configuration
-const columns = [
-  { key: 'name', label: 'Province', sortable: true },
-  { key: 'added', label: 'Added', sortable: true },
-  { key: 'createdBy', label: 'Created by', sortable: true },
-  { key: 'status', label: 'Status', sortable: true, align: 'center' as const, class: 'text-center' },
-  { key: 'actions', label: 'Action', sortable: false, align: 'center' as const, class: 'text-center whitespace-nowrap' },
-]
 
 // Print columns
 const printColumns = [
@@ -213,90 +200,18 @@ function exportCsv() {
     />
 
     <!-- Main Data Table -->
-    <SalesDataTable
+    <ProvinceRecordsTable
       v-if="!pending && !error"
-      :columns="columns"
       :items="filteredProvinces"
       :search="searchQuery"
-      search-placeholder="Search Province..."
+      :filter-status="filterStatus"
+      :sort-order="sortOrder"
       @update:search="searchQuery = $event"
-    >
-      <!-- Custom Filters Slot -->
-      <template #filters>
-        <!-- Status Filter -->
-        <TableFilterSelect
-          v-model="filterStatus"
-          :options="statusOptions"
-          placeholder="All Status"
-          aria-label="Filter status"
-        />
-
-        <!-- Sort Select -->
-        <select
-          v-model="sortOrder"
-          aria-label="Sort order"
-          class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-        >
-          <option value="newest">Sort: Newest</option>
-          <option value="oldest">Sort: Oldest</option>
-          <option value="name-asc">Name: A to Z</option>
-          <option value="name-desc">Name: Z to A</option>
-        </select>
-      </template>
-
-      <!-- Custom Cells -->
-      <template #cell(name)="{ item }">
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span>
-          <span
-            v-if="item.code"
-            class="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary dark:bg-primary/20"
-          >
-            {{ item.code }}
-          </span>
-        </div>
-      </template>
-
-      <template #cell(added)="{ item }">
-        <span class="text-xs text-gray-600 dark:text-gray-400">{{ item.added }}</span>
-      </template>
-
-      <template #cell(createdBy)="{ item }">
-        <div class="flex items-center gap-2">
-          <img
-            :src="item.avatar || '/assets/img/users/user-30.jpg'"
-            :alt="item.createdBy"
-            class="size-7 rounded-full object-cover border border-gray-200 dark:border-gray-700"
-            @error="($event.target as HTMLImageElement).src = '/assets/img/users/user-30.jpg'"
-          />
-          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ item.createdBy }}</span>
-        </div>
-      </template>
-
-      <template #cell(status)="{ item }">
-        <span
-          class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium"
-          :class="item.status === 'Inactive' ? 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-400' : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'"
-        >
-          {{ item.status || 'Active' }}
-        </span>
-      </template>
-
-      <template #cell(actions)="{ item }">
-        <div class="flex items-center justify-center gap-1.5">
-          <SalesActionButton
-            icon="edit"
-            label="Edit Province"
-            @click="handleEdit(item)"
-          />
-          <SalesActionButton
-            icon="trash-2"
-            label="Delete Province"
-            @click="handleDeleteRequest(item)"
-          />
-        </div>
-      </template>
-    </SalesDataTable>
+      @update:filter-status="filterStatus = $event"
+      @update:sort-order="sortOrder = $event"
+      @edit="handleEdit"
+      @delete="handleDeleteRequest"
+    />
 
     <!-- Add/Edit Modal -->
     <ProvinceModal
@@ -329,4 +244,3 @@ function exportCsv() {
     />
   </div>
 </template>
-

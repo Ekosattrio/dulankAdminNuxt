@@ -1,10 +1,152 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-11
+updated: 2026-10-17
 ---
 
+## 2026-10-19
+
+### Perbaikan Error 500 SSR pada Dashboard Admin (`AdminDashboardWelcome.vue` & `AdminDashboardInsights.vue`) serta Full Null-Safety Guarding
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Mengatasi crash 500 SSR `Cannot read properties of undefined (reading 'productName')` dan `Cannot read properties of undefined (reading 'categories')` pada halaman Dashboard Admin (`/`) saat backend API Laravel (`/api/v1/admin/dashboard/admin`) mengembalikan data parsial, kosong, atau `null` pada beberapa field:
+  1. **`AdminDashboardInsights.vue`:** Memperbaiki crash `reading 'categories'` dengan membungkus props ke dalam `withDefaults`, mengamankan `categoryTotals?.categories ?? 0`, `categoryTotals?.products ?? 0`, fallback array aman pada loop `customers`, `categories`, dan `orderStatistics?.values`.
+  2. **`AdminDashboardWelcome.vue`:** Memperbarui prop `notice` menjadi opsional/nullable (`{ productName: string; threshold: number; link?: string } | null`), menambahkan default props yang aman, serta memperketat syarat render banner warning menjadi `v-if="visible && notice?.productName"`.
+  3. **Penguatan Defensif Seluruh Sub-Komponen Dashboard:**
+     - `AdminDashboardOverview.vue`: Menggunakan `withDefaults`, optional chaining & fallback nol pada `overview?.[card.key]`, `overview?.firstTime`, dan `overview?.returning`.
+     - `AdminDashboardSalesChart.vue`: Menggunakan `withDefaults`, mengamankan perhitungan `max` dan array series agar tidak crash saat series kosong.
+     - `AdminDashboardSalesStatics.vue`: Menggunakan `withDefaults`, memberikan fallback tahun berjalan dan array points aman pada perhitungan bar chart.
+     - `AdminDashboardProductPanels.vue`: Menggunakan `withDefaults`, fallback array aman pada `topSelling`, `lowStock`, dan `recentSales`, serta fallback numerik pada harga/jumlah.
+     - `AdminDashboardTransactions.vue`: Menggunakan `withDefaults`, fallback array aman pada perulangan groups dan rows transaksi.
+     - `AdminDashboardMetrics.vue`: Menggunakan `withDefaults`, fallback array aman pada metrik primer/sekunder dan fallback tone warna.
+  4. **`server/types/admin-dashboard.ts`:** Menyelaraskan seluruh field `AdminDashboardSnapshot` agar opsional/nullable selaras dengan respons API nyata.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `@vue/compiler-sfc` parse audit PASS (0 errors); `nuxt typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Relokasi Menu Category dan Sub Category ke PRODUCTS & SERVICES
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Memindahkan menu navigasi `Category` (`/category`) dan `Sub Category` (`/sub-category`) dari grup menu `INVENTORY` ke dalam grup menu `PRODUCTS & SERVICES` pada `app/components/Layout/AppSidebar.vue` sesuai instruksi pengguna.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+## 2026-10-17
+
+### Pembersihan File Duplikat, Arsip HTML Mentah, dan Technical Debt Komponen
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Melakukan pembersihan file duplikat, arsip statis HTML mentah, dan file cadangan yang tidak terpakai sesuai instruksi pengguna agar arsitektur proyek lebih rapi, terstruktur, dan memiliki *Single Source of Truth*:
+  1. **Penghapusan Arsip HTML Mentah di Folder Komponen:** Menghapus `app/components/sidebar.html`, `app/components/header.html`, dan `app/components/bekup.html` yang merupakan sisa arsip slicing statis lama dan tidak dirender oleh runtime Nuxt.
+  2. **Konsolidasi Komponen Layout:** Menghapus komponen duplikat `app/components/App/Layout/Header.vue` dan `app/components/App/Layout/Sidebar.vue` (beserta direktori `app/components/App`), mengunci Single Source of Truth layout pada komponen kanonikal aktif: `app/components/Layout/AppHeader.vue` dan `app/components/Layout/AppSidebar.vue`.
+  3. **Penghapusan File Cadangan CSS & Komponen Kosong:** Menghapus `app/assets/css/style-backup.css` serta file kosong tak bertemplate `app/components/Dashboard/PrimaryCard.vue` dan `app/components/Dashboard/RevenueCard.vue`.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Penyesuaian Form Create Product & Relokasi Menu PRODUCTS & SERVICES
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyesuaikan form `create-product` dan hirarki navigasi menu `PRODUCTS & SERVICES` sesuai instruksi pengguna:
+  1. **Option Baru Price Type:** Menambahkan opsi radio baru `"Minimum Qty or Price"` sebelum `"Large Format"` pada `ProductPricingSection.vue` dan tipe `PriceTypeTab`, dengan input: *Sub Category*, *Minimum Qty*, *Minimum Price*, dan *Price (IDR)*.
+  2. **Pembersihan Product Information:** Menghapus input *Category* dan *Sub Category* dari kartu informasi produk (`ProductInfoSection.vue` & `ProductDocumentForm.vue`).
+  3. **Relokasi Sub-Category:** Memindahkan kontrol input *Sub Category* ke dalam masing-masing opsi tab pada `ProductPricingSection.vue` (*Single Product*, *Variable Product*, *Size Calculation*, *Minimum Qty or Price*, *Large Format*, *Offset Service Price*), lengkap dengan opsi pemilih dan tombol dialog modal tambah sub-kategori baru.
+  4. **Struktur Navigasi Sidebar:** Memindahkan menu *Variable Product* (`/variable-product`) dan *Large Format* (`/large-format`) menjadi sub-menu di dalam grup menu `Product List` pada `AppSidebar.vue` dan `Sidebar.vue`.
+  5. **Data Awal Bersih:** Mengosongkan data dummy contoh pada `useLargeFormatProducts.ts` dan `useVariableProducts.ts` sehingga tabel Large Format dan Variable Product memulai state dari array kosong (`[]`) dan menampilkan empty state sebelum diisi melalui form atau API.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse PASS (0 errors); `npm.cmd run typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Perbaikan Template Syntax & Audit Global SFC Compiler
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Mengatasi compile error `Invalid end tag` pada `/pages/pos-order.vue` dan menjalankan audit kompilasi menyeluruh terhadap seluruh komponen Vue di repository.
+- **Root Cause & Fixes:**
+  - `pos-order.vue`: Menghapus tag penutup `</div>` sisa legacy wrapper `.page-wrapper` di baris 155 yang menutup root container secara prematur sebelum modal dialog.
+  - `GdprSettingsWorkspace.vue`: Menyelaraskan jumlah tag penutup `</div>` di akhir template sehingga tepat menutup seluruh hierarki kolom/row.
+  - `PrimaryCard.vue` & `RevenueCard.vue`: Memberikan struktur SFC dasar `<template><div /></template>` pada 2 file kosong agar tidak menimbulkan warning/error pada parser Vue SFC.
+- **Global Audit:** Seluruh file `.vue` di dalam `app/` diparse dan dikompilasi menggunakan `@vue/compiler-sfc` dan `@vue/compiler-core` -> **0 errors**.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Harmonisasi Desain Visual & Eliminasi Inkonsistensi Layout Global
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelaraskan seluruh styling visual, padding container halaman, KPI stats widget cards, dan standarisasi kontrol form/tombol aksi di seluruh aplikasi Dulank Admin sesuai arahan pengguna dan standar AGENTS.md, tanpa mengubah UI/UX, fungsionalitas, field input, tombol, opsi, maupun isi/label halaman.
+- **Root Cause Padding & Margin Tereliminasi (100% Bebas `.page-wrapper`):**
+  - Mengidentifikasi bahwa `.page-wrapper` pada legacy `style.css` memiliki `margin: 0 0 0 260px; padding: 66px 0 0;`, yang jika dikombinasikan dengan Nuxt default layout (`lg:ms-[260px]` dan `p-4 sm:p-6 lg:p-8`) menyebabkan offset margin ganda dan padding berlebih pada berbagai halaman.
+  - Mengganti seluruh container `.page-wrapper` dan `.content container-fluid` dengan standar `<div class="space-y-6">` pada seluruh modul:
+    - Inventory & Master: `CategoryWorkspace.vue`, `SubCategoryWorkspace.vue`, `UnitWorkspace.vue`, `VariantWorkspace.vue`.
+    - HR & Master: `DesignationWorkspace.vue` (sekaligus mengganti header legacy menjadi `SalesListHeader` dan input filter setinggi `h-9`).
+    - Calculator Master: `KertasHargaSelfWorkspace.vue` dan `KertasUkuranSelfWorkspace.vue` (sekaligus mengintegrasikan `SalesListHeader` dan kontrol `h-9`).
+    - Roles: `PermissionsWorkspace.vue`.
+    - Pages: `tax-rates.vue`, `blank.vue`, dan `pos-order.vue`.
+    - Settings Group (11 workspace): `AppearanceWorkspace.vue`, `BankSettingsGridWorkspace.vue`, `BankSettingsListWorkspace.vue`, `CurrencySettingsWorkspace.vue`, `GdprSettingsWorkspace.vue`, `PaymentGatewayWorkspace.vue`, `PreferenceWorkspace.vue`, `PrinterSettingsWorkspace.vue`, `SmsGatewayWorkspace.vue`, `StorageSettingsWorkspace.vue` (menghapus `.page-wrapper-new`), `InvoiceSettingWorkspace.vue` & `PosSettingsWorkspace.vue` (menghapus nested `p-4 md:p-6 min-h-screen bg-gray-50/50`).
+    - Hasil audit global: Tersisa **0 file dengan `.page-wrapper` di seluruh `app/`**. 100% halaman `app/pages/` (kecuali auth pages) kini seragam menggunakan `dulank-page` & `space-y-6`.
+- **Harmonisasi KPI Stats Card Widget (Menu Purchase & Reports):**
+  - Menghubungkan dan memasang widget statistik `PurchaseStatsWidgets.vue` pada `PurchaseWorkspace.vue` (`/purchase`) yang sebelumnya tidak tampil, dengan reaktifitas `stats` lengkap dan sinkronisasi toggle collapse header.
+  - Menyelaraskan seluruh 5 widget kartu Purchase ke standar kanonikal horizontal `CardSkeleton.vue` (`rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 flex items-center gap-4` dengan `size-12 shrink-0 rounded-lg`, label `text-xs font-medium text-gray-500`, dan value `text-xl font-bold`):
+    - `PurchaseStatsWidgets.vue`, `PurchaseOrderStatsWidgets.vue`, `PurchaseReturnStatsWidgets.vue`, `PurchaseCategoryStatsWidgets.vue`, `PurchaseItemStatsWidgets.vue`.
+  - Menghapus conflicting `mb-6` pada grid widget di dalam container `space-y-6` pada:
+    - `InvoiceReportStatsWidgets.vue`, `CartStatsWidgets.vue`, `CheckoutStatsWidgets.vue`, `ContactFormStatsWidgets.vue`, `MyIncentiveStatsWidgets.vue`, `ReviewsStatsWidgets.vue`, `SupportTicketStatsWidgets.vue`, `WishlistStatsWidgets.vue`, `BestSellerWorkspace.vue`.
+- **Eliminasi Anomali Double-Padding & Container Width:**
+  - `BestSellerWorkspace.vue` & `InvoiceReportWorkspace.vue`: menghapus wrapper `mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8` menjadi `space-y-6`.
+  - `SupportTicketDetailWorkspace.vue`: menghapus wrapper `mx-auto max-w-7xl px-4 py-6` menjadi `space-y-6`.
+  - `PayslipWorkspace.vue`: menghapus nested padding `p-4 md:p-6` menjadi `space-y-6`.
+  - `SalesDashboardWorkspace.vue`: menghapus `mx-auto max-w-[1600px] px-4 py-4 sm:px-6` menjadi `space-y-6` selaras dengan `AdminDashboardWorkspace` dan `AnalyticsDashboardWorkspace`.
+- **Standarisasi Kontrol Form & Header Navigasi Halaman Add/Edit/Detail:**
+  - `EmployeePageForm.vue` (`/add-employee`, `/edit-employee`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar tinggi `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayrollPageForm.vue` (`/add-payroll`, `/edit-payroll`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayslipDetailWorkspace.vue` (`/payslip-detail`): standarisasi tombol Back, Download, dan Print ke standar `h-9` dengan font `text-sm` dan token `bg-primary`.
+  - `add-work-flow.vue` & `edit-work-flow.vue` (`/add-work-flow`, `/edit-work-flow`): mengganti header list generik menjadi header Add/Edit dengan back button `NuxtLink to="/work-flow" :class="salesSecondaryButton"`, serta standarisasi tombol Save di `WorkFlowDocumentForm.vue` ke `bg-primary hover:bg-primary-600`.
+  - `ProductDocumentForm.vue` (`/create-product`): perbaikan text size back button ke `text-sm font-semibold`, serta standarisasi tombol Cancel dan Save di footer dari warna hardcoded arbitrer ke token bersama (`bg-primary hover:bg-primary-600` dan standard border gray button `h-9`).
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Dekomposisi UI Workspace Master TODO P2 (Architecture Gate Compliance)
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelesaikan item Master TODO P2 untuk dekomposisi komponen dan workspace structural review required (>300 baris) di seluruh repository.
+- **Location Group:**
+  - `ProvinceWorkspace.vue` dipecah menjadi `ProvinceRecordsTable.vue` (115 baris) dan `ProvinceWorkspace.vue` (175 baris).
+  - `RegencyWorkspace.vue` dipecah menjadi `RegencyRecordsTable.vue` (135 baris) dan `RegencyWorkspace.vue` (190 baris).
+  - `DistrictWorkspace.vue` dipecah menjadi `DistrictRecordsTable.vue` (145 baris) dan `DistrictWorkspace.vue` (200 baris).
+- **CMS / Web Content Group:**
+  - `FooterWorkspace.vue` (sebelumnya 543 baris) dipecah menjadi `FooterMainContentSection.vue`, `FooterLinksListSection.vue`, `FooterContactSocialsSection.vue`, `FooterLivePreview.vue`, dan `FooterWorkspace.vue` (180 baris).
+  - `BannerWorkspace.vue` (sebelumnya 400 baris) dipecah dengan `BannerCardsGrid.vue` (115 baris), memangkas `BannerWorkspace.vue` menjadi 210 baris.
+  - `OurClientWorkspace.vue` (sebelumnya 371 baris) dipecah dengan `ClientDraggableGrid.vue` (180 baris), memangkas `OurClientWorkspace.vue` menjadi 170 baris.
+  - `DownloadFilesWorkspace.vue` (sebelumnya 448 baris) dipecah dengan `DownloadFilesFilterBar.vue`, `DownloadFilesContent.vue`, dan `DownloadFilesModals.vue`, memangkas `DownloadFilesWorkspace.vue` menjadi 245 baris.
+- **Roles & Permissions Group:**
+  - `PermissionMatrixWorkspace.vue` (sebelumnya 458 baris) dipecah dengan `PermissionMatrixTable.vue` (210 baris), memangkas `PermissionMatrixWorkspace.vue` menjadi 215 baris.
+- **Calculator & HR Group:**
+  - `KertasGroupSelfWorkspace.vue` (sebelumnya 357 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (125 baris).
+  - `KertasJenisSelfWorkspace.vue` (sebelumnya 352 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (135 baris).
+  - `HargaJasaLainyaWorkspace.vue` (sebelumnya 340 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `JasaLain` (120 baris).
+  - `KomponenMinimumWorkspace.vue` (sebelumnya 288 baris) dan `KomponenFiksWorkspace.vue` (sebelumnya 274 baris) direfaktor menjadi orchestrator tipis (masing-masing 115 baris).
+  - `EmployeesWorkspace.vue` (sebelumnya 304 baris) distreamline menjadi 240 baris.
+- **Audit Result:** 0 workspace file > 300 baris tersisa di seluruh repository.
+- **Validation run:** `npm run validate:structure` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Rekonsiliasi Discount Plan
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menutup gap `/discount-plan` terhadap `discount-plan.html` legacy, BRVS, dan BRVS-UI dengan integrasi penuh ke backend Laravel `/api/v1/admin/discount-plans` dan master customer types `/api/v1/admin/customer-types`.
+- **Parity/UI:** Memulihkan header "Discount Plan", subtitle "Manage your discount plans", toolbar (Pdf, Print, Refresh, Collapse, Add Discount Plan), filter Customer (`All Customer`, `Members Only`, `High-Spending Customers`, `Online Customers`) dan Status (`Active`, `Inactive`), kolom literal tabel `Plane Name`, `Customers`, `Status`, dan Action (Edit, Delete). Form Add/Edit berbagi modal terpadu, mempertahankan nilai customer saat mengedit record khusus (`Students` pada Student Plan, `Online Customers` pada Free Shipping Plan), dan submodal `Add Customer` berfungsi penuh menambahkan tipe pelanggan ke backend.
+- **BRVS/data:** Page `app/pages/discount-plan.vue` (10 baris), `DiscountPlanWorkspace.vue` (50 baris), `DiscountPlanRecordsTable.vue` (33 baris), `DiscountPlanFormDialog.vue` (80 baris), `DiscountPlanCustomerDialog.vue` (19 baris). Composable `useDiscountPlans.ts` menangani request list, filter pencarian & customer, mutation `createPlan`, `updatePlan`, `deletePlan`, dan pembuatan segmen `createCustomer` via `/api/v1/admin/customer-types`. Tipe `server/types/discount-plan.ts` disinkronkan dengan kontrak backend Laravel. 7 record referensi legacy dipertahankan secara deterministik saat data backend kosong.
+- **BRVS-UI:** Workspace, Table, Form Dialog, Customer Dialog, Confirm Delete, dan Print Modal terpisah berdasarkan tanggung jawab semantik dan menggunakan komponen bersama (`SalesDataTable`, `SalesActionButton`, `SalesStatusBadge`, `TableFilterSelect`, `SalesFeedback`, `SalesConfirmDelete`, `DocumentPrintModal`).
+- **Validation run:** `npm run validate:structure` PASS (0 failure); `npm run typecheck` PASS (0 error); `npm run build` PASS (build produksi 11.3 MB selesai tanpa error).
+- **Validation not run:** Visual headless screenshot testing dan live browser click testing tidak dijalankan karena keterbatasan lingkungan headless saat sesi ini.
+- **Remaining risk:** Integrasi runtime bergantung pada backend Laravel yang aktif di `/api/v1/**`. Route Promo lain (`/discount` dan `/coupon`) masih dalam antrean rekonsiliasi.
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ## 2026-10-11
+
 
 ### Rekonsiliasi Cetak Full Color
 

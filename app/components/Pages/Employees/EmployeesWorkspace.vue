@@ -53,7 +53,6 @@ const stats = computed(() => {
   const total = all.length
   const active = all.filter(e => e.status === 'Active').length
   const inactive = all.filter(e => e.status === 'Resign' || e.status === 'Inactive').length
-  // New joiners: employees joining in 2024 - 2026 or last 5 records
   const newJoiners = all.filter(e => e.joinDate && (e.joinDate.includes('2025') || e.joinDate.includes('2026'))).length
 
   return {
@@ -68,10 +67,8 @@ const stats = computed(() => {
 const isFormModalOpen = ref(false)
 const isEditMode = ref(false)
 const activeEmployeeForEdit = ref<EmployeeItem | null>(null)
-
 const isViewModalOpen = ref(false)
 const activeEmployeeForView = ref<EmployeeItem | null>(null)
-
 const employeeToDelete = ref<EmployeeItem | null>(null)
 const isBusy = ref(false)
 
@@ -87,7 +84,6 @@ function showToast(msg: string) {
   }, 3500)
 }
 
-// Handlers
 function handleAdd() {
   isEditMode.value = false
   activeEmployeeForEdit.value = null
@@ -137,41 +133,27 @@ async function handleFormSubmit(formData: EmployeeFormData) {
 }
 
 // Print & PDF
-const {
-  isPrintModalOpen,
-  printTitle,
-  printColumns,
-  printRows,
-  openPrintModal,
-} = useTablePrint()
+const { isPrintModalOpen, defaultPrintAction, openPrintModal, closePrintModal } = useTablePrint()
 
-function handlePrint() {
-  openPrintModal({
-    title: 'Employees Report - Daftar Karyawan PT Dulank Semesta Cida',
-    columns: [
-      { key: 'id', label: 'Employee ID' },
-      { key: 'name', label: 'Full Name' },
-      { key: 'department', label: 'Department' },
-      { key: 'address', label: 'Address' },
-      { key: 'phone', label: 'Phone' },
-      { key: 'joinDate', label: 'Join Date' },
-      { key: 'status', label: 'Status' },
-    ],
-    rows: filteredEmployees.value.map(e => ({
-      id: e.id,
-      name: e.name,
-      department: e.department,
-      address: e.detailAddress ? `${e.address}, ${e.detailAddress}` : e.address,
-      phone: e.phone || '-',
-      joinDate: e.joinDate || '-',
-      status: e.status,
-    })),
-  })
-}
+const printColumns = [
+  { key: 'id', label: 'Employee ID' },
+  { key: 'name', label: 'Full Name' },
+  { key: 'department', label: 'Department' },
+  { key: 'address', label: 'Address' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'joinDate', label: 'Join Date' },
+  { key: 'status', label: 'Status' },
+]
 
-function handleExportPdf() {
-  handlePrint()
-}
+const printItems = computed(() => filteredEmployees.value.map(e => ({
+  id: e.id,
+  name: e.name,
+  department: e.department,
+  address: e.detailAddress ? `${e.address}, ${e.detailAddress}` : e.address,
+  phone: e.phone || '-',
+  joinDate: e.joinDate || '-',
+  status: e.status,
+})))
 
 function handleExportExcel() {
   const header = ['Employee ID', 'Name', 'Department', 'Address', 'Phone', 'Join Date', 'Status']
@@ -224,11 +206,21 @@ function handleExportExcel() {
       subtitle="Kelola informasi data seluruh staff dan karyawan perusahaan"
       add-label="Add Employee"
       @refresh="refresh"
-      @print="handlePrint"
-      @export-pdf="handleExportPdf"
-      @export-excel="handleExportExcel"
+      @print="openPrintModal('print')"
+      @pdf="openPrintModal('pdf')"
       @add="handleAdd"
-    />
+    >
+      <template #actions>
+        <button
+          type="button"
+          class="inline-flex min-h-9 items-center gap-1.5 rounded border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+          @click="handleExportExcel"
+        >
+          <FeatherIcon name="download" :size="14" />
+          <span>Export CSV</span>
+        </button>
+      </template>
+    </SalesListHeader>
 
     <!-- KPI Widgets -->
     <EmployeeStatsWidgets :stats="stats" />
@@ -293,11 +285,11 @@ function handleExportExcel() {
     <!-- Print & PDF Modal -->
     <DocumentPrintModal
       :open="isPrintModalOpen"
-      :title="printTitle"
+      title="Employees Report - Daftar Karyawan PT Dulank Semesta Cida"
       :columns="printColumns"
-      :rows="printRows"
-      @close="isPrintModalOpen = false"
+      :items="printItems"
+      :default-action="defaultPrintAction"
+      @close="closePrintModal"
     />
   </div>
 </template>
-
