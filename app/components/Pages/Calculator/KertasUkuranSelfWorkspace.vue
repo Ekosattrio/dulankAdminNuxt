@@ -3,6 +3,7 @@ import type { PaperSize, PaperSizeFormData } from '~/types/paper-size'
 import FeatherIcon from '~/components/Common/FeatherIcon.vue'
 import PagesPaperSizeModal from '~/components/KertasUkuran/PaperSizeModal.vue'
 import PagesPaperSizeTable from '~/components/KertasUkuran/PaperSizeTable.vue'
+import SalesListHeader from '~/components/Sales/SalesListHeader.vue'
 
 definePageMeta({
   layout: 'default'
@@ -72,56 +73,43 @@ const handleSave = async (formData: PaperSizeFormData) => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div class="page-title">
-          <h4 class="fw-bold mb-1">Paper Sizes / Ukuran Kertas</h4>
-          <h6 class="text-muted mb-0">Master dimensi dan ukuran plano / potong standar (A3, A4, F4, Plano 65x100 dll)</h6>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Refresh" @click="refresh()">
-            <FeatherIcon name="rotate-cw" size="16" />
-          </button>
-          <button type="button" class="btn btn-primary d-flex align-items-center gap-2" @click="handleAdd">
-            <FeatherIcon name="plus-circle" size="18" />
-            <span>Add Paper Size</span>
-          </button>
-        </div>
-      </div>
+  <div class="space-y-6">
+    <SalesListHeader
+      title="Paper Sizes / Ukuran Kertas"
+      subtitle="Master dimensi dan ukuran plano / potong standar (A3, A4, F4, Plano 65x100 dll)"
+      add-label="Add Paper Size"
+      :refreshing="pending"
+      @add="handleAdd"
+      @refresh="refresh()"
+    />
 
-      <div class="card border-0 shadow-sm rounded-3 mb-4">
-        <div class="card-body p-4">
-          <div class="row g-3 justify-content-between align-items-center mb-4">
-            <div class="col-md-4">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <FeatherIcon name="search" size="14" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control border-start-0 ps-0"
-                  placeholder="Cari nama ukuran atau kategori..."
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-if="pending" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-
-          <PagesPaperSizeTable
-            v-else
-            :sizes="filteredList"
-            @edit="handleEdit"
-            @delete="handleDelete"
+    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="relative w-full max-w-xs">
+          <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <FeatherIcon name="search" size="14" />
+          </span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="h-9 w-full rounded-md border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            placeholder="Cari nama ukuran atau kategori..."
           />
         </div>
       </div>
+
+      <div v-if="pending" class="py-12 text-center text-sm text-gray-500">
+        <div class="spinner-border text-primary inline-block h-8 w-8 animate-spin rounded-full border-4" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
+      <PagesPaperSizeTable
+        v-else
+        :sizes="filteredList"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      />
     </div>
 
     <PagesPaperSizeModal

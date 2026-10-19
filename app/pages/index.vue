@@ -1,9 +1,16 @@
 <script setup lang="ts">
-useLegacyPage({ title: 'Dashboard Admin', sweetAlert: false })
+import AdminDashboardWorkspace from '~/components/Pages/AdminDashboard/AdminDashboardWorkspace.vue'
+
+definePageMeta({ layout: 'default' })
+
+useLegacyPage({
+  title: 'Dashboard Admin',
+  sweetAlert: true,
+})
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-dashboard-admin">
+  <div class="dulank-page dulank-page-index">
     <AdminDashboardWorkspace />
   </div>
 </template>

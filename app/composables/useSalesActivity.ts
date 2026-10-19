@@ -1,28 +1,29 @@
-import type { SalesHistoryEntry, SalesPayment } from '#server/types/sales-document'
+import type { SalesHistoryEntry } from '#server/types/sales-document'
 
-interface ApiResponse<T> {
-  success?: boolean
-  data: T
-  message?: string
-}
-
+/**
+ * Riwayat sales — backend `/api/v1/admin/sales`.
+ *
+ * Backend mencatat pembatalan pada level Order (webstore), bukan pada
+ * dokumen sales; riwayat "dihapus" tidak disimpan sama sekali. Daftar ini
+ * dikosongkan secara jujur sampai mekanisme riwayat dokumen tersedia.
+ */
 export function useSalesHistory() {
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<SalesHistoryEntry[]>>(
-    '/api/sales/history',
-    { key: 'sales-history' },
-  )
+  const history = computed<SalesHistoryEntry[]>(() => [])
 
   return {
-    history: computed<SalesHistoryEntry[]>(() => data.value?.data ?? []),
-    pending,
-    error,
-    refresh,
+    history,
+    pending: ref(false),
+    error: ref(null),
+    refresh: async () => {},
   }
 }
 
+/**
+ * Pembayaran sales — backend `/api/v1/admin/sales/{number}/payments`.
+ */
 export function useSalesPayments() {
-  async function addPayment(saleId: string, payload: Pick<SalesPayment, 'amount' | 'method' | 'notes'>) {
-    return apiFetch<ApiResponse<unknown>>(`/api/sales/${saleId}/payments`, {
+  async function addPayment(saleNo: string, payload: { amount: number; method?: string; notes?: string }) {
+    await apiFetch(`/api/v1/admin/sales/${encodeURIComponent(saleNo)}/payments`, {
       method: 'POST',
       body: payload,
     })

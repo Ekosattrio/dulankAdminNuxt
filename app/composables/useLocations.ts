@@ -1,14 +1,14 @@
 import type { Province, Regency, District } from '#server/types/location'
 
 export function useProvinces() {
-  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: Province[] }>('/api/provinces', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: Province[] }>('/api/v1/admin/provinces', {
     key: 'provinces-list'
   })
 
   const provinces = computed<Province[]>(() => data.value?.data ?? [])
 
   const saveProvince = async (payload: Partial<Province>) => {
-    const res = await apiFetch<{ success: boolean; data: Province; message?: string }>('/api/provinces', {
+    const res = await apiFetch<{ success: boolean; data: Province; message?: string }>('/api/v1/admin/provinces', {
       method: 'POST',
       body: payload
     })
@@ -17,7 +17,7 @@ export function useProvinces() {
   }
 
   const deleteProvince = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/provinces/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/provinces/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()
@@ -35,14 +35,14 @@ export function useProvinces() {
 }
 
 export function useRegencies() {
-  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: Regency[] }>('/api/regencies', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: Regency[] }>('/api/v1/admin/regencies', {
     key: 'regencies-list'
   })
 
   const regencies = computed<Regency[]>(() => data.value?.data ?? [])
 
   const saveRegency = async (payload: Partial<Regency>) => {
-    const res = await apiFetch<{ success: boolean; data: Regency; message?: string }>('/api/regencies', {
+    const res = await apiFetch<{ success: boolean; data: Regency; message?: string }>('/api/v1/admin/regencies', {
       method: 'POST',
       body: payload
     })
@@ -51,7 +51,7 @@ export function useRegencies() {
   }
 
   const deleteRegency = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/regencies/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/regencies/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()
@@ -69,14 +69,14 @@ export function useRegencies() {
 }
 
 export function useDistricts() {
-  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: District[] }>('/api/districts', {
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: District[] }>('/api/v1/admin/districts', {
     key: 'districts-list'
   })
 
   const districts = computed<District[]>(() => data.value?.data ?? [])
 
   const saveDistrict = async (payload: Partial<District>) => {
-    const res = await apiFetch<{ success: boolean; data: District; message?: string }>('/api/districts', {
+    const res = await apiFetch<{ success: boolean; data: District; message?: string }>('/api/v1/admin/districts', {
       method: 'POST',
       body: payload
     })
@@ -85,7 +85,7 @@ export function useDistricts() {
   }
 
   const deleteDistrict = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/districts/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/districts/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()

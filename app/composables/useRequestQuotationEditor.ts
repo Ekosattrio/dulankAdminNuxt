@@ -4,8 +4,8 @@ export function useRequestQuotationEditor(editing = false) {
   const route = useRoute()
   const router = useRouter()
   const { data, pending, error } = useApiFetch<{ success: boolean; data: RFQItem[] }>(
-    '/api/request-quotations' as string,
-    { key: 'request-quotation-editor' },
+    '/api/v1/admin/request-quotations',
+    { key: 'request-quotation-editor', query: { limit: 100 } },
   )
   const record = computed(() =>
     data.value?.data.find((item: RFQItem) => item.noRequest === route.query.no || item.id === route.query.id),
@@ -61,7 +61,7 @@ export function useRequestQuotationEditor(editing = false) {
     isSubmitting.value = true
     actionError.value = ''
     try {
-      await apiFetch<unknown>('/api/request-quotations', {
+      await apiFetch<unknown>('/api/v1/admin/request-quotations', {
         method: 'POST',
         body: {
           ...(editing ? record.value : {}),

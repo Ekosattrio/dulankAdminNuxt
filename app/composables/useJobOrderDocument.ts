@@ -42,7 +42,7 @@ export function useJobOrderDocument() {
     id: String(route.query.id ?? '').trim(),
     orderId: String(route.query.orderId ?? '').trim(),
   }))
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<JobOrderContext>>('/api/job-order-context', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<JobOrderContext>>('/api/v1/admin/job-order-context', {
     key: `job-order-context-${query.value.id}-${query.value.orderId}`,
     query,
   })
@@ -140,7 +140,7 @@ export function useJobOrderDocument() {
     feedback.value = ''
     try {
       if (!(form.value.steps?.length)) throw new Error('Add at least one workflow step.')
-      const response = await apiFetch<ApiResponse<JobOrder>>('/api/job-orders', { method: 'POST', body: form.value })
+      const response = await apiFetch<ApiResponse<JobOrder>>('/api/v1/admin/job-orders', { method: 'POST', body: form.value })
       feedbackType.value = 'success'
       feedback.value = response.message || 'Job order saved.'
       await router.push({ path: '/job-order-detail', query: { id: response.data.id } })

@@ -1,6 +1,5 @@
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content">
+  <div class="dulank-page dulank-page-pos-order space-y-6">
       <div class="page-header">
         <div class="add-item d-flex">
           <div class="page-title">
@@ -153,7 +152,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Sale Detail Modal -->
     <div v-if="detailModalVisible" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)" @click.self="detailModalVisible = false">

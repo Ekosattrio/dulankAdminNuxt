@@ -64,8 +64,8 @@ async function saveName(payload: FlowNameFormData) {
     </div>
 
     <div class="flex flex-wrap justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
-      <button type="button" class="min-w-24 rounded-md border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700" @click="$emit('cancel')">Cancel</button>
-      <button type="submit" :disabled="busy || pending || !!error || !form.product.trim() || arrangedFlows.length === 0" class="min-w-24 rounded-md bg-[#ff9f43] px-6 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{{ busy ? 'Saving...' : 'Save' }}</button>
+      <button type="button" class="min-w-24 rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 transition" @click="$emit('cancel')">Cancel</button>
+      <button type="submit" :disabled="busy || pending || !!error || !form.product.trim() || arrangedFlows.length === 0" class="min-w-24 rounded-md bg-primary hover:bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition disabled:opacity-50">{{ busy ? 'Saving...' : 'Save' }}</button>
     </div>
 
     <FlowCategoryModal :open="showCategory" :record="null" :busy="modalBusy" :error="modalError" @close="showCategory = false" @submit="saveCategory" />

@@ -51,9 +51,9 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
       <div class="flex items-center gap-3">
         <NuxtLink
           to="/payslip"
-          class="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300"
+          class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
         >
-          <FeatherIcon name="arrow-left" size="16" />
+          <FeatherIcon name="arrow-left" size="14" />
           <span>Back to Payslip List</span>
         </NuxtLink>
         <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">Payslip {{ payslip.slipNo }}</h4>
@@ -62,18 +62,18 @@ const netSalary = computed(() => basePay.value + totalEarnings.value - totalDedu
       <div class="flex items-center gap-2">
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-gray-700"
+          class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
           @click="printPayslip"
         >
-          <FeatherIcon name="download" size="16" />
+          <FeatherIcon name="download" size="14" />
           <span>Download</span>
         </button>
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow hover:bg-primary-600"
+          class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white shadow-sm hover:bg-primary-600"
           @click="printPayslip"
         >
-          <FeatherIcon name="printer" size="16" />
+          <FeatherIcon name="printer" size="14" />
           <span>Print</span>
         </button>
       </div>

@@ -17,7 +17,7 @@ export function useGdprSettings() {
     pending.value = true
     error.value = null
     try {
-      const res = await apiFetch<{ success: boolean; data: GdprSetting }>('/api/gdpr-settings')
+      const res = await apiFetch<{ success: boolean; data: GdprSetting }>('/api/v1/admin/settings/gdpr')
       if (res && res.data) {
         form.value = res.data
       }
@@ -31,8 +31,8 @@ export function useGdprSettings() {
   async function saveSettings(payload: GdprSetting) {
     pending.value = true
     try {
-      const res = await apiFetch<{ success: boolean; data: GdprSetting }>('/api/gdpr-settings', {
-        method: 'POST',
+      const res = await apiFetch<{ success: boolean; data: GdprSetting }>('/api/v1/admin/settings/gdpr', {
+        method: 'PUT',
         body: payload
       })
       form.value = res.data

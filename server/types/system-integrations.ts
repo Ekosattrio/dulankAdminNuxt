@@ -30,7 +30,7 @@ export type IntegrationKey = 'captcha' | 'analytics' | 'adsense' | 'map'
 
 export interface SystemIntegrationsResponse {
   success: boolean
-  data: SystemIntegrations
+  data: { group: string; values: SystemIntegrations }
   message?: string
 }
 

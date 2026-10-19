@@ -10,9 +10,9 @@ export function usePreferences() {
     pending.value = true
     error.value = null
     try {
-      const res = await apiFetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences')
-      if (res && res.data) {
-        preferences.value = res.data
+      const res = await apiFetch<{ success: boolean; data: { group: string; values: { items?: PreferenceItem[] } } }>('/api/v1/admin/settings/preferences')
+      if (res?.data) {
+        preferences.value = res.data.values?.items ?? []
       }
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch preferences'
@@ -24,12 +24,12 @@ export function usePreferences() {
   async function savePreferences(payload: PreferenceItem[]) {
     pending.value = true
     try {
-      const res = await apiFetch<{ success: boolean; data: PreferenceItem[] }>('/api/preferences', {
-        method: 'POST',
-        body: payload
+      const res = await apiFetch<{ success: boolean; data: { group: string; values: { items?: PreferenceItem[] } } }>('/api/v1/admin/settings/preferences', {
+        method: 'PUT',
+        body: { items: payload }
       })
-      preferences.value = res.data
-      return res.data
+      preferences.value = payload
+      return payload
     } catch (err: any) {
       error.value = err.message || 'Failed to save preferences'
       throw err

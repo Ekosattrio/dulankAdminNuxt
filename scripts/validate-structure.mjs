@@ -7,11 +7,6 @@ const root = fileURLToPath(new URL('../', import.meta.url))
 const checkHashes = process.argv.includes('--check-hashes')
 const manifest = JSON.parse(await readFile(path.join(root, 'MIGRATION_MANIFEST.json'), 'utf8'))
 const failures = []
-const pagesWithoutLegacyReference = new Set([
-  // Explicit empty-state routes added because the legacy navigation has no page file.
-  'faq-category.vue',
-  'invoice-template.vue',
-])
 
 function workspacePath(relative) {
   const resolved = path.resolve(root, relative)
@@ -23,12 +18,7 @@ function workspacePath(relative) {
 }
 
 function relocatedCandidates(relative) {
-  const candidates = [relative]
-  const summernoteDist = 'legacy/static-source/assets/plugins/summernote/dist/'
-  if (relative.startsWith(summernoteDist)) {
-    candidates.push(relative.replace(summernoteDist, 'legacy/static-source/assets/plugins/summernote/'))
-  }
-  return candidates
+  return [relative]
 }
 
 async function verifyFile(entry) {
@@ -57,18 +47,7 @@ await Promise.all(Array.from({ length: 8 }, async () => {
   while (next < entries.length) await verifyFile(entries[next++])
 }))
 
-const pages = (await readdir(path.join(root, 'app/pages'))).filter(name => name.endsWith('.vue'))
-for (const page of pages) {
-  if (pagesWithoutLegacyReference.has(page)) continue
-  const reference = `legacy/static-source/${page.slice(0, -4)}.html`
-  try {
-    if (!(await stat(workspacePath(reference))).isFile()) throw new Error('Not a file')
-  } catch {
-    failures.push(`Missing HTML reference for ${page}: ${reference}`)
-  }
-}
-
-for (const directory of ['app', 'docs', 'legacy/static-source', 'public', 'scripts', 'server/api', 'server/data', 'server/types', 'server/utils', 'data']) {
+for (const directory of ['app', 'docs', 'public', 'scripts', 'server/api', 'server/types']) {
   try {
     if (!(await stat(workspacePath(directory))).isDirectory()) throw new Error('Not a directory')
   } catch {
@@ -79,7 +58,6 @@ for (const directory of ['app', 'docs', 'legacy/static-source', 'public', 'scrip
 console.log(JSON.stringify({
   originalFiles: manifest.files.length,
   preservedCopies: manifest.copies.length,
-  pages: pages.length,
   hashesChecked: checkHashes,
   failures,
 }, null, 2))

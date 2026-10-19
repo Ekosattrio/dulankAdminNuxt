@@ -1,10 +1,152 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-11
+updated: 2026-10-17
 ---
 
+## 2026-10-19
+
+### Perbaikan Error 500 SSR pada Dashboard Admin (`AdminDashboardWelcome.vue` & `AdminDashboardInsights.vue`) serta Full Null-Safety Guarding
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Mengatasi crash 500 SSR `Cannot read properties of undefined (reading 'productName')` dan `Cannot read properties of undefined (reading 'categories')` pada halaman Dashboard Admin (`/`) saat backend API Laravel (`/api/v1/admin/dashboard/admin`) mengembalikan data parsial, kosong, atau `null` pada beberapa field:
+  1. **`AdminDashboardInsights.vue`:** Memperbaiki crash `reading 'categories'` dengan membungkus props ke dalam `withDefaults`, mengamankan `categoryTotals?.categories ?? 0`, `categoryTotals?.products ?? 0`, fallback array aman pada loop `customers`, `categories`, dan `orderStatistics?.values`.
+  2. **`AdminDashboardWelcome.vue`:** Memperbarui prop `notice` menjadi opsional/nullable (`{ productName: string; threshold: number; link?: string } | null`), menambahkan default props yang aman, serta memperketat syarat render banner warning menjadi `v-if="visible && notice?.productName"`.
+  3. **Penguatan Defensif Seluruh Sub-Komponen Dashboard:**
+     - `AdminDashboardOverview.vue`: Menggunakan `withDefaults`, optional chaining & fallback nol pada `overview?.[card.key]`, `overview?.firstTime`, dan `overview?.returning`.
+     - `AdminDashboardSalesChart.vue`: Menggunakan `withDefaults`, mengamankan perhitungan `max` dan array series agar tidak crash saat series kosong.
+     - `AdminDashboardSalesStatics.vue`: Menggunakan `withDefaults`, memberikan fallback tahun berjalan dan array points aman pada perhitungan bar chart.
+     - `AdminDashboardProductPanels.vue`: Menggunakan `withDefaults`, fallback array aman pada `topSelling`, `lowStock`, dan `recentSales`, serta fallback numerik pada harga/jumlah.
+     - `AdminDashboardTransactions.vue`: Menggunakan `withDefaults`, fallback array aman pada perulangan groups dan rows transaksi.
+     - `AdminDashboardMetrics.vue`: Menggunakan `withDefaults`, fallback array aman pada metrik primer/sekunder dan fallback tone warna.
+  4. **`server/types/admin-dashboard.ts`:** Menyelaraskan seluruh field `AdminDashboardSnapshot` agar opsional/nullable selaras dengan respons API nyata.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `@vue/compiler-sfc` parse audit PASS (0 errors); `nuxt typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Relokasi Menu Category dan Sub Category ke PRODUCTS & SERVICES
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Memindahkan menu navigasi `Category` (`/category`) dan `Sub Category` (`/sub-category`) dari grup menu `INVENTORY` ke dalam grup menu `PRODUCTS & SERVICES` pada `app/components/Layout/AppSidebar.vue` sesuai instruksi pengguna.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+## 2026-10-17
+
+### Pembersihan File Duplikat, Arsip HTML Mentah, dan Technical Debt Komponen
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Melakukan pembersihan file duplikat, arsip statis HTML mentah, dan file cadangan yang tidak terpakai sesuai instruksi pengguna agar arsitektur proyek lebih rapi, terstruktur, dan memiliki *Single Source of Truth*:
+  1. **Penghapusan Arsip HTML Mentah di Folder Komponen:** Menghapus `app/components/sidebar.html`, `app/components/header.html`, dan `app/components/bekup.html` yang merupakan sisa arsip slicing statis lama dan tidak dirender oleh runtime Nuxt.
+  2. **Konsolidasi Komponen Layout:** Menghapus komponen duplikat `app/components/App/Layout/Header.vue` dan `app/components/App/Layout/Sidebar.vue` (beserta direktori `app/components/App`), mengunci Single Source of Truth layout pada komponen kanonikal aktif: `app/components/Layout/AppHeader.vue` dan `app/components/Layout/AppSidebar.vue`.
+  3. **Penghapusan File Cadangan CSS & Komponen Kosong:** Menghapus `app/assets/css/style-backup.css` serta file kosong tak bertemplate `app/components/Dashboard/PrimaryCard.vue` dan `app/components/Dashboard/RevenueCard.vue`.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Penyesuaian Form Create Product & Relokasi Menu PRODUCTS & SERVICES
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyesuaikan form `create-product` dan hirarki navigasi menu `PRODUCTS & SERVICES` sesuai instruksi pengguna:
+  1. **Option Baru Price Type:** Menambahkan opsi radio baru `"Minimum Qty or Price"` sebelum `"Large Format"` pada `ProductPricingSection.vue` dan tipe `PriceTypeTab`, dengan input: *Sub Category*, *Minimum Qty*, *Minimum Price*, dan *Price (IDR)*.
+  2. **Pembersihan Product Information:** Menghapus input *Category* dan *Sub Category* dari kartu informasi produk (`ProductInfoSection.vue` & `ProductDocumentForm.vue`).
+  3. **Relokasi Sub-Category:** Memindahkan kontrol input *Sub Category* ke dalam masing-masing opsi tab pada `ProductPricingSection.vue` (*Single Product*, *Variable Product*, *Size Calculation*, *Minimum Qty or Price*, *Large Format*, *Offset Service Price*), lengkap dengan opsi pemilih dan tombol dialog modal tambah sub-kategori baru.
+  4. **Struktur Navigasi Sidebar:** Memindahkan menu *Variable Product* (`/variable-product`) dan *Large Format* (`/large-format`) menjadi sub-menu di dalam grup menu `Product List` pada `AppSidebar.vue` dan `Sidebar.vue`.
+  5. **Data Awal Bersih:** Mengosongkan data dummy contoh pada `useLargeFormatProducts.ts` dan `useVariableProducts.ts` sehingga tabel Large Format dan Variable Product memulai state dari array kosong (`[]`) dan menampilkan empty state sebelum diisi melalui form atau API.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse PASS (0 errors); `npm.cmd run typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Perbaikan Template Syntax & Audit Global SFC Compiler
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Mengatasi compile error `Invalid end tag` pada `/pages/pos-order.vue` dan menjalankan audit kompilasi menyeluruh terhadap seluruh komponen Vue di repository.
+- **Root Cause & Fixes:**
+  - `pos-order.vue`: Menghapus tag penutup `</div>` sisa legacy wrapper `.page-wrapper` di baris 155 yang menutup root container secara prematur sebelum modal dialog.
+  - `GdprSettingsWorkspace.vue`: Menyelaraskan jumlah tag penutup `</div>` di akhir template sehingga tepat menutup seluruh hierarki kolom/row.
+  - `PrimaryCard.vue` & `RevenueCard.vue`: Memberikan struktur SFC dasar `<template><div /></template>` pada 2 file kosong agar tidak menimbulkan warning/error pada parser Vue SFC.
+- **Global Audit:** Seluruh file `.vue` di dalam `app/` diparse dan dikompilasi menggunakan `@vue/compiler-sfc` dan `@vue/compiler-core` -> **0 errors**.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Harmonisasi Desain Visual & Eliminasi Inkonsistensi Layout Global
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelaraskan seluruh styling visual, padding container halaman, KPI stats widget cards, dan standarisasi kontrol form/tombol aksi di seluruh aplikasi Dulank Admin sesuai arahan pengguna dan standar AGENTS.md, tanpa mengubah UI/UX, fungsionalitas, field input, tombol, opsi, maupun isi/label halaman.
+- **Root Cause Padding & Margin Tereliminasi (100% Bebas `.page-wrapper`):**
+  - Mengidentifikasi bahwa `.page-wrapper` pada legacy `style.css` memiliki `margin: 0 0 0 260px; padding: 66px 0 0;`, yang jika dikombinasikan dengan Nuxt default layout (`lg:ms-[260px]` dan `p-4 sm:p-6 lg:p-8`) menyebabkan offset margin ganda dan padding berlebih pada berbagai halaman.
+  - Mengganti seluruh container `.page-wrapper` dan `.content container-fluid` dengan standar `<div class="space-y-6">` pada seluruh modul:
+    - Inventory & Master: `CategoryWorkspace.vue`, `SubCategoryWorkspace.vue`, `UnitWorkspace.vue`, `VariantWorkspace.vue`.
+    - HR & Master: `DesignationWorkspace.vue` (sekaligus mengganti header legacy menjadi `SalesListHeader` dan input filter setinggi `h-9`).
+    - Calculator Master: `KertasHargaSelfWorkspace.vue` dan `KertasUkuranSelfWorkspace.vue` (sekaligus mengintegrasikan `SalesListHeader` dan kontrol `h-9`).
+    - Roles: `PermissionsWorkspace.vue`.
+    - Pages: `tax-rates.vue`, `blank.vue`, dan `pos-order.vue`.
+    - Settings Group (11 workspace): `AppearanceWorkspace.vue`, `BankSettingsGridWorkspace.vue`, `BankSettingsListWorkspace.vue`, `CurrencySettingsWorkspace.vue`, `GdprSettingsWorkspace.vue`, `PaymentGatewayWorkspace.vue`, `PreferenceWorkspace.vue`, `PrinterSettingsWorkspace.vue`, `SmsGatewayWorkspace.vue`, `StorageSettingsWorkspace.vue` (menghapus `.page-wrapper-new`), `InvoiceSettingWorkspace.vue` & `PosSettingsWorkspace.vue` (menghapus nested `p-4 md:p-6 min-h-screen bg-gray-50/50`).
+    - Hasil audit global: Tersisa **0 file dengan `.page-wrapper` di seluruh `app/`**. 100% halaman `app/pages/` (kecuali auth pages) kini seragam menggunakan `dulank-page` & `space-y-6`.
+- **Harmonisasi KPI Stats Card Widget (Menu Purchase & Reports):**
+  - Menghubungkan dan memasang widget statistik `PurchaseStatsWidgets.vue` pada `PurchaseWorkspace.vue` (`/purchase`) yang sebelumnya tidak tampil, dengan reaktifitas `stats` lengkap dan sinkronisasi toggle collapse header.
+  - Menyelaraskan seluruh 5 widget kartu Purchase ke standar kanonikal horizontal `CardSkeleton.vue` (`rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 flex items-center gap-4` dengan `size-12 shrink-0 rounded-lg`, label `text-xs font-medium text-gray-500`, dan value `text-xl font-bold`):
+    - `PurchaseStatsWidgets.vue`, `PurchaseOrderStatsWidgets.vue`, `PurchaseReturnStatsWidgets.vue`, `PurchaseCategoryStatsWidgets.vue`, `PurchaseItemStatsWidgets.vue`.
+  - Menghapus conflicting `mb-6` pada grid widget di dalam container `space-y-6` pada:
+    - `InvoiceReportStatsWidgets.vue`, `CartStatsWidgets.vue`, `CheckoutStatsWidgets.vue`, `ContactFormStatsWidgets.vue`, `MyIncentiveStatsWidgets.vue`, `ReviewsStatsWidgets.vue`, `SupportTicketStatsWidgets.vue`, `WishlistStatsWidgets.vue`, `BestSellerWorkspace.vue`.
+- **Eliminasi Anomali Double-Padding & Container Width:**
+  - `BestSellerWorkspace.vue` & `InvoiceReportWorkspace.vue`: menghapus wrapper `mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8` menjadi `space-y-6`.
+  - `SupportTicketDetailWorkspace.vue`: menghapus wrapper `mx-auto max-w-7xl px-4 py-6` menjadi `space-y-6`.
+  - `PayslipWorkspace.vue`: menghapus nested padding `p-4 md:p-6` menjadi `space-y-6`.
+  - `SalesDashboardWorkspace.vue`: menghapus `mx-auto max-w-[1600px] px-4 py-4 sm:px-6` menjadi `space-y-6` selaras dengan `AdminDashboardWorkspace` dan `AnalyticsDashboardWorkspace`.
+- **Standarisasi Kontrol Form & Header Navigasi Halaman Add/Edit/Detail:**
+  - `EmployeePageForm.vue` (`/add-employee`, `/edit-employee`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar tinggi `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayrollPageForm.vue` (`/add-payroll`, `/edit-payroll`): standarisasi back button ke `inline-flex h-9 items-center gap-2 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700` dan tombol footer Cancel/Save ke standar `h-9` dan `bg-primary hover:bg-primary-600`.
+  - `PayslipDetailWorkspace.vue` (`/payslip-detail`): standarisasi tombol Back, Download, dan Print ke standar `h-9` dengan font `text-sm` dan token `bg-primary`.
+  - `add-work-flow.vue` & `edit-work-flow.vue` (`/add-work-flow`, `/edit-work-flow`): mengganti header list generik menjadi header Add/Edit dengan back button `NuxtLink to="/work-flow" :class="salesSecondaryButton"`, serta standarisasi tombol Save di `WorkFlowDocumentForm.vue` ke `bg-primary hover:bg-primary-600`.
+  - `ProductDocumentForm.vue` (`/create-product`): perbaikan text size back button ke `text-sm font-semibold`, serta standarisasi tombol Cancel dan Save di footer dari warna hardcoded arbitrer ke token bersama (`bg-primary hover:bg-primary-600` dan standard border gray button `h-9`).
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Dekomposisi UI Workspace Master TODO P2 (Architecture Gate Compliance)
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menyelesaikan item Master TODO P2 untuk dekomposisi komponen dan workspace structural review required (>300 baris) di seluruh repository.
+- **Location Group:**
+  - `ProvinceWorkspace.vue` dipecah menjadi `ProvinceRecordsTable.vue` (115 baris) dan `ProvinceWorkspace.vue` (175 baris).
+  - `RegencyWorkspace.vue` dipecah menjadi `RegencyRecordsTable.vue` (135 baris) dan `RegencyWorkspace.vue` (190 baris).
+  - `DistrictWorkspace.vue` dipecah menjadi `DistrictRecordsTable.vue` (145 baris) dan `DistrictWorkspace.vue` (200 baris).
+- **CMS / Web Content Group:**
+  - `FooterWorkspace.vue` (sebelumnya 543 baris) dipecah menjadi `FooterMainContentSection.vue`, `FooterLinksListSection.vue`, `FooterContactSocialsSection.vue`, `FooterLivePreview.vue`, dan `FooterWorkspace.vue` (180 baris).
+  - `BannerWorkspace.vue` (sebelumnya 400 baris) dipecah dengan `BannerCardsGrid.vue` (115 baris), memangkas `BannerWorkspace.vue` menjadi 210 baris.
+  - `OurClientWorkspace.vue` (sebelumnya 371 baris) dipecah dengan `ClientDraggableGrid.vue` (180 baris), memangkas `OurClientWorkspace.vue` menjadi 170 baris.
+  - `DownloadFilesWorkspace.vue` (sebelumnya 448 baris) dipecah dengan `DownloadFilesFilterBar.vue`, `DownloadFilesContent.vue`, dan `DownloadFilesModals.vue`, memangkas `DownloadFilesWorkspace.vue` menjadi 245 baris.
+- **Roles & Permissions Group:**
+  - `PermissionMatrixWorkspace.vue` (sebelumnya 458 baris) dipecah dengan `PermissionMatrixTable.vue` (210 baris), memangkas `PermissionMatrixWorkspace.vue` menjadi 215 baris.
+- **Calculator & HR Group:**
+  - `KertasGroupSelfWorkspace.vue` (sebelumnya 357 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (125 baris).
+  - `KertasJenisSelfWorkspace.vue` (sebelumnya 352 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `PaperShop` (135 baris).
+  - `HargaJasaLainyaWorkspace.vue` (sebelumnya 340 baris) direfaktor menjadi clean wrapper adapter berbasis komponen kanonikal `JasaLain` (120 baris).
+  - `KomponenMinimumWorkspace.vue` (sebelumnya 288 baris) dan `KomponenFiksWorkspace.vue` (sebelumnya 274 baris) direfaktor menjadi orchestrator tipis (masing-masing 115 baris).
+  - `EmployeesWorkspace.vue` (sebelumnya 304 baris) distreamline menjadi 240 baris.
+- **Audit Result:** 0 workspace file > 300 baris tersisa di seluruh repository.
+- **Validation run:** `npm run validate:structure` PASS (1.220 original files terverifikasi, 0 failure); `npm run typecheck` PASS (0 errors).
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Rekonsiliasi Discount Plan
+
+- **Date:** 2026-10-17
+- **Actor:** Antigravity
+- **Scope:** Menutup gap `/discount-plan` terhadap `discount-plan.html` legacy, BRVS, dan BRVS-UI dengan integrasi penuh ke backend Laravel `/api/v1/admin/discount-plans` dan master customer types `/api/v1/admin/customer-types`.
+- **Parity/UI:** Memulihkan header "Discount Plan", subtitle "Manage your discount plans", toolbar (Pdf, Print, Refresh, Collapse, Add Discount Plan), filter Customer (`All Customer`, `Members Only`, `High-Spending Customers`, `Online Customers`) dan Status (`Active`, `Inactive`), kolom literal tabel `Plane Name`, `Customers`, `Status`, dan Action (Edit, Delete). Form Add/Edit berbagi modal terpadu, mempertahankan nilai customer saat mengedit record khusus (`Students` pada Student Plan, `Online Customers` pada Free Shipping Plan), dan submodal `Add Customer` berfungsi penuh menambahkan tipe pelanggan ke backend.
+- **BRVS/data:** Page `app/pages/discount-plan.vue` (10 baris), `DiscountPlanWorkspace.vue` (50 baris), `DiscountPlanRecordsTable.vue` (33 baris), `DiscountPlanFormDialog.vue` (80 baris), `DiscountPlanCustomerDialog.vue` (19 baris). Composable `useDiscountPlans.ts` menangani request list, filter pencarian & customer, mutation `createPlan`, `updatePlan`, `deletePlan`, dan pembuatan segmen `createCustomer` via `/api/v1/admin/customer-types`. Tipe `server/types/discount-plan.ts` disinkronkan dengan kontrak backend Laravel. 7 record referensi legacy dipertahankan secara deterministik saat data backend kosong.
+- **BRVS-UI:** Workspace, Table, Form Dialog, Customer Dialog, Confirm Delete, dan Print Modal terpisah berdasarkan tanggung jawab semantik dan menggunakan komponen bersama (`SalesDataTable`, `SalesActionButton`, `SalesStatusBadge`, `TableFilterSelect`, `SalesFeedback`, `SalesConfirmDelete`, `DocumentPrintModal`).
+- **Validation run:** `npm run validate:structure` PASS (0 failure); `npm run typecheck` PASS (0 error); `npm run build` PASS (build produksi 11.3 MB selesai tanpa error).
+- **Validation not run:** Visual headless screenshot testing dan live browser click testing tidak dijalankan karena keterbatasan lingkungan headless saat sesi ini.
+- **Remaining risk:** Integrasi runtime bergantung pada backend Laravel yang aktif di `/api/v1/**`. Route Promo lain (`/discount` dan `/coupon`) masih dalam antrean rekonsiliasi.
+- **Git status:** Branch `main`; HEAD `02f8bc26f2d84bb22ac64b7076829dfacbed7544`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ## 2026-10-11
+
 
 ### Rekonsiliasi Cetak Full Color
 
@@ -693,3 +835,286 @@ updated: 2026-10-11
 - Menerapkan dialog cetak standar ke Language, Download Files, Our Client, Banner, dan Permission Matrix; scope tanggal dapat disembunyikan untuk data non-tanggal.
 - Menambahkan kompatibilitas event PDF lama pada `SalesListHeader` agar toolbar lama tetap membuka dialog cetak.
 - Validasi revisi print/language: 99 JSON server valid dan 99/99 tercakup bundled registry, 11 SFC terkait lolos parse/compile, 7 file TypeScript terkait lolos pemeriksaan syntax, dan `git diff --check` bersih. Build/dev tidak dijalankan; `nuxi typecheck` belum tersedia karena `vue-tsc`/Golar belum terpasang, sedangkan fallback `tsc --noEmit` masih gagal pada error lama di report composables/endpoint CRUD tanpa menunjuk file print/language baru; validator struktur tetap tertahan aset legacy Sticky Kit/Summernote yang hilang sebelumnya.
+
+## 2026-10-10 — Integrasi backend Laravel (fondasi + modul Sales & Profil)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `app/utils/apiFetch.ts` menjadi fetch terpusat: `baseURL` dari `runtimeConfig.public.apiBase`, header `Authorization: Bearer` otomatis dari cookie + localStorage `dulank_admin_token`.
+- Menambahkan `useAdminAuth` (login/logout/me; token cookie SSR-safe) dan middleware global `auth.global.ts` yang mengarahkan halaman non-publik ke `/signin`.
+- `app/pages/signin.vue` kini memanggil `POST /api/v1/admin/auth/login` (backend Laravel) dengan status loading dan pesan error; kredensial default `admin@dulank.test` / `admin12345` (dev).
+- `nuxt.config.ts`: `runtimeConfig.public.apiBase` + proxy `/api/v1/**` ke `LARAVEL_API_URL` (default `http://127.0.0.1:8000`). Mock Nitro lama `/api/*` tetap dilayani agar migrasi bertahap per modul.
+- `useSales` dimigrasikan ke `/api/v1/admin/sales` (list/create/void/recordPayment). Seluruh konsumen ikut termigrasi otomatis: Sales page, POS, Invoice, Delivery Note, Sales Return, Sale Document, Sales Activity. Aksi hapus dipetakan menjadi **void order** (timeline audit dipertahankan).
+- `useProfile` dimigrasikan ke `/api/v1/admin/profile` (GET/PUT) dan `PUT /api/v1/admin/profile/password`; bentuk `UserProfile` dipertahankan lewat mapping.
+- Validasi: `npm run typecheck` **0 error**; `npm run test:sales` 13 check lolos; smoke runtime dev port 3100 — `/signin` HTTP 200, `/` tanpa token 302 → `/signin`, login via proxy sukses, `GET /api/v1/admin/sales` 11 baris (SO-004 terbaru), `GET /api/v1/admin/profile` roles `super-admin`, mock lama `/api/sales` masih hidup.
+- Status: **implemented, verification pending** untuk modul lain. Modul yang belum dimigrasikan tetap memakai mock Nitro lama.
+- **Fix backend Laravel (repo `dulank-backend`, branch `main` · Commit: NOT COMMITTED · Push: NOT PUSHED):** request guest tanpa header `Accept: application/json` dibalas **500 `Route [login] not defined`** karena default Laravel (`ApplicationBuilder`) mengarahkan guest ke `route('login')` yang tidak ada. `bootstrap/app.php` kini memakai `$middleware->redirectGuestsTo(null)` sehingga semua request gagal-auth dibalas envelope konsisten `401 {"success":false,"message":"Unauthenticated."}`. `routes/web.php` root `/` tidak lagi merender view web, melainkan JSON status.
+- Regression test backend: `tests/Feature/Admin/HardeningTest.php` menegaskan 401 JSON tanpa Accept header; `tests/Feature/ExampleTest.php` menegaskan kontrak JSON `GET /`.
+- Validasi fix backend: `vendor/bin/pint --dirty` bersih; `php artisan test --compact` (suite penuh) **144 tes / 1420 assertion lolos**; verifikasi curl ke `:8000` dan lewat proxy Nitro admin `:3000` — tanpa Accept, token invalid, dan tanpa token semuanya `401 application/json`; login sukses tetap mengembalikan token; `GET /` JSON 200; `/up` 200.
+- Catatan risiko: modul lain masih memakai mock; lanjutkan migrasi per modul (produk, orders, payment, purchases, finance, dst.) dengan pola adapter `apiFetch` + tipe resource backend.
+
+## 2026-10-10 — Integrasi backend (lanjutan): Products, Master Katalog, Orders, Payments
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useProducts` → `/api/v1/admin/products` (GET/POST/PUT/DELETE; kontrak `Product` backend identik dengan tipe admin). `importProducts` dipetakan menjadi urutan POST karena backend tidak punya endpoint import massal.
+- `useCategories`, `useSubCategories`, `useUnits`, `useVariants`, `useProductProcesses`, `useWorkshopServices` → endpoints `/api/v1/admin/categories|sub-categories|units|variants|product-processes|workshop-services`; dukungan edit kini memakai PUT (`payload.id`), hapus DELETE.
+- `useOrders` → `/api/v1/admin/orders` + `/orders/stats`; `updateStatus` memakai `POST /orders/{number}/status` dengan resolusi nomor order dari `id`/`no`; `deleteOrder` dipetakan menjadi pembatalan (status `Cancel`) karena backend tidak menyediakan DELETE order admin; `saveOrder` hanya untuk order yang sudah ada (perubahan status).
+- `usePayments` → `/api/v1/admin/payments` (list + record/verify/reject). Tipe `PaymentStatus` diperbarui menjadi `Pending | Verified | Rejected` (verifikasi bukti bayar); `SalesStatusBadge` menampilkan `Verified` sebagai hijau.
+- Status backend untuk order (`Waiting/Processing/Complete/Cancel`) sengaja identik dengan label admin — tidak perlu mapping.
+- Validasi: `npm run typecheck` **0 error**; smoke runtime via dev server (port 3100, proxy Nitro → Laravel): login sukses, list `products` 6, `categories` 8, `sub-categories` 1, `units` 2, `variants` 1, `product-processes` 0, `workshop-services` 1 (filter category `printing` → "Cetak Offset A3"), `orders` 11, `orders/stats` OK, `payments` 9; jalur tulis POST/PUT/DELETE category & product sukses dan di-cleanup.
+- Status: **implemented, verification pending** untuk modul lain (purchases, finance, HRM, workflow, content, settings, reports, peoples, paper/machines, promo, webstore, calculator, tax, pos, blog, faq, dashboard).
+- Catatan: dev server `nuxt dev` (PID 300315) masih berjalan di port 3100 sejak sesi sebelumnya dan sudah hot-reload seluruh perubahan ini.
+
+## 2026-10-10 — Sesi integrasi backend (lanjutan): auth stack, dashboard real, signin UX, .env, & hapus dummy batch 1
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Root cause read 401 diperbaiki**: `useApiFetch` kini menyuntikkan `$fetch: apiFetch` ke `useFetch` Nuxt → seluruh data read memakai `apiFetch` (baseURL + Authorization Bearer + penanganan 401). Sebelumnya hanya request tulis yang membawa token; semua list/dashboard gagal dengan "Unable to load".
+- `apiFetch`: baseURL SSR dari `useRequestURL().origin` (same-origin ke proxy) bila `apiBase` kosong; respons 401 otomatis membersihkan sesi dan kembali ke `/signin?redirect=...` (kecuali endpoint auth).
+- `middleware/auth.global.ts`: redirect-back (`?redirect=`), pengguna ter-authentikasi di halaman publik diarahkan ke `/`, hydrate profil user (nama/roles/avatar) sekali per sesi.
+- `signin.vue` UI/UX dirombak: blok sosial & "Create an account" (link mati) dihapus; error alert proper + validasi client-side + fokus field invalid + `aria-*`; spinner loading; dark mode; kredensial demo tampil hanya di dev (`import.meta.dev`) dengan tombol "Isi otomatis"; `rememberMe` kini bermakna (token juga disimpan di localStorage hanya jika dicentang).
+- `AppHeader.vue`: logout fungsional (`useAdminAuth().logout` → `/signin`), nama/roles/avatar dari backend (bukan "John Smilga"), dead code `closeAllDropdowns` dihapus, toggle dropdown via inline idiomatis.
+- Perbaikan komponen tak terdaftar: `CommonFeatherIcon` → `FeatherIcon` di 5 file (nuxt.config memakai `pathPrefix: false`).
+- **Dashboard index.vue real data**: `useDashboard` baru memakai `GET /api/v1/admin/dashboard` (backend diperluas: totalSales, totalSalesReturn, totalPurchase, totalPurchaseReturn, totalIncome, totalExpense, invoiceDue, totalCustomers, totalSuppliers, monthlyTrend 12 bulan; test `DashboardTest` 28 asersi — backend repo). Grafik monthly real, Top Products real, Recent Orders real, alert low stock real; reuse komponen StatCard/StatusPill/CurrencyDisplay/SalesFeedback/FeatherIcon.
+- **Dummy data batch 1 dihapus** (modul sudah migrasi penuh, nol referensi di app/test): handler Nitro `orders/*`, `payments/*`, `profile/*`, `products/*`, `categories/*`, `sub-categories/*`, `units/*`, `variants/*`, `product-processes/*`, `workshop-services/*`, `sales-dashboard.ts` (32 file; 356→324 handler). Entri manifest disesuaikan (3266→3251). Mock `sales*`, `delivery-notes`, `invoices`, `quotations`, `request-quotations` dipertahankan karena dipakai `test:sales` + modul belum migrasi.
+- **`.env` & `.env.example` dibuat**: `NUXT_PUBLIC_API_BASE=http://127.0.0.1:8000` → `apiFetch` memanggil Laravel **langsung di port 8000** (terbukti di payload SSR); `LARAVEL_API_URL` fallback proxy `/api/v1/**`; `PORT=3000`. `.env` di-ignore, `.env.example` di-track (aturan .gitignore sudah ada).
+- Validasi: `npm run typecheck` 0 error; `test:sales` 13 check lolos; `validate:structure` hanya error lama summernote (pra-existing); smoke SSR dashboard 200 `Welcome, Dulank` tanpa "Unable to load"; login via 3000 sukses.
+- Status: **implemented, verification pending** untuk modul lain. Sisa mock 324 handler — hapus bertahap mengikuti migrasi modul (sales-returns, quotations, invoices, delivery-notes, customers, suppliers, purchases, finance, reports, settings, webstore, paper, calculator, workflow, HRM, content).
+
+## 2026-10-11 — Migrasi batch 2: Peoples (Customers/Types/Stores/Addresses), Suppliers, Sales Returns + pembersihan dummy data menyeluruh
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): tambah `PUT /api/v1/admin/customer-types/{customerType}` (UI admin mengedit tipe pelanggan) di `PeopleController`; test `PeopleUserTest` +1 kasus (create/update/delete tipe pelanggan) → 6 test / 83 asersi lolos.
+- **Frontend migrasi modul (6 komposabel):**
+  - `useCustomers` → `/api/v1/admin/customers` (GET/POST/PUT/DELETE, kontrak `Customer` identik termasuk saldo).
+  - `useCustomerTypes` → `/api/v1/admin/customer-types` (POST/PUT/DELETE).
+  - `useStores` → `/api/v1/admin/stores` (kontrak `Store` identik).
+  - `useSuppliers` → `/api/v1/admin/suppliers`; route backend memakai kode `{supplierId}` — resolusi `id`→`supplierId` dari list.
+  - `useAddress` → tiga panggilan `/api/v1/admin/addresses` (stats + type=customer + type=supplier) digabung menjaga API `{stats, customers, suppliers}`; mapping `ownerType`/`ownerId`; perbaikan bug ref unwrap (`.value` di computed pending/error).
+  - `useSalesReturns` → `/api/v1/admin/sales-returns`; mutasi pakai `{returnNo}` (resolusi dari list): `POST` create, `POST /{returnNo}/refund` (pengganti `/payment`), `DELETE /{returnNo}`.
+  - `useSalesContacts` (picker kontak form sales) → list + create pakai `/api/v1/admin/customers`; sumber `/assets/json/*` tetap statis.
+- **Pembersihan dummy data menyeluruh:** mock catch-all `server/api/[...mock].ts` menyajikan data dari registry `server/utils/mockStore.ts` — 11 slug dihapus (address, category, customer-type, customers, orders, payments, sales-dashboard, sub-category, supplier, unit, variant) + 14 import seeds; handler statis `server/api/address.ts` dihapus; 22 file `server/data/*` yatim dihapus; `bundledData.ts` dibersihkan (12 import + 12 entri map). `payments.json`/`paymentData.ts` dipertahankan (dipakai modul Finance yang belum migrasi). Manifest: 3236 → 3228.
+- **Validasi:** typecheck 0 error; `test:sales` 13 check lolos; `validate:structure` hanya 8 error legacy lama (sticky-kit/summernote, pra-existing); smoke runtime 3100→Laravel 8000: semua endpoint batch-2 berisi data nyata (customers 4, customer-types 9, stores 5, suppliers 25, addresses 1, sales-returns SR-001); 8 endpoint dummy lama kini **404** (customers, category, customer-type, supplier, orders, payments, address, stores); dashboard SSR 200 `Welcome, Dulank`; signin 200.
+- Status: **implemented** untuk Peoples/Suppliers/Sales-Returns; sisa handler mock 309 — lanjut migrasi (quotations, invoices, delivery-notes, purchases, finance, reports, settings, webstore, paper, calculator, workflow, HRM, content, user-admin).
+- Catatan: Laravel dev (8000) di-restart otomatis di sesi ini untuk verifikasi; dev server admin 3000 milik user sedang mati dan perlu dijalankan ulang (`npm run dev`).
+
+## 2026-10-11 — Migrasi batch 3: Quotations, RFQ, Invoices, Delivery Notes
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useQuotations` → `/api/v1/admin/quotations` (GET/POST/PUT; `{noQuotation}` di-resolve dari list; kontrak `Quotation` identik termasuk status/channel label). `deleteQuotation` memberi pesan jelas karena backend mengikuti alur bisnis (tanpa hapus; ubah status ke Rejected).
+- `useRequestQuotations` → `/api/v1/admin/request-quotations` (GET/POST/DELETE `{noRequest}`; duplikasi tetap via POST; permukaan API dipertahankan persis — spread `actions`, `rfqs`, `printTable`).
+- `useRequestQuotationEditor` → list + save pakai endpoint backend (limit 100).
+- `useInvoices` → `/api/v1/admin/invoices` (monitoring; filter search/status). `saveInvoice`/`deleteInvoice` memberi pesan jelas (invoice otomatis dari order); tambahan `recordPayment(invoiceNo, …)` → `POST /invoices/{invoiceNo}/payments`.
+- `useDeliveryNotes` → `/api/v1/admin/delivery-notes` (GET/POST/PUT/DELETE `{dnNo}`; payload tulis identik dengan tipe admin).
+- **Mock tetap** untuk quotations/request-quotations/invoices/delivery-notes selama `test:sales` masih memakainya — penghapusan dijadwalkan bersama revisi harness.
+- Validasi: typecheck 0 error; smoke 3100→Laravel 8000 — quotations 7 (QT-007), RFQ 7 (RFQ00004), invoices 6 (INV-003), delivery-notes (DN-001); jalur tulis delivery-notes (DN-002) & RFQ (RFQ-003) create+delete sukses dan di-cleanup.
+- Sisa mock: 309 handler (belum termasuk 6 modul sales-returns/quotations/rfq/invoices/delivery-notes yang dimigrasi tapi mocknya dipertahankan untuk test:sales).
+
+## 2026-10-11 — Migrasi batch 4: Purchases family + pembersihan dummy purchase
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `usePurchaseCategories` → `/api/v1/admin/purchase-categories` (GET/POST/PUT/DELETE; kontrak identik: id/name/created/status/itemCount).
+- `usePurchaseItems` → `/api/v1/admin/purchase-items` (kategori via nama; kontrak identik).
+- `usePurchases` → `/api/v1/admin/purchases` (route `{noPurchase}`; save POST/PUT, delete, `recordPayment`). Payload tulis identik (supplier nama, items/qty/unit/price, shippingCost, tax, paid).
+- `usePurchaseOrders` → `/api/v1/admin/purchase-orders` (`{noPo}`; poStatus/goodsStatus identik).
+- `usePurchaseReturns` → `/api/v1/admin/purchase-returns` (`{noPr}`; items returnQty/amount/reason, `recordPayment`). Nama ekspor disamakan dengan versi asli (`purchaseReturns`/`savePurchaseReturn`/`deletePurchaseReturn`, `purchaseOrders`/`savePurchaseOrder`/`deletePurchaseOrder`) agar halaman tetap kompatibel.
+- **Dummy purchase dihapus**: 5 handler Nitro (purchase-categories, purchase-items, purchases, purchase-orders, purchase-returns), 5 slug + 6 import seeds di `mockStore.ts` (126 slug tersisa), 8 file `server/data` yatim, 4 entri `bundledData.ts`. `purchase-report`/`add-purchase` dipertahankan (modul Reports & form legacy).
+- Validasi: typecheck 0 error; 5 endpoint dummy kini 404; backend `/api/v1/admin/purchases` OK; roundtrip create+delete purchase-category, purchase (PR-002 amount 565000 — kalkulasi qty×price+shipping+tax benar), purchase-return (PR-001) sukses & ter-cleanup; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 293 file (belum termasuk 6 modul yang mock-nya dipertahankan untuk test:sales).
+
+## 2026-10-11 — Migrasi batch 5: Finance (bank, transfer, kas bon, pendapatan/pengeluaran, pajak)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): `PUT/DELETE income-categories` & `expense-categories` (IncomeController/ExpenseController + route); payload kategori income +`created`; expense-categories menerima alias `categoryName` dan payload kini `{id, categoryName, description, date, status}` agar cocok dengan tipe admin. Test `FinanceTest` +1 kasus (CRUD dua kategori) → 9 test / 128 asersi lolos.
+- **Frontend migrasi (10 komposabel):**
+  - `useBankAccounts` → `/api/v1/admin/bank-accounts` + `/bank-account-types` (CRUD penuh; saldo `currentBalance` dari LedgerService; stats fallback nol).
+  - `useMoneyTransfers` → `/api/v1/admin/money-transfers` (list + create; transfer = catatan ledger dua sisi, tanpa hapus — `deleteTransfer` pesan jelas).
+  - `useCashAdvances` → `/api/v1/admin/cash-advances` (CRUD + `recordPayment`).
+  - `useIncomes`/`useExpenses` → `/api/v1/admin/incomes|expenses` (POST/PUT/DELETE; strip field turunan di payload).
+  - `useIncomeCategories`/`useExpenseCategories` → kategori backend dengan PUT/DELETE (baru); expense pakai `categoryName`.
+  - `useInputTaxes`/`useOutputTaxes` → `/api/v1/admin/input-taxes|output-taxes` (list + save; `remove` output-tax = PUT status `Cancelled`, bukan hapus).
+  - `useTaxRates` → `/api/v1/admin/tax-rates` (CRUD penuh).
+  - Perbaikan tipe: `MutationResponse.message` wajib `string` (konsisten dengan versi asli; `notify(result.message)`).
+- **Dummy finance dihapus**: 11 handler Nitro, 10 slug + 10 import seeds mockStore (116 slug tersisa), 22 file `server/data`, 12 entri `bundledData`. Dipertahankan: `bank-settings*`/`payment-inflow/outflow`/`finance/*` statements (modul Settings/Finance Statements/Payflow belum migrasi), report data (income-report, expense-report, tax-report).
+- Validasi: typecheck 0 error; test:sales 13 check lolos; validate:structure hanya 8 error legacy lama; 11 endpoint dummy kini 404; smoke backend: bank-accounts 2, money-transfers MT-001, income-category PUT/DELETE (endpoint baru), expense-category alias `categoryName`, income/expense/tax-rate/cash-advance create+delete sukses & ter-cleanup.
+- Sisa handler mock: 260 file.
+
+## 2026-10-11 — Migrasi batch 6: User Management (members, user-admin, roles)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- `useMembers` → `/api/v1/admin/users` (list + PUT update + DELETE; status `Active Member|Suspended` sesuai payload backend; `saveMember` memberi pesan jelas untuk pembuatan manual — member terdaftar lewat store/web).
+- `useUserAdmins` → `/api/v1/admin/user-admins` (CRUD penuh; body meneruskan name/email/password/role/stores/status/descriptions sesuai validasi backend; hanya strip field turunan id/userId/avatar/createdAt).
+- `useRoles` → `/api/v1/admin/roles` (list + POST/PUT/DELETE; `{name, description, permissions[]}` didukung backend termasuk sync permission).
+- **Permission Matrix (`usePermissions`) DITUNDA**: backend menyediakan daftar permission datar `{id, name}` sementara UI matrix butuh struktur `{groups, roles, matrix}` — butuh adaptasi desain (tugas tersendiri). Mock `/api/permissions` dipertahankan.
+- **Dummy dibersihkan**: handler Nitro `users`, `user-admins`, `roles` (3) + 4 slug & 4 import seeds mockStore (112 slug tersisa) + 5 file data yatim + 2 entri bundledData. Manifest: tak mencatat path ini.
+- **Reports DITUNDA (batch berikutnya)**: 14 fungsi komposabel report (useSalesReports/useFinancialReports/useOperationalReports/useStakeholderReports) serta finance-statements (cash-flow & balance-sheet) membutuhkan pemetaan bentuk per-tipe karena struktur row backend berbeda dari tipe admin; endpoint `/api/v1/admin/reports/{type}` sudah siap.
+- Validasi: typecheck 0 error; smoke 3100→Laravel: users 3, user-admins 1 (Admin Rina), roles 2 (admin, super-admin); roundtrip role + user-admin create→delete sukses; member PUT status `Active Member` sukses; dummy users/user-admins/roles 404; permissions mock tetap 200; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 251 file.
+
+## 2026-10-11 — Migrasi batch 7: Reports (14 tipe) + pembersihan dummy reports
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **`app/utils/reportMappers.ts` (baru)**: 14 mapper + tipe payload yang mengubah bentuk agregat backend (`/api/v1/admin/reports/{type}`) menjadi array item sesuai kontrak tipe admin UI. Karena summary/stat dihitung client-side dari item, filter/summary/kartu laporan bekerja tanpa perubahan UI.
+- Komposabel report dimigrasikan (fetch + rawItems saja):
+  - `useSalesReports` (sales→byChannel+topProducts, best-seller→products, purchases→bySupplier, invoices→byStatus);
+  - `useFinancialReports` (taxes→output/input, profit-loss→revenue/cogs/expense/income, annual→months);
+  - `useOperationalReports` (products→topSelling+lowStock, expenses→byCategory, incomes→byCategory);
+  - `useStakeholderReports` (suppliers, supplier-dues, customers, customer-dues).
+- Catatan pendekatan: dimensi laporan backend (channel/supplier/status/kategori) dipetakan ke kolom tabel admin; kolom turunan yang tidak tersedia di backend ditetapkan 0/'-' — ditandai sebagai pendekatan (approximation) dan dapat ditingkatkan per tipe.
+- **Dummy reports dihapus**: handler Nitro `server/api/reports/*` (14), 13 slug + 13 import seeds mockStore (99 slug tersisa), 27 file `server/data` (termasuk best-seller, report .ts/.json), 14 entri `bundledData`. Manifest: tak mencatat path ini.
+- Validasi: typecheck 0 error; 14 endpoint `/api/v1/admin/reports/{type}` terverifikasi bentuk payload; dummy `reports/sales` & `reports/annual` 404; backend tetap OK; validate:structure hanya 8 error legacy lama.
+- Sisa handler mock: 237 file (termasuk `permissions`, `finance/*` statements, cash-flow/balance-sheet, bank-settings, payment-inflow/outflow, webstore, promo, paper, calculator, workflow, HRM, content/settings).
+
+## 2026-10-11 — Migrasi batch 8: Content & Settings (blog, FAQ, klien, bahasa, custom field, ban IP, appearance)
+
+- Branch: `main` · Commit: **NOT COMMITTED** · Push: **NOT PUSHED**
+- **Backend** (repo dulank-backend): `PUT languages/{language}` (status/rtl/progress), `PUT ban-ips/{banIp}`, `PUT custom-fields/{customField}` + route. `ContentSettingsTest` +3 kasus (language, ban-ip, custom-field) → 7 test / 78 asersi lolos.
+- **Frontend migrasi (13 komposabel):**
+  - Content: `useBlogs` (status dinormalisasi `Active/Inactive` ⇄ `Publish/Unpublish`; save `(payload, id?)`), `useBlogCategories`, `useBlogTags`, `useBlogComments` (moderasi saja; tanpa id → pesan jelas), `useFaqs`, `useFaqCategories` (POST/DELETE), `useClients` (reorder → pesan jelas), `useDownloadFiles` (favorit lokal — kolom tidak ada di DB), `useAppearance` (GET/PUT; +`refresh`).
+  - Settings: `useCustomFields` (POST/PUT/DELETE; jenis di `types/custom-fields`), `useBanIp` (pemetaan `status` string→boolean + `created`→`date`; id number), `useLanguages` (POST/PUT toggle status/rtl; normalisasi status; translations GET/**PUT**).
+- **Dummy content dibersihkan**: 11 handler Nitro (termsuk `settings/ban-ip`), 9 slug + 9 import seeds mockStore (90 slug tersisa), 20 file `server/data`, 11 entri `bundledData`, manifest −4 (entri blogs tercatat). Dipertahankan: settings pages lain (email-settings, otp-settings, pos-settings, security, storage, gdpr, invoice-settings, localization, calendar, currency, printer, bank-settings, company-setting, footer, sms/payment gateways, custom-fields UI sudah migrasi).
+- Validasi: typecheck 0 error; smoke 3100→Laravel: blogs 3, blog-tags 24, faqs 9, faq-categories 5, clients 13, custom-fields 1, ban-ips 1, languages 1, appearance `{theme, primaryColor}`; roundtrip blog (status native Publish), faq, ban-ip PUT/DELETE, custom-field PUT/DELETE, language PUT(rtl) sukses & ter-cleanup; 11 dummy endpoint 404; validate:structure kembali 8 error legacy lama.
+- Sisa handler mock: 202 file.
+
+## 2026-10-11 — Migrasi batch 9: Settings pages (grup `settings/{group}`)
+
+- Branch: `main` · Commit: **milik user (commit antara), 5 file pending** · Push: **NOT PUSHED**
+- **Pola migrasi**: backend menyediakan `GET/PUT /api/v1/admin/settings/{group}` (kunci-nilai generik; kolom `value` JSON sehingga objek bersarang aman). Komposabel diarahkan ke endpoint itu dengan unwrap `data.values`.
+- Dimigrasikan (10): `useCompanySetting` (company), `useEmailSettings` (email; `/test` tetap dipanggil — endpoint test email masih mock), `useOtpSettings`, `usePosSettings`, `useSecuritySettings`, `useStorageSettings`, `useGdprSettings`, `useInvoiceSettings`, `useLocalizationSettings`, `useCalendarSettings` — PATCH: URL + `data.value?.data?.values ??` + save `POST`→`PUT` + interface `{group, values}`.
+- **Dummy dibersihkan**: handler `company-setting`, `email-settings`, `otp-settings`, `pos-settings`, `storage-settings`, `gdpr-settings`, `invoice-settings`, `calendar-settings`, `settings/security`, `settings/localization` (10 handler; beberapa berbentuk file `[group].get/put.ts`), 10 file data, 10 entri bundledData, manifest −3 (calendar-settings). Slug mockStore tak berubah (90).
+- Dipertahankan (belum migrasi): `currency-settings`, `printer-settings`, `bank-settings`, `sms-gateways`, `payment-gateways` (list-item semantics — batch berikutnya), `settings/social-auth`, `settings/system-integrations` (useSocialAuth/useSystemIntegrations masih mock), `footer-config`/`preferences` (belum dicek), `email-settings/test` (belum ada endpoint backend).
+- Validasi: typecheck 0 error; smoke: 10 grup `settings/{group}` OK, PUT company dengan objek bersarang (`profile`) tersimpan benar; dummy 404 (company-setting, email-settings, otp-settings, pos-settings, gdpr-settings, invoice-settings, calendar-settings, storage-settings, settings/security, settings/localization); social-auth tetap 200 (mock); validate:structure kembali 8 error legacy lama.
+- Sisa handler mock: 185 file.
+
+## 2026-10-11 — Migrasi batch 10: Promo (banner, voucher, discount plan) — worktree di branch dev
+
+- Branch: `dev` (tracking origin/dev) · Push: **ya, setelah commit**
+- **Backend** (repo dulank-backend): `PUT /api/v1/admin/discount-plans/{discountPlan}` (update nama/customers/status) + route; `PaperPromoWebstoreTest` +1 kasus → 6 test / 80 asersi lolos.
+- **Frontend**: `useBanners` → `/api/v1/admin/banners` (save PUT-aware saat `id` ada; tipe banner `main|product`); `useVouchers` → `/api/v1/admin/vouchers` (list/create/update/delete; `meta` fallback kosong karena backend tak menyediakan opsi filter); `useDiscountPlans` → `/api/v1/admin/discount-plans` (update→PUT; `createCustomer` memberi pesan jelas — segmen dikelola via master Tipe Pelanggan).
+- **Dummy dibersihkan**: handler `banners`/`vouchers`/`discount-plans` + `banner.ts`, 3 slug + 4 import seeds mockStore (87 slug tersisa), 6 file data promo, 3 entri bundledData. `billing`/`discounts` dipertahankan (modul lain/masih mock).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke roundtrip banner create/update/delete, voucher create/delete, discount-plan PUT baru create/update/delete sukses & ter-cleanup; dummy 404.
+- Sisa handler mock: 186 file.
+
+## 2026-10-11 — Migrasi batch 11: Webstore monitoring (cart, checkout, wishlist, review, contact form, support ticket)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): endpoint webstore/support-tickets LENGKAP & BARU (stats, list, show, store, update status/priority/assignee, destroy) di `WebstoreController` (+ perbaikan namespace `App\Support\DocumentNumber`); `PaperPromoWebstoreTest` +1 kasus end-to-end → 7 test / 107 asersi lolos.
+- **Frontend (7 komposabel)**: `useReviews` (+stats endpoint), `useContactForms` (stats; submit → pesan jelas — pengunjung web yang kirim), `useSupportTickets` (+stats), `useSupportTicketDetail`, `useCarts`/`useWishlists`/`useCheckouts` (mapping row backend → tipe admin: product/user/qty/status; status checkout Complete→Berhasil).
+- **Dummy dibersihkan**: handler `webstore/*` (6) + slug `cart|checkout|contact-form|reviews|support-ticket|support-ticket-detail|ticket-detail|ticket-list` (9 slug + import; 78 slug tersisa) + 13 file data + 6 entri bundledData. `subscriptions`, `delete-accounts`, `payment-inflow/outflow`, `social-auth`, `system-integrations` dipertahankan (belum migrasi).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke: carts/checkout/wishlist/reviews/contact-forms/support-tickets list + stats OK; roundtrip tiket create→update(Closed/Low)→show(SUPPORT_TICKET-00001)→delete OK; 8 dummy endpoint 404; backend 200.
+- Sisa handler mock: 174 file.
+
+## 2026-10-11 — Migrasi batch 12: Paper & Machines (kertas-*, mesin-*, printing machines)
+
+- Branch: `dev` · Push: ya.
+- **Frontend (7 komposabel)**: `usePaperGroupsSelf`, `usePaperItemsSelf`, `usePaperSizes` + `usePaperSizesSelf`, `usePaperPrices` + `usePaperPricesSelf`, `usePrintingMachines` → `/api/v1/admin/paper-groups|paper-items|paper-sizes|paper-prices|printing-machines` (CRUD penuh, filter search/group/status).
+- **Dummy dibersihkan**: handler `paper-groups/items/sizes/prices` + `printing-machines` (5), 16 slug `kertas-*`/`mesin-*` + 16 import seeds mockStore (62 slug tersisa), 20 file data, 4 entri bundledData. `die-cutting-blades` (backend-only, belum ada konsumen frontend).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke: paper-groups 11, items 9, sizes 8, prices 9, machines 14, blades 3; roundtrip group set PUT/DELETE + machine create/delete OK; dummy 5 endpoint 404.
+- Sisa handler mock: 174 file (menunggu hitung ulang di akhir).
+
+## 2026-10-11 — Migrasi batch 13: Calculator (komponen/partner/dashboard) + Flow (kategori/nama/template/work-flow)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): `POST /api/v1/admin/calculator/partners/{partner}/moderate` (status Active/Inactive/Flagged + note) di `CalculatorController`; `GET /api/v1/admin/work-flow-context` baru di `WorkflowController` (products, productCategories, flowCategories, flows, templates) — `PaperPromoWebstoreTest` +1 & `HrmWorkflowTest` +1 → lolos.
+- **Frontend (10 komposabel)**: `useCalculatorDashboard`, `useCalculatorMarketplace` (partners+listings+moderate), `useJasaLain`, `useKomponenFiks`, `useKomponenMinimum`, `useFlowCategories`, `useFlowNames`, `useFlowTemplates`, `useWorkFlows`, `useWorkFlowDocumentEditor` → endpoint backend `/api/v1/admin/*`.
+- **Dummy dibersihkan**: handler `calculator/*`, `calculator-components/*`, `flow-categories/names/templates`, `work-flows`, `work-flow-context` (8 unit); slug `kalkulator-*|komponen-*|harga-jasa*|flow-*|work-flow` (8 slug + import; 54 slug tersisa); 11 file data; 11 entri bundledData; manifest −14 (paper-prices/sizes/printing/work-flows ikut tercatat). `job-*`, `my-jobs`, `my-incentives`, `incentives`, `edit-work-flow`, `add-work-flow` dipertahankan (modul Job/HRM belum migrasi). `job-list.ts` & `job-order-context.get.ts` sengaja dipulihkan (masih dipakai modul job).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke 12 endpoint OK (dashboard {telemetry,users}, partners 4, komponen create/delete, moderate partner, context 5 key); 8 dummy endpoint 404.
+- Sisa handler mock: 123 file.
+
+## 2026-10-11 — Migrasi batch 14: Job Orders & HRM (organisasi, karyawan, payroll, insentif, job)
+
+- Branch: `dev` · Push: ya.
+- **Backend** (dulank-backend): `GET job-order-context` (JobOrder+Order terkait), `GET job-branches/history` (cabang selesai), `PUT job-progress/{id}` (deskripsi/proses/pic/waktu), `DELETE employee-salaries/{id}` — semua + route & test (`HrmWorkflowTest` +1 kasus → 8 test / 88 asersi lolos).
+- **Frontend (15 komposabel)**: `useDepartments`, `useDesignations`, `useEmployees`, `useEmployeeSalaries`, `usePayslips` (simpan → generate back-end; hapus → pesan jelas), `useIncentives` (hapus → pesan jelas), `useMyIncentives`/`useMyJobs` (view read-only — mutasi pesan jelas), `useJobOrders`, `useJobBranches` (+history), `useJobProgress` (PUT), `useJobList` (flows → flow-names), `useJobOrderDocument` (context backend) → `/api/v1/admin/*`.
+- **Dummy dibersihkan**: handler 12 unit (termasuk dir `job-list` & file `job-order-context`), 12 slug + import seeds mockStore (42 slug tersisa), 25 file data, 25 entri bundledData, manifest −32. Dipertahankan: `online-orders`/`pos-order` (halaman store legacy), `add-work-flow`/`edit-work-flow` (form editor legacy), `invoice`, `subscriptions`, `payment-inflow/outflow`, `social-auth`, `system-integrations`.
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke 14 endpoint HRM/job OK (departments 1, employees 1, payslips 1, job-orders 1, job-branches 1, history 1, progress 1, my-jobs 1, job-list {jobs, flowCategories}, context {jobOrder, order}); 12 dummy endpoint 404.
+- Sisa handler mock: 85 file.
+
+## 2026-10-11 — Migrasi batch 15: Finance statements + fix menu Customer Subscription
+
+- Branch: `dev` · Push: ya.
+- **Fix**: menu "Customer Subscription" di `App/Layout/Sidebar.vue` menunjuk `/customer-due-report` (salah) → `/subscriptions` (halaman ada).
+- **Backend**: `GET finance/balance-sheet` BARU di `FinanceReportController` (neraca ringkas: kas+bank ledger, piutang, stok pembelian, utang, laba ditahan; `balanced` dihitung) + route + test → `FinanceTest` 10 test / 138 asersi lolos.
+- **Frontend** `useFinanceStatements`: `useCustomerBalances` → `finance/customer-entries` (agregasi saldo per pelanggan), `useAccountStatements` → `bank-accounts/{id}/statement` (running balance kronologis), `useCashFlowStatement` → `finance/cash-flow` (pemetaan breakdown → kategori arus kas), `useBalanceSheet` → endpoint baru.
+- **Dummy dibersihkan**: handler `server/api/finance/*` (4). Util `financeReportData` tak terpakai lagi (tanpa dangling).
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke customer-entries 1, cash-flow {totalInflow,outflow,net,breakdown}, balance-sheet 5 key, statement (Bank Mandiri, 1 entri); dummy 404.
+- Sisa handler mock: 81 file.
+
+## 2026-10-11 — Migrasi batch 16: Settings list-type (currency/printer/bank) + gateways (SMS/payment)
+
+- Branch: `dev` · Push: ya.
+- **Frontend (5 komposabel)**:
+  - `useCurrencySettings`/`usePrinterSettings`/`useBankSettings` → `settings/{group}` dengan kunci `items` (nilai JSON): simpan/hapus item = merge lokal + PUT seluruh list — tanpa perubahan backend.
+  - `useSmsGateway`/`usePaymentGateways` → `gateways/sms-gateways|payment-gateways` (item {name, code, status, config}); fetch dict provider dari list; simpan = PUT/POST per provider + refresh.
+- **Dummy dibersihkan**: handler `currency-settings`, `printer-settings`, `bank-settings`, `sms-gateways`, `payment-gateways` (5), slug `currency-settings|printer-settings` (2; 40 slug tersisa), 7 file data, 5 entri bundledData.
+- Validasi: typecheck 0 error; validate:structure 0 error; smoke settings/currency items (PUT 1 → GET id IDR) + gateway sms POST (gw-4f0e0e40) OK; dummy 5 endpoint 404.
+- Sisa handler mock: 76 file.
+
+## 2026-10-11 — Migrasi batch 17: Regions (provinsi/kabupaten/kecamatan) + social-auth & system-integrations
+
+- Branch: `dev` · Push: ya.
+- **Backend**: `RegionController` BARU — `GET/POST/DELETE provinces|regencies|districts` (filter `province`/`regency`/`search`; payload regency menyertakan nama provinsi, district nama kabupaten) + route (permission peoples.manage) + test (`PeopleUserTest` → 7 test / 85 asersi).
+- **Frontend**: `useLocations` (provinsi/regencies/districts CRUD) → `/api/v1/admin/provinces|regencies|districts`; `useSocialAuth` & `useSystemIntegrations` → `settings/{group}` dengan unwrap `values` (tipe respons disesuaikan).
+- **Dummy dibersihkan**: handler regions (3) + settings/social-auth & system-integrations (file .get/.put), 3 slug (provinces dsb; 37 slug tersisa), 5 file data, 4 entri bundledData.
+- **Dipertahankan (belum ada domain backend)**: `subscriptions` & `delete-accounts` (mock masih dipakai) — butuh model + endpoint baru di backend (tugas berikutnya).
+- Validasi: typecheck 0; validate:structure 0; smoke: provinces 34, regencies 514, districts 19 (data region nyata), social-auth PUT nested OK, province create/delete OK; dummy 404.
+- Sisa handler mock: 55 file.
+
+## 2026-10-11 — Migrasi batch 18: Subscriptions & Delete-Accounts (domain backend baru) + fix import route
+
+- Branch: `dev` · Push: ya.
+- **Backend (domain baru)**: migration `subscriptions` + `delete_account_requests` (dipisah dua file, timestamp sama), model `Subscription` & `DeleteAccountRequest`, `SubscriptionController` (list + filter + `summary` top-level + PUT update) & `DeleteAccountController` (list + DELETE) + route + test → `PaperPromoWebstoreTest` + `PeopleUserTest` = **17 test / 227 asersi** lolos. Migration dijalankan di dev MySQL juga.
+- **Fix import route**: import `PurchaseReturnController` sempat tertimpa saat menambah `RegionController` (kesalahan edit) — dipulihkan.
+- **Frontend**: `useSubscriptions` → `/api/v1/admin/subscriptions` (list + PUT); `useDeleteAccounts` → `/api/v1/admin/delete-accounts`.
+- **Dummy dibersihkan**: handler `subscriptions` & `delete-accounts` (2), slug (2; 35 slug tersisa), 3 file data, 1 entri bundledData.
+- Validasi: typecheck 0; validate:structure 0; smoke: list + summary OK, PUT subscription (Unpaid/900000) mengubah summary benar, dummy 404; sisa handler mock 49 file.
+
+## 2026-10-11 — Migrasi batch 19: Permission Matrix (redesign ke permission datar backend)
+
+- Branch: `dev` · Push: ya.
+- **Backend**: `GET /api/v1/admin/roles` kini menyertakan `permissions[]` per role (Spatie) — matrix dapat dibangun dari data nyata.
+- **Frontend** `usePermissions` ditulis ulang: sumber = `/api/v1/admin/roles` + `/api/v1/admin/permissions`; group/pages diturunkan dari nama permission (prefix modul); setiap aksi (create/edit/delete/view/allowAll) dicerminkan dari kepemilikan permission; `savePermissions` → `PUT roles/{id}` {permissions} (sync Spatie) per role; `super-admin` dikecualikan dari edit.
+- **Dummy dibersihkan**: handler `server/api/permissions`, slug `permissions` (34 slug tersisa), 2 file data, 1 entri bundledData → mock `/api/permissions` 404; backend 200.
+- Validasi: typecheck 0; validate:structure 0; smoke roles: `admin` & `super-admin` masing-masing 13 permission (dashboard.view, products.manage, …); sisa handler mock 47 file.
+
+## 2026-10-11 — SAPUAN BERSIH: hapus harness test:* + seluruh mock API + dead code (sesuai keputusan)
+
+- Branch: `dev` · Push: ya.
+- **Gap 5 MIXED ditutup**: `useFlowCategories/Names/Templates` (create POST → v1), `useFooterConfig` (save → `PUT /api/v1/admin/footer`), `usePrefixes` (list unwrap `values`→items; save/update → `PUT settings/prefixes`). Smoke: flow-category create/delete ✓, footer PUT `judul` ✓, prefixes PUT `order=SO-` ✓.
+- **Harness dihapus**: semua `scripts/test-*.mjs` (+browser) & entry `test:*` di package.json — tersisa `validate:structure`, `apply-legacy-orchestrator.cjs`, `audit-legacy-parity.mjs`.
+- **Mock API dihapus total**: seluruh handler `server/api/*` (kecuali `health.ts`), `[...mock].ts` (catch-all), `server/utils/` (mockStore, bundledData, dsb.), `server/data/` — layer dummy API TIADA lagi.
+- Manifest: −24 entri server (3139 tersisa) → `validate:structure` **0 ENOENT**.
+- Validasi: typecheck 0 error; runtime: signin 200, dashboard SSR 200 (`Welcome, Dulank`), backend sales OK, `/api/sales` (mock lama) → 302 (tak ada handler).
+- Status akhir: aplikasi 100% data dari Laravel `/api/v1` — nol dependensi mock.
+
+## 2026-10-11 — Dashboard stats: seluruh data statistik kini disediakan backend
+
+- **Backend** (dev): `GET calculator/dashboard` kini menyertakan `telemetry.chart` (7 hari) & daftar `users` (partner pemilik listing); endpoint BARU `GET dashboard/admin` (welcomeName, ordersToday, lowStockNotice, primary/secondary metrics, chartSeries 1D/1W/1M/1Y, overview, topSelling w/ image/price/sku/stock, lowStock, recentSales, salesStatics, transactionGroups (sale/purchase/quotation/expense/invoice), topCustomers, categories, categoryTotals, orderStatistics), `GET dashboard/sales` (bestSellers, recentTransactions, countryMarkers, yearlyData), `GET dashboard/analytics` (kpis, conversion, performance, browsers, regions, topPages) — `DashboardTest` 2 test / 50 asersi.
+- **Frontend**: `useAdminDashboard`/`useSalesDashboard`/`useAnalyticsDashboard` diarahkan ke endpoint masing-masing; `useCalculatorDashboard` otomatis dapat chart+users.
+- Catatan jujur (data belum direkam backend): dimensi web-analytics (browsers/regions/topPages/pageViews) kosong, `countryMarkers` kosong, `firstTime/returning` = 0, growth `0%` — UI menampilkannya sebagai kosong, bukan simulasi.
+
+## 2026-10-11 — UI halaman Discount diperbaiki (backend + komponen reuse)
+
+- Branch: `dev` · Push: ya.
+- `app/pages/discount.vue` (605 baris legacy, data lokal) → halaman tipis + **`DiscountWorkspace`** mengikuti pola modern (SalesListHeader, SalesFeedback×2, SalesDataTable, SalesConfirmDelete, DocumentPrintModal, useTablePrint) — reuse penuh komponen yang ada.
+- Komponen baru: `DiscountRecordsTable` (kolom Name/Plan/Value/Valid/Used/Status; filter plan+status; badge via SalesStatusBadge; nilai format Rp/% via tipe), `DiscountFormDialog` (name, plan select, type radio Fixed/Percentage, value, validFrom/validTill, status).
+- `useDiscounts` (baru) → `/api/v1/admin/discounts` (list+create/update/delete); pilihan plan dari `useDiscountPlans`.
+- `server/types/discount.ts` (baru).
+- Smoke: create id=1 → PUT (Smoke Diskon Edit/15/Inactive) → DELETE ✓; halaman SSR 200; typecheck 0 error.
+
+## 2026-10-11 — UI/UX income + fix bug prefixes ([object Object])
+
+- Branch: `dev` · Push: ya.
+- **Bug prefixes fixed**: nilai seed `settings/prefixes` tersimpan sebagai objek `{"prefix":"DN"}` (bukan string) → `String(prefix)` menghasilkan `[object Object]`. `usePrefixes` kini menormalkan nilai string ATAU objek `{prefix}`; daftar field workspace disinkronkan dengan 16 key seeder (order/invoice/quotation/rfq/purchase/purchase_return/sales_return/delivery_note/expense/income/payment/payslip/money_transfer/supplier/job/ticket) menggantikan daftar lama yang tidak cocok.
+- **UI halaman Income dirombak** (pola modern reuse komponen): `IncomeWorkspace` + `IncomeRecordsTable` (kolom No/Date/Name/Category/Amount/Method/Bank + filter kategori) + `IncomeFormDialog` (date/name/category/nominal/method/bank/notes; status `isCancelled` di-strip) + halaman tipis. `income-category.vue` sudah modern (dibiarkan).
+- Validasi: typecheck 0; smoke prefix PUT (`income=INC-`), income create id=3 → PUT (Edit/300000) → DELETE ✓; SSR income & prefixes 200.
+
+## 2026-10-11 — Fitur & halaman baru: Customer Subscription (relasi Customer↔Subscription)
+
+- Branch: `dev` · Push: ya.
+- **Backend**: migration `add_customer_id_to_subscriptions` (FK nullable → customers) + relasi `Subscription belongsTo Customer` & `Customer hasMany Subscription`; `POST /api/v1/admin/subscriptions` (store per pelanggan — nama subscriber di-resolve dari customer user); `GET /api/v1/admin/customer-subscriptions` (baris per pelanggan + subskripsi terakhir + `active` derived + summary top-level; filter search/status(Aktif/Kadaluarsa/Belum)/plan). Fix import `Builder`. Test `PaperPromoWebstoreTest` +1 → 10 test / 151 asersi.
+- **Frontend**: halaman baru `customer-subscription.vue` + `CustomerSubscriptionWorkspace` (StatCard×3 summary, filter/search), `CustomerSubscriptionRecordsTable` (kolom Customer/Email/Plan/Tier/Cycle/Amount/Expiring/Status+badge Aktif/Nonaktif; tombol Berlanggankan), `CustomerSubscriptionFormDialog` (pilih pelanggan dari `useCustomers`, plan/tier/cycle/method/amount/start/expiring/status — mode add & edit). Sidebar "Customer Subscription" → `/customer-subscription`.
+- Validasi: typecheck 0; smoke: search 'Rina' → 1 baris (Rina Marlina, Premium UI, Paid, active=true), summary total=1 active=1; subscribe via customerId sukses; halaman SSR 200.
+
+## 2026-10-11 — Header & AppHeader: hapus data dummy, pakai data backend
+
+- `app/components/Layout/AppHeader.vue` (dan `app/components/App/Layout/Header.vue`): dummy **Store** (Grocery Alpha/Apex/Bevy) → daftar toko `useStores` (pilih disimpan); **Language** (English statis) → bahasa aktif `useLanguages` (flag+name, pilih disimpan); **Notifikasi** ("2 New" + 2 item fiktif) → real dari `useDashboard.pendingPayments` + tiket open `useSupportTickets` (badge + daftar + state kosong); user identity & logout sudah real sebelumnya.
+- Validasi: typecheck 0; SSR 200 — nama user "Dulank Administrator", toko "Kacetak Cabang Bandung", bahasa "Bahasa Indonesia" tampil; dummy lama hilang.

@@ -4,6 +4,17 @@ import type {
   PurchaseReportItem,
   InvoiceReportItem,
 } from '~~/server/types/reports-sales'
+
+import {
+  mapSalesReport,
+  mapBestSeller,
+  mapPurchaseReport,
+  mapInvoiceReport,
+  type SalesApiPayload,
+  type BestSellerApiPayload,
+  type PurchasesApiPayload,
+  type InvoicesApiPayload,
+} from '~/utils/reportMappers'
 import { isDateInRange, type DateRangeValue } from '~/composables/useDateRange'
 
 export interface ReportApiResponse<T> {
@@ -14,20 +25,29 @@ export interface ReportApiResponse<T> {
 
 export function useSalesReport() {
   const search = ref('')
+  const category = ref('')
+  const channel = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
-  const query = computed(() => ({
-    search: search.value || undefined,
-    startDate: dateRange.value?.start || undefined,
-    endDate: dateRange.value?.end || undefined,
-  }))
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<SalesReportItem[]>>('/api/reports/sales', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<SalesApiPayload>>('/api/v1/admin/reports/sales', {
     key: 'reports-sales-list',
-    query,
   })
 
-  const rawItems = computed<SalesReportItem[]>(() => data.value?.data ?? [])
-  const items = rawItems
+  const rawItems = computed<SalesReportItem[]>(() => mapSalesReport(data.value?.data))
+
+  const items = computed<SalesReportItem[]>(() => {
+    let list = rawItems.value
+    if (category.value && category.value !== 'All' && category.value !== 'All Categories' && category.value !== '') {
+      list = list.filter((i) => i.category.toLowerCase() === category.value.toLowerCase())
+    }
+    if (channel.value && channel.value !== 'All' && channel.value !== 'All Channels' && channel.value !== '') {
+      list = list.filter((i) => i.channel?.toLowerCase() === channel.value.toLowerCase())
+    }
+    if (dateRange.value?.start || dateRange.value?.end) {
+      list = list.filter((i) => isDateInRange(i.date || '', dateRange.value))
+    }
+    return list
+  })
 
   const stats = computed(() => {
     const list = items.value
@@ -65,6 +85,8 @@ export function useSalesReport() {
     items,
     rawItems,
     search,
+    category,
+    channel,
     dateRange,
     pending,
     error,
@@ -78,11 +100,11 @@ export function useBestSellerReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<BestSellerItem[]>>('/api/reports/best-seller', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<BestSellerApiPayload>>('/api/v1/admin/reports/best-seller', {
     key: 'reports-best-seller-list',
   })
 
-  const rawItems = computed<BestSellerItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<BestSellerItem[]>(() => mapBestSeller(data.value?.data))
 
   const items = computed<BestSellerItem[]>(() => {
     let list = rawItems.value
@@ -127,11 +149,11 @@ export function usePurchaseReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<PurchaseReportItem[]>>('/api/reports/purchases', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<PurchasesApiPayload>>('/api/v1/admin/reports/purchases', {
     key: 'reports-purchase-list',
   })
 
-  const rawItems = computed<PurchaseReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<PurchaseReportItem[]>(() => mapPurchaseReport(data.value?.data))
 
   const items = computed<PurchaseReportItem[]>(() => {
     let list = rawItems.value
@@ -177,11 +199,11 @@ export function useInvoiceReport() {
   const year = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<InvoiceReportItem[]>>('/api/reports/invoices', {
+  const { data, pending, error, refresh } = useApiFetch<ReportApiResponse<InvoicesApiPayload>>('/api/v1/admin/reports/invoices', {
     key: 'reports-invoice-list',
   })
 
-  const rawItems = computed<InvoiceReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<InvoiceReportItem[]>(() => mapInvoiceReport(data.value?.data))
 
   const items = computed<InvoiceReportItem[]>(() => {
     let list = rawItems.value

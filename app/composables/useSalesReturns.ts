@@ -1,10 +1,17 @@
 import type { SalesReturn, SalesReturnFormData, ReturnPayment } from '#server/types/sales-return'
 
+const RELIST = '/api/v1/admin/sales-returns'
+
+/**
+ * Sales Return — backend Laravel `/api/v1/admin/sales-returns`.
+ * Route mutasi memakai `{returnNo}` (bukan id); komposabel menyelesaikan
+ * `id` → `returnNo` dari list yang sudah dimuat.
+ */
 export function useSalesReturns() {
-  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: SalesReturn[] }>(
-    '/api/sales-returns' as string,
-    { key: 'sales-returns-list' },
-  )
+  const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: SalesReturn[] }>(RELIST, {
+    key: 'sales-returns-list',
+    query: { limit: 100 },
+  })
   const returns = computed<SalesReturn[]>(() => data.value?.data ?? [])
   const searchQuery = ref('')
   const filterPaymentStatus = ref('')
@@ -25,6 +32,13 @@ export function useSalesReturns() {
   const busy = ref(false)
   const actionError = ref('')
   const message = ref('')
+
+  const byReturnNo = (idOrNo: number | string): string => {
+    const found = returns.value.find(item => item.id === Number(idOrNo) || item.returnNo === String(idOrNo))
+
+    return found?.returnNo ?? String(idOrNo)
+  }
+
   function add() {
     editData.value = null
     actionError.value = ''
@@ -35,14 +49,13 @@ export function useSalesReturns() {
     actionError.value = ''
     editorOpen.value = true
   }
-  async function mutate(action: () => Promise<unknown>, done: () => void) {
-    if (busy.value) return
+  async function mutate(action: () => Promise<unknown>, done?: () => void) {
     busy.value = true
     actionError.value = ''
     try {
       await action()
       await refresh()
-      done()
+      done?.()
       message.value = 'Changes saved successfully.'
     } catch (error) {
       actionError.value = salesErrorMessage(error)
@@ -51,8 +64,14 @@ export function useSalesReturns() {
     }
   }
   function save(body: SalesReturnFormData) {
+    const { id, paymentStatus, payment, total, ...form } = body
+    void id
+    void paymentStatus
+    void payment
+    void total
+
     return mutate(
-      () => apiFetch<unknown>('/api/sales-returns', { method: 'POST', body }),
+      () => apiFetch<unknown>(RELIST, { method: 'POST', body: form }),
       () => {
         editorOpen.value = false
       },
@@ -62,7 +81,18 @@ export function useSalesReturns() {
     if (!paymentReturn.value) return
     return mutate(
       () =>
-        apiFetch<unknown>(`/api/sales-returns/${paymentReturn.value!.id}/payment`, { method: 'POST', body }),
+        apiFetch<unknown>(
+          `${RELIST}/${encodeURIComponent(byReturnNo(paymentReturn.value!.id))}/refund`,
+          {
+            method: 'POST',
+            body: {
+              method: body.method,
+              amount: body.amount,
+              reference: body.reference ?? body.notes,
+              notes: body.notes,
+            },
+          },
+        ),
       () => {
         paymentReturn.value = null
       },
@@ -71,7 +101,10 @@ export function useSalesReturns() {
   function remove() {
     if (!deleting.value) return
     return mutate(
-      () => apiFetch<unknown>(`/api/sales-returns/${deleting.value!.id}`, { method: 'DELETE' }),
+      () =>
+        apiFetch<unknown>(`${RELIST}/${encodeURIComponent(byReturnNo(deleting.value!.id))}`, {
+          method: 'DELETE',
+        }),
       () => {
         deleting.value = null
       },

@@ -86,7 +86,7 @@ export function useSalesEditor(props: { isOpen: boolean; isEdit: boolean; editDa
   async function applyVoucher() {
     voucherMessage.value = ''
     try {
-      const response = await apiFetch<{ data: { discount: number } }>('/api/sales/voucher', {
+      const response = await apiFetch<{ data: { discount: number } }>('/api/v1/admin/vouchers', {
         method: 'POST',
         body: {
           code: doc.value.voucher,

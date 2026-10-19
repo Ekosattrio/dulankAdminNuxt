@@ -7,14 +7,14 @@ interface ResponseData {
 }
 
 export function useEmployees() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/employees', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/employees', {
     key: 'employees-list'
   })
 
   const employees = computed<EmployeeItem[]>(() => data.value?.data ?? [])
 
   const saveEmployee = async (payload: EmployeeFormData) => {
-    const res = await apiFetch<{ success: boolean; data: EmployeeItem; message?: string }>('/api/employees', {
+    const res = await apiFetch<{ success: boolean; data: EmployeeItem; message?: string }>('/api/v1/admin/employees', {
       method: 'POST',
       body: payload
     })
@@ -23,7 +23,7 @@ export function useEmployees() {
   }
 
   const deleteEmployee = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/employees/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/employees/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()

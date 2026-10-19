@@ -19,7 +19,7 @@ const emptySummary: SubscriptionSummary = {
 }
 
 export function useSubscriptions(filters: Ref<SubscriptionFilterQuery>) {
-  const { data, pending, error, refresh } = useApiFetch<SubscriptionListResponse>('/api/subscriptions', {
+  const { data, pending, error, refresh } = useApiFetch<SubscriptionListResponse>('/api/v1/admin/subscriptions', {
     key: 'subscriptions-list',
     query: filters,
   })
@@ -28,7 +28,7 @@ export function useSubscriptions(filters: Ref<SubscriptionFilterQuery>) {
   const summary = computed(() => data.value?.summary ?? emptySummary)
 
   async function updateSubscription(id: string, payload: SubscriptionUpdateCommand) {
-    const response = await apiFetch<{ success: boolean; data: SubscriptionRecord; message: string }>(`/api/subscriptions/${id}`, {
+    const response = await apiFetch<{ success: boolean; data: SubscriptionRecord; message: string }>(`/api/v1/admin/subscriptions/${encodeURIComponent(id)}`, {
       method: 'PUT',
       body: payload,
     })
@@ -37,7 +37,7 @@ export function useSubscriptions(filters: Ref<SubscriptionFilterQuery>) {
   }
 
   async function deleteSubscription(id: string) {
-    const response = await apiFetch<{ success: boolean; data: SubscriptionRecord; message: string }>(`/api/subscriptions/${id}`, {
+    const response = await apiFetch<{ success: boolean; data: SubscriptionRecord; message: string }>(`/api/v1/admin/subscriptions/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
     await refresh()

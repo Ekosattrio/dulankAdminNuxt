@@ -125,27 +125,25 @@ const exportPdf = () => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content container-fluid">
-      <SalesListHeader title="Units / Satuan" subtitle="Kelola daftar satuan ukuran produk (pcs, rim, meter, box, dll)" add-label="Add New Unit" :refreshing="pending" @add="openAddModal" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
-      <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
+  <div class="space-y-6">
+    <SalesListHeader title="Units / Satuan" subtitle="Kelola daftar satuan ukuran produk (pcs, rim, meter, box, dll)" add-label="Add New Unit" :refreshing="pending" @add="openAddModal" @refresh="refresh()" @print="printTable" @pdf="exportPdf" />
+    <SalesFeedback :pending="pending" :message="toastMessage" skeleton="table" :skeleton-cols="6" @dismiss="toastMessage = ''" />
 
-      <!-- Table Component -->
-      <PagesUnitTable
-        v-if="!pending"
-        :units="filteredUnits"
-        :search-query="searchQuery"
-        :filter-status="selectedStatus"
-        @update:search-query="searchQuery = $event"
-        @update:filter-status="selectedStatus = $event"
-        @add-unit="openAddModal"
-        @edit-unit="handleEdit"
-        @delete-unit="handleDelete"
-        @export-pdf="exportPdf"
-        @print-table="printTable"
-        @refresh="refresh"
-      />
-    </div>
+    <!-- Table Component -->
+    <PagesUnitTable
+      v-if="!pending"
+      :units="filteredUnits"
+      :search-query="searchQuery"
+      :filter-status="selectedStatus"
+      @update:search-query="searchQuery = $event"
+      @update:filter-status="selectedStatus = $event"
+      @add-unit="openAddModal"
+      @edit-unit="handleEdit"
+      @delete-unit="handleDelete"
+      @export-pdf="exportPdf"
+      @print-table="printTable"
+      @refresh="refresh"
+    />
 
     <!-- Modal Component -->
     <PagesUnitModal

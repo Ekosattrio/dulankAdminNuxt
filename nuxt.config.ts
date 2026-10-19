@@ -11,6 +11,23 @@ export default defineNuxtConfig({
     timing: false
   },
   devtools: { enabled: false },
+  runtimeConfig: {
+    public: {
+      // Kosong = same-origin (proxy dev mengarahkan /api/v1/** ke Laravel).
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
+    },
+  },
+  routeRules: {
+    // Backend Laravel: /api/v1/** diproxy; mock Nitro lama di /api/* tetap berjalan
+    // selama migrasi modul berlangsung.
+    '/api/v1/**': {
+      proxy: `${process.env.LARAVEL_API_URL || 'http://127.0.0.1:8000'}/api/v1/**`,
+    },
+    // Gambar dari Laravel public storage (produk, kategori, logo, avatar, dll).
+    '/storage/**': {
+      proxy: `${process.env.LARAVEL_API_URL || 'http://127.0.0.1:8000'}/storage/**`,
+    },
+  },
   modules: [
     '@pinia/nuxt'
   ],

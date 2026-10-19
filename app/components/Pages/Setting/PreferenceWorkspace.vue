@@ -24,9 +24,8 @@ const onToggle = async (pref: PreferenceItem) => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header">
+  <div class="space-y-6">
+    <div class="page-header settings-pg-header">
         <div class="add-item d-flex">
           <div class="page-title">
             <h4>Settings</h4>
@@ -81,6 +80,5 @@ const onToggle = async (pref: PreferenceItem) => {
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>

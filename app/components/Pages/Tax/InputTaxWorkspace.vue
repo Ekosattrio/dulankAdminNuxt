@@ -15,7 +15,7 @@ const currentPageItems = ref<InputTaxView[]>([]); const editTarget = ref<InputTa
 const busy = ref(false); const mutationError = ref(''); const message = ref('')
 const print = useTablePrint()
 const items = computed(() => { const q = search.value.toLowerCase(); return domain.items.value.filter((item) => (!credited.value || item.credited === credited.value) && isDateInRange(item.invoiceDate, dateRange.value) && (!q || [item.purchaseNo, item.fakturNo, item.supplierName].some((value) => value.toLowerCase().includes(q)))) })
-async function save(payload: InputTaxFormData) { busy.value = true; mutationError.value = ''; try { const result = await domain.save(payload); editTarget.value = null; message.value = result.message } catch (error) { mutationError.value = salesErrorMessage(error) } finally { busy.value = false } }
+async function save(payload: InputTaxFormData) { busy.value = true; mutationError.value = ''; try { const result = await domain.save(payload); editTarget.value = null; message.value = result.message || "" } catch (error) { mutationError.value = salesErrorMessage(error) } finally { busy.value = false } }
 const columns = [{ key: 'purchaseNo', label: 'No. Purchase' }, { key: 'invoiceDate', label: 'Date e-tax Invoice' }, { key: 'fakturNo', label: 'Supplier Faktur No.' }, { key: 'supplierName', label: 'Supplier Name' }, { key: 'dpp', label: 'DPP', align: 'right' as const }, { key: 'vat', label: 'VAT - Input Tax', align: 'right' as const }, { key: 'credited', label: 'Credited', align: 'center' as const }]
 </script>
 <template><div class="space-y-6">

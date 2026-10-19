@@ -2,16 +2,16 @@ import type { EmailConfig, TestEmailPayload, TestEmailResult } from '#server/typ
 
 interface ResponseData {
   success: boolean
-  data: EmailConfig
+  data: { group: string; values: EmailConfig }
   message?: string
 }
 
 export function useEmailSettings() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/email-settings', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/settings/email', {
     key: 'email-settings-data',
   })
 
-  const emailConfig = computed<EmailConfig>(() => data.value?.data ?? {
+  const emailConfig = computed<EmailConfig>(() => data.value?.data?.values ?? {
     mailHost: 'smtp.gmail.com',
     mailPort: 587,
     mailUsername: '',
@@ -24,8 +24,8 @@ export function useEmailSettings() {
   })
 
   const saveSettings = async (payload: Partial<EmailConfig>) => {
-    const res = await apiFetch<{ success: boolean; data: EmailConfig; message?: string }>('/api/email-settings', {
-      method: 'POST',
+    const res = await apiFetch<{ success: boolean; data: EmailConfig; message?: string }>('/api/v1/admin/settings/email', {
+      method: 'PUT',
       body: payload,
     })
     await refresh()
@@ -33,7 +33,7 @@ export function useEmailSettings() {
   }
 
   const sendTestEmail = async (toEmail: string) => {
-    const res = await apiFetch<{ success: boolean; data: TestEmailResult; message: string }>('/api/email-settings/test', {
+    const res = await apiFetch<{ success: boolean; data: TestEmailResult; message: string }>('/api/v1/admin/settings/email/test', {
       method: 'POST',
       body: { toEmail } as TestEmailPayload,
     })

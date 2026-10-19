@@ -2,16 +2,16 @@ import type { OtpConfig } from '#server/types/system-settings'
 
 interface ResponseData {
   success: boolean
-  data: OtpConfig
+  data: { group: string; values: OtpConfig }
   message?: string
 }
 
 export function useOtpSettings() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/otp-settings', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/settings/otp', {
     key: 'otp-settings-data',
   })
 
-  const otpConfig = computed<OtpConfig>(() => data.value?.data ?? {
+  const otpConfig = computed<OtpConfig>(() => data.value?.data?.values ?? {
     isEnabled: true,
     provider: 'whatsapp',
     otpType: 'numeric',
@@ -21,8 +21,8 @@ export function useOtpSettings() {
   })
 
   const saveSettings = async (payload: Partial<OtpConfig>) => {
-    const res = await apiFetch<{ success: boolean; data: OtpConfig; message?: string }>('/api/otp-settings', {
-      method: 'POST',
+    const res = await apiFetch<{ success: boolean; data: OtpConfig; message?: string }>('/api/v1/admin/settings/otp', {
+      method: 'PUT',
       body: payload,
     })
     await refresh()

@@ -14,7 +14,7 @@ export interface ExpenseCategoryFilterParams {
 export interface ExpenseCategoryFormData {
   id?: string
   categoryName: string
-  description: string
+  description?: string
   date?: string
   status: 'Active' | 'Deactive'
 }

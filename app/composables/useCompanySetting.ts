@@ -2,16 +2,16 @@ import type { CompanySetting, CompanySettingUpdatePayload } from '#server/types/
 
 interface CompanySettingApiResponse {
   success: boolean
-  data: CompanySetting
+  data: { group: string; values: CompanySetting }
   message?: string
 }
 
 export function useCompanySetting() {
-  const { data, pending, error, refresh } = useApiFetch<CompanySettingApiResponse>('/api/company-setting', {
+  const { data, pending, error, refresh } = useApiFetch<CompanySettingApiResponse>('/api/v1/admin/settings/company', {
     key: 'company-setting-data'
   })
 
-  const companySetting = computed<CompanySetting>(() => data.value?.data ?? {
+  const companySetting = computed<CompanySetting>(() => data.value?.data?.values ?? {
     id: '',
     companyName: '',
     tagline: '',
@@ -35,8 +35,8 @@ export function useCompanySetting() {
   })
 
   const saveCompanySetting = async (payload: CompanySettingUpdatePayload) => {
-    const res = await apiFetch<{ success: boolean; data: CompanySetting; message?: string }>('/api/company-setting', {
-      method: 'POST',
+    const res = await apiFetch<{ success: boolean; data: CompanySetting; message?: string }>('/api/v1/admin/settings/company', {
+      method: 'PUT',
       body: payload
     })
     await refresh()

@@ -6,26 +6,46 @@ interface ResponseData {
   message?: string
 }
 
+interface MutationResponse {
+  success: boolean
+  data?: Store
+  message?: string
+}
+
+/**
+ * Toko (Peoples) — backend Laravel `/api/v1/admin/stores`.
+ */
 export function useStores() {
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/stores', {
-    key: 'stores-list'
+  const query = { limit: 100 }
+
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/stores', {
+    key: 'stores-list',
+    query
   })
 
   const stores = computed<Store[]>(() => data.value?.data ?? [])
 
   const saveStore = async (payload: StoreFormData) => {
-    const res = await apiFetch<{ success: boolean; data: Store; message?: string }>('/api/stores', {
-      method: 'POST',
-      body: payload
-    })
+    const { id, ...body } = payload
+
+    const res = await apiFetch<MutationResponse>(
+      id ? `/api/v1/admin/stores/${encodeURIComponent(id)}` : '/api/v1/admin/stores',
+      {
+        method: id ? 'PUT' : 'POST',
+        body
+      }
+    )
+
     await refresh()
     return res
   }
 
   const deleteStore = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/stores/${id}`, {
-      method: 'DELETE'
-    })
+    const res = await apiFetch<{ success: boolean; message?: string }>(
+      `/api/v1/admin/stores/${encodeURIComponent(id)}`,
+      { method: 'DELETE' }
+    )
+
     await refresh()
     return res
   }

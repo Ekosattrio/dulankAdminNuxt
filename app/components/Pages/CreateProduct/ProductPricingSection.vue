@@ -8,6 +8,8 @@ import type { PriceTypeTab } from '../../../types/product-editor'
 
 const props = defineProps<{
   priceType: PriceTypeTab
+  subCategory: string
+  subCategories: string[]
   quantity: number
   price: number
   minOrderQty: number
@@ -27,6 +29,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:priceType': [value: PriceTypeTab]
+  'update:subCategory': [value: string]
+  'add-sub-category': []
   'update:quantity': [value: number]
   'update:price': [value: number]
   'update:minOrderQty': [value: number]
@@ -49,6 +53,7 @@ const priceTypeTabs: PriceTypeTab[] = [
   'Single Product',
   'Variable Product',
   'Size Calculation',
+  'Minimum Qty or Price',
   'Large Format',
   'Offset Service Price',
 ]
@@ -122,7 +127,7 @@ function removeVariant(index: number) {
           v-for="tab in priceTypeTabs"
           :key="tab"
           type="button"
-          class="inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-xs font-medium transition-colors focus:outline-none"
+          class="inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-xs font-medium transition-colors focus:outline-none cursor-pointer"
           :class="[
             priceType === tab
               ? 'border-primary bg-primary text-white shadow-sm'
@@ -148,7 +153,31 @@ function removeVariant(index: number) {
 
     <!-- 1. Single Product Tab -->
     <div v-if="priceType === 'Single Product'" class="space-y-4 pt-1">
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Quantity</label>
           <input
@@ -239,7 +268,31 @@ function removeVariant(index: number) {
 
     <!-- 2. Variable Product Tab -->
     <div v-else-if="priceType === 'Variable Product'" class="space-y-4 pt-1">
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
         <div>
           <div class="mb-1 flex items-center justify-between">
             <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Variant Attribute</label>
@@ -385,6 +438,30 @@ function removeVariant(index: number) {
     <!-- 3. Size Calculation Tab -->
     <div v-else-if="priceType === 'Size Calculation'" class="space-y-4 pt-1">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Price (IDR)</label>
           <input
@@ -450,9 +527,99 @@ function removeVariant(index: number) {
       </div>
     </div>
 
-    <!-- 4. Large Format Tab -->
+    <!-- 4. Minimum Qty or Price Tab (NEW) -->
+    <div v-else-if="priceType === 'Minimum Qty or Price'" class="space-y-4 pt-1">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
+        <!-- Minimum Qty -->
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Minimum Qty</label>
+          <input
+            :value="minOrderQty"
+            type="number"
+            min="1"
+            :disabled="disabled"
+            :class="formControlClass"
+            @input="emit('update:minOrderQty', Number(($event.target as HTMLInputElement).value))"
+          />
+        </div>
+
+        <!-- Minimum Price -->
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Minimum Price</label>
+          <CurrencyInput
+            :model-value="minPrice"
+            prefix="Rp"
+            align="right"
+            :disabled="disabled"
+            @update:model-value="emit('update:minPrice', $event)"
+          />
+        </div>
+
+        <!-- Price -->
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Price (IDR)</label>
+          <CurrencyInput
+            :model-value="price"
+            prefix="Rp"
+            align="right"
+            :disabled="disabled"
+            @update:model-value="emit('update:price', $event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Large Format Tab -->
     <div v-else-if="priceType === 'Large Format'" class="space-y-4 pt-1">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Price (IDR)</label>
           <CurrencyInput
@@ -552,9 +719,33 @@ function removeVariant(index: number) {
       </div>
     </div>
 
-    <!-- 5. Offset Service Price Tab -->
+    <!-- 6. Offset Service Price Tab -->
     <div v-else-if="priceType === 'Offset Service Price'" class="space-y-4 pt-1">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Sub Category -->
+        <div>
+          <div class="mb-1 flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sub Category</label>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline focus:outline-none"
+              @click="emit('add-sub-category')"
+            >
+              <FeatherIcon name="plus-circle" :size="12" />
+              <span>Add New</span>
+            </button>
+          </div>
+          <select
+            :value="subCategory"
+            :disabled="disabled"
+            :class="formControlClass"
+            @change="emit('update:subCategory', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">Choose Sub Category</option>
+            <option v-for="sc in subCategories" :key="sc" :value="sc">{{ sc }}</option>
+          </select>
+        </div>
+
         <div>
           <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Druck Price</label>
           <CurrencyInput

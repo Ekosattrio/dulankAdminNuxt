@@ -2,7 +2,7 @@ import type { InvoiceSetting } from '#server/types/invoice-setting'
 
 interface InvoiceSettingsResponse {
   success: boolean
-  data: InvoiceSetting
+  data: { group: string; values: InvoiceSetting }
   message?: string
 }
 
@@ -30,17 +30,17 @@ const defaultInvoiceSetting: InvoiceSetting = {
 }
 
 export function useInvoiceSettings() {
-  const { data, pending, error, refresh } = useApiFetch<InvoiceSettingsResponse>('/api/invoice-settings', {
+  const { data, pending, error, refresh } = useApiFetch<InvoiceSettingsResponse>('/api/v1/admin/settings/invoice', {
     key: 'invoice-settings-data'
   })
 
   const settings = computed<InvoiceSetting>(() => {
-    return data.value?.data ?? defaultInvoiceSetting
+    return data.value?.data?.values ?? defaultInvoiceSetting
   })
 
   const saveSettings = async (payload: InvoiceSetting) => {
-    const res = await apiFetch<InvoiceSettingsResponse>('/api/invoice-settings', {
-      method: 'POST',
+    const res = await apiFetch<InvoiceSettingsResponse>('/api/v1/admin/settings/invoice', {
+      method: 'PUT',
       body: payload
     })
     await refresh()

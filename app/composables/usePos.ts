@@ -9,7 +9,7 @@ import type {
 } from '#server/types/pos'
 
 export function usePos() {
-  const catalog = useApiFetch<{ success: boolean; data: POSProduct[] }>('/api/pos-products', {
+  const catalog = useApiFetch<{ success: boolean; data: POSProduct[] }>('/api/v1/admin/pos/products', {
     key: 'pos-catalog',
   })
   const { products: serverProducts } = useProducts()

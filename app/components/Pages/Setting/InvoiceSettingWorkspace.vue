@@ -93,7 +93,7 @@ const formattedInvoiceNumber = computed(() => {
 </script>
 
 <template>
-  <div class="space-y-6 p-4 md:p-6 min-h-screen bg-gray-50/50 dark:bg-gray-950/40">
+  <div class="space-y-6">
     <!-- Toast Notification -->
     <div
       v-if="toastMessage"

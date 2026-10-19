@@ -60,9 +60,8 @@ const sendTestEmail = () => {
 </script>
 
 <template>
-  <div class="page-wrapper mt-3">
-    <div class="content settings-content">
-      <div class="page-header settings-pg-header">
+  <div class="space-y-6">
+    <div class="page-header settings-pg-header">
         <div class="add-item d-flex">
           <div class="page-title">
             <h4>Settings</h4>
@@ -151,7 +150,7 @@ const sendTestEmail = () => {
       <div v-if="showAwsModal" class="modal fade show d-block" style="background: rgba(0, 0, 0, 0.5)" @click.self="showAwsModal = false">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
           <div class="modal-content">
-            <div class="page-wrapper-new p-0">
+            <div class="p-0">
               <div class="content p-4">
                 <div class="modal-header border-0 custom-modal-header p-0 mb-3">
                   <div class="page-title">
@@ -199,6 +198,5 @@ const sendTestEmail = () => {
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>

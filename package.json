@@ -9,30 +9,7 @@
     "preview": "nuxt preview",
     "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare",
-    "validate:structure": "node scripts/validate-structure.mjs",
-    "test:sales": "node scripts/test-sales-api.mjs",
-    "test:payment": "node scripts/test-payment-api.mjs",
-    "test:payment-browser": "node scripts/test-payment-browser.mjs",
-    "test:sales-adjacent": "node scripts/test-sales-adjacent-api.mjs",
-    "test:sales-adjacent-browser": "node scripts/test-sales-adjacent-browser.mjs",
-    "test:webstore": "node scripts/test-webstore-api.mjs",
-    "test:webstore-browser": "node scripts/test-webstore-browser.mjs",
-    "test:orders": "node scripts/test-orders-api.mjs",
-    "test:orders-browser": "node scripts/test-orders-browser.mjs"
-    ,"test:workflow": "node scripts/test-workflow-api.mjs"
-    ,"test:workflow-browser": "node scripts/test-workflow-browser.mjs"
-    ,"test:dashboard": "node scripts/test-dashboard-api.mjs"
-    ,"test:dashboard-browser": "node scripts/test-dashboard-browser.mjs"
-    ,"test:subscriptions": "node scripts/test-subscriptions-api.mjs"
-    ,"test:subscriptions-browser": "node scripts/test-subscriptions-browser.mjs"
-    ,"test:calculator-dashboard": "node scripts/test-calculator-dashboard-api.mjs"
-    ,"test:calculator-dashboard-browser": "node scripts/test-calculator-dashboard-browser.mjs"
-    ,"test:billing": "node scripts/test-billing-api.mjs"
-    ,"test:billing-browser": "node scripts/test-billing-browser.mjs"
-    ,"test:voucher": "node scripts/test-voucher-api.mjs"
-    ,"test:voucher-browser": "node scripts/test-voucher-browser.mjs"
-    ,"test:cetak-full-color": "node scripts/test-cetak-full-color-api.mjs"
-    ,"test:cetak-full-color-browser": "node scripts/test-cetak-full-color-browser.mjs"
+    "validate:structure": "node scripts/validate-structure.mjs"
   },
   "dependencies": {
     "@pinia/nuxt": "^1.0.2",

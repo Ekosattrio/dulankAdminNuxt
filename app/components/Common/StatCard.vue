@@ -32,7 +32,7 @@ withDefaults(
           trendType === 'up' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400',
         ]"
       >
-        <CommonFeatherIcon :name="trendType === 'up' ? 'trending-up' : 'trending-down'" size="12" />
+        <FeatherIcon :name="trendType === 'up' ? 'trending-up' : 'trending-down'" size="12" />
         {{ trend }}
       </span>
     </div>
@@ -49,7 +49,7 @@ withDefaults(
         'bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400': tone === 'indigo',
       }"
     >
-      <CommonFeatherIcon :name="icon" size="22" />
+      <FeatherIcon :name="icon" size="22" />
     </div>
   </div>
 </template>

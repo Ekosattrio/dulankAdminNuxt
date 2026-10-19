@@ -37,7 +37,7 @@ async function save() {
   busy.value = true
   error.value = ''
   try {
-    await addPayment(props.record.id, { amount: amount.value, method: method.value, notes: notes.value })
+    await addPayment(props.record.saleNo, { amount: amount.value, method: method.value, notes: notes.value })
     emit('saved')
     emit('close')
   } catch (e) {

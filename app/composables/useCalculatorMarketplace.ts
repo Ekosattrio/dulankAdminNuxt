@@ -14,20 +14,20 @@ interface ApiResponse<T> {
 }
 
 export function useCalculatorPartners(kind: CalculatorPartnerKind) {
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<CalculatorPartnerRow[]>>('/api/calculator/partners', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<CalculatorPartnerRow[]>>('/api/v1/admin/calculator/partners', {
     key: `calculator-partners-${kind}`,
     query: { kind },
   })
   const partners = computed(() => data.value?.data ?? [])
 
   async function moderatePartner(id: string, input: CalculatorModerationInput) {
-    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/calculator/partners/${id}/moderate`, { method: 'POST', body: input })
+    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/v1/admin/calculator/partners/${encodeURIComponent(id)}/moderate`, { method: 'POST', body: input })
     await refresh()
     return response
   }
 
   async function deletePartner(id: string) {
-    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/calculator/partners/${id}`, { method: 'DELETE' })
+    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/v1/admin/calculator/partners/${encodeURIComponent(id)}`, { method: 'DELETE' })
     await refresh()
     return response
   }
@@ -36,20 +36,20 @@ export function useCalculatorPartners(kind: CalculatorPartnerKind) {
 }
 
 export function useCalculatorListings(category: CalculatorListingCategory) {
-  const { data, pending, error, refresh } = useApiFetch<ApiResponse<CalculatorListingRow[]>>('/api/calculator/listings', {
+  const { data, pending, error, refresh } = useApiFetch<ApiResponse<CalculatorListingRow[]>>('/api/v1/admin/calculator/listings', {
     key: `calculator-listings-${category}`,
     query: { category },
   })
   const listings = computed(() => data.value?.data ?? [])
 
   async function deleteListing(id: string) {
-    const response = await apiFetch<ApiResponse<CalculatorListingRow>>(`/api/calculator/listings/${id}`, { method: 'DELETE' })
+    const response = await apiFetch<ApiResponse<CalculatorListingRow>>(`/api/v1/admin/calculator/listings/${encodeURIComponent(id)}`, { method: 'DELETE' })
     await refresh()
     return response
   }
 
   async function moderateSource(sourcePartnerId: string, input: CalculatorModerationInput) {
-    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/calculator/partners/${sourcePartnerId}/moderate`, { method: 'POST', body: input })
+    const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/v1/admin/calculator/partners/${encodeURIComponent(sourcePartnerId)}/moderate`, { method: 'POST', body: input })
     await refresh()
     return response
   }

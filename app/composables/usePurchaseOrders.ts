@@ -1,36 +1,70 @@
 import type { PurchaseOrder, PurchaseOrderFormData, PurchaseOrderFilterParams } from '#server/types/purchase-order'
 
-export function usePurchaseOrders(filterParams?: Ref<PurchaseOrderFilterParams> | ComputedRef<PurchaseOrderFilterParams>) {
-  const query = computed(() => {
-    if (!filterParams) return {}
-    return unref(filterParams)
-  })
+interface ResponseData {
+  success: boolean
+  data: PurchaseOrder[]
+  meta?: { page: number; limit: number; total: number }
+  message?: string
+}
 
-  const { data, pending, error, refresh } = useApiFetch<{
-    success: boolean
-    data: PurchaseOrder[]
-    meta: { total: number }
-  }>('/api/purchase-orders', {
-    query,
+interface MutationResponse {
+  success: boolean
+  data?: PurchaseOrder
+  message?: string
+}
+
+const RELIST = '/api/v1/admin/purchase-orders'
+
+/**
+ * Purchase Order — backend Laravel `/api/v1/admin/purchase-orders`.
+ * Route mutasi memakai `{noPo}`; `id` di-resolve dari list.
+ */
+export function usePurchaseOrders(filterParams?: Ref<PurchaseOrderFilterParams> | PurchaseOrderFilterParams) {
+  const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
+
+  const query = computed(() => ({
+    search: params.value.search || undefined,
+    status: params.value.status || undefined,
+    goodsStatus: params.value.goodsStatus || undefined,
+    startDate: params.value.startDate || undefined,
+    endDate: params.value.endDate || undefined,
+    limit: 100
+  }))
+
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>(RELIST, {
     key: 'purchase-orders-list',
-    watch: [query],
+    query
   })
 
-  const purchaseOrders = computed(() => data.value?.data || [])
+  const purchaseOrders = computed<PurchaseOrder[]>(() => data.value?.data ?? [])
 
-  async function savePurchaseOrder(form: PurchaseOrderFormData) {
-    const res = await apiFetch<{ success: boolean; data: PurchaseOrder; message: string }>('/api/purchase-orders', {
-      method: 'POST',
-      body: form
-    })
+  const resolveNo = (idOrNo: string): string => {
+    return purchaseOrders.value.find(order => order.id === idOrNo || order.noPO === idOrNo)?.noPO ?? idOrNo
+  }
+
+  const savePurchaseOrder = async (payload: PurchaseOrderFormData) => {
+    const { id, noPO, created, ...body } = payload
+    void noPO
+    void created
+
+    const res = await apiFetch<MutationResponse>(
+      id ? `${RELIST}/${encodeURIComponent(resolveNo(id))}` : RELIST,
+      {
+        method: id ? 'PUT' : 'POST',
+        body
+      }
+    )
+
     await refresh()
     return res
   }
 
-  async function deletePurchaseOrder(id: string) {
-    const res = await apiFetch<{ success: boolean; message: string }>(`/api/purchase-orders/${id}`, {
-      method: 'DELETE'
-    })
+  const deletePurchaseOrder = async (id: string) => {
+    const res = await apiFetch<{ success: boolean; message?: string }>(
+      `${RELIST}/${encodeURIComponent(resolveNo(id))}`,
+      { method: 'DELETE' }
+    )
+
     await refresh()
     return res
   }

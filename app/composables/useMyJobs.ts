@@ -6,40 +6,38 @@ interface ResponseData {
   message?: string;
 }
 
+/**
+ * Tugas saya (view pegawai) — backend Laravel `/api/v1/admin/my-jobs`.
+ * Halaman bersifat pemantauan; mutasi tugas dilakukan lewat Job Order /
+ * Job Branch di modul workflow.
+ */
 export function useMyJobs(filterParams?: Ref<MyJobFilterParams> | MyJobFilterParams) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {});
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>("/api/my-jobs", {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>("/api/v1/admin/my-jobs", {
     key: "my-jobs-list",
     query: params,
   });
 
   const myJobs = computed<MyJob[]>(() => data.value?.data ?? []);
 
-  const saveMyJob = async (payload: MyJobFormData) => {
-    const res = await apiFetch<{ success: boolean; data: MyJob; message?: string }>("/api/my-jobs", {
-      method: "POST",
-      body: payload,
-    });
-    await refresh();
-    return res;
+  const saveMyJob = async (_payload: MyJobFormData) => {
+    void _payload;
+
+    throw new Error("Tugas dibuat lewat job order; halaman ini hanya pemantauan.");
   };
 
-  const deleteMyJob = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/my-jobs/${id}`, {
-      method: "DELETE",
-    });
-    await refresh();
-    return res;
+  const deleteMyJob = async (_id: string) => {
+    void _id;
+
+    throw new Error("Tugas tidak dihapus dari halaman ini; kelola lewat Job Order.");
   };
 
-  const updateJobStatus = async (id: string, payload: MyJobStatusUpdatePayload) => {
-    const res = await apiFetch<{ success: boolean; data: MyJob; message?: string }>(`/api/my-jobs/${id}`, {
-      method: "PUT",
-      body: payload,
-    });
-    await refresh();
-    return res;
+  const updateJobStatus = async (_id: string, _payload: MyJobStatusUpdatePayload) => {
+    void _id;
+    void _payload;
+
+    throw new Error("Status tugas diubah lewat Job Branch/Progress, bukan di halaman ini.");
   };
 
   return {

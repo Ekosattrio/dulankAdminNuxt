@@ -7,7 +7,7 @@ interface TicketResponse {
 }
 
 export function useSupportTicketDetail(id: Ref<string>) {
-  const endpoint = `/api/webstore/support-tickets/${encodeURIComponent(id.value)}`
+  const endpoint = `/api/v1/admin/webstore/support-tickets/${encodeURIComponent(id.value)}`
   const { data, pending, error, refresh } = useApiFetch<TicketResponse>(endpoint, {
     key: `support-ticket-detail-${id.value}`,
   })
@@ -21,7 +21,7 @@ export function useSupportTicketDetail(id: Ref<string>) {
     message.value = ''
     mutationError.value = ''
     try {
-      const response = await apiFetch<TicketResponse>(`/api/webstore/support-tickets/${encodeURIComponent(id.value)}`, {
+      const response = await apiFetch<TicketResponse>(`/api/v1/admin/webstore/support-tickets/${encodeURIComponent(id.value)}`, {
         method: 'PUT',
         body: payload,
       })

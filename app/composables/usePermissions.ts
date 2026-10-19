@@ -5,52 +5,102 @@ export interface PermissionMenuGroupItem {
   pages: string[]
 }
 
+interface PermissionRow {
+  id: string
+  name: string
+}
+
+interface RoleRow {
+  id: string
+  name: string
+  permissions: string[]
+}
+
+interface RolesResponse {
+  success: boolean
+  data: RoleRow[]
+}
+
+interface PermissionsResponse {
+  success: boolean
+  data: PermissionRow[]
+}
+
+const groupedPermissions = (names: string[]): PermissionMenuGroupItem[] => {
+  const map = new Map<string, string[]>()
+
+  for (const name of names) {
+    const group = name.includes('.') ? (name.split('.')[0] ?? 'umum') : 'umum'
+    const pages = map.get(group) ?? []
+    pages.push(name)
+    map.set(group, pages)
+  }
+
+  return [...map.entries()].map(([group, pages]) => ({ group, pages }))
+}
+
+const derivedAction = (allowed: boolean): PermissionAction => ({
+  create: allowed,
+  edit: allowed,
+  delete: allowed,
+  view: allowed,
+  allowAll: allowed,
+})
+
+/**
+ * Matrix permission — backend Laravel `/api/v1/admin/roles` (permission datar
+ * per role). Kolom tambah/ubah/hapus/lihat dicerminkan dari kepemilikan
+ * permission (mengikuti struktur datar backend).
+ */
 export function usePermissions() {
-  const { data, pending, error, refresh } = useApiFetch<{
-    success: boolean
-    data: {
-      groups: { group: string; pages: string[] }[]
-      modules?: string[]
-      roles: string[]
-      matrix: Record<string, Record<string, PermissionAction>>
-    }
-  }>('/api/permissions', {
-    key: 'system-permissions-matrix',
+  const rolesRequest = useApiFetch<RolesResponse>('/api/v1/admin/roles', {
+    key: 'system-roles-matrix',
   })
+  const permissionsRequest = useApiFetch<PermissionsResponse>('/api/v1/admin/permissions', {
+    key: 'system-permissions-list',
+  })
+
+  const pending = computed(() => rolesRequest.pending.value || permissionsRequest.pending.value)
+  const error = computed(() => rolesRequest.error.value || permissionsRequest.error.value)
+
+  const groups = computed<PermissionMenuGroupItem[]>(() =>
+    groupedPermissions(permissionsRequest.data.value?.data?.map(permission => permission.name) ?? []),
+  )
+
+  const modules = computed<string[]>(() => groups.value.flatMap(group => group.pages))
+
+  const roles = computed<string[]>(() =>
+    (rolesRequest.data.value?.data ?? []).filter(role => role.name !== 'super-admin').map(role => role.name ?? ''),
+  )
 
   const matrix = ref<Record<string, Record<string, PermissionAction>>>({})
 
-  watchEffect(() => {
-    if (data.value?.data?.matrix) {
-      matrix.value = JSON.parse(JSON.stringify(data.value.data.matrix))
+  const refreshMatrix = () => {
+    matrix.value = {}
+    const permissions = new Set(permissionsRequest.data.value?.data?.map(item => item.name) ?? [])
+
+    for (const role of rolesRequest.data.value?.data ?? []) {
+      const has = new Set(role.permissions ?? [])
+      for (const page of permissions) {
+        const allowed = has.has(page)
+        matrix.value[page] = matrix.value[page] ?? {}
+        matrix.value[page][role.name] = derivedAction(allowed)
+      }
     }
-  })
+  }
 
-  const groups = computed<{ group: string; pages: string[] }[]>(() => {
-    return data.value?.data?.groups || []
-  })
-
-  const modules = computed<string[]>(() => {
-    if (data.value?.data?.modules && data.value.data.modules.length > 0) {
-      return data.value.data.modules
-    }
-    return groups.value.flatMap((g) => g.pages)
-  })
-
-  const roles = computed<string[]>(() => data.value?.data?.roles || [])
+  watch(
+    () => [rolesRequest.data.value, permissionsRequest.data.value],
+    () => refreshMatrix(),
+    { immediate: true },
+  )
 
   const ensurePermissionItem = (page: string, role: string): PermissionAction => {
     if (!matrix.value[page]) {
       matrix.value[page] = {}
     }
     if (!matrix.value[page][role]) {
-      matrix.value[page][role] = {
-        create: false,
-        edit: false,
-        delete: false,
-        view: false,
-        allowAll: false,
-      }
+      matrix.value[page][role] = derivedAction(false)
     }
     return matrix.value[page][role]
   }
@@ -68,7 +118,7 @@ export function usePermissions() {
     page: string,
     role: string,
     field: 'create' | 'edit' | 'delete' | 'view',
-    value: boolean
+    value: boolean,
   ) => {
     const item = ensurePermissionItem(page, role)
     item[field] = value
@@ -83,18 +133,36 @@ export function usePermissions() {
 
   const isGroupAllAllowed = (groupPages: string[], role: string): boolean => {
     if (!groupPages.length) return false
-    return groupPages.every((p) => {
-      const item = matrix.value[p]?.[role]
+    return groupPages.every((page) => {
+      const item = matrix.value[page]?.[role]
       return !!(item?.allowAll || (item?.create && item?.edit && item?.delete && item?.view))
     })
   }
 
   const savePermissions = async (matrixPayload: Record<string, Record<string, PermissionAction>>) => {
-    await apiFetch('/api/permissions', {
-      method: 'POST',
-      body: { matrix: matrixPayload },
-    })
-    await refresh()
+    const roleRows = rolesRequest.data.value?.data ?? []
+
+    for (const roleRow of roleRows) {
+      if (roleRow.name === 'super-admin') continue
+
+      const allowedPages = Object.entries(matrixPayload)
+        .filter(([, actions]) => (actions[roleRow.name]?.allowAll ?? false))
+        .map(([page]) => page)
+
+      if (!roleRow.permissions || allowedPages.sort().join('|') !== [...(roleRow.permissions ?? [])].sort().join('|')) {
+        await apiFetch(`/api/v1/admin/roles/${encodeURIComponent(roleRow.id)}`, {
+          method: 'PUT',
+          body: { name: roleRow.name, permissions: allowedPages },
+        })
+      }
+    }
+
+    await Promise.all([rolesRequest.refresh(), permissionsRequest.refresh()])
+  }
+
+  const refresh = async () => {
+    await Promise.all([rolesRequest.refresh(), permissionsRequest.refresh()])
+    refreshMatrix()
   }
 
   return {

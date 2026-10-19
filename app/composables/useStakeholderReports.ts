@@ -4,6 +4,17 @@ import type {
   CustomerReportItem,
   CustomerDueReportItem,
 } from '~~/server/types/reports-stakeholders'
+
+import {
+  mapSupplierReport,
+  mapSupplierDueReport,
+  mapCustomerReport,
+  mapCustomerDueReport,
+  type SuppliersApiPayload,
+  type SupplierDuesApiPayload,
+  type CustomersApiPayload,
+  type CustomerDuesApiPayload,
+} from '~/utils/reportMappers'
 import { isDateInRange, type DateRangeValue } from '~/composables/useDateRange'
 
 export interface StakeholderApiResponse<T> {
@@ -18,11 +29,11 @@ export function useSupplierReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SupplierReportItem[]>>('/api/reports/suppliers', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SuppliersApiPayload>>('/api/v1/admin/reports/suppliers', {
     key: 'reports-suppliers-list',
   })
 
-  const rawItems = computed<SupplierReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<SupplierReportItem[]>(() => mapSupplierReport(data.value?.data))
 
   const items = computed<SupplierReportItem[]>(() => {
     let list = rawItems.value
@@ -75,11 +86,11 @@ export function useSupplierDueReport() {
   const category = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SupplierDueReportItem[]>>('/api/reports/supplier-dues', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<SupplierDuesApiPayload>>('/api/v1/admin/reports/supplier-dues', {
     key: 'reports-supplier-dues-list',
   })
 
-  const rawItems = computed<SupplierDueReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<SupplierDueReportItem[]>(() => mapSupplierDueReport(data.value?.data))
 
   const items = computed<SupplierDueReportItem[]>(() => {
     let list = rawItems.value
@@ -138,11 +149,11 @@ export function useCustomerReport() {
   const paymentMethod = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomerReportItem[]>>('/api/reports/customers', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomersApiPayload>>('/api/v1/admin/reports/customers', {
     key: 'reports-customers-list',
   })
 
-  const rawItems = computed<CustomerReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<CustomerReportItem[]>(() => mapCustomerReport(data.value?.data))
 
   const items = computed<CustomerReportItem[]>(() => {
     let list = rawItems.value
@@ -194,11 +205,11 @@ export function useCustomerDueReport() {
   const paymentMethod = ref('')
   const dateRange = ref<DateRangeValue | null>(null)
 
-  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomerDueReportItem[]>>('/api/reports/customer-dues', {
+  const { data, pending, error, refresh } = useApiFetch<StakeholderApiResponse<CustomerDuesApiPayload>>('/api/v1/admin/reports/customer-dues', {
     key: 'reports-customer-dues-list',
   })
 
-  const rawItems = computed<CustomerDueReportItem[]>(() => data.value?.data ?? [])
+  const rawItems = computed<CustomerDueReportItem[]>(() => mapCustomerDueReport(data.value?.data))
 
   const items = computed<CustomerDueReportItem[]>(() => {
     let list = rawItems.value

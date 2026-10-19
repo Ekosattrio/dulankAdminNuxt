@@ -16,13 +16,19 @@ interface ResponseData {
 export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> | SupportTicketFilterQuery) {
   const params = isRef(filterParams) ? filterParams : ref(filterParams || {})
 
-  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/webstore/support-tickets', {
+  const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/webstore/support-tickets', {
     key: 'webstore-support-tickets-list',
     query: params
   })
 
   const tickets = computed<SupportTicket[]>(() => data.value?.data ?? [])
-  const stats = computed<SupportTicketStats>(() => data.value?.stats ?? {
+
+  const { data: statsData, refresh: refreshStats } = useApiFetch<{ success: boolean; data: SupportTicketStats }>(
+    '/api/v1/admin/webstore/support-tickets/stats',
+    { key: 'webstore-support-tickets-stats' },
+  )
+
+  const stats = computed<SupportTicketStats>(() => statsData.value?.data ?? {
     totalTickets: 0,
     totalPendingTickets: 0,
     totalClosedTickets: 0,
@@ -30,7 +36,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   })
 
   const createTicket = async (payload: SupportTicketCommand) => {
-    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>('/api/webstore/support-tickets', {
+    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>('/api/v1/admin/webstore/support-tickets', {
       method: 'POST',
       body: payload
     })
@@ -39,7 +45,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   }
 
   const updateTicket = async (id: string, payload: SupportTicketUpdateCommand) => {
-    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>(`/api/webstore/support-tickets/${id}`, {
+    const res = await apiFetch<{ success: boolean; data: SupportTicket; message?: string }>(`/api/v1/admin/webstore/support-tickets/${encodeURIComponent(id)}`, {
       method: 'PUT',
       body: payload
     })
@@ -48,7 +54,7 @@ export function useSupportTickets(filterParams?: Ref<SupportTicketFilterQuery> |
   }
 
   const deleteTicket = async (id: string) => {
-    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/webstore/support-tickets/${id}`, {
+    const res = await apiFetch<{ success: boolean; message?: string }>(`/api/v1/admin/webstore/support-tickets/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     })
     await refresh()
