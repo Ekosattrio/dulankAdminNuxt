@@ -161,6 +161,8 @@ const menuGroups: MenuGroup[] = [
           { title: "Calender", to: "/calender" },
         ],
       },
+      { title: "Category", icon: "codepen", to: "/category" },
+      { title: "Sub Category", icon: "speaker", to: "/sub-category" },
       { title: "Single Product", icon: "box", to: "/product-list" },
       {
         title: "Product List",
@@ -188,8 +190,6 @@ const menuGroups: MenuGroup[] = [
   {
     header: "INVENTORY",
     items: [
-      { title: "Category", icon: "codepen", to: "/category" },
-      { title: "Sub Category", icon: "speaker", to: "/sub-category" },
       { title: "Unit", icon: "git-commit", to: "/unit" },
       { title: "Variant", icon: "layers", to: "/variant" },
       {

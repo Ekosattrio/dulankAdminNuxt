@@ -4,6 +4,34 @@ tags: [changelog]
 updated: 2026-10-17
 ---
 
+## 2026-10-19
+
+### Perbaikan Error 500 SSR pada Dashboard Admin (`AdminDashboardWelcome.vue` & `AdminDashboardInsights.vue`) serta Full Null-Safety Guarding
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Mengatasi crash 500 SSR `Cannot read properties of undefined (reading 'productName')` dan `Cannot read properties of undefined (reading 'categories')` pada halaman Dashboard Admin (`/`) saat backend API Laravel (`/api/v1/admin/dashboard/admin`) mengembalikan data parsial, kosong, atau `null` pada beberapa field:
+  1. **`AdminDashboardInsights.vue`:** Memperbaiki crash `reading 'categories'` dengan membungkus props ke dalam `withDefaults`, mengamankan `categoryTotals?.categories ?? 0`, `categoryTotals?.products ?? 0`, fallback array aman pada loop `customers`, `categories`, dan `orderStatistics?.values`.
+  2. **`AdminDashboardWelcome.vue`:** Memperbarui prop `notice` menjadi opsional/nullable (`{ productName: string; threshold: number; link?: string } | null`), menambahkan default props yang aman, serta memperketat syarat render banner warning menjadi `v-if="visible && notice?.productName"`.
+  3. **Penguatan Defensif Seluruh Sub-Komponen Dashboard:**
+     - `AdminDashboardOverview.vue`: Menggunakan `withDefaults`, optional chaining & fallback nol pada `overview?.[card.key]`, `overview?.firstTime`, dan `overview?.returning`.
+     - `AdminDashboardSalesChart.vue`: Menggunakan `withDefaults`, mengamankan perhitungan `max` dan array series agar tidak crash saat series kosong.
+     - `AdminDashboardSalesStatics.vue`: Menggunakan `withDefaults`, memberikan fallback tahun berjalan dan array points aman pada perhitungan bar chart.
+     - `AdminDashboardProductPanels.vue`: Menggunakan `withDefaults`, fallback array aman pada `topSelling`, `lowStock`, dan `recentSales`, serta fallback numerik pada harga/jumlah.
+     - `AdminDashboardTransactions.vue`: Menggunakan `withDefaults`, fallback array aman pada perulangan groups dan rows transaksi.
+     - `AdminDashboardMetrics.vue`: Menggunakan `withDefaults`, fallback array aman pada metrik primer/sekunder dan fallback tone warna.
+  4. **`server/types/admin-dashboard.ts`:** Menyelaraskan seluruh field `AdminDashboardSnapshot` agar opsional/nullable selaras dengan respons API nyata.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); `@vue/compiler-sfc` parse audit PASS (0 errors); `nuxt typecheck` PASS (0 errors).
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
+### Relokasi Menu Category dan Sub Category ke PRODUCTS & SERVICES
+
+- **Date:** 2026-10-19
+- **Actor:** Antigravity
+- **Scope:** Memindahkan menu navigasi `Category` (`/category`) dan `Sub Category` (`/sub-category`) dari grup menu `INVENTORY` ke dalam grup menu `PRODUCTS & SERVICES` pada `app/components/Layout/AppSidebar.vue` sesuai instruksi pengguna.
+- **Validation run:** `node scripts/validate-structure.mjs` PASS (1.220 original files terverifikasi, 0 failure); SFC parse & compile audit PASS (0 errors); `npm run typecheck` dipantau.
+- **Git status:** Branch `Rama`; commit status `NOT COMMITTED`; push status `NOT PUSHED`. Tidak ada Git mutating command yang dijalankan.
+
 ## 2026-10-17
 
 ### Pembersihan File Duplikat, Arsip HTML Mentah, dan Technical Debt Komponen
