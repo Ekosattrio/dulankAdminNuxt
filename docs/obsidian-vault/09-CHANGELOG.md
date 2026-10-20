@@ -1129,3 +1129,27 @@ updated: 2026-10-20
 
 - `app/components/Layout/AppHeader.vue` (dan `app/components/App/Layout/Header.vue`): dummy **Store** (Grocery Alpha/Apex/Bevy) → daftar toko `useStores` (pilih disimpan); **Language** (English statis) → bahasa aktif `useLanguages` (flag+name, pilih disimpan); **Notifikasi** ("2 New" + 2 item fiktif) → real dari `useDashboard.pendingPayments` + tiket open `useSupportTickets` (badge + daftar + state kosong); user identity & logout sudah real sebelumnya.
 - Validasi: typecheck 0; SSR 200 — nama user "Dulank Administrator", toko "Kacetak Cabang Bandung", bahasa "Bahasa Indonesia" tampil; dummy lama hilang.
+
+
+## Fondasi data Laravel ? 20 Oktober 2026
+
+- Scope: tahap 1 audit database aktif + backup yang diuji restore; tahap 2 kontrak data + kompatibilitas klasifikasi produk; seeder master contoh. Tidak menyelesaikan seluruh transaksi/BRVS aplikasi.
+- Backend: `dulank:audit-data`, `config/data_contracts.php`, PRD bagian 14, migration nullable `product_type`, enum `ProductType`, helper `ProductPricingContract`, validasi kode produk dan kategori/subkategori. Master ID dan nomor dokumen tetap dibedakan; respons API existing dipertahankan dengan tambahan productType.
+- Frontend: product editor mengirim productType dan priceType terpisah, tidak memulai dengan stok/harga/varian warna contoh, subkategori sesuai induk; Variable Product/Large Format memfilter jenis yang benar. Normalisasi status bahasa mengatasi error typecheck existing di useLanguages.
+- Seeder: `DemoMasterDataSeeder` terpisah dari DatabaseSeeder; hanya local/testing; transaction, provenance source=demo, tidak menimpa record existing/hasil edit, menolak benturan kode demo tanpa provenance. Dataset menambah 175 record master terkait, termasuk 2 cabang, 8 pelanggan, 4 supplier, 6 karyawan, 8 produk; tanpa transaksi, saldo atau stok awal. Promo dan akun contoh nonaktif.
+- Audit MySQL: 133 tabel, backup berhasil dipulihkan dan jumlah seluruh tabel cocok. Hash record awal diverifikasi pada 127 tabel bisnis tanpa perubahan; pengulangan seed tidak mengubah jumlah record. Audit akhir 0 error dan 14 kategori warning (relasi data lama, user_admins kosong, FK barang pembelian/varian belum tersedia).
+- Architecture evidence: route/komponen katalog existing -> useProductEditor/useProducts -> Laravel ProductController -> validasi/enum/helper -> products/relasi. Nuxt proxy dipakai, bukan Nitro JSON lama. Kontrak domain lain ditetapkan dalam PRD; migrasi seluruh flow belum dilakukan.
+- UI responsibility evidence: tidak mengubah markup/layout atau memindahkan tanggung jawab ke page/Workspace; perubahan di composable dan tipe API. Belum ada verifikasi browser desktop/mobile.
+- Check 1: uji FK induk, tipe harga/jenis produk, kode duplikat, API master terisi. Check 2: seed ulang, preserve edit pengguna, rollback provenance rusak/benturan kode, production guard, audit read-only dan tanpa PII.
+- Validation: suite Pest backend penuh, Pint, Nuxt build, typecheck, structure validator dan diff check; rincian akhir pada changelog. `test:sales` tidak tersedia dalam package.json. Status fondasi implemented/API-tested; browser verification pending, bukan approved baseline.
+- Git: branch Rama; NOT COMMITTED; NOT PUSHED; remote verification tidak dijalankan.
+
+
+### Validasi akhir fondasi 20 Oktober 2026
+
+Pest backend penuh PASS: 189 tes / 2.014 assertion. Pint PASS, Nuxt production build PASS, typecheck PASS, structure validator PASS (1.220 file / 0 failure), diff check kedua repo PASS. Audit database lokal setelah seed ulang: 133 tabel / 36 migration, 0 error / 14 kategori warning; jumlah record tetap. Browser belum diuji karena inventory apps/browsers kosong. Tidak ada klaim seluruh flow siap produksi. `test:sales` tidak tersedia. Tahap 1 audit/cadangan selesai; tahap 2 aturan kontrak dan fondasi katalog selesai pada cakupan tercatat, penerapan seluruh domain masih bertahap. Branch Rama; NOT COMMITTED / NOT PUSHED.
+
+
+### Penghapusan data contoh atas permintaan pengguna ? 20 Oktober 2026
+
+175 record yang dibuat DemoMasterDataSeeder dan 175 pemetaan source=demo telah dihapus dari database lokal dalam satu transaksi. Snapshot sebelum penghapusan disimpan di storage/app/private/backups/before-remove-demo-20261020-203138.snapshot. Perbandingan hash seluruh 133 tabel membuktikan record selain target demo tidak berubah; sisa pemetaan demo nol. Master yang sudah ada sebelum seeder tetap dipertahankan. File seeder, migration product_type, dan implementasi kontrak tetap tersedia. Catatan seed sebelumnya adalah riwayat, bukan keadaan database saat ini. Tidak menjalankan ulang seeder. Branch Rama; NOT COMMITTED / NOT PUSHED. Validasi: integritas row sebelum/sesudah penghapusan, bukan perubahan kode; build/tes tidak diulang.

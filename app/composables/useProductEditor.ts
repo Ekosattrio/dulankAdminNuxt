@@ -75,8 +75,8 @@ export function useProductEditor() {
     priceType: (typeof route.query.type === 'string' && ['Single Product', 'Variable Product', 'Size Calculation', 'Minimum Qty or Price', 'Large Format', 'Offset Service Price'].includes(route.query.type))
       ? (route.query.type as PriceTypeTab)
       : 'Single Product',
-    quantity: 100,
-    price: 15000,
+    quantity: 0,
+    price: 0,
     minOrderQty: 1,
     discountType: 'Percentage',
     discountValue: 0,
@@ -87,12 +87,9 @@ export function useProductEditor() {
     minLength: 0,
     minWidth: 0,
     images: [],
-    variants: [
-      { id: '1', variation: 'Color', value: 'red', quantity: 2, price: 50000, checked: true },
-      { id: '2', variation: 'Color', value: 'black', quantity: 3, price: 50000, checked: true },
-    ],
-    selectedAttribute: 'Color',
-    attributeTags: ['red', 'black'],
+    variants: [],
+    selectedAttribute: '',
+    attributeTags: [],
   })
 
   const categoryNames = computed(() => {
@@ -100,7 +97,7 @@ export function useProductEditor() {
   })
 
   const subCategoryNames = computed(() => {
-    return subCategories.value.map(item => item.name)
+    return subCategories.value.filter(item => item.category === form.category).map(item => item.name)
   })
 
   const unitNames = computed(() => {
@@ -117,7 +114,7 @@ export function useProductEditor() {
       unit: product.unit,
       sellingType: product.sellingType || product.priceType,
       description: product.description || '',
-      priceType: product.priceType as PriceTypeTab,
+      priceType: (product.productType || (product.variants?.length ? 'Variable Product' : product.priceType === 'Calculator' ? 'Size Calculation' : 'Single Product')) as PriceTypeTab,
       quantity: product.quantity || 0,
       price: product.price || 0,
       minOrderQty: product.minOrderQty || 1,
@@ -148,6 +145,10 @@ export function useProductEditor() {
       form.priceType = route.query.type as PriceTypeTab
     }
   }, { immediate: true })
+
+  watch(() => form.category, () => {
+    if (!subCategoryNames.value.includes(form.subCategory)) form.subCategory = ''
+  })
 
   function generateCode() {
     const nextCode = products.value.reduce((max, product) => Math.max(max, Number(product.code) || 0), 1000) + 1
@@ -259,13 +260,14 @@ export function useProductEditor() {
         name: form.name.trim(),
         categoryId: categories.value.find(item => item.name === form.category)?.id,
         category: form.category,
-        subCategoryId: subCategories.value.find(item => item.name === form.subCategory)?.id,
+        subCategoryId: subCategories.value.find(item => item.name === form.subCategory && item.category === form.category)?.id,
         subCategory: form.subCategory,
         unitId: units.value.find(item => item.name === form.unit)?.id,
         unit: form.unit,
         storeId: storeRecords.value.find(item => item.storeName === form.store)?.id,
         price: Number(form.price) || 0,
-        priceType: form.priceType,
+        productType: form.priceType,
+        priceType: form.priceType === 'Single Product' ? 'Fixed' : form.priceType === 'Variable Product' ? 'Range' : 'Calculator',
         status: 'Active',
         store: form.store,
         sellingType: form.sellingType,

@@ -25,7 +25,7 @@ const normalizeStatus = (status?: string): string | undefined => {
 }
 
 /**
- * Bahasa & terjemahan — backend Laravel `/api/v1/admin/languages`
+ * Bahasa & terjemahan â€” backend Laravel `/api/v1/admin/languages`
  * (+ `translations` GET/PUT).
  */
 export function useLanguages(filterQuery?: Ref<{ search?: string; status?: string } | undefined>) {
@@ -47,7 +47,7 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     totalKeys: item.totalKeys ?? 0,
     doneKeys: item.doneKeys ?? 0,
     progress: item.progress ?? 0,
-    status: item.status?.toLowerCase() ?? 'active',
+    status: item.status?.toLowerCase() === 'inactive' ? 'inactive' as const : 'active' as const,
   })))
 
   const saveLanguage = async (payload: LanguageFormData) => {
