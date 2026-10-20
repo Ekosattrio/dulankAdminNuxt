@@ -56,61 +56,64 @@ const columns = [
 
 <template>
   <SalesDataTable
-    :data="filteredFields"
+    :items="filteredFields"
     :columns="columns"
     search-placeholder="Cari label field atau modul..."
-    v-model:search="searchQuery"
+    :search="searchQuery"
+    @update:search="searchQuery = $event"
   >
     <template #filters>
       <TableFilterSelect
-        v-model="filterModule"
+        :model-value="filterModule"
         :options="moduleOptions"
         aria-label="Filter modul"
+        @update:model-value="filterModule = $event"
       />
       <TableFilterSelect
-        v-model="filterStatus"
+        :model-value="filterStatus"
         :options="statusOptions"
         aria-label="Filter status"
+        @update:model-value="filterStatus = $event"
       />
     </template>
 
-    <template #cell-module="{ row }">
+    <template #cell(module)="{ item }">
       <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
-        {{ row.module }}
+        {{ item.module }}
       </span>
     </template>
 
-    <template #cell-label="{ row }">
-      <span class="font-medium text-gray-900 dark:text-white">{{ row.label }}</span>
+    <template #cell(label)="{ item }">
+      <span class="font-medium text-gray-900 dark:text-white">{{ item.label }}</span>
     </template>
 
-    <template #cell-type="{ row }">
+    <template #cell(type)="{ item }">
       <span class="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-        {{ row.type }}
+        {{ item.type }}
       </span>
     </template>
 
-    <template #cell-defaultValue="{ row }">
-      <span class="text-xs text-gray-500 dark:text-gray-400">{{ row.defaultValue || '-' }}</span>
+    <template #cell(defaultValue)="{ item }">
+      <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.defaultValue || '-' }}</span>
     </template>
 
-    <template #cell-required="{ row }">
+    <template #cell(required)="{ item }">
       <span
         class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold"
-        :class="row.required ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'"
+        :class="item.required ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'"
       >
-        {{ row.required ? 'Required' : 'Optional' }}
+        {{ item.required ? 'Required' : 'Optional' }}
       </span>
     </template>
 
-    <template #cell-status="{ row }">
-      <SalesStatusBadge :status="row.status" />
+    <template #cell(status)="{ item }">
+      <SalesStatusBadge :status="item.status" />
     </template>
 
-    <template #cell-actions="{ row }">
-      <div class="flex items-center justify-center gap-1">
-        <SalesActionButton action="edit" label="Edit Field" @click="emit('edit', row)" />
-        <SalesActionButton action="delete" label="Hapus Field" @click="emit('delete', row)" />
+    <template #cell(actions)="{ item }">
+      <div class="flex items-center justify-center gap-1.5">
+        <SalesActionButton action="edit" label="Edit Field" @click="emit('edit', item)" />
+        <SalesActionButton action="delete" danger label="Hapus Field" @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>

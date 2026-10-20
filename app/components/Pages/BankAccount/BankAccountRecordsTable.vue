@@ -51,15 +51,15 @@ const columns = [
         @update:model-value="emit('update:status', $event)"
       />
     </template>
-    <template #cell-accountName="{ item }"><span class="font-semibold text-gray-900 dark:text-white">{{ item.accountName }}</span></template>
-    <template #cell-accountNo="{ item }"><span class="font-mono tabular-nums">{{ item.accountNo }}</span></template>
-    <template #cell-openingBalance="{ item }"><CurrencyDisplay :value="item.openingBalance" /></template>
-    <template #cell-currentBalance="{ item }"><CurrencyDisplay :value="item.currentBalance" bold /></template>
-    <template #cell-status="{ item }"><SalesStatusBadge :status="item.status" /></template>
-    <template #cell-actions="{ item }">
+    <template #cell(accountName)="{ item }"><span class="font-semibold text-gray-900 dark:text-white">{{ item.accountName }}</span></template>
+    <template #cell(accountNo)="{ item }"><span class="font-mono tabular-nums">{{ item.accountNo }}</span></template>
+    <template #cell(openingBalance)="{ item }"><CurrencyDisplay :value="item.openingBalance" /></template>
+    <template #cell(currentBalance)="{ item }"><CurrencyDisplay :value="item.currentBalance" bold /></template>
+    <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
+    <template #cell(actions)="{ item }">
       <div class="inline-flex items-center justify-center gap-1.5">
         <SalesActionButton action="edit" label="Edit Bank Account" @click="emit('edit', item)" />
-        <SalesActionButton action="delete" label="Delete Bank Account" @click="emit('delete', item)" />
+        <SalesActionButton action="delete" danger label="Delete Bank Account" @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>

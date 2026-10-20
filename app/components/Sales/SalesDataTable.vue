@@ -261,8 +261,10 @@ watch(totalPages, (value) => {
               ]"
             >
               <slot :name="`cell(${col.key})`" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
-                <slot :name="col.key" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
-                  {{ item[col.key] }}
+                <slot :name="`cell-${col.key}`" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
+                  <slot :name="col.key" :item="item" :row="item" :index="(currentPage - 1) * pageSize + idx">
+                    {{ item[col.key] }}
+                  </slot>
                 </slot>
               </slot>
             </td>

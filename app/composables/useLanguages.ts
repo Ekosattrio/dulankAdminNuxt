@@ -42,7 +42,13 @@ export function useLanguages(filterQuery?: Ref<{ search?: string; status?: strin
     query: queryParams,
   })
 
-  const languages = computed<LanguageItem[]>(() => data.value?.data ?? [])
+  const languages = computed<LanguageItem[]>(() => (data.value?.data ?? []).map((item) => ({
+    ...item,
+    totalKeys: item.totalKeys ?? 0,
+    doneKeys: item.doneKeys ?? 0,
+    progress: item.progress ?? 0,
+    status: item.status?.toLowerCase() ?? 'active',
+  })))
 
   const saveLanguage = async (payload: LanguageFormData) => {
     const { id, ...body } = payload

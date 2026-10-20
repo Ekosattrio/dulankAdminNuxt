@@ -1,9 +1,17 @@
 <script setup lang="ts">
-import type { Designation, DesignationFormData } from '~/types/designation'
+import type { Designation, DesignationFormData } from '#server/types/designation'
+import SalesDialog from '~/components/Sales/SalesDialog.vue'
+import {
+  formControlClass,
+  modalFormInputColClass,
+  modalFormLabelClass,
+  modalFormRowClass,
+} from '~/utils/salesUi'
 
 const props = defineProps<{
   isOpen: boolean
   editData: Designation | null
+  busy?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -35,13 +43,14 @@ watch(
         status: 'Active'
       }
     }
+    validationError.value = ''
   },
   { immediate: true }
 )
 
 const handleSubmit = () => {
   validationError.value = ''
-  if (!form.value.name) {
+  if (!form.value.name?.trim()) {
     validationError.value = 'Nama jabatan / designation tidak boleh kosong.'
     return
   }
@@ -50,70 +59,63 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop-custom" @click.self="emit('close')">
-    <div class="modal-dialog-custom modal-md">
-      <div class="modal-content border-0 shadow-lg rounded-3">
-        <div class="modal-header border-bottom px-4 py-3 bg-light">
-          <h5 class="modal-title fs-5 fw-bold text-dark">
-            {{ editData ? 'Edit Designation' : 'Add Designation' }}
-          </h5>
-          <button type="button" class="btn-close" @click="emit('close')"></button>
+  <SalesDialog
+    :open="isOpen"
+    :title="editData ? 'Edit Designation' : 'Add New Designation'"
+    max-width="md"
+    :busy="busy"
+    @close="emit('close')"
+  >
+    <form class="space-y-4 py-2" @submit.prevent="handleSubmit">
+      <p v-if="validationError" role="alert" class="rounded-md bg-red-50 p-2.5 text-xs text-red-600 dark:bg-red-950/40 dark:text-red-300">
+        {{ validationError }}
+      </p>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">
+          Nama Posisi / Jabatan <span class="text-red-500">*</span>
+        </label>
+        <div :class="modalFormInputColClass">
+          <input
+            v-model="form.name"
+            type="text"
+            :class="formControlClass"
+            placeholder="e.g. Graphic Designer, Lead Press Operator"
+            required
+          />
         </div>
-
-        <form @submit.prevent="handleSubmit">
-          <div class="modal-body p-4">
-            <p v-if="validationError" role="alert" class="mb-3 text-sm text-danger">{{ validationError }}</p>
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Designation / Nama Posisi <span class="text-danger">*</span></label>
-              <input
-                v-model="form.name"
-                type="text"
-                class="form-control"
-                placeholder="e.g. Graphic Designer, Lead Press Operator"
-                required
-              />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Status</label>
-              <select v-model="form.status" class="form-select">
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="modal-footer border-top px-4 py-3 bg-light">
-            <button type="button" class="btn btn-secondary px-4" @click="emit('close')">
-              Cancel
-            </button>
-            <button type="submit" class="btn btn-primary px-4">
-              {{ editData ? 'Update Designation' : 'Save Designation' }}
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
-  </div>
+
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Status</label>
+        <div :class="modalFormInputColClass">
+          <select v-model="form.status" :class="formControlClass">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+        <button
+          type="button"
+          class="inline-flex h-9 items-center justify-center rounded-md border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+          @click="emit('close')"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none disabled:opacity-50"
+          :disabled="busy"
+        >
+          {{ editData ? 'Update Designation' : 'Save Designation' }}
+        </button>
+      </div>
+    </form>
+  </SalesDialog>
 </template>
 
 <style scoped>
-.modal-backdrop-custom {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
-}
-.modal-dialog-custom {
-  width: 100%;
-  max-width: 500px;
-  margin: 1rem;
-}
+/* Scoped styles for DesignationModal */
 </style>
-

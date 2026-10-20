@@ -68,6 +68,7 @@ async function confirmDelete() {
     <SalesListHeader
       title="Custom Fields"
       subtitle="Kelola bidang data kustom tambahan untuk modul sistem"
+      add-label="Add Custom Field"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"

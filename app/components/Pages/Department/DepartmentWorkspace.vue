@@ -30,6 +30,12 @@ const filteredDepartments = computed(() => {
     if (filterStatus.value && d.status.toLowerCase() !== filterStatus.value.toLowerCase()) {
       return false
     }
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.trim().toLowerCase()
+      const matchName = d.name?.toLowerCase().includes(q)
+      const matchMembers = (d.members || []).some(m => m.toLowerCase().includes(q))
+      if (!matchName && !matchMembers) return false
+    }
     return true
   })
 })

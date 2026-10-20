@@ -14,7 +14,13 @@ export function useDesignations(filterParams?: Ref<DesignationFilterParams> | De
     query: params
   })
 
-  const designations = computed<Designation[]>(() => data.value?.data ?? [])
+  const designations = computed<Designation[]>(() => (data.value?.data ?? []).map((item) => ({
+    ...item,
+    members: item.members || [],
+    totalMembers: item.totalMembers ?? (item as any).employeeCount ?? 0,
+    createdOn: item.createdOn || '-',
+    status: item.status || 'Active'
+  })))
 
   const saveDesignation = async (payload: DesignationFormData) => {
     const res = await apiFetch<{ success: boolean; data: Designation; message?: string }>('/api/v1/admin/designations', {

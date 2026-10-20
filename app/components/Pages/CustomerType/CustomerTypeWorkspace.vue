@@ -22,6 +22,10 @@ const filteredCustomerTypes = computed(() => {
     if (filterStatus.value && filterStatus.value !== 'All' && filterStatus.value !== '') {
       if (item.status?.toLowerCase() !== filterStatus.value.toLowerCase()) return false
     }
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.trim().toLowerCase()
+      if (!item.name?.toLowerCase().includes(q)) return false
+    }
     return true
   })
 })
