@@ -12,7 +12,7 @@ useLegacyPage({
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-our-client p-4 md:p-6">
+  <div class="dulank-page dulank-page-our-client">
     <OurClientWorkspace />
   </div>
 </template>

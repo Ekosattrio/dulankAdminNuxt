@@ -429,7 +429,7 @@ function submit() {
       </div>
 
       <!-- Action Footer -->
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button
           type="button"
           class="h-9 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white hover:bg-gray-700"

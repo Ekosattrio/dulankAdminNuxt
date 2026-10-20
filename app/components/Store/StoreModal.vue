@@ -61,7 +61,7 @@ const handleSubmit = () => {
             <h4 class="fw-bold mb-0 text-dark">
               {{ isEdit ? 'Edit Store' : 'Add Store' }}
             </h4>
-            <button type="button" class="btn-close" @click="emit('close')"></button>
+            <button type="button" class="btn-close" @click="emit('close')" aria-label="Close dialog"></button>
           </div>
 
           <!-- Body -->

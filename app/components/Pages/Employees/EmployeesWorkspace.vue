@@ -180,7 +180,7 @@ function handleExportExcel() {
 </script>
 
 <template>
-  <div class="space-y-4 p-4 md:p-6">
+  <div class="space-y-4">
     <!-- Toast notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"

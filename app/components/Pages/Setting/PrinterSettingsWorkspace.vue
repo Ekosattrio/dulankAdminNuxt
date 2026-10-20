@@ -99,7 +99,7 @@ const handleConfirmDelete = async () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
@@ -176,7 +176,7 @@ const handleConfirmDelete = async () => {
               <div class="page-title">
                 <h4>{{ isEditing ? "Edit Printer" : "Add Printer" }}</h4>
               </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
+              <button type="button" class="btn-close" @click="showModal = false" aria-label="Close dialog"></button>
             </div>
             <div class="modal-body custom-modal-body">
               <form @submit.prevent="handleSavePrinter">

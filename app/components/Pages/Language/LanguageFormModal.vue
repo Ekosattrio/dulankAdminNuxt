@@ -149,7 +149,7 @@ function submit() {
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" class="h-9 rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" :disabled="busy" @click="emit('close')">
           Cancel
         </button>

@@ -191,7 +191,7 @@ const handleSubmit = () => {
         </div>
 
         <!-- Footer -->
-        <div class="justify-end p-0 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+        <div class="justify-end p-0 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2">
           <button
             type="button"
             class="inline-flex items-center justify-center rounded border px-3 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 border-gray-800 bg-gray-800 text-white hover:bg-gray-700"

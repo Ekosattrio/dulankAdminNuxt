@@ -49,7 +49,7 @@ const supportTicketPrintColumns = [
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-support-ticket max-w-7xl mx-auto px-4 py-6">
+  <div class="dulank-page dulank-page-support-ticket">
     <!-- Header with Add Ticket button and PDF/Print/Refresh icons -->
     <SalesListHeader
       title="Support Ticket List"

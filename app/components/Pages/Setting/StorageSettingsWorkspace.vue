@@ -70,14 +70,14 @@ const sendTestEmail = () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
 
       <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
         {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
+        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
       </div>
 
       <div class="row">
@@ -159,7 +159,7 @@ const sendTestEmail = () => {
                   <div class="form-check form-switch ms-auto me-3 mb-0">
                     <input v-model="storage.aws.enabled" class="form-check-input" type="checkbox" role="switch" />
                   </div>
-                  <button type="button" class="btn-close" @click="showAwsModal = false"></button>
+                  <button type="button" class="btn-close" @click="showAwsModal = false" aria-label="Close dialog"></button>
                 </div>
                 <div class="modal-body custom-modal-body p-0">
                   <form @submit.prevent="saveAwsConfig">

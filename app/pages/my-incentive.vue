@@ -45,7 +45,7 @@ const incentivePrintColumns = [
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-my-incentive max-w-7xl mx-auto px-4 py-6">
+  <div class="dulank-page dulank-page-my-incentive">
     <!-- Header with literal titles from legacy HTML (Pdf, Print, Refresh icons, NO add button) -->
     <SalesListHeader
       title="My Incentive List"

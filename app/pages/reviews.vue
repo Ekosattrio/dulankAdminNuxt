@@ -46,7 +46,7 @@ const reviewPrintColumns = [
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-reviews max-w-7xl mx-auto px-4 py-6">
+  <div class="dulank-page dulank-page-reviews">
     <!-- Header with literal title and subtitle from Netlify / legacy HTML -->
     <SalesListHeader
       title="Reviews List"

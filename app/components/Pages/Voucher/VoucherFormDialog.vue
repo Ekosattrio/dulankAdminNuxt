@@ -37,7 +37,7 @@ function submit() {
       <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Once Per Customer</label><div :class="modalFormInputColClass"><label class="flex min-h-9 items-center gap-2 text-sm"><input v-model="form.oncePerCustomer" type="checkbox" class="size-4 accent-primary" />Once Per Customer</label></div></div>
       <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Product</label><div :class="modalFormInputColClass"><select v-model="form.productId" :class="formControlClass" :disabled="form.allProducts"><option value="">Choose</option><option v-for="product in products" :key="product.id" :value="product.id">{{ product.name }}</option></select></div></div>
       <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Status</label><div :class="modalFormInputColClass"><label class="flex min-h-9 items-center gap-2 text-sm"><input v-model="form.status" type="checkbox" true-value="Active" false-value="Inactive" class="size-4 accent-primary" />{{ form.status }}</label></div></div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800"><button type="button" :class="salesSecondaryButton" :disabled="busy" @click="emit('close')">Cancel</button><button type="submit" :class="salesPrimaryButton" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800"><button type="button" :class="salesSecondaryButton" :disabled="busy" @click="emit('close')">Cancel</button><button type="submit" :class="salesPrimaryButton" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
     </form>
   </SalesDialog>
 </template>

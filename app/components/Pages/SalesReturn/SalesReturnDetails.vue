@@ -105,7 +105,7 @@ function printReturn() {
           <span>Total (IDR)</span><span>{{ formatRupiah(record.total) }}</span>
         </div>
       </div>
-      <div class="flex justify-end gap-3">
+      <div class="flex flex-wrap justify-end gap-3">
         <button type="button" :class="salesSecondaryButton" @click="$emit('close')">Cancel</button
         ><button type="button" :class="salesPrimaryButton" @click="printReturn">
           <FeatherIcon name="printer" :size="14" />Print

@@ -112,7 +112,7 @@ function handleSubmit() {
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex flex-wrap items-center justify-end gap-2.5 pt-4 border-t border-gray-100 dark:border-gray-800">
         <button
           type="button"
           class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"

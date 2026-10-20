@@ -1,8 +1,19 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-17
+updated: 2026-10-20
 ---
+
+## 2026-10-20
+
+### Konsistensi presentasi frontend lintas halaman
+
+- **Scope:** audit source 191 page/628 komponen; perbaikan padding 31 route, tiga workspace HRM dan Inventory; card statistik tujuh menu; footer modal kanan/responsif; style Tailwind untuk markup Settings/Inventory lama; tipografi tabel dan aksesibilitas tombol tutup. Konten, script, binding, handler, API dan data dipertahankan.
+- **Evidence dan responsibility/architecture matrix:** [UI_CONSISTENCY_AUDIT_2026-10-20.md](../UI_CONSISTENCY_AUDIT_2026-10-20.md).
+- **Check 1 / Check 2:** perbandingan AST konten/script/directive; audit padding root, specificity tombol primary, grid responsif, wrap tombol/KPI; parse/compile seluruh 819 SFC pass.
+- **Validation:** build produksi PASS (exit 0 melalui npm.cmd/cmd); kompilasi stylesheet akhir PASS, termasuk koreksi dua deklarasi tinggi Inventory setelah build client. Structure validator PASS (1.220 original files, 0 failure), diff check PASS. Typecheck gagal pada error existing TS2769 di useLanguages.ts:45 yang tidak diedit. test:sales tidak tersedia pada package.json.
+- **Not run / risk:** browser desktop/390px/dark mode dan interaksi belum diuji karena browser inventory kosong dan iab tidak tersedia; arsip legacy/static-source tidak tersedia pada checkout. Status implemented, browser verification pending; tidak menaikkan status BRVS atau approved baseline.
+- **Git:** branch Rama; NOT COMMITTED; NOT PUSHED; remote verification tidak dijalankan. Tidak ada operasi Git mutating.
 
 ## 2026-10-19
 

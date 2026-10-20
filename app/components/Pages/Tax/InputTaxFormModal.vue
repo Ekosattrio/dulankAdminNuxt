@@ -18,7 +18,7 @@ watch([() => props.open, () => props.item], ([open, item]) => { if (open && item
     <div :class="modalFormRowClass"><span :class="modalFormLabelClass">VAT - Input Tax</span><CurrencyDisplay :value="item.vat" align="left" bold :class="modalFormInputColClass" /></div>
     <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Date e-tax Invoice <span class="text-red-500">*</span></label><div :class="modalFormInputColClass"><input v-model="form.invoiceDate" type="date" :class="formControlClass" required /></div></div>
     <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Credited</label><div :class="modalFormInputColClass"><select v-model="form.credited" :class="formControlClass"><option value="Yes">Yes</option><option value="No">No</option></select></div></div>
-    <div class="flex justify-end gap-2 border-t pt-4"><button type="button" class="h-9 rounded-md border px-4 text-sm" @click="emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
+    <div class="flex flex-wrap justify-end gap-2 border-t pt-4"><button type="button" class="h-9 rounded-md border px-4 text-sm" @click="emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
   </form></SalesDialog>
 </template>
 

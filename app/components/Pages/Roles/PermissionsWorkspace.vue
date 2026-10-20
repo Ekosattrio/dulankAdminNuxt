@@ -15,7 +15,7 @@
             <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
           <li>
             <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
@@ -24,7 +24,7 @@
       </div>
       <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
         {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
+        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
       </div>
 
       <div class="card table-list-card">

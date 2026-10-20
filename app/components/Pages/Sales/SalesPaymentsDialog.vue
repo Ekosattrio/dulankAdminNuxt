@@ -63,7 +63,7 @@ async function save() {
       <p v-if="record?.status === 'Paid' && !record.payments?.length" class="mt-3 text-xs text-gray-500">
         Transaksi tercatat Paid; rincian pembayaran belum tersimpan.
       </p>
-      <div class="mt-5 flex justify-end gap-3">
+      <div class="mt-5 flex flex-wrap justify-end gap-3">
         <button type="button" :class="salesSecondaryButton" @click="$emit('close')">Cancel</button
         ><button v-if="due > 0" type="button" :class="salesPrimaryButton" @click="adding = true">
           Payment-IN
@@ -88,7 +88,7 @@ async function save() {
         /></label>
         <p class="text-xs">Total Due: {{ formatRupiah(due) }}</p>
         <label :class="salesLabel">Notes<textarea v-model="notes" :class="salesField" /></label>
-        <div class="flex justify-end gap-3">
+        <div class="flex flex-wrap justify-end gap-3">
           <button type="button" :class="salesSecondaryButton" @click="adding = false">Cancel</button
           ><button type="submit" :class="salesPrimaryButton">{{ busy ? 'Saving...' : 'Submit' }}</button>
         </div>

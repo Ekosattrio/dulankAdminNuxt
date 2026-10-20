@@ -36,7 +36,7 @@ function submit() {
         <label :class="modalFormLabelClass">Pesan <span class="text-red-500">*</span></label>
         <div :class="modalFormInputColClass"><textarea v-model="form.message" rows="4" required :class="[formControlClass, '!h-auto py-2']" placeholder="Tulis pesan/peringatan..." /></div>
       </div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" class="h-9 rounded-md border border-gray-300 px-4 text-xs font-semibold" :disabled="busy" @click="$emit('close')">Cancel</button>
         <button type="submit" class="h-9 rounded-md bg-amber-500 px-4 text-xs font-semibold text-white disabled:opacity-50" :disabled="busy || !form.message.trim()">{{ busy ? 'Saving...' : 'Submit Tindakan' }}</button>
       </div>

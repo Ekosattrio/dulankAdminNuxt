@@ -62,14 +62,14 @@ const handleToggleSwitch = async () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
 
       <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
         {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
+        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
       </div>
 
       <div class="row">
@@ -120,7 +120,7 @@ const handleToggleSwitch = async () => {
               <div class="page-title">
                 <h4>{{ selectedGw?.name }} Integration</h4>
               </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
+              <button type="button" class="btn-close" @click="showModal = false" aria-label="Close dialog"></button>
             </div>
             <div class="modal-body custom-modal-body">
               <form @submit.prevent="handleSaveGateway">

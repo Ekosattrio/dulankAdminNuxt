@@ -31,7 +31,7 @@ watch(
           <select v-model="form.status" :class="formControlClass"><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
         </div>
       </div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" class="h-9 rounded-md border border-gray-200 bg-white px-4 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200" :disabled="busy" @click="emit('close')">Cancel</button>
         <button type="submit" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button>
       </div>

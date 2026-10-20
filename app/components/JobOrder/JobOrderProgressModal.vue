@@ -23,7 +23,7 @@ const emit = defineEmits<{
               <span class="badge bg-primary px-2 py-1 mb-1 font-monospace">{{ jobOrder.no }}</span>
               <h4 class="fw-bold mb-0 text-dark">{{ jobOrder.jobTitle || jobOrder.product }}</h4>
             </div>
-            <button type="button" class="btn-close" @click="emit('close')"></button>
+            <button type="button" class="btn-close" @click="emit('close')" aria-label="Close dialog"></button>
           </div>
 
           <!-- Body -->

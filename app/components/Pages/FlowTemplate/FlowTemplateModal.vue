@@ -51,7 +51,7 @@ function submit() {
           <div :class="modalFormInputColClass"><input v-model="templateName" required placeholder="SPK Heidelberg Sm52 4 Warna" :class="formControlClass" /></div>
         </div>
         <FlowTemplateInformationEditor v-model:items="items" />
-        <div class="flex justify-end gap-2.5 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div class="flex flex-wrap justify-end gap-2.5 border-t border-gray-200 pt-4 dark:border-gray-700">
           <button type="button" class="min-w-24 rounded-md bg-[#212b36] px-4 py-2 text-sm font-semibold text-white" @click="$emit('close')">Cancel</button>
           <button type="submit" class="min-w-24 rounded-md bg-[#ff9f43] px-5 py-2 text-sm font-semibold text-white" :disabled="busy || items.length === 0">{{ busy ? 'Saving...' : 'Submit' }}</button>
         </div>
