@@ -26,7 +26,7 @@ const columns = [
   { key: 'used', label: 'Used', sortable: true, align: 'center' as const },
   { key: 'valid', label: 'Valid', sortable: true },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 
 function formatDiscount(item: CouponItem): string {

@@ -60,7 +60,9 @@ export function useProfile() {
       method: 'PUT',
       body: {
         ...(name ? { name } : {}),
-        ...(payload.phoneNumber !== undefined ? { phone: payload.phoneNumber } : {})
+        ...(payload.phoneNumber !== undefined ? { phone: payload.phoneNumber } : {}),
+        ...(payload.email !== undefined ? { email: payload.email } : {}),
+        ...(payload.address !== undefined ? { taxAddress: payload.address } : {})
       }
     })
 

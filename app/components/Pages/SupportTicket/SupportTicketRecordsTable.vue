@@ -104,7 +104,7 @@ function getStatusBadgeClass(status: string) {
     <template #cell(ticketNo)="{ item }">
       <button
         type="button"
-        class="font-mono text-xs font-semibold text-primary-600 hover:text-primary-800 hover:underline"
+        class="font-mono text-sm font-semibold text-primary-600 hover:text-primary-800 hover:underline"
         @click="$emit('view-detail', item)"
       >
         {{ item.ticketNo }}

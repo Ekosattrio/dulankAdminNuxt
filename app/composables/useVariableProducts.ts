@@ -23,7 +23,7 @@ export function useVariableProducts(filterParams?: Ref<VariableProductFilterPara
     search: params.value.search || undefined,
     category: params.value.category || undefined,
     status: params.value.status || undefined,
-    priceType: 'Variable Product',
+    productType: 'Variable Product',
     limit: 100,
   }))
 
@@ -35,7 +35,7 @@ export function useVariableProducts(filterParams?: Ref<VariableProductFilterPara
   const products = computed<VariableProductItem[]>(() => {
     const apiItems = data.value?.data
     if (apiItems && Array.isArray(apiItems) && apiItems.length > 0) {
-      const vpItems = apiItems.filter((p) => p.priceType === 'Variable Product')
+      const vpItems = apiItems.filter((p) => (p.productType || p.priceType) === 'Variable Product')
       if (vpItems.length > 0) {
         return vpItems.map((p) => {
           const variants: ProductVariant[] = p.variants || []

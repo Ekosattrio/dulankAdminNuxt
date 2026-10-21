@@ -244,7 +244,7 @@ function handleSubmit() {
                 <th class="px-3 py-2 text-center font-semibold text-gray-600 dark:text-gray-300 w-24">Qty</th>
                 <th class="px-3 py-2 text-center font-semibold text-gray-600 dark:text-gray-300 w-36">Unit</th>
                 <th class="px-3 py-2 text-right font-semibold text-gray-600 dark:text-gray-300 w-48">Price (IDR)</th>
-                <th class="px-2 py-2 text-center w-12"></th>
+                <th class="px-2 py-2 text-center w-12">Action</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
@@ -376,7 +376,7 @@ function handleSubmit() {
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
         <button
           type="button"
           class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-hidden dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"

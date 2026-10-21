@@ -57,6 +57,10 @@
               </div>
 
               <div class="form-login mb-3">
+                <label class="form-label" for="login-code">Kode authenticator (jika aktif)</label>
+                <input id="login-code" v-model="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="form-control" />
+              </div>
+              <div class="form-login mb-3">
                 <label class="form-label text-gray-700 dark:text-gray-300" for="login-password">Password</label>
                 <div class="pass-group position-relative">
                   <input
@@ -80,7 +84,7 @@
                     :title="showPassword ? 'Hide password' : 'Show password'"
                     @click="showPassword = !showPassword"
                   >
-                    <i :class="showPassword ? 'ti ti-eye' : 'ti ti-eye-off'"></i>
+                    <FeatherIcon :name="showPassword ? 'eye' : 'eye-off'" :size="16" />
                   </button>
                 </div>
                 <p v-if="fieldErrors.password" id="login-password-error" class="mt-1 text-xs text-danger">
@@ -158,6 +162,7 @@ const isDev = import.meta.dev;
 
 const email = ref("");
 const password = ref("");
+const code = ref("");
 const rememberMe = ref(true);
 const showPassword = ref(false);
 const errorMessage = ref("");
@@ -219,7 +224,7 @@ const handleLogin = async () => {
   isSubmitting.value = true;
 
   try {
-    await login(email.value.trim(), password.value, rememberMe.value);
+    await login(email.value.trim(), password.value, rememberMe.value, code.value);
     await navigateTo(redirectTarget.value);
   } catch (error: unknown) {
     const fetchError = error as {

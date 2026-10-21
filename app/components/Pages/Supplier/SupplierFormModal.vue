@@ -24,6 +24,7 @@ const statusOptions = ['Active', 'Inactive']
 
 const form = ref<SupplierFormData>({
   id: '',
+  photo: null,
   supplierId: '',
   name: '',
   email: '',
@@ -35,11 +36,13 @@ const form = ref<SupplierFormData>({
 const errorMessage = ref('')
 
 watch(
-  () => props.supplierData,
-  (val) => {
+  () => [props.open, props.supplierData] as const,
+  ([open, val]) => {
+    if (!open) return
     if (val && props.isEdit) {
       form.value = {
         id: val.id,
+        photo: val.photo || null,
         supplierId: val.supplierId || val.id,
         name: val.name,
         email: val.email,
@@ -50,6 +53,7 @@ watch(
     } else {
       form.value = {
         id: '',
+        photo: null,
         supplierId: 'Auto Generated',
         name: '',
         email: '',
@@ -90,6 +94,7 @@ function handleSubmit() {
         {{ errorMessage }}
       </div>
 
+      <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Photo</label><div :class="modalFormInputColClass"><EntityPhotoField v-model="form.photo" :disabled="busy" /></div></div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Supplier ID</label>
         <div :class="modalFormInputColClass">

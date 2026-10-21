@@ -12,7 +12,7 @@ function submit() { if (!name.value.trim()) return void (localError.value = 'Cus
     <form class="space-y-4" @submit.prevent="submit">
       <p v-if="localError || error" role="alert" class="rounded-md bg-rose-50 p-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">{{ localError || error }}</p>
       <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Customer <span class="text-rose-600">*</span></label><div :class="modalFormInputColClass"><input v-model="name" :class="formControlClass" required /></div></div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800"><button type="button" :class="salesSecondaryButton" :disabled="busy" @click="emit('close')">Cancel</button><button type="submit" :class="salesPrimaryButton" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800"><button type="button" :class="salesSecondaryButton" :disabled="busy" @click="emit('close')">Cancel</button><button type="submit" :class="salesPrimaryButton" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
     </form>
   </SalesDialog>
 </template>

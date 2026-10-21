@@ -32,7 +32,7 @@ const idPhotoInput = ref<HTMLInputElement | null>(null)
 const form = ref<EmployeeFormData>({
   id: '',
   name: '',
-  department: 'Produksi',
+  department: '',
   address: '',
   detailAddress: '',
   phone: '',
@@ -59,14 +59,14 @@ watch(
       form.value = {
         id: val.id,
         name: val.name,
-        department: val.department || (props.departments[0] || 'Produksi'),
+        department: val.department || (props.departments[0] || ''),
         address: val.address || '',
         detailAddress: val.detailAddress || '',
         phone: val.phone || '',
         status: val.status || 'Active',
         gender: val.gender || 'Male',
-        dob: val.dob || '',
-        joinDate: val.joinDate || '',
+        dob: normalizeDateInput(val.dob),
+        joinDate: normalizeDateInput(val.joinDate),
         joinChannel: val.joinChannel || 'Offline',
         contact1Name: val.contact1Name || '',
         contact1Phone: val.contact1Phone || '',
@@ -77,15 +77,12 @@ watch(
         photoId: val.photoId || '',
       }
     } else {
-      const today = new Date().toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
+      const now = new Date()
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
       form.value = {
         id: '',
         name: '',
-        department: props.departments[0] || 'Produksi',
+        department: props.departments[0] || '',
         address: '',
         detailAddress: '',
         phone: '',
@@ -358,7 +355,7 @@ function handleSubmit() {
         <div :class="modalFormInputColClass">
           <input
             v-model="form.dob"
-            type="text"
+            type="date"
             placeholder="DD/MM/YYYY"
             :class="formControlClass"
           >
@@ -370,7 +367,7 @@ function handleSubmit() {
         <div :class="modalFormInputColClass">
           <input
             v-model="form.joinDate"
-            type="text"
+            type="date"
             placeholder="DD/MM/YYYY"
             :class="formControlClass"
           >
@@ -480,7 +477,7 @@ function handleSubmit() {
     </form>
 
     <template #footer>
-      <div class="flex items-center justify-end gap-3 w-full">
+      <div class="flex flex-wrap items-center justify-end gap-3 w-full">
         <button
           type="button"
           class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"

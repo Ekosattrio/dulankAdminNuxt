@@ -79,7 +79,7 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(productId)="{ item }">
-      <span class="font-mono text-xs text-gray-600 dark:text-gray-400 font-semibold">
+      <span class="font-mono text-sm text-gray-600 dark:text-gray-400 font-semibold">
         {{ item.productId }}
       </span>
     </template>
@@ -98,7 +98,7 @@ function getStatusBadgeClass(status: string) {
 
     <template #cell(rating)="{ item }">
       <div class="flex items-center justify-center gap-1">
-        <span class="font-bold text-amber-500 text-xs">{{ item.rating }}</span>
+        <span class="font-bold text-amber-500 text-sm">{{ item.rating }}</span>
         <FeatherIcon name="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
       </div>
     </template>
@@ -110,7 +110,7 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(review)="{ item }">
-      <span class="text-gray-600 dark:text-gray-400 text-xs">
+      <span class="text-gray-600 dark:text-gray-400 text-sm">
         {{ item.review }}
       </span>
     </template>

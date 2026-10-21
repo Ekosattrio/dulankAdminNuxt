@@ -14,7 +14,7 @@ const columns = [
   { key: 'categoryName', label: 'Category Name', sortable: true },
   { key: 'date', label: 'Date', sortable: true },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 </script>
 

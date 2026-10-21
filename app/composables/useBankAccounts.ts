@@ -39,11 +39,19 @@ export function useBankAccounts() {
 
   const accounts = computed<BankAccountView[]>(() => accountsRequest.data.value?.data ?? [])
   const accountTypes = computed<BankAccountTypeView[]>(() => typesRequest.data.value?.data ?? [])
-  const stats = computed(() => accountsRequest.data.value?.meta?.stats ?? {
-    total: 0,
-    active: 0,
-    inactive: 0,
-    totalBalance: 0,
+  const stats = computed(() => {
+    if (accountsRequest.data.value?.meta?.stats) {
+      return accountsRequest.data.value.meta.stats
+    }
+    const list = accounts.value
+    const total = list.length
+    const active = list.filter((a) => a.status === 'Active').length
+    const inactive = list.filter((a) => a.status === 'Inactive').length
+    const totalBalance = list.reduce(
+      (sum, a) => sum + (Number(a.currentBalance) || Number(a.openingBalance) || 0),
+      0,
+    )
+    return { total, active, inactive, totalBalance }
   })
   const pending = computed(() => accountsRequest.pending.value || typesRequest.pending.value)
   const error = computed(() => accountsRequest.error.value || typesRequest.error.value)

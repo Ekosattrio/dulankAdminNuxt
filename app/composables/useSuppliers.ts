@@ -35,6 +35,9 @@ export function useSuppliers() {
 
   const saveSupplier = async (payload: SupplierFormData) => {
     const { id, ...body } = payload
+    if (!id && (!body.supplierId || /^auto[\s-]*generated$/i.test(body.supplierId))) delete body.supplierId
+    const { persistImage } = useImageUpload()
+    if (body.photo !== undefined) body.photo = await persistImage(body.photo, 'suppliers')
 
     const res = await apiFetch<MutationResponse>(
       id

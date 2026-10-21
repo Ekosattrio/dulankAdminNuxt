@@ -46,25 +46,7 @@ defineEmits<{ retry: []; dismiss: [] }>()
       </button>
     </div>
 
-    <!-- Message Alert -->
-    <div
-      v-if="message"
-      role="status"
-      class="mb-4 flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-400"
-    >
-      <div class="flex items-center gap-2">
-        <FeatherIcon name="check-circle" :size="16" />
-        <span>{{ message }}</span>
-      </div>
-      <button
-        type="button"
-        aria-label="Dismiss notification"
-        class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-200"
-        @click="$emit('dismiss')"
-      >
-        <FeatherIcon name="x" :size="16" />
-      </button>
-    </div>
+    <ActionToast :message="message" @dismiss="$emit('dismiss')" />
 
     <!-- Skeleton Loader or Fallback Loading State -->
     <template v-if="pending">

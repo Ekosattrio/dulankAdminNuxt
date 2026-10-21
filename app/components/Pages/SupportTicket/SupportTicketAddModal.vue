@@ -182,7 +182,7 @@ function handleSubmit() {
         <p class="text-xs text-gray-400 mt-1">Maximum 60 Characters</p>
       </div>
 
-      <div class="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-gray-100 dark:border-gray-800">
         <button
           type="button"
           class="h-9 px-4 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 transition-colors"

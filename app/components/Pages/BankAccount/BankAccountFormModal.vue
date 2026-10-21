@@ -13,8 +13,11 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ close: []; submit: [payload: BankAccountFormData] }>()
 
+const { stores } = useMasterOptions()
+
 const emptyForm = (): BankAccountFormData => ({
   accountTypeId: props.accountTypes.find((type) => type.status === 'Active')?.id ?? '',
+  branchId: '',
   accountName: '',
   bankName: '',
   accountNo: '',
@@ -57,6 +60,13 @@ function submit() {
     <form class="space-y-4" @submit.prevent="submit">
       <p v-if="error" role="alert" class="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{{ error }}</p>
       <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Cabang</label>
+        <div :class="modalFormInputColClass"><select v-model="form.branchId" :class="formControlClass">
+          <option value="">Pilih cabang</option>
+          <option v-for="store in stores" :key="store.id" :value="String(store.id)">{{ store.store_name }}</option>
+        </select></div>
+      </div>
+      <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Account Holder Name <span class="text-red-500">*</span></label>
         <div :class="modalFormInputColClass"><input v-model="form.accountName" :class="formControlClass" required /></div>
       </div>
@@ -98,7 +108,7 @@ function submit() {
           <select v-model="form.status" :class="formControlClass"><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
         </div>
       </div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" class="h-9 rounded-md border border-gray-200 bg-white px-4 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200" :disabled="busy" @click="emit('close')">Cancel</button>
         <button type="submit" class="h-9 rounded-md bg-primary px-4 text-sm font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button>
       </div>

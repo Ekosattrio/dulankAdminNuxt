@@ -113,7 +113,7 @@ function addItem() {
                 <th>Price</th>
                 <th>Amount</th>
                 <th>Description</th>
-                <th></th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -219,7 +219,7 @@ function addItem() {
             <span>Grand Total (IDR)</span><span>{{ formatRupiah(form.total) }}</span>
           </div>
         </div>
-        <div class="flex justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div class="flex flex-wrap justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
           <button type="button" :class="salesSecondaryButton" @click="emit('close')">Cancel</button
           ><button type="submit" :class="salesPrimaryButton" :disabled="!form.items.length">
             {{ busy ? 'Saving...' : 'Submit' }}

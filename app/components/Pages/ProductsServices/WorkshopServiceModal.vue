@@ -90,7 +90,7 @@ function submit() {
         </template>
       </template>
 
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4"><button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-xs font-semibold text-white" :disabled="busy" @click="$emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-amber-500 px-4 text-xs font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4"><button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-xs font-semibold text-white" :disabled="busy" @click="$emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-amber-500 px-4 text-xs font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button></div>
     </form>
   </SalesDialog>
 </template>

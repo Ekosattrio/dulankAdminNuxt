@@ -28,7 +28,7 @@ const columns = [
   { key: 'due', label: 'Due', sortable: true, align: 'right' as const },
   { key: 'paymentStatus', label: 'Payment Status', sortable: true, align: 'center' as const },
   { key: 'biller', label: 'Biller', sortable: true },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 </script>
 

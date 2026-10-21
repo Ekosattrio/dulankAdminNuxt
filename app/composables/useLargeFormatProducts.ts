@@ -23,7 +23,7 @@ export function useLargeFormatProducts(filterParams?: Ref<LargeFormatFilterParam
     search: params.value.search || undefined,
     category: params.value.category || undefined,
     status: params.value.status || undefined,
-    priceType: 'Large Format',
+    productType: 'Large Format',
     limit: 100,
   }))
 
@@ -35,7 +35,7 @@ export function useLargeFormatProducts(filterParams?: Ref<LargeFormatFilterParam
   const products = computed<LargeFormatProduct[]>(() => {
     const apiItems = data.value?.data
     if (apiItems && Array.isArray(apiItems) && apiItems.length > 0) {
-      const lfItems = apiItems.filter((p) => p.priceType === 'Large Format')
+      const lfItems = apiItems.filter((p) => (p.productType || p.priceType) === 'Large Format')
       if (lfItems.length > 0) {
         return lfItems.map((p) => ({
           id: p.id,
@@ -46,7 +46,7 @@ export function useLargeFormatProducts(filterParams?: Ref<LargeFormatFilterParam
           subCategoryId: p.subCategoryId,
           subCategory: p.subCategory,
           unitId: p.unitId,
-          unit: p.unit || 'm²',
+          unit: p.unit || 'mÂ²',
           price: p.price,
           minPrice: p.minPrice || p.price,
           minOrderQty: p.minOrderQty || 1,

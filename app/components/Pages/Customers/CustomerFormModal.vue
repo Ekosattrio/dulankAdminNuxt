@@ -20,42 +20,43 @@ const emit = defineEmits<{
   submit: [formData: CustomerFormData]
 }>()
 
-const typeOptions = [
-  'Reguler',
-  'Standard',
-  'Premium',
-]
+const { customerTypes } = useCustomerTypes()
+const typeOptions = computed(() => customerTypes.value.filter(item => item.status === 'Active').map(item => item.name))
 
 const form = ref<CustomerFormData>({
   id: '',
+  photo: null,
   customerId: '',
   name: '',
   email: '',
-  type: 'General',
+  type: '',
   phone: '',
 })
 
 const errorMessage = ref('')
 
 watch(
-  () => props.customerData,
-  (val) => {
+  () => [props.open, props.customerData] as const,
+  ([open, val]) => {
+    if (!open) return
     if (val && props.isEdit) {
       form.value = {
         id: val.id,
+        photo: val.photo || null,
         customerId: val.customerId,
         name: val.name,
         email: val.email,
-        type: val.type || 'Standard',
+        type: val.type || '',
         phone: val.phone || '',
       }
     } else {
       form.value = {
         id: '',
+        photo: null,
         customerId: 'Auto Generated',
         name: '',
         email: '',
-        type: 'Standard',
+        type: typeOptions.value[0] || '',
         phone: '',
       }
     }
@@ -92,6 +93,7 @@ function handleSubmit() {
       </div>
 
       <!-- Customer ID -->
+      <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Photo</label><div :class="modalFormInputColClass"><EntityPhotoField v-model="form.photo" :disabled="busy" /></div></div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Customer ID</label>
         <div :class="modalFormInputColClass">
@@ -158,7 +160,7 @@ function handleSubmit() {
       </div>
 
       <!-- Footer Buttons -->
-      <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
         <button
           type="button"
           class="rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"

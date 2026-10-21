@@ -66,7 +66,7 @@ async function loadFile(event: Event) {
       </div>
       <p v-if="fileName" class="text-xs text-gray-600">{{ fileName }}: {{ rows.length }} rows ready</p>
       <p v-if="parseError || error" role="alert" class="rounded-md bg-red-50 p-3 text-xs text-red-700">{{ parseError || error }}</p>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4">
         <button type="button" class="h-9 rounded-md border border-gray-300 px-4 text-xs font-semibold" :disabled="busy" @click="$emit('close')">Cancel</button>
         <button type="submit" class="h-9 rounded-md bg-primary px-4 text-xs font-semibold text-white disabled:opacity-50" :disabled="busy || !rows.length">{{ busy ? 'Importing...' : 'Import Product' }}</button>
       </div>

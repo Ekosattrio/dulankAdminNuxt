@@ -1,10 +1,11 @@
 export interface Department {
   id: string
   name: string
+  memberIds?: string[]
   members: string[]
   totalMembers: number
   createdDate: string
-  status: 'Active' | 'Disable'
+  status: 'Active' | 'Inactive'
 }
 
 export interface DepartmentFilterParams {
@@ -15,9 +16,10 @@ export interface DepartmentFilterParams {
 export interface DepartmentFormData {
   id?: string
   name: string
+  memberIds?: string[]
   members?: string[]
   totalMembers?: number
   createdDate?: string
-  status?: 'Active' | 'Disable'
+  status?: 'Active' | 'Inactive'
 }
 

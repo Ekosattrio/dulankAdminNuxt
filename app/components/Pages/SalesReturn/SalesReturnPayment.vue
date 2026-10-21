@@ -75,7 +75,7 @@ watch(
           <span>Total Due ({{ record?.returnNo }})</span><span>{{ formatRupiah(record?.total || 0) }}</span>
         </div>
         <label :class="salesLabel">Notes<textarea v-model="form.notes" :class="salesField" rows="3" /></label>
-        <div class="flex justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div class="flex flex-wrap justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
           <button type="button" :class="salesSecondaryButton" @click="$emit('close')">Cancel</button
           ><button type="submit" :class="salesPrimaryButton">{{ busy ? 'Saving...' : 'Submit' }}</button>
         </div>

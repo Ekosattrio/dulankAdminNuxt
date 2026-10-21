@@ -9,13 +9,14 @@ import SecurityContactModal from './Security/SecurityContactModal.vue'
 import SecurityDevicesModal from './Security/SecurityDevicesModal.vue'
 import SecurityActivityModal from './Security/SecurityActivityModal.vue'
 
-const { security, pending, error, refresh, updateSecurity } = useSecuritySettings()
+const { security, pending, error, refresh, updateSecurity, changePassword } = useSecuritySettings()
 
 const toastSuccess = ref('')
 const toastError = ref('')
 const isBusy = ref(false)
 
 const isPasswordModalOpen = ref(false)
+const isTwoFactorModalOpen = ref(false)
 const isContactModalOpen = ref(false)
 const contactModalType = ref<'phone' | 'email'>('phone')
 
@@ -30,32 +31,17 @@ function notifySuccess(msg: string) {
   setTimeout(() => { toastSuccess.value = '' }, 4000)
 }
 
-async function handleToggle2FA() {
-  try {
-    await updateSecurity({ twoFactor: !security.value.twoFactor })
-    notifySuccess(`Two Factor Authentication ${security.value.twoFactor ? 'diaktifkan' : 'dinonaktifkan'}`)
-  } catch (err: any) {
-    toastError.value = 'Gagal memperbarui status 2FA'
-  }
-}
+function handleToggle2FA() { isTwoFactorModalOpen.value = true }
+function handleToggleGoogle() { isTwoFactorModalOpen.value = true }
 
-async function handleToggleGoogle() {
-  try {
-    await updateSecurity({ googleAuth: !security.value.googleAuth })
-    notifySuccess(`Google Authenticator ${security.value.googleAuth ? 'terhubung' : 'diputuskan'}`)
-  } catch (err: any) {
-    toastError.value = 'Gagal memperbarui Google Authenticator'
-  }
-}
-
-async function handlePasswordSubmit(newPass: string) {
+async function handlePasswordSubmit(payload: { currentPassword: string; newPassword: string; confirmPassword: string }) {
   isBusy.value = true
   try {
-    await updateSecurity({ passwordLastChanged: 'Baru saja' })
+    await changePassword(payload)
     isPasswordModalOpen.value = false
     notifySuccess('Password berhasil diperbarui!')
   } catch (err: any) {
-    toastError.value = 'Gagal mengubah password'
+    toastError.value = err?.data?.message || 'Gagal mengubah password'
   } finally {
     isBusy.value = false
   }
@@ -76,10 +62,10 @@ async function handleContactSubmit(val: string) {
   try {
     if (contactModalType.value === 'phone') {
       await updateSecurity({ phone: val })
-      notifySuccess('Nomor telepon verifikasi berhasil diperbarui!')
+      notifySuccess('Nomor telepon akun berhasil diperbarui!')
     } else {
       await updateSecurity({ email: val })
-      notifySuccess('Alamat email verifikasi berhasil diperbarui!')
+      notifySuccess('Alamat email akun berhasil diperbarui!')
     }
     isContactModalOpen.value = false
   } catch (err: any) {
@@ -98,15 +84,14 @@ async function handleRemoveContact() {
   isBusy.value = true
   try {
     if (deleteTargetType.value === 'phone') {
-      await updateSecurity({ phone: '-' })
-      notifySuccess('Nomor telepon verifikasi telah dihapus')
+      await updateSecurity({ phone: '' })
+      notifySuccess('Nomor telepon akun telah dihapus')
     } else {
-      await updateSecurity({ email: '-' })
-      notifySuccess('Alamat email verifikasi telah dihapus')
+      throw new Error('Email login wajib tersedia. Ganti alamat email melalui formulir.')
     }
     isConfirmDeleteOpen.value = false
   } catch (err: any) {
-    toastError.value = 'Gagal menghapus kontak'
+    toastError.value = err?.data?.message || err?.message || 'Gagal menghapus kontak'
   } finally {
     isBusy.value = false
   }
@@ -123,31 +108,9 @@ async function handleRemoveContact() {
     />
 
     <!-- Feedback messages -->
-    <div
-      v-if="toastSuccess"
-      class="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-xs font-medium text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300"
-    >
-      <div class="flex items-center gap-2">
-        <FeatherIcon name="check-circle" :size="16" />
-        <span>{{ toastSuccess }}</span>
-      </div>
-      <button type="button" @click="toastSuccess = ''">
-        <FeatherIcon name="x" :size="14" />
-      </button>
-    </div>
+    <ActionToast :message="toastSuccess" @dismiss="toastSuccess = ''" />
 
-    <div
-      v-if="toastError"
-      class="flex items-center justify-between rounded-lg border border-rose-200 bg-rose-50 p-4 text-xs font-medium text-rose-800 dark:border-rose-900 dark:bg-rose-950/50 dark:text-rose-300"
-    >
-      <div class="flex items-center gap-2">
-        <FeatherIcon name="alert-triangle" :size="16" />
-        <span>{{ toastError }}</span>
-      </div>
-      <button type="button" @click="toastError = ''">
-        <FeatherIcon name="x" :size="14" />
-      </button>
-    </div>
+    <ActionToast :message="toastError" tone="error" @dismiss="toastError = ''" />
 
     <SalesFeedback
       v-if="pending && !security"
@@ -174,6 +137,7 @@ async function handleRemoveContact() {
       @deactivate-account="toastError = 'Silakan hubungi Super Admin untuk penonaktifan akun.'"
     />
 
+    <SecurityTwoFactorModal :open="isTwoFactorModalOpen" :enabled="security.twoFactor" @close="isTwoFactorModalOpen = false" @updated="refresh(); notifySuccess('Autentikasi diperbarui')" />
     <!-- Sub Modals -->
     <SecurityPasswordModal
       :open="isPasswordModalOpen"

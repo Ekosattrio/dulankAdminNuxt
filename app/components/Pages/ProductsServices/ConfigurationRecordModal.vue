@@ -42,7 +42,7 @@ function submit() {
           <input v-else v-model="draft[field.key]" :type="field.type === 'number' ? 'number' : 'text'" :min="field.min" :required="field.required" :class="formControlClass" />
         </div>
       </div>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4"><button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white" :disabled="busy" @click="$emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-amber-500 px-4 text-sm font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Save' }}</button></div>
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4"><button type="button" class="h-9 rounded-md bg-gray-800 px-4 text-sm font-semibold text-white" :disabled="busy" @click="$emit('close')">Cancel</button><button type="submit" class="h-9 rounded-md bg-amber-500 px-4 text-sm font-semibold text-white disabled:opacity-50" :disabled="busy">{{ busy ? 'Saving...' : 'Save' }}</button></div>
     </form>
   </SalesDialog>
 </template>

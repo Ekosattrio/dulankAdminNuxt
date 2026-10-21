@@ -1,4 +1,27 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
+
+> **Pilihan visual toast 2026-10-21:** pengguna meminta gaya toast lama kembali: sukses bg-emerald-600 dengan teks/ikon putih, bentuk compact rounded-lg di kanan atas. ActionToastHost sudah disesuaikan; error rose dan info blue. Pertahankan pilihan ini saat revisi selanjutnya. Alur notifikasi tetap global. Kompilasi template/diff PASS; browser belum diverifikasi. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Update UI 2026-10-21:** notifikasi CRUD memakai ActionToastHost global + apiFetch response/bridge ActionToast (41 blok/37 komponen); PhotoField mengikuti Employee; MemberPicker satu input chip/live search; kedua halaman partner menormalkan metrics null/Count field dan filter jenis. 7 Node tests + 3 API tests/17 assertions, kompilasi 830 template, build/typecheck/structure PASS. Browser belum tersedia; partial BRVS, browser verification pending. Evidence [changelog](docs/obsidian-vault/09-CHANGELOG.md); gate tetap di TO-DO.md root. Tidak ada migration/seeding/data produk berubah. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Revisi form/tabel 2026-10-21:** foto Store/Customer/Supplier persisten, anggota Department/Designation berupa employee IDs, status/tanggal konsisten, alamat memakai PK pemilik, role used menampilkan alasan tidak dapat dihapus, ikon font lama diganti Feather SVG dan header aksi diberi Action. Migration foto stores/suppliers sudah diterapkan setelah backup, data lama utuh. Backend 226 tes/2.409 assertions PASS; build/typecheck/structure PASS. Browser tetap belum tersedia. Evidence: [changelog](docs/obsidian-vault/09-CHANGELOG.md). [TO-DO.md](../TO-DO.md) memuat gate tertunda dan tahap 6-14; [DONE.md](../DONE.md) memuat implementasi selesai. Status partial BRVS, browser verification pending. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Update eksekusi 2026-10-21:** FoundationStagesOneToFiveSeeder sudah berhasil dijalankan di MySQL local atas instruksi pengguna, setelah backup. Masuk 57 record baru; data lama dan seluruh domain produk terverifikasi utuh. Audit live 0 error / 34 kategori warning. [DONE.md](../DONE.md) memuat hasil aktual. Catatan sebelumnya "belum dijalankan" adalah riwayat. Tidak menjalankan seeder lama/default; akun demo tetap nonaktif. Status browser/SMTP/kelengkapan bisnis tidak berubah. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Seeder dan DONE (2026-10-21):** backend menyediakan FoundationStagesOneToFiveSeeder mandiri tanpa seluruh domain produk (termasuk kategori/satuan/varian, bahan/mesin/harga/workflow). Hanya diuji SQLite: 6 tes / 222 assertions PASS, tidak dijalankan di DB kerja. Daftar data/halaman serta batas kelengkapan ada di [DONE root workspace](../DONE.md). Jangan mengganti entry point ini dengan DemoMasterDataSeeder lama yang berisi produk. Status modul tidak dinaikkan; browser/SMTP/branch transaksi masih terbatas. Rama; penambahan saat ini NOT COMMITTED / NOT PUSHED.
+
+
+> **Verifikasi lanjutan 2026-10-21:** dropdown wilayah HR memakai read-only location-options; edit karyawan mengambil detail by ID; tanggal/modal dan currency dirapikan; kategori subkategori harus existing. Backend full 211 tes + target terbaru 26 tes PASS; typecheck, build, structure, diff check PASS. Browser inventory tetap kosong; MySQL lokal saat audit ulang menolak koneksi. Hasil DB 20 Oktober adalah evidence sebelumnya. Status **implemented/API tested, browser/runtime verification pending**, partial BRVS. Detail pada [changelog](docs/obsidian-vault/09-CHANGELOG.md). **Rama / NOT COMMITTED / NOT PUSHED**.
+
+
+> **Tahap 3?5, 2026-10-20:** integrasi identitas admin/security/reset/TOTP, master referensi, serta relasi pelanggan/alamat/karyawan/rekening telah diimplementasikan dan diuji API. Pilihan cabang/role/manager/wilayah berasal dari database. Migrasi lokal sudah diterapkan setelah backup; data demo tidak diseed ulang. Status **partial BRVS, implemented/API tested, browser verification pending**. Scope cabang baru Store/BankAccount; transaksi/laporan dan kelengkapan data nyata masih tahap berikutnya. Evidence, risiko dan validasi: [changelog tahap 3?5](docs/obsidian-vault/09-CHANGELOG.md). Branch Rama: **NOT COMMITTED / NOT PUSHED**.
+
+
+> **UI consistency 2026-10-20:** padding lintas menu, card KPI, footer modal, dan presentasi markup lama telah diseragamkan tanpa perubahan konten/data. Status **implemented, browser verification pending**. Cakupan, evidence, error typecheck existing, dan batas browser tersedia di [audit UI](docs/UI_CONSISTENCY_AUDIT_2026-10-20.md). Branch `Rama`: **NOT COMMITTED / NOT PUSHED**. Status fitur/arsitektur modul sebelumnya tetap berlaku.
 ## Repositori: Dulank Admin Nuxt 4 (Percetakan & ERP System)
 
 > **LATEST CODE AUDIT OVERRIDE (2026-10-11):** Baca `docs/CODEBASE_COMPLIANCE_AUDIT_2026-10-09.md` dan inventaris penuh `docs/LEGACY_PARITY_AUDIT_2026-10-10.md` sebelum memakai scorecard di bawah. Source aktual memiliki 188 page, 19 page di atas 150 baris, **0 TypeScript error**, **0 direct request pada page/component**, **0 native browser dialog**, dan **0 direct print pada list/report**. Seluruh 186 HTML lokal identik secara konten dengan repository asli commit `6123241`; semuanya mempunyai route Nuxt, ditambah dua route Nuxt-only. Sebanyak 50 route—Sales/dokumen, Payment, Sales-adjacent, Webstore/Support Ticket, sembilan route Orders/Job Order, enam route master Workflow, Dashboard Admin, Analytics Dashboard, Subscriptions, Kalkulator Dashboard, Billing, serta Voucher—telah direkonsiliasi manual dengan API/persistence/data safeguards serta browser desktop/390px. Delapan aset Sticky Kit/Summernote telah dipulihkan dari salinan internal ber-hash manifest dan structure validator lulus. Seluruh aplikasi belum selesai: 136 route legacy masih memerlukan audit manual/browser. Klaim lama `100% verified/compliant` tetap merupakan snapshot historis.
@@ -346,3 +369,27 @@ Jika sebuah menu resmi selesai, berubah status, atau menjadi batas regresi baru,
 - `docs/MENU_IMPLEMENTATION_COMMAND.md` untuk workflow command "kerjakan menu".
 
 Jangan mengklaim modul selesai tanpa implementasi, flow, dan validasi yang jelas. Catatan progres harus spesifik, bukan sekadar "done".
+
+
+## Fondasi data Laravel ? 20 Oktober 2026
+
+- Scope: tahap 1 audit database aktif + backup yang diuji restore; tahap 2 kontrak data + kompatibilitas klasifikasi produk; seeder master contoh. Tidak menyelesaikan seluruh transaksi/BRVS aplikasi.
+- Backend: `dulank:audit-data`, `config/data_contracts.php`, PRD bagian 14, migration nullable `product_type`, enum `ProductType`, helper `ProductPricingContract`, validasi kode produk dan kategori/subkategori. Master ID dan nomor dokumen tetap dibedakan; respons API existing dipertahankan dengan tambahan productType.
+- Frontend: product editor mengirim productType dan priceType terpisah, tidak memulai dengan stok/harga/varian warna contoh, subkategori sesuai induk; Variable Product/Large Format memfilter jenis yang benar. Normalisasi status bahasa mengatasi error typecheck existing di useLanguages.
+- Seeder: `DemoMasterDataSeeder` terpisah dari DatabaseSeeder; hanya local/testing; transaction, provenance source=demo, tidak menimpa record existing/hasil edit, menolak benturan kode demo tanpa provenance. Dataset menambah 175 record master terkait, termasuk 2 cabang, 8 pelanggan, 4 supplier, 6 karyawan, 8 produk; tanpa transaksi, saldo atau stok awal. Promo dan akun contoh nonaktif.
+- Audit MySQL: 133 tabel, backup berhasil dipulihkan dan jumlah seluruh tabel cocok. Hash record awal diverifikasi pada 127 tabel bisnis tanpa perubahan; pengulangan seed tidak mengubah jumlah record. Audit akhir 0 error dan 14 kategori warning (relasi data lama, user_admins kosong, FK barang pembelian/varian belum tersedia).
+- Architecture evidence: route/komponen katalog existing -> useProductEditor/useProducts -> Laravel ProductController -> validasi/enum/helper -> products/relasi. Nuxt proxy dipakai, bukan Nitro JSON lama. Kontrak domain lain ditetapkan dalam PRD; migrasi seluruh flow belum dilakukan.
+- UI responsibility evidence: tidak mengubah markup/layout atau memindahkan tanggung jawab ke page/Workspace; perubahan di composable dan tipe API. Belum ada verifikasi browser desktop/mobile.
+- Check 1: uji FK induk, tipe harga/jenis produk, kode duplikat, API master terisi. Check 2: seed ulang, preserve edit pengguna, rollback provenance rusak/benturan kode, production guard, audit read-only dan tanpa PII.
+- Validation: suite Pest backend penuh, Pint, Nuxt build, typecheck, structure validator dan diff check; rincian akhir pada changelog. `test:sales` tidak tersedia dalam package.json. Status fondasi implemented/API-tested; browser verification pending, bukan approved baseline.
+- Git: branch Rama; NOT COMMITTED; NOT PUSHED; remote verification tidak dijalankan.
+
+
+### Validasi akhir fondasi 20 Oktober 2026
+
+Pest backend penuh PASS: 189 tes / 2.014 assertion. Pint PASS, Nuxt production build PASS, typecheck PASS, structure validator PASS (1.220 file / 0 failure), diff check kedua repo PASS. Audit database lokal setelah seed ulang: 133 tabel / 36 migration, 0 error / 14 kategori warning; jumlah record tetap. Browser belum diuji karena inventory apps/browsers kosong. Tidak ada klaim seluruh flow siap produksi. `test:sales` tidak tersedia. Tahap 1 audit/cadangan selesai; tahap 2 aturan kontrak dan fondasi katalog selesai pada cakupan tercatat, penerapan seluruh domain masih bertahap. Branch Rama; NOT COMMITTED / NOT PUSHED.
+
+
+### Penghapusan data contoh atas permintaan pengguna ? 20 Oktober 2026
+
+175 record yang dibuat DemoMasterDataSeeder dan 175 pemetaan source=demo telah dihapus dari database lokal dalam satu transaksi. Snapshot sebelum penghapusan disimpan di storage/app/private/backups/before-remove-demo-20261020-203138.snapshot. Perbandingan hash seluruh 133 tabel membuktikan record selain target demo tidak berubah; sisa pemetaan demo nol. Master yang sudah ada sebelum seeder tetap dipertahankan. File seeder, migration product_type, dan implementasi kontrak tetap tersedia. Catatan seed sebelumnya adalah riwayat, bukan keadaan database saat ini. Tidak menjalankan ulang seeder. Branch Rama; NOT COMMITTED / NOT PUSHED. Validasi: integritas row sebelum/sesudah penghapusan, bukan perubahan kode; build/tes tidak diulang.

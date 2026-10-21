@@ -22,6 +22,10 @@ const filteredCustomerTypes = computed(() => {
     if (filterStatus.value && filterStatus.value !== 'All' && filterStatus.value !== '') {
       if (item.status?.toLowerCase() !== filterStatus.value.toLowerCase()) return false
     }
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.trim().toLowerCase()
+      if (!item.name?.toLowerCase().includes(q)) return false
+    }
     return true
   })
 })
@@ -101,13 +105,7 @@ const printColumns = [
 <template>
   <div class="space-y-6">
     <!-- Success Toast -->
-    <div
-      v-if="toastMessage"
-      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
-    >
-      <FeatherIcon name="check-circle" size="16" />
-      <span>{{ toastMessage }}</span>
-    </div>
+    <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
     <!-- Header Toolbar -->
     <SalesListHeader

@@ -24,7 +24,7 @@ const columns = [
   { key: 'amount', label: 'Amount (IDR)', sortable: true, align: 'right' as const },
   { key: 'paymentMethod', label: 'Method', sortable: true },
   { key: 'bankAccount', label: 'Bank Account', sortable: true },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 </script>
 

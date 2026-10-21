@@ -24,7 +24,7 @@ defineEmits<{ close: []; edit: [item: SubscriptionRecord] }>()
         <div><dt class="app-supporting-text font-semibold">Created Date</dt><dd class="mt-1 text-sm">{{ formatSubscriptionDate(item.createdDate) }}</dd></div>
         <div><dt class="app-supporting-text font-semibold">Expiring On</dt><dd class="mt-1 text-sm">{{ formatSubscriptionDate(item.expiringOn) }}</dd></div>
       </dl>
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" :class="salesSecondaryButton" @click="$emit('close')">Close</button>
         <button type="button" :class="salesPrimaryButton" @click="$emit('edit', item)">
           <FeatherIcon name="edit" :size="14" /> Edit

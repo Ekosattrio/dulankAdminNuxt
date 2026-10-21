@@ -56,13 +56,13 @@ const columns = [
     </template>
 
     <template #cell(phone)="{ item }">
-      <span class="text-gray-600 dark:text-gray-400 font-mono text-xs">
+      <span class="text-gray-600 dark:text-gray-400 font-mono text-sm">
         {{ item.phone }}
       </span>
     </template>
 
     <template #cell(message)="{ item }">
-      <span class="text-gray-600 dark:text-gray-400 line-clamp-1 max-w-md text-xs">
+      <span class="text-gray-600 dark:text-gray-400 line-clamp-1 max-w-md text-sm">
         {{ item.message }}
       </span>
     </template>

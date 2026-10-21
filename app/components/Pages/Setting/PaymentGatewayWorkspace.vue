@@ -62,15 +62,12 @@ const handleToggleSwitch = async () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
 
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="row">
         <div class="col-xl-12">
@@ -98,7 +95,7 @@ const handleToggleSwitch = async () => {
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
                       <button class="btn btn-sm btn-outline-primary" @click="openConfig(key as PaymentGatewayKey)">
-                        <i class="ti ti-settings me-1"></i> {{ gw.enabled ? 'View Integration' : 'Connect Now' }}
+                        <FeatherIcon name="settings" :size="16" class="me-1" /> {{ gw.enabled ? 'View Integration' : 'Connect Now' }}
                       </button>
                       <div class="form-check form-switch mb-0">
                         <input v-model="gw.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleSwitch" />
@@ -120,7 +117,7 @@ const handleToggleSwitch = async () => {
               <div class="page-title">
                 <h4>{{ selectedGw?.name }} Integration</h4>
               </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
+              <button type="button" class="btn-close" @click="showModal = false" aria-label="Close dialog"></button>
             </div>
             <div class="modal-body custom-modal-body">
               <form @submit.prevent="handleSaveGateway">

@@ -124,7 +124,7 @@ function getStatusBadgeClass(status: string) {
     </template>
 
     <template #cell(detailProduct)="{ item }">
-      <span class="text-gray-600 dark:text-gray-400 text-xs">
+      <span class="text-gray-600 dark:text-gray-400 text-sm">
         {{ item.detailProduct }}
       </span>
     </template>

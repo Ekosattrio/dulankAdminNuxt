@@ -34,7 +34,7 @@ function chooseProduct(index: number) {
     <h2 class="app-section-title mb-3 mt-7 border-t border-gray-100 pt-5 dark:border-gray-800">Order Detail</h2>
     <div v-if="items.length" class="overflow-x-auto">
       <table class="w-full min-w-[360px] text-left text-sm">
-        <thead><tr class="border-b border-gray-200 text-gray-500"><th class="p-2 font-medium">Product Name</th><th class="p-2 font-medium">Qty</th><th class="p-2"></th></tr></thead>
+        <thead><tr class="border-b border-gray-200 text-gray-500"><th class="p-2 font-medium">Product Name</th><th class="p-2 font-medium">Qty</th><th class="p-2">Action</th></tr></thead>
         <tbody>
           <tr v-for="(item, index) in items" :key="item.productId" class="border-b border-gray-100 dark:border-gray-800">
             <td class="p-2 font-semibold">{{ item.productName }}</td><td class="p-2">{{ item.qty }}</td>

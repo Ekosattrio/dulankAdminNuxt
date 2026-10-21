@@ -32,33 +32,34 @@ const columns = [
 
 <template>
   <SalesDataTable
-    :data="filteredTaxes"
+    :items="filteredTaxes"
     :columns="columns"
     search-placeholder="Cari tarif pajak..."
-    v-model:search="searchQuery"
+    :search="searchQuery"
+    @update:search="searchQuery = $event"
   >
-    <template #cell-name="{ row }">
-      <span class="font-semibold text-gray-900 dark:text-white">{{ row.name }}</span>
+    <template #cell(name)="{ item }">
+      <span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span>
     </template>
 
-    <template #cell-rate="{ row }">
+    <template #cell(rate)="{ item }">
       <span class="inline-flex rounded-md bg-blue-50 px-2 py-0.5 font-mono text-xs font-bold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
-        {{ row.rate }}%
+        {{ item.rate }}%
       </span>
     </template>
 
-    <template #cell-createdOn="{ row }">
-      <span class="text-xs text-gray-500 dark:text-gray-400">{{ row.createdOn }}</span>
+    <template #cell(createdOn)="{ item }">
+      <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.createdOn || '-' }}</span>
     </template>
 
-    <template #cell-status="{ row }">
-      <SalesStatusBadge :status="row.status" />
+    <template #cell(status)="{ item }">
+      <SalesStatusBadge :status="item.status" />
     </template>
 
-    <template #cell-actions="{ row }">
-      <div class="flex items-center justify-center gap-1">
-        <SalesActionButton action="edit" label="Edit Pajak" @click="emit('edit', row)" />
-        <SalesActionButton action="delete" label="Hapus Pajak" @click="emit('delete', row)" />
+    <template #cell(actions)="{ item }">
+      <div class="flex items-center justify-center gap-1.5">
+        <SalesActionButton action="edit" label="Edit Pajak" @click="emit('edit', item)" />
+        <SalesActionButton action="delete" danger label="Hapus Pajak" @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>

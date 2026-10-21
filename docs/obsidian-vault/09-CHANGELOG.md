@@ -1,8 +1,86 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-17
+updated: 2026-10-21
 ---
+
+## 2026-10-21
+
+### Revisi visual toast sesuai pilihan pengguna
+
+- Toast global dikembalikan ke gaya toast Blog sebelumnya: latar hijau emerald-600 untuk sukses, teks/ikon putih, compact rounded-lg, posisi kanan atas. Error memakai latar rose-600 dan info biru; tombol tutup memakai hover putih transparan. Alur API, timer, dismiss dan deduplikasi dipertahankan.
+- Validasi: kompilasi SFC/template dan diff check PASS. Perubahan hanya kelas presentasi; build/typecheck/full tests tidak diulang. Browser visual belum dijalankan karena inventory sesi sebelumnya kosong. Tidak mengubah status verifikasi fitur/arsitektur.
+- Branch Rama; NOT COMMITTED / NOT PUSHED; tidak menjalankan Git mutating.
+
+### Revisi toast, upload gaya Employee, chip anggota dan null metrics partner
+
+- **Implementasi:** host toast tunggal di app (ClientOnly/Teleport, timer/dismiss/tone/aria), event client tanpa state SSR global. apiFetch memberi feedback mutation yang sebelumnya diam, berdasarkan respons; GET/auth/upload perantara/setup 2FA dikecualikan. success=false dan request error tidak diberi sukses; error request tetap dilempar ke form. SalesFeedback message dan 41 blok notifikasi pada 37 komponen memakai ActionToast. Form/loading error tetap dekat konteksnya.
+- **UI:** EntityPhotoField mengikuti Employee (preview bulat, choose/change, x remove, hidden file input, drag/drop/validasi). OrganizationMemberPicker menjadi input chip + live search dropdown berdasarkan employee ID, tanpa checkbox vertikal; chip x, dedupe, empty/disabled/focus dan keyboard.
+- **Partner fix:** normalizeCalculatorPartner memetakan metrics null/missing dan field Count API ke field UI, mempertahankan angka valid; query type printing_shop/paper_store dan guard jenis. CalculatorPartnersPage sum aman. Payload Laravel menambahkan joinDate/subscribed aktual. GET tidak menulis metrics/data contoh; tidak mengubah domain produk atau mengklaim seluruh moderasi/listing selesai.
+- **Architecture/UI evidence:** page -> form/table -> composable -> apiFetch -> Laravel/Eloquent tetap berlaku. New ActionToastHost/ActionToast (presentation/lifecycle), actionToast (event), apiFetch (HTTP feedback), calculatorPartner (pure payload adapter). MemberPicker/PhotoField input+emit saja, persistence tetap di composable. Partial BRVS; browser verification pending.
+- **Re-check:** pemetaan kind/type dan Count field, null metrics, true/false subscription, success=false/request rejection, pengecualian toast upload/auth, navigasi, duplikasi host, SSR tidak menyimpan notifikasi lintas user, template chip/preview/disabled. Native alert tidak ditemukan di source aktif.
+- **Validation:** 7 Node tests PASS lewat scripts/test-ui-feedback.mjs; Pest target 3 tests / 17 assertions PASS; Pint PASS. Kompilasi 830 SFC/template PASS, audit sisa named toast banners bersih. Nuxt typecheck/build dan validate:structure PASS (1.220 original, 0 failure); diff check PASS. Full backend suite tidak diulang (delta backend field respons dicakup target). test:sales tidak tersedia.
+- **Batas:** browser inventory apps=[]/browsers=[]; interaksi desktop/mobile, toast lifecycle dan keyboard browser belum diuji. [DONE](../../../DONE.md) bagian 8 mencatat implementasi; [TO-DO](../../../TO-DO.md) memuat gate browser. Tidak ada seeding/migration/data riil/email eksternal.
+- **Git:** Rama; NOT COMMITTED / NOT PUSHED. Perubahan revisi sebelumnya dipertahankan, tidak menjalankan Git mutating.
+
+### Revisi form/tabel master, CRUD dan ikon - permintaan 8 poin
+
+- **Cakupan:** Store/Customer/Supplier mendapat form foto (upload/preview/remove), persistence dan thumbnail tabel; customer type form/filter memakai master aktual; Designation Members memakai employee ID + total/Created On output otomatis + print/PDF; Department menyimpan relasi anggota aktual, status Inactive dan GET payload lengkap. Alamat customer/supplier mengirim PK numerik pemilik; placeholder Auto Generated diabaikan saat create. DOB/join date modal karyawan memakai date input dan adapter nilai lama.
+- **Role delete:** role terpakai/super-admin menampilkan alasan dan tombol hapus disabled; role kosong tetap bisa dihapus. Backend mengirim usersCount/canDelete/deleteReason, tidak menghapus assignment pengguna secara implisit. API error ditampilkan di UI.
+- **Ikon/kolom:** seluruh tag raw ti/data-feather yang ditemukan pada source aktif dikonversi Feather SVG, termasuk print/aksi Settings/Permissions/PO/retur dan ikon POS Order (presentasi saja; bisnis POS tetap ditunda). Delapan action columns kosong, more Sales dan lima th aksi inline diberi Action; shared SalesDataTable memberi fallback key action/actions. Checkbox tidak diubah menjadi Action. Tidak mengubah data/konfigurasi produk.
+- **Architecture evidence:** route -> form/table/workspace -> useStores/useCustomers/useSuppliers/useDepartments/useDesignations/useAddress + useImageUpload -> apiFetch/proxy Laravel -> PeopleController/SupplierController/OrganizationController/RoleController -> Eloquent/FK. OrganizationMemberPicker dan EntityPhotoField hanya input/emits; request domain tetap di composable. OrganizationController menyimpan assignment ID dalam transaksi; count/tanggal dari relasi/server. Bukan klaim full Nitro BRVS; status partial BRVS, implemented/API tested, browser verification pending.
+- **UI responsibility:** shared EntityPhotoField menangani pilihan/preview/error file; OrganizationMemberPicker menangani pencarian/pilihan karyawan berdasarkan ID; DepartmentFormModal/DesignationModal mengelola form tunggal add/edit, Workspace koordinasi/feedback/print. Tabel memakai data API, bukan dummy. Perubahan shared table hanya fallback label. Review ulang semua UI lama dan legacy parity penuh belum menjadi klaim; legacy/static-source tidak tersedia di checkout.
+- **Re-check 1:** kontrak form-table-field API, refresh list, ID pemilik vs kode bisnis, optional foto preserve/clear, status aktif/nonaktif, relasi anggota, tanggal native date dan busy/error. **Re-check 2:** duplicate nama karyawan ditangani via ID, invalid ID tidak menulis, penghapusan referenced master ditolak, role used/unused, akun pelanggan nonaktif tetap nonaktif, manager lama nonaktif tetap dipertahankan tetapi tidak dapat ditugaskan baru, seluruh icon names statis valid.
+- **Data:** audit live akhir 133 tabel, 0 error, 33 kategori warning. Migration 2026_10_21_101715 menambah photo_path nullable ke stores/suppliers dan sudah diterapkan lokal setelah backup SQL privat. 12.433 baris lama pada 130 tabel non-migration/non-cache identik sebelum/sesudah; tidak menjalankan seeder. Metadata backup ada di [DONE.md](../../../DONE.md).
+- **Validasi:** backend full PASS 226 tes / 2.409 assertions, termasuk 8 regresi baru / 72 assertions. Pint PASS. Frontend build produksi, typecheck dan structure PASS (1.220 original files, 0 failure). Static audit raw font/data-feather tags dan header th kosong bersih; diff check dan tautan dokumentasi diperiksa. test:sales tidak tersedia. Browser inventory apps=[]/browsers=[] sehingga desktop/390px/reload/console/print UI belum diverifikasi.
+- **Tracking:** [TO-DO.md](../../../TO-DO.md) baru memuat gate tertunda dan tahapan 6-14 (penomoran operasional kelanjutan); tahap 6 milik tim produk. DONE.md berisi implementasi tahap 1-5 dan revisi selesai pada cakupannya. Tidak memindahkan gate yang belum diuji ke status verified/approved.
+- **Git:** Rama; NOT COMMITTED / NOT PUSHED. Perubahan lama seeder/docs dari turn sebelumnya dipertahankan; tidak menjalankan Git mutating.
+
+### Eksekusi seeder tahap 1-5 tanpa produk (atas instruksi pengguna)
+
+- **Eksekusi:** FoundationStagesOneToFiveSeeder berhasil pada MySQL local setelah backup SQL privat. Seeder lama/default tidak dijalankan. Masuk 57 record master/akun baru beserta provenance; 2 pivot user-role, 6 pivot role-permission dan 3 activity log. Akun contoh nonaktif, kas nol, master existing dipakai ulang.
+- **Evidence:** perbandingan snapshot 12.347 baris lama pada 131 tabel non-cache tidak menemukan perubahan/penghapusan; seluruh domain produk/katalog/purchasing/printing/workflow/promo dan transaksi yang dilindungi identik. Cache permission diinvalidasi. Audit live: 133 tabel, 0 error, 34 kategori warning. Backup dan verification JSON berada di backend storage/app/private/backups; detail jumlah dan hasil diperbarui di [DONE.md](../../../DONE.md).
+- **Validasi:** pemeriksaan database aktual setelah seeding, bukan hanya output perintah. Tidak ada perubahan source aplikasi/seeder; tes/build/typecheck dan browser/SMTP tidak diulang. Status arsitektur/UI/modul tetap seperti sebelumnya; seeding bukan bukti browser atau kelengkapan bisnis.
+- **Git:** Rama; NOT COMMITTED / NOT PUSHED. Tidak menjalankan Git mutating. Pernyataan belum menjalankan seeder pada catatan sebelumnya merupakan riwayat sebelum instruksi eksekusi ini.
+
+### Seeder tahap 1-5 tanpa domain produk dan inventaris DONE
+
+- **Scope:** seeder backend mandiri `FoundationStagesOneToFiveSeeder`, tidak disambungkan ke DatabaseSeeder dan tidak memanggil DemoMasterDataSeeder lama. Hanya master organisasi/akses, wilayah, pihak/HR dan keuangan; semua katalog/konfigurasi produk serta stok/transaksi dikecualikan. Akun contoh nonaktif/password acak, kas saldo nol. Tidak menjalankan seeder pada database kerja.
+- **Dokumentasi:** [DONE.md root workspace](../../../DONE.md) memuat daftar fixture, jumlah, halaman/route yang diimplementasikan, cara menjalankan, pengecualian serta batas browser/SMTP/branch scope. DONE tidak menaikkan status semua halaman menjadi verified atau approved baseline. Tidak ada perubahan source frontend, arsitektur/UI tetap seperti evidence tahap 1-5 sebelumnya.
+- **Re-check 1/2 dan evidence:** tes relasi ID, snapshot seluruh tabel domain produk/purchasing/printing/workflow/promo, rerun dan data existing/hasil edit tetap utuh, collision rollback, parent wilayah konflik dan guard production. Seeder baru PASS 6 tes / 222 assertions pada SQLite terisolasi. Pint dan diff check PASS. Build/typecheck frontend tidak diulang karena source frontend tidak berubah; browser, SMTP dan live seeding tidak dijalankan.
+- **Git:** branch Rama; baseline admin b224143/backend 9d7c8f7; penambahan saat ini NOT COMMITTED / NOT PUSHED. Tidak melakukan Git mutating. DONE.md berada di root workspace di luar kedua repository Git.
+
+### Pemeriksaan akhir tahap 3?5
+
+- **Perbaikan:** endpoint read-only `/location-options` menyediakan wilayah aktif untuk form HR tanpa memberikan izin mutasi master; `/master-options` menyediakan pilihan akun untuk HR. Edit karyawan membaca endpoint detail berdasarkan ID, menahan simpan sebelum data berhasil dimuat, dan membatalkan respons yang sudah kedaluwarsa saat ID berganti. Tanggal karyawan baru memakai YYYY-MM-DD; departemen kosong tidak lagi diganti teks Produksi buatan. Currency menjaga submit bersamaan, menolak ID edit yang hilang, serta mengembalikan record edit yang benar. Subkategori memakai resolver kategori existing (trim/case), menolak label tidak dikenal tanpa membuat kategori diam-diam.
+- **Evidence:** `useLocationOptions` -> `RegionController::options`; `useEmployeeEditor` -> GET/PUT employees/{id}; `EmployeeFormModal` shared add/edit; `useCurrencySettings` -> settings/currency; `CatalogMasterController` -> `MasterDataService`. Reusable dan status architecture/UI tahap sebelumnya tetap berlaku: partial BRVS, implemented/API tested, browser verification pending.
+- **Validasi:** full backend Pest PASS 211 tests / 2.111 assertions sebelum perbaikan resolver kategori terakhir; sesudahnya target foundation + catalog PASS 26 tests / 147 assertions termasuk regresi baru resolver. Pint PASS; Nuxt typecheck PASS; structure validator PASS 1.220 original files / 0 failures; diff check PASS. Build produksi final PASS (exit 0). Tidak ada script test:sales.
+- **Batas runtime:** inventory computer-use diperiksa ulang, apps=[] / browsers=[]; browser desktop/mobile/reload dan console tetap belum diverifikasi. Audit ulang MySQL 21 Oktober gagal karena koneksi 127.0.0.1:3306 ditolak; tidak mengubah service database. Hasil audit/migrasi/backup 20 Oktober merupakan evidence sebelumnya, bukan audit baru. SMTP sungguhan belum diuji; tidak melakukan pengiriman email, seeding, atau perubahan akun/data riil pada kelanjutan ini.
+- **Git:** branch Rama; NOT COMMITTED / NOT PUSHED. Tidak menjalankan Git mutating. Scope cabang transaksi/laporan belum menyeluruh; data nyata masih perlu dilengkapi sesuai hasil audit sebelumnya.
+
+## 2026-10-20
+
+### Tahap 3?5: identitas admin, master referensi, dan relasi pihak
+
+- **Scope:** pilihan role/cabang/manager dari API; User Admin dengan password awal dan ID cabang; Store/Bank Account mengirim ID; tipe pelanggan dan alamat memakai FK; karyawan tambah/edit record aktual, relasi akun, kontak darurat, departemen dan wilayah database, foto melalui upload API. Profil menyimpan email/taxAddress. Security memakai akun/token/TOTP aktual; login mendukung kode autentikator; forgot/reset password memakai Laravel broker. Currency form menyertakan status/default sesuai validasi backend.
+- **Backend:** Laravel menambahkan guard admin aktif, sinkronisasi role, proteksi akun utama/diri sendiri, branch scope Store/BankAccount, validasi duplicate master dan referential delete, parent wilayah eksplisit, relasi pihak, serta migration nullable untuk data lama. Rincian: `dulank-backend/PRD.md` bagian 15.
+- **Architecture evidence:** route -> komponen domain -> useMasterOptions/useLocations/useEmployees/useEmployeeEditor/useCustomers/useAddress/useSecuritySettings/usePasswordRecovery -> apiFetch/useApiFetch -> `/api/v1/admin/*` Laravel -> controllers/services/Eloquent -> MySQL FK. API Laravel aktif merupakan pengganti layer persistence JSON/Nitro lama; tidak mengklaim full BRVS menurut rantai Nitro pada dokumen historis. server/types tetap kontrak UI. Tidak ada penulisan data dari page.
+- **UI responsibility evidence:** UserAdminFormModal, StoreListFormModal, BankAccountFormModal, AddressFormModal mengelola field/emits; Workspace mengoordinasikan dialog/feedback; SecurityPasswordModal dan SecurityTwoFactorModal terpisah; EmployeePageForm menjadi satu shared form add/edit dengan request/state di useEmployeeEditor. Form karyawan sekitar 300 baris adalah satu tanggung jawab form, belum audit ulang seluruh UI/dekomposisi; auth legacy masih inline form. Status partial BRVS, implemented/API tested, browser verification pending.
+- **Re-check 1:** kontrak payload ID, route POST-upsert vs PUT, pengisian edit aktual, status wilayah persisten, shape company/currency legacy, busy/error/input-preservation.
+- **Re-check 2:** akun non-admin/suspended dengan token, takeover email pelanggan, scope cabang rekening dan pemberian cabang admin, self/super-admin protections, current password, TOTP, token reset replay, parent wilayah tidak valid, master yang masih dipakai, rekening dengan ledger, employee ID/account uniqueness. Pengujian menggunakan database SQLite terisolasi; tidak mengubah akun riil.
+- **Data safety:** migration lokal sudah diterapkan setelah backup SQL; restore backup ke DB sementara membuktikan 12.319 baris di 132 tabel non-migration tetap sama pada kolom lamanya. Tidak menjalankan ulang seeder; data demo tetap dihapus. Audit aktif 0 error / 40 kategori warning; data lama belum lengkap tidak ditebak.
+- **Validation:** backend full Pest dan Pint PASS; Nuxt typecheck PASS; build produksi PASS, final rerun setelah form currency dicatat pada hasil akhir; validate:structure PASS (1.220 original files, 0 failures). test:sales tidak tersedia. Browser desktop/390px, reload dan console tidak dijalankan: inventory browser kosong. SMTP sungguhan tidak diuji; .env.example backend menambahkan URL frontend reset password.
+- **Risiko/batas:** scope cabang seluruh transaksi/laporan belum diterapkan; data nyata/relasi lama perlu dilengkapi; bank settings publik terpisah; TOTP belum recovery code; session UI hanya daftar (endpoint revoke ada); dokumen identitas mengikuti media public existing. Tidak menyatakan seluruh website siap produksi atau approved baseline.
+- **Git:** branch Rama; NOT COMMITTED / NOT PUSHED; tidak melakukan commit/push atau Git mutating.
+
+### Konsistensi presentasi frontend lintas halaman
+
+- **Scope:** audit source 191 page/628 komponen; perbaikan padding 31 route, tiga workspace HRM dan Inventory; card statistik tujuh menu; footer modal kanan/responsif; style Tailwind untuk markup Settings/Inventory lama; tipografi tabel dan aksesibilitas tombol tutup. Konten, script, binding, handler, API dan data dipertahankan.
+- **Evidence dan responsibility/architecture matrix:** [UI_CONSISTENCY_AUDIT_2026-10-20.md](../UI_CONSISTENCY_AUDIT_2026-10-20.md).
+- **Check 1 / Check 2:** perbandingan AST konten/script/directive; audit padding root, specificity tombol primary, grid responsif, wrap tombol/KPI; parse/compile seluruh 819 SFC pass.
+- **Validation:** build produksi PASS (exit 0 melalui npm.cmd/cmd); kompilasi stylesheet akhir PASS, termasuk koreksi dua deklarasi tinggi Inventory setelah build client. Structure validator PASS (1.220 original files, 0 failure), diff check PASS. Typecheck gagal pada error existing TS2769 di useLanguages.ts:45 yang tidak diedit. test:sales tidak tersedia pada package.json.
+- **Not run / risk:** browser desktop/390px/dark mode dan interaksi belum diuji karena browser inventory kosong dan iab tidak tersedia; arsip legacy/static-source tidak tersedia pada checkout. Status implemented, browser verification pending; tidak menaikkan status BRVS atau approved baseline.
+- **Git:** branch Rama; NOT COMMITTED; NOT PUSHED; remote verification tidak dijalankan. Tidak ada operasi Git mutating.
 
 ## 2026-10-19
 
@@ -1118,3 +1196,27 @@ updated: 2026-10-17
 
 - `app/components/Layout/AppHeader.vue` (dan `app/components/App/Layout/Header.vue`): dummy **Store** (Grocery Alpha/Apex/Bevy) → daftar toko `useStores` (pilih disimpan); **Language** (English statis) → bahasa aktif `useLanguages` (flag+name, pilih disimpan); **Notifikasi** ("2 New" + 2 item fiktif) → real dari `useDashboard.pendingPayments` + tiket open `useSupportTickets` (badge + daftar + state kosong); user identity & logout sudah real sebelumnya.
 - Validasi: typecheck 0; SSR 200 — nama user "Dulank Administrator", toko "Kacetak Cabang Bandung", bahasa "Bahasa Indonesia" tampil; dummy lama hilang.
+
+
+## Fondasi data Laravel ? 20 Oktober 2026
+
+- Scope: tahap 1 audit database aktif + backup yang diuji restore; tahap 2 kontrak data + kompatibilitas klasifikasi produk; seeder master contoh. Tidak menyelesaikan seluruh transaksi/BRVS aplikasi.
+- Backend: `dulank:audit-data`, `config/data_contracts.php`, PRD bagian 14, migration nullable `product_type`, enum `ProductType`, helper `ProductPricingContract`, validasi kode produk dan kategori/subkategori. Master ID dan nomor dokumen tetap dibedakan; respons API existing dipertahankan dengan tambahan productType.
+- Frontend: product editor mengirim productType dan priceType terpisah, tidak memulai dengan stok/harga/varian warna contoh, subkategori sesuai induk; Variable Product/Large Format memfilter jenis yang benar. Normalisasi status bahasa mengatasi error typecheck existing di useLanguages.
+- Seeder: `DemoMasterDataSeeder` terpisah dari DatabaseSeeder; hanya local/testing; transaction, provenance source=demo, tidak menimpa record existing/hasil edit, menolak benturan kode demo tanpa provenance. Dataset menambah 175 record master terkait, termasuk 2 cabang, 8 pelanggan, 4 supplier, 6 karyawan, 8 produk; tanpa transaksi, saldo atau stok awal. Promo dan akun contoh nonaktif.
+- Audit MySQL: 133 tabel, backup berhasil dipulihkan dan jumlah seluruh tabel cocok. Hash record awal diverifikasi pada 127 tabel bisnis tanpa perubahan; pengulangan seed tidak mengubah jumlah record. Audit akhir 0 error dan 14 kategori warning (relasi data lama, user_admins kosong, FK barang pembelian/varian belum tersedia).
+- Architecture evidence: route/komponen katalog existing -> useProductEditor/useProducts -> Laravel ProductController -> validasi/enum/helper -> products/relasi. Nuxt proxy dipakai, bukan Nitro JSON lama. Kontrak domain lain ditetapkan dalam PRD; migrasi seluruh flow belum dilakukan.
+- UI responsibility evidence: tidak mengubah markup/layout atau memindahkan tanggung jawab ke page/Workspace; perubahan di composable dan tipe API. Belum ada verifikasi browser desktop/mobile.
+- Check 1: uji FK induk, tipe harga/jenis produk, kode duplikat, API master terisi. Check 2: seed ulang, preserve edit pengguna, rollback provenance rusak/benturan kode, production guard, audit read-only dan tanpa PII.
+- Validation: suite Pest backend penuh, Pint, Nuxt build, typecheck, structure validator dan diff check; rincian akhir pada changelog. `test:sales` tidak tersedia dalam package.json. Status fondasi implemented/API-tested; browser verification pending, bukan approved baseline.
+- Git: branch Rama; NOT COMMITTED; NOT PUSHED; remote verification tidak dijalankan.
+
+
+### Validasi akhir fondasi 20 Oktober 2026
+
+Pest backend penuh PASS: 189 tes / 2.014 assertion. Pint PASS, Nuxt production build PASS, typecheck PASS, structure validator PASS (1.220 file / 0 failure), diff check kedua repo PASS. Audit database lokal setelah seed ulang: 133 tabel / 36 migration, 0 error / 14 kategori warning; jumlah record tetap. Browser belum diuji karena inventory apps/browsers kosong. Tidak ada klaim seluruh flow siap produksi. `test:sales` tidak tersedia. Tahap 1 audit/cadangan selesai; tahap 2 aturan kontrak dan fondasi katalog selesai pada cakupan tercatat, penerapan seluruh domain masih bertahap. Branch Rama; NOT COMMITTED / NOT PUSHED.
+
+
+### Penghapusan data contoh atas permintaan pengguna ? 20 Oktober 2026
+
+175 record yang dibuat DemoMasterDataSeeder dan 175 pemetaan source=demo telah dihapus dari database lokal dalam satu transaksi. Snapshot sebelum penghapusan disimpan di storage/app/private/backups/before-remove-demo-20261020-203138.snapshot. Perbandingan hash seluruh 133 tabel membuktikan record selain target demo tidak berubah; sisa pemetaan demo nol. Master yang sudah ada sebelum seeder tetap dipertahankan. File seeder, migration product_type, dan implementasi kontrak tetap tersedia. Catatan seed sebelumnya adalah riwayat, bukan keadaan database saat ini. Tidak menjalankan ulang seeder. Branch Rama; NOT COMMITTED / NOT PUSHED. Validasi: integritas row sebelum/sesudah penghapusan, bukan perubahan kode; build/tes tidak diulang.

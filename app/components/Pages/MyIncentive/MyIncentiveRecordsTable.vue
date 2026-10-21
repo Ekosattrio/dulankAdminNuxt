@@ -105,7 +105,7 @@ const totalAmount = computed(() => {
 
       <!-- Table Footer Total Row matching exact legacy tfoot (Total in col 1, colspan 5, Amount sum in col 7) -->
       <template #footer>
-        <tr class="bg-gray-50/80 dark:bg-gray-800/80 font-bold border-t-2 border-gray-300 dark:border-gray-600 text-xs">
+        <tr class="bg-gray-50/80 dark:bg-gray-800/80 font-bold border-t-2 border-gray-300 dark:border-gray-600 text-sm">
           <td class="px-4 py-3 text-start text-gray-900 dark:text-white font-bold">Total</td>
           <td colspan="5"></td>
           <td id="amount-total" class="px-4 py-3 text-end text-gray-900 dark:text-white font-bold">

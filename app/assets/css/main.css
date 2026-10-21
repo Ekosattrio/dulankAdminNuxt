@@ -1,4 +1,5 @@
 @import "tailwindcss" source(none);
+@import "./legacy-ui.css";
 
 /* Scan the application, keeping the HTML reference and vendor assets separate. */
 @source "../../app.vue";
@@ -116,6 +117,20 @@
 }
 
 @layer components {
+  /* Outer spacing belongs to layouts/default.vue, including inventory routes. */
+  .dulank-page {
+    @apply min-w-0 w-full;
+  }
+
+  .app-stat-card {
+    @apply flex min-w-0 items-center gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-800 dark:bg-gray-900;
+  }
+
+  .app-stat-card .tabular-nums {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
   .app-page-title {
     @apply text-xl font-bold text-gray-900 dark:text-white;
   }
@@ -147,7 +162,7 @@
   /* Inventory master pages still reuse legacy table components, but their active
      route must follow the same light Tailwind surface as Sales/Purchases. */
   .inventory-master-page {
-    @apply min-w-0 px-4 py-5 md:px-6;
+    @apply min-w-0;
   }
 
   .inventory-master-page .page-wrapper,
@@ -194,6 +209,7 @@
   .inventory-master-page .search-input input,
   .inventory-master-page .filters select {
     @apply h-9 rounded-md border border-gray-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200;
+    height: 36px;
   }
 
   .inventory-master-page .search-input input {
@@ -254,6 +270,7 @@
   .inventory-master-page .modal-content .form-control,
   .inventory-master-page .modal-content .form-select {
     @apply h-9 w-full rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700 shadow-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200;
+    height: 36px;
   }
 
   .inventory-master-page .modal-content .btn {

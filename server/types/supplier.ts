@@ -1,6 +1,7 @@
 export interface Supplier {
   id: string
   supplierId: string
+  photo?: string | null
   name: string
   email: string
   contact: string
@@ -17,6 +18,7 @@ export interface SupplierFilterParams {
 export interface SupplierFormData {
   id?: string
   supplierId?: string
+  photo?: string | null
   name: string
   email: string
   contact: string

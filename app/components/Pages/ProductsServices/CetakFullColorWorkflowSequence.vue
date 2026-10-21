@@ -25,7 +25,7 @@ function move(index: number, direction: -1 | 1) {
     <div class="overflow-x-auto">
       <table class="min-w-[620px] w-full text-left text-sm">
         <thead class="border-b border-gray-200 bg-gray-50 font-semibold text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-          <tr><th class="w-16 px-4 py-3">No</th><th class="w-28 px-4 py-3"></th><th class="px-4 py-3">Flow Category</th><th class="px-4 py-3">Flow Name</th></tr>
+          <tr><th class="w-16 px-4 py-3">No</th><th class="w-28 px-4 py-3">Action</th><th class="px-4 py-3">Flow Category</th><th class="px-4 py-3">Flow Name</th></tr>
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
           <tr v-for="(item, index) in items" :key="item.id">

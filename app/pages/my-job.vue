@@ -63,7 +63,7 @@ const handleStatusSubmit = async (payload: { status: JobStatus; qtyOk: string; q
 </script>
 
 <template>
-  <div class="dulank-page dulank-page-my-job max-w-7xl mx-auto px-4 py-6">
+  <div class="dulank-page dulank-page-my-job">
     <SalesFeedback
       v-if="feedbackMessage"
       :message="feedbackType === 'success' ? feedbackMessage : ''"

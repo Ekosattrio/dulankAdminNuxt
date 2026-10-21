@@ -113,7 +113,7 @@ const emit = defineEmits<{
             <FeatherIcon name="phone" :size="18" />
           </div>
           <div>
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Nomor Telepon Terverifikasi</h4>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Nomor Telepon Akun</h4>
             <p class="text-xs text-gray-500">{{ security.phone }}</p>
           </div>
         </div>
@@ -142,7 +142,7 @@ const emit = defineEmits<{
             <FeatherIcon name="mail" :size="18" />
           </div>
           <div>
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Alamat Email Terverifikasi</h4>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Alamat Email Akun</h4>
             <p class="text-xs text-gray-500">{{ security.email }}</p>
           </div>
         </div>
@@ -157,7 +157,7 @@ const emit = defineEmits<{
           <button
             type="button"
             class="h-8 rounded-md px-2.5 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
-            @click="emit('remove-email')"
+            disabled title="Email login wajib tersedia; gunakan Ubah untuk mengganti."
           >
             Hapus
           </button>

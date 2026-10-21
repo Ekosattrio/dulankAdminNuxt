@@ -117,7 +117,7 @@ const emit = defineEmits<{
           class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-primary/90"
           @click="emit('edit', order); emit('close')"
         >
-          <i data-feather="edit" class="h-3.5 w-3.5"></i>
+          <FeatherIcon name="edit" :size="14" class="h-3.5 w-3.5" />
           Edit Order
         </button>
       </div>

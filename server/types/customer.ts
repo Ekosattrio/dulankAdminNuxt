@@ -1,6 +1,7 @@
 export interface CustomerRecord {
   id: string
   customerId: string
+  photo?: string | null
   name: string
   email: string
   type: string
@@ -37,6 +38,7 @@ export interface CustomerFilterParams {
 export interface CustomerFormData {
   id?: string
   customerId?: string
+  photo?: string | null
   name: string
   email: string
   type: string

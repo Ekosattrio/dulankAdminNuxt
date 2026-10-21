@@ -106,7 +106,7 @@ const { historyItems, pending, refresh } = useJobBranchHistory(filters)
     </div>
 
     <template #footer>
-      <div class="flex items-center justify-end gap-2">
+      <div class="flex flex-wrap items-center justify-end gap-2">
         <button
           type="button"
           class="h-9 px-4 rounded-lg bg-[#212b36] hover:bg-gray-800 text-white text-xs font-medium transition-colors"

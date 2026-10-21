@@ -99,7 +99,7 @@ const handleConfirmDelete = async () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
@@ -112,7 +112,7 @@ const handleConfirmDelete = async () => {
                 <div class="setting-title mb-0">
                   <h4 class="fs-18 fw-bold">Printer Settings</h4>
                 </div>
-                <button class="btn btn-added" @click="openAddModal"><i class="ti ti-plus me-1"></i> Add New Printer</button>
+                <button class="btn btn-added" @click="openAddModal"><FeatherIcon name="plus-circle" :size="16" class="me-1" /> Add New Printer</button>
               </div>
 
               <div class="card table-list-card border shadow-sm">
@@ -147,10 +147,10 @@ const handleConfirmDelete = async () => {
                           <td class="action-table-data text-end">
                             <div class="edit-delete-action d-inline-flex gap-2">
                               <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(p)">
-                                <i class="ti ti-edit"></i>
+                                <FeatherIcon name="edit" :size="16"  />
                               </button>
                               <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="openDeleteConfirm(p)">
-                                <i class="ti ti-trash"></i>
+                                <FeatherIcon name="trash-2" :size="16"  />
                               </button>
                             </div>
                           </td>
@@ -176,7 +176,7 @@ const handleConfirmDelete = async () => {
               <div class="page-title">
                 <h4>{{ isEditing ? "Edit Printer" : "Add Printer" }}</h4>
               </div>
-              <button type="button" class="btn-close" @click="showModal = false"></button>
+              <button type="button" class="btn-close" @click="showModal = false" aria-label="Close dialog"></button>
             </div>
             <div class="modal-body custom-modal-body">
               <form @submit.prevent="handleSavePrinter">

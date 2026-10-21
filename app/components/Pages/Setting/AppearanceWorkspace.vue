@@ -76,15 +76,12 @@ const resetForm = () => {
         </div>
         <ul class="table-top-head">
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
         </ul>
       </div>
 
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="row">
         <div class="col-xl-12">
@@ -113,9 +110,9 @@ const resetForm = () => {
                           @click="selectedTheme = mode"
                         >
                           <div class="py-3 fs-24">
-                            <i v-if="mode === 'Light'" class="ti ti-sun text-warning"></i>
-                            <i v-else-if="mode === 'Dark'" class="ti ti-moon text-dark"></i>
-                            <i v-else class="ti ti-device-desktop text-primary"></i>
+                            <FeatherIcon name="sun" :size="16" v-if="mode === 'Light'" class="text-warning" />
+                            <FeatherIcon name="moon" :size="16" v-else-if="mode === 'Dark'" class="text-dark" />
+                            <FeatherIcon name="monitor" :size="16" v-else class="text-primary" />
                           </div>
                           <span class="text-sm font-semibold d-block">{{ mode }}</span>
                         </div>
@@ -138,10 +135,10 @@ const resetForm = () => {
                           :style="{ width: '36px', height: '36px', backgroundColor: color.hex }"
                           @click="selectedAccent = color.name"
                         >
-                          <i
+                          <FeatherIcon name="check" :size="16"
                             v-if="selectedAccent === color.name"
-                            class="ti ti-check text-white position-absolute top-50 start-50 translate-middle"
-                          ></i>
+                            class="text-white position-absolute top-50 start-50 translate-middle"
+                           />
                         </div>
                       </div>
                     </div>

@@ -60,10 +60,10 @@ export function useAdminAuth() {
     }
   }
 
-  const login = async (email: string, password: string, remember = false) => {
+  const login = async (email: string, password: string, remember = false, code = '') => {
     const response = await apiFetch<LoginResponse>('/api/v1/admin/auth/login', {
       method: 'POST',
-      body: { email, password, device_name: 'dulank-admin-web' },
+      body: { email, password, code: code || undefined, device_name: 'dulank-admin-web' },
     })
 
     persistToken(response.data.token, remember)

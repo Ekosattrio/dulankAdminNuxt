@@ -14,7 +14,7 @@ function close() {
   <SalesDialog :open="open" :title="title" :busy="busy" @close="!busy && close()">
     <p class="text-sm text-gray-600 dark:text-gray-300">{{ message }}</p>
     <p v-if="error" role="alert" class="mt-3 text-sm text-red-600">{{ error }}</p>
-    <div class="mt-6 flex justify-end gap-3">
+    <div class="mt-6 flex flex-wrap justify-end gap-3">
       <button
         type="button"
         :disabled="busy"

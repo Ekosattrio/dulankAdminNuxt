@@ -135,7 +135,7 @@ function handleSubmit() {
       </div>
 
       <!-- Footer Buttons -->
-      <div class="mt-6 flex justify-end gap-3 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="mt-6 flex flex-wrap justify-end gap-3 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button
           type="button"
           :disabled="busy"

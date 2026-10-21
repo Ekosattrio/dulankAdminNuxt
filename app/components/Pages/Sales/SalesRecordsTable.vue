@@ -37,7 +37,7 @@ const transactionCodes = [
 
 const { formatRupiah } = useFormatters()
 const columns = [
-  { key: 'more', label: '' },
+  { key: 'more', label: 'Action' },
   { key: 'saleNo', label: 'No Sales', sortable: true },
   { key: 'customer', label: 'Customer', sortable: true },
   { key: 'date', label: 'Date', sortable: true },

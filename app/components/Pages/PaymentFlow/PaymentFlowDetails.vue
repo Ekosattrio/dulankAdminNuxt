@@ -63,7 +63,7 @@ const { formatNumber } = useFormatters()
         <p v-else class="text-sm text-gray-500">No payment has been recorded.</p>
       </section>
 
-      <div class="flex justify-end gap-2.5 border-t border-gray-200 pt-4 dark:border-gray-700">
+      <div class="flex flex-wrap justify-end gap-2.5 border-t border-gray-200 pt-4 dark:border-gray-700">
         <button
           type="button"
           class="min-w-24 rounded-md bg-[#212b36] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#092c4c] focus:outline-none"

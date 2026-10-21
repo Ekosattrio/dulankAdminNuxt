@@ -12,20 +12,17 @@
             <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
           </li>
           <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
+            <a title="Print" href="javascript:void(0);" @click="printTable"><FeatherIcon name="printer" :size="16"  /></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="14" /></a>
           </li>
           <li>
-            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><i class="ti ti-chevron-up"></i></a>
+            <a title="Collapse" href="javascript:void(0);" @click="toggleCollapse"><FeatherIcon name="chevron-up" :size="16"  /></a>
           </li>
         </ul>
       </div>
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="card table-list-card">
         <div class="card-body">
@@ -37,7 +34,7 @@
             </div>
             <div class="d-flex align-items-center gap-2">
               <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" @click="showFilter = !showFilter">
-                <i class="ti ti-filter"></i> Filter
+                <FeatherIcon name="filter" :size="16"  /> Filter
               </button>
               <select v-model="selectedRole" class="form-select form-select-sm" style="min-width: 140px">
                 <option value="Admin">Admin</option>
@@ -66,7 +63,7 @@
               </div>
               <div class="col-lg-4 col-sm-12 d-flex align-items-end">
                 <button class="btn btn-warning btn-sm text-white w-100" @click="applyFilter">
-                  <i class="ti ti-search me-1"></i> Apply Filter
+                  <FeatherIcon name="search" :size="16" class="me-1" /> Apply Filter
                 </button>
               </div>
             </div>

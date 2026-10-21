@@ -9,13 +9,14 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  submit: [newPassword: string]
+  submit: [payload: { currentPassword: string; newPassword: string; confirmPassword: string }]
 }>()
 
 const current = ref('')
 const newPass = ref('')
 const confirmPass = ref('')
 const errorMsg = ref('')
+watch(() => props.open, (open) => { if (!open) { current.value = ''; newPass.value = ''; confirmPass.value = ''; errorMsg.value = '' } })
 
 function handleSubmit() {
   errorMsg.value = ''
@@ -27,14 +28,12 @@ function handleSubmit() {
     errorMsg.value = 'Konfirmasi password tidak cocok.'
     return
   }
-  if (newPass.value.length < 6) {
-    errorMsg.value = 'Password baru minimal 6 karakter.'
+  if (newPass.value.length < 8) {
+    errorMsg.value = 'Password baru minimal 8 karakter.'
     return
   }
-  emit('submit', newPass.value)
-  current.value = ''
-  newPass.value = ''
-  confirmPass.value = ''
+  if (props.busy) return
+  emit('submit', { currentPassword: current.value, newPassword: newPass.value, confirmPassword: confirmPass.value })
 }
 </script>
 
@@ -89,7 +88,7 @@ function handleSubmit() {
         </div>
       </div>
 
-      <div class="mt-6 flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button
           type="button"
           class="h-9 rounded-md border border-gray-300 px-4 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800"

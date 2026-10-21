@@ -87,7 +87,7 @@ const handleSubmit = () => {
             <span v-else-if="editData">Edit Data Karyawan</span>
             <span v-else>Tambah Karyawan Baru</span>
           </h5>
-          <button type="button" class="btn-close" @click="emit('close')"></button>
+          <button type="button" class="btn-close" @click="emit('close')" aria-label="Close dialog"></button>
         </div>
 
         <form @submit.prevent="handleSubmit">

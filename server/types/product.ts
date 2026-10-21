@@ -1,3 +1,5 @@
+export type ProductType = 'Single Product' | 'Variable Product' | 'Size Calculation' | 'Minimum Qty or Price' | 'Large Format' | 'Offset Service Price'
+
 export interface ProductVariant {
   id: string
   variation: string
@@ -19,6 +21,7 @@ export interface Product {
   unit: string
   storeId: string
   price: number
+  productType?: ProductType | null
   priceType: string
   created: string
   status: 'Active' | 'Inactive'
@@ -60,6 +63,7 @@ export interface ProductFormData {
   unit: string
   storeId?: string
   price: number
+  productType?: ProductType | null
   priceType: string
   status?: 'Active' | 'Inactive'
   store?: string
@@ -86,5 +90,6 @@ export interface ProductImportRow {
   subCategory: string
   unit: string
   price: number
+  productType?: ProductType | null
   priceType: string
 }

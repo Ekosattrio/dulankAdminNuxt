@@ -66,7 +66,7 @@ const period = computed(() => dateRangeToDisplay(props.dateRange, 'All Periods')
         No sub-product breakdown data for this category.
       </p>
 
-      <div class="flex justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
         <button type="button" class="min-h-9 rounded-md bg-[#212b36] px-4 text-sm font-semibold text-white" @click="emit('close')">Cancel</button>
         <button type="button" class="min-h-9 rounded-md bg-[#ff9f43] px-4 text-sm font-semibold text-white" @click="emit('submit')">Submit</button>
       </div>

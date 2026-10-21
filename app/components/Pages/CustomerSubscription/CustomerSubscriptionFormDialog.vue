@@ -141,7 +141,7 @@ function submit() {
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
         <button type="button" :class="salesSecondaryButton" :disabled="busy" @click="emit('close')">Cancel</button>
         <button type="submit" :class="salesPrimaryButton" :disabled="busy">{{ busy ? 'Saving...' : 'Submit' }}</button>
       </div>

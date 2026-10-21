@@ -34,13 +34,13 @@ const columns = [
     <template #filters>
       <TableFilterSelect :model-value="status" :options="['Active', 'Inactive']" placeholder="All Statuses" @update:model-value="emit('update:status', $event)" />
     </template>
-    <template #cell-name="{ item }"><span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span></template>
-    <template #cell-accountCount="{ item }"><span class="tabular-nums">{{ item.accountCount }}</span></template>
-    <template #cell-status="{ item }"><SalesStatusBadge :status="item.status" /></template>
-    <template #cell-actions="{ item }">
+    <template #cell(name)="{ item }"><span class="font-semibold text-gray-900 dark:text-white">{{ item.name }}</span></template>
+    <template #cell(accountCount)="{ item }"><span class="tabular-nums">{{ item.accountCount }}</span></template>
+    <template #cell(status)="{ item }"><SalesStatusBadge :status="item.status" /></template>
+    <template #cell(actions)="{ item }">
       <div class="inline-flex items-center justify-center gap-1.5">
         <SalesActionButton action="edit" label="Edit Account Type" @click="emit('edit', item)" />
-        <SalesActionButton action="delete" label="Delete Account Type" :disabled="item.accountCount > 0" @click="emit('delete', item)" />
+        <SalesActionButton action="delete" danger label="Delete Account Type" :disabled="item.accountCount > 0" @click="emit('delete', item)" />
       </div>
     </template>
   </SalesDataTable>

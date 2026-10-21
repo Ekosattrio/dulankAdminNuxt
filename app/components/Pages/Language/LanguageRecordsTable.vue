@@ -96,11 +96,11 @@ const columns = [
     </template>
 
     <template #cell(totalKeys)="{ item }">
-      <span class="font-mono tabular-nums">{{ item.totalKeys.toLocaleString('id-ID') }}</span>
+      <span class="font-mono tabular-nums">{{ (item.totalKeys ?? 0).toLocaleString('id-ID') }}</span>
     </template>
 
     <template #cell(doneKeys)="{ item }">
-      <span class="font-mono tabular-nums">{{ item.doneKeys.toLocaleString('id-ID') }}</span>
+      <span class="font-mono tabular-nums">{{ (item.doneKeys ?? 0).toLocaleString('id-ID') }}</span>
     </template>
 
     <template #cell(progress)="{ item }">

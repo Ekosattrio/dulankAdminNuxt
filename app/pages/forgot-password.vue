@@ -28,10 +28,11 @@
                 </div>
               </div>
               <div class="form-login mb-3">
-                <button type="submit" class="btn btn-login w-100 btn-primary py-2 text-white font-semibold">
+                <button type="submit" :disabled="busy" class="btn btn-login w-100 btn-primary py-2 text-white font-semibold">
                   Send Reset Link
                 </button>
               </div>
+              <p v-if="error" role="alert" class="text-sm text-red-600">{{ error }}</p>
               <p v-if="submitted" role="status" class="mb-3 rounded border border-success p-2 text-sm text-success">
                 If an account exists for {{ email }}, a password reset link has been sent.
               </p>
@@ -90,11 +91,8 @@ useLegacyPage({
 })
 
 const email = ref('')
-const submitted = ref(false)
-
-const handleSubmit = () => {
-  submitted.value = true
-}
+const { busy, error, submitted, send } = usePasswordRecovery()
+const handleSubmit = () => send(email.value)
 </script>
 
 <style scoped>

@@ -1,6 +1,8 @@
 export interface Store {
   id: string
+  photo?: string | null
   storeName: string
+  managerId?: string | null
   userName: string
   address: string
   phone: string
@@ -15,7 +17,9 @@ export interface StoreFilterParams {
 
 export interface StoreFormData {
   id?: string
+  photo?: string | null
   storeName: string
+  managerId?: string | null
   userName: string
   address: string
   phone: string

@@ -21,7 +21,7 @@ const emit = defineEmits<{
           <!-- Header -->
           <div class="modal-header border-0 p-0 pb-3 mb-3 d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0 text-dark">Customer Details</h4>
-            <button type="button" class="btn-close" @click="emit('close')"></button>
+            <button type="button" class="btn-close" @click="emit('close')" aria-label="Close dialog"></button>
           </div>
 
           <!-- Body -->

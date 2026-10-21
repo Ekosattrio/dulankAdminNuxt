@@ -180,7 +180,7 @@ function handleExportExcel() {
 </script>
 
 <template>
-  <div class="space-y-4 p-4 md:p-6">
+  <div class="space-y-4">
     <!-- Toast notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -190,14 +190,7 @@ function handleExportExcel() {
       leave-from-class="translate-y-0 opacity-100"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <div
-        v-if="toastMessage"
-        class="fixed right-6 top-20 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-xl"
-        role="alert"
-      >
-        <FeatherIcon name="check-circle" size="18" />
-        <span>{{ toastMessage }}</span>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
     </Transition>
 
     <!-- Header bar -->

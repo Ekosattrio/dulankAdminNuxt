@@ -68,6 +68,7 @@ async function confirmDelete() {
     <SalesListHeader
       title="Tax Rates"
       subtitle="Kelola master tarif pajak penjualan, PPN faktur, dan pajak masukan"
+      add-label="Add Tax Rate"
       :refreshing="pending"
       @refresh="refresh"
       @add="openAddModal"

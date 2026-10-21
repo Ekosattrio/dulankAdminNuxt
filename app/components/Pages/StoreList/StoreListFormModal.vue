@@ -20,12 +20,16 @@ const emit = defineEmits<{
   submit: [formData: StoreFormData]
 }>()
 
+const { managers } = useMasterOptions()
+
 const statusOptions = ['Active', 'Inactive']
 
 const form = ref<StoreFormData>({
   id: '',
+  photo: null,
   storeName: '',
   userName: '',
+  managerId: '',
   phone: '',
   email: '',
   address: '',
@@ -35,13 +39,16 @@ const form = ref<StoreFormData>({
 const errorMessage = ref('')
 
 watch(
-  () => props.storeData,
-  (val) => {
+  () => [props.open, props.storeData] as const,
+  ([open, val]) => {
+    if (!open) return
     if (val && props.isEdit) {
       form.value = {
         id: val.id,
+        photo: val.photo || null,
         storeName: val.storeName,
         userName: val.userName,
+        managerId: val.managerId || '',
         phone: val.phone || '',
         email: val.email || '',
         address: val.address || '',
@@ -50,8 +57,10 @@ watch(
     } else {
       form.value = {
         id: '',
+        photo: null,
         storeName: '',
         userName: '',
+        managerId: '',
         phone: '',
         email: '',
         address: '',
@@ -64,20 +73,13 @@ watch(
 )
 
 function handleSubmit() {
+  if (props.busy) return
   if (!form.value.storeName.trim()) {
     errorMessage.value = 'Store name is required'
     return
   }
-  if (!form.value.userName.trim()) {
+  if (!form.value.managerId) {
     errorMessage.value = 'Manager / Username is required'
-    return
-  }
-  if (!form.value.phone.trim()) {
-    errorMessage.value = 'Phone number is required'
-    return
-  }
-  if (!form.value.email.trim()) {
-    errorMessage.value = 'Email address is required'
     return
   }
   errorMessage.value = ''
@@ -98,6 +100,7 @@ function handleSubmit() {
         {{ errorMessage }}
       </div>
 
+      <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Photo</label><div :class="modalFormInputColClass"><EntityPhotoField v-model="form.photo" :disabled="busy" /></div></div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Store Name <span class="text-rose-500">*</span></label>
         <div :class="modalFormInputColClass">
@@ -114,38 +117,34 @@ function handleSubmit() {
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Manager / User <span class="text-rose-500">*</span></label>
         <div :class="modalFormInputColClass">
-          <input
-            v-model="form.userName"
-            type="text"
-            placeholder="e.g. Thomas21"
-            :class="formControlClass"
-            required
-          >
+          <select v-model="form.managerId" :class="formControlClass" required>
+            <option disabled value="">Pilih penanggung jawab</option>
+            <option v-if="form.managerId && !managers.some(manager => String(manager.id) === form.managerId)" :value="form.managerId">{{ storeData?.userName || 'Manager tersimpan' }} (tersimpan)</option>
+            <option v-for="manager in managers" :key="manager.id" :value="String(manager.id)">{{ manager.name }}</option>
+          </select>
         </div>
       </div>
 
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Phone <span class="text-rose-500">*</span></label>
+        <label :class="modalFormLabelClass">Phone</label>
         <div :class="modalFormInputColClass">
           <input
             v-model="form.phone"
             type="text"
             placeholder="+62 812..."
             :class="formControlClass"
-            required
           >
         </div>
       </div>
 
       <div :class="modalFormRowClass">
-        <label :class="modalFormLabelClass">Email <span class="text-rose-500">*</span></label>
+        <label :class="modalFormLabelClass">Email</label>
         <div :class="modalFormInputColClass">
           <input
             v-model="form.email"
             type="email"
             placeholder="branch@example.com"
             :class="formControlClass"
-            required
           >
         </div>
       </div>

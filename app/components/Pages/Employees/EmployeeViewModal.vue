@@ -148,7 +148,7 @@ const emit = defineEmits<{
     </div>
 
     <template #footer>
-      <div class="flex items-center justify-end gap-3 w-full">
+      <div class="flex flex-wrap items-center justify-end gap-3 w-full">
         <button
           type="button"
           class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"

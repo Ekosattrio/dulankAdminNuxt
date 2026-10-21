@@ -280,6 +280,7 @@ const menuGroups: MenuGroup[] = [
     items: [
       { title: "Employees", icon: "briefcase", to: "/employees" },
       { title: "Department", icon: "git-merge", to: "/department" },
+      { title: "Designation", icon: "award", to: "/designation" },
       {
         title: "Payroll",
         icon: "calendar",
@@ -394,6 +395,7 @@ const menuGroups: MenuGroup[] = [
         submenus: [
           { title: "Email setting", to: "/email-setting" },
           { title: "Language", to: "/language" },
+          { title: "Custom Fields", to: "/custom-field" },
           { title: "OTP", to: "/otp" },
         ],
       },

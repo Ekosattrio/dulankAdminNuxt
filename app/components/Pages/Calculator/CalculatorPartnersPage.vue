@@ -30,7 +30,7 @@ const filteredPartners = computed(() => partners.value.filter(partner => {
 
 const stats = computed(() => {
   const rows = partners.value
-  const sum = (key: keyof CalculatorPartnerRow['metrics']) => rows.reduce((total, row) => total + Number(row.metrics[key] || 0), 0)
+  const sum = (key: keyof CalculatorPartnerRow['metrics']) => rows.reduce((total, row) => total + Number(row.metrics?.[key] || 0), 0)
   const base = [
     { label: isPrinting.value ? 'Percetakan' : 'Toko Kertas', value: rows.length, icon: isPrinting.value ? 'printer' : 'shopping-bag' },
     { label: 'Subscribed', value: rows.filter(row => row.subscribed).length, icon: 'check-circle', tone: 'bg-emerald-50 text-emerald-600' },
@@ -80,7 +80,7 @@ async function submitModeration(input: CalculatorModerationInput) {
     notify(response.message || 'Tindakan berhasil disimpan')
     manageTarget.value = null
   } catch (cause: any) {
-    actionError.value = cause?.data?.statusMessage || cause?.message || 'Tindakan gagal disimpan'
+    actionError.value = cause?.data?.message || cause?.data?.statusMessage || cause?.message || 'Tindakan gagal disimpan'
   } finally { busy.value = false }
 }
 
@@ -92,7 +92,7 @@ async function confirmDelete() {
     notify(response.message || 'Partner berhasil dihapus')
     deleteTarget.value = null
   } catch (cause: any) {
-    actionError.value = cause?.data?.statusMessage || cause?.message || 'Partner gagal dihapus'
+    actionError.value = cause?.data?.message || cause?.data?.statusMessage || cause?.message || 'Partner gagal dihapus'
   } finally { busy.value = false }
 }
 </script>
