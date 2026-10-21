@@ -27,6 +27,8 @@ export function useStores() {
 
   const saveStore = async (payload: StoreFormData) => {
     const { id, ...body } = payload
+    const { persistImage } = useImageUpload()
+    if (body.photo !== undefined) body.photo = await persistImage(body.photo, 'stores')
 
     const res = await apiFetch<MutationResponse>(
       id ? `/api/v1/admin/stores/${encodeURIComponent(id)}` : '/api/v1/admin/stores',

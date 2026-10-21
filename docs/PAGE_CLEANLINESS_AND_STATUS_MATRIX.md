@@ -1,5 +1,11 @@
 # PANDUAN PAGE BERSIH, PETA KOMPONEN & MASTER STATUS MATRIX
 
+> **Update UI 2026-10-21:** notifikasi CRUD memakai ActionToastHost global + apiFetch response/bridge ActionToast (41 blok/37 komponen); PhotoField mengikuti Employee; MemberPicker satu input chip/live search; kedua halaman partner menormalkan metrics null/Count field dan filter jenis. 7 Node tests + 3 API tests/17 assertions, kompilasi 830 template, build/typecheck/structure PASS. Browser belum tersedia; partial BRVS, browser verification pending. Evidence [changelog](obsidian-vault/09-CHANGELOG.md); gate tetap di TO-DO.md root. Tidak ada migration/seeding/data produk berubah. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Revisi 2026-10-21:** Store/Customer/Supplier photo -> useImageUpload/API -> persisted URL/table; Department/Designation memberIds -> OrganizationController transaction -> employees FK -> counts/names response; Customer/Supplier address -> owner PK; Role list -> deletion eligibility/reason; static icon fonts -> Feather; action labels/date fields konsisten. Shared form inputs EntityPhotoField/OrganizationMemberPicker terpisah dari request; route tetap composition layer. Backend regression/full suite, build/typecheck/structure PASS; browser inventory kosong sehingga status **implemented/API tested, browser verification pending; partial BRVS**. [TO-DO](../../TO-DO.md) dan [DONE](../../DONE.md) menjadi tracking tahap lintas repo, tidak menggantikan evidence audit modul historis. Rama; NOT COMMITTED / NOT PUSHED.
+
+
 > **Verifikasi lanjutan 2026-10-21:** dropdown wilayah HR memakai read-only location-options; edit karyawan mengambil detail by ID; tanggal/modal dan currency dirapikan; kategori subkategori harus existing. Backend full 211 tes + target terbaru 26 tes PASS; typecheck, build, structure, diff check PASS. Browser inventory tetap kosong; MySQL lokal saat audit ulang menolak koneksi. Hasil DB 20 Oktober adalah evidence sebelumnya. Status **implemented/API tested, browser/runtime verification pending**, partial BRVS. Detail pada [changelog](obsidian-vault/09-CHANGELOG.md). **Rama / NOT COMMITTED / NOT PUSHED**.
 
 

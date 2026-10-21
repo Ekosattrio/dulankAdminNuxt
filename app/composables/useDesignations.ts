@@ -23,9 +23,10 @@ export function useDesignations(filterParams?: Ref<DesignationFilterParams> | De
   })))
 
   const saveDesignation = async (payload: DesignationFormData) => {
-    const res = await apiFetch<{ success: boolean; data: Designation; message?: string }>('/api/v1/admin/designations', {
-      method: 'POST',
-      body: payload
+    const { id, ...body } = payload
+    const res = await apiFetch<{ success: boolean; data: Designation; message?: string }>(id ? `/api/v1/admin/designations/${encodeURIComponent(id)}` : '/api/v1/admin/designations', {
+      method: id ? 'PUT' : 'POST',
+      body
     })
     await refresh()
     return res

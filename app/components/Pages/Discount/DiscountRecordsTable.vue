@@ -29,7 +29,7 @@ const columns = [
   { key: 'products', label: 'Products', sortable: true },
   { key: 'used', label: 'Used', sortable: true, align: 'center' as const },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 
 const formatValue = (item: DiscountItem): string =>

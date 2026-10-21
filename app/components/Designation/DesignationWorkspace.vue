@@ -8,6 +8,7 @@ import SalesFeedback from '~/components/Sales/SalesFeedback.vue'
 
 const { designations, pending, error, refresh, saveDesignation, deleteDesignation } = useDesignations()
 
+const { employees } = useMasterOptions()
 const searchQuery = ref('')
 const selectedStatus = ref('')
 
@@ -36,6 +37,14 @@ const filteredDesignations = computed(() => {
   })
 })
 
+const { isPrintModalOpen, defaultPrintAction, printTitle, printColumns, printRows, openPrintModal } = useTablePrint()
+function handlePrint(action: 'print' | 'pdf') {
+  openPrintModal({ title: 'Designation / Jabatan', action, columns: [
+    { key: 'name', label: 'Designation' }, { key: 'members', label: 'Members' },
+    { key: 'totalMembers', label: 'Total Members' }, { key: 'createdOn', label: 'Created On' }, { key: 'status', label: 'Status' },
+  ], rows: filteredDesignations.value.map(item => ({ ...item, members: item.members.join(', ') })) })
+}
+
 const openAddModal = () => {
   editData.value = null
   isModalOpen.value = true
@@ -61,7 +70,7 @@ const handleConfirmDelete = async () => {
     showToast(res?.message || 'Jabatan berhasil dihapus')
     itemToDelete.value = null
   } catch (err: any) {
-    showToast(err?.message || 'Gagal menghapus jabatan')
+    showToast(err?.data?.message || err?.message || 'Gagal menghapus jabatan')
   } finally {
     isDeleting.value = false
   }
@@ -75,7 +84,7 @@ const handleSave = async (payload: DesignationFormData) => {
     isModalOpen.value = false
     editData.value = null
   } catch (err: any) {
-    showToast(err?.message || 'Gagal menyimpan jabatan')
+    showToast(err?.data?.message || err?.message || 'Gagal menyimpan jabatan')
   } finally {
     isBusy.value = false
   }
@@ -121,9 +130,12 @@ const handleSave = async (payload: DesignationFormData) => {
       @delete="handleDelete"
     />
 
+    <DocumentPrintModal :open="isPrintModalOpen" :title="printTitle" :columns="printColumns" :rows="printRows" :default-action="defaultPrintAction" :show-date-range="false" @close="isPrintModalOpen = false" />
+
     <PagesDesignationModal
       :is-open="isModalOpen"
       :edit-data="editData"
+      :employees="employees"
       :busy="isBusy"
       @close="isModalOpen = false"
       @save="handleSave"

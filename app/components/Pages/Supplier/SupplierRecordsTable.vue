@@ -59,7 +59,7 @@ const columns = [
     </template>
 
     <template #cell(name)="{ item }">
-      <EntityIdentity :name="item.name" :subtitle="item.picName" kind="supplier" />
+      <EntityIdentity :image="item.photo || ''" :name="item.name" :subtitle="item.picName" kind="supplier" />
     </template>
 
     <template #cell(email)="{ item }">

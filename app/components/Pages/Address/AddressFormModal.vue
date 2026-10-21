@@ -34,7 +34,7 @@ const form = ref({
 })
 
 const errorMessage = ref('')
-const { provinces, regencies, districts } = useLocations()
+const { provinces, regencies, districts } = useLocationOptions()
 const availableCities = computed(() => regencies.value.filter(item => item.province === form.value.province))
 const availableDistricts = computed(() => districts.value.filter(item => item.regency === form.value.city && item.province === form.value.province))
 watch(() => form.value.province, () => { if (!availableCities.value.some(item => item.name === form.value.city)) { form.value.city = ''; form.value.district = '' } })
@@ -46,7 +46,7 @@ watch(
     if (val && props.isEdit) {
       form.value = {
         id: val.id || '',
-        customerId: val.customerId || val.supplierId || '',
+        customerId: val.ownerId || val.customerId || val.supplierId || '',
         name: val.name || val.user || '',
         contact: val.contact || val.phone || '',
         province: val.province || '',

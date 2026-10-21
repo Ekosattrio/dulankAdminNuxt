@@ -14,9 +14,10 @@ export function useDepartments() {
   const departments = computed<Department[]>(() => data.value?.data ?? [])
 
   const saveDepartment = async (payload: DepartmentFormData) => {
-    const res = await apiFetch<{ success: boolean; data: Department; message?: string }>('/api/v1/admin/departments', {
-      method: 'POST',
-      body: payload
+    const { id, ...body } = payload
+    const res = await apiFetch<{ success: boolean; data: Department; message?: string }>(id ? `/api/v1/admin/departments/${encodeURIComponent(id)}` : '/api/v1/admin/departments', {
+      method: id ? 'PUT' : 'POST',
+      body
     })
     await refresh()
     return res

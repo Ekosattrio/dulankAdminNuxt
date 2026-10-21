@@ -65,8 +65,8 @@ watch(
         phone: val.phone || '',
         status: val.status || 'Active',
         gender: val.gender || 'Male',
-        dob: val.dob || '',
-        joinDate: val.joinDate || '',
+        dob: normalizeDateInput(val.dob),
+        joinDate: normalizeDateInput(val.joinDate),
         joinChannel: val.joinChannel || 'Offline',
         contact1Name: val.contact1Name || '',
         contact1Phone: val.contact1Phone || '',
@@ -355,7 +355,7 @@ function handleSubmit() {
         <div :class="modalFormInputColClass">
           <input
             v-model="form.dob"
-            type="text"
+            type="date"
             placeholder="DD/MM/YYYY"
             :class="formControlClass"
           >
@@ -367,7 +367,7 @@ function handleSubmit() {
         <div :class="modalFormInputColClass">
           <input
             v-model="form.joinDate"
-            type="text"
+            type="date"
             placeholder="DD/MM/YYYY"
             :class="formControlClass"
           >

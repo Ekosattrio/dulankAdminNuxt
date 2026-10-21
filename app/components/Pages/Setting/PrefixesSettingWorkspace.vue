@@ -101,14 +101,7 @@ async function handleSave() {
 <template>
   <div class="space-y-6">
     <!-- Success / Info Toast -->
-    <div
-      v-if="toastMessage"
-      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
-      :class="toastType === 'success' ? 'bg-emerald-600' : 'bg-slate-700'"
-    >
-      <FeatherIcon :name="toastType === 'success' ? 'check-circle' : 'info'" size="16" />
-      <span>{{ toastMessage }}</span>
-    </div>
+    <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
     <!-- Header Section -->
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

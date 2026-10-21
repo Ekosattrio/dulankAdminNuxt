@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue'
 import type { Department, DepartmentFormData } from '#server/types/department'
 import { useDepartments } from '~/composables/useDepartments'
-import { useEmployees } from '~/composables/useEmployees'
 import { useTablePrint } from '~/composables/useTablePrint'
 import DepartmentStatsWidgets from '~/components/Pages/Department/DepartmentStatsWidgets.vue'
 import DepartmentRecordsTable from '~/components/Pages/Department/DepartmentRecordsTable.vue'
@@ -17,12 +16,7 @@ const searchQuery = ref('')
 const filterStatus = ref('')
 
 const { departments, pending, error, refresh, saveDepartment, deleteDepartment } = useDepartments()
-const { employees } = useEmployees()
-
-// Available employee names for quick pick
-const availableMembers = computed(() => {
-  return employees.value.map(e => e.name)
-})
+const { employees } = useMasterOptions()
 
 // Client-side filtering for 0ms smooth search without skeleton flicker
 const filteredDepartments = computed(() => {
@@ -46,7 +40,7 @@ const stats = computed(() => {
   const totalDepartments = all.length
   const totalEmployees = all.reduce((sum, d) => sum + (d.totalMembers ?? (d.members?.length || 0)), 0)
   const activeDepartments = all.filter(d => d.status === 'Active').length
-  const inactiveDepartments = all.filter(d => d.status === 'Disable').length
+  const inactiveDepartments = all.filter(d => d.status === 'Inactive').length
 
   return {
     totalDepartments,
@@ -228,7 +222,7 @@ function handleExportExcel() {
       :open="isFormModalOpen"
       :is-edit="isEditMode"
       :department-data="activeDepartmentForEdit"
-      :available-members="availableMembers"
+      :employees="employees"
       :busy="isBusy"
       @close="isFormModalOpen = false"
       @submit="handleFormSubmit"

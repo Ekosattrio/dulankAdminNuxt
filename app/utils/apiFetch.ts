@@ -1,3 +1,4 @@
+import { showActionToast } from '~/utils/actionToast'
 import type { FetchOptions } from 'ofetch'
 import type { FetchError } from 'ofetch'
 
@@ -106,12 +107,26 @@ export const apiFetch = ((url: string, options: FetchOptions<'json'> = {}) => {
     headers.set('Authorization', `Bearer ${token}`)
   }
 
+  const method = String(options.method || 'GET').toUpperCase()
+  const notify = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && !/\/(?:auth|uploads)\//.test(url) && !url.includes('/two-factor/setup')
   return rawFetch(url, {
     ...options,
     baseURL: resolveBaseURL(),
     headers,
+  }).then(response => {
+    const result = response as { success?: boolean; message?: string } | undefined
+    if (notify && result?.success === false) throw Object.assign(new Error(result.message || 'Perubahan gagal disimpan.'), { data: result })
+    if (notify && result?.success !== false) {
+      showActionToast(result?.message || (method === 'DELETE' ? 'Data berhasil dihapus.' : method === 'POST' ? 'Data berhasil disimpan.' : 'Perubahan berhasil disimpan.'), 'success', 'request')
+    }
+    return response
   }).catch(async (error: unknown) => {
     const fetchError = error as FetchError
+    if (notify) {
+      const data = fetchError?.data as { message?: string; statusMessage?: string; errors?: Record<string, string[]> } | undefined
+      const validation = Object.values(data?.errors || {}).flat()[0]
+      showActionToast(validation || data?.message || data?.statusMessage || 'Perubahan gagal disimpan. Silakan coba lagi.', 'error', 'request')
+    }
     if (fetchError?.status === 401) {
       await handleUnauthorized(url)
     }

@@ -336,7 +336,7 @@ async function handleSubmit() {
                 <th class="px-3 py-2.5 text-center w-[120px]">Unit</th>
                 <th class="px-3 py-2.5 text-right w-[160px]">Price (IDR)</th>
                 <th class="px-3 py-2.5 text-right w-[160px]">Amount (IDR)</th>
-                <th class="px-2 py-2.5 text-center w-[50px]"></th>
+                <th class="px-2 py-2.5 text-center w-[50px]">Action</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">

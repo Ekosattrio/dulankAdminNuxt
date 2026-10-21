@@ -1,6 +1,7 @@
 export interface Designation {
   id: string
   name: string
+  memberIds?: string[]
   members: string[]
   createdOn: string
   totalMembers: number
@@ -15,6 +16,7 @@ export interface DesignationFilterParams {
 export interface DesignationFormData {
   id?: string
   name: string
+  memberIds?: string[]
   members?: string[]
   totalMembers?: number
   createdOn?: string

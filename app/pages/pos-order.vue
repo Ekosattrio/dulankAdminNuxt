@@ -12,14 +12,14 @@
             <a title="Pdf" href="javascript:void(0);" @click="exportPdf"><img src="/assets/img/icons/pdf.svg" alt="img" /></a>
           </li>
           <li>
-            <a title="Print" href="javascript:void(0);" @click="printTable"><i class="ti ti-printer"></i></a>
+            <a title="Print" href="javascript:void(0);" @click="printTable"><FeatherIcon name="printer" :size="16"  /></a>
           </li>
           <li>
-            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><i class="ti ti-rotate"></i></a>
+            <a title="Refresh" href="javascript:void(0);" @click="refresh()"><FeatherIcon name="rotate-cw" :size="16"  /></a>
           </li>
         </ul>
         <div class="page-btn">
-          <NuxtLink to="/add-sales" class="btn btn-primary"> <i class="ti ti-circle-plus me-1"></i>Add Sales </NuxtLink>
+          <NuxtLink to="/add-sales" class="btn btn-primary"> <FeatherIcon name="plus-circle" :size="16" class="me-1" />Add Sales </NuxtLink>
         </div>
       </div>
       <p v-if="feedbackMessage" role="status" class="alert alert-success py-2">{{ feedbackMessage }}</p>
@@ -30,7 +30,7 @@
           <div class="table-top d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
             <div class="search-set d-flex align-items-center gap-2 flex-wrap">
               <div class="search-input">
-                <span class="btn-searchset"><i class="ti ti-search"></i></span>
+                <span class="btn-searchset"><FeatherIcon name="search" :size="16"  /></span>
                 <input
                   v-model="searchQuery"
                   type="text"
@@ -109,27 +109,27 @@
                   <td class="text-center action-table-data">
                     <div class="dropdown">
                       <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown">
-                        <i class="ti ti-dots-vertical"></i>
+                        <FeatherIcon name="more-vertical" :size="16"  />
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li>
                           <button class="dropdown-item py-1 small" type="button" @click="viewDetail(order)">
-                            <i class="ti ti-eye me-2 text-info"></i>Sale Detail
+                            <FeatherIcon name="eye" :size="16" class="me-2 text-info" />Sale Detail
                           </button>
                         </li>
                         <li>
                           <button class="dropdown-item py-1 small" type="button" @click="openPayments(order)">
-                            <i class="ti ti-receipt me-2 text-secondary"></i>Show Payments
+                            <FeatherIcon name="file-text" :size="16" class="me-2 text-secondary" />Show Payments
                           </button>
                         </li>
                         <li v-if="order.due > 0">
                           <button class="dropdown-item py-1 small" type="button" @click="openCreatePayment(order)">
-                            <i class="ti ti-credit-card me-2 text-success"></i>Create Payment
+                            <FeatherIcon name="credit-card" :size="16" class="me-2 text-success" />Create Payment
                           </button>
                         </li>
                         <li>
                           <NuxtLink :to="'/sales-receipt?id=' + order.reference" class="dropdown-item py-1 small">
-                            <i class="ti ti-printer me-2 text-primary"></i>Print Receipt
+                            <FeatherIcon name="printer" :size="16" class="me-2 text-primary" />Print Receipt
                           </NuxtLink>
                         </li>
                         <li>
@@ -137,7 +137,7 @@
                         </li>
                         <li>
                           <button class="dropdown-item py-1 small text-danger" type="button" @click="deleteOrder(order.id)">
-                            <i class="ti ti-trash me-2"></i>Delete
+                            <FeatherIcon name="trash-2" :size="16" class="me-2" />Delete
                           </button>
                         </li>
                       </ul>

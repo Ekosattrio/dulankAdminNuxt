@@ -13,7 +13,7 @@ const columns = [
   { key: 'name', label: 'Plane Name', sortable: true },
   { key: 'customers', label: 'Customers', sortable: true },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 const customerOptions = computed(() => props.meta.filterCustomerSegments.map(item => ({ label: item.filterLabel || item.name, value: item.id })))
 </script>

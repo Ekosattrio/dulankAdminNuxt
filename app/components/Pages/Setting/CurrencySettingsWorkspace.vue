@@ -121,7 +121,7 @@ const handleConfirmDelete = async () => {
                   <h4 class="fs-18 fw-bold">Currency Settings</h4>
                 </div>
                 <button class="btn btn-added" @click="openAddModal">
-                  <i class="ti ti-plus me-1"></i> Add New Currency
+                  <FeatherIcon name="plus-circle" :size="16" class="me-1" /> Add New Currency
                 </button>
               </div>
 
@@ -165,10 +165,10 @@ const handleConfirmDelete = async () => {
                           <td class="action-table-data text-end">
                             <div class="edit-delete-action d-inline-flex gap-2">
                               <button class="btn btn-sm btn-outline-primary p-1" title="Edit" @click="openEditModal(c)">
-                                <i class="ti ti-edit"></i>
+                                <FeatherIcon name="edit" :size="16"  />
                               </button>
                               <button class="btn btn-sm btn-outline-danger p-1" title="Delete" @click="openDeleteConfirm(c)">
-                                <i class="ti ti-trash"></i>
+                                <FeatherIcon name="trash-2" :size="16"  />
                               </button>
                             </div>
                           </td>

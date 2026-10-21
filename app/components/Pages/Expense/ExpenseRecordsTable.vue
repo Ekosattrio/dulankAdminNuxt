@@ -27,7 +27,7 @@ const columns = [
   { key: 'paid', label: 'Paid (IDR)', sortable: true, align: 'right' as const },
   { key: 'due', label: 'Due (IDR)', sortable: true, align: 'right' as const },
   { key: 'status', label: 'Status', sortable: true, align: 'center' as const },
-  { key: 'actions', label: '', align: 'center' as const },
+  { key: 'actions', label: 'Action', align: 'center' as const },
 ]
 </script>
 

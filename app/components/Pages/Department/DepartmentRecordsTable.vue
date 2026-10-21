@@ -18,7 +18,7 @@ const emit = defineEmits<{
   'delete': [department: Department]
 }>()
 
-const statusOptions = ['Active', 'Disable']
+const statusOptions = ['Active', 'Inactive']
 
 const columns = [
   { key: 'name', label: 'Department', sortable: true },

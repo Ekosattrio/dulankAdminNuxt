@@ -1,3 +1,4 @@
+import { normalizeCalculatorPartner } from '~/utils/calculatorPartner'
 import type {
   CalculatorListingCategory,
   CalculatorListingRow,
@@ -16,9 +17,9 @@ interface ApiResponse<T> {
 export function useCalculatorPartners(kind: CalculatorPartnerKind) {
   const { data, pending, error, refresh } = useApiFetch<ApiResponse<CalculatorPartnerRow[]>>('/api/v1/admin/calculator/partners', {
     key: `calculator-partners-${kind}`,
-    query: { kind },
+    query: { type: kind === 'paper_shop' ? 'paper_store' : kind },
   })
-  const partners = computed(() => data.value?.data ?? [])
+  const partners = computed(() => (Array.isArray(data.value?.data) ? data.value.data : []).map(normalizeCalculatorPartner).filter((row): row is CalculatorPartnerRow => row !== null && row.kind === kind))
 
   async function moderatePartner(id: string, input: CalculatorModerationInput) {
     const response = await apiFetch<ApiResponse<CalculatorPartnerRow>>(`/api/v1/admin/calculator/partners/${encodeURIComponent(id)}/moderate`, { method: 'POST', body: input })

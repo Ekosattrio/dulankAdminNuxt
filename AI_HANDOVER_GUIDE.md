@@ -1,5 +1,20 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
 
+> **Pilihan visual toast 2026-10-21:** pengguna meminta gaya toast lama kembali: sukses bg-emerald-600 dengan teks/ikon putih, bentuk compact rounded-lg di kanan atas. ActionToastHost sudah disesuaikan; error rose dan info blue. Pertahankan pilihan ini saat revisi selanjutnya. Alur notifikasi tetap global. Kompilasi template/diff PASS; browser belum diverifikasi. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Update UI 2026-10-21:** notifikasi CRUD memakai ActionToastHost global + apiFetch response/bridge ActionToast (41 blok/37 komponen); PhotoField mengikuti Employee; MemberPicker satu input chip/live search; kedua halaman partner menormalkan metrics null/Count field dan filter jenis. 7 Node tests + 3 API tests/17 assertions, kompilasi 830 template, build/typecheck/structure PASS. Browser belum tersedia; partial BRVS, browser verification pending. Evidence [changelog](docs/obsidian-vault/09-CHANGELOG.md); gate tetap di TO-DO.md root. Tidak ada migration/seeding/data produk berubah. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Revisi form/tabel 2026-10-21:** foto Store/Customer/Supplier persisten, anggota Department/Designation berupa employee IDs, status/tanggal konsisten, alamat memakai PK pemilik, role used menampilkan alasan tidak dapat dihapus, ikon font lama diganti Feather SVG dan header aksi diberi Action. Migration foto stores/suppliers sudah diterapkan setelah backup, data lama utuh. Backend 226 tes/2.409 assertions PASS; build/typecheck/structure PASS. Browser tetap belum tersedia. Evidence: [changelog](docs/obsidian-vault/09-CHANGELOG.md). [TO-DO.md](../TO-DO.md) memuat gate tertunda dan tahap 6-14; [DONE.md](../DONE.md) memuat implementasi selesai. Status partial BRVS, browser verification pending. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Update eksekusi 2026-10-21:** FoundationStagesOneToFiveSeeder sudah berhasil dijalankan di MySQL local atas instruksi pengguna, setelah backup. Masuk 57 record baru; data lama dan seluruh domain produk terverifikasi utuh. Audit live 0 error / 34 kategori warning. [DONE.md](../DONE.md) memuat hasil aktual. Catatan sebelumnya "belum dijalankan" adalah riwayat. Tidak menjalankan seeder lama/default; akun demo tetap nonaktif. Status browser/SMTP/kelengkapan bisnis tidak berubah. Rama; NOT COMMITTED / NOT PUSHED.
+
+
+> **Seeder dan DONE (2026-10-21):** backend menyediakan FoundationStagesOneToFiveSeeder mandiri tanpa seluruh domain produk (termasuk kategori/satuan/varian, bahan/mesin/harga/workflow). Hanya diuji SQLite: 6 tes / 222 assertions PASS, tidak dijalankan di DB kerja. Daftar data/halaman serta batas kelengkapan ada di [DONE root workspace](../DONE.md). Jangan mengganti entry point ini dengan DemoMasterDataSeeder lama yang berisi produk. Status modul tidak dinaikkan; browser/SMTP/branch transaksi masih terbatas. Rama; penambahan saat ini NOT COMMITTED / NOT PUSHED.
+
+
 > **Verifikasi lanjutan 2026-10-21:** dropdown wilayah HR memakai read-only location-options; edit karyawan mengambil detail by ID; tanggal/modal dan currency dirapikan; kategori subkategori harus existing. Backend full 211 tes + target terbaru 26 tes PASS; typecheck, build, structure, diff check PASS. Browser inventory tetap kosong; MySQL lokal saat audit ulang menolak koneksi. Hasil DB 20 Oktober adalah evidence sebelumnya. Status **implemented/API tested, browser/runtime verification pending**, partial BRVS. Detail pada [changelog](docs/obsidian-vault/09-CHANGELOG.md). **Rama / NOT COMMITTED / NOT PUSHED**.
 
 

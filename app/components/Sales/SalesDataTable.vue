@@ -228,7 +228,7 @@ watch(totalPages, (value) => {
             >
               <slot :name="`header(${col.key})`" :column="col">
                 <div class="inline-flex items-center gap-1.5">
-                  <span>{{ col.label }}</span>
+                  <span>{{ col.label || (['action', 'actions'].includes(col.key) ? 'Action' : '') }}</span>
                   <span v-if="col.sortable" class="text-gray-400">
                     <FeatherIcon
                       v-if="sortKey === col.key"

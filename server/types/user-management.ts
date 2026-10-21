@@ -28,6 +28,9 @@ export interface UserAdmin {
 }
 
 export interface SystemRole {
+  usersCount?: number
+  canDelete?: boolean
+  deleteReason?: string
   id: string
   name: string
   createdOn: string

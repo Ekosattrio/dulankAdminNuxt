@@ -167,13 +167,7 @@ function handleDownload(item: DownloadFileItem) {
 <template>
   <div class="space-y-5">
     <!-- Success Toast Notification -->
-    <div
-      v-if="toastMessage"
-      class="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-xs font-semibold text-white shadow-xl transition-all"
-    >
-      <FeatherIcon name="check-circle" size="16" />
-      <span>{{ toastMessage }}</span>
-    </div>
+    <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
     <SalesListHeader
       title="Download Files"

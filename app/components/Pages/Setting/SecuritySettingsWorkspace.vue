@@ -108,31 +108,9 @@ async function handleRemoveContact() {
     />
 
     <!-- Feedback messages -->
-    <div
-      v-if="toastSuccess"
-      class="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-xs font-medium text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300"
-    >
-      <div class="flex items-center gap-2">
-        <FeatherIcon name="check-circle" :size="16" />
-        <span>{{ toastSuccess }}</span>
-      </div>
-      <button type="button" @click="toastSuccess = ''">
-        <FeatherIcon name="x" :size="14" />
-      </button>
-    </div>
+    <ActionToast :message="toastSuccess" @dismiss="toastSuccess = ''" />
 
-    <div
-      v-if="toastError"
-      class="flex items-center justify-between rounded-lg border border-rose-200 bg-rose-50 p-4 text-xs font-medium text-rose-800 dark:border-rose-900 dark:bg-rose-950/50 dark:text-rose-300"
-    >
-      <div class="flex items-center gap-2">
-        <FeatherIcon name="alert-triangle" :size="16" />
-        <span>{{ toastError }}</span>
-      </div>
-      <button type="button" @click="toastError = ''">
-        <FeatherIcon name="x" :size="14" />
-      </button>
-    </div>
+    <ActionToast :message="toastError" tone="error" @dismiss="toastError = ''" />
 
     <SalesFeedback
       v-if="pending && !security"

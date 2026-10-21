@@ -67,7 +67,7 @@ async function handleFormSubmit(payload: Partial<SystemRole>) {
     activeRoleForEdit.value = null
     showToast(isEditMode.value ? 'Role updated successfully' : 'Role created successfully')
   } catch (err: any) {
-    showToast(err?.message || 'Failed to save Role')
+    showToast(err?.data?.message || err?.message || 'Failed to save Role')
   } finally {
     isBusy.value = false
   }
@@ -81,7 +81,7 @@ async function handleConfirmDelete() {
     showToast(`Role '${roleToDelete.value.name}' deleted successfully`)
     roleToDelete.value = null
   } catch (err: any) {
-    showToast(err?.message || 'Failed to delete Role')
+    showToast(err?.data?.message || err?.message || 'Failed to delete Role')
   } finally {
     isBusy.value = false
   }

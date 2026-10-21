@@ -84,7 +84,7 @@
                     :title="showPassword ? 'Hide password' : 'Show password'"
                     @click="showPassword = !showPassword"
                   >
-                    <i :class="showPassword ? 'ti ti-eye' : 'ti ti-eye-off'"></i>
+                    <FeatherIcon :name="showPassword ? 'eye' : 'eye-off'" :size="16" />
                   </button>
                 </div>
                 <p v-if="fieldErrors.password" id="login-password-error" class="mt-1 text-xs text-danger">

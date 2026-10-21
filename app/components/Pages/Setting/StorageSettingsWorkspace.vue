@@ -75,10 +75,7 @@ const sendTestEmail = () => {
         </ul>
       </div>
 
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="row">
         <div class="col-xl-12">
@@ -89,7 +86,7 @@ const sendTestEmail = () => {
               </div>
               <div class="page-header text-end justify-content-end mb-4">
                 <a href="javascript:void(0);" class="btn btn-primary" @click="sendTestEmail">
-                  <i class="ti ti-mail me-2"></i>Send test email
+                  <FeatherIcon name="mail" :size="16" class="me-2" />Send test email
                 </a>
               </div>
               <div class="row">
@@ -109,7 +106,7 @@ const sendTestEmail = () => {
                       </li>
                       <li class="setting-gateway d-flex align-items-center">
                         <a href="javascript:void(0);" class="me-2 text-muted" @click="openConfig('local')">
-                          <i class="ti ti-settings fs-18"></i>
+                          <FeatherIcon name="settings" :size="16" class="fs-18" />
                         </a>
                         <div class="form-check form-switch mb-0">
                           <input v-model="storage.local.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleLocal" />
@@ -131,7 +128,7 @@ const sendTestEmail = () => {
                       </li>
                       <li class="setting-gateway d-flex align-items-center">
                         <a href="javascript:void(0);" class="me-2 text-muted" @click="showAwsModal = true">
-                          <i class="ti ti-settings fs-18"></i>
+                          <FeatherIcon name="settings" :size="16" class="fs-18" />
                         </a>
                         <div class="form-check form-switch mb-0">
                           <input v-model="storage.aws.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleAws" />

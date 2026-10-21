@@ -39,10 +39,7 @@ const onToggle = async (pref: PreferenceItem) => {
         </ul>
       </div>
 
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="row">
         <div class="col-xl-12">

@@ -20,42 +20,43 @@ const emit = defineEmits<{
   submit: [formData: CustomerFormData]
 }>()
 
-const typeOptions = [
-  'Reguler',
-  'Standard',
-  'Premium',
-]
+const { customerTypes } = useCustomerTypes()
+const typeOptions = computed(() => customerTypes.value.filter(item => item.status === 'Active').map(item => item.name))
 
 const form = ref<CustomerFormData>({
   id: '',
+  photo: null,
   customerId: '',
   name: '',
   email: '',
-  type: 'General',
+  type: '',
   phone: '',
 })
 
 const errorMessage = ref('')
 
 watch(
-  () => props.customerData,
-  (val) => {
+  () => [props.open, props.customerData] as const,
+  ([open, val]) => {
+    if (!open) return
     if (val && props.isEdit) {
       form.value = {
         id: val.id,
+        photo: val.photo || null,
         customerId: val.customerId,
         name: val.name,
         email: val.email,
-        type: val.type || 'Standard',
+        type: val.type || '',
         phone: val.phone || '',
       }
     } else {
       form.value = {
         id: '',
+        photo: null,
         customerId: 'Auto Generated',
         name: '',
         email: '',
-        type: 'Standard',
+        type: typeOptions.value[0] || '',
         phone: '',
       }
     }
@@ -92,6 +93,7 @@ function handleSubmit() {
       </div>
 
       <!-- Customer ID -->
+      <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Photo</label><div :class="modalFormInputColClass"><EntityPhotoField v-model="form.photo" :disabled="busy" /></div></div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Customer ID</label>
         <div :class="modalFormInputColClass">

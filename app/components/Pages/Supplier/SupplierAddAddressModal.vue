@@ -70,7 +70,7 @@ async function handleSubmit() {
 
   try {
     const payload = {
-      customerId: props.supplier.supplierId || props.supplier.id,
+      customerId: props.supplier.id,
       name: form.value.fullName,
       contact: form.value.contact,
       province: form.value.province,

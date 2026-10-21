@@ -67,10 +67,7 @@ const handleToggleSwitch = async () => {
         </ul>
       </div>
 
-      <div v-if="toastMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ toastMessage }}
-        <button type="button" class="btn-close" @click="toastMessage = ''" aria-label="Close dialog"></button>
-      </div>
+      <ActionToast :message="toastMessage" @dismiss="toastMessage = ''" />
 
       <div class="row">
         <div class="col-xl-12">
@@ -98,7 +95,7 @@ const handleToggleSwitch = async () => {
 
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top">
                       <button class="btn btn-sm btn-outline-primary" @click="openConfig(key as PaymentGatewayKey)">
-                        <i class="ti ti-settings me-1"></i> {{ gw.enabled ? 'View Integration' : 'Connect Now' }}
+                        <FeatherIcon name="settings" :size="16" class="me-1" /> {{ gw.enabled ? 'View Integration' : 'Connect Now' }}
                       </button>
                       <div class="form-check form-switch mb-0">
                         <input v-model="gw.enabled" class="form-check-input" type="checkbox" role="switch" @change="handleToggleSwitch" />

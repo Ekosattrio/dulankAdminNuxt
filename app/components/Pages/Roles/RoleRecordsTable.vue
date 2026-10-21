@@ -63,7 +63,7 @@ const emit = defineEmits<{
             :key="r.id"
             class="transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/30"
           >
-            <td class="px-4 py-3.5 font-semibold text-gray-900 dark:text-gray-100">{{ r.name }}</td>
+            <td class="px-4 py-3.5 font-semibold text-gray-900 dark:text-gray-100">{{ r.name }}<p v-if="r.deleteReason" class="mt-1 text-xs font-normal text-gray-500">{{ r.deleteReason }}</p></td>
             <td class="px-4 py-3.5 text-gray-600 dark:text-gray-400">{{ r.createdOn }}</td>
             <td class="px-4 py-3.5 text-end">
               <div class="inline-flex items-center gap-1.5">
@@ -84,8 +84,10 @@ const emit = defineEmits<{
                 </NuxtLink>
                 <button
                   type="button"
-                  class="rounded p-1 text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
-                  title="Delete Role"
+                  class="rounded p-1 text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950/30 dark:hover:text-rose-400 disabled:opacity-40 disabled:cursor-not-allowed"
+                  :title="r.deleteReason || 'Delete Role'"
+                  :disabled="r.canDelete === false"
+                  :aria-label="r.deleteReason || 'Delete Role'"
                   @click="emit('delete', r)"
                 >
                   <FeatherIcon name="trash-2" size="14" />

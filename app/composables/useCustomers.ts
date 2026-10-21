@@ -30,6 +30,9 @@ export function useCustomers() {
 
   const saveCustomer = async (payload: CustomerFormData) => {
     const { id, ...body } = payload
+    if (!id && (!body.customerId || /^auto[\s-]*generated$/i.test(body.customerId))) delete body.customerId
+    const { persistImage } = useImageUpload()
+    if (body.photo !== undefined) body.photo = await persistImage(body.photo, 'customers')
     const customerTypeId = customerTypeState.customerTypes.value.find(item => item.name === body.type)?.id
 
     const res = await apiFetch<MutationResponse>(

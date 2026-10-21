@@ -25,15 +25,8 @@ const emit = defineEmits<{
   'delete': [customer: Customer]
 }>()
 
-const customerTypeOptions = [
-  'Standard',
-  'Premium',
-  'Free Shipping',
-  'Corporate',
-  'VIP',
-  'Reseller',
-  'General',
-]
+const { customerTypes } = useCustomerTypes()
+const customerTypeOptions = computed(() => customerTypes.value.map(item => item.name))
 
 const columns = [
   { key: 'customerId', label: 'Customer ID', sortable: true },
@@ -95,12 +88,7 @@ function getTypeBadgeClass(type: string) {
     </template>
 
     <template #cell(name)="{ item }">
-      <div class="flex items-center gap-2">
-        <div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary-900/30 dark:text-primary-400">
-          {{ item.name?.charAt(0) || 'C' }}
-        </div>
-        <span class="font-medium text-gray-900 dark:text-gray-100">{{ item.name }}</span>
-      </div>
+      <EntityIdentity :name="item.name" :image="item.photo || ''" kind="person" />
     </template>
 
     <template #cell(email)="{ item }">

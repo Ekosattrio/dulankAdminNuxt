@@ -113,7 +113,7 @@ function addItem() {
                 <th>Price</th>
                 <th>Amount</th>
                 <th>Description</th>
-                <th></th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>

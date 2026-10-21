@@ -11,6 +11,7 @@ import {
 const props = defineProps<{
   isOpen: boolean
   editData: Designation | null
+  employees?: { id: string | number; name: string }[]
   busy?: boolean
 }>()
 
@@ -21,16 +22,19 @@ const emit = defineEmits<{
 
 const form = ref<DesignationFormData>({
   name: '',
+  memberIds: [],
   status: 'Active'
 })
 const validationError = ref('')
 
 watch(
-  () => props.editData,
-  (val) => {
+  () => [props.isOpen, props.editData] as const,
+  ([open, val]) => {
+    if (!open) return
     if (val) {
       form.value = {
         id: val.id,
+        memberIds: [...(val.memberIds || [])],
         name: val.name,
         createdOn: val.createdOn,
         status: val.status,
@@ -40,6 +44,7 @@ watch(
     } else {
       form.value = {
         name: '',
+        memberIds: [],
         status: 'Active'
       }
     }
@@ -49,6 +54,7 @@ watch(
 )
 
 const handleSubmit = () => {
+  if (props.busy) return
   validationError.value = ''
   if (!form.value.name?.trim()) {
     validationError.value = 'Nama jabatan / designation tidak boleh kosong.'
@@ -86,6 +92,8 @@ const handleSubmit = () => {
         </div>
       </div>
 
+      <div :class="modalFormRowClass"><label :class="modalFormLabelClass">Members</label><div :class="modalFormInputColClass"><OrganizationMemberPicker :model-value="form.memberIds || []" :employees="employees || []" :disabled="busy" @update:model-value="form.memberIds = $event" /></div></div>
+      <div v-if="editData" :class="modalFormRowClass"><span :class="modalFormLabelClass">Created On</span><span :class="modalFormInputColClass">{{ editData.createdOn || '-' }} (otomatis)</span></div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Status</label>
         <div :class="modalFormInputColClass">
