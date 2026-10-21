@@ -1,5 +1,11 @@
 # PANDUAN PAGE BERSIH, PETA KOMPONEN & MASTER STATUS MATRIX
 
+> **Verifikasi lanjutan 2026-10-21:** dropdown wilayah HR memakai read-only location-options; edit karyawan mengambil detail by ID; tanggal/modal dan currency dirapikan; kategori subkategori harus existing. Backend full 211 tes + target terbaru 26 tes PASS; typecheck, build, structure, diff check PASS. Browser inventory tetap kosong; MySQL lokal saat audit ulang menolak koneksi. Hasil DB 20 Oktober adalah evidence sebelumnya. Status **implemented/API tested, browser/runtime verification pending**, partial BRVS. Detail pada [changelog](obsidian-vault/09-CHANGELOG.md). **Rama / NOT COMMITTED / NOT PUSHED**.
+
+
+> **Update tahap 3?5 (2026-10-20):** User Admin, Store, Bank Account, Customer/Address, Employee dan Profile/Security/auth memakai kontrak Laravel aktual untuk perubahan yang tercatat di [changelog](obsidian-vault/09-CHANGELOG.md). **Implemented/API tested; browser verification pending; partial BRVS.** Route -> komponen form/dialog -> domain composable -> apiFetch -> Laravel controller/service -> Eloquent/FK. Tidak mengklaim full Nitro BRVS atau seluruh legacy parity. EmployeePageForm satu shared editor add/edit; autentikasi legacy dan beberapa Workspace masih memerlukan review dekomposisi. Scope cabang transaksi/laporan belum menyeluruh. Data existing dipertahankan dan demo tidak diisi ulang. Branch Rama: **NOT COMMITTED / NOT PUSHED**.
+
+
 ## Dulank Admin Nuxt 4 (Percetakan & ERP System)
 
 > **DOKUMEN KANONIK KUALITAS & STATUS REPOSITORI**

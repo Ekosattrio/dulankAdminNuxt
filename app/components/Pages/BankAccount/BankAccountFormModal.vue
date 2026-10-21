@@ -13,8 +13,11 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ close: []; submit: [payload: BankAccountFormData] }>()
 
+const { stores } = useMasterOptions()
+
 const emptyForm = (): BankAccountFormData => ({
   accountTypeId: props.accountTypes.find((type) => type.status === 'Active')?.id ?? '',
+  branchId: '',
   accountName: '',
   bankName: '',
   accountNo: '',
@@ -56,6 +59,13 @@ function submit() {
   <SalesDialog :open="open" :title="item ? 'Edit Bank Account' : 'Add Bank Account'" size="lg" @close="!busy && emit('close')">
     <form class="space-y-4" @submit.prevent="submit">
       <p v-if="error" role="alert" class="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{{ error }}</p>
+      <div :class="modalFormRowClass">
+        <label :class="modalFormLabelClass">Cabang</label>
+        <div :class="modalFormInputColClass"><select v-model="form.branchId" :class="formControlClass">
+          <option value="">Pilih cabang</option>
+          <option v-for="store in stores" :key="store.id" :value="String(store.id)">{{ store.store_name }}</option>
+        </select></div>
+      </div>
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Account Holder Name <span class="text-red-500">*</span></label>
         <div :class="modalFormInputColClass"><input v-model="form.accountName" :class="formControlClass" required /></div>

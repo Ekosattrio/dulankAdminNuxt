@@ -1,5 +1,11 @@
 # PANDUAN SERAH TERIMA AI (AI HANDOVER & ONBOARDING GUIDE)
 
+> **Verifikasi lanjutan 2026-10-21:** dropdown wilayah HR memakai read-only location-options; edit karyawan mengambil detail by ID; tanggal/modal dan currency dirapikan; kategori subkategori harus existing. Backend full 211 tes + target terbaru 26 tes PASS; typecheck, build, structure, diff check PASS. Browser inventory tetap kosong; MySQL lokal saat audit ulang menolak koneksi. Hasil DB 20 Oktober adalah evidence sebelumnya. Status **implemented/API tested, browser/runtime verification pending**, partial BRVS. Detail pada [changelog](docs/obsidian-vault/09-CHANGELOG.md). **Rama / NOT COMMITTED / NOT PUSHED**.
+
+
+> **Tahap 3?5, 2026-10-20:** integrasi identitas admin/security/reset/TOTP, master referensi, serta relasi pelanggan/alamat/karyawan/rekening telah diimplementasikan dan diuji API. Pilihan cabang/role/manager/wilayah berasal dari database. Migrasi lokal sudah diterapkan setelah backup; data demo tidak diseed ulang. Status **partial BRVS, implemented/API tested, browser verification pending**. Scope cabang baru Store/BankAccount; transaksi/laporan dan kelengkapan data nyata masih tahap berikutnya. Evidence, risiko dan validasi: [changelog tahap 3?5](docs/obsidian-vault/09-CHANGELOG.md). Branch Rama: **NOT COMMITTED / NOT PUSHED**.
+
+
 > **UI consistency 2026-10-20:** padding lintas menu, card KPI, footer modal, dan presentasi markup lama telah diseragamkan tanpa perubahan konten/data. Status **implemented, browser verification pending**. Cakupan, evidence, error typecheck existing, dan batas browser tersedia di [audit UI](docs/UI_CONSISTENCY_AUDIT_2026-10-20.md). Branch `Rama`: **NOT COMMITTED / NOT PUSHED**. Status fitur/arsitektur modul sebelumnya tetap berlaku.
 ## Repositori: Dulank Admin Nuxt 4 (Percetakan & ERP System)
 

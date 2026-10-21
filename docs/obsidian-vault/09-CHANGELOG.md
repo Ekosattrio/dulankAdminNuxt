@@ -1,10 +1,33 @@
 ---
 title: Documentation Changelog
 tags: [changelog]
-updated: 2026-10-20
+updated: 2026-10-21
 ---
 
+## 2026-10-21
+
+### Pemeriksaan akhir tahap 3?5
+
+- **Perbaikan:** endpoint read-only `/location-options` menyediakan wilayah aktif untuk form HR tanpa memberikan izin mutasi master; `/master-options` menyediakan pilihan akun untuk HR. Edit karyawan membaca endpoint detail berdasarkan ID, menahan simpan sebelum data berhasil dimuat, dan membatalkan respons yang sudah kedaluwarsa saat ID berganti. Tanggal karyawan baru memakai YYYY-MM-DD; departemen kosong tidak lagi diganti teks Produksi buatan. Currency menjaga submit bersamaan, menolak ID edit yang hilang, serta mengembalikan record edit yang benar. Subkategori memakai resolver kategori existing (trim/case), menolak label tidak dikenal tanpa membuat kategori diam-diam.
+- **Evidence:** `useLocationOptions` -> `RegionController::options`; `useEmployeeEditor` -> GET/PUT employees/{id}; `EmployeeFormModal` shared add/edit; `useCurrencySettings` -> settings/currency; `CatalogMasterController` -> `MasterDataService`. Reusable dan status architecture/UI tahap sebelumnya tetap berlaku: partial BRVS, implemented/API tested, browser verification pending.
+- **Validasi:** full backend Pest PASS 211 tests / 2.111 assertions sebelum perbaikan resolver kategori terakhir; sesudahnya target foundation + catalog PASS 26 tests / 147 assertions termasuk regresi baru resolver. Pint PASS; Nuxt typecheck PASS; structure validator PASS 1.220 original files / 0 failures; diff check PASS. Build produksi final PASS (exit 0). Tidak ada script test:sales.
+- **Batas runtime:** inventory computer-use diperiksa ulang, apps=[] / browsers=[]; browser desktop/mobile/reload dan console tetap belum diverifikasi. Audit ulang MySQL 21 Oktober gagal karena koneksi 127.0.0.1:3306 ditolak; tidak mengubah service database. Hasil audit/migrasi/backup 20 Oktober merupakan evidence sebelumnya, bukan audit baru. SMTP sungguhan belum diuji; tidak melakukan pengiriman email, seeding, atau perubahan akun/data riil pada kelanjutan ini.
+- **Git:** branch Rama; NOT COMMITTED / NOT PUSHED. Tidak menjalankan Git mutating. Scope cabang transaksi/laporan belum menyeluruh; data nyata masih perlu dilengkapi sesuai hasil audit sebelumnya.
+
 ## 2026-10-20
+
+### Tahap 3?5: identitas admin, master referensi, dan relasi pihak
+
+- **Scope:** pilihan role/cabang/manager dari API; User Admin dengan password awal dan ID cabang; Store/Bank Account mengirim ID; tipe pelanggan dan alamat memakai FK; karyawan tambah/edit record aktual, relasi akun, kontak darurat, departemen dan wilayah database, foto melalui upload API. Profil menyimpan email/taxAddress. Security memakai akun/token/TOTP aktual; login mendukung kode autentikator; forgot/reset password memakai Laravel broker. Currency form menyertakan status/default sesuai validasi backend.
+- **Backend:** Laravel menambahkan guard admin aktif, sinkronisasi role, proteksi akun utama/diri sendiri, branch scope Store/BankAccount, validasi duplicate master dan referential delete, parent wilayah eksplisit, relasi pihak, serta migration nullable untuk data lama. Rincian: `dulank-backend/PRD.md` bagian 15.
+- **Architecture evidence:** route -> komponen domain -> useMasterOptions/useLocations/useEmployees/useEmployeeEditor/useCustomers/useAddress/useSecuritySettings/usePasswordRecovery -> apiFetch/useApiFetch -> `/api/v1/admin/*` Laravel -> controllers/services/Eloquent -> MySQL FK. API Laravel aktif merupakan pengganti layer persistence JSON/Nitro lama; tidak mengklaim full BRVS menurut rantai Nitro pada dokumen historis. server/types tetap kontrak UI. Tidak ada penulisan data dari page.
+- **UI responsibility evidence:** UserAdminFormModal, StoreListFormModal, BankAccountFormModal, AddressFormModal mengelola field/emits; Workspace mengoordinasikan dialog/feedback; SecurityPasswordModal dan SecurityTwoFactorModal terpisah; EmployeePageForm menjadi satu shared form add/edit dengan request/state di useEmployeeEditor. Form karyawan sekitar 300 baris adalah satu tanggung jawab form, belum audit ulang seluruh UI/dekomposisi; auth legacy masih inline form. Status partial BRVS, implemented/API tested, browser verification pending.
+- **Re-check 1:** kontrak payload ID, route POST-upsert vs PUT, pengisian edit aktual, status wilayah persisten, shape company/currency legacy, busy/error/input-preservation.
+- **Re-check 2:** akun non-admin/suspended dengan token, takeover email pelanggan, scope cabang rekening dan pemberian cabang admin, self/super-admin protections, current password, TOTP, token reset replay, parent wilayah tidak valid, master yang masih dipakai, rekening dengan ledger, employee ID/account uniqueness. Pengujian menggunakan database SQLite terisolasi; tidak mengubah akun riil.
+- **Data safety:** migration lokal sudah diterapkan setelah backup SQL; restore backup ke DB sementara membuktikan 12.319 baris di 132 tabel non-migration tetap sama pada kolom lamanya. Tidak menjalankan ulang seeder; data demo tetap dihapus. Audit aktif 0 error / 40 kategori warning; data lama belum lengkap tidak ditebak.
+- **Validation:** backend full Pest dan Pint PASS; Nuxt typecheck PASS; build produksi PASS, final rerun setelah form currency dicatat pada hasil akhir; validate:structure PASS (1.220 original files, 0 failures). test:sales tidak tersedia. Browser desktop/390px, reload dan console tidak dijalankan: inventory browser kosong. SMTP sungguhan tidak diuji; .env.example backend menambahkan URL frontend reset password.
+- **Risiko/batas:** scope cabang seluruh transaksi/laporan belum diterapkan; data nyata/relasi lama perlu dilengkapi; bank settings publik terpisah; TOTP belum recovery code; session UI hanya daftar (endpoint revoke ada); dokumen identitas mengikuti media public existing. Tidak menyatakan seluruh website siap produksi atau approved baseline.
+- **Git:** branch Rama; NOT COMMITTED / NOT PUSHED; tidak melakukan commit/push atau Git mutating.
 
 ### Konsistensi presentasi frontend lintas halaman
 

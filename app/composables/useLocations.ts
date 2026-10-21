@@ -35,6 +35,7 @@ export function useProvinces() {
 }
 
 export function useRegencies() {
+  const { provinces } = useProvinces()
   const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: Regency[] }>('/api/v1/admin/regencies', {
     key: 'regencies-list'
   })
@@ -42,6 +43,7 @@ export function useRegencies() {
   const regencies = computed<Regency[]>(() => data.value?.data ?? [])
 
   const saveRegency = async (payload: Partial<Regency>) => {
+    payload = { ...payload, provinceId: payload.provinceId || provinces.value.find(item => item.name === payload.province)?.id }
     const res = await apiFetch<{ success: boolean; data: Regency; message?: string }>('/api/v1/admin/regencies', {
       method: 'POST',
       body: payload
@@ -69,6 +71,7 @@ export function useRegencies() {
 }
 
 export function useDistricts() {
+  const { regencies } = useRegencies()
   const { data, pending, error, refresh } = useApiFetch<{ success: boolean; data: District[] }>('/api/v1/admin/districts', {
     key: 'districts-list'
   })
@@ -76,6 +79,7 @@ export function useDistricts() {
   const districts = computed<District[]>(() => data.value?.data ?? [])
 
   const saveDistrict = async (payload: Partial<District>) => {
+    payload = { ...payload, regencyId: payload.regencyId || regencies.value.find(item => item.name === payload.regency && (!payload.provinceId || item.provinceId === payload.provinceId))?.id }
     const res = await apiFetch<{ success: boolean; data: District; message?: string }>('/api/v1/admin/districts', {
       method: 'POST',
       body: payload
@@ -146,5 +150,16 @@ export function useLocations() {
     refreshAll,
     getRegenciesByProvince,
     getDistrictsByRegency
+  }
+}
+
+/** Read-only choices shared by forms whose roles cannot manage geographic masters. */
+export function useLocationOptions() {
+  const { data, pending, error } = useApiFetch<{ data: { provinces: Province[]; regencies: Regency[]; districts: District[] } }>('/api/v1/admin/location-options', { key: 'location-options' })
+  return {
+    provinces: computed(() => data.value?.data.provinces ?? []),
+    regencies: computed(() => data.value?.data.regencies ?? []),
+    districts: computed(() => data.value?.data.districts ?? []),
+    pending, error,
   }
 }

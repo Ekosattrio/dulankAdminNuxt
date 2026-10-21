@@ -21,11 +21,15 @@ const currentCurrency = ref<{
   code: string
   symbol: string
   exchangeRate: number
+  isDefault: boolean
+  status: 'active' | 'inactive'
 }>({
   name: '',
   code: '',
   symbol: '',
-  exchangeRate: 1
+  exchangeRate: 1,
+  isDefault: true,
+  status: 'active'
 })
 
 const filteredCurrencies = computed(() => {
@@ -41,7 +45,9 @@ const openAddModal = () => {
     name: '',
     code: '',
     symbol: '',
-    exchangeRate: 1
+    exchangeRate: 1,
+    isDefault: currencies.value.length === 0,
+    status: 'active'
   }
   showModal.value = true
 }
@@ -53,7 +59,9 @@ const openEditModal = (c: CurrencySetting) => {
     name: c.name,
     code: c.code,
     symbol: c.symbol,
-    exchangeRate: c.exchangeRate
+    exchangeRate: c.exchangeRate,
+    isDefault: c.isDefault,
+    status: c.status
   }
   showModal.value = true
 }
@@ -206,6 +214,9 @@ const handleConfirmDelete = async () => {
                   <label class="form-label">Exchange Rate (Numeric)</label>
                   <input v-model.number="currentCurrency.exchangeRate" type="number" step="any" class="form-control" placeholder="1 or 15600" />
                 </div>
+                <label class="mb-3 flex items-center gap-2 text-sm"><input v-model="currentCurrency.isDefault" type="checkbox" /> Mata uang default</label>
+                <label class="mb-3 block text-sm">Status<select v-model="currentCurrency.status" class="form-control"><option value="active">Active</option><option value="inactive">Inactive</option></select></label>
+                <p v-if="error" role="alert" class="mb-3 text-sm text-red-600">{{ error }}</p>
                 <div class="modal-footer modal-action-footer justify-content-end pt-3 border-top">
                   <button type="button" class="btn btn-light" @click="showModal = false">Cancel</button>
                   <button type="submit" class="btn btn-warning text-white" :disabled="isSaving">

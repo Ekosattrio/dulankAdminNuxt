@@ -16,7 +16,9 @@ export interface UserAdmin {
   userId: string
   name: string
   email: string
-  role: 'Admin' | 'Manager' | 'Supervisor' | 'Staff'
+  role: string
+  password?: string
+  storeNames?: string[]
   stores: string[]
   status: 'Active' | 'Inactive'
   phone?: string

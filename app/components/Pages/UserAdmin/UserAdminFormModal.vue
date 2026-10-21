@@ -20,7 +20,8 @@ const form = ref<{
   name: string
   email: string
   phone: string
-  role: 'Admin' | 'Manager' | 'Supervisor' | 'Staff'
+  role: string
+  password?: string
   stores: string[]
   status: 'Active' | 'Inactive'
   avatar: string
@@ -29,14 +30,14 @@ const form = ref<{
   name: '',
   email: '',
   phone: '',
-  role: 'Admin',
-  stores: ['Toko Pusat'],
+  role: '',
+  stores: [],
   status: 'Active',
   avatar: '/assets/img/users/user-01.jpg',
   descriptions: '',
 })
 
-const availableStores = ['Toko Pusat', 'Toko Cabang 1', 'Toko Cabang 2', 'Toko Cabang 3']
+const { stores: availableStores, roles: availableRoles } = useMasterOptions()
 
 watch(
   () => props.user,
@@ -59,8 +60,8 @@ watch(
         name: '',
         email: '',
         phone: '',
-        role: 'Admin',
-        stores: ['Toko Pusat'],
+        role: '',
+        stores: [],
         status: 'Active',
         avatar: '/assets/img/users/user-01.jpg',
         descriptions: '',
@@ -89,7 +90,8 @@ const onAvatarChange = (e: Event) => {
 }
 
 const handleSubmit = () => {
-  emit('submit', { ...form.value })
+  if (props.busy) return
+  emit('submit', { ...form.value, ...(props.isEdit ? {} : { password: form.value.password }) })
 }
 </script>
 
@@ -164,10 +166,8 @@ const handleSubmit = () => {
                 v-model="form.role"
                 class="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 focus:border-[#FE9F43] focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
               >
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Supervisor">Supervisor</option>
-                <option value="Staff">Staff</option>
+                <option disabled value="">Select role</option>
+                <option v-for="role in availableRoles" :key="role.id" :value="role.name">{{ role.name }}</option>
               </select>
             </div>
 
@@ -183,23 +183,27 @@ const handleSubmit = () => {
             </div>
           </div>
 
+          <div v-if="!isEdit">
+            <label class="mb-1 block text-sm font-semibold">Initial Password *</label>
+            <input v-model="form.password" type="password" minlength="8" autocomplete="new-password" required class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm dark:bg-gray-800" />
+          </div>
           <!-- Store Assignment Checkboxes -->
           <div>
             <label class="mb-1.5 block text-xs font-semibold text-gray-700 dark:text-gray-300">Assigned Stores *</label>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="st in availableStores"
-                :key="st"
+                :key="st.id"
                 type="button"
                 :class="[
                   'rounded-md px-2.5 py-1 text-xs font-medium border transition-colors',
-                  form.stores.includes(st)
+                  form.stores.includes(String(st.id))
                     ? 'border-[#FE9F43] bg-[#FE9F43]/10 text-[#FE9F43]'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400'
                 ]"
-                @click="toggleStore(st)"
+                @click="toggleStore(String(st.id))"
               >
-                {{ st }}
+                {{ st.store_name }}
               </button>
             </div>
           </div>

@@ -103,7 +103,7 @@ const printColumns = [
 const printableAdmins = computed(() =>
   filteredUserAdmins.value.map((a) => ({
     ...a,
-    storesText: a.stores.join(', '),
+    storesText: (a.storeNames || a.stores).join(', '),
   }))
 )
 
@@ -114,7 +114,7 @@ function handleExportExcel() {
     `"${a.name.replace(/"/g, '""')}"`,
     `"${a.email}"`,
     `"${a.role}"`,
-    `"${a.stores.join(', ')}"`,
+    `"${(a.storeNames || a.stores).join(', ')}"`,
     `"${a.status}"`,
     `"${a.phone || ''}"`,
   ])

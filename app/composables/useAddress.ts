@@ -30,6 +30,7 @@ interface MutationResponse {
  * mengekspos API `{ stats, customers, suppliers }` yang dipakai halaman.
  */
 export function useAddress() {
+  const { provinces, regencies, districts } = useLocations()
   const { data: statsData, pending: statsPending, error: statsError, refresh: refreshStats } = useApiFetch<StatsResponse>(`/api/v1/admin/addresses/stats`, {
     key: STATS_KEY
   })
@@ -66,7 +67,11 @@ export function useAddress() {
     const { id, customerId, type, ...rest } = payload
     const ownerType = kind ?? type ?? 'customer'
 
+    const province = provinces.value.find(item => item.name === rest.province)
+    const regency = regencies.value.find(item => item.name === rest.city && (!province || item.provinceId === province.id))
+    const district = districts.value.find(item => item.name === rest.district && (!regency || item.regencyId === regency.id))
     const body = {
+      provinceId: province?.id, regencyId: regency?.id, districtId: district?.id,
       ownerType,
       ownerId: Number(customerId || 0),
       name: rest.name,

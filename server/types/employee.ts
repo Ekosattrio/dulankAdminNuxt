@@ -1,6 +1,9 @@
 export interface EmployeeItem {
   id: string
   name: string
+  departmentId?: string | null
+  designationId?: string | null
+  userId?: string | null
   department: string
   address: string
   detailAddress?: string
@@ -28,6 +31,9 @@ export interface EmployeeFilterParams {
 export interface EmployeeFormData {
   id?: string
   name: string
+  departmentId?: string | null
+  designationId?: string | null
+  userId?: string | null
   department: string
   address: string
   detailAddress?: string

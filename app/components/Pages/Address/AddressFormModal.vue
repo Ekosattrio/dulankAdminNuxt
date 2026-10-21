@@ -34,6 +34,11 @@ const form = ref({
 })
 
 const errorMessage = ref('')
+const { provinces, regencies, districts } = useLocations()
+const availableCities = computed(() => regencies.value.filter(item => item.province === form.value.province))
+const availableDistricts = computed(() => districts.value.filter(item => item.regency === form.value.city && item.province === form.value.province))
+watch(() => form.value.province, () => { if (!availableCities.value.some(item => item.name === form.value.city)) { form.value.city = ''; form.value.district = '' } })
+watch(() => form.value.city, () => { if (!availableDistricts.value.some(item => item.name === form.value.district)) form.value.district = '' })
 
 watch(
   () => props.addressData,
@@ -142,18 +147,8 @@ function handleSubmit() {
         <label :class="modalFormLabelClass">Provinsi / Kota</label>
         <div :class="modalFormInputColClass">
           <div class="grid grid-cols-2 gap-2">
-            <input
-              v-model="form.province"
-              type="text"
-              placeholder="Provinsi (e.g. DKI Jakarta)"
-              :class="formControlClass"
-            />
-            <input
-              v-model="form.city"
-              type="text"
-              placeholder="Kota (e.g. Jakarta Timur)"
-              :class="formControlClass"
-            />
+            <select v-model="form.province" :class="formControlClass"><option value="">Pilih provinsi</option><option v-if="form.province && !provinces.some(item => item.name === form.province)" :value="form.province">{{ form.province }}</option><option v-for="item in provinces" :key="item.id" :value="item.name">{{ item.name }}</option></select>
+            <select v-model="form.city" :class="formControlClass"><option value="">Pilih kabupaten/kota</option><option v-if="form.city && !availableCities.some(item => item.name === form.city)" :value="form.city">{{ form.city }}</option><option v-for="item in availableCities" :key="item.id" :value="item.name">{{ item.name }}</option></select>
           </div>
         </div>
       </div>
@@ -162,12 +157,7 @@ function handleSubmit() {
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Kecamatan</label>
         <div :class="modalFormInputColClass">
-          <input
-            v-model="form.district"
-            type="text"
-            placeholder="Kecamatan (e.g. Kramat Jati)"
-            :class="formControlClass"
-          />
+          <select v-model="form.district" :class="formControlClass"><option value="">Pilih kecamatan</option><option v-if="form.district && !availableDistricts.some(item => item.name === form.district)" :value="form.district">{{ form.district }}</option><option v-for="item in availableDistricts" :key="item.id" :value="item.name">{{ item.name }}</option></select>
         </div>
       </div>
 

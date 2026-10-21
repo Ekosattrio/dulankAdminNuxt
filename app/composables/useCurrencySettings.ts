@@ -44,12 +44,16 @@ export function useCurrencySettings() {
   }
 
   async function saveItem(payload: Partial<CurrencySetting>) {
+    if (pending.value) throw new Error('Tunggu proses mata uang selesai.')
     pending.value = true
+    error.value = null
     try {
-      const next = [...items.value]
+      payload = { ...payload, code: payload.code?.trim().toUpperCase() }
+      const next = items.value.map(item => ({ ...item, isDefault: payload.isDefault && item.id !== payload.id ? false : item.isDefault }))
       if (payload.id) {
         const idx = next.findIndex(item => item.id === payload.id)
-        if (idx !== -1) next[idx] = { ...next[idx], ...payload } as CurrencySetting
+        if (idx === -1) throw new Error('Mata uang tidak ditemukan. Muat ulang data.')
+        next[idx] = { ...next[idx], ...payload } as CurrencySetting
       } else {
         next.push({
           id: String(Date.now()),
@@ -57,9 +61,9 @@ export function useCurrencySettings() {
         } as CurrencySetting)
       }
       await syncItems(next)
-      return next[next.length - 1]
+      return next.find(item => item.id === payload.id) ?? next[next.length - 1]
     } catch (err: any) {
-      error.value = err.message || 'Failed to save mata uang setting'
+      error.value = err?.data?.message || err.message || 'Failed to save mata uang setting'
       throw err
     } finally {
       pending.value = false
@@ -67,7 +71,9 @@ export function useCurrencySettings() {
   }
 
   async function deleteItem(id: string) {
+    if (pending.value) throw new Error('Tunggu proses mata uang selesai.')
     pending.value = true
+    error.value = null
     try {
       await syncItems(items.value.filter(item => item.id !== id))
     } catch (err: any) {

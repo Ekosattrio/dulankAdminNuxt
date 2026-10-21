@@ -32,7 +32,7 @@ const idPhotoInput = ref<HTMLInputElement | null>(null)
 const form = ref<EmployeeFormData>({
   id: '',
   name: '',
-  department: 'Produksi',
+  department: '',
   address: '',
   detailAddress: '',
   phone: '',
@@ -59,7 +59,7 @@ watch(
       form.value = {
         id: val.id,
         name: val.name,
-        department: val.department || (props.departments[0] || 'Produksi'),
+        department: val.department || (props.departments[0] || ''),
         address: val.address || '',
         detailAddress: val.detailAddress || '',
         phone: val.phone || '',
@@ -77,15 +77,12 @@ watch(
         photoId: val.photoId || '',
       }
     } else {
-      const today = new Date().toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
+      const now = new Date()
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
       form.value = {
         id: '',
         name: '',
-        department: props.departments[0] || 'Produksi',
+        department: props.departments[0] || '',
         address: '',
         detailAddress: '',
         phone: '',

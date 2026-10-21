@@ -20,12 +20,15 @@ const emit = defineEmits<{
   submit: [formData: StoreFormData]
 }>()
 
+const { managers } = useMasterOptions()
+
 const statusOptions = ['Active', 'Inactive']
 
 const form = ref<StoreFormData>({
   id: '',
   storeName: '',
   userName: '',
+  managerId: '',
   phone: '',
   email: '',
   address: '',
@@ -42,6 +45,7 @@ watch(
         id: val.id,
         storeName: val.storeName,
         userName: val.userName,
+        managerId: val.managerId || '',
         phone: val.phone || '',
         email: val.email || '',
         address: val.address || '',
@@ -52,6 +56,7 @@ watch(
         id: '',
         storeName: '',
         userName: '',
+  managerId: '',
         phone: '',
         email: '',
         address: '',
@@ -68,7 +73,7 @@ function handleSubmit() {
     errorMessage.value = 'Store name is required'
     return
   }
-  if (!form.value.userName.trim()) {
+  if (!form.value.managerId) {
     errorMessage.value = 'Manager / Username is required'
     return
   }
@@ -114,13 +119,10 @@ function handleSubmit() {
       <div :class="modalFormRowClass">
         <label :class="modalFormLabelClass">Manager / User <span class="text-rose-500">*</span></label>
         <div :class="modalFormInputColClass">
-          <input
-            v-model="form.userName"
-            type="text"
-            placeholder="e.g. Thomas21"
-            :class="formControlClass"
-            required
-          >
+          <select v-model="form.managerId" :class="formControlClass" required>
+            <option disabled value="">Pilih penanggung jawab</option>
+            <option v-for="manager in managers" :key="manager.id" :value="String(manager.id)">{{ manager.name }}</option>
+          </select>
         </div>
       </div>
 

@@ -18,6 +18,7 @@ interface MutationResponse {
  * Kontrak resource identik dengan tipe admin (`Customer`).
  */
 export function useCustomers() {
+  const customerTypeState = useCustomerTypes()
   const query = { limit: 100 }
 
   const { data, pending, error, refresh } = useApiFetch<ResponseData>('/api/v1/admin/customers', {
@@ -29,12 +30,13 @@ export function useCustomers() {
 
   const saveCustomer = async (payload: CustomerFormData) => {
     const { id, ...body } = payload
+    const customerTypeId = customerTypeState.customerTypes.value.find(item => item.name === body.type)?.id
 
     const res = await apiFetch<MutationResponse>(
       id ? `/api/v1/admin/customers/${encodeURIComponent(id)}` : '/api/v1/admin/customers',
       {
         method: id ? 'PUT' : 'POST',
-        body
+        body: { ...body, customerTypeId }
       }
     )
 

@@ -1,8 +1,7 @@
 const PUBLIC_ROUTES = new Set([
   '/signin',
   '/forgot-password',
-  '/otp',
-  '/social-authentication',
+  '/reset-password',
   '/auth',
 ])
 

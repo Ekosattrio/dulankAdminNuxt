@@ -9,13 +9,14 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  submit: [newPassword: string]
+  submit: [payload: { currentPassword: string; newPassword: string; confirmPassword: string }]
 }>()
 
 const current = ref('')
 const newPass = ref('')
 const confirmPass = ref('')
 const errorMsg = ref('')
+watch(() => props.open, (open) => { if (!open) { current.value = ''; newPass.value = ''; confirmPass.value = ''; errorMsg.value = '' } })
 
 function handleSubmit() {
   errorMsg.value = ''
@@ -27,14 +28,12 @@ function handleSubmit() {
     errorMsg.value = 'Konfirmasi password tidak cocok.'
     return
   }
-  if (newPass.value.length < 6) {
-    errorMsg.value = 'Password baru minimal 6 karakter.'
+  if (newPass.value.length < 8) {
+    errorMsg.value = 'Password baru minimal 8 karakter.'
     return
   }
-  emit('submit', newPass.value)
-  current.value = ''
-  newPass.value = ''
-  confirmPass.value = ''
+  if (props.busy) return
+  emit('submit', { currentPassword: current.value, newPassword: newPass.value, confirmPassword: confirmPass.value })
 }
 </script>
 

@@ -18,7 +18,8 @@ const emit = defineEmits<{
   delete: [user: UserAdmin]
 }>()
 
-const roles = ['Admin', 'Manager', 'Supervisor', 'Staff']
+const { roles: roleOptions } = useMasterOptions()
+const roles = computed(() => roleOptions.value.map(item => item.name))
 const statuses = ['Active', 'Inactive']
 
 const getRoleTone = (role: string) => {
@@ -113,7 +114,7 @@ const getRoleTone = (role: string) => {
             <td class="px-4 py-3.5">
               <div class="flex flex-wrap gap-1">
                 <AppBadge
-                  v-for="st in adm.stores"
+                  v-for="st in (adm.storeNames || adm.stores)"
                   :key="st"
                   :label="st"
                   tone="primary"

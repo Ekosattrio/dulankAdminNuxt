@@ -18,59 +18,9 @@ const router = useRouter()
 
 const isEdit = computed(() => props.mode === 'edit')
 
-const form = reactive({
-  fullName: isEdit.value ? 'Budi Setiadi' : '',
-  gender: isEdit.value ? 'Male' : '',
-  dob: isEdit.value ? '1990-02-12' : '1995-01-01',
-  joinDate: isEdit.value ? '2023-01-15' : new Date().toISOString().split('T')[0],
-  address: isEdit.value ? 'Jawa Barat, Kab. Karawang, Karawang Barat' : '',
-  detailAddress: isEdit.value ? 'Perum Griya Indah Blok E2 No.55' : '',
-  department: isEdit.value ? 'Produksi' : '',
-  contactPerson1: isEdit.value ? 'Dudung Sukaya' : '',
-  contactPhone1: isEdit.value ? '6258454455555' : '',
-  contactPerson2: isEdit.value ? 'Mimin Mintarsih' : '',
-  contactPhone2: isEdit.value ? '62854515422255' : '',
-  email: isEdit.value ? 'budi2548@gmail.com' : '',
-  phone: isEdit.value ? '+6281234567001' : '',
-  password: isEdit.value ? '••••••••' : '',
-  confirmPassword: isEdit.value ? '••••••••' : ''
-})
-
+const { isLoading, selectPhoto, form, errorMessage, isSubmitting, departments, managers, submitForm } = useEmployeeEditor(computed(() => props.mode))
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
-const { saveEmployee } = useEmployees()
-const isSubmitting = ref(false)
-
-const handleAddressSelect = (addr: { province?: string; city?: string; district?: string }) => {
-  const parts = [addr.province, addr.city, addr.district].filter(Boolean)
-  form.address = parts.join(', ')
-}
-
-const submitForm = async () => {
-  isSubmitting.value = true
-  try {
-    await saveEmployee({
-      name: form.fullName,
-      gender: form.gender as 'Male' | 'Female',
-      dob: form.dob,
-      joinDate: form.joinDate,
-      address: form.address,
-      detailAddress: form.detailAddress,
-      department: form.department,
-      contact1Name: form.contactPerson1,
-      contact1Phone: form.contactPhone1,
-      contact2Name: form.contactPerson2,
-      contact2Phone: form.contactPhone2,
-      email: form.email,
-      phone: form.phone
-    })
-    router.push('/employees')
-  } catch (err) {
-    console.error('Failed to save employee:', err)
-  } finally {
-    isSubmitting.value = false
-  }
-}
 </script>
 
 <template>
@@ -92,6 +42,8 @@ const submitForm = async () => {
     </PageHeader>
 
     <!-- Main Card Form -->
+    <p v-if="errorMessage" role="alert" class="mb-4 text-sm text-red-600">{{ errorMessage }}</p>
+    <p v-if="isLoading" class="text-sm" role="status">Memuat karyawan...</p>
     <form @submit.prevent="submitForm">
       <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 space-y-8">
         <!-- 1. Employee Information -->
@@ -110,7 +62,7 @@ const submitForm = async () => {
               <span class="text-xs font-semibold text-gray-700 dark:text-gray-200">Profile Photo</span>
               <label class="mt-2 inline-block cursor-pointer text-xs font-medium text-primary hover:underline">
                 Upload Image
-                <input type="file" class="hidden" accept="image/*" />
+                <input type="file" class="hidden" accept="image/jpeg,image/png,image/webp" @change="selectPhoto($event, 'avatar')" />
               </label>
             </div>
 
@@ -121,11 +73,12 @@ const submitForm = async () => {
               <span class="text-xs font-semibold text-gray-700 dark:text-gray-200">Photo ID</span>
               <label class="mt-2 inline-block cursor-pointer text-xs font-medium text-blue-600 hover:underline">
                 Upload Image
-                <input type="file" class="hidden" accept="image/*" />
+                <input type="file" class="hidden" accept="image/jpeg,image/png,image/webp" @change="selectPhoto($event, 'photoId')" />
               </label>
             </div>
           </div>
 
+          <img v-if="form.avatar" :src="form.avatar" alt="Profile preview" class="h-20 w-20 rounded-lg object-cover" /><img v-if="form.photoId" :src="form.photoId" alt="Photo ID preview" class="h-20 w-32 rounded-lg object-cover" />
           <!-- Fields -->
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -174,7 +127,7 @@ const submitForm = async () => {
               <AddressCascader
                 v-model="form.address"
                 placeholder="Select Province, City, District"
-                @select="handleAddressSelect"
+
               />
             </div>
 
@@ -203,13 +156,7 @@ const submitForm = async () => {
               <select
                 v-model="form.department"
                 class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              >
-                <option value="">Choose</option>
-                <option value="Produksi">Produksi</option>
-                <option value="Administrasi & Keuangan">Administrasi & Keuangan</option>
-                <option value="Desain Grafis">Desain Grafis</option>
-                <option value="Marketing">Marketing</option>
-              </select>
+              ><option value="">Pilih departemen</option><option v-for="department in departments" :key="department.id" :value="department.name">{{ department.name }}</option></select>
             </div>
           </div>
         </div>
@@ -267,6 +214,10 @@ const submitForm = async () => {
             <h6 class="text-base font-bold text-gray-900 dark:text-gray-100">Account Manager</h6>
           </div>
 
+          <p class="text-xs">Password dan hak akses dikelola melalui <NuxtLink to="/user-admin" class="text-primary underline">User Admin</NuxtLink>. Pilih akun yang sudah dibuat untuk menghubungkannya ke karyawan.</p>
+          <select v-model="form.userId" aria-label="Akun admin karyawan" class="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm">
+            <option value="">Tanpa akun login</option><option v-for="manager in managers" :key="manager.id" :value="String(manager.id)">{{ manager.name }}</option>
+          </select>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label class="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">Email</label>
@@ -291,6 +242,7 @@ const submitForm = async () => {
               <div class="relative">
                 <input
                   v-model="form.password"
+                  disabled
                   :type="showPassword ? 'text' : 'password'"
                   class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-10 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                 />
@@ -309,6 +261,7 @@ const submitForm = async () => {
               <div class="relative">
                 <input
                   v-model="form.confirmPassword"
+                  disabled
                   :type="showConfirmPassword ? 'text' : 'password'"
                   class="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pe-10 text-sm text-gray-800 transition focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                 />
@@ -334,6 +287,7 @@ const submitForm = async () => {
           </NuxtLink>
           <button
             type="submit"
+            :disabled="isSubmitting || isLoading"
             class="inline-flex h-9 items-center rounded-md bg-primary px-6 text-sm font-semibold text-white shadow hover:bg-primary-600 transition"
           >
             Save

@@ -9,13 +9,14 @@ import SecurityContactModal from './Security/SecurityContactModal.vue'
 import SecurityDevicesModal from './Security/SecurityDevicesModal.vue'
 import SecurityActivityModal from './Security/SecurityActivityModal.vue'
 
-const { security, pending, error, refresh, updateSecurity } = useSecuritySettings()
+const { security, pending, error, refresh, updateSecurity, changePassword } = useSecuritySettings()
 
 const toastSuccess = ref('')
 const toastError = ref('')
 const isBusy = ref(false)
 
 const isPasswordModalOpen = ref(false)
+const isTwoFactorModalOpen = ref(false)
 const isContactModalOpen = ref(false)
 const contactModalType = ref<'phone' | 'email'>('phone')
 
@@ -30,32 +31,17 @@ function notifySuccess(msg: string) {
   setTimeout(() => { toastSuccess.value = '' }, 4000)
 }
 
-async function handleToggle2FA() {
-  try {
-    await updateSecurity({ twoFactor: !security.value.twoFactor })
-    notifySuccess(`Two Factor Authentication ${security.value.twoFactor ? 'diaktifkan' : 'dinonaktifkan'}`)
-  } catch (err: any) {
-    toastError.value = 'Gagal memperbarui status 2FA'
-  }
-}
+function handleToggle2FA() { isTwoFactorModalOpen.value = true }
+function handleToggleGoogle() { isTwoFactorModalOpen.value = true }
 
-async function handleToggleGoogle() {
-  try {
-    await updateSecurity({ googleAuth: !security.value.googleAuth })
-    notifySuccess(`Google Authenticator ${security.value.googleAuth ? 'terhubung' : 'diputuskan'}`)
-  } catch (err: any) {
-    toastError.value = 'Gagal memperbarui Google Authenticator'
-  }
-}
-
-async function handlePasswordSubmit(newPass: string) {
+async function handlePasswordSubmit(payload: { currentPassword: string; newPassword: string; confirmPassword: string }) {
   isBusy.value = true
   try {
-    await updateSecurity({ passwordLastChanged: 'Baru saja' })
+    await changePassword(payload)
     isPasswordModalOpen.value = false
     notifySuccess('Password berhasil diperbarui!')
   } catch (err: any) {
-    toastError.value = 'Gagal mengubah password'
+    toastError.value = err?.data?.message || 'Gagal mengubah password'
   } finally {
     isBusy.value = false
   }
@@ -76,10 +62,10 @@ async function handleContactSubmit(val: string) {
   try {
     if (contactModalType.value === 'phone') {
       await updateSecurity({ phone: val })
-      notifySuccess('Nomor telepon verifikasi berhasil diperbarui!')
+      notifySuccess('Nomor telepon akun berhasil diperbarui!')
     } else {
       await updateSecurity({ email: val })
-      notifySuccess('Alamat email verifikasi berhasil diperbarui!')
+      notifySuccess('Alamat email akun berhasil diperbarui!')
     }
     isContactModalOpen.value = false
   } catch (err: any) {
@@ -98,15 +84,14 @@ async function handleRemoveContact() {
   isBusy.value = true
   try {
     if (deleteTargetType.value === 'phone') {
-      await updateSecurity({ phone: '-' })
-      notifySuccess('Nomor telepon verifikasi telah dihapus')
+      await updateSecurity({ phone: '' })
+      notifySuccess('Nomor telepon akun telah dihapus')
     } else {
-      await updateSecurity({ email: '-' })
-      notifySuccess('Alamat email verifikasi telah dihapus')
+      throw new Error('Email login wajib tersedia. Ganti alamat email melalui formulir.')
     }
     isConfirmDeleteOpen.value = false
   } catch (err: any) {
-    toastError.value = 'Gagal menghapus kontak'
+    toastError.value = err?.data?.message || err?.message || 'Gagal menghapus kontak'
   } finally {
     isBusy.value = false
   }
@@ -174,6 +159,7 @@ async function handleRemoveContact() {
       @deactivate-account="toastError = 'Silakan hubungi Super Admin untuk penonaktifan akun.'"
     />
 
+    <SecurityTwoFactorModal :open="isTwoFactorModalOpen" :enabled="security.twoFactor" @close="isTwoFactorModalOpen = false" @updated="refresh(); notifySuccess('Autentikasi diperbarui')" />
     <!-- Sub Modals -->
     <SecurityPasswordModal
       :open="isPasswordModalOpen"

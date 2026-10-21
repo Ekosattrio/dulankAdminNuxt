@@ -17,53 +17,13 @@ const emit = defineEmits<{
 const isOpen = ref(false)
 const activeTab = ref<'prov' | 'kota' | 'kec'>('prov')
 
-const provinsiData = ref<Record<string, string>>({})
-const kotaData = ref<Record<string, Array<{ id: string; nama: string }>>>({})
-const kecamatanList = ref<Array<{ bps: string; nama: string; kodepos?: string }>>([])
-
+const { provinces, regencies, districts, pending, error } = useLocationOptions()
+const provinsiData = computed(() => Object.fromEntries(provinces.value.filter(item => item.status === 'Active').map(item => [item.id, item.name])))
 const selectedProv = ref<{ id: string; name: string } | null>(null)
 const selectedKota = ref<{ id: string; name: string } | null>(null)
 const selectedKec = ref<{ name: string; kodepos: string } | null>(null)
-
-const isLoaded = ref(false)
-
-const loadData = async () => {
-  if (isLoaded.value) return
-  try {
-    const [provRes, kotaRes, kodeposRes] = await Promise.all([
-      fetch('/assets/json/provinsi.json').then(r => r.json()),
-      fetch('/assets/json/kota-kabupaten.json').then(r => r.json()),
-      fetch('/assets/json/kodepos.json').then(r => r.json())
-    ])
-    provinsiData.value = provRes
-    kotaData.value = kotaRes
-
-    // Process unique kecamatans
-    const kecMap: Record<string, { bps: string; nama: string; kodepos: string }> = {}
-    Object.values(kodeposRes as Record<string, any>).forEach(item => {
-      if (item.bps && item.nama) {
-        const key = `${item.bps}|${item.nama}`
-        if (!kecMap[key]) {
-          kecMap[key] = { bps: item.bps, nama: item.nama, kodepos: item.kodepos || '' }
-        }
-      }
-    })
-    kecamatanList.value = Object.values(kecMap)
-    isLoaded.value = true
-  } catch (err) {
-    console.error('Failed to load address data:', err)
-  }
-}
-
-const availableKotArray = computed(() => {
-  if (!selectedProv.value) return []
-  return kotaData.value[selectedProv.value.id] || []
-})
-
-const availableKecArray = computed(() => {
-  if (!selectedKota.value) return []
-  return kecamatanList.value.filter(k => k.bps === selectedKota.value?.id)
-})
+const availableKotArray = computed(() => regencies.value.filter(item => item.provinceId === selectedProv.value?.id && item.status === 'Active').map(item => ({ id: item.id, nama: item.name })))
+const availableKecArray = computed(() => districts.value.filter(item => item.regencyId === selectedKota.value?.id && item.status === 'Active').map(item => ({ nama: item.name, kodepos: item.postalCode || '' })))
 
 const selectProvince = (id: string, name: string) => {
   selectedProv.value = { id, name }
@@ -87,7 +47,7 @@ const selectDistrict = (name: string, kodepos: string) => {
 
 const openDropdown = () => {
   isOpen.value = true
-  loadData()
+
 }
 </script>
 
@@ -145,6 +105,9 @@ const openDropdown = () => {
         </button>
       </div>
 
+      <p v-if="pending" class="p-3 text-xs">Memuat wilayah...</p>
+      <p v-else-if="error" role="alert" class="p-3 text-xs text-red-600">Gagal memuat master wilayah.</p>
+      <p v-else-if="!provinces.length" class="p-3 text-xs">Master wilayah belum tersedia.</p>
       <!-- Tab 1: Provinsi List -->
       <div v-if="activeTab === 'prov'" class="mt-2 max-h-56 overflow-y-auto space-y-0.5 text-xs">
         <button
@@ -193,7 +156,7 @@ const openDropdown = () => {
           @click="selectDistrict(item.nama, item.kodepos || '')"
         >
           <span>{{ item.nama }}</span>
-          <span v-if="item.kodepos" class="text-gray-400 text-[10px]">{{ item.kodepos }}</span>
+          <span v-if="item.kodepos" class="text-gray-400 text-xs">{{ item.kodepos }}</span>
         </button>
       </div>
     </div>
